@@ -1,4 +1,4 @@
-### Hi 👋 Welcome. I'm into programming just for fun. I learn step by step according to my needs and projects.
+#### Hi 👋 I'm into programming just for fun. I learn step by step according to my needs and projects.
 
 #Right now I like python and libraries like Selenium, webdriver, pyautogui and Tkinter.
 
