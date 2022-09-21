@@ -4,15 +4,15 @@
 
   <b><i>Me other work.</i></b>
 
-[<img height="70"  src="https://spiralking.com/wp-content/uploads/2019/04/code4.png" />][codepen]
-[<img height="70"  src = "http://nickengmann.com/assets/img/blog/hackster.png">][hack] 
-[<img height="70"  src="https://westonaic.org/wp-content/uploads/2019/08/tinkercad.jpg" />][tinker]
-[<img height="70"  src = "https://dosenit.com/wp-content/uploads/2020/10/arduino2-ide-logo.jpg">][arduino] 
-[<img height="70"  src="https://camo.githubusercontent.com/425d8f5244807f3d1a00379aea09c8b6af3dc5408dfdf3420e06d7f7fcb7c527/68747470733a2f2f656173796564612e636f6d2f696d616765732f656173796564612d7468756d626e61696c2e706e673f69643d6435656431666535393330363032393735646631" />][eda]
-[<img height="70"  src="https://img.shields.io/badge/-figma-000000.svg?&style=for-the-badge&logo=figma&logoColor=white" />][figma]
-[<img height="70"  src = "https://i.ytimg.com/vi/h5QFqYZ3ses/maxresdefault.jpg">][jitter]
-[<img height="70"  src = "https://images.news18.com/ibnlive/uploads/2022/03/instagram-logo-1.jpg">][instagram]
-[<img height="70"  src = "https://github.com/berru-g/berru-g/blob/main/contact.png?raw=true">][mail]
+[<img height="50"  src="https://spiralking.com/wp-content/uploads/2019/04/code4.png" />][codepen]
+[<img height="50"  src = "http://nickengmann.com/assets/img/blog/hackster.png">][hack] 
+[<img height="50"  src="https://westonaic.org/wp-content/uploads/2019/08/tinkercad.jpg" />][tinker]
+[<img height="50"  src = "https://dosenit.com/wp-content/uploads/2020/10/arduino2-ide-logo.jpg">][arduino] 
+[<img height="50"  src="https://camo.githubusercontent.com/425d8f5244807f3d1a00379aea09c8b6af3dc5408dfdf3420e06d7f7fcb7c527/68747470733a2f2f656173796564612e636f6d2f696d616765732f656173796564612d7468756d626e61696c2e706e673f69643d6435656431666535393330363032393735646631" />][eda]
+[<img height="50"  src="https://img.shields.io/badge/-figma-000000.svg?&style=for-the-badge&logo=figma&logoColor=white" />][figma]
+[<img height="50"  src = "https://i.ytimg.com/vi/h5QFqYZ3ses/maxresdefault.jpg">][jitter]
+[<img height="50"  src = "https://images.news18.com/ibnlive/uploads/2022/03/instagram-logo-1.jpg">][instagram]
+[<img height="50"  src = "https://github.com/berru-g/berru-g/blob/main/contact.png?raw=true">][mail]
 <br />
 <hr />
 
