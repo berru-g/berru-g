@@ -2,44 +2,29 @@
 
 #Right now I like python and libraries like Selenium, webdriver, pyautogui and Tkinter.
 
-#### My tools
+  <b><i>Me other work.</i></b>
 
-![outools](https://user-images.githubusercontent.com/61543927/190911859-09be0095-0d46-4223-a392-8c010ecfa849.png)
+[<img height="70"  src="https://spiralking.com/wp-content/uploads/2019/04/code4.png" />][codepen]
+[<img height="70"  src = "http://nickengmann.com/assets/img/blog/hackster.png">][hack] 
+[<img height="70"  src="https://westonaic.org/wp-content/uploads/2019/08/tinkercad.jpg" />][tinker]
+[<img height="70"  src = "https://dosenit.com/wp-content/uploads/2020/10/arduino2-ide-logo.jpg">][arduino] 
+[<img height="70"  src="https://camo.githubusercontent.com/425d8f5244807f3d1a00379aea09c8b6af3dc5408dfdf3420e06d7f7fcb7c527/68747470733a2f2f656173796564612e636f6d2f696d616765732f656173796564612d7468756d626e61696c2e706e673f69643d6435656431666535393330363032393735646631" />][eda]
+[<img height="70"  src="https://img.shields.io/badge/-figma-000000.svg?&style=for-the-badge&logo=figma&logoColor=white" />][figma]
+[<img height="70"  src = "https://i.ytimg.com/vi/h5QFqYZ3ses/maxresdefault.jpg">][jitter]
+[<img height="70"  src = "https://images.news18.com/ibnlive/uploads/2022/03/instagram-logo-1.jpg">][instagram]
+[<img height="70"  src = "https://github.com/berru-g/berru-g/blob/main/contact.png?raw=true">][mail]
+<br />
+<hr />
 
-- My other works:
-    -  [hackster](https://www.hackster.io/BERRU)
-    -  [tinkercad](https://www.tinkercad.com/dashboard)
-    -  [EasyEda](https://easyeda.com/account/user)
+[codepen]: https://codepen.io/h-lautre
+[hack]: https://www.hackster.io/BERRU
+[tinker]: https://www.tinkercad.com/dashboard
+[arduino]: https://create.arduino.cc/projecthub/BERRU
+[eda]: https://easyeda.com/account/user
+[figma]: https://www.figma.com/file/rgiN9WuIwpGOZHCG9LV9QO/first-appli?node-id=0%3A1
+[jitter]: https://jitter.video/
+[instagram]: https://www.instagram.com/berru_aka/
+[mail]: mailto:gael-berru@outlook.fr
 
-[![Write me](https://github.com/berru-g/berru-g/blob/main/contact.png?raw=true)](mailto:g.leberruyer@gmail.com.com#gh-dark-mode-only)
 
-
-<!--
-    Chemin neuronnal de l'humeur, 
-    dialogue entre l'esprit, le coeur et l'humeur
-    Berru "insomnie" 9 20-->
-
-    <p id="smile" style='color:var(--knee-color); text-align:center;'></p>
-    <btn onclick="myFunction()"><i class='myBrain' style='font-size:110%;color:var(--berru-color)'
-        title="?"></i></btn>
-        <style>.myBrain { width:100%; height:100%; } .myBrain:hover { transform:scale(0.9); opacity:0.9; } </style>
-
-<script>
-
-    function myFunction() {
-        var soul;
-        var mood = new Love().getSmile();
-        if (mood < 5) {
-            soul = "stop crying";
-        } else if (mood < 8) {
-            soul = "what else is there?";
-        } if (mood <= 9) {
-            soul = "We are getting closer to relaxation here!";
-            alert("Breathe!");
-        } else {
-            soul = "It is not beautiful the damn life!";
-        }
-        document.getElementById("smile").innerHEART = soul;
-    }
-
-</script>
+<h3 align="center">I'm not a developer, just curious.</h3>
