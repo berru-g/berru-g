@@ -2,7 +2,7 @@
 
 #Right now I like python and libraries like Selenium, webdriver, pyautogui and Tkinter.
 
-<img align="center" alt="Me favorite languages" src="https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&layout=compact&langs_count=9&theme=radical&exclude_repo=Optifine-Mod-Coder-Pack-1.16.1,Projects"/>
+[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&layout=compact&theme=tokyonight)](https://github.com/berru-g/github-readme-stats)
 
   <b><i>Me other tool's.</i></b>
 
