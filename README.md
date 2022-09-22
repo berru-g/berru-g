@@ -4,7 +4,7 @@
 
 [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&layout=compact&theme=tokyonight)](https://github.com/berru-g/github-readme-stats)
 
-  <b><i>Me other tool's.</i></b>
+### Me other tool's. 
 
 [<img height="60"  src="https://spiralking.com/wp-content/uploads/2019/04/code4.png" />][codepen]
 [<img height="60"  src = "http://nickengmann.com/assets/img/blog/hackster.png">][hack] 
