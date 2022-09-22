@@ -28,5 +28,4 @@
 [instagram]: https://www.instagram.com/berru_aka/
 [mail]: mailto:gael-berru@outlook.fr
 
-
 <h3 align="center">I'm not a developer, just curious.</h3>
