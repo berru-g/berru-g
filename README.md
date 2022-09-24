@@ -2,6 +2,10 @@
 
 #Right now I like python and libraries like Selenium, webdriver, pyautogui and Tkinter.
 
+- My work in front-end dev:
+    -  [Asso berru](https://berru-g.github.io/assoberru/)
+    -  [Gangue Astral](https://berru-g.github.io/Gangue-Astral/)
+
 [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&layout=compact&theme=tokyonight)](https://github.com/berru-g/github-readme-stats)
 
 ### Me favorite tool's. 
@@ -27,9 +31,5 @@
 [jitter]: https://jitter.video/
 [instagram]: https://www.instagram.com/berru_aka/
 [mail]: mailto:gael-berru@outlook.fr
-
-- My other site:
-    -  [Asso berru](https://berru-g.github.io/assoberru/)
-    -  [Gangue Astral](https://berru-g.github.io/Gangue-Astral/)
     
 <h3 align="center">I'm not a developer, just curious.</h3>
