@@ -5,6 +5,7 @@
 - My work in front-end dev:
     -  [Asso berru](https://berru-g.github.io/assoberru/)
     -  [Gangue Astral](https://berru-g.github.io/Gangue-Astral/)
+    -  [Diy Microcontroller](https://berru-g.github.io/DIY-microcontroller/)
 
 [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&layout=compact&theme=tokyonight)](https://github.com/berru-g/github-readme-stats)
 
