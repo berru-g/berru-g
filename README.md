@@ -4,7 +4,7 @@
 
 [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&layout=compact&theme=tokyonight)](https://github.com/berru-g/github-readme-stats)
 
-### Me other tool's. 
+### Me favorite tool's. 
 
 [<img height="60"  src="https://spiralking.com/wp-content/uploads/2019/04/code4.png" />][codepen]
 [<img height="60"  src = "http://nickengmann.com/assets/img/blog/hackster.png">][hack] 
@@ -28,4 +28,8 @@
 [instagram]: https://www.instagram.com/berru_aka/
 [mail]: mailto:gael-berru@outlook.fr
 
+- My other site:
+    -  [Asso berru](https://berru-g.github.io/assoberru/)
+    -  [Gangue Astral](https://berru-g.github.io/Gangue-Astral/)
+    
 <h3 align="center">I'm not a developer, just curious.</h3>
