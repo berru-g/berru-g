@@ -3,6 +3,7 @@
 #Right now I like python and libraries like Selenium, webdriver, pyautogui and Tkinter.
 
 - My work in front-end dev:
+    -  [Lego revisited](https://berru-g.github.io/Lego-revisited/)
     -  [Asso berru](https://berru-g.github.io/assoberru/)
     -  [Gangue Astral](https://berru-g.github.io/Gangue-Astral/)
     -  [Make & Play](https://berru-g.github.io/Make-Play/)
