@@ -3,9 +3,9 @@
 #### I am currently looking for a project to develop my skills.
 
 - My work in front-end dev:
+    -  [3D interactiv](https://berru-g.github.io/3D-model-interactive/)
     -  [Lego revisited](https://berru-g.github.io/Lego-revisited/)
     -  [Asso berru](https://berru-g.github.io/assoberru/)
-    -  [Gangue Astral](https://berru-g.github.io/Gangue-Astral/)
     -  [Make & Play](https://berru-g.github.io/Make-Play/)
 
 
