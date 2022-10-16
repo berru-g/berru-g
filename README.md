@@ -3,6 +3,7 @@
 #### I am currently looking for a project to develop my skills.
 
 - My work in front-end dev:
+    -  [Portfolio](https://berru-g.github.io/The-Craftman/)
     -  [3D interactiv](https://berru-g.github.io/3D-model-interactive/)
     -  [Lego revisited](https://berru-g.github.io/Lego-revisited/)
     -  [Asso berru](https://berru-g.github.io/assoberru/)
