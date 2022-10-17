@@ -37,5 +37,7 @@
 [instagram]: https://www.instagram.com/berru_aka/
 [mindomo]: https://www.mindomo.com
 [mail]: mailto:gael-berru@outlook.fr
+
+![](./berru-g-3d-contrib/profile-green-animate.svg)
     
 <h3 align="center">I'm not a developer, just curious.</h3>
