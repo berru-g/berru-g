@@ -10,7 +10,7 @@
     -  [Make & Play](https://berru-g.github.io/Make-Play/)
 
 
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&layout=compact&theme=tokyonight)](https://github.com/berru-g/github-readme-stats)
+[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&langs_count=9&layout=compact&&theme=tokyonight)](https://github.com/berru-g/github-readme-stats)
 
 ### Me favorite tool's. 
 
