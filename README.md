@@ -1,22 +1,9 @@
 ### Hi 👋 I'm into programming just for fun. I learn step by step according to my needs and projects.
 
-#### I am currently looking for a project to develop my skills.
-
 - My last work in front-end dev:
     -  [Lego revisited](https://berru-g.github.io/Lego-revisited/)
     -  [Asso berru](https://berru-g.github.io/assoberru/)
     -  [Make & Play](https://berru-g.github.io/Make-Play/)
-
-- follow me :
-    - [sketchfab](https://sketchfab.com/g.leberruyer)
-
-    - [hackster](https://www.hackster.io/BERRU)
-
-    - [tinkercad](https://www.tinkercad.com/dashboard)
-
-    - [EasyEda](https://easyeda.com/account/user)
-
-    - [codepen](https://codepen.io/h-lautre)
 
 [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&langs_count=9&layout=compact&&theme=tokyonight)](https://github.com/berru-g/github-readme-stats)
 
@@ -46,5 +33,7 @@
 [mindomo]: https://www.mindomo.com
 [mail]: mailto:gael-berru@outlook.fr
 
+#### follow me :
+[sketchfab](https://sketchfab.com/g.leberruyer) - [hackster](https://www.hackster.io/BERRU) - [tinkercad](https://www.tinkercad.com/dashboard) - [EasyEda](https://easyeda.com/account/user) - [codepen](https://codepen.io/h-lautre)
     
 <h3 align="center">I'm not a developer, just curious.</h3>
