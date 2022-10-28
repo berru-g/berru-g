@@ -1,9 +1,12 @@
 ### Hi 👋 I'm into programming just for fun. I learn step by step according to my needs and projects.
 
 - My last work in front-end dev:
+
     -  [Lego revisited](https://berru-g.github.io/Lego-revisited/)
     -  [Asso berru](https://berru-g.github.io/assoberru/)
     -  [Make & Play](https://berru-g.github.io/Make-Play/)
+
+This is the [Project](https://github.com/Sercurio/MIDIPots) of the moment.
 
 [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&langs_count=9&layout=compact&&theme=tokyonight)](https://github.com/berru-g/github-readme-stats)
 
