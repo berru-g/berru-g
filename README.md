@@ -14,7 +14,9 @@
 </p>
 
 
-#####  Electronic [Project](https://github.com/Sercurio/MIDIPots) of the moment. Work in progress, follow to get the release date of the first controller. Do you want to help us [develop the project](https://github.com/Sercurio/MIDIPots) ?
+#####  Electronic [Project](https://github.com/Sercurio/MIDIPots) of the moment. Work in progress*, follow to get the release date of the first controller. Do you want to help us [develop the project](https://github.com/Sercurio/MIDIPots) ?
 
 
-<a hef="https://github.com/berru-g/github-readme-stats"><img src="https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&amp;te_color=white&amp;bg_color=transparent&amp;hide_border=true&amp;title_color=white&amp;custom_title=Favorite-language&amp;langs_count=9&amp;layout=compact"/>
+<a hef="https://github.com/berru-g/github-readme-stats"><img src="https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&amp;te_color=white&amp;bg_color=#1b1b1b&amp;hide_border=true&amp;title_color=white&amp;custom_title=Favorite-language&amp;langs_count=9&amp;layout=compact"/>
+
+  <a href="https://berru-g.github.io/Make-play-PLAN/">more </a>*
