@@ -11,14 +11,15 @@
  <br>
 
 <div width="100%">
- <a href="https://github.com/berru-g/github-readme-activity-graph"><img align="left" max-width="600px" src="https://activity-graph.herokuapp.com/graph?username=berru-g&amp;te_color=white&bg_color=fffff0&color=708090&line=24292e&point=24292e&area=true&hide_border=true"/>
 
-
-<a href="https://github.com/berru-g/github-readme-stats"><img align="right" src="https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&amp;te_color=white&amp;bg_color=fffff0&color=708090&line=24292e&point=24292e&area=true&hide_border=true&custom_title=Favorite-language&amp;langs_count=9&amp;layout=compact"/>
+<a href="https://github.com/berru-g/github-readme-stats"><img align="left" src="https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&amp;te_color=white&amp;bg_color=fffff0&color=708090&line=24292e&point=24292e&area=true&hide_border=true&custom_title=Favorite-language&amp;langs_count=9&amp;layout=compact"/>
+ 
+ 
+ <a href="https://github.com/berru-g/github-readme-activity-graph"><img align="rigth" max-width="600px" src="https://activity-graph.herokuapp.com/graph?username=berru-g&amp;te_color=white&bg_color=fffff0&color=708090&line=24292e&point=24292e&area=true&hide_border=true"/>
  
  </div>
 
- 
+
 
  <p><a href="https://berru-g.github.io/Make-play-PLAN/" align="left">more </a>*</p>
 <br>
