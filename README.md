@@ -6,7 +6,7 @@
 
 <p align="left"> Project in progress, <a href="https://github.com/Sercurio/MIDIPots">native controller</a> for Ableton and other creative software. Work in progress* with <a href="https://wiki.seeedstudio.com/Seeeduino-XIAO/">Seeed xiao</a>, PCB with<a href="https://easyeda.com/user#">Easyeda</a>,the code <a href="https://github.com/Sercurio/MIDIPots/issue">in progress</a>. Watch the <a href="https://www.hackster.io/gleberruyer">V-1.0.0 </a> of 2020 with 328p, uno, mega 25 and micro.</p>
 
-  <p>Visit the prototype site named <a href="https://berru-g.github.io/Make-Play/">Make & Play</a>*</p>
+  <p>Visit the prototype site named <a href="https://berru-g.github.io/Make-Play/">Make & Play</a>* & the shop <a href="https://www.tindie.com/stores/makeandplay/">Tindie.</p>
 
 
 
