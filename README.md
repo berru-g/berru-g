@@ -15,7 +15,7 @@
 
 <div align="center">
 
-<a href="https://github.com/berru-g/github-readme-stats"><img align="left" height="180px" src="https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&amp;te_color=white&amp;bg_color=fffff0&color=708090&line=24292e&point=24292e&area=true&hide_border=true&custom_title=Favorite-language&amp;langs_count=9&amp;layout=compact"/>
+<a href="https://github.com/berru-g/github-readme-stats"><img align="left" height="180px" src="https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&amp;te_color=white&amp;bg_color=fffff0&color=708090&line=24292e&point=24292e&area=true&hide_border=true&custom_title=Favorite-language&amp;langs_count=10&amp;layout=compact"/>
 
  
  <a href="https://github.com/berru-g/github-readme-activity-graph"><img align="rigth" height="180px" src="https://activity-graph.herokuapp.com/graph?username=berru-g&amp;te_color=white&bg_color=fffff0&color=708090&line=24292e&point=24292e&area=true&hide_border=true"/>
@@ -32,11 +32,9 @@
 
 <p align="center">
   <a href="https://codepen.io/h-lautre">Front-end</a> &bull;
-  <a href="https://berru-g.github.io/Make-Play/">Electronic</a> &bull;
+  <a href="https://www.tindie.com/stores/makeandplay/">Electronic</a> &bull;
   <a href="https://berru-g.github.io/Lego-revisited/">Interactive</a> &bull;
-  <a href="https://sketchfab.com/g-leberruyer">Modeling 3D</a> &bull;
   <a href="https://berru-g.github.io/assoberru/">Festival</a> &bull;
   <a href="https://berru-clothing.com">Brand</a> &bull;
-  <a href="https://berru-g.github.io/Lego-revisited/">Sunday</a>&bull;
   <a href="https://berru-g.github.io/couteau-adam">and other time to observe</a>
 </p>
