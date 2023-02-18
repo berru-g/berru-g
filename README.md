@@ -11,9 +11,8 @@
  <br>
 <div align="center">
 <a href="https://github.com/berru-g/github-readme-stats"><img align="left" height="180px" src="https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&amp;te_color=white&amp;bg_color=fffff0&color=708090&line=24292e&point=24292e&area=true&hide_border=true&custom_title=skills&amp;langs_count=10&amp;layout=compact"/>
-
- 
- <a href="https://github.com/berru-g/github-readme-activity-graph"><img align="rigth" height="180px" src="https://activity-graph.herokuapp.com/graph?username=berru-g&amp;te_color=white&bg_color=fffff0&color=708090&line=24292e&point=24292e&area=true&hide_border=true"/>
+  
+ <a href="https://github.com/berru-g/github-readme-activity-graph"><img align="rigth" height="180px" src="https://github-readme-activity-graph.cyclic.app/graph?username=berru-g&bg_color=22272e&color=ffffff&line=408080&point=ffffff&area=true&hide_border=true"/>
  </div>
 
 <br>
