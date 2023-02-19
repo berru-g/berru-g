@@ -1,23 +1,12 @@
-<h3 align="left">Hi, im not a developer, just curious</h3>
+<h3 align="center">Hi, im not a developer, just curious</h3>
 
 
-<h4 align="left">Always learning and looking for a project.</h5>
+<h4 align="center">Always learning and looking for a project.</h5>
 
 
-<p align="left"> Project in progress, <a href="https://github.com/Sercurio/MIDIPots">native controller</a> for Ableton and other creative software. Work in progress* with <a href="https://wiki.seeedstudio.com/Seeeduino-XIAO/">Seeed xiao</a>, PCB with<a href="https://easyeda.com/user#">Easyeda</a>,the code <a href="https://github.com/Sercurio/MIDIPots/issue">in progress</a>. Watch the <a href="https://www.hackster.io/gleberruyer">V-1.0.0 </a> of 2020 with 328p, uno, mega 25 and micro.</p>
+<h3 align="center">- Hi I am looking for a job. -</h3>
 
-  <p>Visit the prototype site named <a href="https://berru-g.github.io/Make-Play/">Make & Play</a>* & the shop <a href="https://www.tindie.com/stores/makeandplay/">Tindie.</p>
-<br>
- <br>
-<div align="center">
-<a href="https://github.com/berru-g/github-readme-stats"><img align="left" height="180px" src="https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&amp;te_color=white&amp;bg_color=fffff0&color=708090&line=24292e&point=24292e&area=true&hide_border=true&custom_title=skills&amp;langs_count=10&amp;layout=compact"/>
-  
- <a href="https://github.com/berru-g/github-readme-activity-graph"><img align="rigth" height="180px" src="https://github-readme-activity-graph.cyclic.app/graph?username=berru-g&bg_color=22272e&color=ffffff&line=408080&point=ffffff&area=true&hide_border=true"/>
- </div>
-
-<br>
- <br>
-  <h4 align=center>My other experiences</h4>
+<h5 align=center>skill's</h5>
 
 <p align="center">
   <a href="https://codepen.io/h-lautre">Front-end</a> &bull;
@@ -25,5 +14,24 @@
   <a href="https://berru-g.github.io/Lego-revisited/">Interactive</a> &bull;
   <a href="https://berru-g.github.io/assoberru/">Festival</a> &bull;
   <a href="https://berru-clothing.com">Brand</a> &bull;
-  <a href="https://berru-g.github.io/couteau-adam">and other time to observe</a>
+  <a href="https://berru-g.github.io/couteau-adam">Fun</a>
 </p>
+
+
+#####  My latest learning
+
+ - [SEO](www.livre-audio-enfant.com)
+ - [Portfolio](https://berru-g.github.io/The-Craftman/)
+ - [Responsive](https://berru-g.github.io/Make-Play/)
+ - [First site 2020](https://codepen.io/h-lautre/pen/WNrbawy)
+ - [Audio API](https://berru-g.github.io/Rick-MortySample/)
+
+
+
+<div width="100%">
+<a href="https://github.com/berru-g/github-readme-stats"><img align="left" src="https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&amp;te_color=white&amp;bg_color=fffff0&color=708090&line=24292e&point=24292e&area=true&hide_border=true&custom_title=language used&amp;langs_count=9&amp;layout=compact"/> 
+ </div>
+
+
+
+
