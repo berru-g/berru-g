@@ -11,7 +11,7 @@
 
 #####  My latest learning
 
- - [SEO](www.livre-audio-enfant.com)
+ - [SEO](https://www.livre-audio-enfant.com)
  - [Portfolio](https://berru-g.github.io/The-Craftman/)
  - [Responsive](https://berru-g.github.io/Make-Play/)
  - [First site 2020](https://codepen.io/h-lautre/pen/WNrbawy)
