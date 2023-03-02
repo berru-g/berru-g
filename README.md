@@ -20,8 +20,8 @@
 
 
 <div width="100%">
-<a href="https://github.com/berru-g/github-readme-stats"><img align="center" src="https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&amp;te_color=white&amp;bg_color=fffff0&color=708090&line=24292e&point=24292e&area=true&hide_border=true&custom_title=language used&amp;langs_count=10&amp;layout=compact"/> 
- </div>
+<a href="https://github.com/berru-g/github-readme-stats"><img src="https://github-readme-stats.vercel.app/api/?username=berru-g&bg_color=a7a7a7&hide_border=true&title_color=118ab2&custom_title=Github activity&card_width=30%&include_all_commits=true"/> 
+</div>
 
 
 <h5 align=center>skill's</h5>
