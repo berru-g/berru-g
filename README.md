@@ -1,14 +1,6 @@
 <h3 align="left">Hi, im not a developer, just curious</h3>
 
 
-<h4 align="left">Always learning and looking for a project.</h5>
-
-
-<h3 align="left">- Hi I am looking for a job. -</h3>
-
-
-
-
 #####  My latest learning
 
  - [SEO](https://www.livre-audio-enfant.com)
