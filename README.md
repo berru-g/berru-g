@@ -14,9 +14,9 @@
  - [SEO](https://www.livre-audio-enfant.com)
  - [Portfolio](https://berru-g.github.io/The-Craftman/)
  - [Responsive](https://berru-g.github.io/Make-Play/)
- - [First site 2020](https://codepen.io/h-lautre/pen/WNrbawy)
+ - [First site 2020](https://codepen.io/h-lautre/full/WNrbawy)
  - [Audio API](https://berru-g.github.io/Rick-MortySample/)
-
+ - [Réseau-CISCO](https://github.com/berru-g/Desk-cmd-de-base/tree/main/Cisco)
 
 
 <div width="100%">
