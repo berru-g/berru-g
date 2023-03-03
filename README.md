@@ -11,8 +11,9 @@
  - [Réseau-CISCO](https://github.com/berru-g/Desk-cmd-de-base/tree/main/Cisco)
 
 
-<div width="100%">
-<a href="https://github.com/berru-g/github-readme-stats"><img src="https://github-readme-stats.vercel.app/api/?username=berru-g&bg_color=a7a7a7&hide_border=true&title_color=118ab2&custom_title=Github activity&card_width=30%&include_all_commits=true"/> 
+<div width="100%"><!--
+<a href="https://github.com/berru-g/github-readme-stats"><img src="https://github-readme-stats.vercel.app/api/?username=berru-g&bg_color=a7a7a7&hide_border=true&title_color=118ab2&custom_title=Github activity&card_width=30%&include_all_commits=true"/>-->
+ <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&te_color=white&bg_color=a7a7a7&hide_border=true&title_color=118ab2&custom_title=Favorite language&langs_count=9&card_height=100&layout=compact" />
 </div>
 
 
