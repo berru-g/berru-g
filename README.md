@@ -1,10 +1,11 @@
-<h3 align="left">Hi, im not a developer, just curious</h3>
+<h3 align="left">Hi, I am self-taught.</h3>
+<h4 align="left">Looking for a first professional experience. A need?</h4>
 
 
 #####  My latest learning
 
  - [SEO](https://www.livre-audio-enfant.com)
- - [Portfolio](https://berru-g.github.io/The-Craftman/)
+ - [Scrapping](https://berru-g.github.io/comparator-price-electronic-componant/)
  - [Responsive](https://berru-g.github.io/Make-Play/)
  - [First site 2020](https://codepen.io/h-lautre/full/WNrbawy)
  - [Audio API](https://berru-g.github.io/Rick-MortySample/)
