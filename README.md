@@ -1,6 +1,9 @@
+<body>
 <h3 align="left">Hi, I am self-taught.</h3>
 <h4 align="left">Looking for a first professional experience. A need?</h4>
-
+<style>body {
+    background-color: black;
+}</style>
 
 #####  My latest learning
 
@@ -28,4 +31,4 @@
   <a href="https://berru-clothing.com">Brand</a> &bull;
   <a href="https://berru-g.github.io/couteau-adam">Fun</a>
 </p>
-
+</body>
