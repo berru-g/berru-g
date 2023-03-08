@@ -1,9 +1,12 @@
 <body>
 <h3 align="left">Hi, I am self-taught.</h3>
 <h4 align="left">Looking for a first professional experience. A need?</h4>
-<style>body {
+<style>
+body {
     background-color: black;
-}</style>
+    color:white;
+}
+</style>
 
 #####  My latest learning
 
