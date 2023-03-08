@@ -8,7 +8,7 @@
 <ul>
 <li><a href="https://www.livre-audio-enfant.com">SEO</a></li>
 <li><a href="https://berru-g.github.io/comparator-price-electronic-componant/">Scrapping</a></li>
-<li><a href="https://berru-g.github.io/Make-Play/">Responsive</a></li>
+<li><a href="https://berru-g.github.io/Lego-revisited/">Responsive</a></li>
 <li><a href="https://codepen.io/h-lautre/full/WNrbawy">First site 2020</a></li>
 <li><a href="https://berru-g.github.io/Rick-MortySample/">Audio API</a></li>
 <li><a href="https://github.com/berru-g/Desk-cmd-de-base/tree/main/Cisco">Réseau-CISCO</a></li>
