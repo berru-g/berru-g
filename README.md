@@ -12,6 +12,7 @@
 <li><a href="https://codepen.io/h-lautre/full/WNrbawy">First site 2020</a></li>
 <li><a href="https://berru-g.github.io/Rick-MortySample/">Audio API</a></li>
 <li><a href="https://github.com/berru-g/Desk-cmd-de-base/tree/main/Cisco">Réseau-CISCO</a></li>
+<li><a href="https://github.com/berru-g/MAKE_PLAY-1">Controller USB midi</a></li>
 </ul>
 </div>
 
