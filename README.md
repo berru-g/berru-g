@@ -2,7 +2,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <body>
 <h3 align="left">Hi, I am self-taught.</h3>
-<h4 align="left">I learn when I have time for fun</h4>
+<h4 align="left">I learn when I have time, I have a shit job, I code for fun</h4>
 
   <div class=""><h5 id="my-latest-learning">My latest learning</h5>
 <ul>
