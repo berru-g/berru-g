@@ -7,7 +7,7 @@
   <div class=""><h5 id="my-latest-learning">My latest learning</h5>
 <ul>
 <li><a href="https://www.livre-audio-enfant.com">SEO</a></li>
-<li><a href="https://github.com/berru-g/Linkedin-job-search-and-automatic-response">Scrapping</a></li>
+<li><a href="https://github.com/berru-g/Price-comparator">Scrapping</a></li>
 <li><a href="https://berru-g.github.io/Lego-revisited/">Responsive</a></li>
 <li><a href="https://codepen.io/h-lautre/full/WNrbawy">First site 2020</a></li>
 <li><a href="https://berru-g.github.io/Rick-MortySample/">Audio API</a></li>
