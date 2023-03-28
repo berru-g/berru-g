@@ -19,15 +19,19 @@ body {
   margin: 0em;
   padding: 2em;
 }
+ul {
+  top: 50%;
+}
 
 img {
   object-fit: cover;
-  width: 70vh;
+  width: 60vh;
   height: auto;
   top: 200px;
   left: 50%;
   transform: translate(-50%,-50%);
   position: fixed;
+  z-index: 0;
 }
 
 .b1 {
@@ -45,6 +49,7 @@ section {
 .menu {
   z-index:10;
   font-family: 'montserrat';
+  color: #000;
 }
 .menu,children:hover {
   color: black;
@@ -63,7 +68,13 @@ footer {
   background-color: white;
   color: #000;
   position: relative;
-  top: 93%;
+  top: 91%;
   text-align: center;
   
 }
+h3, h5 {
+  z-index: 50;
+}
+
+
+
