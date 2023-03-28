@@ -30,9 +30,9 @@ ul {
 
 img {
   object-fit: cover;
-  width: 50%;
+  width: 55%;
   height: auto;
-  top: 250px;
+  top: 400px;
   left: 50%;
   transform: translate(-50%,-50%);
   position: fixed;
