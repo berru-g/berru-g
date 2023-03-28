@@ -8,6 +8,11 @@
 body {
   font-family: 'Montserrat';
 }
+header {
+  width: 100%;
+  height: auto;
+  text-align: center;
+}
 .box {
   height: 100vh;
   /*solution aux img superposées*/
@@ -25,9 +30,9 @@ ul {
 
 img {
   object-fit: cover;
-  width: 60vh;
+  width: 45vh;
   height: auto;
-  top: 200px;
+  top: 250px;
   left: 50%;
   transform: translate(-50%,-50%);
   position: fixed;
@@ -51,16 +56,17 @@ section {
   font-family: 'montserrat';
   color: #000;
 }
-.menu,children:hover {
-  color: black;
-}
-a {
-  color: #0f6cb4;
+ul { color:white;}
+a, .list {
+  color: #4b4b4b;
   position: relative;
   text-decoration: none;
 }
 a:hover{
   transform: scale(1.2);
+  color: #0f6cb4;
+}
+.list:hover {
   color: white;
 }
 
@@ -70,6 +76,8 @@ footer {
   position: relative;
   top: 91%;
   text-align: center;
+  width: 100%;
+  height: 50px;
   
 }
 h3, h5 {
