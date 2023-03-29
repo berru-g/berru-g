@@ -28,21 +28,33 @@ ul {
   top: 50%;
 }
 
-img {
+.back1 {
   object-fit: cover;
   width: 50%;
   height: auto;
-  top: 300px;
+  top: 470px;
   left: 50%;
   transform: translate(-50%,-50%);
   position: fixed;
   z-index: 0;
 }
-.right{
+
+.back2{
   object-fit: cover;
   width: 50%;
   height: auto;
-  top: 410px;
+  top: 200px;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  position: fixed;
+  z-index: 1;
+}
+
+.back2bis{
+  object-fit: cover;
+  width: 50%;
+  height: auto;
+  top: 450px;
   left: 50%;
   transform: translate(-50%,-50%);
   position: fixed;
@@ -93,6 +105,3 @@ footer {
 h3, h5 {
   z-index: 50;
 }
-
-
-
