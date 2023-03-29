@@ -30,7 +30,7 @@ ul {
 
 .back1 {
   object-fit: cover;
-  width: 50%;
+  width: 55%;
   height: auto;
   top: 470px;
   left: 50%;
@@ -43,7 +43,7 @@ ul {
   object-fit: cover;
   width: 50%;
   height: auto;
-  top: 200px;
+  top: 180px;
   left: 50%;
   transform: translate(-50%,-50%);
   position: fixed;
@@ -52,9 +52,9 @@ ul {
 
 .back2bis{
   object-fit: cover;
-  width: 50%;
+  width: 70%;
   height: auto;
-  top: 450px;
+  top: 420px;
   left: 50%;
   transform: translate(-50%,-50%);
   position: fixed;
@@ -80,7 +80,7 @@ section {
 }
 ul { color:white;}
 a, .list {
-  color: #4b4b4b;
+  color: #0f6cb4;
   position: relative;
   text-decoration: none;
 }
@@ -105,3 +105,9 @@ footer {
 h3, h5 {
   z-index: 50;
 }
+h5{
+  color: white;
+  font-size: 1.2em;
+}
+
+
