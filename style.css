@@ -20,7 +20,7 @@ header {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
 .presentation {
-  width: 80%;
+  width: 100%;
   height: auto;
   margin: 0em;
   padding: 2em;
@@ -68,7 +68,7 @@ ul {
 .b2 {
   background-color: #0f6cb4;
   width: 100%;
-  height: 850px;
+  height: auto;
 }
 
 section {
@@ -94,6 +94,18 @@ a:hover{
 .list:hover {
   color: white;
 }
+/* Home cards */
+  .home-cards {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  
+  .home-cards iframe {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
 
 footer {
   background-color: white;
