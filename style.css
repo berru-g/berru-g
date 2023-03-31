@@ -105,7 +105,11 @@ a:hover{
     width: 100%;
     margin-bottom: 20px;
   }
-  
+.langage {
+  width: 50%;
+  height: auto;
+  margin-bottom: 20px;
+}
 
 footer {
   background-color: white;
