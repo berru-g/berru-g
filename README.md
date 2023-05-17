@@ -6,6 +6,9 @@
 
   <div class=""><h5 id="my-latest-learning">My latest project</h5>
 <ul>
+<li><a href="https://www.nobullshitjusttravel.com">affiliation Booking</a></li>
+<li><a href="https://www.livre-audio-enfant.com">affiliation Audible</a></li>
+<li><a href="https://www.amazon.fr/L%C3%A9a-Bruger/e/B0C5FNM7LK/ref=dp_byline_cont_ebooks_1">Mes livres sur Amazon et Kindle</a></li>
 <li><a href="https://cdpn.io/pen/debug/KKGgJpK?authentication_hash=xnMabBDZxqer">Utilitaire systeme</a></li>
   <li><a href="https://cdpn.io/pen/debug/wvYeeaE?authentication_hash=LDkmdONvKmOA">Write your name ?</a></li>
 <li><a href="https://www.livre-audio-enfant.com">SEO</a></li>
