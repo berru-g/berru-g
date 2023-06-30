@@ -6,9 +6,9 @@
 
   <div class=""><h5 id="my-latest-learning">My latest project</h5>
 <ul>
-<li><a href="https://www.nobullshitjusttravel.com">affiliation Booking</a></li>
-<li><a href="https://www.livre-audio-enfant.com">affiliation Audible</a></li>
-<li><a href="https://www.amazon.fr/L%C3%A9a-Bruger/e/B0C5FNM7LK/ref=dp_byline_cont_ebooks_1">Mes livres sur Amazon et Kindle</a></li>
+  <li><a href="https://codepen.io/h-lautre/full/poQNmmV">Site sur le Web3</a></li>
+<li><a href="https://www.nobullshitjusttravel.com">Site d'offre de voyage</a></li>
+<li><a href="https://www.livre-audio-enfant.com">Site de livre Audio</a></li>
 <li><a href="https://cdpn.io/pen/debug/KKGgJpK?authentication_hash=xnMabBDZxqer">Utilitaire systeme</a></li>
   <li><a href="https://cdpn.io/pen/debug/wvYeeaE?authentication_hash=LDkmdONvKmOA">Write your name ?</a></li>
 <li><a href="https://www.livre-audio-enfant.com">SEO</a></li>
@@ -33,7 +33,6 @@
 <p align="center">
   <a href="https://codepen.io/h-lautre">Front-end</a> &bull;
   <a href="https://www.tindie.com/stores/makeandplay/">Electronic</a> &bull;
-  <a href="https://berru-g.github.io/Lego-revisited/">Interactive</a> &bull;
   <a href="https://berru-g.github.io/assoberru/">Festival</a> &bull;
   <a href="https://berru-clothing.com">Brand</a> &bull;
   <a href="https://berru-g.github.io/couteau-adam">Fun</a>
