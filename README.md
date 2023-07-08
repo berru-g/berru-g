@@ -10,14 +10,15 @@
 <li><a href="https://www.nobullshitjusttravel.com">Site d'offre de voyage</a></li>
 <li><a href="https://www.livre-audio-enfant.com">Site de livre Audio</a></li>
 <li><a href="https://cdpn.io/pen/debug/KKGgJpK?authentication_hash=xnMabBDZxqer">Utilitaire systeme</a></li>
-  <li><a href="https://cdpn.io/pen/debug/wvYeeaE?authentication_hash=LDkmdONvKmOA">Write your name ?</a></li>
+<li><a href="https://cdpn.io/pen/debug/wvYeeaE?authentication_hash=LDkmdONvKmOA">Write your name ?</a></li>
 <li><a href="https://www.livre-audio-enfant.com">SEO</a></li>
-<li><a href="https://github.com/berru-g/#">Scrapping</a></li>
+<li><a href="https://github.com/berru-g/Price-comparator/tree/master/script">Scrapping</a></li>
+<li><a href="https://cdpn.io/pen/debug/abYYBGE?authentication_hash=yokZELQEOYbA">parallax</a></li>
 <li><a href="https://berru-g.github.io/Lego-revisited/">Responsive</a></li>
 <li><a href="https://codepen.io/h-lautre/full/WNrbawy">First site 2020</a></li>
 <li><a href="https://berru-g.github.io/Rick-MortySample/">Audio API</a></li>
 <li><a href="https://github.com/berru-g/Desk-cmd-de-base/tree/main/Cisco">Réseau-CISCO</a></li>
-<li><a href="https://github.com/berru-g/MAKE_PLAY-1">Controller USB midi</a></li>
+<li>2020 <a href="https://github.com/berru-g/MAKE_PLAY-1">Controller USB midi</a></li>
 </ul>
 </div>
 
