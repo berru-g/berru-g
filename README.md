@@ -6,7 +6,7 @@
 
   <div class=""><h5 id="my-latest-learning">My latest project</h5>
 <ul>
-  <li><a href="https://codepen.io/h-lautre/debug/eYQEVNw">Site sur le Web3</a></li>
+  <li><a href="https://codepen.io/h-lautre/full/eYQEVNw">Site sur le Web3</a></li>
 <li><a href="https://www.nobullshitjusttravel.com">Site d'offre de voyage</a></li>
 <li><a href="https://www.livre-audio-enfant.com">Site de livre Audio</a></li>
 <li><a href="https://cdpn.io/pen/debug/KKGgJpK?authentication_hash=xnMabBDZxqer">Utilitaire systeme</a></li>
