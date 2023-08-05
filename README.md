@@ -3,7 +3,7 @@
   <body>
 <h3 align="left">Hi, I am self-taught.</h3>
 <h4 align="left">I learn when I have time, I code for fun</h4>
-
+<!--
   <div class=""><h5 id="my-latest-learning">My latest project</h5>
 <ul>
   <li><a href="https://github.com/berru-g/a-la-quete-de-satoshi">if-you-have-an-hour-to-spare</a></li>
@@ -23,8 +23,8 @@
 </ul>
 </div>
 
-
-<div width="100%"><!--
+-->
+<div align=center><!--
 <a href="https://github.com/berru-g/github-readme-stats"><img src="https://github-readme-stats.vercel.app/api/?username=berru-g&bg_color=a7a7a7&hide_border=true&title_color=118ab2&custom_title=Github activity&card_width=30%&include_all_commits=true"/>-->
  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&text_color=a1a1a1&bg_color=a7a7a700&hide_border=true&title_color=a1a1a1&custom_title=Favorite-language&langs_count=10&card_height=100&layout=compact" />
 </div>
