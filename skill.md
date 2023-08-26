@@ -7,9 +7,10 @@
   <div class=""><h5 id="my-latest-learning">Derniers projets web</h5>
 <ul>
   <li><a href="https://codepen.io/h-lautre/full/eYQEVNw">Site theme Web3</a></li>
+  <li><a href="https://codepen.io/h-lautre/full/vYvNGBP">Crypto Unity</a></li>
 <li><a href="https://www.nobullshitjusttravel.com">Site d'offre de voyage</a></li>
 <li><a href="https://www.livre-audio-enfant.com">Site de livre Audio</a></li>
-<li><a href="https://cdpn.io/pen/debug/abYYBGE?authentication_hash=yokZELQEOYbA">parallax</a></li>
+<li><a href="https://codepen.io/h-lautre/full/abYYBGE">parallax</a></li>
 </ul>
 </div>
 
