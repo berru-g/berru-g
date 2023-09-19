@@ -5,7 +5,7 @@
 <h4 align="left">I learn when I have time, I code for fun</h4>
       <div class=""><h5 id="my-latest-learning">Derniers projets web</h5>
 <ul>
-  <li><a href="https://codepen.io/h-lautre/pen/WNLEVrg">Wallet All in one</a></li>
+  <li><a href="https://codepen.io/h-lautre/full/WNLEVrg">Wallet All in one</a></li>
   <li><a href="https://codepen.io/h-lautre/full/eYQEVNw">Site theme Web3</a></li>
   <li><a href="https://codepen.io/h-lautre/full/vYvNGBP">Crypto Unity</a></li>
 <li><a href="https://www.nobullshitjusttravel.com">Site d'offre de voyage</a></li>
