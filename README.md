@@ -1,9 +1,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <body>
-<h3 align="left">Hi, I am self-taught.</h3>
-<h4 align="left">I learn when I have time, I code for fun</h4>
-      <div class=""><h5 id="my-latest-learning">Derniers projets web</h5>
+<h3 align="left">I'm not a developer, I code for fun.</h3>
+<h4 align="left">Open for a project.</h4>
+      <div class=""><h5 id="my-latest-learning">Last project :</h5>
 <ul>
   <li><a href="https://codepen.io/h-lautre/full/WNLEVrg">Wallet All in one</a></li>
   <li><a href="https://codepen.io/h-lautre/full/eYQEVNw">Site theme Web3</a></li>
