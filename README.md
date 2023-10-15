@@ -2,7 +2,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <body>
 <h3 align="left">I'm not a developer, I code for fun. Open for a project.</h3>
-      <div class=""><h5 id="my-latest-learning">Last project :</h5>
+
+    npm list
+      +-- learn@4.2.0 
+      +-- make@2.4.0 
+       -- play@1.1.1
+    
+
+<div class=""><h4 id="my-latest-learning">Last project :</h4>
 <ul>
   <li><a href="https://codepen.io/h-lautre/full/WNLEVrg">Wallet All in one</a></li>
   <li><a href="https://codepen.io/h-lautre/full/eYQEVNw">Site theme Web3</a></li>
@@ -14,7 +21,7 @@
 </ul>
 </div>
 
-  <div class=""><h5 id="my-latest-learning">Tool's</h5>
+  <div class=""><h4 id="my-latest-learning">Tool's</h4>
 <ul>
   <li><a href="https://codepen.io/h-lautre/pen/bGOQxjK">Terminal help-desk interactif</a></li>
   <li><a href="https://github.com/berru-g/api-crypto-tool-s">Alarm crypto</a></li>
