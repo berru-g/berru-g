@@ -1,13 +1,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <body>
-<h3 align="left">I'm not a developer, I code for fun. Open for a project.</h3>
+
 
     npm list
-      +-- learn@4.2.0 
-      +-- make@2.4.0 
-       -- play@1.1.1
-    
+      +-- learn@7.7.7 
+      +-- make@1.0.1 
+       -- play@4.2.0
+
+<h3 align="left">I'm not a developer, I code for fun. Open for a project.</h3>
 
 <div class=""><h4 id="my-latest-learning">Last project :</h4>
 <ul>
