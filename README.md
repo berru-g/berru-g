@@ -28,7 +28,7 @@
   <li><a href="https://github.com/berru-g/api-crypto-tool-s">Alarm crypto</a></li>
 <li><a href="https://github.com/berru-g/All-in-one-dashboard">Wallet</a></li>
   <li><a href="https://github.com/berru-g/OTTO-TOOLS">Automation</a></li>
-<li><a href="https://github.com/berru-g/Price-comparator/tree/master/script">Scrapping</a></li>
+<li><a href="https://github.com/berru-g/OTTO-TOOLS/tree/main/scrap">Scrapping</a></li>
 <li>2020 <a href="https://github.com/berru-g/MAKE_PLAY-1">Controller USB midi</a></li>
 </ul>
 </div>
