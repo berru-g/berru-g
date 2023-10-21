@@ -37,6 +37,17 @@
  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&text_color=a1a1a1&bg_color=a7a7a700&hide_border=true&title_color=a1a1a1&custom_title=Favorite-language&langs_count=10&card_height=100&layout=compact" />
 </div>
 
+<div align=center>
+  <img src="https://img.shields.io/github/stars/berru-g" />
+  <img src="https://img.shields.io/github/forks/berru-g" />
+</div>
+<p align='center'>
+  <a href="#"><img src="https://github-readme-stats.vercel.app/api?username=berru-g&show_icons=true&count_private=true&text_color=a1a1a1&bg_color=a7a7a700&hide_border=true&title_color=a1a1a1&theme=dark" width="350"></a>
+</p>
+<p align='center'>
+  <a href="#"><img src="https://github-readme-stats.vercel.app/api/pin/?username=berru-g&repo=github-readme-stats&text_color=a1a1a1&bg_color=a7a7a700&hide_border=true&title_color=a1a1a1" width="350"></a>
+</p>
+
 
 <h5 align=center>skill's</h5>
 
