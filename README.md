@@ -33,10 +33,11 @@
 </ul>
 </div>
 
-<!--<div align=center>
+<div align=center>
  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&text_color=a1a1a1&bg_color=a7a7a700&hide_border=true&title_color=a1a1a1&custom_title=Favorite-language&langs_count=10&card_height=100&layout=compact"/>
 </div>
 
+<!--
 <div align=center>
   <img src="https://img.shields.io/github/stars/berru-g" />
   <img src="https://img.shields.io/github/forks/berru-g" />
