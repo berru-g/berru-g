@@ -6,7 +6,7 @@
     npm list
       +-- learn@7.7.7 
       +-- make@1.0.1 
-       -- play@4.2.0
+       -- play@1.2.3
 
 <h3 align="left">I'm not a developer, I code for fun. Open for a project.</h3>
 
