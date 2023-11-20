@@ -12,7 +12,7 @@
 
 <div class=""><h4 id="my-latest-learning">Last project :</h4>
 <ul>
-  <li><a href="https://codepen.io/h-lautre/full/WNLEVrg">Wallet All in one</a></li>
+  <li><a href="https://w4llet-all-in-one.000webhostapp.com/">Wallet All in one</a></li>
   <li><a href="https://codepen.io/h-lautre/full/eYQEVNw">Site theme Web3</a></li>
   <li><a href="https://codepen.io/h-lautre/full/vYvNGBP">Crypto Unity</a></li>
 <li><a href="https://www.nobullshitjusttravel.com">Site d'offre de voyage</a></li>
