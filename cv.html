@@ -11,6 +11,7 @@
  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <meta name="keywords" content="Web3, Blockchain, Décentralisation, Cryptomonnaie, Contrats intelligents, DApps (Applications décentralisées), Ethereum, NFT (Tokens non fongibles), Protocoles ouverts, Interopérabilité, Infrastructures décentralisées, Gouvernance décentralisée, Identité numérique, Smart contracts, Web décentralisé, Tokens, Consensus, IPFS (InterPlanetary File System), DAO (Organisations autonomes décentralisées), Web3 Stack">
   <meta name="description" content="C'est quoi le web3? A quoi sert le web3? Quel sont les avantages? Nous répondons à ces questions sur le futur du web.">
+  
 <style>
   /* Réinitialisation des styles par défaut */
 body, h1, h2, p, ul, li {
@@ -512,51 +513,29 @@ footer {
   
 }
 </style>
-  <script>
-    function toggleMenu() {
+
+</head>
+<body>
+    <header>
+        <div class="logo">
+          <div class="custom-loader"></div>
+          
+        </div>
+        <nav>
+<div class="menu-container">
+  <div class="hamburger-menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+     <script>
+        function toggleMenu() {
             var menu = document.getElementById("menu");
             menu.classList.toggle("show");
         }
-    $(window).on("scroll", function() {
-  $(".scroll-section").each(function() {
-    if (isElementInViewport(this)) {
-      $(this).addClass("visible");
-      if ($(this).hasClass("scroll-1")) {
-        var rect = this.getBoundingClientRect();
-        if (rect.left <= 0) {
-          $(this).addClass("scroll-left");
-        }
-      } else if ($(this).hasClass("scroll-2")) {
-        var rect = this.getBoundingClientRect();
-        if (rect.left <= 0) {
-          $(this).addClass("scroll-right");
-        }
-      } else if ($(this).hasClass("scroll-3")) {
-        var rect = this.getBoundingClientRect();
-        if (rect.right <= (window.innerWidth || document.documentElement.clientWidth)) {
-          $(this).addClass("scroll-right");
-        }
-      } else if ($(this).hasClass("scroll-4")) {
-        var rect = this.getBoundingClientRect();
-        if (rect.top <= 0) {
-          $(this).addClass("scroll-down");
-        }
-      }
-    }
-  });
-});
-
-function isElementInViewport(el) {
-  var rect = el.getBoundingClientRect();
-  return (
-    rect.top >= 0 &&
-    rect.left >= 0 &&
-    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-  );
-}
-
-
+    </script>
+   <script>
 const hamburgerMenu = document.querySelector('.hamburger-menu');
 
 hamburgerMenu.addEventListener('click', () => {
@@ -573,25 +552,7 @@ hamburgerMenu.addEventListener('click', () => {
     }
   });
 });
-
-
   </script>
-</head>
-<body>
-    <header>
-        <div class="logo">
-          <div class="custom-loader"></div>
-          
-        </div>
-        <nav>
-<div class="menu-container">
-  <div class="hamburger-menu">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
-</div>
-     
     </header>
     <main>
         <div class="intro">
@@ -664,10 +625,46 @@ hamburgerMenu.addEventListener('click', () => {
     <p>L'intégration de l'intelligence artificielle et du Web sémantique dans le Web 3.0 permet de comprendre et d'analyser les données de manière plus avancée. Les systèmes peuvent utiliser des techniques de traitement du langage naturel, de vision par ordinateur et d'apprentissage automatique pour extraire des informations pertinentes, améliorer la recherche et la recommandation de contenu, et automatiser certaines tâches.</p>
 </section>
 </br>
-      <script>
-        
-    </script>
- 
+      <!---->
+  <script>
+        $(window).on("scroll", function() {
+  $(".scroll-section").each(function() {
+    if (isElementInViewport(this)) {
+      $(this).addClass("visible");
+      if ($(this).hasClass("scroll-1")) {
+        var rect = this.getBoundingClientRect();
+        if (rect.left <= 0) {
+          $(this).addClass("scroll-left");
+        }
+      } else if ($(this).hasClass("scroll-2")) {
+        var rect = this.getBoundingClientRect();
+        if (rect.left <= 0) {
+          $(this).addClass("scroll-right");
+        }
+      } else if ($(this).hasClass("scroll-3")) {
+        var rect = this.getBoundingClientRect();
+        if (rect.right <= (window.innerWidth || document.documentElement.clientWidth)) {
+          $(this).addClass("scroll-right");
+        }
+      } else if ($(this).hasClass("scroll-4")) {
+        var rect = this.getBoundingClientRect();
+        if (rect.top <= 0) {
+          $(this).addClass("scroll-down");
+        }
+      }
+    }
+  });
+});
+function isElementInViewport(el) {
+  var rect = el.getBoundingClientRect();
+  return (
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+  );
+}
+  </script>
 </body>
   <footer>
     <div class="footer-content">
@@ -691,5 +688,4 @@ hamburgerMenu.addEventListener('click', () => {
         <p>Tous droits réservés &copy; 2023 | coding by <a href="https://github.com/berru-g/">Berru-g</a></p>
     </div>
 </footer>
-
 </html>
