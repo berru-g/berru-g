@@ -513,6 +513,10 @@ footer {
 }
 </style>
   <script>
+    function toggleMenu() {
+            var menu = document.getElementById("menu");
+            menu.classList.toggle("show");
+        }
     $(window).on("scroll", function() {
   $(".scroll-section").each(function() {
     if (isElementInViewport(this)) {
@@ -661,10 +665,7 @@ hamburgerMenu.addEventListener('click', () => {
 </section>
 </br>
       <script>
-        function toggleMenu() {
-            var menu = document.getElementById("menu");
-            menu.classList.toggle("show");
-        }
+        
     </script>
  
 </body>
