@@ -8,7 +8,7 @@
       +-- make@1.0.1 
        -- play@1.2.3
 
-<h3 align="left">I'm not a developer, I code for fun when I have time. Give me the opportunity to train and we will do great things. Open for a project.</h3>
+<h3 align="left">I'm not a developer, I code for fun when I have time. Open for a project.</h3>
 
 <div class=""><h4 id="my-latest-learning">Last project :</h4>
 <ul>
