@@ -60,6 +60,6 @@
   <a href="https://www.tindie.com/stores/makeandplay/">Electronic</a> &bull;
   <a href="https://berru-g.github.io/assoberru/">Festival</a> &bull;
   <a href="https://berru-clothing.com">Brand</a> &bull;
-  <a href="https://github.com/berru-g/tagged-these-documents-via-a-captcha">Fun</a>
+  <a href="https://berru-g.github.io/berru-g/">CV-inline</a>
 </p>
 </body>
