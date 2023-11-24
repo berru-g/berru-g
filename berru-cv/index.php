@@ -818,11 +818,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $message = $_POST["message"];
 
     $servername = "localhost";
-    $username = "id21501192_w4llet_admin";
+    $username = "id21501192_wallet_allinone";
     $password = "W4llet-W4llet";
-    $dbname = "berrucv";
+    $dbname = "id21501192_w4llet_admin";
     //$bdd = new PDO("mysql:host=localhost;dbname=id21501192_w4llet_admin;charset=utf8", "id21501192_wallet_allinone", "W4llet-W4llet");
-    $conn = new mysql($servername, $username, $password, $dbname);
+    $conn = new mysqli($servername, $username, $password, $dbname);
 
     // Vérifier la connexion
     if ($conn->connect_error) {
@@ -830,7 +830,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Préparer et exécuter la requête SQL pour insérer le commentaire
-    $sql = "INSERT INTO commentaires (email, message) VALUES ('$email', '$message')";
+    $sql = "INSERT INTO berrucv (email, message) VALUES ('$email', '$message')";
     if ($conn->query($sql) === TRUE) {
         echo '<script>showMessage();</script>';
     } else {
@@ -856,7 +856,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!--fin espace commentaire-->
 
   <div class="intro">
-    <h1>En savoir plus</h1>
+    <h1>M' écrire directement</h1>
     <p>Contactez moi pour me parler de votre projet et je vous dirais si je peut vous être utile.</p>
     <a href="mailto:g.leberruyer@gmail.com"><button class="btn">M' écrire</button></a>
   </div>
@@ -925,4 +925,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <p>Tous droits réservés &copy; 2023 | coding by <a href="https://github.com/berru-g/">Berru-g</a></p>
   </div>
 </footer>
+
 </html>
