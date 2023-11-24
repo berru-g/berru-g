@@ -1,0 +1,928 @@
+<html>
+<!--Template by berru-g-->
+<head>
+  <meta charset="UTF-8">
+  <title>berru-g</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="https://github.com/berru-g/life-game/blob/main/src-img/hero/walk-perso-fixeD.png?raw=true"/>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <script src="script.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.all.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <meta name="keywords"
+    content="développeur web, site pas cher, développeur site internet,site statistiques ">
+  <meta name="description"
+    content="Développeur de site web static et dynamique autodidacte en quête de professionnalisation. CV en ligne berru-g/github.com">
+<!--commentaire-->
+<script>
+  function showMessage() {
+      alert("Le message a été envoyé avec succès merci!");
+  }
+</script>
+  <style>
+    
+  #commentaire {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+  }
+
+  form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 300px;
+  }
+
+  label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+  }
+
+  input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+  }
+
+  input[type="submit"] {
+      background-color: #5a8cea;
+      color: #fff;
+      cursor: pointer;
+  }
+
+  input[type="submit"]:hover {
+      background-color: #7a8cea;
+  }
+
+  @media (max-width: 400px) {
+      form {
+          width: 100%;
+      }
+  }
+</style>
+<!--fin de l'espace commentaire-->
+  <style>
+    /* Réinitialisation des styles par défaut */
+    body,
+    h1,
+    h2,
+    p,
+    ul,
+    li {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Importer la police Roboto depuis Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+    /* Appliquer la police à vos éléments */
+    body {
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background-image: linear-gradient(to top, #7fffd4, #8A2BE2, #1a1a1a);
+      background-repeat: repeat;
+      background-position: center;
+      /* Mode de fusion pour superposer l'image */
+      background-blend-mode: overlay;
+    }
+
+    body::after {
+      /* Opacité de l'image superposée */
+      content: "";
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://github.com/berru-g/scroll-effect/blob/main/src/img/back.png?raw=true') center/cover;
+      opacity: 0.3;
+      /* Modifier l'opacité ici */
+      pointer-events: none;
+    }
+
+    /* Styles pour l'en-tête */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: transparent;
+      backdrop-filter: blur(1px);
+    }
+
+    .im {
+      width: 70%;
+      height: auto;
+      margin: auto;
+      display: flex;
+    }
+
+    .logo img {
+      max-height: 55px;
+    }
+
+    .custom-loader {
+      width: 30px;
+      height: 12.5px;
+      border: 1px solid #Fff;
+      border-radius: 50%;
+      display: grid;
+      animation: h2 4s infinite linear;
+    }
+
+    .custom-loader:before,
+    .custom-loader:after {
+      content: "";
+      grid-area: 1/1;
+      border: inherit;
+      border-radius: 50%;
+      animation: inherit;
+      animation-duration: 6s;
+    }
+
+    .custom-loader:after {
+      --s: -1;
+    }
+
+    @keyframes h2 {
+      100% {
+        transform: rotate(calc(var(--s, 1)*1turn))
+      }
+    }
+
+    .menu-container {
+      position: relative;
+    }
+
+    .hamburger-menu {
+      width: 30px;
+      height: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .hamburger-menu span {
+      width: 100%;
+      height: 2px;
+      background-color: #fff;
+    }
+
+    /* Style pour la fenêtre contextuelle (popup) de SweetAlert */
+    .swal-overlay {
+      background-color: rgba(0, 0, 255, 0.5);
+      backdrop-filter: blur(5px);
+    }
+
+    .custom-swal-popup {
+      width: 300px;
+      background-color: #1a1a1a;
+      color: white;
+      box-shadow: none;
+    }
+
+    .custom-swal-close-button {
+      color: #fff;
+      font-size: 20px;
+      opacity: 0.7;
+    }
+
+    .custom-swal-content {
+      text-align: center;
+    }
+
+    .custom-swal-popup ul {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+
+    .custom-swal-popup ul li {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .custom-swal-popup ul li:last-child {
+      border-bottom: none;
+    }
+
+
+    /*scroll effect*/
+    .scroll-section {
+      padding: 15px 50px;
+      color: white;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.5s, transform 0.5s;
+    }
+
+    .scroll-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .scroll-section-left {
+      transform: translateX(-100%);
+    }
+
+    /* Effet 1 
+.scroll-1 {
+  padding: 15px 50px;
+  color: white;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.scroll-1.scroll-left {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.scroll-2 {
+  padding: 15px 50px;
+  color: white;
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.scroll-2.scroll-right {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-section.scroll-3 {
+  padding: 15px 50px;
+  color: white;
+  opacity: 0;
+  transform: translateX(50px);
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.scroll-section.scroll-3.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-section.scroll-4 {
+  padding: 15px 50px;
+  color: white;
+  opacity: 0;
+  transform: translateY(-50px);
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.scroll-section.scroll-4.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+*/
+    h2 {
+      color: #fff;
+    }
+
+    /* Animation */
+    h1 {
+      animation-name: slide-in-left;
+      animation-duration: 2s;
+    }
+
+    h3,
+    p {
+      color: #fff;
+      animation-name: slide-in-right;
+      animation-duration: 2s;
+    }
+
+    .logo {
+      display: inline-block;
+      position: relative;
+      max-width: 200px;
+      animation-name: bounce-in-top;
+      animation-duration: 2s;
+    }
+
+    /* Définir les animations */
+    @keyframes slide-in-left {
+      from {
+        transform: translateX(-100%);
+      }
+
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slide-in-right {
+      from {
+        transform: translateX(100%);
+      }
+
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes bounce-in-top {
+      from {
+        transform: translateY(-150px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /*-----------------------*/
+    /* Styles pour la section d'introduction */
+    .intro {
+      padding: 50px;
+      text-align: center;
+    }
+
+    .intro h1 {
+      color: #fff;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .intro p {
+      color: #fff;
+      font-size: 16px;
+    }
+
+    .imginter {
+      max-width: 400px;
+      height: auto;
+      margin: auto;
+      display: flex;
+    }
+
+    button {
+      margin: 20px;
+    }
+
+    .btn {
+      width: 130px;
+      height: 40px;
+      color: #fff;
+      border-radius: 5px;
+      padding: 10px 25px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 500;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      display: inline-block;
+      box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+        7px 7px 20px 0px rgba(0, 0, 0, .1),
+        4px 4px 5px 0px rgba(0, 0, 0, .1);
+      outline: none;
+    }
+
+    .btn {
+      border: none;
+      background: transparent;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .btn:hover {
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .btn:before {
+      position: absolute;
+      content: '';
+      display: inline-block;
+      top: -180px;
+      left: 0;
+      width: 30px;
+      height: 100%;
+      background-color: #fff;
+      animation: shiny-btn1 3s ease-in-out infinite;
+    }
+
+    .btn:hover {
+      opacity: .5;
+    }
+
+    .btn:active {
+      box-shadow: 4px 4px 6px 0 rgba(255, 255, 255, .3),
+        -4px -4px 6px 0 rgba(116, 125, 136, .2),
+        inset -4px -4px 6px 0 rgba(255, 255, 255, .2),
+        inset 4px 4px 6px 0 rgba(0, 0, 0, .2);
+    }
+
+
+    @-webkit-keyframes shiny-btn1 {
+      0% {
+        -webkit-transform: scale(0) rotate(45deg);
+        opacity: 0;
+      }
+
+      80% {
+        -webkit-transform: scale(0) rotate(45deg);
+        opacity: 0.5;
+      }
+
+      81% {
+        -webkit-transform: scale(4) rotate(45deg);
+        opacity: 1;
+      }
+
+      100% {
+        -webkit-transform: scale(50) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    /* Styles pour les boîtes de contenu */
+    .content {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding: 50px;
+    }
+
+    .box {
+      width: 45%;
+      padding: 20px;
+      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      backdrop-filter: blur(4px);
+      animation: box-fade 1s ease-in-out;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    @keyframes box-fade {
+      0% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .box:hover {
+      transform: scale(1.05);
+    }
+
+    .box img {
+      max-width: 100%;
+      height: auto;
+      animation: image-fade 1s ease-in-out;
+    }
+
+    @keyframes image-fade {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .box .text {
+      animation: text-fade 1s ease-in-out;
+    }
+
+    @keyframes text-fade {
+      0% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .box i.material-icons {
+      font-size: 48px;
+      color: #fff;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .intro {
+        padding: 20px;
+      }
+
+      .btn {
+        margin: 10px auto;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .box {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .menu-icon {
+        display: block;
+      }
+
+      .menu li {
+        margin-left: 0;
+      }
+
+      .menu li a {
+        color: #fff;
+      }
+
+      .box:hover {
+        transform: none;
+      }
+    }
+
+    a {
+      color: #ffbf00;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #b478ec;
+    }
+
+    .ban {
+      width: 100%;
+      height:
+        auto;
+    }
+
+    footer {
+      background-color: #1a1a1a;
+      color: #fff;
+      padding: 10px 5px;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .footer-section {
+      flex-basis: 30%;
+      margin-bottom: 20px;
+    }
+
+    .footer-section h3 {
+      margin-bottom: 10px;
+    }
+
+    .footer-section p,
+    .footer-section ul,
+    .footer-section a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .footer-section.about p {
+      line-height: 1.5;
+    }
+
+    .footer-section.links ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-section.links li {
+      margin-bottom: 5px;
+    }
+
+    .footer-section.links a:hover {
+      color: #7fffd4;
+    }
+
+    .footer-section.contact p i {
+      margin-right: 10px;
+
+    }
+
+    .footer-bottom {
+      background-color: #1a1a1a;
+      padding: 0px 0;
+      text-align: center;
+    }
+
+    .footer-bottom p {
+      font-size: 12px;
+      color: #ccc;
+      margin: 0;
+
+    }
+
+    .profile-image {
+      display: block;
+      margin: 0 auto;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+    }
+  </style>
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXWVBMBL8N"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-XXWVBMBL8N');
+</script>
+
+<body>
+  <header>
+    <div class="logo">
+      <div class="custom-loader"></div>
+
+    </div>
+    <nav>
+      <div class="menu-container">
+        <div class="hamburger-menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+      <script>
+        function toggleMenu() {
+          var menu = document.getElementById("menu");
+          menu.classList.toggle("show");
+        }
+      </script>
+      <script>
+        const hamburgerMenu = document.querySelector('.hamburger-menu');
+
+        hamburgerMenu.addEventListener('click', () => {
+          // Utilisation de SweetAlert pour afficher la fenêtre contextuelle
+          Swal.fire({
+            title: 'Skills',
+            html: '<ul><li><a href="#">Accueil</a></li><li><a href="https://github.com/berru-g/">Github</a></li><li><a href="https://codepen.io/h-lautre">Codepen</a></li><li><a href="https://www.tindie.com/stores/makeandplay/">Tindie</a></li></ul>',
+            showCloseButton: true,
+            showConfirmButton: false,
+            customClass: {
+              popup: 'custom-swal-popup',
+              closeButton: 'custom-swal-close-button',
+              content: 'custom-swal-content',
+            }
+          });
+        });
+      </script>
+  </header>
+  <main>
+    <a href="https://github.com/berru-g"><img src="https://avatars.githubusercontent.com/u/61543927?v=4"
+        alt="berru-g/github" class="profile-image"></a>
+    <div class="intro">
+      <h1>berru-g</h1>
+      <p>I'm not a developer, I code for fun when I have time. Open for a project.</p>
+      <!-- <a href="https://codepen.io/h-lautre"><button class="btn">Découvrir</a></button>-->
+    </div>
+    <section class="scroll-section">
+      <h2>Autodidacte</h2><br>
+      <p>Développant mes connaissances en autodidacte dans le domaine du développement web et de la programmation back,
+        depuis le confinement en 2020, j'ai acquis certaine compétences.</p><br>
+      <p> Voyons cela par domaine;</p>
+      <!--<img class="im" src="https://www.numerama.com/wp-content/uploads/2023/02/blockchain-4.jpg" alt="Image 4"/>-->
+    </section>
+
+
+
+    <div class="content">
+      <div class="box">
+
+        <section class="scroll-section">
+          <a href="#"><img
+              src="https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&text_color=a1a1a1&bg_color=a7a7a700&hide_border=true&title_color=a1a1a1&custom_title=Favorite-language&langs_count=10&card_height=100&layout=compact" /></a>
+        </section><i class="fa-duotone fa-cube fa-2xs"
+          style="--fa-primary-color: #ffffff; --fa-secondary-color: #ffffff;"></i>
+        <div class="text">
+          <h2>Front-end</h2><br>
+          <p>Pour le developpement front-end j'utilise les languages HTML, CSS, SCSS et JavaScript ainsi que plusieurs
+            de leur librairies. Je maitrise les associations de couleurs adapté aux besoins et à l'univers voulu.</p>
+          <br>
+          <p> Découvrez mes travaux sur <a href="https://codepen.io/h-lautre">Codepen</a>.</p>
+        </div>
+      </div>
+
+      <div class="box">
+
+        <div class="text">
+          <h2>Base de données</h2><br>
+          <p>L'utilisation de PHP et PHPmyAdmin pour gérer une base de données SQL est ce que j'utilise le plus, c'est
+            une solution simple et facile d'acces pour le client est le developpeur. L'implémentation de php gère
+            <i>l'inscription de l'utilisateur, la connexion, le changement de mot de passe et la déconnexion</i>.</p>
+          <br>
+          <p>Visiter mon site d'exemple <a href="https://w4llet-all-in-one.000webhostapp.com/">Wallet-all-in-one</a>.
+          </p>
+        </div>
+        <section class="scroll-section">
+          <a href="#"><img src="https://www.icone-png.com/png/53/52503.png" alt="Image 2"></a>
+        </section>
+      </div>
+      </section>
+      <div class="box">
+
+        <section class="scroll-section">
+          <a href="#"><img
+              src="https://ethereum.org/static/9a6e158f4ffd1cb5de246a3ecd0d7f86/16dfb/hackathon_transparent.webp"
+              alt="Image 3"></a>
+        </section>
+        <div class="text">
+          <h2>Electronique</h2><br>
+          <p>Le confinement fut long j'ai donc pu m'essayer à la création de Machine DAW, ou machine pour tout logiciel
+            de création musiqual tel que Ableton ou FL-Studio. A l'aide de beaucoup de tuto pour la partie programmation
+            et de beaucoup de soudure pour la partie création de circuit électronique. J'ai crée quelques machines
+            lowcost.</p><br>
+          <p>Découvrez mes travaux en électronique sur <a href="https://www.tindie.com/stores/makeandplay/">Tindie</a>.
+          </p>
+        </div>
+      </div>
+      <div class="box">
+
+        <div class="text">
+          <h2>Automation</h2><br>
+          <p>Par nécessité j'ai étais amené à développer des outils d'automation pour éviter certaines tâches
+            répetitives.</p><br>
+          <p>Vous trouverez les script dans <a href="https://github.com/berru-g/OTTO-TOOLS">le repository dédié</a>.</p>
+          <section class="scroll-section">
+            <a href="#"><img src="https://ethereum.org/static/5dea0acbc8484c42006d7bbed32fa019/d1bb0/doge-computer.webp"
+                alt="Image 3"></a>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section class="scroll-section">
+    <h2>Objectif professionalisation :</h2><br>
+    <p>En développant mes compétences en autodidacte dans le domaine du développement et de la programmation, je
+      recherche maintenant une opportunité de stage dans un environnement professionnel, pour acquérir une compréhension
+      approfondie des concepts fondamentaux du développement web.
+    </p><br>
+    <p>
+      Mon objectif est de progresser par la pratique, maîtriser les outils modernes tels que les frameworks, et
+      confronter mes limites afin de tendre vers un niveau professionnel.
+    </p><br>
+    <p>
+      Je suis convaincu que cette expérience immersive sera cruciale pour mon évolution et ma contribution pourrait
+      s'avérer enrichissante pour nous tous.
+    </p><br>
+    <p>
+      Si vous le souhaitez, je reste à votre disposition pour un entretien téléphonique ou dans vos locaux.
+      Je pourrais alors vous expliquer directement mon projet.
+    </p>
+  </section>
+
+  <!--espace commentaire-->
+  <?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST["email"];
+    $message = $_POST["message"];
+
+    $servername = "localhost";
+    $username = "id21501192_w4llet_admin";
+    $password = "W4llet-W4llet";
+    $dbname = "berrucv";
+    //$bdd = new PDO("mysql:host=localhost;dbname=id21501192_w4llet_admin;charset=utf8", "id21501192_wallet_allinone", "W4llet-W4llet");
+    $conn = new mysql($servername, $username, $password, $dbname);
+
+    // Vérifier la connexion
+    if ($conn->connect_error) {
+        die("La connexion à la base de données a échoué: " . $conn->connect_error);
+    }
+
+    // Préparer et exécuter la requête SQL pour insérer le commentaire
+    $sql = "INSERT INTO commentaires (email, message) VALUES ('$email', '$message')";
+    if ($conn->query($sql) === TRUE) {
+        echo '<script>showMessage();</script>';
+    } else {
+        echo "Erreur lors de l'insertion du commentaire: " . $conn->error;
+    }
+
+    $conn->close();
+}
+?>
+
+<!-- Formulaire -->
+<div id="commentaire">
+<form action="" method="post">
+    <label for="email">Votre email :</label>
+    <input type="email" name="email" required><br>
+
+    <label for="message">Votre commentaire :</label>
+    <textarea name="message" rows="4" required></textarea><br>
+
+    <input type="submit" value="Envoyer le commentaire">
+</form>
+</div>
+<!--fin espace commentaire-->
+
+  <div class="intro">
+    <h1>En savoir plus</h1>
+    <p>Contactez moi pour me parler de votre projet et je vous dirais si je peut vous être utile.</p>
+    <a href="mailto:g.leberruyer@gmail.com"><button class="btn">M' écrire</button></a>
+  </div>
+
+  <br>
+  <!---->
+  <script>
+    $(window).on("scroll", function () {
+      $(".scroll-section").each(function () {
+        if (isElementInViewport(this)) {
+          $(this).addClass("visible");
+          if ($(this).hasClass("scroll-1")) {
+            var rect = this.getBoundingClientRect();
+            if (rect.left <= 0) {
+              $(this).addClass("scroll-left");
+            }
+          } else if ($(this).hasClass("scroll-2")) {
+            var rect = this.getBoundingClientRect();
+            if (rect.left <= 0) {
+              $(this).addClass("scroll-right");
+            }
+          } else if ($(this).hasClass("scroll-3")) {
+            var rect = this.getBoundingClientRect();
+            if (rect.right <= (window.innerWidth || document.documentElement.clientWidth)) {
+              $(this).addClass("scroll-right");
+            }
+          } else if ($(this).hasClass("scroll-4")) {
+            var rect = this.getBoundingClientRect();
+            if (rect.top <= 0) {
+              $(this).addClass("scroll-down");
+            }
+          }
+        }
+      });
+    });
+    function isElementInViewport(el) {
+      var rect = el.getBoundingClientRect();
+      return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+      );
+    }
+  </script>
+</body>
+<footer>
+  <div class="footer-content">
+    <div class="footer-section links">
+      <h3>Liens rapides</h3>
+      <ul>
+        <li><a href="https://codepen.io/h-lautre">Front-end</a></li>
+        <li><a href="https://github.com/berru-g/">Github</a></li>
+        <li><a href="#">Electronique</a></li>
+        <li><a href="https://github.com/berru-g/game_for_kids">Game for kids</a></li>
+      </ul>
+    </div>
+    <div class="footer-section contact">
+      <h3>Contact</h3>
+      <p><i class="material-icons">location_on</i>L.A NTS</p>
+      <p><i class="material-icons">email</i>g.leberruyer@gmail.com</p>
+      <p><i class="material-icons">phone</i>0701020304</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>Tous droits réservés &copy; 2023 | coding by <a href="https://github.com/berru-g/">Berru-g</a></p>
+  </div>
+</footer>
+</html>
