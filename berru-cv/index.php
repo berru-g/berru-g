@@ -845,10 +845,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div id="commentaire">
 <form action="" method="post">
     <label for="email">Votre email :</label>
-    <input type="email" name="email" required><br>
+    <input type="email" name="email" placeholder="ou votre pseudo" required><br>
 
     <label for="message">Votre commentaire :</label>
-    <textarea name="message" rows="4" required></textarea><br>
+    <textarea name="message" rows="4" placeholder="dois contenir au moins une bonne nouvelle" required></textarea><br>
 
     <input type="submit" value="Envoyer le commentaire">
 </form>
