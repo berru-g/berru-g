@@ -10,7 +10,7 @@
 
 <h3 align="left">I'm not a developer, I code for fun when I have time. Open for a project.</h3>
 
-<div class=""><h4 id="my-latest-learning">Last project :</h4>
+<!--<div class=""><h4 id="my-latest-learning">Last project :</h4>
 <ul>
   <li><a href="https://w4llet-all-in-one.000webhostapp.com/">Wallet All in one</a></li>
   <li><a href="https://codepen.io/h-lautre/full/eYQEVNw">Site theme Web3</a></li>
@@ -20,7 +20,7 @@
 <li><a href="https://codepen.io/h-lautre/full/abYYBGE">parallax</a></li>
   
 </ul>
-</div>
+</div>-->
 
   <div class=""><h4 id="my-latest-learning">Tool's</h4>
 <ul>
