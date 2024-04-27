@@ -24,10 +24,11 @@
 
   <div class=""><h4 id="my-latest-learning">Tool's 2020</h4>
 <ul>
-  <li><a href="https://codepen.io/h-lautre/pen/bGOQxjK">Terminal help-desk interactif</a></li>
+  <li><a href="https://berru-g.github.io/console-interactive/">Terminal help-desk interactif</a></li>
   <li><a href="https://github.com/berru-g/api-crypto-tool-s">Alarm crypto</a></li>
 <li><a href="https://github.com/berru-g/All-in-one-dashboard">Wallet</a></li>
-  <li><a href="https://github.com/berru-g/OTTO-TOOLS">Automation</a></li>
+  <li><a href="https://github.com/berru-g/OTTO-TOOLS">Automation</a></li> 
+ <li><a href="https://berru-g.github.io/generate-qrcode/">QRCode generate</a></li> 
 <li><a href="https://github.com/berru-g/OTTO-TOOLS/tree/main/scrap">Scrapping</a></li>
 <li>2020 <a href="https://github.com/berru-g/MAKE_PLAY-1">Controller USB midi</a></li>
 </ul>
