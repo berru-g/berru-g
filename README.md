@@ -10,16 +10,14 @@
 
 <h3 align="left">I'm not a developer, I code for fun when I have time. Open for a project.</h3>
 
-<!--<div class=""><h4 id="my-latest-learning">Last project :</h4>
+<div class=""><h4 id="my-latest-learning">Site 2020</h4>
 <ul>
-  <li><a href="https://w4llet-all-in-one.000webhostapp.com/">Wallet All in one</a></li>
-  <li><a href="https://codepen.io/h-lautre/full/vYvNGBP">Crypto Unity</a></li>
+  <li><a href="https://codepen.io/h-lautre/full/eYQEVNw">Web3 theme site</a></li>
+  <li><a href="https://berru-g.github.io/assoberru/">Association events site</a></li>
 <li><a href="https://www.nobullshitjusttravel.com">Site d'offre de voyage</a></li>
 <li><a href="https://www.livre-audio-enfant.com">SEO livre Audio</a></li>
-<li><a href="https://codepen.io/h-lautre/full/abYYBGE">parallax</a></li>
-  
 </ul>
-</div>-->
+</div>
 
   <div class=""><h4 id="my-latest-learning">Tool's 2020</h4>
 <ul>
@@ -28,7 +26,6 @@
   <li><a href="https://github.com/berru-g/OTTO-TOOLS">Automation</a></li> 
  <li><a href="https://berru-g.github.io/generate-qrcode/">QRCode generate</a></li> 
 <li><a href="https://github.com/berru-g/OTTO-TOOLS/tree/main/scrap">Scrapping</a></li>
-  <li><a href="https://codepen.io/h-lautre/full/eYQEVNw">Site theme Web3</a></li>
 <li>2020 <a href="https://github.com/berru-g/MAKE_PLAY-1">Controller DAW USB midi with arduino</a></li>
 </ul>
 </div>
