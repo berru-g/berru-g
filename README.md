@@ -19,10 +19,11 @@
 </ul>
 </div>
 
-  <div class=""><h4 id="my-latest-learning">Tool's 2020</h4>
+  <div class=""><h4 id="my-latest-learning">Free Tool's 2020</h4>
 <ul>
   <li><a href="https://berru-g.github.io/console-interactive/">Terminal help-desk interactif</a></li>
 <li><a href="https://github.com/berru-g/All-in-one-dashboard">Wallet all in one</a></li>
+  <li><a href="https://berru-g.github.io/wallet_allinone.php/budget/">Budget calcul</a></li>
   <li><a href="https://github.com/berru-g/OTTO-TOOLS">Automation</a></li> 
  <li><a href="https://berru-g.github.io/generate-qrcode/">QRCode generate</a></li> 
 <li><a href="https://github.com/berru-g/OTTO-TOOLS/tree/main/scrap">Scrapping</a></li>
