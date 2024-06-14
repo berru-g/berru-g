@@ -81,7 +81,7 @@
   width: 80%;
   margin: 0 auto;
   padding: 20px;
-  background-color: #333333;
+  background-image: linear-gradient(to top, #7fffd4, #0f52ba);
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
