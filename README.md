@@ -12,6 +12,7 @@
 
 <div class=""><h4 id="my-latest-learning">Site 2020</h4>
 <ul>
+<li><a>https://berru-g.github.io/gangue-astral-free-player/index.html">player music</a></li>
   <li><a href="https://codepen.io/h-lautre/full/eYQEVNw">Web3 theme site</a></li>
   <li><a href="https://berru-g.github.io/assoberru/">Association events site</a></li>
 <li><a href="https://www.nobullshitjusttravel.com">Site d'offre de voyage</a></li>
