@@ -344,7 +344,7 @@ li {
 }
 
 .photo:hover {
-  filter: blur(2px);
+  transform:scale(0.9);
 }
 
 .profile-image {
@@ -352,7 +352,7 @@ li {
   height: 150px;
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid #333;
+  
 }
 
 /*-----------------------*/
@@ -586,6 +586,32 @@ a:hover {
     auto;
 }
 
+.formulaire {
+  margin: 0;
+  margin-left: 30%;
+  padding: 20 20;
+}
+
+.formulaire input,
+.formulaire textarea {
+  width: 50%;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border-radius: 5px;
+}
+
+.formulaire button {
+  padding: 0.5rem 1rem;
+  background: #0f52ba;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.formulaire button:hover {
+  background: #0056b3;
+}
 footer {
   background-color: #1a1a1a;
   color: #fff;
