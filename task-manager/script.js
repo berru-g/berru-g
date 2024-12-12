@@ -18,34 +18,34 @@ document.addEventListener('DOMContentLoaded', function () {
   const totalWalletValue = document.getElementById('wallet-total-value');
   const bitcoinPriceElement = document.getElementById('bitcoin-price');
   const solanaPriceElement = document.getElementById('solana-price');
-  const pepePriceElement = document.getElementById('pepe-price');
+  const rsrPriceElement = document.getElementById('rsr-price');
   const teslaPriceElement = document.getElementById('tesla-price');
   
   // Sample wallet values
   const wallet = {
       bitcoin: 0.0000,
       solana: 0,
-      pepe: 106000000
+      rsr: 91020
   };
 
   // Fetch Crypto Prices
   async function fetchCryptoPrices() {
-      const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,solana,pepe&vs_currencies=usd&include_24hr_change=true');
+      const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,solana,reserve-rights-token&vs_currencies=usd&include_24hr_change=true');
       const data = await response.json();
 
       const bitcoinPrice = data.bitcoin.usd;
       const solanaPrice = data.solana.usd;
-      const pepePrice = data.pepe.usd;
+      const rsrPrice = data.rsr.usd;
 
       bitcoinPriceElement.textContent = `$${bitcoinPrice}`;
       solanaPriceElement.textContent = `$${solanaPrice}`;
-      pepePriceElement.textContent = `$${pepePrice}`;
+      rsrPriceElement.textContent = `$${rsrPrice}`;
 
       bitcoinPriceElement.style.color = data.bitcoin.usd_24h_change >= 0 ? '#2ed573' : '#ff6348';
       solanaPriceElement.style.color = data.solana.usd_24h_change >= 0 ? '#2ed573' : '#ff6348';
-      pepePriceElement.style.color = data.pepe.usd_24h_change >= 0 ? '#2ed573' : '#ff6348';
+      rsrPriceElement.style.color = data.rsr.usd_24h_change >= 0 ? '#2ed573' : '#ff6348';
 
-      totalWalletValue.textContent = `$${(wallet.bitcoin * bitcoinPrice + wallet.solana * solanaPrice + wallet.pepe * pepePrice).toFixed(2)}`;
+      totalWalletValue.textContent = `$${(wallet.bitcoin * bitcoinPrice + wallet.solana * solanaPrice + wallet.rsr * rsrPrice).toFixed(2)}`;
   }
 
   // Fetch Tesla Stock Price
