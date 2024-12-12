@@ -1,0 +1,73 @@
+<html lang="en">
+<head><!--berru-g.github-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Dashboard & ToDo List</title>
+    <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.all.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1 id="date-time" title="Everything in front of you with this Dashboard including, the live crypto price, total amount of your wallet(s). Add tasks to be executed today (alarm) and chatgptp support widget.
+For full use, don't forget to add your API key for Chatgpt.
+">Dashboard</h1>
+        <div class="menu-container">
+  <div class="hamburger-menu">
+    <button></button>
+  </div>
+</div>
+    </header>
+    <div class="container">
+        <div class="sidebar">
+            <div><img id="bitcoin-logo" src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=032" alt=""> <span id="bitcoin-price"></span></div>
+            <div><img id="solana-logo" src="https://cryptologos.cc/logos/solana-sol-logo.png?v=032" alt=""> <span id="solana-price"></span></div>
+            <div><img id="pepe-logo" src="https://cryptologos.cc/logos/pepe-pepe-logo.png?v=032" alt=""> <span id="pepe-price"></span></div>
+            <div><img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=032" id="wallet-total"><span id="wallet-total-value"></span></div>
+            <!--<div><img id="tesla-logo" src="https://logo-marque.com/wp-content/uploads/2020/11/Tesla-Symbole-650x366.png" alt="Tesla"> <span id="tesla-price"></span></div>-->
+        </div>
+
+        <div class="content">
+           <button id="add-task">Add Task</button>
+            <div id="todo-list">
+                <!-- Tasks will be appended here -->
+            </div>
+        </div>
+    </div>
+  <div class="chat-widget">
+        <div class="chat-header">ChatGPT</div>
+        <div class="chat-body" id="chat-body">
+            <div class="message bot">Hello! How can I assist you today?</div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="chat-input" placeholder="Type a message...">
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+    <footer class="footer">
+<div class="footer-columns">
+      <div class="footer-column">
+        <h3 class="footer-title">Other free tool</h3>
+        <a href="https://berru-g.github.io/All-in-one-dashboard/" class="footer-link">Wallet all in one</a>
+        <a href="https://berru-g.github.io/console-interactive/" class="footer-link">HelpDesk terminal</a>
+        <a href="#" class="footer-link">QrCode no ads, no data</a>
+      </div>
+      <div class="footer-column">
+        <h3 class="footer-title">Profil</h3>
+        <a href="https://github.com/berru-g" class="footer-link">Github</a>
+        <a href="https://codepen.io/h-lautre" class="footer-link">Codepen</a>
+        <a href="https://bento.me/berru" class="footer-link">Bento</a>
+      </div>
+      <div class="footer-column">
+        <h3 class="footer-title">Developper</h3>
+        <a href="https://bento.me/berru" class="footer-link">Dev</a>
+        <a href="https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,solana,pepe&vs_currencies=usd&include_24hr_change=true" class="footer-link">API</a>
+        <a href="https://github.com/berru-g" class="footer-link">Code source</a>
+      </div>
+    </div>
+      <div class="footer-bottom">
+      <p>Tous droits réservés &copy; 2024 | <a href="https://comeup.com/fr/@berru">berru-g</a></p>
+  </footer>
+</html>

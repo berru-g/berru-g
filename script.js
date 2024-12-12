@@ -1,64 +1,74 @@
-/*Swal.fire({
-    title: 'Bienvenue sur mon CV en ligne',
-    text: 'Appelez moi pour plus de détails ',
-    icon: 'info',
-    timer: 5000,
-    timerProgressBar: true,
-    showConfirmButton: false
-  }).then(() => {
-  });*/
+//  tutorial : https://codepen.io/ebinabo/pen/WNwjEaL
 
+/*
+https://gsap.com/
+*/
+document.getElementById('dark-mode-toggle').addEventListener('click', function () {
   
-  $(window).on("scroll", function () {
-    $(".scroll-section").each(function () {
-      if (isElementInViewport(this)) {
-        $(this).addClass("visible");
-        if ($(this).hasClass("scroll-1")) {
-          var rect = this.getBoundingClientRect();
-          if (rect.left <= 0) {
-            $(this).addClass("scroll-left");
-          }
-        } else if ($(this).hasClass("scroll-2")) {
-          var rect = this.getBoundingClientRect();
-          if (rect.left <= 0) {
-            $(this).addClass("scroll-right");
-          }
-        } else if ($(this).hasClass("scroll-3")) {
-          var rect = this.getBoundingClientRect();
-          if (rect.right <= (window.innerWidth || document.documentElement.clientWidth)) {
-            $(this).addClass("scroll-right");
-          }
-        } else if ($(this).hasClass("scroll-4")) {
-          var rect = this.getBoundingClientRect();
-          if (rect.top <= 0) {
-            $(this).addClass("scroll-down");
-          }
-        }
-      }
-    });
+  const body = document.body;
+  const footer = document.querySelector('footer');
+  const isDark = body.classList.toggle('dark-mode');
+  
+  gsap.to(body, {
+    backgroundColor: isDark ? '#2f2f2f' : '#fbfbf0',
+    color: isDark ? '#f6f6dc' : '#2f2f2f',
+    duration: 0.25
   });
-  function isElementInViewport(el) {
-    var rect = el.getBoundingClientRect();
-    return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
-  }
 
-  const hamburgerMenu = document.querySelector('.hamburger-menu');
-  hamburgerMenu.addEventListener('click', () => {
-    // Utilisation de SweetAlert pour afficher la fenêtre contextuelle
-    Swal.fire({
-      title: 'Skills',
-      html: '<ul><li><a href="https://www.instagram.com/berru_aka/">Illustrations & more</a></li><li><a href="https://github.com/berru-g/">Code open source</a></li><li><a href="https://codepen.io/h-lautre">Sites et outils</a></li><li><a href="https://www.tindie.com/stores/makeandplay/">PCB Hardware</a></li></ul>',
-      showCloseButton: true,
-      showConfirmButton: false,
-      customClass: {
-        popup: 'custom-swal-popup',
-        closeButton: 'custom-swal-close-button',
-        content: 'custom-swal-content',
-      }
-    });
+  gsap.to(footer, {
+    borderColor:isDark ? '#f6f6dc' : '#2f2f2f',
+    duration: 0.15});
+});
+
+/* 
+https://swiperjs.com
+*/
+const swiper = new Swiper(".swiper-slider", {
+  centeredSlides: true,
+  speed:800,
+  slidesPerView: 1,
+  grabCursor: true,
+  freeMode: false,
+  loop: true,
+  touchRatio: 1.5,
+  spaceBetween: 0.0,
+  mousewheel: false,
+  keyboard: {
+    enabled: true
+  },
+  autoplay:true,
+  autoplay: {
+    delay: 3000,
+    disableOnInteraction: false
+  },
+  pagination: {
+    el: ".swiper-pagination",
+    type: "progressbar",
+  }
+});
+
+/* 
+https://github.com/locomotivemtl/locomotive-scroll 
+*/
+const scroller = new LocomotiveScroll({
+  el: document.querySelector('[data-scroll-container]'),
+  smooth: true
+});
+
+// Navigation
+document.querySelectorAll('.nav-bar a').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const targetId = this.getAttribute('href').substring(1);
+    const targetSection = document.getElementById(targetId);
+    scroller.scrollTo(targetSection);
   });
+});
+
+// go top
+document.querySelector('.go').addEventListener('click', function (e) {
+  e.preventDefault();
+  const targetId = this.getAttribute('href').substring(1);
+  const targetSection = document.getElementById(targetId);
+  scroller.scrollTo(targetSection);
+});
