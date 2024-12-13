@@ -112,5 +112,14 @@ h2 {
   display: inline-block;
   border-bottom: 4px solid var(--wesbos);
   margin-top: 0;
-  font: 50px cookie, cursive;
+  font: 50px  cursive;
+}
+.alergene {
+  color: white;
+  border: 1px solid var(--wesbos);
+  border-radius: 3px;
+}
+a {
+  color: white;
+  text-decoration: none;
 }
