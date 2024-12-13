@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Restaurant menu with follow along highlighter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css?family=Cookie" rel="stylesheet"><link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div class="wrapper">
+
+  <h2>Restoberge Menu</h2>
+
+  <div class="buttons-container">
+    <a href="#" class="button button--is-active" data-target="platMenu">Plats</a>
+    <a href="#" class="button" data-target="desserteMenu">Desserts</a>
+    <a href="#" class="button" data-target="boissonMenu">Boissons</a>
+  </div>
+
+  <!-- Start plat Menu -->
+  <div class="menu menu--is-visible" id="platMenu">
+    <div class="item">
+      <div class="item__header">
+        <h3 class="item__title">Poke bawl</h3>
+        <span class="item__dots"></span>
+        <span class="item__price">12€</span>
+      </div>
+      <p class="item__description">Poulet mariné 24H, concombre, carotte en pickles, riz sauté et épices.</p>
+    </div>
+
+    <div class="item">
+      <div class="item__header">
+        <h3 class="item__title">Gauffre</h3>
+        <span class="item__dots"></span>
+        <span class="item__price">12€</span>
+      </div>
+      <p class="item__description">Gauffre de pois chiche aux épice et herbes fraiche, crême de ricotta, aubergines rôtie et poivrons confit.</p>
+    </div>
+<!--
+    <div class="item">
+      <div class="item__header">
+        <h3 class="item__title">Neapolitan plat</h3>
+        <span class="item__dots"></span>
+        <span class="item__price">$18</span>
+      </div>
+      <p class="item__description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt quos harum officia eaque nobis ut.</p>
+    </div>
+
+    <div class="item">
+      <div class="item__header">
+        <h3 class="item__title">Pepperoni plat</h3>
+        <span class="item__dots"></span>
+        <span class="item__price">$15</span>
+      </div>
+      <p class="item__description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt quos harum officia eaque nobis ut.</p>
+    </div>-->
+  </div> <!-- End plat Menu -->
+
+  <!-- Start desserte Menu -->
+  <div class="menu" id="desserteMenu">
+    <div class="item">
+      <div class="item__header">
+        <h3 class="item__title">Gateau noisette</h3>
+        <span class="item__dots"></span>
+        <span class="item__price">8€</span>
+      </div>
+      <p class="item__description">Gateau aux éclats de noisettes et ganache crémeuse.</p>
+    </div>
+
+    <div class="item">
+      <div class="item__header">
+        <h3 class="item__title">Gateau nantais</h3>
+        <span class="item__dots"></span>
+        <span class="item__price">7€</span>
+      </div>
+      <p class="item__description">Le gateau historique du coin.</p>
+    </div>
+<!--
+    <div class="item">
+      <div class="item__header">
+        <h3 class="item__title">Café Latte</h3>
+        <span class="item__dots"></span>
+        <span class="item__price">$3</span>
+      </div>
+      <p class="item__description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt quos harum officia eaque nobis ut.</p>
+    </div>
+
+    <div class="item">
+      <div class="item__header">
+        <h3 class="item__title">Espresso</h3>
+        <span class="item__dots"></span>
+        <span class="item__price">$4</span>
+      </div>
+      <p class="item__description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt quos harum officia eaque nobis ut.</p>
+    </div>-->
+  </div> <!-- End desserte Menu -->
+
+  <!-- Start boisson Menu -->
+  <div class="menu" id="boissonMenu">
+    <div class="item">
+      <div class="item__header">
+        <h3 class="item__title">Soft</h3>
+        <span class="item__dots"></span>
+        <span class="item__price">3€</span>
+      </div>
+      <p class="item__description">Coca, orangina, sirop, sprite, jus bio et nantais.</p>
+    </div>
+
+    <div class="item">
+      <div class="item__header">
+        <h3 class="item__title">Chaud</h3>
+        <span class="item__dots"></span>
+        <span class="item__price">3€</span>
+      </div>
+      <p class="item__description">Café, thé et chocolat.</p>
+    </div>
+
+    <div class="item">
+      <div class="item__header">
+        <h3 class="item__title">Vin</h3>
+        <span class="item__dots"></span>
+        <span class="item__price">{4€}</span>
+      </div>
+      <p class="item__description">Vin bio et nature du coin exclusivement.</p>
+    </div>
+<!--
+    <div class="item">
+      <div class="item__header">
+        <h3 class="item__title">Chuck Norris boisson</h3>
+        <span class="item__dots"></span>
+        <span class="item__price">$20</span>
+      </div>
+      <p class="item__description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt quos harum officia eaque nobis ut.</p>
+    </div>-->
+  </div> <!-- End boisson Menu -->
+
+</div> <!-- End Wrapper -->
+<!-- partial -->
+  <script  src="./script.js"></script>
+
+</body>
+</html>
