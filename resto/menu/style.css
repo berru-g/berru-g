@@ -1,6 +1,9 @@
 :root {
   --wesbos: #ffc600;
 }
+.intro {
+  text-align: center;
+}
 
 .menu {
   display: none;
