@@ -6,4 +6,4 @@
 ## dessert1 8€
 ## dessert2 6€
 
-#. ![retour sur le site]("HTTPS://www.berru-g.io.github.com/berru-g")
+# ![retour sur le site]("https://berru-g.github.io/berru-g/resto/index.html")
