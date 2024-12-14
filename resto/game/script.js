@@ -108,7 +108,7 @@
 				frag += '<div class="card" data-id="'+ v.id +'"><div class="inside">\
 				<div class="front"><img src="'+ v.img +'"\
 				alt="'+ v.name +'" /></div>\
-				<div class="back"><img src="https://img.icons8.com/?size=100&id=DLdHbRGIh8J6&format=png&color=000000"\
+				<div class="back"><img src="https://img.icons8.com/?size=100&id=IKUI0X3Z0i0G&format=png&color=000000"\
 				alt="Codepen" /></div></div>\
 				</div>';
 			});
@@ -123,8 +123,8 @@
 			id: 1,
 		},
 		{
-			name: "css3",//pizza
-			img: "https://img.icons8.com/?size=100&id=oTyopyeAHiFU&format=png&color=000000",
+			name: "css3",//orange
+			img: "https://img.icons8.com/?size=100&id=hfNCM7e9VGca&format=png&color=000000",
 			id: 2
 		},
 		{
@@ -133,8 +133,8 @@
 			id: 3
 		},
 		{
-			name: "jquery",//tacos
-			img: "https://img.icons8.com/?size=100&id=d8xgvuLH67az&format=png&color=000000",
+			name: "jquery",//piment
+			img: "https://img.icons8.com/?size=100&id=Y7n9cYaHR1r8&format=png&color=000000",
 			id: 4
 		}, 
 		{
@@ -164,7 +164,7 @@
 		},
 		{
 			name: "sass",//poulet
-			img: "https://img.icons8.com/?size=100&id=rq1htNPCZYz0&format=png&color=000000",
+			img: "https://img.icons8.com/?size=100&id=TCNjnFqJ0PXC&format=png&color=000000",
 			id: 10
 		},
 		{
