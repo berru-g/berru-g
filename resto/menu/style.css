@@ -117,7 +117,7 @@ h2 {
 .alergene {
   color: white;
   border: 1px solid var(--wesbos);
-  border-radius: 3px;
+  border-radius: 3px; 
 }
 a {
   color: white;
