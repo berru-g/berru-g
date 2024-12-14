@@ -138,7 +138,7 @@
 			id: 4
 		}, 
 		{
-			name: "javascript",//eags
+			name: "javascript",//eggs
 			img: "https://img.icons8.com/?size=100&id=an1G4LtcC9mF&format=png&color=000000",
 			id: 5
 		},
