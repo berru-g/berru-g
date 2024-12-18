@@ -1,9 +1,9 @@
 ### Simplifions les démarches administratives grâce à la blockchain et aux identités numériques
 
 #### Problème actuel :
-Les démarches administratives en France (et ailleurs) sont souvent synonymes de lourdeur, perte de temps et inefficacité. Nous devons constamment fournir les mêmes documents à plusieurs entités, naviguer entre plateformes peu intuitives et attendre des semaines pour des réponses.  
+Les démarches administratives en France (et ailleurs) sont souvent synonymes de lourdeur, perte de temps et inefficacité. Nous devons constamment fournir les mêmes documents à plusieurs entités, naviguer entre plateformes peu intuitives et peu fonctionnnel. Les services publics français sont particulièrement médiocre. 
 
-#### Proposition : Une solution numérique sécurisée basée sur la blockchain**  
+#### Proposition : **Une solution numérique sécurisée basée sur la blockchain**
 Je propose une solution où chaque citoyen dispose d’une **identité numérique sécurisée**, stockée sur un système décentralisé (blockchain), et accessible via des outils simples comme un badge RFID, une clé USB sécurisée, ou une application mobile.  
 
 Cette identité numérique regrouperait toutes les données nécessaires :  
