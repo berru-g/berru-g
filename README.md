@@ -53,6 +53,7 @@
 <h5 align=center>skill's</h5>
 
 <p align="center">
+  <a href="blog\index.html">blog</a> &bull;
   <a href="https://codepen.io/h-lautre">Front-end</a> &bull;
   <a href="https://www.tindie.com/stores/makeandplay/">Electronic</a> &bull;
   <a href="https://berru-g.github.io/assoberru/">Festival</a> &bull;
