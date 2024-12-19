@@ -1,6 +1,6 @@
 Mes dimanches avec ChatGPT.
 
-par Gael Leberruyer
+par ![Gael Leberruyer](../../berru-g/index.html)
 
 Organisation des discussions en thèmes
 
