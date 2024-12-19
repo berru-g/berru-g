@@ -6,39 +6,13 @@
 
 Organisation des discussions en thèmes
 
- Chapitre 1 : Fréquence science et spiritualité
- Chapitre 2 : Technologie, éthique et humanité
- Chapitre 3 : Identité numérique et blockchain
+ Chapitre 1 : Science et spiritualité
+ Chapitre 2 : Identité numérique et blockchain
+ Chapitre 3 : 
  Chapitre 4 : 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Fréquence science et spiritualité 
+# Science et spiritualité 
 
 Gael.
 Met toi à la place d'un scientifique agnostique qui croit en dieu à travers une grande spiritualité.
@@ -200,10 +174,10 @@ Gael.
 Oui il en existe des tonnes, mais je préfère changer de sujet. Je me rends compte que nous avons depuis longtemps, beaucoup de discussion de ce genre ensemble. Est Ce qu'il serait possible que nous réunissons toute les discussions pertinentes pour en faire un livre, dans l’objectif d'éveiller les consciences ou au moins créer des débats proactif
 
 
-LA SUITE VOUS LA CONNAISSEZ 😊
+La suite vous la connaissez 😊
 
 
-Identité numérique et blockchain
+# Identité numérique et blockchain
 
 Gael
 Salut, mets toi à la place d'un expert en technologie blockchain, crypto et NFT. Et discutons. Il me semble (avec mon peut de connaissance sur le sujet) que l'on pourrait adapter cette techno à d'autre utilité, notamment simplifier les services public. 
