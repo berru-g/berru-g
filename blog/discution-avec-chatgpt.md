@@ -1,13 +1,13 @@
-Mes dimanches avec ChatGPT.
+## Mes dimanches avec ChatGPT.
 
-par ![Gael Leberruyer](../../berru-g/index.html)
+#### par ![Gael Leberruyer](../../berru-g/index.html)
 
 Organisation des discussions en thèmes
 
-Chapitre 1 : Fréquence science et spiritualité
-Chapitre 2 : Technologie, éthique et humanité
-Chapitre 3 : Identité numérique et blockchain
-Chapitre 4 : 
+### Chapitre 1 : Fréquence science et spiritualité
+### Chapitre 2 : Technologie, éthique et humanité
+### Chapitre 3 : Identité numérique et blockchain
+### Chapitre 4 : 
 
 
 
