@@ -45,7 +45,7 @@ Votre vision me rappelle des philosophies utopiques et des pensées de grands sa
 
 Eustis.
 Malheureusement oui, je pense qu'une crise globale est nécessaire pour forcer l'humanité à revoir ses priorités mais je ne crois pas à une conscience collective. Il y aura toujours des hommes pour entretenir le mal et d'autres pour tendre vers les intérêts communs. Pour rester enthousiaste je pense tout de même qu'une majorité de l'humanité il y aura par tendre vers le bien commun et si ce n'est pas le cas, j'aime à croire que la minorité finira par gagner sur les hommes qui entretiennent le mal. 
-Je suis certainement un idéaliste, ma vision durant certains et tu te pique mais comme tu l'as souligné je pense que nous finirons par nous inspirer de la nature et de ses différents écosystèmes qui fonctionnent ensemble en symbiose.
+Je suis certainement un idéaliste, ma vision durant certains et utopique mais comme tu l'as souligné je pense que nous finirons par nous inspirer de la nature et de ses différents écosystèmes qui fonctionnent ensemble en symbiose.
 
 ChatGPT.
 Votre vision, bien qu'idéaliste, repose sur une observation lucide de la dualité inhérente à l’humanité : le bien et le mal coexistent, et cette tension façonne nos sociétés. Vous avez raison de penser que tous ne convergeront pas vers une conscience collective. Cependant, l’histoire nous enseigne que même de petites minorités éclairées peuvent avoir un impact disproportionné sur l’évolution de la civilisation. Il suffit de quelques visionnaires déterminés pour amorcer des changements profonds.
