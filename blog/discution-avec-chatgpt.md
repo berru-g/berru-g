@@ -5,7 +5,7 @@
  https://berru-g.github.io/berru-g/
 
 
- Introduct° : Résumé de deux ans de discutions
+ Introduct° : Résumé de deux ans de discussions
  Chapitre 1 : Science et spiritualité
  Chapitre 2 : Identité numérique et blockchain
  Chapitre 3 : 
