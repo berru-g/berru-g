@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mes Dimanches avec ChatGPT </title>
+    <title>Mes Dimanches avec ChatGPT</title>
     <link rel="shortcut icon"
         href="https://github.com/berru-g/life-game/blob/main/src-img/hero/walk-perso-fixeD.png?raw=true" />
     <meta name="keywords"
@@ -14,12 +13,10 @@
     <meta name="author" content="berru-g github">
     <meta name="robots" content="index, follow">
     <meta property="og:title" content="Discussion avec chatgpt">
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.all.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
     <style>
         @import url("https://fonts.googleapis.com/css?family=Montserrat:400,400i,700");
-
         body {
             font-family: 'Montserrat', sans-serif;
             line-height: 1.6;
@@ -29,47 +26,38 @@
             background-color: #F4F5F6;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.4'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
-
         header {
             background: #5582d8;
             color: white;
             padding: 1rem;
             text-align: center;
         }
-
         nav {
             margin: 1rem;
         }
-
         nav ul {
             list-style: none;
             padding: 0;
         }
-
         nav ul li {
             margin: 0.5rem 0;
         }
-
         nav ul li a {
             text-decoration: none;
             color: #4c53af;
         }
-
         nav ul li a:hover {
             text-decoration: none;
             color: grey;
         }
-
         a {
             text-decoration: none;
             color: #4c53af;
         }
-
         a:hover {
             text-decoration: none;
             color: grey;
         }
-
         section {
             padding: 1rem;
             margin: 1rem auto;
@@ -78,23 +66,20 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
         }
-
         h1 {
             color: white;
         }
-
         h2 {
             color: #808080;
         }
     </style>
 </head>
-
 <body>
     <script>
         Swal.fire({
             title: 'Je pose ça là',
             text: 'Ce site n\'a aucun objectif hormis partager ma vision.',
-            icon: 'success', //icon: 'path/to/custom/icon.png',
+            icon: 'info', //icon: 'path/to/custom/icon.png',
             confirmButtonText: 'OK',
             customClass: {
                 confirmButton: 'btn btn-primary',
@@ -112,8 +97,8 @@
             <li><a href="#intro">Introduction : Présentation</a></li>
             <li><a href="#chapitre1">Chapitre 1 : Science et spiritualité</a></li>
             <li><a href="#chapitre2">Chapitre 2 : Identité numérique et blockchain</a></li>
-            <li><a href="#chapitre3">Chapitre 3</a></li>
-            <li><a href="#chapitre4">Chapitre 4</a></li>
+            <li><a href="#chapitre3">Chapitre 3 : Contenu à venir...</a></li>
+            <li><a href="#chapitre4">Chapitre 4 : Contenu à venir...</a></li>
         </ul>
     </nav>
 
@@ -668,5 +653,4 @@
 
     <p style="text-align:center"><a href="https://berru-g.github.io/berru-g/">Par Gael Berru</a></p>
 </body>
-
 </html>
