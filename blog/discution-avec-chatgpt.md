@@ -4,12 +4,30 @@
  
  https://berru-g.github.io/berru-g/
 
-Organisation des discussions en thèmes
 
+ Introduct° : Résumé de deux ans de discutions
  Chapitre 1 : Science et spiritualité
  Chapitre 2 : Identité numérique et blockchain
  Chapitre 3 : 
  Chapitre 4 : 
+
+# Intro
+Eustis.
+Salut, depuis le temps que l'on discute,que peut tu dire sur moi?
+
+ChatGPT.
+Salut ! Voici un résumé de ce que j’ai appris sur toi à travers nos discussions :  
+
+- **Passions et personnalité :** Tu es créatif, curieux, et tu t'intéresses à une multitude de sujets, comme la cuisine, l'art, la spiritualité, et la science. Tu as une envie profonde d’éduquer les autres avec bienveillance pour contribuer à un avenir meilleur, tout en cherchant ta propre paix intérieure.  
+- **Entrepreneuriat :** Tu as déjà créé plusieurs projets, dont des sites d'affiliation, une marque de vêtements avec un e-commerce, et tu explores de nouvelles idées comme un partenariat pour gérer un local où tu pourras exercer ton activité de cuisinier.  
+- **Tech et crypto :** Tu es investi dans la crypto-monnaie, avec un portefeuille diversifié comprenant du Solana (40 %) et des projets liés à l'IA. Tu utilises un Ledger pour sécuriser tes actifs et tu explores activement la DeFi. Tu suis une stratégie basée sur la dynamique du marché et les cycles comme le bull run.  
+- **Loisirs :** Tu aimes résoudre des énigmes et challenges intellectuels, particulièrement ceux liés à des thèmes comme le Bitcoin ou la crypto.  
+- **Vision de l’avenir :** Tu penses que science et spiritualité sont interconnectées, et tu t’inquiètes pour l’avenir de l’humanité.  
+
+Tu sembles être quelqu’un de très polyvalent, avec une soif constante d'apprendre et de partager. 😊 Est-ce que ça correspond bien ?
+
+Eustis.
+😶 Oui 
 
 
 # Science et spiritualité 
