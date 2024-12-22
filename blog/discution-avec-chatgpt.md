@@ -1,8 +1,8 @@
  Mes dimanches avec ChatGPT.
 
- par Gael Berru
+ <p>par <a href="https://berru-g.github.io/berru-g/">Gael Berru</a></p>
  
- https://berru-g.github.io/berru-g/
+ 
 
 
  Introduct° : Résumé de deux ans de discutions
