@@ -12,4 +12,7 @@
 
 <h1 align="center"><a href="https://berru-g.github.io/berru-g/" style="display: inline-block; padding: 10px 20px; background-color: #3498db; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;">Visit me skill's</a></h1>
 
+<h1 align="center"><a href="https://mes-dimanches-avec-chatgpt.netlify.app/" style="display: inline-block; padding: 10px 20px; background-color: #3498db; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;">or me blog</a></h1>
+
+
 </body>
