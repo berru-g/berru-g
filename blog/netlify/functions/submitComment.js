@@ -1,8 +1,8 @@
 // netlify/functions/submitComment.js
-const fetch = require('node-fetch'); // Utilisé pour faire des requêtes HTTP
+import fetch from 'node-fetch'; // Utilisé pour faire des requêtes HTTP
 const { GITHUB_TOKEN, GITHUB_REPO, GITHUB_FILE_PATH } = process.env;
 
-exports.handler = async (event, context) => {
+export async function handler(event, context) {
   // Vérifier que la méthode HTTP est POST
   if (event.httpMethod !== 'POST') {
     return {
@@ -58,4 +58,4 @@ exports.handler = async (event, context) => {
       body: JSON.stringify({ message: 'Erreur interne' })
     };
   }
-};
+}
