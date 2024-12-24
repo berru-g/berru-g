@@ -1,8 +1,10 @@
 [build]
 functions = "netlify/functions"
-publish = "dist"  # ou ton dossier de publication (e.g. "build" ou "public")
+publish = "blog"
+command = "echo 'No build command set'"
 
 [[redirects]]
 from = "/.netlify/functions/*"
 to = "/functions/:splat"
 status = 200
+
