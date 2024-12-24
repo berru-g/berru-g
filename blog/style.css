@@ -137,11 +137,12 @@ img {
 }
 
 #comments-section div {
-    padding: 15px;
-    background-color: #f1f1f1;
-    border-radius: 6px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    margin: 1rem auto;
+    max-width: 800px;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 #comments-section h4 {
