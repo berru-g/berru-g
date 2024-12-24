@@ -1,0 +1,8 @@
+[build]
+functions = "netlify/functions"
+publish = "dist"  # ou ton dossier de publication (e.g. "build" ou "public")
+
+[[redirects]]
+from = "/.netlify/functions/*"
+to = "/functions/:splat"
+status = 200
