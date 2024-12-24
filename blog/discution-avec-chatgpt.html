@@ -125,8 +125,9 @@
 
         #read-time {
             font-family: 'Montserrat', sans-serif;
-            line-height: 1.4;
-            color: #555;
+            line-height: 1.6;
+            font-size: 0.9rem;
+            color: grey;
             margin-bottom: 1rem;
         }
     </style>
@@ -1086,6 +1087,22 @@
     <p style="text-align:center"><a href="mailto:g.leberruyer@gmail.com">Si vous trouvez ce contenue pertinent je vous
             invite à le partager et à m'écrire pour en parler. Merci</a></p>
 </body>
+<!-- modify this form HTML and place wherever you want your form -->
+<form
+  action="https://formspree.io/f/mqaaabay"
+  method="POST"
+>
+  <label>
+    Your email:
+    <input type="email" name="email">
+  </label>
+  <label>
+    Your message:
+    <textarea name="message"></textarea>
+  </label>
+  <!-- your other form fields go here -->
+  <button type="submit">Send</button>
+</form>
 <script>
     // Fonction pour calculer le temps de lecture
     function calculateReadTime() {
