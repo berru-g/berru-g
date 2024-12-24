@@ -1,4 +1,58 @@
-const fetch = require('node-fetch');
+// Fonction Netlify qui gère la soumission du commentaire
+import fetch from 'node-fetch'; // N'oublie pas d'importer `node-fetch` pour que `fetch` fonctionne côté serveur.
+
+export async function handler(event, context) {
+    if (event.httpMethod === "POST") {
+        const { name, comment } = JSON.parse(event.body); // Récupère les données du formulaire
+
+        const date = new Date().toISOString(); // Date actuelle en format ISO
+
+        const newComment = { name, comment, date };
+
+        // Récupère les commentaires existants depuis le fichier JSON GitHub
+        const commentsResponse = await fetch('https://raw.githubusercontent.com/berru-g/berru-g/main/blog/comments.json');
+        const comments = await commentsResponse.json();
+
+        // Ajoute le nouveau commentaire
+        comments.push(newComment);
+
+        const content = JSON.stringify(comments);
+
+        // Envoie les commentaires mis à jour à GitHub (en utilisant l'API PUT)
+        const githubResponse = await fetch('https://api.github.com/repos/berru-g/berru-g/contents/blog/comments.json', {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`, // Utilisation du token GitHub via une variable d'environnement
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: 'Ajout d\'un commentaire',
+                content: Buffer.from(content).toString('base64'), // Encode les données en base64
+                sha: 'SHA_DU_FICHIER_COMMENTAIRE', // SHA à récupérer ou à mettre à jour pour éviter les conflits
+            }),
+        });
+
+        if (githubResponse.ok) {
+            return {
+                statusCode: 200,
+                body: JSON.stringify({ message: 'Commentaire ajouté avec succès' }),
+            };
+        } else {
+            return {
+                statusCode: 500,
+                body: JSON.stringify({ message: 'Erreur lors de l\'ajout du commentaire' }),
+            };
+        }
+    }
+
+    // Retourne une erreur si ce n'est pas une méthode POST
+    return {
+        statusCode: 405,
+        body: JSON.stringify({ message: 'Méthode non autorisée' }),
+    };
+}
+
+/*const fetch = require('node-fetch');
 
 exports.handler = async function(event, context) {
   const { name, comment } = JSON.parse(event.body);
@@ -42,3 +96,4 @@ exports.handler = async function(event, context) {
     return { statusCode: 500, body: 'Erreur lors de l\'ajout du commentaire' };
   }
 };
+*/
