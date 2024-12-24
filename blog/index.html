@@ -130,7 +130,8 @@
                 esprit seront au centre.
             </p><br>
             <p style="text-align:center"><a class="go" href="#header">Revenir au sommaire</a></p>
-            <p style="text-align:center"><a href="https://mes-dimanches-avec-chatgpt.netlify.app/">Ce même site avec un espace commentaire ici.</a></p>
+            <p style="text-align:center"><a href="https://mes-dimanches-avec-chatgpt.netlify.app/">Ce même site avec un
+                    espace commentaire ici.</a></p>
         </section>
         <section id="presentation">
             <h2>Présentation</h2>
@@ -1004,28 +1005,31 @@
     </div>
 
     <div id="space-comment">
-            <!--formulaire de commentaires-->
-    <div id="comment-form">
-        <h2>Laissez un commentaire :</h2>
-        <form id="comment-form">
-            <label for="name">Votre nom</label>
-            <input type="text" id="name" name="name" required>
+        <!--formulaire de commentaires-->
+        <div id="comment-form">
+            <h2>Laissez un commentaire :</h2>
+            <form id="comment-form">
+                <label for="name">Votre nom</label>
+                <input type="text" id="name" name="name" required>
 
-            <label for="comment">Votre commentaire</label>
-            <textarea id="comment" name="comment" required></textarea>
+                <label for="comment">Votre commentaire</label>
+                <textarea id="comment" name="comment" required></textarea>
 
-            <button type="submit">Envoyer</button>
-        </form>
+                <button type="submit">Envoyer</button>
+            </form>
+        </div>
+
+        <div id="comments-section">
+            <!-- Les commentaires récupérés via JS seront affichés ici -->
+        </div>
     </div>
 
-    <div id="comments-section">
-        <!-- Les commentaires récupérés via JS seront affichés ici -->
-    </div>
-    </div>
+    <p style="text-align:center"><a href="mailto:g.leberruyer@gmail.com">Si vous voulez m'écrire directement ça se passe
+            ici. Merci.</a></p>
 
-    <p style="text-align:center"><a href="mailto:g.leberruyer@gmail.com">Si vous voulez m'écrire directement ça se passe ici. Merci.</a></p>
+    <script src="comments.js"></script>
+    <script src="netlify\functions\create-comment.js"></script>
+    <script src="script.js"></script>
 </body>
-<script src="create-comments.js"></script>
-<script src="script.js"></script>
 
 </html>
