@@ -1007,15 +1007,12 @@
         <!--formulaire de commentaires-->
         <div id="comment-form">
             <h2>Laissez un commentaire :</h2>
-            <form id="comment-form">
-                <label for="name">Votre nom</label>
-                <input type="text" id="name" name="name" required>
-
-                <label for="comment">Votre commentaire</label>
-                <textarea id="comment" name="comment" required></textarea>
-
+            <form onsubmit="submitComment(event)">
+                <input type="text" id="name" placeholder="Votre nom">
+                <textarea id="comment" placeholder="Votre commentaire"></textarea>
                 <button type="submit">Envoyer</button>
             </form>
+            
         </div>
 
         <div id="comments-section">
