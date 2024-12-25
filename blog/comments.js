@@ -6,7 +6,7 @@ async function submitComment(event) {
   const comment = document.getElementById('comment').value;
 
   // Envoi des données via la fonction Netlify
-  const response = await fetch('/.netlify/functions/create-comment', {
+  const response = await fetch('../netlify/functions/create-comment', {
       method: 'POST',
       body: JSON.stringify({ name, comment }),
       headers: {
