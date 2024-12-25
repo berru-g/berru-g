@@ -14,3 +14,15 @@
 
   // Appelle la fonction au chargement de la page
   calculateReadTime();
+/*
+  Swal.fire({
+    title: 'Espace commentaire',
+    text: 'L\'espace commentaire est indisponible',
+    icon: 'warning',
+    timer: 5000,
+    timerProgressBar: true,
+    showConfirmButton: false
+  }).then(() => {
+    // Action après la confirmation de la déconnexion
+  });
+  */
