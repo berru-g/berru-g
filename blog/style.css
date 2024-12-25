@@ -82,11 +82,17 @@ img {
 }
 
 /* Style général du formulaire */
+
+#space-comment{
+    background-color: #5582d8;
+    border-radius: 8px;
+    padding: 20px;
+}
 #comment-form {
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
-    background-color: #e5e4e4;
+    background-color: #F4F5F6;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -140,7 +146,7 @@ img {
     padding: 1rem;
     margin: 1rem auto;
     max-width: 800px;
-    background: #e5e4e4;
+    background: #F4F5F6;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
