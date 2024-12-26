@@ -1,6 +1,7 @@
 [build]
 functions = "netlify/functions"
 publish = "blog"
+command = ""
 
 [functions]
 node_bundler = "esbuild"  # Optimisation pour les fonctions avec ESM
