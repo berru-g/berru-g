@@ -1,6 +1,7 @@
 {
   "name": "blog",
   "version": "1.0.0",
+  "type": "module",
   "main": "script.js",
   "scripts": {
     "test": ""
@@ -13,3 +14,4 @@
     "node-fetch": "^3.3.2"
   }
 }
+
