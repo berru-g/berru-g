@@ -33,8 +33,9 @@ async function loadComments() {
   comments.forEach(comment => {
       const commentDiv = document.createElement('div');
       commentDiv.innerHTML = `
-          <h4>${comment.name} - ${comment.date}</h4>
+          <h4>${comment.name}</h4>
           <p>${comment.comment}</p>
+          <p>${comment.date}</p>
       `;
       commentSection.appendChild(commentDiv);
   });
