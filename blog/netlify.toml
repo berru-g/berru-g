@@ -1,7 +1,7 @@
 [build]
 functions = "netlify/functions"
-publish = "blog"
-command = "echo 'No build command set'"
+publish = "./"
+command = ""
 
 [[redirects]]
 from = "/.netlify/functions/*"
