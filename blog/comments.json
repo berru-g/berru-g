@@ -1,27 +1,7 @@
 [
   {
-    "name": "Paul",
-    "comment": "L'idée de se servir de la blockchain pour les services publics est excellente, je ne savais pas cela possible et encore moins que l'Estonie avait commencé cette évolution. À quand cela en France ? Merci Gaël pour ton contenu franchement intéressant.",
-    "date": "2024-12-22T10:30:00Z"
-  },
-  {
-    "name": "Hamed",
-    "comment": "Découvert via Reddit, j'adore ce genre de réflexion, continuez comme ça !",
-    "date": "2024-12-23T14:00:00Z"
-  },
-  {
-    "name": "anonyme",
-    "comment": "ta mise en page est à chier et ça ose demander un don 😂",
-    "date": "2024-12-23T14:12:00Z"
-  },
-  {
-    "name": "Caro",
-    "comment": "Très bon contenu. J'ai eu la curiosité de cliquer sur ton nom, sérieux tu sais faire tout ça. Bravo encore.",
-    "date": "2024-12-23T16:37:00Z"
-  },
-  {
-    "name": "Le gars de reddit",
-    "comment": "Mec je n'ai lu que le chapitre sur le projet d'une identité numérique pour l'instant et c'est pertinent. Je reviendrais lire la suite. Chouette travail ( attention aux fautes par contre ) 😊",
-    "date": "2024-12-24T10:07:00Z"
+    "name": "test",
+    "comment": "teste commentaire",
+    "date": ""
   }
 ]
