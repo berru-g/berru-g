@@ -1,4 +1,5 @@
-import fetch from 'node-fetch'; // Remplace par const fetch = require('node-fetch') si CommonJS
+const fetch = require('node-fetch');
+ // Remplace par const fetch = require('node-fetch') si CommonJS
 
 export async function handler(event, context) {
     if (event.httpMethod !== "POST") {
