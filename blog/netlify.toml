@@ -1,7 +1,8 @@
 [build]
 functions = "netlify/functions"
-publish = "/blog"
-command = "echo 'no build command'"
+publish = "blog"
+command = "echo 'no build command'"  # Pas de commande de build pour un site statique
 
 [functions]
-node_bundler = "esbuild"  # Optimisation pour les fonctions avec ESM
+node_bundler = "esbuild"  # Optimisation pour ES6/ESM
+directory = "netlify/functions"
