@@ -88,3 +88,5 @@ export async function handler(event, context) {
         };
     }
 }
+console.log('Données reçues :', { name, comment });
+console.error('Erreur détectée :', error.message);
