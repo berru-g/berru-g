@@ -1,7 +1,7 @@
 
     // Fonction pour calculer le temps de lecture
     function calculateReadTime() {
-      const wordsPerMinute = 140; // Vitesse de lecture moyenne
+      const wordsPerMinute = 130; // Vitesse de lecture moyenne
       const articleContainer = document.getElementById('article-content');
       const text = articleContainer.innerText || articleContainer.textContent; // Texte total
       const wordCount = text.split(/\s+/).length; // Compte les mots
