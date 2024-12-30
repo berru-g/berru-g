@@ -118,7 +118,8 @@
                     gérer un local où tu pourras exercer ton activité de chef cuisinier.</li>
                 <li><strong>Tech et crypto :</strong> Tu es investi dans la crypto-monnaie, avec un portefeuille
                     diversifié
-                    comprenant du Solana (40 %) et des projets liés à l'IA. Tu utilises un <a href="https://shop.ledger.com/?r=97b532808e9b">ledger</a> pour sécuriser tes
+                    comprenant du Solana (40 %) et des projets liés à l'IA. Tu utilises un <a
+                        href="https://shop.ledger.com/?r=97b532808e9b">ledger</a> pour sécuriser tes
                     actifs
                     et tu explores activement la DeFi. Tu suis une stratégie basée sur la dynamique du marché et les
                     cycles
@@ -1096,23 +1097,21 @@
             <!---->
         </section>
 
-    </div>
+        <div id="space-comment">
+            <h2 style="text-align:center; color:white">Espace commentaires</h2><br>
+            <div id="comment-form">
+                <h2>Laissez un commentaire :</h2>
+                <p style="color:#f66d6d">! Pour des raisons technique l'espace commentaires n'est pas disponible!</p>
+                <form onsubmit="submitComment(event)">
+                    <input type="text" id="name" placeholder="Votre nom">
+                    <textarea id="comment" placeholder="Votre commentaire"></textarea>
+                    <button type="submit">Envoyer</button>
+                </form>
+            </div>
 
-    <div id="space-comment">
-        <h2 style="text-align:center; color:white">Espace commentaires</h2><br>
-        <div id="comment-form">
-            <h2>Laissez un commentaire :</h2>
-            <p style="color:#f66d6d">! Pour des raisons technique l'espace commentaires n'est plus disponibles pour le
-                moment. Si un expert en dev back pour deploy l'espace com via netlify passe par là 😉 Merci</p>
-            <form onsubmit="submitComment(event)">
-                <input type="text" id="name" placeholder="Votre nom">
-                <textarea id="comment" placeholder="Votre commentaire"></textarea>
-                <button type="submit">Envoyer</button>
-            </form>
-        </div>
-
-        <div id="comments-section">
-            <!-- Les commentaires récupérés via JS seront affichés ici -->
+            <div id="comments-section">
+                <!-- Les commentaires récupérés via JS seront affichés ici -->
+            </div>
         </div>
     </div>
     <p style="text-align:center"><a href="#header">Revenir au sommaire</a></p><br>
