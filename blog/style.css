@@ -84,7 +84,11 @@ img {
     height: auto;
     border-radius: 8px;
 }
-
+#punch {
+    text-align: center;
+    color: var(--color-grey);
+    font-size: 0.4;
+}
 #read-time {
     font-family: 'Montserrat', sans-serif;
     line-height: 1.6;
