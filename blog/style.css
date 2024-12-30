@@ -119,9 +119,9 @@ img {
     /* Centre verticalement si nécessaire */
     margin: 0 auto;
     /* Centre le formulaire lui-même */
-    width: 100%;
+    width: 100% !important;
     /* Optionnel, selon la largeur que tu souhaites pour le formulaire */
-    max-width: 900px;
+    max-width: 500px;
     /* Limite la largeur du formulaire */
 }
 
@@ -130,7 +130,7 @@ textarea,
 label,
 button {
     width: 100% !important;
-    max-width: 900px;
+    max-width: 500px;
     padding: 1rem;
     margin: 1rem 0;
     border-radius: 8px;
@@ -202,23 +202,6 @@ footer {
 }
 
 /*
-#comment-form {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: var(--color-article);
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-#comment-form label {
-    font-size: 1rem;
-    margin-bottom: 8px;
-    display: block;
-    font-weight: bold;
-    color: var(--color-text);
-}
-
 #comment-form input,
 #comment-form textarea {
     width: 95%;
@@ -250,9 +233,25 @@ footer {
 #comment-form button:hover {
     background-color: var(--color-button-hover);
 }
-
+*/
+#comment-form {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: var(--color-header);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+#comment-form label {
+    font-size: 1rem;
+    margin-bottom: 8px;
+    display: block;
+    font-weight: bold;
+    color: var(--color-header);
+}
 #comments-section {
     margin-top: 40px;
+    background: var(--color-header);
 }
 
 #comments-section div {
@@ -266,12 +265,11 @@ footer {
 
 #comments-section h4 {
     font-size: 1.1rem;
-    color: var(--color-text);
+    color: var(--color-grey-article);
     margin: 0 0 5px;
 }
 
 #comments-section p {
     font-size: 1rem;
-    color: var(--color-grey-article);
+    color: var(--color-text);
 }
-*/
