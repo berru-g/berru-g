@@ -99,6 +99,50 @@ img {
     padding: 20px;
 }
 
+.formulaire {
+    margin: 1rem 0;
+}
+
+.formulaire {
+    display: flex;
+    flex-direction: column; /* Aligne les éléments verticalement */
+    align-items: center; /* Centre horizontalement les éléments */
+    justify-content: center; /* Centre verticalement si nécessaire */
+    margin: 0 auto; /* Centre le formulaire lui-même */
+    width: 100%; /* Optionnel, selon la largeur que tu souhaites pour le formulaire */
+    max-width: 900px; /* Limite la largeur du formulaire */
+}
+
+.formulaire input,
+textarea,
+label,
+button {
+    width: 100% !important; 
+    max-width: 900px;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+    box-sizing: border-box; /* Évite les soucis liés aux marges/paddings */
+}
+
+.formulaire button {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+.formulaire button:hover {
+    background: #0056b3;
+}
+
+.footer-bottom {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+/*
 #comment-form {
     max-width: 800px;
     margin: 20px auto;
@@ -171,3 +215,4 @@ img {
     font-size: 1rem;
     color: var(--color-grey-article);
 }
+*/

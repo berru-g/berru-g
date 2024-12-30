@@ -1094,9 +1094,25 @@
         <section id="chapitre7">
             <h2>Chapitre 7</h2>
             <p>En cours...</p>
-            <!---->
+            <p style="text-align:center"><a href="#header">Revenir au sommaire</a></p><br>
         </section>
+    </div>
+    <div id="space-comment">
+        <form class="formulaire" action="https://formspree.io/f/xjvnnlby" method="POST">
+            <label>
+                <h2 style="text-align:center; color:white">Espace commentaires</h2><br>
+                <input type="email" name="email" placeholder="email">
+            </label>
+            <label>
+                <textarea name="message" placeholder="ton message"></textarea>
+            </label>
+            <button type="submit">Envoie</button>
+        </form>
+    </div>
+    <div class="footer-bottom">
+        <p>Tous droits réservés &copy; 2024 | <a href="https://github.com/berru-g/">berru-g</a></p>
 
+        <!--
         <div id="space-comment">
             <h2 style="text-align:center; color:white">Espace commentaires</h2><br>
             <div id="comment-form">
@@ -1110,14 +1126,11 @@
             </div>
 
             <div id="comments-section">
-                <!-- Les commentaires récupérés via JS seront affichés ici -->
             </div>
-        </div>
+        </div>-->
+        <p><a href="./img/recevoir-usdc.jpeg">Vous pouvez encourager mon travail avec un don en
+                usdc. Merci</a></p>
     </div>
-    <p style="text-align:center"><a href="#header">Revenir au sommaire</a></p><br>
-    <p style="text-align:center"><a href="./img/recevoir-usdc.jpeg">Vous pouvez encourager mon travail avec un don en
-            usdc. Merci</a></p>
-
     <script src="comments.js"></script>
     <script type="module" src="\netlify\functions\create-comment.js"></script>
     <script src="script.js"></script>
