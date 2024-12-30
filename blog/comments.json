@@ -2,24 +2,29 @@
   {
     "name": "Alyssia L.",
     "comment": "Merci pour ce site ! Je n'utilise pas chatgpt comme ça mais c'est inspirant. On voit la diff entre t'es discussion avec et sans chatgpt, tu as un bon style d'écriture. Continue comme ça !",
-    "date": "2024-12-30"
+    "date": "2024-12-30",
+    "role": "user"
   },
   {
     "name": "ADMIN",
-    "comment": "Merci pour ce retour 🙏"
+    "comment": "Merci pour ce retour 🙏",
+    "role": "admin"
   },
   {
     "name": "Julien",
     "comment": "Salut, merci pour ton contenu, il est vraiment utile. C'est pas trop tard pour s'inscrire sur Binance avec le bull run? Bonne continuation dans tes projets! Attention aux fautes, le gars de Reddit 😉",
-    "date": "2024-12-29"
+    "date": "2024-12-29",
+    "role": "user"
   },
   {
     "name": "ADMIN",
-    "comment": "Merci 🙏 je vais corriger mes fautes daurtografe ;)"
+    "comment": "Merci 🙏 je vais corriger mes fautes daurtografe ;)",
+    "role": "admin"
   },
   {
     "name": "Anonyme",
     "comment": "L'idée de se servire de la blockchain pour une identité numérique ça tue !",
-    "date": "2024-12-28"
+    "date": "2024-12-28",
+    "role": "user"
   }
 ]

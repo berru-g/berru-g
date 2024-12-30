@@ -108,7 +108,13 @@ img {
     border-radius: 8px;
     padding: 20px;
 }
-
+[data-role="admin"] {
+    color: #007bff; 
+  }
+  [data-role="user"] {
+    color: #333; 
+  }
+  
 .formulaire {
     margin: 1rem 0;
 }
