@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,400i,700");
+
 :root {
     --color-text: #333;
     --color-article: #F4F5F6;
@@ -84,11 +85,13 @@ img {
     height: auto;
     border-radius: 8px;
 }
+
 #punch {
     text-align: center;
     color: var(--color-grey);
     font-size: 0.4;
 }
+
 #read-time {
     font-family: 'Montserrat', sans-serif;
     line-height: 1.6;
@@ -108,13 +111,15 @@ img {
     border-radius: 8px;
     padding: 20px;
 }
+
 [data-role="admin"] {
-    color: #007bff; 
-  }
-  [data-role="user"] {
-    color: #333; 
-  }
-  
+    color: #007bff;
+}
+
+[data-role="user"] {
+    color: #333;
+}
+
 .formulaire {
     margin: 1rem 0;
 }
@@ -129,7 +134,7 @@ img {
     /* Centre verticalement si nécessaire */
     margin: 0 auto;
     /* Centre le formulaire lui-même */
-    width: 100% !important;
+    width: 100% ;
     /* Optionnel, selon la largeur que tu souhaites pour le formulaire */
     max-width: 500px;
     /* Limite la largeur du formulaire */
@@ -139,7 +144,7 @@ img {
 textarea,
 label,
 button {
-    width: 100% !important;
+    width: 100% ;
     max-width: 500px;
     padding: 1rem;
     margin: 1rem 0;
@@ -164,16 +169,18 @@ button {
     margin-top: 1rem;
     text-align: center;
 }
+
 .info-icon {
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: #007bff;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #007bff;
 }
+
 footer {
     width: 100%;
     height: auto;
     background: #fff;
-    color: grey;
+    color: var(--color-text);
     padding: 2rem 1rem;
     text-align: center;
     opacity: 0.7;
@@ -256,6 +263,7 @@ footer {
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
 #comment-form label {
     font-size: 1rem;
     margin-bottom: 8px;
@@ -263,6 +271,7 @@ footer {
     font-weight: bold;
     color: var(--color-header);
 }
+
 #comments-section {
     margin-top: 40px;
     background: var(--color-header);
