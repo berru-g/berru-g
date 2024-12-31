@@ -164,7 +164,11 @@ button {
     margin-top: 1rem;
     text-align: center;
 }
-
+.info-icon {
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #007bff;
+}
 footer {
     width: 100%;
     height: auto;
