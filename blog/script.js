@@ -14,22 +14,11 @@
 
   // Appelle la fonction au chargement de la page
   calculateReadTime();
-/*
-  Swal.fire({
-    title: 'Espace commentaire',
-    text: 'L\'espace commentaire est indisponible',
-    icon: 'warning',
-    timer: 5000,
-    timerProgressBar: true,
-    showConfirmButton: false
-  }).then(() => {
-    // Action après la confirmation de la déconnexion
-  });
-  */
+
 function showInfo() {
       Swal.fire({
         title: 'Protection de vos données',
-        text: "Conformément à notre engagement en faveur de la protection de votre vie privée, seules les informations que vous choisissez de partager explicitement, comme votre nom, sont affichées publiquement. Votre adresse e-mail, si fournie, n’est jamais partagée ou publiée telle quelle. Elle peut être affichée sous une forme partiellement masquée ou chiffrée pour protéger votre confidentialité.",
+        text: "Conformément à mon engagement en faveur de la protection de votre vie privée, seules les informations que vous choisissez de partager explicitement, comme votre nom, sont affichées publiquement. Votre adresse e-mail n’est jamais partagée ou publiée telle quelle. Elle peut être affichée sous une forme partiellement masquée ou chiffrée pour protéger votre confidentialité.",
         icon: 'info',
         confirmButtonText: 'Compris',
         customClass: {

@@ -179,11 +179,10 @@ button {
 footer {
     width: 100%;
     height: auto;
-    background: #fff;
+    background: var(--color-article);
     color: var(--color-text);
     padding: 2rem 1rem;
     text-align: center;
-    opacity: 0.7;
 }
 
 .footer-content {
