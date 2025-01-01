@@ -1,0 +1,119 @@
+<!--donnation-page-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+        .donation-container {
+            display: flex;
+            flex-wrap: wrap; /* Permet de passer en colonne si l'espace est insuffisant */
+            justify-content: center;
+            gap: 20px;
+        }
+        .donation-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            width: 300px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .donation-card img {
+            max-width: 100%;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .address-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .address {
+            background-color: #f5f5f5;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-family: monospace;
+            user-select: all;
+        }
+        .copy-button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .copy-button:hover {
+            opacity: 0.6;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 600px) {
+            .donation-container {
+                flex-direction: column; /* Passe en colonne sur petits écrans */
+                align-items: center;
+            }
+        }
+        a {
+            color:#ee964b;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Merci pour votre générosité</h1>
+    <div class="donation-container">
+        <!-- USDC Donation -->
+        <div class="donation-card">
+            <img src="../blog/img/usdc.jpeg" alt="QR Code USDC">
+            <p><strong>Adresse USDC :</strong></p>
+            <div class="address-container">
+                <span class="address" id="usdc-address">0x826b8c0480eab14a50a502c3b9ee73953fae3db7</span>
+                <button class="copy-button" data-target="usdc-address">Copier</button>
+            </div>
+        </div>
+        <!-- Bitcoin Donation -->
+        <div class="donation-card">
+            <img src="../blog/img/btc.jpeg" alt="QR Code Bitcoin">
+            <p><strong>Adresse Bitcoin :</strong></p>
+            <div class="address-container">
+                <span class="address" id="btc-address">bc1qgxkfnze2kzueu4y0ft933yv0da5ydh9fyu7tjv</span>
+                <button class="copy-button" data-target="btc-address">Copier</button>
+            </div>
+        </div>
+    </div>
+  <h2><a href="index.html">Revenir au site</a></h2>
+    <script>
+        // Ajout d'un événement pour chaque bouton Copier
+        document.querySelectorAll('.copy-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const targetId = this.getAttribute('data-target');
+                const addressElement = document.getElementById(targetId);
+                const address = addressElement.textContent;
+
+                // Crée un élément temporaire pour copier le texte
+                const tempInput = document.createElement('input');
+                tempInput.value = address;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+
+                // Optionnel : Feedback visuel
+                alert('Adresse copiée dans le presse-papiers : ' + address);
+            });
+        });
+    </script>
+</body>
+</html>
