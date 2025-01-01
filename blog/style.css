@@ -301,14 +301,14 @@ footer {
     position: relative;
     overflow: hidden;
     background: var(--color-article);
-    border: 1px solid #ddd;
+    /*border: 1px solid #ddd;*/
     height: 50px;
 }
 
 .donator-ticker .ticker-content {
     display: flex;
     align-items: center;
-    animation: scroll-left 10s linear infinite;
+    animation: scroll-left 12s linear infinite;
     white-space: nowrap;
 }
 
@@ -326,6 +326,6 @@ footer {
     }
 
     100% {
-        transform: translateX(-200%);
+        transform: translateX(-240%);
     }
 }
