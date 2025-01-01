@@ -1,9 +1,12 @@
 <!--donnation-page-->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon"
+        href="https://github.com/berru-g/life-game/blob/main/src-img/hero/walk-perso-fixeD.png?raw=true" />
     <title>Donation Page</title>
     <style>
         body {
@@ -11,12 +14,22 @@
             margin: 20px;
             text-align: center;
         }
+
+        header {
+            background: white;
+            color: #0d3b66;
+            padding: 1rem;
+            text-align: center;
+        }
+
         .donation-container {
             display: flex;
-            flex-wrap: wrap; /* Permet de passer en colonne si l'espace est insuffisant */
+            flex-wrap: wrap;
+            /* Permet de passer en colonne si l'espace est insuffisant */
             justify-content: center;
             gap: 20px;
         }
+
         .donation-card {
             border: 1px solid #ddd;
             padding: 15px;
@@ -25,11 +38,13 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
+
         img {
             max-width: 100%;
             margin-bottom: 10px;
             border-radius: 5px;
         }
+
         .address-container {
             display: flex;
             align-items: center;
@@ -37,6 +52,7 @@
             gap: 10px;
             margin-top: 10px;
         }
+
         .address {
             background-color: #f5f5f5;
             padding: 5px 10px;
@@ -45,6 +61,7 @@
             font-family: monospace;
             user-select: all;
         }
+
         .copy-button {
             background-color: #4caf50;
             color: white;
@@ -54,6 +71,7 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
+
         .copy-button:hover {
             opacity: 0.6;
         }
@@ -61,18 +79,23 @@
         /* Responsiveness */
         @media (max-width: 600px) {
             .donation-container {
-                flex-direction: column; /* Passe en colonne sur petits écrans */
+                flex-direction: column;
+                /* Passe en colonne sur petits écrans */
                 align-items: center;
             }
         }
+
         a {
-            color:#ee964b;
+            color: #ee964b;
             text-decoration: none;
         }
     </style>
 </head>
+
 <body>
-    <h1>Merci pour votre générosité</h1>
+    <header>
+        <h1>Merci pour votre générosité</h1>
+    </header>
     <div class="donation-container">
         <!-- USDC Donation -->
         <div class="donation-card">
@@ -93,8 +116,8 @@
             </div>
         </div>
     </div>
-  <h2><a href="index.html">Revenir au site</a></h2><br>
-  <p>Tous droits réservés &copy; 2024 | <a href="https://github.com/berru-g/">berru-g</a></p>
+    <h2><a href="index.html">Revenir au site</a></h2><br>
+    <p>Tous droits réservés &copy; 2024 | <a href="https://github.com/berru-g/">berru-g</a></p>
 
     <script>
         // Ajout d'un événement pour chaque bouton Copier
@@ -118,4 +141,5 @@
         });
     </script>
 </body>
+
 </html>

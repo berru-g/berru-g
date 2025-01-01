@@ -134,7 +134,7 @@ img {
     /* Centre verticalement si nécessaire */
     margin: 0 auto;
     /* Centre le formulaire lui-même */
-    width: 100% ;
+    width: 100%;
     /* Optionnel, selon la largeur que tu souhaites pour le formulaire */
     max-width: 500px;
     /* Limite la largeur du formulaire */
@@ -144,7 +144,7 @@ img {
 textarea,
 label,
 button {
-    width: 100% ;
+    width: 100%;
     max-width: 500px;
     padding: 1rem;
     margin: 1rem 0;
@@ -294,4 +294,38 @@ footer {
 #comments-section p {
     font-size: 1rem;
     color: var(--color-text);
+}
+
+/* Style de la bande défilante */
+.donator-ticker {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-article);
+    border: 1px solid #ddd;
+    height: 50px;
+}
+
+.donator-ticker .ticker-content {
+    display: flex;
+    align-items: center;
+    animation: scroll-left 10s linear infinite;
+    white-space: nowrap;
+}
+
+.donator-ticker .donator {
+    margin: 0 50px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Animation pour le défilement */
+@keyframes scroll-left {
+    0% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(-200%);
+    }
 }
