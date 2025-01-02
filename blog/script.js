@@ -18,7 +18,7 @@
 function showInfo() {
       Swal.fire({
         title: 'Protection de vos données',
-        text: "Conformément à mon engagement en faveur de la protection de votre vie privée, seules les informations que vous choisissez de partager explicitement, comme votre nom, sont affichées publiquement. Votre adresse e-mail n’est jamais partagée ou publiée telle quelle. Elle peut être affichée sous une forme partiellement masquée ou chiffrée pour protéger votre confidentialité.",
+        text: "Conformément à mon engagement en faveur de la protection de votre vie privée, seules les informations que vous choisissez de partager explicitement, comme votre nom, sont affichées publiquement. Votre adresse e-mail n’est jamais partagée ou publiée telle quelle. Elle peut être affichée sous une forme partiellement masquée ou chiffrée pour protéger votre confidentialité. Pensez à utiliser un alias de messagerie 🧑‍💻",
         icon: 'info',
         confirmButtonText: 'Compris',
         customClass: {

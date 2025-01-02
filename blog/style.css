@@ -100,7 +100,7 @@ img {
     margin-bottom: 1rem;
 }
 
-#space-comment {
+#espace-commentaire {
     background-color: var(--color-header);
     border-radius: 8px;
     padding: 20px;
@@ -308,7 +308,7 @@ footer {
 .donator-ticker .ticker-content {
     display: flex;
     align-items: center;
-    animation: scroll-left 12s linear infinite;
+    animation: scroll-left 14s linear infinite;
     white-space: nowrap;
 }
 
@@ -326,6 +326,6 @@ footer {
     }
 
     100% {
-        transform: translateX(-240%);
+        transform: translateX(-230%);
     }
 }
