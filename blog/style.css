@@ -81,7 +81,17 @@ section {
 
 h1 {
     color: var(--color-article);
-}
+    animation-name: slide-in-left;
+    animation-duration: 2s;
+  }
+  @keyframes slide-in-left {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
 
 h2 {
     color: var(--color-grey);
