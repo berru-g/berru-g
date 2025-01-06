@@ -344,7 +344,12 @@ footer {
     font-weight: bold;
     color: #333;
 }
-
+/*
+.donator:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+    */
 /* Animation pour le défilement */
 @keyframes scroll-left {
     0% {
