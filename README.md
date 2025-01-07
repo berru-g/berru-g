@@ -12,7 +12,7 @@
 
 <h1 align="center"><a href="https://berru-g.github.io/berru-g/" style="display: inline-block; padding: 10px 20px; background-color: #3498db; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;">Visit me skill's</a></h1>
 
-<h1 align="center"><a href="https://mes-dimanches-avec-chatgpt.netlify.app/" style="display: inline-block; padding: 10px 20px; background-color: #3498db; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;">or me blog</a></h1>
+<h1 align="center"><a href="https://savoir-relatif-et-absolu.netlify.app" style="display: inline-block; padding: 10px 20px; background-color: #3498db; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;">or me blog</a></h1>
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/e6d8257e-d747-418b-bf43-189593a86851/deploy-status)](https://app.netlify.com/sites/mes-dimanches-avec-chatgpt/deploys)
 <div align=center>
