@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,400i,700");
-
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=Salsa&display=swap");
 :root {
     --color-text: #333;
     --color-article: #F4F5F6;
@@ -82,21 +82,8 @@ section {
 
 h1 {
     color: var(--color-article);
-    animation-name: slide-in-left;
-    animation-duration: 2s;
+    font-family: 'Quicksand', sans-serif;
 }
-
-/*
-@keyframes slide-in-left {
-    from {
-        transform: translateX(-100%);
-    }
-
-    to {
-        transform: translateX(0);
-    }
-}
-    */
 
 h2 {
     color: var(--color-grey);
@@ -106,6 +93,8 @@ img {
     width: 100%;
     height: auto;
     border-radius: 8px;
+    display: block;
+    margin: 0px auto;
 }
 
 #small {
