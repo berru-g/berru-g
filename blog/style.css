@@ -84,15 +84,17 @@ h1 {
     color: var(--color-article);
     animation-name: slide-in-left;
     animation-duration: 2s;
-  }
-  @keyframes slide-in-left {
+}
+
+@keyframes slide-in-left {
     from {
-      transform: translateX(-100%);
+        transform: translateX(-100%);
     }
+
     to {
-      transform: translateX(0);
+        transform: translateX(0);
     }
-  }
+}
 
 h2 {
     color: var(--color-grey);
@@ -344,6 +346,7 @@ footer {
     font-weight: bold;
     color: #333;
 }
+
 /*
 .donator:hover {
     transform: translateY(-5px);
@@ -359,4 +362,67 @@ footer {
     100% {
         transform: translateX(-230%);
     }
+}
+
+/* Conteneur principal centré */
+.share-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+/* Bouton principal centré */
+#shareButton {
+    background-color: #f1f1f1;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0 auto;
+    /* Centrage horizontal */
+}
+
+#shareButton:hover {
+    background-color: #ddd;
+}
+
+/* Popup de partage (ouvre vers le haut) */
+.share-popup {
+    position: absolute;
+    bottom: 10px;
+    /* Positionne le popup au-dessus */
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    z-index: 1000;
+}
+
+.share-popup button,
+.share-popup a {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    text-align: left;
+    border: none;
+    background-color: #f1f1f1;
+    color: #333;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.share-popup button:hover,
+.share-popup a:hover {
+    background-color: #ddd;
 }
