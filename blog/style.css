@@ -106,9 +106,13 @@ img {
 }
 
 #punch {
-    text-align: center;
-    color: var(--color-grey);
+    text-align:left;
+    color: #1a1a1a;
     font-size: 0.3;
+    background: #93a9f1;
+    border: 1px solid #7a94eb;
+    border-radius: 8px;
+    padding: 1rem;
 }
 
 #read-time {
