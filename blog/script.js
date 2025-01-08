@@ -18,7 +18,7 @@ calculateReadTime();
 function showInfo() {
   Swal.fire({
     title: 'Protection de vos données',
-    text: "Conformément à mon engagement en faveur de la protection de votre vie privée, seules les informations que vous choisissez de partager explicitement, comme votre nom, sont affichées publiquement. Votre adresse e-mail n’est jamais partagée ou publiée telle quelle. Elle peut être affichée sous une forme partiellement masquée ou chiffrée pour protéger votre confidentialité. Pensez à utiliser un alias de messagerie 🧑‍💻",
+    text: "Conformément à mon engagement en faveur de la protection de votre vie privée, seules les informations que vous choisissez de partager explicitement, comme votre nom ou prénom, sont affichées publiquement. Votre adresse e-mail n’est jamais partagée ou publiée telle quelle. Elle peut être affichée sous une forme partiellement masquée ou chiffrée pour protéger votre confidentialité. Pensez à utiliser un alias de messagerie 🧑‍💻",
     icon: 'info',
     confirmButtonText: 'Compris',
     customClass: {
@@ -34,10 +34,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Configurer les liens de partage
   const twitterShare = document.getElementById("twitterShare");
-  twitterShare.href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentURL)}&text=${encodeURIComponent("Découvrez cet article incroyable !")}`;
+  twitterShare.href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentURL)}&text=${encodeURIComponent("Découvrez cet article de Gael Berru, incroyable !")}`;
 
   const whatsappShare = document.getElementById("whatsappShare");
-  whatsappShare.href = `https://api.whatsapp.com/send?text=${encodeURIComponent("Découvrez cet article : " + currentURL)}`;
+  whatsappShare.href = `https://api.whatsapp.com/send?text=${encodeURIComponent("Découvrez cet article de Gael Berru : " + currentURL)}`;
 
   const facebookShare = document.getElementById("facebookShare");
   facebookShare.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentURL)}`;
