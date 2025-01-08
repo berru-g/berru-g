@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,400i,700");
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=Salsa&display=swap");
+
 :root {
     --color-text: #333;
     --color-article: #F4F5F6;
@@ -13,7 +14,7 @@
 }
 
 *,
-*::before,
+s *::before,
 *::after {
     box-sizing: border-box;
 }
@@ -110,14 +111,20 @@ img {
     color: var(--color-grey);
     font-size: 0.3;
 }
+
 #info {
-    text-align:left;
+    text-align: left;
     color: #1a1a1a;
     font-size: 0.3;
-    background: #f1eb93;
-    border: 1px solid #7a94eb;
+    background: #95abf5;
+    border: 1px solid #1a1a1a;
     border-radius: 8px;
     padding: 1rem;
+}
+
+#info:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 #read-time {

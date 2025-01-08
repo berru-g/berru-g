@@ -39,6 +39,11 @@
             text-align: center;
         }
 
+        .donation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
         img {
             max-width: 100%;
             margin-bottom: 10px;
@@ -60,10 +65,17 @@
             border: 1px solid #ddd;
             font-family: monospace;
             user-select: all;
+            max-width: 190px;
+            /* Limite la largeur */
+            white-space: nowrap;
+            /* Empêche le retour à la ligne */
+            overflow: hidden;
+            /* Cache le surplus */
+            text-overflow: ellipsis;
         }
 
         .copy-button {
-            background-color: #4caf50;
+            background-color: #58a9f8;
             color: white;
             border: none;
             padding: 5px 10px;
@@ -94,7 +106,6 @@
 
 <body>
     <header>
-        <h1>Merci pour votre générosité 🙏</h1>
     </header>
     <div class="donation-container">
         <!-- USDC Donation -->
@@ -116,7 +127,7 @@
             </div>
         </div>
     </div>
-    <h2><a href="index.html">↩️ Revenir au site</a></h2><br>
+    <h2><a href="index.html">↩️</a></h2><br>
     <p>Tous droits réservés &copy; 2024 | <a href="https://github.com/berru-g/">berru-g</a></p>
 
     <script>
@@ -136,7 +147,7 @@
                 document.body.removeChild(tempInput);
 
                 // Optionnel : Feedback visuel
-                alert('Adresse copiée dans le presse-papiers : ' + address);
+                alert('Adresse copiée dans le presse-papiers : Merci pour votre geste 🙏' + address);
             });
         });
     </script>
