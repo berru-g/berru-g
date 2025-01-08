@@ -106,6 +106,11 @@ img {
 }
 
 #punch {
+    text-align: center;
+    color: var(--color-grey);
+    font-size: 0.3;
+}
+#info {
     text-align:left;
     color: #1a1a1a;
     font-size: 0.3;
