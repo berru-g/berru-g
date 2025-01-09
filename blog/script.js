@@ -18,7 +18,7 @@ calculateReadTime();
 function showInfo() {
   Swal.fire({
     title: 'Protection de vos données',
-    text: "Conformément à mon engagement en faveur de la protection de votre vie privée, seules les informations que vous choisissez de partager explicitement, comme votre nom ou prénom, sont affichées publiquement. Votre adresse e-mail n’est jamais partagée ou publiée telle quelle. Elle peut être affichée sous une forme partiellement masquée ou chiffrée pour protéger votre confidentialité. Pensez à utiliser un alias de messagerie 🧑‍💻",
+    text: "Conformément à mon engagement en faveur de la protection de votre vie privée, seules votre nom ou prénom est affiché publiquement. Votre adresse e-mail n’est jamais partagée ou publiée telle quelle. Elle peut être partiellement masquée ou chiffrée. Pensez à utiliser un alias de messagerie 🧑‍💻 Mes réponses vous sauront envoyé par mail et n'apparaitrons pas dans l'espace commentaire. Merci",
     icon: 'info',
     confirmButtonText: 'Compris',
     customClass: {
