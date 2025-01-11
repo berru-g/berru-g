@@ -401,9 +401,9 @@ footer {
 /* Popup de partage (ouvre vers le haut) */
 .share-popup {
     position: absolute;
-    bottom: 10px;
+    bottom: 80px;
     /* Positionne le popup au-dessus */
-    right: 0;
+    right: 50;
     background-color: white;
     border: 1px solid #ddd;
     border-radius: 8px;
