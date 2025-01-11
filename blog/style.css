@@ -89,7 +89,7 @@ h2 {
     color: var(--color-grey);
 }
 
-img {
+img, iframe {
     width: 100%;
     height: auto;
     border-radius: 8px;
