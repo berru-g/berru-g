@@ -98,7 +98,7 @@ img, iframe {
 }
 
 #small {
-    width: 50%;
+    width: 60%;
     height: auto;
     border-radius: 8px;
     display: block;
@@ -115,7 +115,7 @@ img, iframe {
     text-align: left;
     color: #1a1a1a;
     font-size: 0.3;
-    background: #e4eaff;
+    background: #e4e9fb;
     border: 1px solid #1a1a1a;
     border-radius: 8px;
     padding: 1rem;
@@ -129,7 +129,7 @@ img, iframe {
 #read-time {
     font-family: 'Montserrat', sans-serif;
     line-height: 1.6;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: grey;
     margin-bottom: 1rem;
 }
