@@ -27,14 +27,25 @@ body {
     padding: 0;
     overflow-x: hidden;
     color: var(--color-text);
-    background-color: var(--color-header);
+    background-color: var(--color-article);
 }
 
 header {
-    background: var(--color-header);
+    background: var(--color-article);
     color: white;
     padding: 1rem;
     text-align: center;
+}
+h1 {
+    color: var(--color-header);
+    font-family: 'Montserrat', sans-serif;
+}
+.mention {
+    text-align: center;
+    color: var(--color-grey)
+}
+h2 {
+    color: var(--color-grey);
 }
 
 nav {
@@ -58,7 +69,7 @@ nav ul li a {
 
 nav ul li a:hover {
     text-decoration: none;
-    color: grey;
+    color: var(--color-lien);
 }
 
 a {
@@ -76,17 +87,9 @@ section {
     margin: 1rem auto;
     max-width: 800px;
     background: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
-}
-
-h1 {
-    color: var(--color-article);
-    font-family: 'Montserrat', sans-serif;
-}
-
-h2 {
-    color: var(--color-grey);
 }
 
 img, iframe {
