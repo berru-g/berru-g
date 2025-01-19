@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>images crées avec IA</title>
+    <link rel="shortcut icon" href="https://savoir-relatif-et-absolu.netlify.app/img/logo.png" />
+    <link rel="apple-touch-icon" href="https://savoir-relatif-et-absolu.netlify.app/img/logo.png" />
+
+    <meta name="description" content="Meta descriptionis here..................">
+    <meta name="keywords" content="MOT, clef, ici, ..........">
+
+    <meta name="author" content="Gael Berru">
+    <meta name="robots" content="noai">
+    <!-- Balises Open Graph pour les réseaux sociaux -->
+    <meta property="og:title" content="images crées avec IA">
+    <meta property="og:description" content="Meta descriptionis here..................">
+
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://savoir-relatif-et-absolu.netlify.app/">
+    <link rel="canonical" href="https://savoir-relatif-et-absolu.netlify.app/gallery-image" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /*
+
+All grid code is placed in a 'supports' rule (feature query) at the bottom of the CSS (Line 77). 
+        
+The 'supports' rule will only run if your browser supports CSS grid.
+
+Flexbox is used as a fallback so that browsers which don't support grid will still recieve an identical layout.
+
+*/
+
+        @import url("https://fonts.googleapis.com/css?family=Montserrat:400,400i,700");
+
+        :root {
+            /* Base font size */
+            font-size: 10px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: #fafafa;
+        }
+
+        .container {
+            max-width: 100rem;
+            margin: 0 auto;
+            padding: 0 2rem 2rem;
+        }
+
+        .heading {
+            font-family: "Montserrat", Arial, sans-serif;
+            font-size: 4rem;
+            font-weight: 500;
+            line-height: 1.5;
+            text-align: center;
+            padding: 3.5rem 0;
+            color: #1a1a1a;
+        }
+
+        .heading span {
+            display: block;
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            /* Compensate for excess margin on outer gallery flex items */
+            margin: -1rem -1rem;
+        }
+
+        .gallery-item {
+            /* Minimum width of 24rem and grow to fit available space */
+            flex: 1 0 24rem;
+            /* Margin value should be half of grid-gap value as margins on flex items don't collapse */
+            margin: 1rem;
+            box-shadow: 0.3rem 0.4rem 0.4rem rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+
+        .gallery-image {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 400ms ease-out;
+        }
+
+        .gallery-image:hover {
+            transform: scale(1.15);
+        }
+
+        /*
+
+The following rule will only run if your browser supports CSS grid.
+
+Remove or comment-out the code block below to see how the browser will fall-back to flexbox styling. 
+
+*/
+
+        @supports (display: grid) {
+            .gallery {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+                grid-gap: 2rem;
+            }
+
+            .gallery,
+            .gallery-item {
+                margin: 0;
+            }
+        }
+
+        a {
+            text-decoration: none;
+            color: #ee964b;
+        }
+
+        a:hover {
+            text-decoration: none;
+            color: grey;
+        }
+
+        h1 {
+            color: #0d3b66;
+            font-family: sans-serif;
+        }
+
+        h2 {
+            color: var(--color-grey);
+        }
+
+        /* Conteneur principal centré */
+        .share-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Bouton principal centré */
+        #shareButton {
+            background-color: #f1f1f1;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 0 auto;
+            /* Centrage horizontal */
+        }
+
+        #shareButton:hover {
+            background-color: #ddd;
+        }
+
+        /* Popup de partage (ouvre vers le haut) */
+        .share-popup {
+            position: absolute;
+            bottom: 80px;
+            /* Positionne le popup au-dessus */
+            right: 50;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px #0d3b66;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+            z-index: 1000;
+        }
+
+        .share-popup button,
+        .share-popup a {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            text-align: center;
+            border: none;
+
+            color: #333;
+            border-radius: 100px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .share-popup button:hover,
+        .share-popup a:hover {
+            background-color: #ddd;
+        }
+
+        p {
+            text-align: center;
+            font-size: medium;
+            font-family: 'Montserrat', sans-serif;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <h3 class="heading">Image crée avec IA <span>& Libre de droit</span></h3>
+        <p>Si certaines images vous sont utiles et que vous souhaitez me remercier pour l'utilisation gratuite, vous pouvez me
+            <strong><a href="../donation.html" target="_blank" rel="noopener">faire le don de votre choix.</a></strong>
+        </p><br>
+
+
+        <div class="gallery">
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/satoshi-nakamoto (1).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/satoshi-nakamoto (2).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/satoshi-nakamoto (3).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/satoshi-nakamoto (4).jpg" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/blockchain-ferme.webp" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/blockchain-park.webp" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/Comment-choisir-un-bon-token.webp" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image"
+                    src="../img/DALL·E 2025-01-09 08.33.19 - A conceptual illustration depicting alignment between oneself and the universe, symbolizing a profound connection and timeless flow. A person sits in .webp"
+                    alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/etat-de-flow.webp" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/Et-si-les-humains-étaient-des-tokens.webp" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/IDNUM1.webp" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/IDNUM2.webp" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/IDNUM3.webp" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/kali.webp" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/la-blockchain-et-marche-de-lart.webp" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/la-blockchain-pour-les-nuls.webp" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/l-art-de-la-guerre.webp" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/Necessite-de-la-solitude.webp" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/profilfemmeor.jpg" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/relatif.jpg" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/savoir.jpg" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/token.jpg" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/wild-blockchain.webp" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/absolu.jpg" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/agent-ia.webp" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="../img/blockchain.png" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/femme-robe-blanche (1).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/femme-robe-blanche (2).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/femme-robe-blanche (3).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/femme-robe-blanche (4).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/femme-robe-blanche (5).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/femme-robe-blanche (6).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/femme-robe-ete (5).jpg" alt="#">
+            </div>
+
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/femme-robe-ete(7).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/grenouille-frogman (1).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/grenouille-frogman (2).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/grenouille-frogman (3).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/grenouille-frogman (4).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/grenouille-frogman (5).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/grenouille-frogman (6).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/grenouille-frogman (7).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/grenouille-frogman (8).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/grenouille-frogman (9).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/grenouille-frogman (10).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/homme-plage (1).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/homme-plage (2).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/homme-plage (3).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/homme-plage (4).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/homme-plage (5).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/homme-plage (6).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/homme-plage (7).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/portrait-homme-medite (1).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/portrait-homme-medite (2).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/portrait-homme-medite (3).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/portrait-homme-medite (4).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/portrait-homme-medite (5).jpg" alt="#">
+            </div>
+            <div class="gallery-item">
+                <img class="gallery-image" src="img/portrait-homme-medite (6).jpg" alt="#">
+            </div>
+
+
+        </div>
+
+
+        <br>
+        <strong>
+            <p style="text-align:center"><a href="../index.html">Revenir au site</a></p>
+        </strong>
+        <br>
+        <strong>
+            <p style="text-align:center"><a href="../index.html/#espace-commentaire">Poser une question</a></p>
+        </strong>
+        <br>
+        <div class="share-container">
+            <!-- Bouton principal avec icône "share" -->
+            <button id="shareButton">
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 24 24">
+                    <path
+                        d="M 20 0 C 17.789063 0 16 1.789063 16 4 C 16 4.277344 16.039063 4.550781 16.09375 4.8125 L 7 9.375 C 6.265625 8.535156 5.203125 8 4 8 C 1.789063 8 0 9.789063 0 12 C 0 14.210938 1.789063 16 4 16 C 5.203125 16 6.265625 15.464844 7 14.625 L 16.09375 19.1875 C 16.039063 19.449219 16 19.722656 16 20 C 16 22.210938 17.789063 24 20 24 C 22.210938 24 24 22.210938 24 20 C 24 17.789063 22.210938 16 20 16 C 18.796875 16 17.734375 16.535156 17 17.375 L 7.90625 12.8125 C 7.960938 12.550781 8 12.277344 8 12 C 8 11.722656 7.960938 11.449219 7.90625 11.1875 L 17 6.625 C 17.734375 7.464844 18.796875 8 20 8 C 22.210938 8 24 6.210938 24 4 C 24 1.789063 22.210938 0 20 0 Z">
+                    </path>
+                </svg>
+            </button>
+            <!-- Popup avec les options -->
+            <div id="sharePopup" class="share-popup">
+                <button onclick="copyToClipboard()"><i class='fas fa-copy'></i></button>
+                <a href="#" id="twitterShare" target="_blank"><i class='fa-brands fa-twitter'></i></a>
+                <a href="#" id="whatsappShare" target="_blank"><i class='fa-brands fa-whatsapp'></i></a>
+                <a href="#" id="facebookShare" target="_blank"><i class='fa-brands fa-facebook-f'></i></a>
+            </div>
+        </div>
+
+        <script src="../script.js"></script>
+</body>
+<p style="text-align:center">Images libre de droit 2024 | <a href="../index.html">Gael Berru</a></p>

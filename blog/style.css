@@ -42,7 +42,7 @@ h1 {
 }
 .mention {
     text-align: center;
-    color: var(--color-grey)
+    color: var(--color-grey);
 }
 h2 {
     color: var(--color-grey);
