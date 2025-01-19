@@ -42,6 +42,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const facebookShare = document.getElementById("facebookShare");
   facebookShare.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentURL)}`;
 
+  /*const mediumShare = document.getElementById("mediumShare");
+  mediumShare.href = `https://medium.com/new-story?source=${encodeURIComponent(currentURL)}`;*/
+
+
   // Afficher ou masquer le popup
   shareButton.addEventListener("click", () => {
     const isVisible = sharePopup.style.display === "flex";
