@@ -282,7 +282,9 @@
             <li style='color: #ff4d4d;'>75 à 100%: Capacité maximal <span style="color:grey">, fortement
                     déconseillé ou, le token vient de faire un ATH. DYOR.</span></li>
         </ul>
-        <span style="color:grey">( * Notez le nom complet avec un tiret. Ex: pour injective notez injective-protocol, pour Akash notez
+        <span style="color:grey">( * Si le token recherché n'est pas dans les 100 premier rang, notez le nom complet
+            avec un tiret. Ex: pour injective notez injective-protocol,
+            pour Akash notez
             akash-network, pour RSR notez reserve-rights-token etc )</span>
     </section>
     <br>
@@ -338,6 +340,193 @@
     <br>
     <h5>Tous droits réservés &copy; 2025 | <a href="https://berru-g.github.io/berru-g/">berru-g</a></h5>
     <script>
+        // Fonction pour charger le cache depuis localStorage
+        function loadCache() {
+            const cache = localStorage.getItem('tokenCache');
+            return cache ? JSON.parse(cache) : {
+                "btc": "bitcoin",
+                "eth": "ethereum",
+                "xrp": "ripple",
+                "usdt": "tether",
+                "sol": "solana",
+                "bnb": "binancecoin",
+                "doge": "dogecoin",
+                "usdc": "usd-coin",
+                "ada": "cardano",
+                "trx": "tron",
+                "dot": "polkadot",
+                "matic": "polygon",
+                "avax": "avalanche",
+                "shib": "shiba-inu",
+                "ltc": "litecoin",
+                "wbtc": "wrapped-bitcoin",
+                "dai": "dai",
+                "uni": "uniswap",
+                "leo": "leo-token",
+                "atom": "cosmos",
+                "link": "chainlink",
+                "etc": "ethereum-classic",
+                "xlm": "stellar",
+                "bch": "bitcoin-cash",
+                "algo": "algorand",
+                "qnt": "quant-network",
+                "near": "near",
+                "cro": "crypto-com-chain",
+                "vet": "vechain",
+                "icp": "internet-computer",
+                "hbar": "hedera-hashgraph",
+                "fil": "filecoin",
+                "apt": "aptos",
+                "lunc": "terra-luna",
+                "egld": "elrond",
+                "ftm": "fantom",
+                "sand": "the-sandbox",
+                "axs": "axie-infinity",
+                "mana": "decentraland",
+                "chz": "chiliz",
+                "xmr": "monero",
+                "okb": "okb",
+                "bsv": "bitcoin-sv",
+                "theta": "theta-token",
+                "eos": "eos",
+                "flow": "flow",
+                "aave": "aave",
+                "frax": "frax",
+                "klay": "klaytn",
+                "xtz": "tezos",
+                "rune": "thorchain",
+                "zec": "zcash",
+                "snx": "synthetix-network-token",
+                "neo": "neo",
+                "gala": "gala",
+                "crv": "curve-dao-token",
+                "kcs": "kucoin-shares",
+                "miota": "iota",
+                "ht": "huobi-token",
+                "usdp": "paxos-standard",
+                "btt": "bittorrent",
+                "lrc": "loopring",
+                "comp": "compound-governance-token",
+                "one": "harmony",
+                "enj": "enjincoin",
+                "bat": "basic-attention-token",
+                "mkr": "maker",
+                "xem": "nem",
+                "dcr": "decred",
+                "waves": "waves",
+                "tusd": "true-usd",
+                "cdai": "cdai",
+                "cusdc": "cusdc",
+                "ceth": "ceth",
+                "cusdt": "cusdt",
+                "ftt": "ftx-token",
+                "ksm": "kusama",
+                "yfi": "yearn-finance",
+                "btg": "bitcoin-gold",
+                "omg": "omisego",
+                "zrx": "0x",
+                "ont": "ontology",
+                "nano": "nano",
+                "sc": "siacoin",
+                "icx": "icon",
+                "qtum": "qtum",
+                "bnt": "bancor",
+                "zen": "horizen",
+                "sushi": "sushi",
+                "dgb": "digibyte",
+                "uma": "uma",
+                "rev": "revain",
+                "hive": "hive",
+                "iotx": "iotex",
+                "fet": "fetch-ai",
+                "cel": "celsius",
+                "srm": "serum",
+                "rsv": "reserve",
+                "ogn": "origin-protocol",
+                "ankr": "ankr",
+                "storj": "storj",
+                "ocean": "ocean-protocol",
+                "grt": "the-graph",
+                "bal": "balancer",
+                "band": "band-protocol",
+                "akash": "akash-network",
+                "rsr": "reserve-rights-token"
+            };
+        }
+
+        // Fonction pour sauvegarder le cache dans localStorage
+        function saveCache(cache) {
+            localStorage.setItem('tokenCache', JSON.stringify(cache));
+        }
+
+        // Charger le cache initial
+        const tokenCache = loadCache();
+
+        document.getElementById('calculate').addEventListener('click', async () => {
+            const userInput = document.getElementById('token').value.toLowerCase();
+            const resultDiv = document.getElementById('result');
+
+            try {
+                let token = userInput;
+
+                // Vérifier si le token existe déjà dans le cache
+                if (tokenCache[token]) {
+                    token = tokenCache[token];
+                } else {
+                    // Si non trouvé, faire une requête pour valider et récupérer le nom officiel
+                    const response = await fetch(`https://api.coingecko.com/api/v3/coins/${token}`);
+                    if (!response.ok) throw new Error('Token introuvable');
+                    const data = await response.json();
+
+                    // Ajouter le token au cache avec son nom officiel
+                    tokenCache[userInput] = data.id;
+                    saveCache(tokenCache); // Sauvegarder dans localStorage
+                }
+
+                // Faire la requête pour obtenir les informations du token
+                const response = await fetch(`https://api.coingecko.com/api/v3/coins/${token}`);
+                if (!response.ok) throw new Error('Token introuvable');
+
+                const data = await response.json();
+                const currentPrice = data.market_data.current_price.usd;
+                const allTimeHigh = data.market_data.ath.usd;
+                const allTimeLow = data.market_data.atl.usd;
+
+                // Calcul du pourcentage
+                const percentage = ((currentPrice - allTimeLow) / (allTimeHigh - allTimeLow)) * 100;
+                let percentageClass = '';
+
+                // Attribution de la couleur selon le pourcentage
+                if (percentage > 75) {
+                    percentageClass = 'red';
+                } else if (percentage > 50) {
+                    percentageClass = 'orange';
+                } else if (percentage > 25) {
+                    percentageClass = 'blue';
+                } else {
+                    percentageClass = 'green';
+                }
+
+                // Mise en forme du résultat
+                resultDiv.innerHTML = `
+            <p><strong>Token:</strong> ${data.name} (${data.symbol.toUpperCase()})</p>
+            <p><strong>Prix actuel:</strong> $${currentPrice.toFixed(3)}</p>
+            <p><strong>Plus bas historique:</strong> $${allTimeLow.toFixed(3)}</p>
+            <p><strong>Plus haut historique:</strong> $${allTimeHigh.toFixed(3)}</p>
+            <p><strong>A </strong> 
+                <span class="percentage ${percentageClass}">
+                    ${percentage.toFixed(2)}%
+                </span>
+                <strong> de sa capacité maximale</strong>
+            </p>
+        `;
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: red;">Erreur: ${error.message}</p>`;
+            }
+        });
+
+    </script>
+    <!--<script>
         document.getElementById('calculate').addEventListener('click', async () => {
             const token = document.getElementById('token').value.toLowerCase();
             const resultDiv = document.getElementById('result');
@@ -383,7 +572,7 @@
                 resultDiv.innerHTML = `<p style="color: red;">Erreur: ${error.message}</p>`;
             }
         });
-    </script>
+    </script>-->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const shareButton = document.getElementById("shareButton");
@@ -428,6 +617,7 @@
         });
 
     </script>
+
 </body>
 
 </html>
