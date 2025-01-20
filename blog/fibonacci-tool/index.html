@@ -9,6 +9,7 @@
        Mise à jour article : Weekly
        Licence : The MIT License (MIT)
        Copyright (c) 2025 Berru
+       Contact : https://savoir-relatif-et-absolu.netlify.app/#espace-commentaire
     ============================================
 -->
 
@@ -147,8 +148,8 @@
             border-radius: 5px;
             background-color: #161b22;
             border: 1px solid #30363d;
-            width: 80%;
-            max-width: 600px;
+            width: 60%;
+            max-width: 500px;
         }
 
         .percentage {
@@ -272,18 +273,20 @@
             investissement ) <strong><a href="#dyor">DYOR*</a></strong></p>
     </section>
     <section>
-        <p>Entrez le nom d'un token ( ex: bitcoin, injective-protocol ) et découvrez son potentiel de performance :
-            <ul>
-                <li style='color: #3b82f6;'>00 à 25% : opportunité | potentiel x4 sur investissement</li>
-                <li style='color: #34d399;'>25 à 50% : opportunité | potentiel x2</li>
-                <li style='color: #ffa500;'>50 à 75% : restez prudent</li>
-                <li style='color: #ff4d4d;'>75 à 100%: Capacité maximal <span style="color:grey">, fortement
-                        déconseillé ou, le token vient de faire un ATH. DYOR.</span></li>
-            </ul>
-        </p>
+        <p>Entrez le nom d'un token* et découvrez son potentiel de performance :</p>
+
+        <ul>
+            <li style='color: #3b82f6;'>00 à 25% : opportunité | potentiel x4 sur investissement</li>
+            <li style='color: #34d399;'>25 à 50% : opportunité | potentiel x2</li>
+            <li style='color: #ffa500;'>50 à 75% : restez prudent</li>
+            <li style='color: #ff4d4d;'>75 à 100%: Capacité maximal <span style="color:grey">, fortement
+                    déconseillé ou, le token vient de faire un ATH. DYOR.</span></li>
+        </ul>
+        <span style="color:grey">( * Notez le nom complet avec un tiret. Ex: pour injective notez injective-protocol, pour Akash notez
+            akash-network, pour RSR notez reserve-rights-token etc )</span>
     </section>
     <br>
-    <input type="text" id="token" placeholder="Nom du token (ex: solana, render-token)">
+    <input type="text" id="token" placeholder="Nom du token (ex: bitcoin, render-token)">
     <button id="calculate">Calculer</button>
     <div id="result"></div>
     <br>
