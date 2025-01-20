@@ -100,9 +100,6 @@
             max-width: 500px;
             border-radius: 8px;
             font-size: small;
-        }
-
-        section:hover {
             transform: translateY(-5px);
             box-shadow: 0 2px 8px #1A1A1A;
         }
@@ -129,7 +126,7 @@
 
         button:hover {
             background-color: #58a6ff;
-            color: #0d1117;
+            color: #c9d1d9;
         }
 
         #result {
@@ -174,6 +171,7 @@
             color: grey;
         }
         .share-container {
+            margin-top: 10px;
             position: relative;
             display: flex;
             justify-content: center;
@@ -182,10 +180,11 @@
         /* Bouton principal centré */
         #shareButton {
             background-color: #f1f1f1;
+            opacity: 0.6;
             border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -208,7 +207,7 @@
             background-color: white;
             border: 1px solid #ddd;
             border-radius: 8px;
-            box-shadow: 0 4px 8px #0d3b66;
+            box-shadow: 0 4px 8px #313131;
             display: none;
             flex-direction: column;
             gap: 10px;
@@ -223,9 +222,8 @@
             font-size: 18px;
             text-align: center;
             border: none;
-            
             color: #333;
-            border-radius: 100px;
+            border-radius: 8px;
             cursor: pointer;
             text-decoration: none;
         }
@@ -240,7 +238,7 @@
 <body>
     <h1>Fibonacci Retracement</h1>
     <section>
-        <p>Entrez le nom d'un token ( bitcoin, doge-coin ) et découvrez son potentiel de performance : <li
+        <p>Entrez le nom d'un token ( bitcoin, injective ) et découvrez son potentiel de performance : <li
                 style='color: #34d399;'>0-25% : de
                 sa capacité, opportunité d'investir,</li>
             <li style='color: #3b82f6;'>25-50% : potentiel de doubler, </li>
@@ -253,7 +251,7 @@
     <button id="calculate">Calculer</button>
     <div id="result"></div>
     <br>
-    <br>
+    
     <div class="share-container">
         <!-- Bouton principal avec icône "share" -->
         <button id="shareButton">
@@ -334,6 +332,50 @@
                 resultDiv.innerHTML = `<p style="color: red;">Erreur: ${error.message}</p>`;
             }
         });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const shareButton = document.getElementById("shareButton");
+            const sharePopup = document.getElementById("sharePopup");
+            const currentURL = window.location.href;
+          
+            // Configurer les liens de partage
+            const twitterShare = document.getElementById("twitterShare");
+            twitterShare.href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentURL)}&text=${encodeURIComponent("Tool magic Fibonacci Retracement !")}`;
+          
+            const whatsappShare = document.getElementById("whatsappShare");
+            whatsappShare.href = `https://api.whatsapp.com/send?text=${encodeURIComponent("Tool magic Fibonacci Retracement  : " + currentURL)}`;
+          
+            const facebookShare = document.getElementById("facebookShare");
+            facebookShare.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentURL)}`;
+          
+            /*const mediumShare = document.getElementById("mediumShare");
+            mediumShare.href = `https://medium.com/new-story?source=${encodeURIComponent(currentURL)}`;*/
+          
+          
+            // Afficher ou masquer le popup
+            shareButton.addEventListener("click", () => {
+              const isVisible = sharePopup.style.display === "flex";
+              sharePopup.style.display = isVisible ? "none" : "flex";
+            });
+          
+            // Copier le lien dans le presse-papier
+            window.copyToClipboard = () => {
+              navigator.clipboard.writeText(currentURL).then(() => {
+                alert("Lien copié dans le presse-papier !");
+              }).catch(err => {
+                console.error("Échec de la copie du lien : ", err);
+              });
+            };
+          
+            // Cacher le popup quand on clique en dehors
+            document.addEventListener("click", (e) => {
+              if (!shareButton.contains(e.target) && !sharePopup.contains(e.target)) {
+                sharePopup.style.display = "none";
+              }
+            });
+          });
+          
     </script>
 </body>
 
