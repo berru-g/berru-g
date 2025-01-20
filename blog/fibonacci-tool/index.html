@@ -15,9 +15,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>fibonacci retracement</title>
-    <link rel="shortcut icon" href="https://savoir-relatif-et-absolu.netlify.app/img/logo.png" />
-    <link rel="apple-touch-icon" href="https://savoir-relatif-et-absolu.netlify.app/img/logo.png" />
+    <title>fibonacci retracement free tool</title>
+    <link rel="shortcut icon" href="https://img.icons8.com/?size=100&id=bsZ8zwOxyUKF&format=png&color=000000" />
+    <link rel="apple-touch-icon" href="https://img.icons8.com/?size=100&id=bsZ8zwOxyUKF&format=png&color=000000" />
     <meta name="description"
         content="Simplifiez vos décisions d'investissement avec notre outil d'analyse crypto visuel et intuitif">
     <meta name="keywords"
@@ -147,7 +147,7 @@
             border-radius: 5px;
             background-color: #161b22;
             border: 1px solid #30363d;
-            width: 90%;
+            width: 80%;
             max-width: 600px;
         }
 
@@ -182,12 +182,17 @@
             text-decoration: none;
             color: #58a6ff;
         }
-        a:hover { color: grey;}
+
+        a:hover {
+            color: grey;
+        }
+
+        /* Conteneur principal centré */
         .share-container {
-            margin-top: 10px;
             position: relative;
             display: flex;
             justify-content: center;
+            margin-top: 20px;
         }
 
         /* Bouton principal centré */
@@ -195,8 +200,8 @@
             background-color: #f1f1f1;
             border: none;
             border-radius: 8px;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -219,7 +224,7 @@
             background-color: white;
             border: 1px solid #ddd;
             border-radius: 8px;
-            box-shadow: 0 4px 8px #313131;
+            box-shadow: 0 4px 8px #0d3b66;
             display: none;
             flex-direction: column;
             gap: 10px;
@@ -234,6 +239,7 @@
             font-size: 18px;
             text-align: center;
             border: none;
+
             color: #333;
             border-radius: 8px;
             cursor: pointer;
@@ -248,14 +254,15 @@
 </head>
 
 <body>
-    <h1><a href="https://medium.com/@gael-berru/fibonacci-retracement-a56d53d5863d" target="_blank" rel="noopener">Fibonacci Retracement</a></h1>
+    <h1>Fibonacci Retracement</h1>
     <section>
         <p>Entrez le nom d'un token ( bitcoin, injective-protocol ) et découvrez son potentiel de performance : <li
                 style='color: #34d399;'>0-25% : de
                 sa capacité, opportunité d'investir,</li>
             <li style='color: #3b82f6;'>25-50% : potentiel de doubler, </li>
             <li style='color: #ffa500;'>50-75% : restez prudent, </li>
-            <li style='color: #ff4d4d;'>75-100%: Capacité maximal donc fortement déconseillé.</li>
+            <li style='color: #ff4d4d;'>75-100%: Capacité maximal <span style="color:grey">, fortement
+                    déconseillé soit le token vient de faire un ATH. DYOR.</span></li>
         </p>
     </section>
     <br>
@@ -285,7 +292,8 @@
     <section>
         <p>Disclaimer:</p>
         <p>Cet outil est fourni à titre informatif uniquement et ne constitue pas un conseil financier ou un outil
-            d'investissement professionnel. Les données présentées sont basées sur les informations historiques et ne
+            d'investissement professionnel. Les données présentées ( API de <a href="https://www.coingecko.com"
+                target="_blank" rel="noopener">CoinGecko.com</a> ) sont basées sur les informations historiques et ne
             garantissent pas les performances futures des crypto-monnaies. Nous vous recommandons vivement de réaliser
             des
             recherches approfondies avant de prendre toute décision
@@ -293,17 +301,21 @@
             votre
             investissement. Utilisez cet outil comme un support supplémentaire, et non comme une source unique de
             décision.
-        </p>
-        Si vous êtes débutant nous vous conseillons de commencer par là, <a
-            href="https://savoir-relatif-et-absolu.netlify.app/comment-choisir-un-bon-token">comment choisir un bon
-            token
-            ?</a> Merci</p>
-            <p>Si cet outil vous est utile est que <a
-                href="https://savoir-relatif-et-absolu.netlify.app/donation">vous souhaitez faire un don</a>, ou <a
-                href="https://savoir-relatif-et-absolu.netlify.app/index.html/#espace-commentaire">une remarque pour une amélioration</a> du tool.</p>
+            </ul>
+            <li>Si vous souhaitez une <a href="https://medium.com/@gael-berru/fibonacci-retracement-a56d53d5863d"
+                    target="_blank" rel="noopener">explication sur cette outil</a>.</li>
+            <li>Si vous êtes débutant je vous conseil de commencer par là, <a
+                    href="https://savoir-relatif-et-absolu.netlify.app/comment-choisir-un-bon-token">comment choisir un
+                    bon
+                    token
+                    ?</a></li>
+            <li>Si cet outil vous est utile est que <a href="https://savoir-relatif-et-absolu.netlify.app/donation">vous
+                    souhaitez faire un don</a>,</li>
+            <li>ou <a href="https://savoir-relatif-et-absolu.netlify.app/index.html/#espace-commentaire">une remarque
+                    pour une amélioration</a> du tool.</li>
     </section>
     <br>
-    <h5>Tous droits réservés &copy; 2024 | <a href="https://berru-g.github.io/berru-g/">berru-g</a></h5>
+    <h5>Tous droits réservés &copy; 2025 | <a href="https://berru-g.github.io/berru-g/">berru-g</a></h5>
     <script>
         document.getElementById('calculate').addEventListener('click', async () => {
             const token = document.getElementById('token').value.toLowerCase();
