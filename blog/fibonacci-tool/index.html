@@ -70,10 +70,22 @@
           }
         }
         </script>
-        
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-07M3KXWGNR"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-07M3KXWGNR');
+    </script>
+
+
 
     <style>
         @import url("https://fonts.googleapis.com/css?family=Montserrat:400,400i,700");
+
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #0d1117;
@@ -168,19 +180,19 @@
 
         a {
             text-decoration: none;
-            color: grey;
+            color: #58a6ff;
         }
+        a:hover { color: grey;}
         .share-container {
             margin-top: 10px;
             position: relative;
             display: flex;
             justify-content: center;
         }
-        
+
         /* Bouton principal centré */
         #shareButton {
             background-color: #f1f1f1;
-            opacity: 0.6;
             border: none;
             border-radius: 8px;
             width: 40px;
@@ -193,11 +205,11 @@
             margin: 0 auto;
             /* Centrage horizontal */
         }
-        
+
         #shareButton:hover {
             background-color: #ddd;
         }
-        
+
         /* Popup de partage (ouvre vers le haut) */
         .share-popup {
             position: absolute;
@@ -214,7 +226,7 @@
             padding: 10px;
             z-index: 1000;
         }
-        
+
         .share-popup button,
         .share-popup a {
             width: 100%;
@@ -227,7 +239,7 @@
             cursor: pointer;
             text-decoration: none;
         }
-        
+
         .share-popup button:hover,
         .share-popup a:hover {
             background-color: #ddd;
@@ -236,9 +248,9 @@
 </head>
 
 <body>
-    <h1>Fibonacci Retracement</h1>
+    <h1><a href="https://medium.com/@gael-berru/fibonacci-retracement-a56d53d5863d" target="_blank" rel="noopener">Fibonacci Retracement</a></h1>
     <section>
-        <p>Entrez le nom d'un token ( bitcoin, injective ) et découvrez son potentiel de performance : <li
+        <p>Entrez le nom d'un token ( bitcoin, injective-protocol ) et découvrez son potentiel de performance : <li
                 style='color: #34d399;'>0-25% : de
                 sa capacité, opportunité d'investir,</li>
             <li style='color: #3b82f6;'>25-50% : potentiel de doubler, </li>
@@ -247,16 +259,15 @@
         </p>
     </section>
     <br>
-    <input type="text" id="token" placeholder="Nom du token (ex: bitcoin, injective-protocol)">
+    <input type="text" id="token" placeholder="Nom du token (ex: solana, render-token)">
     <button id="calculate">Calculer</button>
     <div id="result"></div>
     <br>
-    
+
     <div class="share-container">
         <!-- Bouton principal avec icône "share" -->
         <button id="shareButton">
-            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100"
-                viewBox="0 0 24 24">
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 24 24">
                 <path
                     d="M 20 0 C 17.789063 0 16 1.789063 16 4 C 16 4.277344 16.039063 4.550781 16.09375 4.8125 L 7 9.375 C 6.265625 8.535156 5.203125 8 4 8 C 1.789063 8 0 9.789063 0 12 C 0 14.210938 1.789063 16 4 16 C 5.203125 16 6.265625 15.464844 7 14.625 L 16.09375 19.1875 C 16.039063 19.449219 16 19.722656 16 20 C 16 22.210938 17.789063 24 20 24 C 22.210938 24 24 22.210938 24 20 C 24 17.789063 22.210938 16 20 16 C 18.796875 16 17.734375 16.535156 17 17.375 L 7.90625 12.8125 C 7.960938 12.550781 8 12.277344 8 12 C 8 11.722656 7.960938 11.449219 7.90625 11.1875 L 17 6.625 C 17.734375 7.464844 18.796875 8 20 8 C 22.210938 8 24 6.210938 24 4 C 24 1.789063 22.210938 0 20 0 Z">
                 </path>
@@ -264,28 +275,35 @@
         </button>
         <!-- Popup avec les options -->
         <div id="sharePopup" class="share-popup">
-            <button onclick="copyToClipboard()"><i class='fas fa-copy' ></i></button>
-            <a href="#" id="twitterShare" target="_blank"><i class='fa-brands fa-twitter' ></i></a>
-            <a href="#" id="whatsappShare" target="_blank"><i class='fa-brands fa-whatsapp' ></i></a>
-            <a href="#" id="facebookShare" target="_blank"><i class='fa-brands fa-facebook-f' ></i></a>
+            <button onclick="copyToClipboard()"><i class='fas fa-copy'></i></button>
+            <a href="#" id="twitterShare" target="_blank"><i class='fa-brands fa-twitter'></i></a>
+            <a href="#" id="whatsappShare" target="_blank"><i class='fa-brands fa-whatsapp'></i></a>
+            <a href="#" id="facebookShare" target="_blank"><i class='fa-brands fa-facebook-f'></i></a>
         </div>
     </div>
     <br>
     <section>
-    <p>Disclaimer:</p>
-    <p>Cet outil est fourni à titre informatif uniquement et ne constitue pas un conseil financier ou un outil
-        d'investissement professionnel. Les données présentées sont basées sur les informations historiques et ne
-        garantissent pas les performances futures des crypto-monnaies. Nous vous recommandons vivement de réaliser des
-        recherches approfondies avant de prendre toute décision
-        d'investissement. Les crypto-monnaies comportent des risques significatifs, y compris la perte totale de votre
-        investissement. Utilisez cet outil comme un support supplémentaire, et non comme une source unique de décision.
-    </p>
-    Si vous êtes débutant nous vous conseillons de commencer par là, <a
-        href="https://savoir-relatif-et-absolu.netlify.app/comment-choisir-un-bon-token">comment choisir un bon token
-        ?</a> Merci</p>
+        <p>Disclaimer:</p>
+        <p>Cet outil est fourni à titre informatif uniquement et ne constitue pas un conseil financier ou un outil
+            d'investissement professionnel. Les données présentées sont basées sur les informations historiques et ne
+            garantissent pas les performances futures des crypto-monnaies. Nous vous recommandons vivement de réaliser
+            des
+            recherches approfondies avant de prendre toute décision
+            d'investissement. Les crypto-monnaies comportent des risques significatifs, y compris la perte totale de
+            votre
+            investissement. Utilisez cet outil comme un support supplémentaire, et non comme une source unique de
+            décision.
+        </p>
+        Si vous êtes débutant nous vous conseillons de commencer par là, <a
+            href="https://savoir-relatif-et-absolu.netlify.app/comment-choisir-un-bon-token">comment choisir un bon
+            token
+            ?</a> Merci</p>
+            <p>Si cet outil vous est utile est que <a
+                href="https://savoir-relatif-et-absolu.netlify.app/donation">vous souhaitez faire un don</a>, ou <a
+                href="https://savoir-relatif-et-absolu.netlify.app/index.html/#espace-commentaire">une remarque pour une amélioration</a> du tool.</p>
     </section>
-        <br>
-    <h4>Tous droits réservés &copy; 2024 | <a href="https://berru-g.github.io/berru-g/">berru-g</a></h4>
+    <br>
+    <h5>Tous droits réservés &copy; 2024 | <a href="https://berru-g.github.io/berru-g/">berru-g</a></h5>
     <script>
         document.getElementById('calculate').addEventListener('click', async () => {
             const token = document.getElementById('token').value.toLowerCase();
@@ -338,44 +356,44 @@
             const shareButton = document.getElementById("shareButton");
             const sharePopup = document.getElementById("sharePopup");
             const currentURL = window.location.href;
-          
+
             // Configurer les liens de partage
             const twitterShare = document.getElementById("twitterShare");
             twitterShare.href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentURL)}&text=${encodeURIComponent("Tool magic Fibonacci Retracement !")}`;
-          
+
             const whatsappShare = document.getElementById("whatsappShare");
             whatsappShare.href = `https://api.whatsapp.com/send?text=${encodeURIComponent("Tool magic Fibonacci Retracement  : " + currentURL)}`;
-          
+
             const facebookShare = document.getElementById("facebookShare");
             facebookShare.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentURL)}`;
-          
+
             /*const mediumShare = document.getElementById("mediumShare");
             mediumShare.href = `https://medium.com/new-story?source=${encodeURIComponent(currentURL)}`;*/
-          
-          
+
+
             // Afficher ou masquer le popup
             shareButton.addEventListener("click", () => {
-              const isVisible = sharePopup.style.display === "flex";
-              sharePopup.style.display = isVisible ? "none" : "flex";
+                const isVisible = sharePopup.style.display === "flex";
+                sharePopup.style.display = isVisible ? "none" : "flex";
             });
-          
+
             // Copier le lien dans le presse-papier
             window.copyToClipboard = () => {
-              navigator.clipboard.writeText(currentURL).then(() => {
-                alert("Lien copié dans le presse-papier !");
-              }).catch(err => {
-                console.error("Échec de la copie du lien : ", err);
-              });
+                navigator.clipboard.writeText(currentURL).then(() => {
+                    alert("Lien copié dans le presse-papier !");
+                }).catch(err => {
+                    console.error("Échec de la copie du lien : ", err);
+                });
             };
-          
+
             // Cacher le popup quand on clique en dehors
             document.addEventListener("click", (e) => {
-              if (!shareButton.contains(e.target) && !sharePopup.contains(e.target)) {
-                sharePopup.style.display = "none";
-              }
+                if (!shareButton.contains(e.target) && !sharePopup.contains(e.target)) {
+                    sharePopup.style.display = "none";
+                }
             });
-          });
-          
+        });
+
     </script>
 </body>
 
