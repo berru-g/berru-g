@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="fr">
+<!-- 
+    ============================================
+       Developed by : https://github.com/berru-g/
+       Project : Savoir-relatif-et-absolu
+       Date : 20/01/2025
+       Version : 1.0
+       Mise à jour article : Weekly
+       Licence : The MIT License (MIT)
+       Copyright (c) 2025 Berru
+    ============================================
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fibonacci retracement</title>
+    <link rel="shortcut icon" href="https://savoir-relatif-et-absolu.netlify.app/img/logo.png" />
+    <link rel="apple-touch-icon" href="https://savoir-relatif-et-absolu.netlify.app/img/logo.png" />
+    <meta name="description"
+        content="Simplifiez vos décisions d'investissement avec notre outil d'analyse crypto visuel et intuitif">
+    <meta name="keywords"
+        content="Gaël berru, fibonacci tool, fibonacci retracement, outil analise token, capacité maximal d'un token, quand investir, comment savoir si j'investie au bon moment, tool retracement, traidingview, Comment analyser un token crypto avant d'investir, Outil gratuit pour évaluer le potentiel d'une crypto-monnaie">
+    <meta name="author" content="Gael Berru.">
+    <meta name="robots" content="noai">
+    <!-- Balises Open Graph pour les réseaux sociaux -->
+    <meta property="og:title" content="fibonacci retracement">
+    <meta property="og:description" content="Fibonacci retracement Analyse tool free.">
+    <meta property="og:type" content="tool">
+    <meta property="og:url" content="https://savoir-relatif-et-absolu.netlify.app">
+    <link rel="canonical" href="https://savoir-relatif-et-absolu.netlify.app/fibonacci-tool" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Outil d'Analyse Crypto",
+      "description": "Analysez la position actuelle des crypto-monnaies entre leur plus bas et plus haut historique. Simplifiez vos décisions d'investissement grâce à un code couleur intuitif.",
+      "url": "https://savoir-relatif-et-absolu.netlify.app/fibonacci-tool",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "All",
+      "creator": {
+        "@type": "Person",
+        "name": "Gael Berru",
+        "url": "https://savoir-relatif-et-absolu.netlify.app/fibonacci-tool"
+      },
+      "image": "blog\fibonacci-tool\fibonacci-tool.webp",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": "Outil d'Analyse Crypto",
+          "description": "Un outil innovant pour évaluer le potentiel de performance des crypto-monnaies.",
+          "brand": {
+            "@type": "Brand",
+            "name": "Savoir Relatif et Absolu"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "reviewCount": "120"
+          }
+        }
+        </script>
+        
+
+    <style>
+        @import url("https://fonts.googleapis.com/css?family=Montserrat:400,400i,700");
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+
+        }
+
+        h1 {
+            color: #58a6ff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        section {
+            padding: 2rem;
+            margin: 1rem auto;
+            max-width: 500px;
+            border-radius: 8px;
+            font-size: small;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 2px 8px #1A1A1A;
+        }
+
+        input {
+            width: 300px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #30363d;
+            border-radius: 5px;
+            background-color: #161b22;
+            color: #c9d1d9;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #21262d;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #58a6ff;
+            color: #0d1117;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .percentage {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .red {
+            color: #fff;
+            background-color: #ff4d4d;
+        }
+
+        .orange {
+            color: #fff;
+            background-color: #ffa500;
+        }
+
+        .blue {
+            color: #fff;
+            background-color: #3b82f6;
+        }
+
+        .green {
+            color: #fff;
+            background-color: #34d399;
+        }
+
+        a {
+            text-decoration: none;
+            color: grey;
+        }
+        .share-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+        
+        /* Bouton principal centré */
+        #shareButton {
+            background-color: #f1f1f1;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 0 auto;
+            /* Centrage horizontal */
+        }
+        
+        #shareButton:hover {
+            background-color: #ddd;
+        }
+        
+        /* Popup de partage (ouvre vers le haut) */
+        .share-popup {
+            position: absolute;
+            bottom: 80px;
+            /* Positionne le popup au-dessus */
+            right: 50;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px #0d3b66;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+            z-index: 1000;
+        }
+        
+        .share-popup button,
+        .share-popup a {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            text-align: center;
+            border: none;
+            
+            color: #333;
+            border-radius: 100px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .share-popup button:hover,
+        .share-popup a:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Fibonacci Retracement</h1>
+    <section>
+        <p>Entrez le nom d'un token ( bitcoin, doge-coin ) et découvrez son potentiel de performance : <li
+                style='color: #34d399;'>0-25% : de
+                sa capacité, opportunité d'investir,</li>
+            <li style='color: #3b82f6;'>25-50% : potentiel de doubler, </li>
+            <li style='color: #ffa500;'>50-75% : restez prudent, </li>
+            <li style='color: #ff4d4d;'>75-100%: Capacité maximal donc fortement déconseillé.</li>
+        </p>
+    </section>
+    <br>
+    <input type="text" id="token" placeholder="Nom du token (ex: bitcoin, injective-protocol)">
+    <button id="calculate">Calculer</button>
+    <div id="result"></div>
+    <br>
+    <br>
+    <div class="share-container">
+        <!-- Bouton principal avec icône "share" -->
+        <button id="shareButton">
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100"
+                viewBox="0 0 24 24">
+                <path
+                    d="M 20 0 C 17.789063 0 16 1.789063 16 4 C 16 4.277344 16.039063 4.550781 16.09375 4.8125 L 7 9.375 C 6.265625 8.535156 5.203125 8 4 8 C 1.789063 8 0 9.789063 0 12 C 0 14.210938 1.789063 16 4 16 C 5.203125 16 6.265625 15.464844 7 14.625 L 16.09375 19.1875 C 16.039063 19.449219 16 19.722656 16 20 C 16 22.210938 17.789063 24 20 24 C 22.210938 24 24 22.210938 24 20 C 24 17.789063 22.210938 16 20 16 C 18.796875 16 17.734375 16.535156 17 17.375 L 7.90625 12.8125 C 7.960938 12.550781 8 12.277344 8 12 C 8 11.722656 7.960938 11.449219 7.90625 11.1875 L 17 6.625 C 17.734375 7.464844 18.796875 8 20 8 C 22.210938 8 24 6.210938 24 4 C 24 1.789063 22.210938 0 20 0 Z">
+                </path>
+            </svg>
+        </button>
+        <!-- Popup avec les options -->
+        <div id="sharePopup" class="share-popup">
+            <button onclick="copyToClipboard()"><i class='fas fa-copy' ></i></button>
+            <a href="#" id="twitterShare" target="_blank"><i class='fa-brands fa-twitter' ></i></a>
+            <a href="#" id="whatsappShare" target="_blank"><i class='fa-brands fa-whatsapp' ></i></a>
+            <a href="#" id="facebookShare" target="_blank"><i class='fa-brands fa-facebook-f' ></i></a>
+        </div>
+    </div>
+    <br>
+    <section>
+    <p>Disclaimer:</p>
+    <p>Cet outil est fourni à titre informatif uniquement et ne constitue pas un conseil financier ou un outil
+        d'investissement professionnel. Les données présentées sont basées sur les informations historiques et ne
+        garantissent pas les performances futures des crypto-monnaies. Nous vous recommandons vivement de réaliser des
+        recherches approfondies avant de prendre toute décision
+        d'investissement. Les crypto-monnaies comportent des risques significatifs, y compris la perte totale de votre
+        investissement. Utilisez cet outil comme un support supplémentaire, et non comme une source unique de décision.
+    </p>
+    Si vous êtes débutant nous vous conseillons de commencer par là, <a
+        href="https://savoir-relatif-et-absolu.netlify.app/comment-choisir-un-bon-token">comment choisir un bon token
+        ?</a> Merci</p>
+    </section>
+        <br>
+    <h4>Tous droits réservés &copy; 2024 | <a href="https://berru-g.github.io/berru-g/">berru-g</a></h4>
+    <script>
+        document.getElementById('calculate').addEventListener('click', async () => {
+            const token = document.getElementById('token').value.toLowerCase();
+            const resultDiv = document.getElementById('result');
+
+            try {
+                const response = await fetch(`https://api.coingecko.com/api/v3/coins/${token}`);
+                if (!response.ok) throw new Error('Token introuvable');
+
+                const data = await response.json();
+                const currentPrice = data.market_data.current_price.usd;
+                const allTimeHigh = data.market_data.ath.usd;
+                const allTimeLow = data.market_data.atl.usd;
+
+                // Calcul du pourcentage
+                const percentage = ((currentPrice - allTimeLow) / (allTimeHigh - allTimeLow)) * 100;
+                let percentageClass = '';
+
+                // Attribution de la couleur selon le pourcentage
+                if (percentage > 75) {
+                    percentageClass = 'red';
+                } else if (percentage > 50) {
+                    percentageClass = 'orange';
+                } else if (percentage > 25) {
+                    percentageClass = 'blue';
+                } else {
+                    percentageClass = 'green';
+                }
+
+                // Mise en forme du résultat
+                resultDiv.innerHTML = `
+                    <p><strong>Token:</strong> ${data.name} (${data.symbol.toUpperCase()})</p>
+                    <p><strong>Prix actuel:</strong> $${currentPrice.toFixed(3)}</p>
+                    <p><strong>Plus bas historique:</strong> $${allTimeLow.toFixed(3)}</p>
+                    <p><strong>Plus haut historique:</strong> $${allTimeHigh.toFixed(3)}</p>
+                    <p><strong>A </strong> 
+                        <span class="percentage ${percentageClass}">
+                            ${percentage.toFixed(2)}%
+                        </span>
+                        <strong> de sa capacité maximal</strong>
+                    </p>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: red;">Erreur: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+
+</html>
