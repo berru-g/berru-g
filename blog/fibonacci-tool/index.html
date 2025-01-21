@@ -87,10 +87,33 @@
     <style>
         @import url("https://fonts.googleapis.com/css?family=Montserrat:400,400i,700");
 
+        /* Variables pour les couleurs */
+        :root {
+            --background-color: #161b22;
+            --text-color: #c9d1d9;
+            --primary-color: #58a6ff;
+            --secondary-color: #21262d;
+            --border-color: #30363d;
+            --shadow-color: #1A1A1A;
+            --input-background: #161b22;
+            
+        }
+
+        body.light-mode {
+            --background-color: linear-gradient(90deg, #eeaeca 0%, #94bbe9 100%);
+            --text-color: #000000;
+            --primary-color: #1a73e8;
+            --secondary-color: #f1f3f4;
+            --border-color: #dcdcdc;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --input-background: #f9f9f9;
+        }
+
+        /* Application des variables */
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #161b22;
-            color: #c9d1d9;
+            background-color: var(--background-color);
+            color: var(--text-color);
             margin: 0;
             padding: 0;
             display: flex;
@@ -98,11 +121,10 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-
         }
 
         h1 {
-            color: #58a6ff;
+            color: var(--primary-color);
             margin-bottom: 20px;
             text-align: center;
         }
@@ -112,43 +134,44 @@
             margin: 1rem auto;
             max-width: 500px;
             border-radius: 8px;
-            font-size: small;
             transform: translateY(-5px);
-            box-shadow: 0 2px 8px #1A1A1A;
-            border: 1px solid #30363d;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            margin-top: 20px;
         }
 
         input {
             width: 300px;
             padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #30363d;
-            border-radius: 5px;
-            background-color: #161b22;
-            color: #c9d1d9;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--input-background);
+            color: var(--text-color);
+            margin-top: 20px;
         }
 
         button {
             padding: 10px 20px;
-            background-color: #21262d;
-            color: #c9d1d9;
-            border: 1px solid #30363d;
-            border-radius: 5px;
+            margin-top: 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.3s;
         }
 
         button:hover {
-            background-color: #58a6ff;
-            color: #c9d1d9;
+            background-color: var(--primary-color);
+            color: var(--text-color);
         }
 
         #result {
             margin-top: 20px;
             padding: 20px;
-            border-radius: 5px;
-            background-color: #161b22;
-            border: 1px solid #30363d;
+            border-radius: 8px;
+            background-color: var(--background-color);
+            border: 1px solid var(--border-color);
             width: 60%;
             max-width: 500px;
         }
@@ -156,9 +179,30 @@
         .percentage {
             font-weight: bold;
             padding: 5px 10px;
-            border-radius: 5px;
+            border-radius: 8px;
             display: inline-block;
         }
+
+        /* Bouton pour basculer le thème */
+        .theme-toggle {
+            position: fixed;
+            top: 0px;
+            right: 20px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 5px var(--shadow-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+        }
+
 
         .red {
             color: #fff;
@@ -254,8 +298,6 @@
         }
 
         img {
-            width: 70%;
-            height: auto;
             max-width: 500px;
             border-radius: 8px;
         }
@@ -264,17 +306,20 @@
 
 <body>
     <h1>Fibonacci Retracement tool</h1>
-    <br><img src="fibonacci-tool-free.png" alt="free tool fibonacci retracement">
+    <!--    <button id="themeToggle" class="theme-toggle">Light Mode</button>
+-->
     <section>
-        <p><strong>Que fait cet outils ?</strong> Il récupère le plus bas et plus haut historique d'un token, calcul
+    <img src="fibonacci-tool-free.png" alt="free tool fibonacci retracement">
+
+        <p><strong>Que fait cet outils ?</strong></p><p>Il récupère le plus bas et plus haut historique d'un token, calcul
             sa place par rapport à son prix
             actuel, pour donner son niveau dans sa capacité maximal.</p>
-        <p><strong>Exemple:</strong> Une réponse de 20% indique que le
+        <p><strong>Exemple:</strong></p><p>Une réponse de 20% indique que le
             token recherché est à 20% de son prix max, donc que son potentiel de croissance est de 80% ( apriori un bon
             investissement ) <strong><a href="#dyor">DYOR*</a></strong></p>
-    </section>
-    <section>
-        <p>Entrez le nom d'un token* et découvrez son potentiel de performance :</p>
+    
+    <br>
+        <h2>Entrez le nom d'un token* et découvrez son potentiel de performance :</h2>
 
         <ul>
             <li style='color: #3b82f6;'>00 à 25% : opportunité | potentiel x4 sur investissement</li>
@@ -283,8 +328,9 @@
             <li style='color: #ff4d4d;'>75 à 100%: Capacité maximal <span style="color:grey">, fortement
                     déconseillé ou, le token vient de faire un ATH. DYOR.</span></li>
         </ul>
-        <span style="color:grey">( * En cas de "Erreur: Token introuvable", notez le nom complet
-            avec un tiret si nécessaire. Ex: pour btc notez bitcoin, pour injective notez injective-protocol,
+        <span style="color:grey">( * En cas d "Erreur: Token introuvable", notez le nom complet
+            avec un tiret si nécessaire. 
+            Ex: pour btc notez bitcoin, pour injective notez injective-protocol,
             pour Akash notez
             akash-network, pour RSR notez reserve-rights-token etc )</span>
     </section>
@@ -340,6 +386,32 @@
     </section>
     <br>
     <h5>Tous droits réservés &copy; 2025 | <a href="https://berru-g.github.io/berru-g/">berru-g</a></h5>
+   <!---<script>
+        // Récupération du mode depuis le localStorage
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        document.body.classList.add(currentTheme + '-mode');
+
+        // Gestion du bouton de bascule
+        const themeToggleButton = document.createElement('button');
+        themeToggleButton.className = 'theme-toggle';
+        themeToggleButton.textContent = 'Light Mode';
+
+        // Ajout du bouton au document
+        document.body.appendChild(themeToggleButton);
+
+        themeToggleButton.addEventListener('click', () => {
+            if (document.body.classList.contains('dark-mode')) {
+                document.body.classList.replace('dark-mode', 'light-mode');
+                themeToggleButton.textContent = 'Dark Mode';
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.body.classList.replace('light-mode', 'dark-mode');
+                themeToggleButton.textContent = 'Light Mode';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    </script>-->
+
     <script>
         // Fonction pour charger le cache depuis localStorage
         function loadCache() {
@@ -511,10 +583,10 @@
                 // Mise en forme du résultat
                 resultDiv.innerHTML = `
             <p><strong>Token:</strong> ${data.name} (${data.symbol.toUpperCase()})</p>
-            <p><strong>Prix actuel:</strong> $${currentPrice.toFixed(3)}</p>
-            <p><strong>Plus bas historique:</strong> $${allTimeLow.toFixed(3)}</p>
-            <p><strong>Plus haut historique:</strong> $${allTimeHigh.toFixed(3)}</p>
-            <p><strong>A </strong> 
+            <p><strong>Prix actuel:</strong> $${currentPrice.toFixed(4)}</p>
+            <p><strong>Plus bas historique:</strong> $${allTimeLow.toFixed(4)}</p>
+            <p><strong>Plus haut historique:</strong> $${allTimeHigh.toFixed(4)}</p>
+            <p><strong>${data.name} est à </strong> 
                 <span class="percentage ${percentageClass}">
                     ${percentage.toFixed(2)}%
                 </span>
