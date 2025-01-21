@@ -87,7 +87,7 @@
     <style>
         @import url("https://fonts.googleapis.com/css?family=Montserrat:400,400i,700");
 
-        
+
         :root {
             --background-color: #161b22;
             --text-color: #c9d1d9;
@@ -98,9 +98,9 @@
             --input-background: #161b22;
 
         }
-/*
+
         body.light-mode {
-            --background-color: linear-gradient(90deg, #eeaeca 0%, #94bbe9 100%);
+            --background-color:#f1f1f1 ;
             --text-color: #000000;
             --primary-color: #1a73e8;
             --secondary-color: #f1f3f4;
@@ -115,7 +115,7 @@
             box-sizing: border-box;
         }
 
-        Application des variables */
+
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: var(--background-color);
@@ -190,7 +190,6 @@
             display: inline-block;
         }
 
-        /* Bouton pour basculer le thème 
         .theme-toggle {
             position: fixed;
             top: 0px;
@@ -208,7 +207,7 @@
         .theme-toggle:hover {
             background-color: var(--primary-color);
             color: var(--text-color);
-        }*/
+        }
 
 
         .red {
@@ -315,10 +314,10 @@
 
 <body>
     <h1>Fibonacci Retracement tool</h1>
-    <!--    <button id="themeToggle" class="theme-toggle">Light Mode</button>
--->
+    <button id="themeToggle" class="theme-toggle">Light Mode</button>
+
     <section>
-<!--        <img src="fibonacci-tool-free.png" alt="free tool fibonacci retracement">
+        <!--        <img src="fibonacci-tool-free.png" alt="free tool fibonacci retracement">
 -->
         <p><strong>Que fait cet outils ?</strong></p>
         <p>Il récupère le plus bas et plus haut historique d'un token, calcul
@@ -397,7 +396,7 @@
     </section>
     <br>
     <h5>Tous droits réservés &copy; 2025 | <a href="https://berru-g.github.io/berru-g/">berru-g</a></h5>
-    <!---<script>
+    <script>
         // Récupération du mode depuis le localStorage
         const currentTheme = localStorage.getItem('theme') || 'dark';
         document.body.classList.add(currentTheme + '-mode');
@@ -421,7 +420,7 @@
                 localStorage.setItem('theme', 'dark');
             }
         });
-    </script>-->
+    </script>
 
     <script>
         // Fonction pour charger le cache depuis localStorage
