@@ -16,18 +16,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>fibonacci retracement free tool</title>
+    <title>fiboscope based fibonacci retracement</title>
     <link rel="shortcut icon" href="https://img.icons8.com/?size=100&id=bsZ8zwOxyUKF&format=png&color=000000" />
     <link rel="apple-touch-icon" href="https://img.icons8.com/?size=100&id=bsZ8zwOxyUKF&format=png&color=000000" />
     <meta name="description"
-        content="Simplifiez vos décisions d'investissement avec notre outil d'analyse crypto visuel et intuitif">
+        content="FiboScope est un outil basé sur le Fibonacci retracement, outil précieux pour prendre des décision en tant qu'investisseur.">
     <meta name="keywords"
         content="Gaël berru, fibonacci tool, fibonacci retracement, outil analise token, capacité maximal d'un token, quand investir, comment savoir si j'investie au bon moment, tool retracement, traidingview, Comment analyser un token crypto avant d'investir, Outil gratuit pour évaluer le potentiel d'une crypto-monnaie">
     <meta name="author" content="Gael Berru.">
     <meta name="robots" content="noai">
     <!-- Balises Open Graph pour les réseaux sociaux -->
-    <meta property="og:title" content="fibonacci retracement">
-    <meta property="og:description" content="Fibonacci retracement Analyse tool free.">
+    <meta property="og:title" content="fiboScope">
+    <meta property="og:description" content="FiboScope est un outil basé sur le Fibonacci retracement, outil précieux pour prendre des décision en tant qu'investisseur.">
     <meta property="og:type" content="tool">
     <meta property="og:url" content="https://savoir-relatif-et-absolu.netlify.app">
     <link rel="canonical" href="https://savoir-relatif-et-absolu.netlify.app/fibonacci-tool" />
@@ -100,7 +100,7 @@
         }
 
         body.light-mode {
-            --background-color:#f1f1f1 ;
+            --background-color: #f1f1f1;
             --text-color: #000000;
             --primary-color: #1a73e8;
             --secondary-color: #f1f3f4;
@@ -313,12 +313,15 @@
 </head>
 
 <body>
-    <h1>Fibonacci Retracement tool</h1>
+    <h1>FiboScope</h1>
     <button id="themeToggle" class="theme-toggle">Light Mode</button>
-
+    <h2>Fibonacci Retracement tool</h2>
     <section>
         <!--        <img src="fibonacci-tool-free.png" alt="free tool fibonacci retracement">
 -->
+        <p>Bienvenue, cet outil  s'inspire du célèbre indicateur professionnel Fibonacci Retracement.
+            Initialement conçu pour identifier les zones de cassure de tendance sur les marchés financiers, il est ici
+            détourné pour mesurer le potentiel de performance futur d’un token.</p>
         <p><strong>Que fait cet outils ?</strong></p>
         <p>Il récupère le plus bas et plus haut historique d'un token, calcul
             sa place par rapport à son prix
@@ -326,17 +329,17 @@
         <p><strong>Exemple:</strong></p>
         <p>Une réponse de 20% indique que le
             token recherché est à 20% de son prix max, donc que son potentiel de croissance est de 80% ( apriori un bon
-            investissement ) <strong><a href="#dyor">DYOR*</a></strong></p>
+            investissement ) <strong><a href="#dyor">ℹ️ DYOR*</a></strong></p>
 
         <br>
-        <h2>Entrez le nom d'un token* et découvrez son potentiel de performance :</h2>
+        <h3>Entrez le nom d'un token* et découvrez son potentiel de performance :</h3>
 
         <ul>
             <li style='color: #3b82f6;'>00 à 25% : opportunité | potentiel x4 sur investissement</li>
             <li style='color: #34d399;'>25 à 50% : opportunité | potentiel x2</li>
             <li style='color: #ffa500;'>50 à 75% : restez prudent</li>
             <li style='color: #ff4d4d;'>75 à 100%: Capacité maximal <span style="color:grey">, fortement
-                    déconseillé ou, le token vient de faire un ATH. DYOR.</span></li>
+                    déconseillé sauf si le token vient de faire un ATH. DYOR.</span></li>
         </ul>
         <span style="color:grey">( * En cas d "Erreur: Token introuvable", notez le nom complet
             avec un tiret si nécessaire.
@@ -369,33 +372,39 @@
     </div>
     <br>
     <section id="dyor">
-        <p>Disclaimer:</p>
+        <p><strong>ℹ️ Disclaimer:</strong></p>
         <p>Cet outil est fourni à titre informatif uniquement et ne constitue pas un conseil financier ou un outil
-            d'investissement professionnel. Les données présentées ( API de <a href="https://www.coingecko.com"
-                target="_blank" rel="noopener">CoinGecko.com</a> ) sont basées sur les informations historiques et ne
+            d'investissement à lui seul.</p>
+        <p>🚨 Cet outil est conçu par mes soins et basé sur ma théorie que l'outil pro
+            "Fibonacci
+            retracement", à l'origine conçu pour repérer les zones de cassure de tendance, peut également servir à
+            mesurer le potentiel de performance d'un token.</p>
+        <p>Les données présentées ( API de <a href="https://www.coingecko.com" target="_blank"
+                rel="noopener">CoinGecko.com</a> ) sont basées sur les informations historiques et ne
             garantissent pas les performances futures des crypto-monnaies. Nous vous recommandons vivement de réaliser
             des
             recherches approfondies* (DYOR) avant de prendre toute décision
             d'investissement. Les crypto-monnaies comportent des risques significatifs, y compris la perte totale de
             votre
             investissement. Utilisez cet outil comme un support supplémentaire, et non comme une source unique de
-            décision.
+            décision. Merci.
         <ul>
-            <li>Si vous souhaitez une <a href="https://medium.com/@gael-berru/fibonacci-retracement-a56d53d5863d"
+            <li>✅ Si vous souhaitez une <a href="https://medium.com/@gael-berru/fibonacci-retracement-a56d53d5863d"
                     target="_blank" rel="noopener">explication sur cette outil</a>.</li>
-            <li>Si vous êtes débutant, <a
+            <li>✅ Si vous êtes débutant, <a
                     href="https://savoir-relatif-et-absolu.netlify.app/comment-choisir-un-bon-token">comment choisir un
                     bon
                     token
                     ?</a></li>
-            <li>Si cet outil vous est utile est que <a href="https://savoir-relatif-et-absolu.netlify.app/donation">vous
-                    souhaitez faire un don</a>,</li>
-            <li>ou <a href="https://savoir-relatif-et-absolu.netlify.app/index.html/#espace-commentaire">une remarque
+            <li>🪙 Si cet outil vous est utile est que <a
+                    href="https://savoir-relatif-et-absolu.netlify.app/donation">vous
+                    souhaitez faire un don</a> 😉</li>
+            <li>⚙️ ou <a href="https://savoir-relatif-et-absolu.netlify.app/index.html/#espace-commentaire">une remarque
                     pour une amélioration</a> du tool.</li>
         </ul>
     </section>
     <br>
-    <h5>Tous droits réservés &copy; 2025 | <a href="https://berru-g.github.io/berru-g/">berru-g</a></h5>
+    <h5>FiboScope &copy; 2025 | tool by <a href="https://berru-g.github.io/berru-g/">berru-g</a></h5>
     <script>
         // Récupération du mode depuis le localStorage
         const currentTheme = localStorage.getItem('theme') || 'dark';
@@ -578,84 +587,68 @@
                 // Calcul du pourcentage
                 const percentage = ((currentPrice - allTimeLow) / (allTimeHigh - allTimeLow)) * 100;
                 let percentageClass = '';
+                let percentageText = '';
 
                 // Attribution de la couleur selon le pourcentage
                 if (percentage > 75) {
                     percentageClass = 'red';
+                    percentageText = '⚠️';
                 } else if (percentage > 50) {
                     percentageClass = 'orange';
+                    percentageText = 'DYOR';
                 } else if (percentage > 25) {
                     percentageClass = 'blue';
+                    percentageText = '🤷‍♂️';
                 } else {
                     percentageClass = 'green';
+                    percentageText = '🚀';
                 }
+
+                // **Ajout : Calcul du Ratio Supply/Max Supply**
+                const circulatingSupply = data.market_data.circulating_supply || 0; // Vérifier s'il est disponible
+                const maxSupply = data.market_data.max_supply || 1; // Éviter la division par zéro
+                const supplyRatio = maxSupply > 0 ? (circulatingSupply / maxSupply) * 100 : 0;
+
+                // **Ajout : Récupération du Rang**
+                const marketRank = data.market_cap_rank || 'Non classé';
+                const priceChange24h = data.market_data.price_change_percentage_24h.toFixed(2);
+                const priceChange7d = data.market_data.price_change_percentage_7d.toFixed(2);
 
                 // Mise en forme du résultat
                 resultDiv.innerHTML = `
-            <p><strong>Token:</strong> ${data.name} (${data.symbol.toUpperCase()})</p>
-            <p><strong>Prix actuel:</strong> $${currentPrice.toFixed(4)}</p>
-            <p><strong>Plus bas historique:</strong> $${allTimeLow.toFixed(4)}</p>
-            <p><strong>Plus haut historique:</strong> $${allTimeHigh.toFixed(4)}</p>
-            <p><strong>${data.name} est à </strong> 
-                <span class="percentage ${percentageClass}">
-                    ${percentage.toFixed(2)}%
-                </span>
-                <strong> de sa capacité maximale</strong>
-            </p>
-        `;
+        <p><strong>Token:</strong> ${data.name} (${data.symbol.toUpperCase()})</p>
+        <p><strong>Prix actuel:</strong> $${currentPrice.toFixed(4)}</p>
+        <p><strong>Plus bas historique:</strong> $${allTimeLow.toFixed(4)}</p>
+        <p><strong>Plus haut historique:</strong> $${allTimeHigh.toFixed(4)}</p>
+        <p><strong>${data.name} est à </strong> 
+            <span class="percentage ${percentageClass}">
+                ${percentage.toFixed(2)}%
+            </span>
+            <strong> de sa capacité maximale</strong><br>
+        </p>
+        <p><strong>Rang :</strong> ${marketRank}</p>
+        <p><strong>Tokens en circulation :</strong> ${supplyRatio.toFixed(2)}%</p>
+        
+        <p><strong>Sur 24h :</strong> ${priceChange24h}%</p>
+        <p><strong>Sur 7 jours :</strong> ${priceChange7d}%</p>
+        <span> Investir = ${percentageText}</span>
+
+        <iframe src="https://www.coingecko.com/en/coins/${data.id}/sparkline" 
+        width="100%" 
+        height="200" 
+        frameborder="0">
+        </iframe>
+
+
+        <p><a href="https://www.coingecko.com/en/coins/${data.id}" target="_blank">Voir plus sur CoinGecko</a></p>
+
+    `;
             } catch (error) {
                 resultDiv.innerHTML = `<p style="color: red;">Erreur: ${error.message}</p>`;
             }
         });
-
     </script>
-    <!--<script>
-        document.getElementById('calculate').addEventListener('click', async () => {
-            const token = document.getElementById('token').value.toLowerCase();
-            const resultDiv = document.getElementById('result');
 
-            try {
-                const response = await fetch(`https://api.coingecko.com/api/v3/coins/${token}`);
-                if (!response.ok) throw new Error('Token introuvable');
-
-                const data = await response.json();
-                const currentPrice = data.market_data.current_price.usd;
-                const allTimeHigh = data.market_data.ath.usd;
-                const allTimeLow = data.market_data.atl.usd;
-
-                // Calcul du pourcentage
-                const percentage = ((currentPrice - allTimeLow) / (allTimeHigh - allTimeLow)) * 100;
-                let percentageClass = '';
-
-                // Attribution de la couleur selon le pourcentage
-                if (percentage > 75) {
-                    percentageClass = 'red';
-                } else if (percentage > 50) {
-                    percentageClass = 'orange';
-                } else if (percentage > 25) {
-                    percentageClass = 'blue';
-                } else {
-                    percentageClass = 'green';
-                }
-
-                // Mise en forme du résultat
-                resultDiv.innerHTML = `
-                    <p><strong>Token:</strong> ${data.name} (${data.symbol.toUpperCase()})</p>
-                    <p><strong>Prix actuel:</strong> $${currentPrice.toFixed(3)}</p>
-                    <p><strong>Plus bas historique:</strong> $${allTimeLow.toFixed(3)}</p>
-                    <p><strong>Plus haut historique:</strong> $${allTimeHigh.toFixed(3)}</p>
-                    <p><strong>A </strong> 
-                        <span class="percentage ${percentageClass}">
-                            ${percentage.toFixed(2)}%
-                        </span>
-                        <strong> de sa capacité maximal</strong>
-                    </p>
-                `;
-            } catch (error) {
-                resultDiv.innerHTML = `<p style="color: red;">Erreur: ${error.message}</p>`;
-            }
-        });
-    </script>-->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const shareButton = document.getElementById("shareButton");
