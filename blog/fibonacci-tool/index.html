@@ -27,7 +27,8 @@
     <meta name="robots" content="noai">
     <!-- Balises Open Graph pour les réseaux sociaux -->
     <meta property="og:title" content="fiboScope">
-    <meta property="og:description" content="FiboScope est un outil basé sur le Fibonacci retracement, outil précieux pour prendre des décision en tant qu'investisseur.">
+    <meta property="og:description"
+        content="Découvrez les tokens ayant le plus faible pourcentage de leur capacité maximale, avec un potentiel de croissance élevé.">
     <meta property="og:type" content="tool">
     <meta property="og:url" content="https://savoir-relatif-et-absolu.netlify.app">
     <link rel="canonical" href="https://savoir-relatif-et-absolu.netlify.app/fibonacci-tool" />
@@ -139,8 +140,9 @@
         section {
             padding: 2rem;
             margin: 1rem auto;
-            max-width: 500px;
+            max-width: 550px;
             border-radius: 8px;
+            background-color: var(--input-background);
             transform: translateY(-5px);
             box-shadow: 0 2px 8px var(--shadow-color);
             border: 1px solid var(--border-color);
@@ -319,9 +321,11 @@
     <section>
         <!--        <img src="fibonacci-tool-free.png" alt="free tool fibonacci retracement">
 -->
-        <p>Bienvenue, cet outil  s'inspire du célèbre indicateur professionnel Fibonacci Retracement.
-            Initialement conçu pour identifier les zones de cassure de tendance sur les marchés financiers, il est ici
-            détourné pour mesurer le potentiel de performance futur d’un token.</p>
+        <p>Bienvenue, cet outil s'inspire du célèbre indicateur professionnel Fibonacci Retracement.
+            Initialement conçu pour identifier les zones de cassure et les tendances sur les marchés financiers, il est ici
+            détourné pour mesurer la performance potentiel d’un token.</p>
+        <p>Afin de trouver les tokens ayant le plus faible pourcentage de leur capacité maximale, avec un potentiel de
+            croissance élevé.</p>
         <p><strong>Que fait cet outils ?</strong></p>
         <p>Il récupère le plus bas et plus haut historique d'un token, calcul
             sa place par rapport à son prix
@@ -634,6 +638,7 @@
         <span> Investir = ${percentageText}</span>
 
         <p><a href="https://www.coingecko.com/en/coins/${data.id}" target="_blank">Voir plus sur CoinGecko</a></p>
+        
 
     `;
             } catch (error) {

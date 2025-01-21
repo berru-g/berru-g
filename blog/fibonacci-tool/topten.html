@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,7 +41,8 @@
             background-color: #2c2f3e;
         }
 
-        th, td {
+        th,
+        td {
             padding: 12px;
             text-align: center;
             border: 1px solid #444;
@@ -72,10 +74,12 @@
         }
     </style>
 </head>
+
 <body>
     <header>Top 10 Cryptos avec le Plus Grand Potentiel</header>
     <div class="content">
-        <p>Découvrez les tokens ayant le plus faible pourcentage de leur capacité maximale, avec un potentiel de croissance élevé.</p>
+        <p>Découvrez les tokens ayant le plus faible pourcentage de leur capacité maximale, avec un potentiel de
+            croissance élevé.</p>
         <div id="loading" class="loading">Chargement des données...</div>
         <table id="results" style="display: none;">
             <thead>
@@ -90,77 +94,83 @@
             </thead>
             <tbody></tbody>
         </table>
-        <div id="error" class="error" style="display: none;">Erreur lors du chargement des données. Veuillez réessayer.</div>
+        <div id="error" class="error" style="display: none;">Erreur lors du chargement des données. Veuillez réessayer.
+        </div>
     </div>
 
     <script>
-async function fetchCryptoData() {
-    try {
-        const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-        const apiUrl = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_asc&per_page=250&page=1&sparkline=false";
-        const response = await fetch(proxyUrl + apiUrl);
-        const data = await response.json();
+        async function fetchCryptoData() {
+            try {
+                const proxyUrl = "https://api.allorigins.win/get?url="; // Utilisation d'un proxy plus stable
+                const apiUrl = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_asc&per_page=250&page=1&sparkline=false";
+                const response = await fetch(proxyUrl + encodeURIComponent(apiUrl));
+                const text = await response.text(); // On récupère la réponse sous forme de texte
+        
+                // On tente de parser la réponse en JSON
+                try {
+                    const data = JSON.parse(text).contents; // Assure-toi que la réponse JSON est bien sous la clé "contents"
+                    const results = JSON.parse(data)
+                        .filter(token => token.market_cap > 1000000 && token.total_volume > 10000)
+                        .map(token => {
+                            const percentage = ((token.current_price - token.atl) / (token.ath - token.atl)) * 100;
+                            const circulatingSupplyPercentage = token.total_supply
+                                ? (token.circulating_supply / token.total_supply) * 100
+                                : null;
+        
+                            return {
+                                name: token.name,
+                                symbol: token.symbol.toUpperCase(),
+                                percentage: percentage.toFixed(2),
+                                rank: token.market_cap_rank,
+                                marketCap: token.market_cap.toLocaleString('en-US'),
+                                circulatingSupplyPercentage: circulatingSupplyPercentage
+                                    ? circulatingSupplyPercentage.toFixed(2)
+                                    : 'N/A',
+                            };
+                        })
+                        .filter(token => token.percentage > 0 && token.percentage <= 100)
+                        .sort((a, b) => a.percentage - b.percentage)
+                        .slice(0, 10);
+        
+                    console.log("Top 10 tokens with lowest capacity percentage:", results);
+        
+                    const resultContainer = document.getElementById("result");
+                    resultContainer.innerHTML = "";
+        
+                    results.forEach(token => {
+                        const row = document.createElement("div");
+                        row.className = "token-row";
+        
+                        row.innerHTML = `
+                            <div class="token-name">${token.name} (${token.symbol})</div>
+                            <div class="token-rank">Rank: ${token.rank}</div>
+                            <div class="token-marketcap">Market Cap: $${token.marketCap}</div>
+                            <div class="token-percentage">Capacity: <span style="color: ${getColor(token.percentage)}">${token.percentage}%</span></div>
+                            <div class="token-supply">Circulating Supply: ${token.circulatingSupplyPercentage}%</div>
+                        `;
+        
+                        resultContainer.appendChild(row);
+                    });
+                } catch (error) {
+                    console.error("Error parsing JSON:", error.message);
+                    console.log("Response Text:", text); // Affiche la réponse complète pour débogage
+                }
+            } catch (error) {
+                console.error("Error fetching crypto data:", error.message);
+            }
+        }
+        
+        function getColor(percentage) {
+            if (percentage <= 25) return "green";
+            if (percentage <= 50) return "blue";
+            if (percentage <= 75) return "orange";
+            return "red";
+        }
+        
+        // Call the function to fetch data on load
+        fetchCryptoData();
 
-        const results = data
-            .filter(token => token.market_cap > 1000000 && token.total_volume > 10000)
-            .map(token => {
-                const percentage = ((token.current_price - token.atl) / (token.ath - token.atl)) * 100;
-                const circulatingSupplyPercentage = token.total_supply
-                    ? (token.circulating_supply / token.total_supply) * 100
-                    : null;
-
-                return {
-                    name: token.name,
-                    symbol: token.symbol.toUpperCase(),
-                    percentage: percentage.toFixed(2),
-                    rank: token.market_cap_rank,
-                    marketCap: token.market_cap.toLocaleString('en-US'),
-                    circulatingSupplyPercentage: circulatingSupplyPercentage
-                        ? circulatingSupplyPercentage.toFixed(2)
-                        : 'N/A',
-                };
-            })
-            .filter(token => token.percentage > 0 && token.percentage <= 100)
-            .sort((a, b) => a.percentage - b.percentage)
-            .slice(0, 10);
-
-        console.log("Top 10 tokens with lowest capacity percentage:", results);
-
-        const resultContainer = document.getElementById("result");
-        resultContainer.innerHTML = "";
-
-        results.forEach(token => {
-            const row = document.createElement("div");
-            row.className = "token-row";
-
-            row.innerHTML = `
-                <div class="token-name">${token.name} (${token.symbol})</div>
-                <div class="token-rank">Rank: ${token.rank}</div>
-                <div class="token-marketcap">Market Cap: $${token.marketCap}</div>
-                <div class="token-percentage">Capacity: <span style="color: ${getColor(token.percentage)}">${token.percentage}%</span></div>
-                <div class="token-supply">Circulating Supply: ${token.circulatingSupplyPercentage}%</div>
-            `;
-
-            resultContainer.appendChild(row);
-        });
-    } catch (error) {
-        console.error("Error fetching crypto data:", error.message);
-    }
-}
-
-function getColor(percentage) {
-    if (percentage <= 25) return "green";
-    if (percentage <= 50) return "blue";
-    if (percentage <= 75) return "orange";
-    return "red";
-}
-
-// Call the function to fetch data on load
-fetchCryptoData();
-
-
-         
-                 
     </script>
 </body>
+
 </html>
