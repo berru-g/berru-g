@@ -87,7 +87,7 @@
     <style>
         @import url("https://fonts.googleapis.com/css?family=Montserrat:400,400i,700");
 
-        /* Variables pour les couleurs */
+        
         :root {
             --background-color: #161b22;
             --text-color: #c9d1d9;
@@ -96,9 +96,9 @@
             --border-color: #30363d;
             --shadow-color: #1A1A1A;
             --input-background: #161b22;
-            
-        }
 
+        }
+/*
         body.light-mode {
             --background-color: linear-gradient(90deg, #eeaeca 0%, #94bbe9 100%);
             --text-color: #000000;
@@ -109,7 +109,13 @@
             --input-background: #f9f9f9;
         }
 
-        /* Application des variables */
+        *,
+        s *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        Application des variables */
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: var(--background-color);
@@ -127,6 +133,7 @@
             color: var(--primary-color);
             margin-bottom: 20px;
             text-align: center;
+            margin: 20;
         }
 
         section {
@@ -183,7 +190,7 @@
             display: inline-block;
         }
 
-        /* Bouton pour basculer le thème */
+        /* Bouton pour basculer le thème 
         .theme-toggle {
             position: fixed;
             top: 0px;
@@ -201,7 +208,7 @@
         .theme-toggle:hover {
             background-color: var(--primary-color);
             color: var(--text-color);
-        }
+        }*/
 
 
         .red {
@@ -298,6 +305,8 @@
         }
 
         img {
+            width: 70%;
+            height: auto;
             max-width: 500px;
             border-radius: 8px;
         }
@@ -309,16 +318,18 @@
     <!--    <button id="themeToggle" class="theme-toggle">Light Mode</button>
 -->
     <section>
-    <img src="fibonacci-tool-free.png" alt="free tool fibonacci retracement">
-
-        <p><strong>Que fait cet outils ?</strong></p><p>Il récupère le plus bas et plus haut historique d'un token, calcul
+<!--        <img src="fibonacci-tool-free.png" alt="free tool fibonacci retracement">
+-->
+        <p><strong>Que fait cet outils ?</strong></p>
+        <p>Il récupère le plus bas et plus haut historique d'un token, calcul
             sa place par rapport à son prix
             actuel, pour donner son niveau dans sa capacité maximal.</p>
-        <p><strong>Exemple:</strong></p><p>Une réponse de 20% indique que le
+        <p><strong>Exemple:</strong></p>
+        <p>Une réponse de 20% indique que le
             token recherché est à 20% de son prix max, donc que son potentiel de croissance est de 80% ( apriori un bon
             investissement ) <strong><a href="#dyor">DYOR*</a></strong></p>
-    
-    <br>
+
+        <br>
         <h2>Entrez le nom d'un token* et découvrez son potentiel de performance :</h2>
 
         <ul>
@@ -329,7 +340,7 @@
                     déconseillé ou, le token vient de faire un ATH. DYOR.</span></li>
         </ul>
         <span style="color:grey">( * En cas d "Erreur: Token introuvable", notez le nom complet
-            avec un tiret si nécessaire. 
+            avec un tiret si nécessaire.
             Ex: pour btc notez bitcoin, pour injective notez injective-protocol,
             pour Akash notez
             akash-network, pour RSR notez reserve-rights-token etc )</span>
@@ -386,7 +397,7 @@
     </section>
     <br>
     <h5>Tous droits réservés &copy; 2025 | <a href="https://berru-g.github.io/berru-g/">berru-g</a></h5>
-   <!---<script>
+    <!---<script>
         // Récupération du mode depuis le localStorage
         const currentTheme = localStorage.getItem('theme') || 'dark';
         document.body.classList.add(currentTheme + '-mode');
