@@ -427,7 +427,8 @@
                 de son ATH peut indiquer qu'il a perdu sa traction ou que le projet est inactif, voire abandonné.</li>
             <li><strong>Une capitalisation boursière faible peut être un signal d'alerte :</strong> Les tokens à faible
                 market cap sont souvent plus volatils et risqués, et certains peuvent être des scams. <a
-                    href="top-ten-scam.html">Exemple ici avec un algo qui liste le top 100 des projets abandonné.</a></li>
+                    href="top-ten-scam.html">Exemple ici avec un algo qui liste le top 100 des projets abandonné.</a>
+            </li>
             <li><strong>N'effectuez pas d'achat basé uniquement sur cet outil :</strong> Faites vos propres recherches
                 (DYOR).</li>
         </ul>
@@ -673,7 +674,9 @@
 
                 // Mise en forme du résultat
                 resultDiv.innerHTML = `
-        <p><strong>Token:</strong> ${data.name} (${data.symbol.toUpperCase()})</p>
+                <p style="display: flex; justify-content: space-between; align-items: center;">
+        <span><strong>Token:</strong> ${data.name} (${data.symbol.toUpperCase()})</span>
+        <img src="${data.image}" alt="${data.name} logo" style="width: 50px; height: 50px; margin-left: 10px;"></p>
         <p><strong>Prix actuel:</strong> $${currentPrice.toFixed(4)}</p>
         <p><strong>Plus bas historique:</strong> $${allTimeLow.toFixed(4)}</p>
         <p><strong>Plus haut historique:</strong> $${allTimeHigh.toFixed(4)}</p>
