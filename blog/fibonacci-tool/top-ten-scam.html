@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top 10 Crypto avec le Plus Grand Potentiel</title>
+    <title>Top 10 Crypto Arnaque</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -76,10 +76,10 @@
 </head>
 
 <body>
-    <header>Top 10 Cryptos avec le Plus Grand Potentiel</header>
+    <header>Top 10 Cryptos scam</header>
     <div class="content">
-        <p>Découvrez les tokens ayant le plus faible pourcentage de leur capacité maximale, avec un potentiel de
-            croissance élevé.</p>
+        <p>Découvrez les tokens ayant le plus faible pourcentage de leur capacité maximale, sans potentiel de croissance
+            car sans MarketCap ou fond réel donc arnaque ou scam.</p>
         <div id="loading" class="loading">Chargement des données...</div>
         <table id="results" style="display: none;">
             <thead>
@@ -99,6 +99,70 @@
     </div>
 
     <script>
+        async function fetchCryptoData() {
+            try {
+                const apiUrl = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_asc&per_page=250&page=1&sparkline=false';
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                const results = data.map(token => {
+                    const percentage = ((token.current_price - token.atl) / (token.ath - token.atl)) * 100;
+                    const circulatingSupplyPercentage = token.total_supply
+                        ? (token.circulating_supply / token.total_supply) * 100
+                        : null;
+
+                    return {
+                        name: token.name,
+                        symbol: token.symbol.toUpperCase(),
+                        percentage: percentage.toFixed(2),
+                        rank: token.market_cap_rank,
+                        marketCap: token.market_cap.toLocaleString('en-US'),
+                        circulatingSupplyPercentage: circulatingSupplyPercentage
+                            ? circulatingSupplyPercentage.toFixed(2)
+                            : 'N/A',
+                    };
+                });
+
+                // Trier par % croissant et prendre les 10 premiers
+                const topTokens = results.sort((a, b) => a.percentage - b.percentage).slice(0, 10);
+
+                displayResults(topTokens);
+            } catch (error) {
+                console.error(error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+
+        function displayResults(tokens) {
+            const table = document.getElementById('results');
+            const tbody = table.querySelector('tbody');
+            tbody.innerHTML = ''; // Clear existing rows
+
+            tokens.forEach(token => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${token.name}</td>
+                    <td>${token.symbol}</td>
+                    <td>${token.percentage} %</td>
+                    <td>${token.rank}</td>
+                    <td>$${token.marketCap}</td>
+                    <td>${token.circulatingSupplyPercentage} %</td>
+                `;
+
+                tbody.appendChild(row);
+            });
+
+            document.getElementById('loading').style.display = 'none';
+            table.style.display = 'table';
+        }
+
+        // Charger les données au chargement de la page
+        fetchCryptoData();
+    </script>
+
+    <!--<script>
         async function fetchCryptoData() {
             try {
                 const proxyUrl = "https://api.allorigins.win/get?url="; // Utilisation d'un proxy plus stable
@@ -170,7 +234,10 @@
         // Call the function to fetch data on load
         fetchCryptoData();
 
-    </script>
+    </script>-->
 </body>
+<strong>
+    <p style="text-align:center"><a href="index.html">↩️</a></p>
+</strong>
 
 </html>

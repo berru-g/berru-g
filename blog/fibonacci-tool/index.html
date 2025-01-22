@@ -181,8 +181,8 @@
             border-radius: 8px;
             background-color: var(--background-color);
             border: 1px solid var(--border-color);
-            width: 60%;
-            max-width: 500px;
+            width: 70%;
+            max-width: 550px;
         }
 
         .percentage {
@@ -311,6 +311,48 @@
             max-width: 500px;
             border-radius: 8px;
         }
+
+        /*bulle info scam*/
+        .info-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .info-icon {
+            background-color: #007BFF;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .info-tooltip {
+            visibility: hidden;
+            width: 300px;
+            background-color: #f9f9f9;
+            color: #333;
+            text-align: left;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            font-size: 12px;
+        }
+
+        .info-container:hover .info-tooltip {
+            visibility: visible;
+        }
     </style>
 </head>
 
@@ -322,10 +364,11 @@
         <!--        <img src="fibonacci-tool-free.png" alt="free tool fibonacci retracement">
 -->
         <p>Bienvenue, cet outil s'inspire du célèbre indicateur professionnel Fibonacci Retracement.
-            Initialement conçu pour identifier les zones de cassure et les tendances sur les marchés financiers, il est ici
-            détourné pour mesurer la performance potentiel d’un token.</p>
-        <p>Afin de trouver les tokens ayant le plus faible pourcentage de leur capacité maximale, avec un potentiel de
+            Initialement conçu pour identifier les zones de cassure et les tendances sur les marchés financiers, il est
+            ici
+            détourné pour mesurer la performance potentiel d’un token. Afin de trouver les tokens avec un potentiel de
             croissance élevé.</p>
+
         <p><strong>Que fait cet outils ?</strong></p>
         <p>Il récupère le plus bas et plus haut historique d'un token, calcul
             sa place par rapport à son prix
@@ -377,20 +420,32 @@
     <br>
     <section id="dyor">
         <p><strong>ℹ️ Disclaimer:</strong></p>
-        <p>Cet outil est fourni à titre informatif uniquement et ne constitue pas un conseil financier ou un outil
-            d'investissement à lui seul.</p>
+        <p>
+            Bien que FiboScope vous permette de mesurer le pourcentage actuel d'un token par rapport à son ATH (All-Time
+            High), il est important de noter que :
+        </p>
+        <ul>
+            <li><strong>Un prix bas par rapport à l'ATH n'est pas une garantie d'opportunité :</strong> Un token à 1 %
+                de son ATH peut indiquer qu'il a perdu sa traction ou que le projet est inactif, voire abandonné.</li>
+            <li><strong>Une capitalisation boursière faible peut être un signal d'alerte :</strong> Les tokens à faible
+                market cap sont souvent plus volatils et risqués, et certains peuvent être des scams. <a
+                    href="top-ten-scam.html">Exemple ici.</a></li>
+            <li><strong>N'effectuez pas d'achat basé uniquement sur cet outil :</strong> Faites vos propres recherches
+                (DYOR).</li>
+        </ul>
+        <p>
+            <em>Fiboscope</em> ne peut être tenue responsable de pertes financières liées à vos décisions.
+            Investir dans les cryptomonnaies comporte des risques : ne misez que ce que vous êtes prêt à perdre.
+        </p>
+
         <p>🚨 Cet outil est conçu par mes soins et basé sur ma théorie que l'outil pro
             "Fibonacci
             retracement", à l'origine conçu pour repérer les zones de cassure de tendance, peut également servir à
             mesurer le potentiel de performance d'un token.</p>
         <p>Les données présentées ( API de <a href="https://www.coingecko.com" target="_blank"
                 rel="noopener">CoinGecko.com</a> ) sont basées sur les informations historiques et ne
-            garantissent pas les performances futures des crypto-monnaies. Nous vous recommandons vivement de réaliser
-            des
-            recherches approfondies* (DYOR) avant de prendre toute décision
-            d'investissement. Les crypto-monnaies comportent des risques significatifs, y compris la perte totale de
-            votre
-            investissement. Utilisez cet outil comme un support supplémentaire, et non comme une source unique de
+            garantissent pas les performances futures des crypto-monnaies. Utilisez cet outil comme un support
+            supplémentaire, et non comme une source unique de
             décision. Merci.
         <ul>
             <li>✅ Si vous souhaitez une <a href="https://medium.com/@gael-berru/fibonacci-retracement-a56d53d5863d"
