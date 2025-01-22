@@ -676,7 +676,7 @@
                 resultDiv.innerHTML = `
                 <p style="display: flex; justify-content: space-between; align-items: center;">
         <span><strong>Token:</strong> ${data.name} (${data.symbol.toUpperCase()})</span>
-        <img src="${data.image}" alt="${data.name} logo" style="width: 50px; height: 50px; margin-left: 10px;"></p>
+        <img src="${data.image.small}" alt="${data.name} logo" style="width: 50px; height: 50px; margin-left: 10px;"></p>
         <p><strong>Prix actuel:</strong> $${currentPrice.toFixed(4)}</p>
         <p><strong>Plus bas historique:</strong> $${allTimeLow.toFixed(4)}</p>
         <p><strong>Plus haut historique:</strong> $${allTimeHigh.toFixed(4)}</p>
