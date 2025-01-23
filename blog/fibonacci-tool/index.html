@@ -32,6 +32,10 @@
     <meta property="og:type" content="tool">
     <meta property="og:url" content="https://savoir-relatif-et-absolu.netlify.app">
     <link rel="canonical" href="https://savoir-relatif-et-absolu.netlify.app/" />
+    <!--
+    <link rel="alternate" hreflang="fr" href="https://savoir-relatif-et-absolu.netlify.app/fibonacci-tool/fr/" />
+    <link rel="alternate" hreflang="en" href="https://savoir-relatif-et-absolu.netlify.app/fibonacci-tool/en/" />
+-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script type="application/ld+json">
     {
@@ -354,15 +358,33 @@
             visibility: visible;
         }
     </style>
+
+    <!--<div id="google_translate_element"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                { pageLanguage: 'fr', includedLanguages: 'en,fr,es,de,it,zh-CN', layout: google.translate.TranslateElement.InlineLayout.SIMPLE },
+                'google_translate_element'
+            );
+        }
+    </script>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>-->
+
 </head>
 
 <body>
     <h1>FiboScope</h1>
     <button id="themeToggle" class="theme-toggle">Light Mode</button>
     <h2>Fibonacci Retracement tool</h2>
+
     <section>
-        <!--        <img src="fibonacci-tool-free.png" alt="free tool fibonacci retracement">
--->
+
+        <!--<div id="language-selector">
+            <a href="/fr/">🇫🇷 </a> | <a href="/en/">🇬🇧 </a>
+        </div>-->
+
+
+
         <p>Bienvenue, cet outil s'inspire du célèbre indicateur professionnel Fibonacci Retracement.
             Initialement conçu pour identifier les zones de cassure et les tendances sur les marchés financiers, il est
             ici
@@ -427,7 +449,7 @@
                 de son ATH peut indiquer qu'il a perdu sa traction ou que le projet est inactif, voire abandonné.</li>
             <li><strong>Une capitalisation boursière faible peut être un signal d'alerte :</strong> Les tokens à faible
                 market cap sont souvent plus volatils et risqués, et certains peuvent être des scams. <a
-                    href="top-ten-scam.html">Exemple ici avec un algo qui liste le top 100 des projets abandonné.</a>
+                    href="top-ten-scam.html">Exemple avec cette liste du top 100 des projets abandonné.</a>
             </li>
             <li><strong>N'effectuez pas d'achat basé uniquement sur cet outil :</strong> Faites vos propres recherches
                 (DYOR).</li>
@@ -600,7 +622,11 @@
                 "bal": "balancer",
                 "band": "band-protocol",
                 "akash": "akash-network",
-                "rsr": "reserve-rights-token"
+                "rsr": "reserve-rights-token",
+                "jupiter": "jupiter-exchange-solana",
+                "tao": "bittensor",
+                "inj": "injective-protocol",
+                "render": "render-token"
             };
         }
 
@@ -675,25 +701,30 @@
                 // Mise en forme du résultat
                 resultDiv.innerHTML = `
                 <p style="display: flex; justify-content: space-between; align-items: center;">
-        <span><strong>Token:</strong> ${data.name} (${data.symbol.toUpperCase()})</span>
+        <span><strong>Token :</strong> ${data.name} (${data.symbol.toUpperCase()})</span>
         <img src="${data.image.small}" alt="${data.name} logo" style="width: 50px; height: 50px; margin-left: 10px;"></p>
-        <p><strong>Prix actuel:</strong> $${currentPrice.toFixed(4)}</p>
-        <p><strong>Plus bas historique:</strong> $${allTimeLow.toFixed(4)}</p>
-        <p><strong>Plus haut historique:</strong> $${allTimeHigh.toFixed(4)}</p>
+        <p><strong>Prix actuel :</strong> $${currentPrice.toFixed(4)}</p>
+        <p><strong>ATL :</strong> $${allTimeLow.toFixed(4)}</p>
+        <p><strong>ATH :</strong> $${allTimeHigh.toFixed(4)}</p>
         <p><strong>${data.name} est à </strong> 
             <span class="percentage ${percentageClass}">
                 ${percentage.toFixed(2)}%
             </span>
-            <strong> de sa capacité maximale</strong><br>
+            <strong> de son potentiel max ou ATH</strong><br>
         </p>
         <p><strong>Rang :</strong> ${marketRank}</p>
         <p><strong>Tokens en circulation :</strong> ${supplyRatio.toFixed(2)}%</p>
         
         <p><strong>Sur 24h :</strong> ${priceChange24h}%</p>
         <p><strong>Sur 7 jours :</strong> ${priceChange7d}%</p>
-        <span> Investir = ${percentageText}</span>
 
-        <p><a href="https://www.coingecko.com/en/coins/${data.id}" target="_blank">Voir plus sur CoinGecko</a></p>
+        <p><strong>Écosystème : </strong>${data.platforms && Object.keys(data.platforms).length > 0
+                        ? Object.keys(data.platforms).join(', ')
+                        : 'Non spécifié'}</p>
+
+        <p><strong>Catégorie :</strong> ${data.categories ? data.categories.join(', ') : 'Non spécifiée'}</p>
+
+        <p><strong><a href="https://www.coingecko.com/fr/coins/${data.id}" target="_blank">Voir plus sur CoinGecko</a></strong></p>
         
 
     `;
