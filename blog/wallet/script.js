@@ -14,7 +14,7 @@ fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,solana,bittenso
       near: 14,
       mysterium: 1.42,
       ethereum: 0.0001,
-      apu-s-club:350000,
+      'apu-s-club':350000,
        optimism: 0.15,
 
     };
