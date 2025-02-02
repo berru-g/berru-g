@@ -1,0 +1,220 @@
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 20;
+	padding: 20;
+	display: block;
+	justify-content: center;
+	align-items: center;
+  font-family: 'Arial', sans-serif;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+header {
+  margin-top: 20px;
+  margin-left: 20px;
+  color: grey;
+}
+.hamburger-menu {
+  width: 40px;
+  height: 20px;
+  color: grey;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.hamburger-menu span {
+  width: 100%;
+  height: 2px;
+  background-color: grey;
+}
+span {
+  text-decoration: none;
+  color: grey;
+}
+
+#crypto-prices {
+  margin: 20px 20px;
+	display: block;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+  max-width: 100%;
+  padding: 20px;
+  background-color: #333;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+h1 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.crypto-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #444;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.crypto-item:hover {
+  background-color: #333;
+}
+
+h2 {
+  font-size: 18px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+h3 {
+  color:grey;
+}
+
+svg:hover {
+  opacity: 0.6;
+}
+p {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.trend {
+  font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.trend.positive {
+  background-color: #2cbe7e;
+  color: #fff;
+}
+
+.trend.negative {
+  background-color: #e74c3c;
+  color: #fff;
+}
+/* Animation de changement de prix */
+.crypto-item p {
+  transition: color 0.3s ease-in-out, font-size 0.3s ease-in-out;
+}
+
+/* Animation lorsque le prix change */
+.crypto-item.updated p {
+  color: #2cbe7e; /* Vert pour une hausse */
+  font-size: 17px;
+}
+
+/* Animation de baisse de prix */
+.crypto-item.updated-negative p {
+  color: #e74c3c; /* Rouge pour une baisse */
+  font-size: 18px;
+}
+svg {
+  margin-top: 20px;
+}
+
+.light-mode p {
+
+  color:grey;
+}
+
+.dark-mode p {
+
+  color:#fff;
+}
+
+/* Dark mode support */
+body {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Mode clair par défaut */
+body.light-mode {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+/* Mode sombre */
+body.dark-mode {
+  background-color: #333;
+  color: #fff;
+}
+
+/* Éléments affectés */
+.dark-mode #crypto-prices {
+  background-color: #444;
+  color: #fff;
+}
+
+.light-mode #crypto-prices {
+  background-color: #ddd;
+  color: #333;
+}
+
+.dark-mode .crypto-item {
+  background-color: #333;
+  color: #fff;
+}
+
+
+.light-mode .crypto-item {
+  background-color: #f5f5f5;
+  color: #333;
+}
+.dark-mode a {
+  color: #ab9ff2;
+  text-decoration:none;
+}
+
+.light-mode a {
+  color: #0ebeff;
+  text-decoration:none;
+}
+a:hover {
+  color: grey;
+  text-decoration:none;
+}
+.light-mode .crypto-item:hover {
+  background-color: #ddd;
+}
+
+.dark-mode .crypto-item:hover {
+  background-color: #444;
+}
+#toggle-dark-mode {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: 2px solid grey;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s;
+}
+
+#toggle-dark-mode:hover {
+  background: grey;
+  color: white;
+}
