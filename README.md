@@ -21,6 +21,7 @@
 <div align=center>
   <img src="https://img.shields.io/github/stars/berru-g" />
   <img src="https://img.shields.io/github/forks/berru-g" />
-[![Netlify Status](https://api.netlify.com/api/v1/badges/e6d8257e-d747-418b-bf43-189593a86851/deploy-status)](https://app.netlify.com/sites/mes-dimanches-avec-chatgpt/deploys)
+
+[![NetlifyStatus](https://api.netlify.com/api/v1/badges/e6d8257e-d747-418b-bf43-189593a86851/deploy-status)](https://app.netlify.com/sites/mes-dimanches-avec-chatgpt/deploys)
 </div>
 </body>
