@@ -5,14 +5,14 @@ fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana,bittensor,inject
     const container = document.getElementById('crypto-prices');
 
      const tokenHoldings = {
-      solana: 0.44,
+      solana: 1.40,
       bittensor: 1,
       'injective-protocol': 6,
       'reserve-rights-token': 41964,
       near: 14,
-      mysterium: 2.52,
+      mysterium: 5,
       ethereum: 0.0001,
-      'apu-s-club':680000,
+      'apu-s-club':1000000,
        optimism: 0.18,
     };
   
