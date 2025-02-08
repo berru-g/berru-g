@@ -1,19 +1,20 @@
-fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana,bittensor,injective-protocol,reserve-rights-token,near,mysterium,ethereum,optimism,apu-s-club&vs_currencies=usd&include_24hr_change=true')
+fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana,bittensor,injective-protocol,reserve-rights-token,near,mysterium,ethereum,optimism,apu-s-club,render-token&vs_currencies=usd&include_24hr_change=true')
 
   .then(response => response.json())
   .then(data => {
     const container = document.getElementById('crypto-prices');
 
      const tokenHoldings = {
-      solana: 1.40,
+      solana: 1.72,
       bittensor: 1,
       'injective-protocol': 6,
-      'reserve-rights-token': 41964,
-      near: 14,
+      'reserve-rights-token': 42007,
+      near: 98,
       mysterium: 5,
       ethereum: 0.0001,
-      'apu-s-club':1000000,
+      //'apu-s-club':1000000,
        optimism: 0.18,
+       'render-token': 32.61,
     };
   
 
@@ -92,7 +93,7 @@ hamburgerMenu.addEventListener('click', () => {
   // Utilisation de SweetAlert pour afficher la fenêtre contextuelle
   Swal.fire({
     title: 'All my wallets',
-    html: '<ul><li><a href="https://shop.ledger.com/?r=">Ledger</a></li><li><a href="https://accounts.binance.com/register?ref=">Binance</a></li><li><a href="#">Phantom</a></li><li><a href="https://solscan.io/account/D6khWoqvc2zX46HVtSZcNrPumnPLPM72SnSuDhBrZeTC#portfolio">Solscan</a></li><li><a href="https://pump.fun/profile/D6khWo">Pump.fun</a></li><li><a href="https://jup.ag">jup.ag</a></li></ul>',
+    html: '<ul><li><a href="https://shop.ledger.com/?r=">Ledger</a></li><li><a href="https://accounts.binance.com/register?ref=">Binance</a></li><li><a href="#">Phantom</a></li><li><a href="https://solscan.io/account/D6khWoqvc2zX46HVtSZcNrPumnPLPM72SnSuDhBrZeTC#portfolio">Solscan.io</a></li><li><a href="https://pump.fun/profile/D6khWo">Pump.fun</a></li><li><a href="https://jup.ag">jup.ag</a></li></ul>',
     showCloseButton: true,
     showConfirmButton: false,
     customClass: {
