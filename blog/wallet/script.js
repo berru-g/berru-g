@@ -4,7 +4,7 @@ fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana,bittensor,inject
   .then(data => {
     const container = document.getElementById('crypto-prices');
 
-     const tokenHoldings = {
+    const tokenHoldings = {
       solana: 1.72,
       bittensor: 1,
       'injective-protocol': 6,
@@ -13,10 +13,10 @@ fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana,bittensor,inject
       mysterium: 5,
       ethereum: 0.0001,
       //'apu-s-club':1000000,
-       optimism: 0.18,
-       'render-token': 32.61,
+      optimism: 0.18,
+      'render-token': 32.61,
     };
-  
+
 
     let totalPortfolioValue = 0; // Initialisation du total
 
@@ -47,7 +47,7 @@ fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana,bittensor,inject
         const currentPrice = parseFloat(cryptoElement.querySelector('.price').textContent.replace(' $', ''));
         const currentChange = parseFloat(cryptoElement.querySelector('.change').textContent.replace('24h : ', '').replace('%', ''));
         const newTotalValue = (price * holdings).toFixed(2);
-        
+
 
         if (currentPrice !== price) {
           cryptoElement.querySelector('.price').textContent = `$${price}`;
@@ -78,9 +78,9 @@ fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana,bittensor,inject
       totalElement.classList.add('portfolio-total');
       container.appendChild(totalElement);
     }
-    
-    totalElement.innerHTML = `<h3 id="total">${totalPortfolioValue.toFixed(2) } 💵</h3>`;
-  
+
+    totalElement.innerHTML = `<h3 id="total">${totalPortfolioValue.toFixed(2)} 💵</h3>`;
+
   })
   .catch(error => {
     console.error('Erreur lors de la récupération des données:', error);
@@ -125,3 +125,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+
+
