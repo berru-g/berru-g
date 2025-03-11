@@ -71,11 +71,14 @@ header {
     top: 0;
     left: 0;
     width: 100%;
+    height: 80px;
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 1000;
+    border: 1px solid var(--border-color);
+    box-shadow: 0px 15px 0px -1px var(--border-color);
 }
 
 header h1 {
@@ -123,22 +126,27 @@ span {
 .swal-overlay {
     background-color: white;
     backdrop-filter: blur(5px);
+    
 }
 
 .custom-swal-popup {
     width: 350px;
     background-color: white;
     box-shadow: none;
+    border-radius: 12px;
+    border: 1px solid black;
+    box-shadow: -16px 15px 0px -1px #878787;
 }
 
 .custom-swal-close-button {
     color: #ab9ff2;
-    font-size: 20px;
+    font-size: 40px;
 
 }
 
 .custom-swal-content {
     text-align: center;
+    font-size: 30px;
 }
 
 .custom-swal-popup ul {
@@ -282,6 +290,10 @@ input {
     background-color: var(--input-background);
     color: var(--text-color);
     margin-top: 20px;
+}
+input:hover,
+textarea:hover {
+    transform: scale(1.02);
 }
 
 button {
