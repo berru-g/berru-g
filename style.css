@@ -67,7 +67,7 @@ body {
 
 /* Header */
 header {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -78,9 +78,17 @@ header {
     z-index: 1000;
 }
 
-header img {
-    position: fixed;
+header h1 {
+    position: absolute;
     top: 20px;
+    left: 20px;
+    height: 40px;
+    color: var(--background-color);
+}
+header img {
+    position: absolute;
+    top: 20px;
+    right: 20px;
     height: 40px;
     border-radius: 12px;
 }
