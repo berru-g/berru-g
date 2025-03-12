@@ -10,9 +10,11 @@
     --shadow-color: rgba(0, 0, 0, 0.1);
     --input-background: #f9f9f9;
     --accent-color: #2575fc;
-    --success-color: #00cc66;
-    --error-color: #ff4444;
+    --success-color: #60d394;
+    --error-color: #ee6055;
+    --jaune-color:#ffd97d;
 }
+
 
 body.light-mode {
     --background-color: #0f0f0f;
