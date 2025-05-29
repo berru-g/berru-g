@@ -10,7 +10,7 @@
        -- play@1.2.3
 
 
-<h1 align="center"><a href="https://berru-g.github.io/berru-g/" style="display: inline-block; padding: 10px 20px; background-color: #3498db; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;">🛠️ skills</a></h1>
+<h1 align="center"><a href="https://gael-berru.netlify.app/" style="display: inline-block; padding: 10px 20px; background-color: #3498db; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;">🛠️ skills</a></h1>
 
 <h1 align="center"><a href="https://crypto-free-tools.netlify.app" style="display: inline-block; padding: 10px 20px; background-color: #3498db; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;">Tools crypto</a></h1>
 
