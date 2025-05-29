@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://berru-g.github.io/berru-g//sitemap.xml
+Sitemap: https://gael-berru.netlify.app///sitemap.xml
