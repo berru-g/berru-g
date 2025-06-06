@@ -179,6 +179,24 @@ a:hover {
     transform: scale(1.05);
 }
 
+#loader-3d {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+#dessertCanvas {
+  width: 300px;
+  height: 300px;
+}
+
 /* Intro Section */
 #intro {
     text-align: center;

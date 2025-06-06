@@ -61,9 +61,14 @@
   
 }
 </script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+
 </head>
 <header>
-    <h1><span style="color:#5086eb;"><</span><span style="color:#fad646;">/</span><span style="color:#f56545;">> </span> berru-g</h1>
+    <h1>
+        <span style="color:#5086eb;">
+            <</span><span style="color:#fad646;">/</span><span style="color:#f56545;">> </span> berru-g
+    </h1>
     <div class="hamburger-menu">
         <img src="https://img.icons8.com/?size=100&id=36389&format=png&color=808080" alt="Logo de l’app">
     </div>
@@ -89,14 +94,70 @@
             });
         });
     </script>
+    <!-- Loader 3D -->
+    <div id="loader-3d">
+        <canvas id="dessertCanvas"></canvas>
+    </div>
+    <script>
+        const scene = new THREE.Scene();
+
+        const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+        camera.position.z = 5;
+
+        const renderer = new THREE.WebGLRenderer({
+            canvas: document.getElementById('dessertCanvas'),
+            alpha: true // important : ne touche pas au fond défini en CSS
+        });
+        renderer.setSize(300, 300);
+
+        // GÉOMÉTRIE
+        const geometry = new THREE.DodecahedronGeometry(1.5, 0);
+        const material = new THREE.MeshStandardMaterial({
+            color: 0x2575fc, // Bleu profond que tu m’as demandé
+            metalness: 0.5,
+            roughness: 0.2
+        });
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        // LUMIÈRES
+        const light = new THREE.PointLight(0xffffff, 1.2);
+        light.position.set(5, 5, 5);
+        scene.add(light);
+
+        const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambient);
+
+        // ANIMATION
+        function animate() {
+            requestAnimationFrame(animate);
+            mesh.rotation.y += 0.01;
+            mesh.rotation.x += 0.005;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // DISPARITION DU LOADER
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loader-3d');
+                loader.style.opacity = '0';
+                loader.style.pointerEvents = 'none';
+            }, 2000);
+        });
+
+    </script>
+
+
     <div id="intro">
     </div>
     <section id="features">
         <div class="feature-card">
-            <p>« Autodidacte, j’aime créer, concevoir et construire des projets de A à Z, du site web au prototype innovant, en
+            <p>« Autodidacte, j’aime créer, concevoir et construire des projets de A à Z, du site web au prototype
+                innovant, en
                 passant par l’organisation d’événements. Mon objectif ? Allier créativité, utilité sociale et plaisir de
                 faire – seul ou à plusieurs. »</p>
-            
+
             <br>
             <!--<a href="https://cryptoguide2025.gumroad.com/l/ntamdc" rel="noopener" target="_blank"><button>Guide crypto débutant</button></a>-->
         </div>
@@ -105,8 +166,10 @@
             <p>Language skills</p>
             <div
                 style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 16px; background:transparent; padding: 20px; border-radius: 12px;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/PHP-logo.svg" alt="PHP" height="50" title="php">
-                <img src="https://upload.wikimedia.org/wikipedia/en/d/dd/MySQL_logo.svg" alt="MySQL" height="50" title="mySQL">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/PHP-logo.svg" alt="PHP" height="50"
+                    title="php">
+                <img src="https://upload.wikimedia.org/wikipedia/en/d/dd/MySQL_logo.svg" alt="MySQL" height="50"
+                    title="mySQL">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" alt="JavaScript"
                     height="50" title="JavaScript">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/CSS3_logo_and_wordmark.svg" alt="CSS3"
@@ -120,11 +183,11 @@
             </div>
             <p>Dev full stack : design, front, Stripe, Supabase, auth, debug. Dernier projet ➡️ <a
                     href="https://pixelearth.netlify.app/" rel="noopener" target="_blank">Pixel 1€</a></p>
-                    <br>
+            <br>
             <a href="https://fr.fiverr.com/berruaka/code-your-static-site-app-or-tools" rel="noopener"
                 target="_blank"><button>Commander un site</button></a>
         </div>
-<br>
+        <br>
         <div class="features-grid">
             <div class="feature-card">
                 <i class="fa-solid fa-code"></i>
