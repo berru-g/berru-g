@@ -12,7 +12,7 @@
     --accent-color: #2575fc;
     --success-color: #60d394;
     --error-color: #ee6055;
-    --jaune-color:#ffd97d;
+    --jaune-color: #ffd97d;
 }
 
 
@@ -180,21 +180,21 @@ a:hover {
 }
 
 #loader-3d {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: var(--primary-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
 }
 
 #dessertCanvas {
-  width: 300px;
-  height: 300px;
+    width: 300px;
+    height: 300px;
 }
 
 /* Intro Section */
@@ -224,7 +224,7 @@ section {
 #features {
     padding: 20px 20px;
     background-color: transparent;
-    
+
 }
 
 #features h2 {
@@ -269,6 +269,71 @@ section {
 
 .feature-card p {
     color: var(--text-color);
+}
+
+.feature-card-presentation {
+    background-color: var(--background-color);
+    padding: 20px;
+    border-radius: 12px;
+    text-align: left;
+    /* border: 1px solid var(--border-color);
+    box-shadow: 0 2px 10px var(--shadow-color);*/
+    border: 1px solid black;
+    box-shadow: -16px 15px 0px -1px #878787;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.feature-card-presentation:hover {
+    transform: scale(1.01);
+
+}
+.feature-card-presentation h1 {
+    font-size: 1.8rem;
+    color: #2575fc;
+    margin-bottom: 1rem;
+}
+
+.feature-card-presentation h2 {
+    font-size: 1.4rem;
+    color: #2575fc;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.feature-card-presentation p {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.feature-card-presentation ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 1.5rem;
+}
+
+.feature-card-presentation li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.feature-card-presentation li::before {
+    content: "✔";
+    position: absolute;
+    left: 0;
+    color: #2575fc;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.feature-card-presentation button {
+    display: block;
+    margin: 0 auto;
+}
+
+strong {
+    color: #111;
+    font-weight: 600;
 }
 
 #pub {
