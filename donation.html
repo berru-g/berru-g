@@ -1,0 +1,354 @@
+<!--donnation-page-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon"
+        href="https://github.com/berru-g/life-game/blob/main/src-img/hero/walk-perso-fixeD.png?raw=true" />
+    <title>Donation Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+
+        header {
+            width: 100%;
+            max-width: 1200px;
+            height: 50px;
+            background: transparent;
+            color: grey;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .menu-container {
+            position: absolute;
+            margin-right: 0px;
+            margin-top: 0px;
+        }
+
+        .hamburger-menu {
+            width: 40px;
+            height: 40px;
+            color: #ab9ff2;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .hamburger-menu svg {
+            width: 100%;
+            height: auto;
+        }
+
+        span {
+            text-decoration: none;
+            color: grey;
+        }
+
+        /* Style pour la fenêtre contextuelle (popup) de SweetAlert */
+        .swal-overlay {
+            background-color: white;
+            backdrop-filter: blur(5px);
+        }
+
+        .custom-swal-popup {
+            width: 350px;
+            background-color: white;
+            box-shadow: none;
+        }
+
+        .custom-swal-close-button {
+            color: #ab9ff2;
+            font-size: 20px;
+
+        }
+
+        .custom-swal-content {
+            text-align: center;
+        }
+
+        .custom-swal-popup ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .custom-swal-popup ul li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .custom-swal-popup ul li:last-child {
+            border-bottom: none;
+        }
+
+        .donation-container {
+            display: flex;
+            flex-wrap: wrap;
+            /* Permet de passer en colonne si l'espace est insuffisant */
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .donation-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            width: 300px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .donation-card:hover {
+            /*transform: translateY(-5px);*/
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        img {
+            max-width: 200px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .address-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .address {
+            background-color: #f5f5f5;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-family: monospace;
+            user-select: all;
+            max-width: 160px;
+            /* Limite la largeur */
+            white-space: nowrap;
+            /* Empêche le retour à la ligne */
+            overflow: hidden;
+            /* Cache le surplus */
+            text-overflow: ellipsis;
+        }
+
+        .copy-button {
+            background-color: white;
+            width: 20px;
+            height: auto;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .copy-button:hover {
+            opacity: 0.7;
+        }
+
+        svg {
+            width: 15px;
+            height: auto;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 600px) {
+            .donation-container {
+                flex-direction: column;
+                /* Passe en colonne sur petits écrans */
+                align-items: center;
+            }
+        }
+
+        a {
+            color: #ab9ff2;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+
+        <div class="menu-container">
+            <div class="hamburger-menu">
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 50 50">
+                    <path
+                        d="M 5 8 A 2.0002 2.0002 0 1 0 5 12 L 45 12 A 2.0002 2.0002 0 1 0 45 8 L 5 8 z M 5 23 A 2.0002 2.0002 0 1 0 5 27 L 45 27 A 2.0002 2.0002 0 1 0 45 23 L 5 23 z M 5 38 A 2.0002 2.0002 0 1 0 5 42 L 45 42 A 2.0002 2.0002 0 1 0 45 38 L 5 38 z">
+                    </path>
+                </svg>
+            </div>
+        </div>
+    </header>
+    <div class="donation-container">
+
+        <!-- Bitcoin Donation -->
+        <div class="donation-card">
+            <img src="img/btcP.png" alt="QR Code Bitcoin">
+            <p><strong>Adresse Bitcoin :</strong></p>
+            <div class="address-container">
+                <span class="address" id="btc-address">bc1q9hk2gs7zj80tqynu5skerc0clwasagzmcar0an</span>
+                <button class="copy-button" data-target="btc-address"><svg viewBox="0 0 448 512" width="100"
+                        title="copy">
+                        <path
+                            d="M320 448v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V120c0-13.255 10.745-24 24-24h72v296c0 30.879 25.121 56 56 56h168zm0-344V0H152c-13.255 0-24 10.745-24 24v368c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24V128H344c-13.2 0-24-10.8-24-24zm120.971-31.029L375.029 7.029A24 24 0 0 0 358.059 0H352v96h96v-6.059a24 24 0 0 0-7.029-16.97z" />
+                    </svg></button>
+            </div>
+        </div>
+
+        <!-- Solana Donation -->
+        <div class="donation-card">
+            <img src="img/sol.png" alt="QR Code Solana">
+            <p><strong>Adresse Solana :</strong></p>
+            <div class="address-container">
+                <span class="address" id="sol-address">D6khWoqvc2zX46HVtSZcNrPumnPLPM72SnSuDhBrZeTC</span>
+                <button class="copy-button" data-target="sol-address"><svg viewBox="0 0 448 512" width="100"
+                        title="copy">
+                        <path
+                            d="M320 448v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V120c0-13.255 10.745-24 24-24h72v296c0 30.879 25.121 56 56 56h168zm0-344V0H152c-13.255 0-24 10.745-24 24v368c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24V128H344c-13.2 0-24-10.8-24-24zm120.971-31.029L375.029 7.029A24 24 0 0 0 358.059 0H352v96h96v-6.059a24 24 0 0 0-7.029-16.97z" />
+                    </svg></button>
+            </div>
+        </div>
+
+        <!-- Paypal Donation -->
+        <div class="donation-card">
+            <img src="img/paypal.jpg" alt="QR Code paypal">
+            <p><strong></strong></p>
+            <p><strong>Don via Paypal</strong></p>
+            <div class="address-container">
+                <span class="address" id="paypal-address">gldeuxieme24@gmail.com</span>
+                <button class="copy-button" data-target="paypal-address"><svg viewBox="0 0 448 512" width="100"
+                        title="copy">
+                        <path
+                            d="M320 448v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V120c0-13.255 10.745-24 24-24h72v296c0 30.879 25.121 56 56 56h168zm0-344V0H152c-13.255 0-24 10.745-24 24v368c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24V128H344c-13.2 0-24-10.8-24-24zm120.971-31.029L375.029 7.029A24 24 0 0 0 358.059 0H352v96h96v-6.059a24 24 0 0 0-7.029-16.97z" />
+                    </svg></button>
+            </div>
+        </div>
+
+        <!-- Base Donation -->
+        <div class="donation-card">
+            <img src="img/base.png" alt="QR Code base">
+            <p><strong></strong></p>
+            <p><strong>Adresse Base</strong></p>
+            <div class="address-container">
+                <span class="address" id="base-address">0x026e9B43BAB0881FD55625ac1dB6dC418162eDAd</span>
+                <button class="copy-button" data-target="base-address"><svg viewBox="0 0 448 512" width="100"
+                        title="copy">
+                        <path
+                            d="M320 448v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V120c0-13.255 10.745-24 24-24h72v296c0 30.879 25.121 56 56 56h168zm0-344V0H152c-13.255 0-24 10.745-24 24v368c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24V128H344c-13.2 0-24-10.8-24-24zm120.971-31.029L375.029 7.029A24 24 0 0 0 358.059 0H352v96h96v-6.059a24 24 0 0 0-7.029-16.97z" />
+                    </svg></button>
+            </div>
+        </div>
+
+        <!-- Eth Donation -->
+        <div class="donation-card">
+            <img src="img/eth.png" alt="QR Code Eth">
+            <p><strong></strong></p>
+            <p><strong>Adresse Eth</strong></p>
+            <div class="address-container">
+                <span class="address" id="Eth-address">0x026e9B43BAB0881FD55625ac1dB6dC418162eDAd</span>
+                <button class="copy-button" data-target="Eth-address"><svg viewBox="0 0 448 512" width="100"
+                        title="copy">
+                        <path
+                            d="M320 448v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V120c0-13.255 10.745-24 24-24h72v296c0 30.879 25.121 56 56 56h168zm0-344V0H152c-13.255 0-24 10.745-24 24v368c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24V128H344c-13.2 0-24-10.8-24-24zm120.971-31.029L375.029 7.029A24 24 0 0 0 358.059 0H352v96h96v-6.059a24 24 0 0 0-7.029-16.97z" />
+                    </svg></button>
+            </div>
+        </div>
+
+        <!-- Polygon Donation -->
+        <div class="donation-card">
+            <img src="img/Polygon.png" alt="QR Code Polygon">
+            <p><strong></strong></p>
+            <p><strong>Adresse Polygon</strong></p>
+            <div class="address-container">
+                <span class="address" id="Polygon-address">0x026e9B43BAB0881FD55625ac1dB6dC418162eDAd</span>
+                <button class="copy-button" data-target="Polygon-address"><svg viewBox="0 0 448 512" width="100"
+                        title="copy">
+                        <path
+                            d="M320 448v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V120c0-13.255 10.745-24 24-24h72v296c0 30.879 25.121 56 56 56h168zm0-344V0H152c-13.255 0-24 10.745-24 24v368c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24V128H344c-13.2 0-24-10.8-24-24zm120.971-31.029L375.029 7.029A24 24 0 0 0 358.059 0H352v96h96v-6.059a24 24 0 0 0-7.029-16.97z" />
+                    </svg></button>
+            </div>
+        </div>
+
+    </div>
+
+    <p style="text-align:center;margin-top:40px;">Tous droits réservés &copy; 2024 | <a
+            href="https://github.com/berru-g/">berru-g</a></p>
+
+    <script>
+        // Ajout d'un événement pour chaque bouton Copier
+        document.querySelectorAll('.copy-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const targetId = this.getAttribute('data-target');
+                const addressElement = document.getElementById(targetId);
+                const address = addressElement.textContent;
+
+                // Crée un élément temporaire pour copier le texte
+                const tempInput = document.createElement('input');
+                tempInput.value = address;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+
+                // Optionnel : Feedback visuel
+                Toastify({
+                    text: "✅ Adresse copiée !",
+                    duration: 2000,
+                    gravity: "center",
+                    position: "center",
+                    backgroundColor: "",
+
+                }).showToast();
+            });
+        });
+        // MENU via lib sweetalert2
+        const hamburgerMenu = document.querySelector('.hamburger-menu');
+
+        hamburgerMenu.addEventListener('click', () => {
+            // Utilisation de SweetAlert pour afficher la fenêtre contextuelle
+            Swal.fire({
+                title: 'berru-g 🌍',
+                html: '<ul><li><a href="https://savoir-relatif-et-absolu.netlify.app/">Blog</a></li><li><a href="https://medium.com/@gael-berru">Articles</a></li><li><a href="https://crypto-free-tools.netlify.app/">Crypto Tools</a></li><li><a href="https://github.com/berru-g/">Github</a></li><li><a href="https://codepen.io/h-lautre">Codepen</a></li></ul>',
+                showCloseButton: true,
+                showConfirmButton: false,
+                customClass: {
+                    popup: 'custom-swal-popup',
+                    closeButton: 'custom-swal-close-button',
+                    content: 'custom-swal-content',
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
