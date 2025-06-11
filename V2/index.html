@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Professionnel</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-tab active" data-target="home">Accueil</div>
+            <div class="nav-tab" data-target="services">Services</div>
+            <div class="nav-tab" data-target="gallery">Galerie</div>
+            <div class="nav-tab" data-target="reviews">Avis</div>
+            <div class="nav-tab" data-target="contact">Contact</div>
+        </div>
+    </nav>
+
+    <!-- Contenu des pages -->
+    <div class="page-container" id="pageContainer">
+        <!-- Page Accueil -->
+        <div class="page" id="home">
+            <img src="https://thispersondoesnotexist.com/" alt="Profil" class="profile-img">
+            <h1>Bienvenue sur mon site</h1>
+            <p>Je suis un professionnel passionné par mon métier. Avec plus de 10 ans d'expérience, je mets mon
+                savoir-faire à votre service pour des résultats exceptionnels.</p>
+            <button class="home-btn">Découvrir</button>
+        </div>
+
+        <!-- Page Services -->
+        <div class="page" id="services">
+            <div class="service-section">
+                <div class="service-icon">🔧</div>
+                <h3>Service Professionnel</h3>
+                <p>Un service de qualité réalisé par des experts avec des matériaux haut de gamme.</p>
+                <button class="service-btn">En savoir plus</button>
+            </div>
+
+            <div class="service-section">
+                <div class="service-icon">⚡</div>
+                <h3>Rapide et Efficace</h3>
+                <p>Interventions rapides sans compromis sur la qualité du travail effectué.</p>
+                <button class="service-btn">En savoir plus</button>
+            </div>
+
+            <div class="service-section">
+                <div class="service-icon">💎</div>
+                <h3>Sur Mesure</h3>
+                <p>Des solutions personnalisées adaptées à vos besoins spécifiques.</p>
+                <button class="service-btn">En savoir plus</button>
+            </div>
+        </div>
+
+        <!-- Page Galerie -->
+        <div class="page" id="gallery">
+            <h2 class="gallery-title">Ma Galerie</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/600x600" alt="Projet 1" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h3>Projet 1</h3>
+                        <p>Description courte</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/600x600" alt="Projet 2" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h3>Projet 2</h3>
+                        <p>Description courte</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/600x600" alt="Projet 1" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h3>Projet 1</h3>
+                        <p>Description courte</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/600x600" alt="Projet 2" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h3>Projet 2</h3>
+                        <p>Description courte</p>
+                    </div>
+                </div><div class="gallery-item">
+                    <img src="https://via.placeholder.com/600x600" alt="Projet 1" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h3>Projet 1</h3>
+                        <p>Description courte</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/600x600" alt="Projet 2" class="gallery-img">
+                    <div class="gallery-caption">
+                        <h3>Projet 2</h3>
+                        <p>Description courte</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="lightbox" id="lightbox">
+            <span class="close-lightbox">&times;</span>
+            <img class="lightbox-img" id="lightbox-img">
+        </div>
+
+        <!-- Page Avis -->
+        <div class="page" id="reviews">
+            <div class="review-section">
+                <h3>Jean D.</h3>
+                <p>"Service exceptionnel, je recommande vivement !"</p>
+                <div class="stars">★★★★★</div>
+            </div>
+
+            <div class="review-section">
+                <h3>Marie L.</h3>
+                <p>"Professionnel et à l'écoute, résultat parfait."</p>
+                <div class="stars">★★★★☆</div>
+            </div>
+
+            <div class="review-section">
+                <h3>Pierre T.</h3>
+                <p>"Intervention rapide et efficace, très satisfait."</p>
+                <div class="stars">★★★★★</div>
+            </div>
+        </div>
+
+        <!-- Page Contact -->
+        <div class="page" id="contact">
+            <h2>Contactez-moi</h2>
+            <form class="contact-form">
+                <input type="email" placeholder="Votre email" required>
+                <textarea placeholder="Votre message" required></textarea>
+                <button type="submit" class="contact-btn">Envoyer</button>
+            </form>
+        </div>
+    </div>
+
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>
