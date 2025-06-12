@@ -313,8 +313,18 @@ section {
 
 .feature-card-presentation li {
     position: relative;
-    padding-left: 1.5rem;
+    padding: 15px 20px;
     margin-bottom: 0.75rem;
+    border-radius: 12px;
+    box-shadow:
+        inset 2px 2px 5px rgba(0, 0, 0, 0.1),
+        /* ombre foncée en bas à droite */
+        inset -2px -2px 5px rgba(255, 255, 255, 0.5);
+    /* lumière en haut à gauche */
+}
+.feature-card-presentation li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px var(--shadow-color);
 }
 
 .feature-card-presentation li::before {
