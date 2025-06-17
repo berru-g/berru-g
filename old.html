@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<!-- 
+    ============================================
+       Developed by : https://github.com/berru-g/
+       Project : berru-g CV
+       Date : 20/01/2025
+       Version : 1.0.2  | 16/02/25
+       Mise à jour article : Weekly
+       Licence : The MIT License (MIT)
+       Copyright (c) 2025 Berru
+    ============================================
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaël Leberruyer | Créateur de solutions</title>
+    <link rel="shortcut icon" href="/img/logo.png" />
+    <link rel="apple-touch-icon" href="/img/logo.png" />
+    <meta name="description"
+        content="Développeur autodidacte et passionné par les solutions web et web3. Je conçois des projets concrets alliant technologie, durabilité et impact social.">
+    <meta name="keywords"
+        content="site web pas cher, dev web pas cher Nantes, Gael Leberruyer, Gael Berru, web3, crypto enthusiast, berruclothing, savoir relatif et absolu, codeur de site nantes, developpeur nantes,">
+    <meta name="author" content="Gael Berru.">
+    <meta name="robots" content="noai">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.all.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="old.css">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Gaël Leberruyer (Berru-G)",
+  "url": "https://gael-berru.netlify.app/",
+  "description": "Créateur polyvalent spécialisé en développement web personalisé. Autodidacte passionné par les projets concrets alliant utilité et créativité.",
+  "jobTitle": "Créateur de solutions numériques & low-tech",
+  "image": "https://berru-g.github.io/berru-g/img/cube.png",
+  "sameAs": [
+    "https://github.com/berru-g",
+    "https://codepen.io/h-lautre",
+    "https://medium.com/@gael-berru",
+    "https://www.instagram.com/berru_aka/"
+  ],
+  "skills": ["Développement web", "Prototypage low-tech", "Innovation sociale"],
+  "hasOccupation": {
+    "@type": "Outils",
+    "name": "Développeur d'outils crypto et formation débutants",
+    "description": "Conception de crypto-free-tools.netlify.app",
+    "skills": ["API", "JavaScript"]
+  },
+  "knowsAbout": [
+    "Solutions durables",
+    "Autonomie énergétique",
+    "Développement front-end",
+    "Organisation d'événements"
+  ]
+  
+}
+</script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+
+</head>
+<header>
+    <h1>
+        <span style="color:#5086eb;">
+            <</span><span style="color:#fad646;">/</span><span style="color:#f56545;">> </span> berru-g dev web
+    </h1>
+    <div class="hamburger-menu">
+        <img src="https://img.icons8.com/?size=100&id=36389&format=png&color=808080" alt="Logo de l’app">
+    </div>
+</header>
+
+<body>
+    <script>
+        // MENU via lib sweetalert2
+        const hamburgerMenu = document.querySelector('.hamburger-menu');
+
+        hamburgerMenu.addEventListener('click', () => {
+            // Utilisation de SweetAlert pour afficher la fenêtre contextuelle
+            Swal.fire({
+                title: '<span style="color:cornflowerblue;"><a href="https://pixelearth.netlify.app/">🌐</a></span>',
+                html: '<ul><li><a href="https://fr.fiverr.com/berruaka/code-your-static-site-app-or-tools">Dev web</a></li><li><a href="https://medium.com/@gael-berru">Articles</a></li><li><a href="https://github.com/berru-g/">Github</a></li><li><a href="https://cryptoguide2025.gumroad.com/l/ntamdc">Guide crypto</a></li><li><a href="https://crypto-free-tools.netlify.app/">Crypto Tools</a></li><li><a href="https://berru-g.github.io/berru-g/donation.html">Buy me a coffe</a></li></ul>',
+                showCloseButton: true,
+                showConfirmButton: false,
+                customClass: {
+                    popup: 'custom-swal-popup',
+                    closeButton: 'custom-swal-close-button',
+                    content: 'custom-swal-content',
+                }
+            });
+        });
+    </script>
+    <!-- Loader 3D -->
+    <div id="loader-3d">
+        <canvas id="dessertCanvas"></canvas>
+    </div>
+
+    <div id="intro">
+    </div>
+    <section id="features">
+        <div class="feature-card">
+            <p>« Autodidacte, j’aime créer, concevoir et construire des projets de A à Z. Mon objectif ? Allier
+                créativité, utilité sociale et plaisir de
+                faire – seul ou à plusieurs. »</p>
+
+            <br>
+        </div>
+        <br>
+        <div class="feature-card-presentation">
+            <h1>Vous cherchez un site web 100% personnalisé ?</h1>
+            <p>Je mets mes compétences à votre service pour concrétiser votre vision.</p>
+
+            <h2>Pourquoi travailler avec moi ?</h2>
+            <ul>
+                <li><strong>Développement tailor-made</strong> : Pas de templates prédéfinis, votre projet est
+                    unique.</li>
+                <li><strong>Code source livré</strong> : Vous êtes propriétaire à 100%, sans dépendance.</li>
+                <li><strong>Flexibilité</strong> : Je m’adapte à vos exigences et délais pour un résultat optimal.
+                </li>
+                <li><strong>Optimiser SEO</strong> : Certains de mes projets sont en première page de Google sans
+                    payer.</li>
+            </ul>
+
+            <h2>Ce que je vous propose :</h2>
+            <ul>
+                <li>Site responsive codé en <strong>HTML, CSS, JavaScript, PHP & mySQL</strong> (pas de templates
+                    génériques) pour avoir un site unique.
+                </li>
+                <li>Intégration d’API possible.</li>
+                <li>Formulaire de contact sécurisé.</li>
+                <li>Optimisation SEO.</li>
+                <li>Suivi du trafic avec Google Tag Manager pour mesurer votre audience.</li>
+                <li>Base de donnée de contact + paiement via Stripe.</li>
+            </ul>
+
+            <h2>Transparence & Liberté</h2>
+            <p>Je vous accompagne de l'idée de votre projet ( possibilité de discuter de charte graphique, logo etc) à
+                la mise en ligne de votre site statique, clef en main.</p>
+            <p>Avec la remise du code source, vous conservez une entière autonomie :</p>
+            <ul>
+                <li>Pas de blocage en cas de changement de développeur.</li>
+                <li>Pas besoin de tout recommencer à zéro.</li>
+            </ul>
+
+            <p><strong>Discutons de votre idée !</strong> <a href="#formulaire">Contactez-moi</a> pour évaluer ensemble
+                sa faisabilité ou <a href="./service-dev.html">voir les options.</a></p>
+            <br>
+            <p><a href="./template-by-berru-g/index.html">Voir mes templates disponible.</a> Livraison en 2 jours à la
+                signature du devis.</p>
+
+            <br>
+            <a href="https://fr.fiverr.com/berruaka/code-your-static-site-app-or-tools" rel="noopener"
+                target="_blank"><button>Commander un site</button></a>
+        </div>
+        <br>
+        <section id="features">
+            <div class="feature-card" style="text-align:left;">
+                <h2>Mes Templates codé main :</h2>
+                <ul>
+                    <p>Template_<a href="./template-by-berru-g/template3byberru/index.html" rel="noopener" target="_blank"> Shop + stripe</a></p>
+                    <p>Template_<a href="https://crypto-free-tools.netlify.app/guide-pour-debutants/" rel="noopener" target="_blank"> Tunnel de
+                            vente</a></p>
+                    <p>Template_<a href="https://crypto-free-tools.netlify.app" rel="noopener" target="_blank"> Tool crypto</a></p>
+                    <p>Template_<a href="https://golden-dessert.netlify.app" rel="noopener" target="_blank"> Site + formulaire + base de données +
+                            inteface admin</a></p>
+                    <p>Template_<a href="https://pixelearth.netlify.app" rel="noopener" target="_blank"> One page + paiement + base de données</a></p>
+
+                </ul>
+            </div>
+        </section>
+        <br>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fa-solid fa-code"></i>
+                <h3>Code</h3>
+                <p>-</p>
+                <p><a href="https://github.com/berru-g/" target="_blank" rel="noopener">Github</a></p>
+                <p>-</p>
+                <p><a href="https://codepen.io/h-lautre" target="_blank" rel="noopener">Codepen</a></p>
+            </div>
+            <div class="feature-card">
+                <i class="fa-solid fa-gears"></i>
+                <h3>Tools</h3>
+                <p><a href="https://crypto-free-tools.netlify.app/" target="_blank"
+                        rel="noopener">Crypto-tools</a><span>.app</span>
+                </p>
+                <p><a href="https://crypto-free-tools.netlify.app/heatmap-forest/">Heatmap </a><span>3D</span></p>
+                <p><a href="https://github.com/berru-g/MAKE_PLAY-1" target="_blank" rel="noopener">Controller
+                    </a><span>DAW</span>
+                </p>
+                <p><a href="https://berru-g.github.io/console-interactive/">Help desk </a><span>terminal</span></p>
+
+            </div>
+            <div class="feature-card">
+                <i class="fa-solid fa-link"></i>
+                <h3>Projets</h3>
+                <p><a href="https://www.facebook.com/BERRUClothing">Marque </a><span>2016</span></p>
+                <p><a href="https://github.com/berru-g/Mountain-Meister-project-2017/blob/main/BF01.jpg">Innov Marketing
+                    </a><span>2017</span></p>
+                <p><a href="https://www.facebook.com/lesflaneriesnantes/">Asso </a><span>2018</span></p>
+                <p><a href="https://www.tindie.com/stores/makeandplay/">Electronic </a><span>2020</span></p>
+            </div>
+            <div class="feature-card">
+                <i class="fa-solid fa-handshake"></i>
+                <h3>Build</h3>
+                <p>-</p>
+                <p><a href="https://mystnodes.co/?referral_code=3ullsxCv7CT5LTmXysyJxpqRlZ96UxeujciprQn5">MystNodes</a>
+                </p>
+                <p>-</p>
+                <p><a href="https://app.getgrass.io/register/?referralCode=vuVMPERoPN8ecJe">Grass.io</a></p>
+            </div>
+            <div class="feature-card">
+                <i class="fa-regular fa-file"></i>
+                <h3>Articles</h3>
+                <p>-</p>
+                <p><a href="https://crypto-free-tools.netlify.app/guide-pour-debutants/" target="_blank"
+                        rel="noopener">Guide crypto débutant</a></p>
+                <p>-</p>
+                <p><a href="https://medium.com/@gael-berru" target="_blank" rel="noopener">medium.com</a></p>
+            </div>
+            <div class="feature-card">
+                <i class="fa-solid fa-palette"></i>
+                <h3>Draw</h3>
+                <p>-</p>
+                <p><a href="https://www.facebook.com/ALPakaBerru/">Old profil</a></p>
+                <p>-</p>
+                <p><a href="https://www.instagram.com/berru_aka/">Instagram</a></p>
+            </div>
+        </div>
+    </section>
+    <br>
+    <section id="formulaire">
+        <h2>📩 Contactez moi</h2><br>
+        <form action="https://formspree.io/f/meoewywl" method="POST">
+            <label for="email"></label>
+            <input type="email" name="email" id="email" placeholder="demande@email.com" required>
+
+            <label for="message"></label>
+            <textarea name="message" id="message"
+                placeholder="Besoin d’un site avec formulaire de contact, optimisation SEO, tag manager..."
+                required></textarea>
+
+            <button type="submit">Envoyer <i class="fa-solid fa-paper-plane"></i></button>
+        </form>
+    </section>
+    <br>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section links">
+                <h3>Offres <i class="fa-solid fa-gift"></i></h3>
+                <ul>
+                    <li><a href="https://www.binance.info/activity/referral-entry/CPA?ref=CPA_00U44FY1PQ" rel="noopener"
+                            target="_blank">Binance</a></li>
+                    <li><a href="https://shop.ledger.com/pages/ledger-nano-s-plus/?r=97b532808e9b">Ledger</a></li>
+
+                    <li><a href="https://savoir-relatif-et-absolu.netlify.app/mysterium-network" rel="noopener"
+                            target="_blank">MystNodes</a>
+                    </li>
+                    <li><a href="https://app.getgrass.io/register/?referralCode=vuVMPERoPN8ecJe" rel="noopener"
+                            target="_blank">Grass.io</a>
+                    </li>
+                    <li><a href="https://amzn.to/3GgIx4g">Amazon</a></li>
+                </ul>
+            </div>
+            <div class="footer-section links">
+                <h3>More +</h3>
+                <ul>
+                    <li><a href="https://pixelearth.netlify.app/" rel="noopener" target="_blank">Buy a pixel</a></li>
+                    <li><a href="https://cryptoguide2025.gumroad.com/l/ntamdc" rel="noopener" target="_blank">Guide
+                            crypto</a></li>
+                    <li><a href="#formulaire">Contact</a></li>
+                    <li><a href="https://medium.com/@gael-berru" rel="noopener" target="_blank">Blockchain</a></li>
+                    <li><a href="https://berru-g.github.io/berru-g/donation.html" rel="noopener" target="_blank">Buy me
+                            a coffe</a></li>
+                </ul>
+            </div>
+        </div>
+        <a href="https://crypto-free-tools.netlify.app/" rel="noopener" target="_blank"><button>Try crypto tools <i
+                    class="fa-solid fa-gears"></i></button></a>
+        <h5 style="margin-bottom:5px;margin-top:20px;">berru-g | 2025
+        </h5>
+    </footer>
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -15,32 +15,6 @@
     --jaune-color: #ffd97d;
 }
 
-
-body.light-mode {
-    --background-color: #0f0f0f;
-    /* Fond sombre */
-    --text-color: #e0e0e0;
-    /* Texte clair */
-    --titre-color: grey;
-    --primary-color: #ab9ff2;
-    /* Couleur principale (violet) */
-    --secondary-color: #1a1a1a;
-    /* Arrière-plan des sections */
-    --border-color: #30363d;
-    /* Bordures discrètes */
-    --shadow-color: rgba(0, 0, 0, 0.2);
-    /* Ombres douces */
-    --input-background: #222;
-    /* Arrière-plan des inputs */
-    --accent-color: #58a6ff;
-    /* Couleur d'accent (bleu) */
-    --success-color: #00cc66;
-    /* Vert pour les indicateurs positifs */
-    --error-color: #ff4444;
-    /* Rouge pour les erreurs */
-}
-
-/* Simple CSS Reset */
 * {
     margin: 0;
     padding: 0;
@@ -213,9 +187,10 @@ a:hover {
 section {
     padding: 20px;
     margin-bottom: 20px;
-    background: var(--secondary-color);
+
     border-radius: 12px;
-    /* border: 1px solid var(--border-color);
+    /* background: var(--secondary-color);
+    border: 1px solid var(--border-color);
     box-shadow: 0 2px 10px var(--shadow-color);*/
     width: 90%;
     max-width: 800px;
@@ -355,6 +330,95 @@ strong {
     margin-top: 10px;
     margin-bottom: 20px;
     border-radius: 12px;
+}
+/* COMPETENCES SECTION - Style que tu aimes */
+.skills-section {
+    padding: 60px 0;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 40px;
+}
+
+.skill-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid black;
+    box-shadow: -16px 15px 0px -1px #878787;
+    transition: transform 0.3s;
+}
+
+.skill-card:hover {
+    transform: translateY(-5px);
+}
+
+.skill-card h3 {
+    color: var(--accent-color);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.skill-card h3 i {
+    margin-right: 12px;
+    color: var(--primary-color);
+    font-size: 1.4rem;
+}
+
+/* REALISATIONS SECTION - Avec screenshots */
+.projects-section {
+    padding: 60px 0;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.project-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid black;
+    box-shadow: -16px 15px 0px -1px #878787;
+    overflow: hidden;
+}
+
+.project-image {
+    height: 200px;
+    background-size: cover;
+    background-position: top;
+    position: relative;
+}
+
+.project-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 15px;
+}
+
+.project-content {
+    padding: 20px;
+}
+
+.project-links {
+    margin-top: 15px;
+}
+
+.project-links a {
+    display: inline-block;
+    margin-right: 10px;
+    color: var(--primary-color);
+    font-weight: bold;
 }
 
 /* Formulaire de Contact */
