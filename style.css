@@ -299,7 +299,10 @@ section {
 }
 .feature-card-presentation li:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px var(--shadow-color);
+    box-shadow:
+        inset 2px 2px 5px rgba(0, 0, 0, 0.1),
+       
+        inset -2px -2px 5px rgba(255, 255, 255, 0.5);
 }
 
 .feature-card-presentation li::before {
