@@ -27,6 +27,7 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="tunnel.css">
@@ -46,7 +47,7 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" data-aos="fade-up">
         <div class="container">
             <h1>Besoin d'un site personnalisé !</h1>
             <p>Je conçois pour vous un site vitrine 100% sur-mesure, sans template, livré en 7 jours. Profitez d'une
@@ -60,17 +61,17 @@
         <div class="container">
             <h2 class="section-title">Pourquoi me confier votre site ?</h2>
             <div class="benefits-grid">
-                <div class="benefit-card">
+                <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
                     <div class="benefit-icon">💡</div>
                     <h3>Sur-mesure & unique</h3>
                     <p>Votre site est codé à la main, sans template, selon votre image et vos besoins.</p>
                 </div>
-                <div class="benefit-card">
+                <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
                     <div class="benefit-icon">⚙️</div>
                     <h3>Optimisé SEO</h3>
                     <p>Des bases solides pour un bon référencement naturel dès la mise en ligne.</p>
                 </div>
-                <div class="benefit-card">
+                <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
                     <div class="benefit-icon">🚀</div>
                     <h3>Cléf en main</h3>
                     <p>Je m'occupe du site, vous faites le reste du taf et recevez vos premiers clients sous peu.</p>
@@ -84,10 +85,10 @@
         <div class="container">
             <h2 class="section-title">Exemples de projets réalisés</h2>
             <div class="products-grid">
-                <div class="product-card">
+                <div class="product-card" data-aos="fade-up" data-aos-delay="200">
                     <div class="product-image" style="background-image: url('./img/formulaire.png');">
                     </div>
-                    <div class="product-info">
+                    <div class="product-info" data-aos="fade-up" data-aos-delay="200">
                         <h3>Site vitrine</h3>
                         <p>Site one page, formulaire de contact, design épuré et responsive.</p>
                         <div class="price">€400 <span class="original-price">€500</span></div>
@@ -95,7 +96,7 @@
                             style="display: block; text-align: center; padding: 10px;">Je commande</a>
                     </div>
                 </div>
-                <div class="product-card">
+                <div class="product-card" data-aos="fade-up" data-aos-delay="200">
                     <div class="product-image" style="background-image: url('./img/pixelandroid.png');">
                     </div>
                     <div class="product-info">
@@ -106,7 +107,7 @@
                             style="display: block; text-align: center; padding: 10px;">Je commande</a>
                     </div>
                 </div>
-                <div class="product-card">
+                <div class="product-card" data-aos="fade-up" data-aos-delay="200">
                     <div class="product-image" style="background-image: url('./img/shop.png');">
                     </div>
                     <div class="product-info">
@@ -126,17 +127,17 @@
         <div class="container">
             <h2 class="section-title">Témoignages</h2>
             <div class="testimonial-grid">
-                <div class="testimonial-card">
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="300">
                     <p class="testimonial-text">"Gaël a parfaitement compris mes besoins. Mon site d'artisan est rapide,
                         clair et visible sur Google. Je recommande sans hésiter."</p>
                     <p class="testimonial-author">- Nico, Pornic</p>
                 </div>
-                <div class="testimonial-card">
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="300">
                     <p class="testimonial-text">"J'avais besoin d’un portfolio simple mais pro, il a livré en moins
                         d’une semaine. J’ai reçu mes premiers contacts dès la mise en ligne."</p>
                     <p class="testimonial-author">- Yasmine B., Bordeaux</p>
                 </div>
-                <div class="testimonial-card">
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="300">
                     <p class="testimonial-text">"Le site vitrine développé par Gaël a boosté mon activité. Son approche
                         est fluide, humaine et efficace."</p>
                     <p class="testimonial-author">- Thierry R., Lyon</p>
@@ -163,7 +164,7 @@
             <h2 class="section-title">📩 Contactez moi</h2>
 
             <form action="https://formspree.io/f/xdkzdqrj" method="POST"
-                style="background-color: var(--light); padding: 30px; border-radius: 10px;">
+                style="background-color: var(--light); padding: 30px; border-radius: 10px;" data-aos="zoom-in" data-aos-delay="100">
                 <label for="email" style="display: block; margin-bottom: 8px; font-weight: bold;">Votre email</label>
                 <input type="email" name="email" id="email" placeholder="demande@email.com" required
                     style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px;">
@@ -211,7 +212,7 @@
         document.getElementById('orderForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
-        
+
             // Validation simple
             if (!email) {
                 alert('Veuillez remplir tous les champs du formulaire.');
@@ -242,6 +243,14 @@
             }
         }, 5000);
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+    </script>
+
 </body>
 
 </html>
