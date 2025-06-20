@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audit Web Prospect</title>
+  <style>
+    :root {
+      --primary: #ab9ff2;
+      --secondary: #2575fc;
+      --bg-dark: #f7f7f7;
+      --bg-light: #fcfcfc;
+      --text-light: #1e1e2f;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg-dark);
+      margin: 0;
+      padding: 2rem;
+      color: var(--text-light);
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: var(--bg-light);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    .logo {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 80px;
+    }
+    h1, h2 {
+      text-align: center;
+      color: var(--primary);
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fff;
+      color: #000;
+    }
+    .score-bar {
+      height: 24px;
+      border-radius: 12px;
+      background: #eee;
+      margin-top: 0.3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .score-fill {
+      height: 100%;
+      text-align: right;
+      padding-right: 0.5rem;
+      font-size: 0.8rem;
+      line-height: 24px;
+      color: #fff;
+      transition: width 0.3s ease;
+    }
+    .red { background-color: #f44336; }
+    .orange { background-color: #ffa726; }
+    .green { background-color: #66bb6a; }
+    .section {
+      margin-top: 2rem;
+    }
+    .checkbox-list {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .checkbox-list label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      background: #f0f0f0;
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+      width: 100%;
+    }
+    .average-score {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      background: #e0e0e0;
+      padding: 1rem;
+      border-radius: 12px;
+      color: var(--secondary);
+    }
+    .chart-container {
+      width: 200px;
+      margin: auto;
+      position: relative;
+    }
+    .chart-container::after {
+      content: "87%";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+    .btn-export {
+      float: right;
+      background-color: var(--secondary);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      margin-bottom: 1rem;
+    }
+    .performance-section {
+      display: flex;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+    .performance-section .checkbox-list {
+      flex: 1;
+      max-width: 300px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button onclick="exportToPDF()" class="btn-export">Exporter en PDF</button>
+    <img src="logo.png" alt="Logo" class="logo">
+    <h1>Audit Web Prospect</h1>
+
+    <label for="prospectName">Nom du prospect</label>
+    <input type="text" id="prospectName">
+
+    <label for="siteUrl">URL du site</label>
+    <input type="text" id="siteUrl">
+
+    <div class="section">
+      <h2>Analyse SEO & Technique</h2>
+      <div id="seoAnalysis"></div>
+      <div class="average-score" id="seoAverage">Moyenne : 0%</div>
+    </div>
+
+    <div class="section performance-section">
+      <div>
+        <h2>Performance List</h2>
+        <div class="checkbox-list" id="performanceList">
+          <label><input type="checkbox" value="Responsive"> Responsive</label>
+          <label><input type="checkbox" value="Vitesse"> Vitesse</label>
+          <label><input type="checkbox" value="CTA"> CTA</label>
+          <label><input type="checkbox" value="Informations"> Informations</label>
+          <label><input type="checkbox" value="Images optimisées"> Images optimisées</label>
+          <label><input type="checkbox" value="Google Tag"> Google Tag</label>
+          <label><input type="checkbox" value="Formulaire"> Formulaire</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Comparatif avec mes projets</h2>
+      <div class="chart-container">
+        <canvas id="projectChart"></canvas>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Suggestions d'amélioration</h2>
+      <textarea id="suggestions" rows="6" readonly></textarea>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    function exportToPDF() {
+      const inputs = document.querySelectorAll('input[type="number"]');
+      inputs.forEach(input => input.style.display = 'none');
+
+      html2pdf().from(document.querySelector('.container')).save().then(() => {
+        inputs.forEach(input => input.style.display = '');
+      });
+    }
+
+    const seoCriteria = [
+      'Meta information',
+      'Page quality',
+      'Page structure',
+      'Link structure',
+      'Server',
+      'External factors'
+    ];
+
+    const container = document.getElementById('seoAnalysis');
+    const avgEl = document.getElementById('seoAverage');
+    const suggestionsEl = document.getElementById('suggestions');
+    const performanceList = document.getElementById('performanceList');
+
+    let scores = [];
+
+    seoCriteria.forEach((crit, i) => {
+      const label = document.createElement('label');
+      label.textContent = crit + ':';
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.min = 0;
+      input.max = 100;
+      input.value = 0;
+      input.addEventListener('input', () => updateScores());
+
+      const bar = document.createElement('div');
+      bar.className = 'score-bar';
+      const fill = document.createElement('div');
+      fill.className = 'score-fill red';
+      fill.style.width = '0%';
+      fill.textContent = '0%';
+      bar.appendChild(fill);
+
+      container.appendChild(label);
+      container.appendChild(input);
+      container.appendChild(bar);
+
+      scores.push({ input, fill });
+    });
+
+    function updateScores() {
+      let total = 0;
+      let suggestionText = '';
+
+      scores.forEach(({ input, fill }, i) => {
+        let val = parseInt(input.value) || 0;
+        val = Math.min(100, Math.max(0, val));
+        total += val;
+        fill.textContent = val + '%';
+        fill.style.width = val + '%';
+
+        if (val <= 50) fill.className = 'score-fill red';
+        else if (val <= 65) fill.className = 'score-fill orange';
+        else fill.className = 'score-fill green';
+
+        if (val <= 65) suggestionText += `- Améliorer ${seoCriteria[i]}\n`;
+      });
+
+      document.querySelectorAll('#performanceList input[type=checkbox]').forEach(cb => {
+        if (!cb.checked) suggestionText += `- Vérifier: ${cb.value}\n`;
+      });
+
+      const average = Math.round(total / scores.length);
+      avgEl.textContent = `Moyenne : ${average}%`;
+      suggestionsEl.value = suggestionText;
+    }
+
+    updateScores();
+
+    const ctx = document.getElementById('projectChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Qualité moyenne des projets'],
+        datasets: [{
+          label: 'Comparatif',
+          data: [87, 13],
+          backgroundColor: ['#66bb6a', '#ddd'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        cutout: '70%',
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: false },
+        }
+      }
+    });
+  </script>
+</body>
+</html>
