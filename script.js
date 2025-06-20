@@ -43,5 +43,5 @@ window.addEventListener('load', () => {
         const loader = document.getElementById('loader-3d');
         loader.style.opacity = '0';
         loader.style.pointerEvents = 'none';
-    }, 2000);
+    }, 1400);
 });

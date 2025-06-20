@@ -9,7 +9,7 @@
       --primary: #ab9ff2;
       --secondary: #2575fc;
       --bg-dark: #f7f7f7;
-      --bg-light: #fcfcfc;
+      --bg-light: #ffffff;
       --text-light: #1e1e2f;
     }
     body {
@@ -55,7 +55,7 @@
     .score-bar {
       height: 24px;
       border-radius: 12px;
-      background: #eee;
+      background: #ddd;
       margin-top: 0.3rem;
       position: relative;
       overflow: hidden;
@@ -85,10 +85,9 @@
       align-items: center;
       gap: 0.5rem;
       margin-top: 0.5rem;
-      background: #f0f0f0;
+      background: #eee;
       padding: 0.4rem 0.6rem;
       border-radius: 6px;
-      width: 100%;
     }
     .average-score {
       margin-top: 1rem;
@@ -105,8 +104,7 @@
       margin: auto;
       position: relative;
     }
-    .chart-container::after {
-      content: "87%";
+    .chart-center-text {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -125,20 +123,19 @@
       cursor: pointer;
       margin-bottom: 1rem;
     }
-    .performance-section {
-      display: flex;
-      justify-content: space-between;
-      gap: 2rem;
+    .no-print {
+      display: none;
     }
-    .performance-section .checkbox-list {
-      flex: 1;
-      max-width: 300px;
+    @media print {
+      .no-print, input, .btn-export {
+        display: none !important;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <button onclick="exportToPDF()" class="btn-export">Exporter en PDF</button>
+  <div class="container" id="auditContent">
+    <button onclick="exportToPDF()" class="btn-export no-print">Exporter en PDF</button>
     <img src="logo.png" alt="Logo" class="logo">
     <h1>Audit Web Prospect</h1>
 
@@ -154,18 +151,16 @@
       <div class="average-score" id="seoAverage">Moyenne : 0%</div>
     </div>
 
-    <div class="section performance-section">
-      <div>
-        <h2>Performance List</h2>
-        <div class="checkbox-list" id="performanceList">
-          <label><input type="checkbox" value="Responsive"> Responsive</label>
-          <label><input type="checkbox" value="Vitesse"> Vitesse</label>
-          <label><input type="checkbox" value="CTA"> CTA</label>
-          <label><input type="checkbox" value="Informations"> Informations</label>
-          <label><input type="checkbox" value="Images optimisées"> Images optimisées</label>
-          <label><input type="checkbox" value="Google Tag"> Google Tag</label>
-          <label><input type="checkbox" value="Formulaire"> Formulaire</label>
-        </div>
+    <div class="section">
+      <h2>Performance List</h2>
+      <div class="checkbox-list" id="performanceList">
+        <label><input type="checkbox" value="Responsive"> Responsive</label>
+        <label><input type="checkbox" value="Vitesse"> Vitesse</label>
+        <label><input type="checkbox" value="CTA"> CTA</label>
+        <label><input type="checkbox" value="Informations"> Informations</label>
+        <label><input type="checkbox" value="Images optimisées"> Images optimisées</label>
+        <label><input type="checkbox" value="Google Tag"> Google Tag</label>
+        <label><input type="checkbox" value="Formulaire"> Formulaire</label>
       </div>
     </div>
 
@@ -173,12 +168,13 @@
       <h2>Comparatif avec mes projets</h2>
       <div class="chart-container">
         <canvas id="projectChart"></canvas>
+        <div class="chart-center-text" id="chartPercent">0%</div>
       </div>
     </div>
 
     <div class="section">
       <h2>Suggestions d'amélioration</h2>
-      <textarea id="suggestions" rows="6" readonly></textarea>
+      <textarea id="suggestions" rows="8" readonly></textarea>
     </div>
   </div>
 
@@ -186,28 +182,18 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
     function exportToPDF() {
-      const inputs = document.querySelectorAll('input[type="number"]');
-      inputs.forEach(input => input.style.display = 'none');
-
-      html2pdf().from(document.querySelector('.container')).save().then(() => {
-        inputs.forEach(input => input.style.display = '');
+      document.querySelectorAll('input, .btn-export').forEach(el => el.style.display = 'none');
+      html2pdf().from(document.getElementById('auditContent')).save().then(() => {
+        document.querySelectorAll('input, .btn-export').forEach(el => el.style.display = '');
       });
     }
 
-    const seoCriteria = [
-      'Meta information',
-      'Page quality',
-      'Page structure',
-      'Link structure',
-      'Server',
-      'External factors'
-    ];
-
+    const seoCriteria = ['Meta information', 'Page quality', 'Page structure', 'Link structure', 'Server', 'External factors'];
     const container = document.getElementById('seoAnalysis');
     const avgEl = document.getElementById('seoAverage');
     const suggestionsEl = document.getElementById('suggestions');
     const performanceList = document.getElementById('performanceList');
-
+    const chartText = document.getElementById('chartPercent');
     let scores = [];
 
     seoCriteria.forEach((crit, i) => {
@@ -237,7 +223,7 @@
 
     function updateScores() {
       let total = 0;
-      let suggestionText = '';
+      let suggestions = [];
 
       scores.forEach(({ input, fill }, i) => {
         let val = parseInt(input.value) || 0;
@@ -250,28 +236,39 @@
         else if (val <= 65) fill.className = 'score-fill orange';
         else fill.className = 'score-fill green';
 
-        if (val <= 65) suggestionText += `- Améliorer ${seoCriteria[i]}\n`;
+        if (val <= 65) suggestions.push(`🔧 ${seoCriteria[i]} : des améliorations sont nécessaires pour booster votre visibilité.`);
       });
 
-      document.querySelectorAll('#performanceList input[type=checkbox]').forEach(cb => {
-        if (!cb.checked) suggestionText += `- Vérifier: ${cb.value}\n`;
+      const checkboxes = document.querySelectorAll('#performanceList input[type=checkbox]');
+      checkboxes.forEach(cb => {
+        if (!cb.checked) {
+          switch (cb.value) {
+            case 'CTA':
+              suggestions.push(`📌 Ajouter des CTA clairs peut augmenter le taux de conversion de 12%.`);
+              break;
+            case 'Formulaire':
+              suggestions.push(`📨 Un formulaire est indispensable pour capter des leads et permettre un contact direct.`);
+              break;
+            default:
+              suggestions.push(`📋 Vérifier la présence et l’optimisation de l’élément : ${cb.value}.`);
+          }
+        }
       });
 
       const average = Math.round(total / scores.length);
       avgEl.textContent = `Moyenne : ${average}%`;
-      suggestionsEl.value = suggestionText;
+      suggestionsEl.value = suggestions.map(s => `- ${s}`).join('\n');
+      updateChart(average);
     }
 
-    updateScores();
-
     const ctx = document.getElementById('projectChart').getContext('2d');
-    new Chart(ctx, {
+    const chart = new Chart(ctx, {
       type: 'doughnut',
       data: {
         labels: ['Qualité moyenne des projets'],
         datasets: [{
           label: 'Comparatif',
-          data: [87, 13],
+          data: [0, 100],
           backgroundColor: ['#66bb6a', '#ddd'],
           borderWidth: 0
         }]
@@ -284,6 +281,14 @@
         }
       }
     });
+
+    function updateChart(average) {
+      chart.data.datasets[0].data = [average, 100 - average];
+      chart.update();
+      chartText.textContent = `${average}%`;
+    }
+
+    updateScores();
   </script>
 </body>
 </html>
