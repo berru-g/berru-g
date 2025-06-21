@@ -3,105 +3,116 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Audit Web Prospect</title>
+  <title>Audit Web - Opportunités de Conversion</title>
+  <meta name="description" content="Recevez un audit professionnel et gratuit de votre site web. Découvrez comment améliorer vos performances, votre visibilité et votre taux de conversion dès aujourd'hui.">
+  <meta name="robots" content="index, follow">
   <style>
     :root {
-      --primary: #ab9ff2;
-      --secondary: #2575fc;
-      --bg-dark: #f7f7f7;
-      --bg-light: #ffffff;
-      --text-light: #1e1e2f;
+      --primary: #4e65ff;
+      --secondary: #92effd;
+      --light-bg: #f4f8fb;
+      --white: #ffffff;
+      --dark: #1c2230;
+      --gray: #888;
+      --success: #66bb6a;
+      --warning: #ffa726;
+      --error: #f44336;
     }
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: var(--bg-dark);
+      background: var(--light-bg);
       margin: 0;
-      padding: 2rem;
-      color: var(--text-light);
+      padding: 40px 20px;
+      color: var(--dark);
     }
     .container {
       max-width: 1000px;
+      background: var(--white);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
       margin: auto;
-      background: var(--bg-light);
-      padding: 2rem;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       position: relative;
     }
     .logo {
+      width: 70px;
       position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 80px;
+      top: 30px;
+      right: 30px;
     }
-    h1, h2 {
+    h1 {
       text-align: center;
       color: var(--primary);
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    .intro {
+      text-align: center;
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      color: var(--gray);
     }
     label {
-      display: block;
-      margin-top: 1rem;
       font-weight: bold;
+      display: block;
+      margin-top: 1.5rem;
+      color: var(--dark);
     }
     input, textarea {
       width: 100%;
       padding: 0.6rem;
-      margin-top: 0.5rem;
-      border: 1px solid #ddd;
+      border: 1px solid #ccc;
       border-radius: 8px;
-      background: #fff;
-      color: #000;
+      margin-top: 0.5rem;
+      font-size: 1rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
     }
     .score-bar {
-      height: 24px;
-      border-radius: 12px;
+      height: 22px;
+      border-radius: 11px;
       background: #ddd;
-      margin-top: 0.3rem;
-      position: relative;
+      margin-top: 5px;
       overflow: hidden;
     }
     .score-fill {
       height: 100%;
+      color: white;
       text-align: right;
-      padding-right: 0.5rem;
+      padding-right: 8px;
       font-size: 0.8rem;
-      line-height: 24px;
-      color: #fff;
-      transition: width 0.3s ease;
+      line-height: 22px;
     }
-    .red { background-color: #f44336; }
-    .orange { background-color: #ffa726; }
-    .green { background-color: #66bb6a; }
-    .section {
-      margin-top: 2rem;
-    }
+    .red { background-color: var(--error); }
+    .orange { background-color: var(--warning); }
+    .green { background-color: var(--success); }
+
     .checkbox-list {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      gap: 10px;
     }
     .checkbox-list label {
+      background: #f1f1f1;
+      padding: 10px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
-      background: #eee;
-      padding: 0.4rem 0.6rem;
-      border-radius: 6px;
+      gap: 8px;
     }
     .average-score {
-      margin-top: 1rem;
+      margin: 1.5rem 0;
       text-align: center;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: bold;
-      background: #e0e0e0;
-      padding: 1rem;
-      border-radius: 12px;
-      color: var(--secondary);
+      color: var(--primary);
     }
     .chart-container {
-      width: 200px;
-      margin: auto;
+      width: 180px;
+      margin: 2rem auto;
       position: relative;
     }
     .chart-center-text {
@@ -109,25 +120,42 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       font-weight: bold;
       color: var(--primary);
     }
-    .btn-export {
-      float: right;
-      background-color: var(--secondary);
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      color: white;
-      cursor: pointer;
-      margin-bottom: 1rem;
+    .suggestions {
+      background: #f9f9f9;
+      padding: 1.2rem;
+      border-radius: 10px;
+      border-left: 5px solid var(--primary);
+      font-size: 1rem;
+      white-space: pre-wrap;
     }
-    .no-print {
-      display: none;
+    .btn-export {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .cta-contact {
+      display: block;
+      text-align: center;
+      margin-top: 30px;
+      padding: 15px;
+      background: var(--primary);
+      color: white;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
     }
     @media print {
-      .no-print, input, .btn-export {
+      .btn-export {
         display: none !important;
       }
     }
@@ -135,9 +163,10 @@
 </head>
 <body>
   <div class="container" id="auditContent">
-    <button onclick="exportToPDF()" class="btn-export no-print">Exporter en PDF</button>
+    <button onclick="exportToPDF()" class="btn-export">Télécharger le PDF</button>
     <img src="logo.png" alt="Logo" class="logo">
     <h1>Audit Web Prospect</h1>
+    <p class="intro">Ce rapport met en lumière les améliorations clés à apporter à votre site pour générer plus de vues, plus de clics et plus de ventes.</p>
 
     <label for="prospectName">Nom du prospect</label>
     <input type="text" id="prospectName">
@@ -145,27 +174,29 @@
     <label for="siteUrl">URL du site</label>
     <input type="text" id="siteUrl">
 
-    <div class="section">
-      <h2>Analyse SEO & Technique</h2>
-      <div id="seoAnalysis"></div>
-      <div class="average-score" id="seoAverage">Moyenne : 0%</div>
-    </div>
+    <div class="grid">
+      <div>
+        <h2>Analyse SEO & Technique</h2>
+        <div id="seoAnalysis"></div>
+        <div class="average-score" id="seoAverage">Moyenne : 0%</div>
+      </div>
 
-    <div class="section">
-      <h2>Performance List</h2>
-      <div class="checkbox-list" id="performanceList">
-        <label><input type="checkbox" value="Responsive"> Responsive</label>
-        <label><input type="checkbox" value="Vitesse"> Vitesse</label>
-        <label><input type="checkbox" value="CTA"> CTA</label>
-        <label><input type="checkbox" value="Informations"> Informations</label>
-        <label><input type="checkbox" value="Images optimisées"> Images optimisées</label>
-        <label><input type="checkbox" value="Google Tag"> Google Tag</label>
-        <label><input type="checkbox" value="Formulaire"> Formulaire</label>
+      <div>
+        <h2>Performance fonctionnelle</h2>
+        <div class="checkbox-list" id="performanceList">
+          <label><input type="checkbox" value="Responsive"> Responsive</label>
+          <label><input type="checkbox" value="Vitesse"> Vitesse</label>
+          <label><input type="checkbox" value="CTA"> CTA</label>
+          <label><input type="checkbox" value="Informations"> Informations</label>
+          <label><input type="checkbox" value="Images optimisées"> Images optimisées</label>
+          <label><input type="checkbox" value="Google Tag"> Google Tag</label>
+          <label><input type="checkbox" value="Formulaire"> Formulaire</label>
+        </div>
       </div>
     </div>
 
     <div class="section">
-      <h2>Comparatif avec mes projets</h2>
+      <h2>Comparaison avec mes projets</h2>
       <div class="chart-container">
         <canvas id="projectChart"></canvas>
         <div class="chart-center-text" id="chartPercent">0%</div>
@@ -173,18 +204,21 @@
     </div>
 
     <div class="section">
-      <h2>Suggestions d'amélioration</h2>
-      <textarea id="suggestions" rows="8" readonly></textarea>
+      <h2>Suggestions personnalisées</h2>
+      <div class="suggestions" id="suggestions"></div>
     </div>
+
+    <a href="mailto:contact@tonsite.com" class="cta-contact">Discutons ensemble de l'amélioration de votre site</a>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
     function exportToPDF() {
-      document.querySelectorAll('input, .btn-export').forEach(el => el.style.display = 'none');
+      const btn = document.querySelector('.btn-export');
+      btn.style.display = 'none';
       html2pdf().from(document.getElementById('auditContent')).save().then(() => {
-        document.querySelectorAll('input, .btn-export').forEach(el => el.style.display = '');
+        btn.style.display = 'block';
       });
     }
 
@@ -204,7 +238,7 @@
       input.min = 0;
       input.max = 100;
       input.value = 0;
-      input.addEventListener('input', () => updateScores());
+      input.addEventListener('input', updateScores);
 
       const bar = document.createElement('div');
       bar.className = 'score-bar';
@@ -221,6 +255,20 @@
       scores.push({ input, fill });
     });
 
+    const msgMap = {
+      'CTA': "📌 Ajouter des CTA clairs peut augmenter les conversions de plus de 12%.",
+      'Formulaire': "📨 Un formulaire est essentiel pour capter des leads et permettre un contact direct.",
+      'Responsive': "📱 Un design responsive est crucial pour l'expérience mobile, qui représente 60% du trafic.",
+      'Vitesse': "⚡ Un site lent fait fuir les visiteurs. Optimisez les temps de chargement.",
+      'Informations': "🧭 Vos visiteurs doivent trouver les infos clés en quelques secondes.",
+      'Images optimisées': "🖼️ Des images lourdes ralentissent le site. Pensez à les compresser.",
+      'Google Tag': "📊 Installer Google Tag Manager permet un meilleur suivi des performances."
+    };
+
+    document.querySelectorAll('#performanceList input[type=checkbox]').forEach(cb => {
+      cb.addEventListener('change', updateScores);
+    });
+
     function updateScores() {
       let total = 0;
       let suggestions = [];
@@ -231,33 +279,23 @@
         total += val;
         fill.textContent = val + '%';
         fill.style.width = val + '%';
+        fill.className = 'score-fill ' + (val > 65 ? 'green' : val > 50 ? 'orange' : 'red');
 
-        if (val <= 50) fill.className = 'score-fill red';
-        else if (val <= 65) fill.className = 'score-fill orange';
-        else fill.className = 'score-fill green';
-
-        if (val <= 65) suggestions.push(`🔧 ${seoCriteria[i]} : des améliorations sont nécessaires pour booster votre visibilité.`);
+        if (val <= 65) {
+          suggestions.push(`🔧 ${seoCriteria[i]} : des améliorations sont recommandées pour améliorer la visibilité.`);
+        }
       });
 
       const checkboxes = document.querySelectorAll('#performanceList input[type=checkbox]');
       checkboxes.forEach(cb => {
         if (!cb.checked) {
-          switch (cb.value) {
-            case 'CTA':
-              suggestions.push(`📌 Ajouter des CTA clairs peut augmenter le taux de conversion de 12%.`);
-              break;
-            case 'Formulaire':
-              suggestions.push(`📨 Un formulaire est indispensable pour capter des leads et permettre un contact direct.`);
-              break;
-            default:
-              suggestions.push(`📋 Vérifier la présence et l’optimisation de l’élément : ${cb.value}.`);
-          }
+          suggestions.push(msgMap[cb.value]);
         }
       });
 
       const average = Math.round(total / scores.length);
       avgEl.textContent = `Moyenne : ${average}%`;
-      suggestionsEl.value = suggestions.map(s => `- ${s}`).join('\n');
+      suggestionsEl.textContent = suggestions.map(s => `- ${s}`).join('\n');
       updateChart(average);
     }
 
@@ -265,7 +303,7 @@
     const chart = new Chart(ctx, {
       type: 'doughnut',
       data: {
-        labels: ['Qualité moyenne des projets'],
+        labels: ['Note moyenne'],
         datasets: [{
           label: 'Comparatif',
           data: [0, 100],
@@ -282,10 +320,10 @@
       }
     });
 
-    function updateChart(average) {
-      chart.data.datasets[0].data = [average, 100 - average];
+    function updateChart(avg) {
+      chart.data.datasets[0].data = [avg, 100 - avg];
       chart.update();
-      chartText.textContent = `${average}%`;
+      chartText.textContent = `${avg}%`;
     }
 
     updateScores();

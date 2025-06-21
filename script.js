@@ -45,3 +45,4 @@ window.addEventListener('load', () => {
         loader.style.pointerEvents = 'none';
     }, 1400);
 });
+

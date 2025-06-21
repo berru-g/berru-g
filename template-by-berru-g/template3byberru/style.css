@@ -2,6 +2,7 @@
     --primary: #9ce5d2;
     --secondary: #81d2c7;
     --accent: #fcb53e;
+    --cta: #E69CB0;
     --light: #ecf0f1;
     --dark: #4c505c;
 }
@@ -77,7 +78,7 @@ header {
 
 .cta-button {
     display: inline-block;
-    background-color: var(--accent);
+    background-color: var(--cta);
     color: white;
     padding: 15px 30px;
     border-radius: 50px;
@@ -178,7 +179,7 @@ header {
 .price {
     font-size: 22px;
     font-weight: bold;
-    color: var(--accent);
+    color: var(--cta);
     margin: 15px 0;
 }
 
