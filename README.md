@@ -20,16 +20,14 @@
 </div>
 
 
-<div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 16px; background: #f9f9f9; padding: 20px; border-radius: 12px;">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/MAMP_logo.png" alt="MAMP" height="50">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/f/f8/Apache_HTTP_server_logo_%282019-present%29.svg" alt="Apache" height="50">
+<div align=center>
   <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/PHP-logo.svg" alt="PHP" height="50">
   <img src="https://upload.wikimedia.org/wikipedia/en/d/dd/MySQL_logo.svg" alt="MySQL" height="50">
   <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" alt="JavaScript" height="50">
   <img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/CSS3_logo_and_wordmark.svg" alt="CSS3" height="50">
   <img src="https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg" alt="HTML5" height="50">
-  <img src="https://seeklogo.com/images/S/supabase-logo-DCC676FFE2-seeklogo.com.png" alt="Supabase" height="50">
-  <img src="https://seeklogo.com/images/N/netlify-logo-758722CDF4-seeklogo.com.png" alt="Netlify" height="50">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Tabler-icons_brand-supabase.svg/640px-Tabler-icons_brand-supabase.svg.png" alt="Supabase" height="50">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Cib-netlify_%28CoreUI_Icons_v1.0.0%29.svg/640px-Cib-netlify_%28CoreUI_Icons_v1.0.0%29.svg.png" alt="Netlify" height="50">
 </div>
 
 
