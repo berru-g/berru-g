@@ -7,9 +7,64 @@
     <title>NeoPaint 🎨</title>
     <link rel="stylesheet" href="style.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .swal2-container {
+            padding-top: 20px;
+            align-items: flex-start !important;
+        }
+
+        .swal2-show {
+            animation: swal2-show 0.3s;
+        }
+
+        .swal2-hide {
+            animation: swal2-hide 0.3s;
+        }
+
+        @keyframes swal2-show {
+            0% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes swal2-hide {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <script>
+        // Afficher le popup quand la page est chargée
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                title: 'Déso si tu tombe ici',
+                text: 'A la base c\'est pour occuper ma nièce',
+                position: 'top',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                backdrop: false,
+                width: '400px'
+            });
+        });
+    </script>
+
     <canvas id="paintCanvas"></canvas>
 
     <div class="toolbar">
