@@ -83,38 +83,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Gestion de l'envoi du formulaire
 document.getElementById('devisForm').addEventListener('submit', function(e) {
-  e.preventDefault(); // Empêche l'envoi classique
-  
-  // Récupère toutes les données
-  const devisData = {
-    numero: document.getElementById('invoice-number').textContent,
-    date: document.getElementById('invoice-date').textContent,
-    client: {
-      nom: document.getElementById('client-name').value,
-      email: document.getElementById('client-email').value
-    },
-    services: Array.from(document.querySelectorAll('.item:checked')).map(item => ({
-      label: item.dataset.label,
-      price: item.dataset.price
-    })),
-    total: document.getElementById('invoice-total').textContent
-  };
+    e.preventDefault();
+    
+    // Préparer les données
+    const formData = new FormData();
+    formData.append('numero', document.getElementById('invoice-number').textContent);
+    formData.append('date', document.getElementById('invoice-date').textContent);
+    formData.append('client_nom', document.getElementById('client-name').value);
+    formData.append('client_email', document.getElementById('client-email').value);
+    formData.append('total', document.getElementById('invoice-total').textContent);
+    
+    // Ajouter chaque checkbox
+    document.querySelectorAll('.item').forEach(item => {
+        const name = item.dataset.label.toLowerCase().replace(/ /g, '_');
+        formData.append(name, item.checked ? '1' : '0');
+    });
 
-  // Envoi AJAX
-  fetch('submit.php', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(devisData)
-  })
-  .then(response => response.text())
-  .then(data => {
-    alert("Devis envoyé avec succès !");
-    console.log(data);
-  })
-  .catch(error => {
-    console.error('Error:', error);
-    alert("Une erreur est survenue lors de l'envoi.");
-  });
+    // Envoyer
+    fetch('submit.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('Devis envoyé avec succès !');
+        localStorage.setItem('factureCount', parseInt(factureCount) + 1);
+        location.reload();
+    })
+    .catch(error => {
+        alert('Erreur: ' + error.message);
+    });
 });

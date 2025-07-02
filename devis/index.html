@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <form id="devisForm" method="post" action="submit.php">
+  <form id="devisForm">
   <div class="invoice-box" id="invoice">
     <h1>Devis Berru-g Dev web</h1>
     <p><strong>Devis N°:</strong> <span id="invoice-number"></span><br>
@@ -23,25 +23,25 @@
     </p>
 
     <h2>Les bases :</h2>
-    <form id="service-form">
-      <label><input type="checkbox" class="item" data-label="Développement site vitrine" data-price="550"> Développement
+    <div id="service-form">
+      <label><input type="checkbox" class="item" name="developpement_vitrine" data-label="Développement site vitrine" data-price="550"> Développement
         site vitrine (550 €)</label>
-      <label><input type="checkbox" class="item" data-label="Formulaire simple" data-price="50"> Formulaire de contact
+      <label><input type="checkbox" class="item" name="formulaire_simple" data-label="Formulaire simple" data-price="50"> Formulaire de contact
         simple (50 €)</label>
-      <label><input type="checkbox" class="item" data-label="Formulaire et bdd" data-price="400"> Formulaire de contact
+      <label><input type="checkbox" class="item" name="formulaire_complexe" data-label="Formulaire et bdd" data-price="400"> Formulaire de contact
         complexe (400 €)</label>
-      <label><input type="checkbox" class="item" data-label="Optimisation SEO" data-price="100"> Optimisation SEO (100
+      <label><input type="checkbox" class="item" name="optimisation_seo" data-label="Optimisation SEO" data-price="100"> Optimisation SEO (100
         €)</label>
       <h2>Passer à la vente en ligne :</h2>
-      <label><input type="checkbox" class="item" data-label="Système de paiement" data-price="500"> Système de paiement
+      <label><input type="checkbox" class="item" name="systeme_paiement" data-label="Système de paiement" data-price="500"> Système de paiement
         (500 €)</label>
-      <label><input type="checkbox" class="item" data-label="Interface admin" data-price="100"> Interface admin (100
+      <label><input type="checkbox" class="item" name="interface_admin" data-label="Interface admin" data-price="100"> Interface admin (100
         €/an)</label>
       <h2>Pour une offre "je veux un site clef en main" :</h2>
-      <label><input type="checkbox" class="item" data-label="nom de domaine" data-price="10"> Nom de domaine (10
+      <label><input type="checkbox" class="item" name="nom_domaine" data-label="nom de domaine" data-price="10"> Nom de domaine (10
         €/an)</label>
-      <label><input type="checkbox" class="item" data-label="hébergement" data-price="80"> hébergement (80 €/an)</label>
-    </form>
+      <label><input type="checkbox" class="item" name="hebergement" data-label="hébergement" data-price="80"> hébergement (80 €/an)</label>
+      </div>
 
     <table id="invoice-table">
       <thead>
@@ -63,12 +63,13 @@
     </div>
   </div>
 
-  <a href="./index.html" class="download-btn">Revenir au site</a>
-  <a href="#" class="download-btn" onclick="downloadPDF()">Télécharger la facture (PDF)</a>
-  <button type="submit" class="download-btn">Envoyer le devis</button>
+  <div class="action-buttons">
+      <a href="./index.html" class="download-btn">Revenir au site</a>
+      <button type="button" class="download-btn" onclick="downloadPDF()">Télécharger la facture (PDF)</button>
+      <button type="submit" class="download-btn">Envoyer le devis</button>
     </div>
   </form>
-  
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="facture.js"></script>
 </body>
