@@ -5,116 +5,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Devis Berru-g Dev web</title>
-  <style>
-    h1,
-    h2 {
-      color: var(--primary)
-    }
-
-    :root {
-      --primary: #ab9ff2;
-      --text-dark: #333;
-      --text-light: #fff;
-      --background: #f4f3fc;
-      --box-background: #ffffff;
-      --border-color: #ddd
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--background);
-      color: var(--text-dark);
-      padding: 2rem;
-      max-width: 900px;
-      margin: auto
-    }
-
-    .download-btn,
-    .footer,
-    h2 {
-      margin-top: 2rem
-    }
-
-    .invoice-box {
-      background: var(--box-background);
-      padding: 2rem;
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, .05)
-    }
-
-    .download-btn,
-    table th {
-      background: var(--primary)
-    }
-
-    h1 {
-      margin-bottom: .5rem
-    }
-
-    h2 {
-      font-size: 1.2rem;
-      border-bottom: 2px solid var(--primary);
-      padding-bottom: .3rem
-    }
-
-    input[type=text] {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
-      border: 1px solid var(--border-color);
-      border-radius: 6px
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: .95rem
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem
-    }
-
-    table td,
-    table th {
-      border: 1px solid var(--border-color);
-      padding: 10px;
-      text-align: left
-    }
-
-    table th {
-      color: var(--text-light)
-    }
-
-    .right {
-      text-align: right
-    }
-
-    .footer {
-      font-size: .85rem;
-      color: #777
-    }
-
-    .download-btn {
-      display: inline-block;
-      color: var(--text-light);
-      padding: .6rem 1.2rem;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: 700;
-      transition: background .2s
-    }
-
-    .download-btn:hover {
-      background: #9789db
-    }
-  </style>
+ <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+  <form id="devisForm" method="post" action="submit.php">
   <div class="invoice-box" id="invoice">
     <h1>Devis Berru-g Dev web</h1>
     <p><strong>Devis N°:</strong> <span id="invoice-number"></span><br>
@@ -170,7 +65,10 @@
 
   <a href="./index.html" class="download-btn">Revenir au site</a>
   <a href="#" class="download-btn" onclick="downloadPDF()">Télécharger la facture (PDF)</a>
-
+  <button type="submit" class="download-btn">Envoyer le devis</button>
+    </div>
+  </form>
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="facture.js"></script>
 </body>

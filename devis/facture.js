@@ -80,3 +80,41 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initialisation au chargement
   handleFormInteractions.call({});
 });
+
+// Gestion de l'envoi du formulaire
+document.getElementById('devisForm').addEventListener('submit', function(e) {
+  e.preventDefault(); // Empêche l'envoi classique
+  
+  // Récupère toutes les données
+  const devisData = {
+    numero: document.getElementById('invoice-number').textContent,
+    date: document.getElementById('invoice-date').textContent,
+    client: {
+      nom: document.getElementById('client-name').value,
+      email: document.getElementById('client-email').value
+    },
+    services: Array.from(document.querySelectorAll('.item:checked')).map(item => ({
+      label: item.dataset.label,
+      price: item.dataset.price
+    })),
+    total: document.getElementById('invoice-total').textContent
+  };
+
+  // Envoi AJAX
+  fetch('submit.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(devisData)
+  })
+  .then(response => response.text())
+  .then(data => {
+    alert("Devis envoyé avec succès !");
+    console.log(data);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert("Une erreur est survenue lors de l'envoi.");
+  });
+});

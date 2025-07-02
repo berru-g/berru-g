@@ -1,0 +1,17 @@
+# Empêcher l'accès direct à config.php
+<Files "config.php">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Forcer POST pour submit.php
+<Files "submit.php">
+    <IfModule mod_rewrite.c>
+        RewriteEngine On
+        RewriteCond %{REQUEST_METHOD} !POST
+        RewriteRule ^ - [F,L]
+    </IfModule>
+</Files>
+
+# Désactiver l'affichage des erreurs PHP en prod
+php_flag display_errors off
