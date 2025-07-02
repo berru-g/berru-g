@@ -29,7 +29,10 @@ body {
 }
 
 .demo-container {
+    display: block;
+    margin: 0 auto;
     padding: 40px 20px;
+    max-width: 900px;
     min-height: 100vh;
 }
 
@@ -638,12 +641,12 @@ body {
     color: var(--text-color);
 }
 
-img {
+.profil {
     display: block;
     margin: 0 auto;
-    width: 70%;
+    width: 7%;
     height: auto;
-    border-radius: 12px;
+    border-radius: 100%;
 }
 
 a {
