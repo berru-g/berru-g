@@ -48,7 +48,7 @@ function draw(e) {
   if (!drawing) return;
   const { x, y } = getCursorPos(e);
 
-  ctx.lineWidth = 5;
+  ctx.lineWidth = brushSize;
   ctx.lineCap = "round";
   ctx.strokeStyle = currentTool === "eraser" ? "#fff" : colorPicker.value;
 
@@ -80,3 +80,21 @@ saveBtn.addEventListener("click", () => {
   link.href = canvas.toDataURL();
   link.click();
 });
+
+// epaisseur .➡️
+const sizeBtn = document.getElementById("sizeBtn");
+const brushSizeSlider = document.getElementById("brushSize");
+
+let brushSize = parseInt(brushSizeSlider.value);
+
+// Afficher/Masquer la slider
+sizeBtn.addEventListener("click", () => {
+  const visible = brushSizeSlider.style.display === "block";
+  brushSizeSlider.style.display = visible ? "none" : "block";
+});
+
+// Modifier la taille du pinceau en direct
+brushSizeSlider.addEventListener("input", (e) => {
+  brushSize = parseInt(e.target.value);
+});
+

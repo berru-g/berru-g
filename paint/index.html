@@ -14,6 +14,11 @@
 
     <div class="toolbar">
         <button data-tool="brush" title="Pinceau"><i class="fas fa-paint-brush"></i></button>
+        <button id="sizeBtn" title="Épaisseur">
+            <i class="fa-solid fa-brush"></i>
+        </button>
+
+        <input type="range" id="brushSize" min="1" max="40" value="5">
         <button data-tool="eraser" title="Gomme"><i class="fas fa-eraser"></i></button>
         <input type="color" id="colorPicker" title="Couleur">
         <button id="clearBtn" title="Effacer"><i class="fas fa-trash"></i></button>
