@@ -44,9 +44,11 @@ canvas {
   padding: 0;
   cursor: pointer;
 }
+
 #brushSize {
   position: absolute;
-  bottom: 80px; /* au-dessus de la toolbar */
+  bottom: 80px;
+  /* au-dessus de la toolbar */
   left: 50%;
   transform: translateX(-50%);
   width: 150px;

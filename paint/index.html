@@ -2,56 +2,145 @@
 <html lang="fr">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NeoPaint 🎨</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+        #login-overlay {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            background-color: rgba(255, 255, 255, 0.163);
+            backdrop-filter: blur(8px) !important;
+            z-index: 9999 !important;
+            /* Très élevé */
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        #login-overlay.active {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        #login-container {
+            background: transparent !important;
+            padding: 30px !important;
+            border-radius: 10px !important;
+            text-align: center !important;
+            width: 300px !important;
+            z-index: 10000 !important;
+            /* Plus élevé que l'overlay */
+        }
+
+        #password-input {
+            width: 100% !important;
+            padding: 10px !important;
+            margin: 15px 0 !important;
+            border: 1px solid #ddd !important;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2) !important;
+            border-radius: 5px !important;
+            font-size: 16px !important;
+        }
+
+        #submit-btn {
+            background: transparent !important;
+            color: white !important;
+            border: 1px solid #ddd !important;
+            padding: 10px 20px !important;
+            border-radius: 5px !important;
+            cursor: pointer !important;
+            font-size: 16px !important;
+        }
+
+        #submit-btn:hover {
+            background: grey !important;
+        }
+
+        .error-message {
+            color: red !important;
+            margin-top: 10px !important;
+            display: none !important;
+        }
+
+        /* Style pour SweetAlert */
         .swal2-container {
-            padding-top: 20px;
+            padding-top: 20px !important;
             align-items: flex-start !important;
+            z-index: 10001 !important;
+            /* Le plus élevé */
         }
 
-        .swal2-show {
-            animation: swal2-show 0.3s;
+        /* Masquer l'appli avant connexion */
+        .app-content {
+            display: none;
         }
 
-        .swal2-hide {
-            animation: swal2-hide 0.3s;
-        }
-
-        @keyframes swal2-show {
-            0% {
-                transform: translateY(-100px);
-                opacity: 0;
-            }
-
-            100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes swal2-hide {
-            0% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-
-            100% {
-                transform: translateY(-100px);
-                opacity: 0;
-            }
+        /* Afficher après connexion */
+        .authenticated .app-content {
+            display: block;
         }
     </style>
 </head>
 
 <body>
+    <!-- Votre application (masquée au début) -->
+    <div class="app-content">
+        <div class="content">
+        </div>
+
+        <canvas id="paintCanvas"></canvas>
+
+        <div class="toolbar">
+            <button data-tool="brush" title="Pinceau"><i class="fas fa-paint-brush"></i></button>
+            <button id="sizeBtn" title="Épaisseur"><i class="fa-solid fa-brush"></i></button>
+            <input type="range" id="brushSize" min="1" max="40" value="5">
+            <button data-tool="eraser" title="Gomme"><i class="fas fa-eraser"></i></button>
+            <input type="color" id="colorPicker" title="Couleur">
+            <button id="clearBtn" title="Effacer"><i class="fas fa-trash"></i></button>
+            <button id="saveBtn" title="Sauvegarder"><i class="fas fa-save"></i></button>
+        </div>
+    </div>
+
+    <!-- Overlay de connexion -->
+    <div id="login-overlay">
+        <div id="login-container">
+
+            <input type="password" id="password-input" placeholder="Mot de passe">
+            <button id="submit-btn">Valider</button>
+            <p id="error-message" class="error-message">Mot de passe incorrect</p>
+        </div>
+    </div>
+
     <script>
-        // Afficher le popup quand la page est chargée
-        document.addEventListener('DOMContentLoaded', function () {
+        // Mot de passe
+        const CORRECT_PASSWORD = "amour";
+
+        // Références aux éléments DOM
+        const body = document.body;
+        const loginOverlay = document.getElementById('login-overlay');
+        const passwordInput = document.getElementById('password-input');
+        const submitBtn = document.getElementById('submit-btn');
+        const errorMessage = document.getElementById('error-message');
+
+        // Vérifier si déjà authentifié
+        if (sessionStorage.getItem('authenticated') === 'true') {
+            unlockContent();
+        } else {
+            initLoginSystem();
+        }
+
+        function initLoginSystem() {
+            /* Afficher le popup d'accueil
             Swal.fire({
                 title: 'Déso si tu tombe ici',
                 text: 'A la base c\'est pour occuper ma nièce',
@@ -61,30 +150,46 @@
                 timerProgressBar: true,
                 backdrop: false,
                 width: '400px'
+            });*/
+
+            // Activer l'overlay après 2s
+            setTimeout(() => {
+                loginOverlay.classList.add('active');
+                passwordInput.focus();
+            }, 2000);
+
+            // Gestionnaire de clic pour le bouton de validation
+            submitBtn.addEventListener('click', checkPassword);
+
+            // Gestionnaire pour la touche Entrée
+            passwordInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
             });
-        });
+        }
+
+        function checkPassword() {
+            if (passwordInput.value === CORRECT_PASSWORD) {
+                unlockContent();
+                sessionStorage.setItem('authenticated', 'true');
+            } else {
+                errorMessage.style.display = 'block';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        }
+
+        function unlockContent() {
+            body.classList.add('authenticated');
+            loginOverlay.classList.remove('active');
+
+            // Charger le script de peinture seulement après authentification
+            const script = document.createElement('script');
+            script.src = 'script.js';
+            document.body.appendChild(script);
+        }
     </script>
-
-    <canvas id="paintCanvas"></canvas>
-
-    <div class="toolbar">
-        <button data-tool="brush" title="Pinceau"><i class="fas fa-paint-brush"></i></button>
-        <button id="sizeBtn" title="Épaisseur">
-            <i class="fa-solid fa-brush"></i>
-        </button>
-
-        <input type="range" id="brushSize" min="1" max="40" value="5">
-        <button data-tool="eraser" title="Gomme"><i class="fas fa-eraser"></i></button>
-        <input type="color" id="colorPicker" title="Couleur">
-        <button id="clearBtn" title="Effacer"><i class="fas fa-trash"></i></button>
-        <button id="saveBtn" title="Sauvegarder"><i class="fas fa-save"></i></button>
-    </div>
-
-    <!-- FontAwesome -->
-    <script src="https://kit.fontawesome.com/YOUR_KIT.js" crossorigin="anonymous"></script>
-
-
-    <script src="script.js"></script>
 </body>
 
 </html>
