@@ -1,61 +1,46 @@
-body {
-    margin: 0;
-    background: #f4f5f7;
-    font-family: 'Inter', sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-}
-
-.toolbar {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 1rem;
-    background: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-    margin-bottom: 1rem;
-    justify-content: center;
-    z-index: 10;
-}
-
-.toolbar select,
-.toolbar input,
-.toolbar button {
-    font-size: 1rem;
-    padding: 0.6rem 0.9rem;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    background: #f9f9f9;
-}
-
+/* FULLSCREEN CANVAS */
 canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: 0;
-    border-radius: 0;
-    background: #fff;
-    box-shadow:none;
-    touch-action: none;
-    /* désactive le scroll/pinch sur le canvas */
-    
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+  z-index: 0;
+  touch-action: none;
 }
 
-@media (max-width: 600px) {
-    .toolbar {
-        flex-direction: column;
-        align-items: stretch;
-    }
+/* TOOLBAR EN BAS */
+.toolbar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16px;
+  padding: 12px 24px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
 
-    .toolbar select,
-    .toolbar input,
-    .toolbar button {
-        width: 100%;
-    }
+/* BOUTONS */
+.toolbar button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #333;
+  cursor: pointer;
+}
+
+/* COLOR PICKER */
+#colorPicker {
+  border: none;
+  background: none;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  cursor: pointer;
 }

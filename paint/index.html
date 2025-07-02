@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NeoPaint 🎨</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NeoPaint 🎨</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
+
 <body>
-  <div class="toolbar">
-    <select id="tool">
-      <option value="brush">🖌️ Pinceau</option>
-      <option value="eraser">🧽 Gomme</option>
-      <option value="line">📏 Ligne</option>
-      <option value="rect">⬛ Rectangle</option>
-      <option value="circle">⚪ Cercle</option>
-    </select>
+    <canvas id="paintCanvas"></canvas>
 
-    <input type="color" id="colorPicker" value="#000000" />
-    <input type="range" id="brushSize" min="1" max="30" value="5" />
+    <div class="toolbar">
+        <button data-tool="brush" title="Pinceau"><i class="fas fa-paint-brush"></i></button>
+        <button data-tool="eraser" title="Gomme"><i class="fas fa-eraser"></i></button>
+        <input type="color" id="colorPicker" title="Couleur">
+        <button id="clearBtn" title="Effacer"><i class="fas fa-trash"></i></button>
+        <button id="saveBtn" title="Sauvegarder"><i class="fas fa-save"></i></button>
+    </div>
 
-    <button id="clearBtn">🗑️ Effacer</button>
-    <button id="saveBtn">💾 Sauvegarder</button>
-  </div>
+    <!-- FontAwesome -->
+    <script src="https://kit.fontawesome.com/YOUR_KIT.js" crossorigin="anonymous"></script>
 
-  <canvas id="paintCanvas" width="1000" height="600"></canvas>
 
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
+
 </html>
