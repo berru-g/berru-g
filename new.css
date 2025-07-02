@@ -755,6 +755,15 @@ a {
         transform: translateY(-20px) rotate(180deg);
     }
 }
+@keyframes float-rotate {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(45deg);
+  }
+}
+
 
 /* ==================== FOOTER ==================== */
 .footer {

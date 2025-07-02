@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NeoPaint 🎨</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="toolbar">
+    <select id="tool">
+      <option value="brush">🖌️ Pinceau</option>
+      <option value="eraser">🧽 Gomme</option>
+      <option value="line">📏 Ligne</option>
+      <option value="rect">⬛ Rectangle</option>
+      <option value="circle">⚪ Cercle</option>
+    </select>
+
+    <input type="color" id="colorPicker" value="#000000" />
+    <input type="range" id="brushSize" min="1" max="30" value="5" />
+
+    <button id="clearBtn">🗑️ Effacer</button>
+    <button id="saveBtn">💾 Sauvegarder</button>
+  </div>
+
+  <canvas id="paintCanvas" width="1000" height="600"></canvas>
+
+  <script src="script.js"></script>
+</body>
+</html>
