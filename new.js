@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // réduction de 10%
-// Gère le nombre de visites dans le localStorage
+/*
 let visits = parseInt(localStorage.getItem('visits') || '0') + 1;
 localStorage.setItem('visits', visits);
 
@@ -174,7 +174,7 @@ window.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
-
+*/
 // Mini quizz
 const quiz = [
     {
