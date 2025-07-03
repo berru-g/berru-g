@@ -153,25 +153,109 @@ localStorage.setItem('visits', visits);
 
 // Affiche la popup à chaque visite
 window.addEventListener("DOMContentLoaded", () => {
-  if (visits % 12 === 0) {
-    Swal.fire({
-      icon: 'success',
-      title: `🎉 Bravo ! Vous êtes le ${visits}ᵉ visiteur.`,
-      text: "Vous avez gagné -10% sur votre prochaine commande !",
-      footer: "<b>Code à utiliser :</b> <code>I-AM-THE-BEST</code>",
-      confirmButtonText: "Super !",
-      timer: 8000,
-      timerProgressBar: true
+    if (visits % 12 === 0) {
+        Swal.fire({
+            icon: 'success',
+            title: `🎉 Bravo ! Vous êtes le ${visits}ᵉ visiteur.`,
+            text: "Vous avez gagné -10% sur votre prochaine commande !",
+            footer: "<b>Code à utiliser :</b> <code>I-AM-THE-BEST</code>",
+            confirmButtonText: "Super !",
+            timer: 8000,
+            timerProgressBar: true
+        });
+    } else {
+        Swal.fire({
+            icon: 'info',
+            title: `👀 Vous êtes le ${visits}ᵉ visiteur aujourd'hui`,
+            text: "Pas de réduction cette fois-ci... Revenez plus tard 😉",
+            confirmButtonText: "OK",
+            timer: 5000,
+            timerProgressBar: true
+        });
+    }
+});
+
+// Mini quizz
+const quiz = [
+    {
+        question: "Quel est le principal objectif d’un site vitrine ?",
+        options: ["Informer", "Divertir", "Convertir", "Faire joli"],
+        answer: "Convertir"
+    },
+    {
+        question: "Un site lent peut-il nuire à vos ventes ?",
+        options: ["Non", "Oui", "Uniquement sur mobile", "Seulement si trop lent"],
+        answer: "Oui"
+    },
+    {
+        question: "Que signifie 'responsive' ?",
+        options: ["Réactif", "Rapide", "Adapté à tous les écrans", "Avec animations"],
+        answer: "Adapté à tous les écrans"
+    }
+];
+
+async function launchQuiz() {
+    let score = 0;
+
+    for (let i = 0; i < quiz.length; i++) {
+        const q = quiz[i];
+        const { value: userAnswer } = await Swal.fire({
+            title: `Question ${i + 1}`,
+            text: q.question,
+            input: "select",
+            inputOptions: q.options.reduce((acc, opt) => {
+                acc[opt] = opt;
+                return acc;
+            }, {}),
+            inputPlaceholder: "Choisissez une réponse",
+            showCancelButton: false
+        });
+
+        if (userAnswer === q.answer) {
+            score++;
+        }
+    }
+
+    if (score === quiz.length) {
+        Swal.fire({
+            icon: 'success',
+            title: '🧠 Bravo !',
+            text: "Toutes les réponses sont correctes. Vous gagnez -10% avec le code I-KNOW-MY-WEB.",
+            confirmButtonText: 'Yes !'
+        });
+    } else {
+        Swal.fire({
+            icon: 'info',
+            title: 'Presque !',
+            text: `Vous avez ${score}/${quiz.length} bonnes réponses. Réessayez pour débloquer la réduction.`,
+            confirmButtonText: 'OK'
+        });
+    }
+}
+
+document.getElementById("launch-quiz").addEventListener("click", launchQuiz);
+
+// FAQ
+document.querySelectorAll('.faq-question').forEach(button => {
+  button.addEventListener('click', () => {
+    const answer = button.nextElementSibling;
+
+    // Ferme toutes les autres réponses
+    document.querySelectorAll('.faq-answer').forEach(a => {
+      if (a !== answer) {
+        a.style.maxHeight = null;
+        a.style.opacity = 0;
+      }
     });
-  } else {
-    Swal.fire({
-      icon: 'info',
-      title: `👀 Vous êtes le ${visits}ᵉ visiteur`,
-      text: "Pas de réduction cette fois-ci... Revenez plus tard 😉",
-      confirmButtonText: "OK",
-      timer: 5000,
-      timerProgressBar: true
-    });
-  }
+
+    // Toggle la réponse cliquée
+    if (answer.style.maxHeight) {
+      answer.style.maxHeight = null;
+      answer.style.opacity = 0;
+    } else {
+      answer.style.maxHeight = answer.scrollHeight + "px";
+      answer.style.opacity = 1;
+    }
+  });
 });
 
