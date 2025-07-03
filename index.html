@@ -204,11 +204,10 @@
         </div>
     </div>
 
-    <!-- Demo Content -->
-    <div class="demo-container" data-aos="fade-up" data-aos-delay="200"> <!-- Home Section -->
+    <!-- Intro -->
+    <div class="demo-container" data-aos="fade-up" data-aos-delay="200"> 
         <section id="home" class="content-section">
             <h1 class="section-title">Créez un site web qui travaille pour vous</h1>
-            <!--<img class="profil" src="./img/wamcache.png">-->
             <p class="section-subtitle">
                 Développeur web passionné, <strong>j’aide les indépendants et créatifs à concevoir un site à leur image, pensé pour convertir et faire grandir leur activité.</strong>
             </p>
@@ -216,180 +215,231 @@
             <p class="section-subtitle">Objectif : un site unique, esthétique et performant, qui transforme les visiteurs en clients.</p>
         </section>
 
-        <!-- Benefits Section -->
-        <section class="benefits">
-            <div class="container">
-                <h2 class="section-title">Pourquoi me confier votre site ?</h2>
-                <div class="benefits-grid">
-                    <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
-                        <div class="benefit-icon">💡</div>
-                        <h3>Sur-mesure & unique</h3>
-                        <p>Votre site est codé à la main, sans template, selon votre image et vos besoins.</p>
+    <!--Test de changement automatique de la section intro 
+    - une intro par semaine pour tester le seo
+    ⚠️ baise la largeur du container ? 
+    <div class="demo-container" data-aos="fade-up" data-aos-delay="200">
+        <section id="home" class="content-section">
+            <h1 class="section-title" id="dynamic-h1">Chargement...</h1>
+            <p class="section-subtitle" id="dynamic-p1">Chargement du contenu...</p>
+            <p class="section-subtitle" id="dynamic-p2">Merci de patienter...</p>
+        </section>
+    </div>
+
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            const intros = [
+                {
+                    h1: "Créez un site web qui travaille pour vous",
+                    p1: "Développeur web passionné, <strong>j’aide les indépendants et créatifs à concevoir un site à leur image, pensé pour convertir et faire grandir leur activité.</strong>",
+                    p2: "Objectif : un site unique, esthétique et performant, qui transforme les visiteurs en clients."
+                },
+                {
+                    h1: "Un site sur-mesure, à l’image de votre vision",
+                    p1: "Développeur autodidacte, <strong>je transforme vos idées en une présence en ligne impactante.</strong>",
+                    p2: "Un site fluide, beau, et pensé pour vos objectifs."
+                },
+                {
+                    h1: "Un site. Une vision. Des résultats.",
+                    p1: "Je conçois des sites web pour indépendants et créatifs. <strong>Pensés pour capter, séduire et convertir sans blabla inutile.</strong>",
+                    p2: "Un outil simple, esthétique et efficace."
+                },
+                {
+                    h1: "Développement web sur-mesure pour les pros exigeants",
+                    p1: "J’accompagne freelances et entrepreneurs à créer un site rapide et efficace. <strong>Design personnalisé, SEO, sécurité et conversion au cœur de chaque projet.</strong>",
+                    p2: "Votre présence en ligne devient un levier stratégique."
+                }
+            ];
+
+            const now = new Date();
+            const todayUTC = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+            const dayNumber = Math.floor((todayUTC - new Date(Date.UTC(now.getFullYear(), 0, 1))) / (1000 * 60 * 60 * 24));
+            const periodLength = 2; // tous les 2 jours
+            const index = Math.floor(dayNumber / periodLength) % intros.length;
+
+
+
+            const selectedIntro = intros[index];
+
+            document.getElementById("dynamic-h1").innerText = selectedIntro.h1;
+            document.getElementById("dynamic-p1").innerHTML = selectedIntro.p1;
+            document.getElementById("dynamic-p2").innerText = selectedIntro.p2;
+        });
+    </script>-->
+
+
+    <!-- Benefits Section -->
+    <section class="benefits">
+        <div class="container">
+            <h2 class="section-title">Pourquoi me confier votre site ?</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="benefit-icon">💡</div>
+                    <h3>Sur-mesure & unique</h3>
+                    <p>Votre site est codé à la main, sans template, selon votre image et vos besoins.</p>
+                </div>
+                <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="benefit-icon">⚙️</div>
+                    <h3>Optimisé SEO</h3>
+                    <p>Des bases solides pour un bon référencement naturel dès la mise en ligne.</p>
+                </div>
+                <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="benefit-icon">💳</div>
+                    <h3>E-commerce</h3>
+                    <p>Intégration d'un systéme de paiement à tout moments.</p>
+                </div>
+                <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="benefit-icon">🚀</div>
+                    <h3>Cléf en main</h3>
+                    <p>Je m'occupe du site, de l'hebergement et du nom de domaine.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= NOUVELLE SECTION RÉALISATIONS ================= -->
+    <section id="skill">
+        <h2 class="section-title">Mes Réalisations</h2>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
+            <!-- Projet 1 -->
+            <div style="background: white; border-radius: 12px; border: 1px solid black; box-shadow: -8px 8px 0px -1px hsla(0, 0%, 53%, 0.501); overflow: hidden;"
+                data-aos="fade-right" data-aos-delay="500">
+                <div style="height: 200px; background: url('./img/devpixel.png') center/cover; position: relative;">
+                    <div
+                        style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 10px 15px;">
+                        PixelEarth - Marketplace
                     </div>
-                    <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
-                        <div class="benefit-icon">⚙️</div>
-                        <h3>Optimisé SEO</h3>
-                        <p>Des bases solides pour un bon référencement naturel dès la mise en ligne.</p>
-                    </div>
-                    <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
-                        <div class="benefit-icon">💳</div>
-                        <h3>E-commerce</h3>
-                        <p>Intégration d'un systéme de paiement à tout moments.</p>
-                    </div>
-                    <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
-                        <div class="benefit-icon">🚀</div>
-                        <h3>Cléf en main</h3>
-                        <p>Je m'occupe du site, de l'hebergement et du nom de domaine.</p>
+                </div>
+                <div style="padding: 20px;">
+                    <p>Plateforme de vente de pixel avec systeme de paiement et base de données.</p>
+                    <div style="margin-top: 15px;">
+                        <a href="https://pixelearth.netlify.app/" target="_blank"
+                            style="display: inline-block; margin-right: 10px; color: #ab9ff2; font-weight: bold;"><i
+                                class="fa-solid fa-link"></i></a>
+                        <a href="#" class="screenshot-link"
+                            style="display: inline-block; color: #ab9ff2; font-weight: bold;"><i
+                                class="fa-solid fa-magnifying-glass-plus"></i></a>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <!-- ================= NOUVELLE SECTION RÉALISATIONS ================= -->
-        <section id="skill">
-            <h2 class="section-title">Mes Réalisations</h2>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
-                <!-- Projet 1 -->
-                <div style="background: white; border-radius: 12px; border: 1px solid black; box-shadow: -8px 8px 0px -1px hsla(0, 0%, 53%, 0.501); overflow: hidden;"
-                    data-aos="fade-right" data-aos-delay="500">
-                    <div style="height: 200px; background: url('./img/devpixel.png') center/cover; position: relative;">
-                        <div
-                            style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 10px 15px;">
-                            PixelEarth - Marketplace
-                        </div>
-                    </div>
-                    <div style="padding: 20px;">
-                        <p>Plateforme de vente de pixel avec systeme de paiement et base de données.</p>
-                        <div style="margin-top: 15px;">
-                            <a href="https://pixelearth.netlify.app/" target="_blank"
-                                style="display: inline-block; margin-right: 10px; color: #ab9ff2; font-weight: bold;"><i
-                                    class="fa-solid fa-link"></i></a>
-                            <a href="#" class="screenshot-link"
-                                style="display: inline-block; color: #ab9ff2; font-weight: bold;"><i
-                                    class="fa-solid fa-magnifying-glass-plus"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Projet 2 -->
-                <div style="background: white; border-radius: 12px; border: 1px solid black; box-shadow: -8px 8px 0px -1px hsla(0, 0%, 53%, 0.501); overflow: hidden;"
-                    data-aos="fade-right" data-aos-delay="500">
+            <!-- Projet 2 -->
+            <div style="background: white; border-radius: 12px; border: 1px solid black; box-shadow: -8px 8px 0px -1px hsla(0, 0%, 53%, 0.501); overflow: hidden;"
+                data-aos="fade-right" data-aos-delay="500">
+                <div
+                    style="height: 200px; background: url('./img/devcryptotool.png') center/cover; position: relative;">
                     <div
-                        style="height: 200px; background: url('./img/devcryptotool.png') center/cover; position: relative;">
-                        <div
-                            style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 10px 15px;">
-                            Crypto Free Tools
-                        </div>
-                    </div>
-                    <div style="padding: 20px;">
-                        <p>Suite d'outils pour traders avec API CoinGecko et Binance.</p>
-                        <div style="margin-top: 15px;">
-                            <a href="https://crypto-free-tools.netlify.app/" target="_blank"
-                                style="display: inline-block; margin-right: 10px; color: #ab9ff2; font-weight: bold;"><i
-                                    class="fa-solid fa-link"></i></a>
-                            <a href="#" class="screenshot-link"
-                                style="display: inline-block; color: #ab9ff2; font-weight: bold;"><i
-                                    class="fa-solid fa-magnifying-glass-plus"></i></a>
-                        </div>
+                        style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 10px 15px;">
+                        Crypto Free Tools
                     </div>
                 </div>
-
-                <!-- Projet 3 -->
-                <div style="background: white; border-radius: 12px; border: 1px solid black; box-shadow: -8px 8px 0px -1px hsla(0, 0%, 53%, 0.501); overflow: hidden;"
-                    data-aos="fade-right" data-aos-delay="500">
-                    <div
-                        style="height: 200px; background: url('./img/devgoldendessert.png') center/cover; position: relative;">
-                        <div
-                            style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 10px 15px;">
-                            Golden Dessert - formulaire
-                        </div>
-                    </div>
-                    <div style="padding: 20px;">
-                        <p>Site vitrine avec formulaire de contact et backoffice admin.</p>
-                        <div style="margin-top: 15px;">
-                            <a href="https://golden-dessert.netlify.app/" target="_blank"
-                                style="display: inline-block; margin-right: 10px; color: #ab9ff2; font-weight: bold;"><i
-                                    class="fa-solid fa-link"></i></a>
-                            <a href="#" class="screenshot-link"
-                                style="display: inline-block; color: #ab9ff2; font-weight: bold;"><i
-                                    class="fa-solid fa-magnifying-glass-plus"></i></a>
-                        </div>
+                <div style="padding: 20px;">
+                    <p>Suite d'outils pour traders avec API CoinGecko et Binance.</p>
+                    <div style="margin-top: 15px;">
+                        <a href="https://crypto-free-tools.netlify.app/" target="_blank"
+                            style="display: inline-block; margin-right: 10px; color: #ab9ff2; font-weight: bold;"><i
+                                class="fa-solid fa-link"></i></a>
+                        <a href="#" class="screenshot-link"
+                            style="display: inline-block; color: #ab9ff2; font-weight: bold;"><i
+                                class="fa-solid fa-magnifying-glass-plus"></i></a>
                     </div>
                 </div>
-
-                <!-- Projet 4 -->
-                <div style="background: white; border-radius: 12px; border: 1px solid black; box-shadow: -8px 8px 0px -1px hsla(0, 0%, 53%, 0.501); overflow: hidden;"
-                    data-aos="fade-right" data-aos-delay="500">
-                    <div
-                        style="height: 200px; background: url('./img/devpaddlepromo.png') center/cover; position: relative;">
-                        <div
-                            style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 10px 15px;">
-                            Paddle promo - tunnel de vente
-                        </div>
-                    </div>
-                    <div style="padding: 20px;">
-                        <p>Tunnel de vente.</p>
-                        <div style="margin-top: 15px;">
-                            <a href="https://paddlepromo.netlify.app/" target="_blank"
-                                style="display: inline-block; margin-right: 10px; color: #ab9ff2; font-weight: bold;"><i
-                                    class="fa-solid fa-link"></i></a>
-                            <a href="#" class="screenshot-link"
-                                style="display: inline-block; color: #ab9ff2; font-weight: bold;"><i
-                                    class="fa-solid fa-magnifying-glass-plus"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Projet 5 -->
-                <div style="background: white; border-radius: 12px; border: 1px solid black; box-shadow: -8px 8px 0px -1px hsla(0, 0%, 53%, 0.501); overflow: hidden;"
-                    data-aos="fade-right" data-aos-delay="500">
-                    <div style="height: 200px; background: url('./img/devadmin.png') center/cover; position: relative;">
-                        <div
-                            style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 10px 15px;">
-                            Pack : formulaire + interface admin + facturation
-                        </div>
-                    </div>
-                    <div style="padding: 20px;">
-                        <p>Interface Admin.</p>
-                        <div style="margin-top: 15px;">
-                            <a href="https://github.com/berru-g/form-et-interface-admin/blob/main/readme.md"
-                                target="_blank"
-                                style="display: inline-block; margin-right: 10px; color: #ab9ff2; font-weight: bold;"><i
-                                    class="fa-solid fa-link"></i></a>
-                            <a href="#" class="screenshot-link"
-                                style="display: inline-block; color: #ab9ff2; font-weight: bold;"><i
-                                    class="fa-solid fa-magnifying-glass-plus"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Projet 6 -->
-                <div style="background: white; border-radius: 12px; border: 1px solid black; box-shadow: -8px 8px 0px -1px hsla(0, 0%, 53%, 0.501); overflow: hidden;"
-                    data-aos="fade-right" data-aos-delay="500">
-                    <div
-                        style="height: 200px; background: url('./img/messagerie.png') center/cover; position: relative;">
-                        <div
-                            style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 10px 15px;">
-                            Messagerie interne
-                        </div>
-                    </div>
-                    <div style="padding: 20px;">
-                        <p>Messagerie</p>
-                        <div style="margin-top: 15px;">
-                            <a href="https://github.com/berru-g/projet-messagerie/blob/main/readme.md" target="_blank"
-                                style="display: inline-block; margin-right: 10px; color: #ab9ff2; font-weight: bold;"><i
-                                    class="fa-solid fa-link"></i></a>
-                            <a href="#" class="screenshot-link"
-                                style="display: inline-block; color: #ab9ff2; font-weight: bold;"><i
-                                    class="fa-solid fa-magnifying-glass-plus"></i></a>
-                        </div>
-                    </div>
-                </div>
-
             </div>
-        </section>
-        <!-- cta devis
+
+            <!-- Projet 3 -->
+            <div style="background: white; border-radius: 12px; border: 1px solid black; box-shadow: -8px 8px 0px -1px hsla(0, 0%, 53%, 0.501); overflow: hidden;"
+                data-aos="fade-right" data-aos-delay="500">
+                <div
+                    style="height: 200px; background: url('./img/devgoldendessert.png') center/cover; position: relative;">
+                    <div
+                        style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 10px 15px;">
+                        Golden Dessert - formulaire
+                    </div>
+                </div>
+                <div style="padding: 20px;">
+                    <p>Site vitrine avec formulaire de contact et backoffice admin.</p>
+                    <div style="margin-top: 15px;">
+                        <a href="https://golden-dessert.netlify.app/" target="_blank"
+                            style="display: inline-block; margin-right: 10px; color: #ab9ff2; font-weight: bold;"><i
+                                class="fa-solid fa-link"></i></a>
+                        <a href="#" class="screenshot-link"
+                            style="display: inline-block; color: #ab9ff2; font-weight: bold;"><i
+                                class="fa-solid fa-magnifying-glass-plus"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projet 4 -->
+            <div style="background: white; border-radius: 12px; border: 1px solid black; box-shadow: -8px 8px 0px -1px hsla(0, 0%, 53%, 0.501); overflow: hidden;"
+                data-aos="fade-right" data-aos-delay="500">
+                <div
+                    style="height: 200px; background: url('./img/devpaddlepromo.png') center/cover; position: relative;">
+                    <div
+                        style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 10px 15px;">
+                        Paddle promo - tunnel de vente
+                    </div>
+                </div>
+                <div style="padding: 20px;">
+                    <p>Tunnel de vente.</p>
+                    <div style="margin-top: 15px;">
+                        <a href="https://paddlepromo.netlify.app/" target="_blank"
+                            style="display: inline-block; margin-right: 10px; color: #ab9ff2; font-weight: bold;"><i
+                                class="fa-solid fa-link"></i></a>
+                        <a href="#" class="screenshot-link"
+                            style="display: inline-block; color: #ab9ff2; font-weight: bold;"><i
+                                class="fa-solid fa-magnifying-glass-plus"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projet 5 -->
+            <div style="background: white; border-radius: 12px; border: 1px solid black; box-shadow: -8px 8px 0px -1px hsla(0, 0%, 53%, 0.501); overflow: hidden;"
+                data-aos="fade-right" data-aos-delay="500">
+                <div style="height: 200px; background: url('./img/devadmin.png') center/cover; position: relative;">
+                    <div
+                        style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 10px 15px;">
+                        Pack : formulaire + interface admin + facturation
+                    </div>
+                </div>
+                <div style="padding: 20px;">
+                    <p>Interface Admin.</p>
+                    <div style="margin-top: 15px;">
+                        <a href="https://github.com/berru-g/form-et-interface-admin/blob/main/readme.md" target="_blank"
+                            style="display: inline-block; margin-right: 10px; color: #ab9ff2; font-weight: bold;"><i
+                                class="fa-solid fa-link"></i></a>
+                        <a href="#" class="screenshot-link"
+                            style="display: inline-block; color: #ab9ff2; font-weight: bold;"><i
+                                class="fa-solid fa-magnifying-glass-plus"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projet 6 -->
+            <div style="background: white; border-radius: 12px; border: 1px solid black; box-shadow: -8px 8px 0px -1px hsla(0, 0%, 53%, 0.501); overflow: hidden;"
+                data-aos="fade-right" data-aos-delay="500">
+                <div style="height: 200px; background: url('./img/messagerie.png') center/cover; position: relative;">
+                    <div
+                        style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 10px 15px;">
+                        Messagerie interne
+                    </div>
+                </div>
+                <div style="padding: 20px;">
+                    <p>Messagerie</p>
+                    <div style="margin-top: 15px;">
+                        <a href="https://github.com/berru-g/projet-messagerie/blob/main/readme.md" target="_blank"
+                            style="display: inline-block; margin-right: 10px; color: #ab9ff2; font-weight: bold;"><i
+                                class="fa-solid fa-link"></i></a>
+                        <a href="#" class="screenshot-link"
+                            style="display: inline-block; color: #ab9ff2; font-weight: bold;"><i
+                                class="fa-solid fa-magnifying-glass-plus"></i></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- cta devis
         <section id="Devis" class="content-section" data-aos="zoom-in" data-aos-delay="100">
             <h2 class="section-title">Devis</h2>
             <p class="section-subtitle">
@@ -401,79 +451,78 @@
         </section>-->
 
 
-        <!-- ================= NOUVELLE SECTION AVIS CLIENTS ================= -->
-        <section id="avis" style="margin-top: 50px;" data-aos="fade-up" data-aos-delay="200">
-            <h2 class="section-title">Avis Clients</h2>
+    <!-- ================= NOUVELLE SECTION AVIS CLIENTS ================= -->
+    <section id="avis" style="margin-top: 50px;" data-aos="fade-up" data-aos-delay="200">
+        <h2 class="section-title">Avis Clients</h2>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
-                <!-- Avis 1 -->
-                <div
-                    style="background: white; padding: 25px; border-radius: 12px; border: 1px solid black; box-shadow: -8px 8px 0px -1px hsla(0, 0%, 53%, 0.501); position: relative;">
-                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                        <div
-                            style="width: 40px; height: 40px; background: #ffd97d; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; color: white; font-weight: bold;">
-                            5★</div>
-                        <div>
-                            <h4 style="margin: 0; color: #444;">Nico Golden Dessert</h4>
-                            <p style="margin: 0; font-size: 0.9em; color: grey;"><a
-                                    href="https://golden-dessert.netlify.app" rel="noopener" target="_blank">Visiter le
-                                    site de Nicolas</a></p>
-                        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
+            <!-- Avis 1 -->
+            <div
+                style="background: white; padding: 25px; border-radius: 12px; border: 1px solid black; box-shadow: -8px 8px 0px -1px hsla(0, 0%, 53%, 0.501); position: relative;">
+                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div
+                        style="width: 40px; height: 40px; background: #ffd97d; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; color: white; font-weight: bold;">
+                        5★</div>
+                    <div>
+                        <h4 style="margin: 0; color: #444;">Nico Golden Dessert</h4>
+                        <p style="margin: 0; font-size: 0.9em; color: grey;"><a
+                                href="https://golden-dessert.netlify.app" rel="noopener" target="_blank">Visiter le
+                                site de Nicolas</a></p>
                     </div>
-                    <p style="font-style: italic;">"Gaël a livré un site parfaitement propre en 1 semaine seulement.
-                        Il nous à même fait cadeaux d'une interface admin. Je recommande !"</p>
+                </div>
+                <p style="font-style: italic;">"Gaël a livré un site parfaitement propre en 1 semaine seulement.
+                    Il nous à même fait cadeaux d'une interface admin. Je recommande !"</p>
+            </div>
+
+            <!-- Avis 2 -->
+            <div
+                style="background: white; padding: 25px; border-radius: 12px; border: 1px solid grey; box-shadow: -8px 8px 0px -1px hsla(0, 0%, 53%, 0.501); position: relative;">
+                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div
+                        style="width: 40px; height: 40px; background: #ffd97d; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; color: white; font-weight: bold;">
+                        5★</div>
+                    <div>
+                        <h4 style="margin: 0; color: #444;">Client Freelance</h4>
+                        <p style="margin: 0; font-size: 0.9em; color: grey;"><a
+                                href="https://crypto-free-tools.netlify.app" rel="noopener" target="_blank">Visiter
+                                le site de Eustis</a></p>
+                    </div>
+                </div>
+                <p style="font-style: italic;">"Développeur réactif et compétent. Il a su comprendre mes besoins
+                    complexes en matière d'intégration API."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="content-section">
+        <h2 class="section-title">Contact</h2>
+        <p class="section-subtitle">
+            Prêt à créer votre présence en ligne ? <a href="https://berru-g.github.io/name-generate-color/">Egg#1</a>
+        </p>
+
+        <div class="contact-form">
+            <form action="https://formspree.io/f/xrbklnwy" method="POST">
+
+                <div class="form-group">
+                    <!--<label for="email" class="form-label">Email Address</label>-->
+                    <input type="email" id="email" name="email" class="form-input" placeholder="Votre adresse mail"
+                        required>
                 </div>
 
-                <!-- Avis 2 -->
-                <div
-                    style="background: white; padding: 25px; border-radius: 12px; border: 1px solid grey; box-shadow: -8px 8px 0px -1px hsla(0, 0%, 53%, 0.501); position: relative;">
-                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                        <div
-                            style="width: 40px; height: 40px; background: #ffd97d; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; color: white; font-weight: bold;">
-                            5★</div>
-                        <div>
-                            <h4 style="margin: 0; color: #444;">Client Freelance</h4>
-                            <p style="margin: 0; font-size: 0.9em; color: grey;"><a
-                                    href="https://crypto-free-tools.netlify.app" rel="noopener" target="_blank">Visiter
-                                    le site de Eustis</a></p>
-                        </div>
-                    </div>
-                    <p style="font-style: italic;">"Développeur réactif et compétent. Il a su comprendre mes besoins
-                        complexes en matière d'intégration API."</p>
+                <div class="form-group">
+                    <!--<label for="message" class="form-label">Message</label>-->
+                    <textarea id="message" name="message" class="form-textarea"
+                        placeholder="Pour commencer, décrivez moi vos besoins et vos envies. 😊" required></textarea>
                 </div>
-            </div>
-        </section>
 
-        <!-- Contact Section -->
-        <section id="contact" class="content-section">
-            <h2 class="section-title">Contact</h2>
-            <p class="section-subtitle">
-                Prêt à créer votre présence en ligne ? <a href="https://berru-g.github.io/name-generate-color/">Egg#1</a>
-            </p>
-
-            <div class="contact-form">
-                <form action="https://formspree.io/f/xrbklnwy" method="POST">
-
-                    <div class="form-group">
-                        <!--<label for="email" class="form-label">Email Address</label>-->
-                        <input type="email" id="email" name="email" class="form-input" placeholder="Votre adresse mail"
-                            required>
-                    </div>
-
-                    <div class="form-group">
-                        <!--<label for="message" class="form-label">Message</label>-->
-                        <textarea id="message" name="message" class="form-textarea"
-                            placeholder="Pour commencer, décrivez moi vos besoins et vos envies. 😊"
-                            required></textarea>
-                    </div>
-
-                    <button type="submit" class="submit-btn">
-                        <span>Envoyer </span>
-                        <i class="fa-solid fa-paper-plane"></i>
-                    </button>
-                </form>
-            </div>
-        </section>
+                <button type="submit" class="submit-btn">
+                    <span>Envoyer </span>
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </section>
     </div>
 
     <!-- Footer -->
