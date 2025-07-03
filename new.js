@@ -146,4 +146,32 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// gasp anim
+// réduction de 10%
+// Gère le nombre de visites dans le localStorage
+let visits = parseInt(localStorage.getItem('visits') || '0') + 1;
+localStorage.setItem('visits', visits);
+
+// Affiche la popup à chaque visite
+window.addEventListener("DOMContentLoaded", () => {
+  if (visits % 12 === 0) {
+    Swal.fire({
+      icon: 'success',
+      title: `🎉 Bravo ! Vous êtes le ${visits}ᵉ visiteur.`,
+      text: "Vous avez gagné -10% sur votre prochaine commande !",
+      footer: "<b>Code à utiliser :</b> <code>I-AM-THE-BEST</code>",
+      confirmButtonText: "Super !",
+      timer: 8000,
+      timerProgressBar: true
+    });
+  } else {
+    Swal.fire({
+      icon: 'info',
+      title: `👀 Vous êtes le ${visits}ᵉ visiteur`,
+      text: "Pas de réduction cette fois-ci... Revenez plus tard 😉",
+      confirmButtonText: "OK",
+      timer: 5000,
+      timerProgressBar: true
+    });
+  }
+});
+
