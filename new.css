@@ -644,9 +644,9 @@ body {
 .profil {
     display: block;
     margin: 0 auto;
-    width: 7%;
+    width: 50%;
     height: auto;
-    border-radius: 100%;
+    border-radius: 25%;
 }
 
 a {
