@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="fr">
-
+<!--
+    Pour que ma nièce s'occupe en voiture
+    dev by berru-g
+    07/25
+-->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,33 +37,42 @@
         }
 
         #login-container {
-            background: #dcdcdc !important;
-            padding: 30px !important;
-            border-radius: 10px !important;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             text-align: center !important;
             width: 300px !important;
             z-index: 10000 !important;
             /* Plus élevé que l'overlay */
         }
-
+        h2 {
+            color: grey;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
         #password-input {
-            width: 70px !important;
-            padding: 10px !important;
-            margin: 15px 0 !important;
-            border: 1px solid #9b9b9b !important;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2) !important;
-            border-radius: 5px !important;
-            font-size: 16px !important;
+            width: 90%;
+            padding: 12px 15px;
+            margin: 0.5rem 0 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s;
         }
 
         #submit-btn {
-            background: transparent !important;
-            color: #9b9b9b !important;
-            border: 1px solid #9b9b9b !important;
-            padding: 10px 20px !important;
-            border-radius: 5px !important;
-            cursor: pointer !important;
-            font-size: 16px !important;
+            width: 100%;
+            padding: 12px;
+            background: #ab9ff2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
         }
 
         #submit-btn:hover {
@@ -93,7 +106,7 @@
 </head>
 
 <body>
-    <!-- Votre application (masquée au début) -->
+    <!-- app(masquée au début) -->
     <div class="app-content">
         <div class="content">
         </div>
@@ -114,9 +127,10 @@
     <!-- Overlay de connexion -->
     <div id="login-overlay">
         <div id="login-container">
-
-            <input type="password" id="password-input" placeholder="Mot de passe">
-            <button id="submit-btn">Valider</button>
+            <i class="fas fa-shield-alt logo" style="display: block; margin: 0 auto; width: 80px; height: auto; color: #ab9ff2;"></i>
+            <h2>Connexion</h2>
+            <input type="password" id="password-input" placeholder="mdp">
+            <button id="submit-btn" class="valider">Valider</button>
             <p id="error-message" class="error-message">Mot de passe incorrect</p>
         </div>
     </div>
@@ -156,7 +170,7 @@
             setTimeout(() => {
                 loginOverlay.classList.add('active');
                 passwordInput.focus();
-            }, 2000);
+            }, 500);
 
             // Gestionnaire de clic pour le bouton de validation
             submitBtn.addEventListener('click', checkPassword);
