@@ -1148,3 +1148,13 @@ a {
 .faq-item.active .faq-question i {
   transform: rotate(180deg);
 }
+.custom-toast {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    background: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+}

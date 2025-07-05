@@ -5,9 +5,10 @@
        Developed by : https://github.com/berru-g/
        Project : berru-g CV
        Date : 02/07/2025
-       Version : 1.0.9
+       Version : 1.2.1
        Copyright (c) 2025 Berru
-       nb: ne triche pas pour trouver les easter egg 🔍🤓
+       nb: tu as trouvé les easter egg ? 🔍
+       Tiens voici le Egg#6 ➡️ https://codepen.io/h-lautre/full/vEOqzKX
     ============================================
 -->
 
@@ -38,27 +39,26 @@
   "@type": "Person",
   "name": "Gaël Leberruyer (Berru-G)",
   "url": "https://gael-berru.netlify.app/",
-  "description": "Créateur polyvalent spécialisé en développement web personalisé. Autodidacte passionné par les projets concrets alliant utilité et créativité.",
+  "description": "Créateur en développement web personalisé. Autodidacte passionné par les projets concrets alliant utilité et créativité.",
   "jobTitle": "Créateur de sites web sur mesure et efficace.",
-  "image": "https://berru-g.github.io/berru-g/img/cube.png",
+  "image": "https://berru-g.github.io/berru-g/img/logo.png",
   "sameAs": [
     "https://github.com/berru-g",
     "https://codepen.io/h-lautre",
     "https://medium.com/@gael-berru",
     "https://www.instagram.com/berru_aka/"
   ],
-  "skills": ["Développement web", "Dev site sur mesure", "Innovation sociale"],
+  "skills": ["Développement web", "Dev site sur mesure", "buy a pixel"],
   "hasOccupation": {
     "@type": "Outils",
     "name": "Développeur autodidacte fullstack",
     "description": "Conception d'outils",
-    "skills": ["API", "JavaScript"]
+    "skills": ["PHP", "SQL", "API", "JavaScript"]
   },
   "knowsAbout": [
     "Site sur mesure",
     "Tunnel de vente",
-    "Développement front-end",
-    "Organisation d'événements"
+    "Développement front-end"
   ]
 }
 </script>
@@ -380,7 +380,8 @@
                         style="height: 200px; background: url('./img/devpaddlepromo.png') center/cover; position: relative;">
                         <div
                             style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 10px 15px;">
-                            Paddle promo - tunnel de vente
+                            Paddle promo - <a href="https://fr.wikipedia.org/wiki/Tunnel_de_commande">tunnel</a> de
+                            vente
                         </div>
                     </div>
                     <div style="padding: 20px;">
@@ -503,7 +504,7 @@
             <h2 class="section-title">Contact</h2>
             <p class="section-subtitle">
                 Prêt à créer votre présence en ligne ? <a
-                    href="https://berru-g.github.io/name-generate-color/">Egg#1</a>
+                    href="https://berru-g.github.io/name-generate-color/" title="easter egg #1">Egg#1</a>
             </p>
 
             <div class="contact-form">
@@ -557,7 +558,7 @@
                 <div class="faq-answer">
                     <p>Tout dépend du projet, mais en général, il faut compter entre une et quatre semaines selon la
                         complexité,
-                        les contenus, et les fonctionnalités souhaitées. <a href="./pfp.html">Egg#3</a></p>
+                        les contenus, et les fonctionnalités souhaitées. <a href="./pfp.html" title="easter egg #3">Egg#3</a></p>
                 </div>
             </div>
 
@@ -574,43 +575,19 @@
 
     </section>
 
- 
+
     <footer class="footer">
         <div class="footer-content">
 
             <ul class="footer-links">
                 <li><a href="#home" class="footer-link">Home</a></li>
                 <li><a href="./devis/index.html" class="footer-link">Devis</a></li>
-                <a href="./paint/index.html">Egg#2</a>
+                <a href="./paint/index.html" title="easter egg #2">Egg#2</a>
                 <li><a href="#" id="launch-quiz" class="footer-link">Quiz</a></li>
-                <li><a href="#" id="show-tip" class="footer-link">Tips</a></li>
+                <li><a href="#show-tip" id="show-tip" class="footer-link">Tips</a></li>
             </ul>
             <script>
-                // tips toast
-                const tips = [
-                    "💡 75% des internautes jugent une entreprise à son site.",
-                    "📱 Un site responsive est indispensable en 2025.",
-                    "🚀 Un site rapide augmente vos chances de conversion de 2x.",
-                    "🎯 Un appel à l’action clair booste vos demandes de devis.",
-                    "👁️‍🗨️ Less is more : un design épuré est souvent plus impactant.",
-                    "🔒 La sécurité (https) inspire confiance à vos visiteurs."
-                ];
-
-                function showToast(message) {
-                    const toast = document.createElement("div");
-                    toast.className = "custom-toast";
-                    toast.textContent = message;
-                    document.body.appendChild(toast);
-                    setTimeout(() => {
-                        toast.remove();
-                    }, 6000);
-                }
-
-                document.getElementById("show-tip").addEventListener("click", (e) => {
-                    e.preventDefault();
-                    const randomTip = tips[Math.floor(Math.random() * tips.length)];
-                    showToast(randomTip);
-                });
+                
             </script>
 
             <div class="footer-social">
@@ -650,7 +627,8 @@
 
 
             <div class="footer-copy">
-                © 2025 berru-g | Ce site contient des easter egg
+                © 2025 berru-g | Ce site contient des easter egg <a
+                    href="https://berru-g.github.io/console-interactive/" title="easter egg #4">Egg#4</a>
             </div>
     </footer>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

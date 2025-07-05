@@ -237,25 +237,57 @@ document.getElementById("launch-quiz").addEventListener("click", launchQuiz);
 
 // FAQ
 document.querySelectorAll('.faq-question').forEach(button => {
-  button.addEventListener('click', () => {
-    const answer = button.nextElementSibling;
+    button.addEventListener('click', () => {
+        const answer = button.nextElementSibling;
 
-    // Ferme toutes les autres réponses
-    document.querySelectorAll('.faq-answer').forEach(a => {
-      if (a !== answer) {
-        a.style.maxHeight = null;
-        a.style.opacity = 0;
-      }
+        // Ferme toutes les autres réponses
+        document.querySelectorAll('.faq-answer').forEach(a => {
+            if (a !== answer) {
+                a.style.maxHeight = null;
+                a.style.opacity = 0;
+            }
+        });
+
+        // Toggle la réponse cliquée
+        if (answer.style.maxHeight) {
+            answer.style.maxHeight = null;
+            answer.style.opacity = 0;
+        } else {
+            answer.style.maxHeight = answer.scrollHeight + "px";
+            answer.style.opacity = 1;
+        }
     });
-
-    // Toggle la réponse cliquée
-    if (answer.style.maxHeight) {
-      answer.style.maxHeight = null;
-      answer.style.opacity = 0;
-    } else {
-      answer.style.maxHeight = answer.scrollHeight + "px";
-      answer.style.opacity = 1;
-    }
-  });
 });
 
+// tips toast
+const tips = [
+    "💡 75% des internautes jugent une entreprise à son site.",
+    "📱 Un site responsive est indispensable en 2025.",
+    "🚀 Un site rapide augmente vos chances de conversion de 2x.",
+    "🎯 Un appel à l’action clair booste vos demandes de devis.",
+    "👁️‍🗨️ Less is more : un design épuré est souvent plus impactant.",
+    "🔒 La sécurité (https) inspire confiance à vos visiteurs.",
+    "📊 53% des visiteurs quittent un site qui met plus de 3 secondes à charger. (Google, 2023)",
+    "🛒 78% des clients vérifient un site avant d’acheter, même en magasin physique. (RetailDive)",
+    "📱 En 2025, 75% du trafic web viendra des mobiles. (Statista)",
+    "🎨 94% des premières impressions sont liées au design d’un site. (ResearchGate)",
+    "🔍 75% des utilisateurs ne cliquent que sur les 5 premiers résultats Google. (Advanced Web Ranking)",
+    "🔒 85% des acheteurs en ligne évitent les sites non sécurisés (sans HTTPS). (GlobalSign)"
+];
+
+function showToast(message) {
+    const toast = document.createElement("div");
+    toast.className = "custom-toast";
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        toast.remove();
+    }, 6000);
+}
+
+document.getElementById("show-tip").addEventListener("click", (e) => {
+    e.preventDefault();
+    console.log("Bouton cliqué !");
+    const randomTip = tips[Math.floor(Math.random() * tips.length)];
+    showToast(randomTip);
+});
