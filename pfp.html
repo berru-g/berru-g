@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>PFP Generator</title>
+    <style>
+        body{font-family:'Comic Sans MS',cursive;background:#f0f8ff;text-align:center}#pfp-canvas{border:5px solid #000;background:#fff;margin:20px;image-rendering:pixelated;border-radius:12px}.berru-btn{background:linear-gradient(45deg,#8a2be2,#ff10f0);border:3px solid #000;padding:10px 20px;font-weight:700;margin:10px;transform:rotate(-2deg);cursor:pointer;border-radius:12px;transition:.5s;transform-origin:top left;box-shadow:3px 3px 5px rgba(0,0,0,.3)}.berru-btn.clicked{transform:rotate(75deg) translateY(20px);box-shadow:5px 10px 8px rgba(0,0,0,.4);animation:1.5s forwards fallAndWobble;box-shadow:8px 15px 10px rgba(0,0,0,.4)}@keyframes fallAndWobble{0%{transform:rotate(-2deg)}30%{transform:rotate(80deg) translateY(10px)}50%{transform:rotate(70deg) translateY(15px)}70%{transform:rotate(80deg) translateY(15px)}100%,85%{transform:rotate(75deg) translateY(15px)}}
+    </style>
+</head>
+<body>
+    <h1>PFP GENERATOR</h1>
+    <canvas id="pfp-canvas" width="200" height="200"></canvas>
+    <br>
+    <button class="berru-btn" id="myBtn" onclick="generateMooPFP()">GÉNÉRER UN berru-PFP</button>
+    <script>
+        const canvas = document.getElementById('pfp-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function generateMooPFP() {
+            // Effacer le canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Fond aléatoire
+            ctx.fillStyle = `hsl(${Math.random() * 360}, 70%, 80%)`;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // Tête de vache (carrée pour le style pixel)
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(50, 50, 100, 100);
+            // Taches de vache (aléatoires)
+            ctx.fillStyle = '#000000';
+            for (let i = 0; i < 5; i++) {
+                const x = 50 + Math.random() * 100;
+                const y = 50 + Math.random() * 100;
+                ctx.beginPath();
+                ctx.arc(x, y, 5 + Math.random() * 10, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            // Texte $BERRUDENG
+            ctx.font = 'bold 16px Arial';
+            ctx.fillStyle = '#8A2BE2';
+            ctx.fillText('$BERRUDENG', 60, 180);
+        }
+        // Générer un PFP au chargement
+        generateMooPFP();
+        // effet btn
+        const btn = document.getElementById('myBtn');
+        btn.addEventListener('click', function () {
+            this.classList.toggle('clicked');
+            // Optionnel : Revenir à l'état initial après 2 secondes
+            setTimeout(() => {
+                this.classList.remove('clicked');
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
