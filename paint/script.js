@@ -12,6 +12,7 @@ resizeCanvas();
 // Tools
 let currentTool = "brush";
 let drawing = false;
+let startX, startY; // Pour les formes
 
 const colorPicker = document.getElementById("colorPicker");
 const clearBtn = document.getElementById("clearBtn");
@@ -32,30 +33,150 @@ function getCursorPos(e) {
 
 // Dessin
 function startDraw(e) {
-  drawing = true;
   const { x, y } = getCursorPos(e);
-  ctx.beginPath();
-  ctx.moveTo(x, y);
-  draw(e);
+  startX = x;
+  startY = y;
+  
+  if (currentTool === "brush" || currentTool === "eraser") {
+    drawing = true;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    draw(e);
+  } else if (currentTool === "fill") {
+    floodFill(x, y, colorPicker.value);
+  } else {
+    drawing = true;
+  }
 }
 
 function stopDraw() {
+  if (!drawing) return;
+  
+  if (currentTool === "rectangle") {
+    drawRectangle();
+  } else if (currentTool === "circle") {
+    drawCircle();
+  }
+  
   drawing = false;
-  ctx.beginPath();
 }
 
 function draw(e) {
   if (!drawing) return;
-  const { x, y } = getCursorPos(e);
+  
+  if (currentTool === "brush" || currentTool === "eraser") {
+    const { x, y } = getCursorPos(e);
 
-  ctx.lineWidth = brushSize;
-  ctx.lineCap = "round";
-  ctx.strokeStyle = currentTool === "eraser" ? "#fff" : colorPicker.value;
+    ctx.lineWidth = brushSize;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = currentTool === "eraser" ? "#fff" : colorPicker.value;
 
-  ctx.lineTo(x, y);
-  ctx.stroke();
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  }
+}
+
+// Fonction pour dessiner un rectangle
+function drawRectangle() {
+  const { x, y } = getCursorPos(event);
+  
   ctx.beginPath();
-  ctx.moveTo(x, y);
+  ctx.lineWidth = brushSize;
+  ctx.strokeStyle = colorPicker.value;
+  ctx.fillStyle = colorPicker.value;
+  
+  const width = x - startX;
+  const height = y - startY;
+  
+  ctx.rect(startX, startY, width, height);
+  ctx.fill();
+  ctx.stroke();
+}
+
+// Fonction pour dessiner un cercle
+function drawCircle() {
+  const { x, y } = getCursorPos(event);
+  
+  ctx.beginPath();
+  ctx.lineWidth = brushSize;
+  ctx.strokeStyle = colorPicker.value;
+  ctx.fillStyle = colorPicker.value;
+  
+  const radius = Math.sqrt(Math.pow(x - startX, 2) + Math.pow(y - startY, 2));
+  
+  ctx.arc(startX, startY, radius, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+}
+
+// Algorithme de remplissage (flood fill)
+function floodFill(startX, startY, fillColor) {
+  const pixelStack = [[startX, startY]];
+  const canvasWidth = canvas.width;
+  const canvasHeight = canvas.height;
+  
+  // Créer une image des pixels actuels
+  const imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+  const pixels = imageData.data;
+  
+  // Convertir la couleur de départ en RGBA
+  const startPos = (Math.floor(startY) * canvasWidth + Math.floor(startX)) * 4;
+  const startR = pixels[startPos];
+  const startG = pixels[startPos + 1];
+  const startB = pixels[startPos + 2];
+  const startA = pixels[startPos + 3];
+  
+  // Convertir la couleur de remplissage en RGBA
+  const hexToRgb = (hex) => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return [r, g, b, 255];
+  };
+  
+  const fillRgba = hexToRgb(fillColor);
+  
+  // Si la couleur de départ est la même que la couleur de remplissage, on ne fait rien
+  if (startR === fillRgba[0] && startG === fillRgba[1] && startB === fillRgba[2]) {
+    return;
+  }
+  
+  while (pixelStack.length) {
+    const newPos = pixelStack.pop();
+    const x = newPos[0];
+    const y = newPos[1];
+    
+    // Obtenir la position actuelle dans le tableau de pixels
+    const pixelPos = (Math.floor(y) * canvasWidth + Math.floor(x)) * 4;
+    
+    // Vérifier si on est dans les limites
+    if (x < 0 || x >= canvasWidth || y < 0 || y >= canvasHeight) continue;
+    
+    // Vérifier si le pixel correspond à la couleur de départ
+    const r = pixels[pixelPos];
+    const g = pixels[pixelPos + 1];
+    const b = pixels[pixelPos + 2];
+    const a = pixels[pixelPos + 3];
+    
+    if (r === startR && g === startG && b === startB && a === startA) {
+      // Définir la nouvelle couleur
+      pixels[pixelPos] = fillRgba[0];
+      pixels[pixelPos + 1] = fillRgba[1];
+      pixels[pixelPos + 2] = fillRgba[2];
+      pixels[pixelPos + 3] = fillRgba[3];
+      
+      // Ajouter les pixels voisins à la pile
+      pixelStack.push([x + 1, y]);
+      pixelStack.push([x - 1, y]);
+      pixelStack.push([x, y + 1]);
+      pixelStack.push([x, y - 1]);
+    }
+  }
+  
+  // Mettre à jour le canvas avec les nouveaux pixels
+  ctx.putImageData(imageData, 0, 0);
 }
 
 // Events

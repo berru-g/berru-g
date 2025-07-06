@@ -5,6 +5,7 @@
     dev by berru-g
     07/25
 -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,97 +13,6 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <style>
-        #login-overlay {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            bottom: 0 !important;
-            background-color: hsla(0, 0%, 86%, 0.179);
-            backdrop-filter: blur(8px) !important;
-            z-index: 9999 !important;
-            /* Très élevé */
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        #login-overlay.active {
-            opacity: 1 !important;
-            visibility: visible !important;
-        }
-
-        #login-container {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            text-align: center !important;
-            width: 300px !important;
-            z-index: 10000 !important;
-            /* Plus élevé que l'overlay */
-        }
-        h2 {
-            color: grey;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-            font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-        }
-        #password-input {
-            width: 90%;
-            padding: 12px 15px;
-            margin: 0.5rem 0 1rem;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border 0.3s;
-        }
-
-        #submit-btn {
-            width: 100%;
-            padding: 12px;
-            background: #ab9ff2;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-        }
-
-        #submit-btn:hover {
-            background: grey !important;
-        }
-
-        .error-message {
-            color: red !important;
-            margin-top: 10px !important;
-            display: none !important;
-        }
-
-        /* Style pour SweetAlert */
-        .swal2-container {
-            padding-top: 20px !important;
-            align-items: flex-start !important;
-            z-index: 10001 !important;
-            /* Le plus élevé */
-        }
-
-        /* Masquer l'appli avant connexion */
-        .app-content {
-            display: none;
-        }
-
-        /* Afficher après connexion */
-        .authenticated .app-content {
-            display: block;
-        }
-    </style>
 </head>
 
 <body>
@@ -119,15 +29,20 @@
             <input type="range" id="brushSize" min="1" max="40" value="5">
             <button data-tool="eraser" title="Gomme"><i class="fas fa-eraser"></i></button>
             <input type="color" id="colorPicker" title="Couleur">
+            <button data-tool="fill" title="Pot de peinture"><i class="fas fa-fill-drip"></i></button>
+            <button data-tool="rectangle" title="Rectangle"><i class="fas fa-square"></i></button>
+            <button data-tool="circle" title="Cercle"><i class="fas fa-circle"></i></button>
             <button id="clearBtn" title="Effacer"><i class="fas fa-trash"></i></button>
             <button id="saveBtn" title="Sauvegarder"><i class="fas fa-save"></i></button>
+            
         </div>
     </div>
 
     <!-- Overlay de connexion -->
     <div id="login-overlay">
         <div id="login-container">
-            <i class="fas fa-shield-alt logo" style="display: block; margin: 0 auto; width: 80px; height: auto; color: #ab9ff2;"></i>
+            <i class="fas fa-shield-alt logo"
+                style="display: block; margin: 0 auto; width: 80px; height: auto; color: #ab9ff2;"></i>
             <h2>Connexion</h2>
             <input type="password" id="password-input" placeholder="mdp">
             <button id="submit-btn" class="valider">Valider</button>

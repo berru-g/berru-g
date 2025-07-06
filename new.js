@@ -272,6 +272,7 @@ const tips = [
     "📱 En 2025, 75% du trafic web viendra des mobiles. (Statista)",
     "🎨 94% des premières impressions sont liées au design d’un site. (ResearchGate)",
     "🔍 75% des utilisateurs ne cliquent que sur les 5 premiers résultats Google. (Advanced Web Ranking)",
+    "🥚 Ce site contient 7 Easter Egg ( curiosité à découvrir )",
     "🔒 85% des acheteurs en ligne évitent les sites non sécurisés (sans HTTPS). (GlobalSign)"
 ];
 
