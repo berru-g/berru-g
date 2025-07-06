@@ -2,8 +2,6 @@
 <html lang="fr">
 <!--
     Pour que ma nièce s'occupe en voiture
-    dev by berru-g
-    07/25
 -->
 
 <head>
@@ -23,18 +21,27 @@
 
         <canvas id="paintCanvas"></canvas>
 
-        <div class="toolbar">
-            <button data-tool="brush" title="Pinceau"><i class="fas fa-paint-brush"></i></button>
-            <button id="sizeBtn" title="Épaisseur"><i class="fa-solid fa-brush"></i></button>
-            <input type="range" id="brushSize" min="1" max="40" value="5">
-            <button data-tool="eraser" title="Gomme"><i class="fas fa-eraser"></i></button>
-            <input type="color" id="colorPicker" title="Couleur">
-            <button data-tool="fill" title="Pot de peinture"><i class="fas fa-fill-drip"></i></button>
-            <button data-tool="rectangle" title="Rectangle"><i class="fas fa-square"></i></button>
-            <button data-tool="circle" title="Cercle"><i class="fas fa-circle"></i></button>
-            <button id="clearBtn" title="Effacer"><i class="fas fa-trash"></i></button>
-            <button id="saveBtn" title="Sauvegarder"><i class="fas fa-save"></i></button>
-            
+        <div class="toolbar-container">
+            <div class="toolbar-handle">
+                <i class="fas fa-chevron-up"></i>
+            </div>
+
+            <div class="toolbar">
+                <button data-tool="brush" title="Pinceau"><i class="fas fa-paint-brush"></i></button>
+                <button id="sizeBtn" title="Épaisseur"><i class="fa-solid fa-brush"></i></button>
+                <input type="range" id="brushSize" min="1" max="40" value="5">
+                <button data-tool="eraser" title="Gomme"><i class="fas fa-eraser"></i></button>
+                <input type="color" id="colorPicker" title="Couleur">
+                <button data-tool="fill" title="Pot de peinture"><i class="fas fa-fill-drip"></i></button>
+                <button data-tool="rectangle" title="Rectangle"><i class="fas fa-square"></i></button>
+                <button data-tool="circle" title="Cercle"><i class="fas fa-circle"></i></button>
+                <button data-tool="text" title="Texte"><i class="fas fa-font"></i></button>
+                <button id="clearBtn" title="Effacer"><i class="fas fa-trash"></i></button>
+                <button id="saveBtn" title="Sauvegarder"><i class="fas fa-save"></i></button>
+                <button id="undoBtn" title="Annuler"><i class="fas fa-undo"></i></button>
+                <button id="redoBtn" title="Rétablir"><i class="fas fa-redo"></i></button>
+                <a href="https://gael-berru.netlify.app"><button id="#" title="berru-g"><i class="fas fa-code"></i></button></a>
+            </div>
         </div>
     </div>
 
