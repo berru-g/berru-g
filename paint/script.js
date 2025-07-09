@@ -41,6 +41,7 @@ function resizeCanvas() {
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
 
+
 // Tools
 let currentTool = "brush";
 let drawing = false;

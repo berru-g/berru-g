@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist Mise en Ligne</title>
+   <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="left">
+            <img src="https://gael-berru.netlify.app/img/wamcache.png" alt="Logo">
+            <div class="info">
+                <strong>Projet : golden dessert</strong>
+                <a href="https://gael-berru.netlify.app" target="_blank">https://gael-berru.net</a>
+            </div>
+        </div>
+        <div id="progress">
+            <svg class="progress-circle" viewBox="0 0 36 36">
+                <path fill="none" stroke="#eee" stroke-width="4"
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path id="progress-path" fill="none" stroke="#6c63ff" stroke-width="4" stroke-dasharray="0, 100"
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            </svg>
+            <span id="percent">0%</span>
+        </div>
+        <div id="time-counter">
+            <div>Temps passé: <span id="time-spent">0h</span></div>
+            <div>Temps restant: <span id="time-remaining">0h</span></div>
+        </div>
+    </header>
+    <div class="section">
+        <h2>📝 Contenu</h2>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Textes des pages<br><span class="details">Rédaction et
+                    intégration</span><span class="time">~2h</span></label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Images<br><span class="details">Sélection et optimisation</span><span
+                    class="time">~1h</span></label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Liens externes<br><span class="details">Vérification et
+                    intégration</span><span class="time">~30min</span></label>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>💻 Développement</h2>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Page d'accueil<br><span class="details">Développement HTML/CSS/JS</span><span
+                    class="time">~3h</span></label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Page À propos<br><span class="details">Développement HTML/CSS/JS</span><span
+                    class="time">~2h</span></label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Galerie<br><span class="details">Développement HTML/CSS/JS</span><span
+                    class="time">~4h</span></label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Page de contact<br><span class="details">Développement
+                    HTML/CSS/JS</span><span class="time">~3h</span></label>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🧱 Site Statique</h2>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Réservation du nom de domaine<br><span class="details">Achat du domaine et
+                    configuration DNS</span><span class="time">~1h</span></label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Mise en place de l'hébergement<br><span class="details">Hébergement mutualisé
+                    ou VPS simple</span><span class="time">~2h</span></label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Sécurisation HTTPS<br><span class="details">Installation d'un certificat SSL
+                    (Let's Encrypt)</span><span class="time">~1h</span></label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Transfert des fichiers<br><span class="details">Upload via FTP, structure
+                    OK</span><span class="time">~1h</span></label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Vérification responsive<br><span class="details">Tests mobiles et
+                    navigateurs</span><span class="time">~1h</span></label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>SEO de base<br><span class="details">Balises titre, description,
+                    favicon</span><span class="time">~1h</span></label>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>⚙️ Site Dynamique (en plus)</h2>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Configuration de la base de données<br><span class="details">MySQL/PostgreSQL
+                    + utilisateur</span><span class="time">~1h</span></label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Import des tables<br><span class="details">Import .sql via
+                    phpMyAdmin</span><span class="time">~30min</span></label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Connexion site → base<br><span class="details">Fichiers `.env`,
+                    `config.php`</span><span class="time">~1h</span></label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Formulaire connecté<br><span class="details">Vérification et insertion en
+                    base</span><span class="time">~2h</span></label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Envoi de mails<br><span class="details">PHPMailer ou `mail()`</span><span
+                    class="time">~1h</span></label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Interface admin<br><span class="details">Login sécurisé et accès
+                    restreint</span><span class="time">~2h</span></label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Tests fonctionnels<br><span class="details">Fonctionnement, sécurité,
+                    validations</span><span class="time">~1h</span></label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox"> <label>Statistiques<br><span class="details">Google Analytics, Matomo…</span><span
+                    class="time">~30min</span></label>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
