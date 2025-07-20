@@ -1,0 +1,149 @@
+:root {
+    --bg: #1e1e1e;
+    --text: #ccc;
+    --border: #ab9ff2;
+    --accent: #61dafb;
+    --input-bg: #1e1e1e;
+    --preview-bg: #fff;
+}
+
+body.light {
+    --bg: #f9f9f9;
+    --text: #222;
+    --border: #ccc;
+    --accent: #ab9ff2;
+    --input-bg: #fff;
+    --preview-bg: #f0f0f0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Fira Code', monospace;
+    background-color: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background-color: var(--bg);
+    color: var(--text);
+    text-align: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 1.3rem;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    margin-right: 10px;
+}
+
+.controls button {
+    background: none;
+    border: 1px solid var(--text);
+    color: var(--text);
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background 0.3s;
+}
+
+.controls button:hover {
+    background: var(--border);
+}
+
+
+/* editeur */
+.main-layout {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.editor-panel {
+    background-color: var(--input-bg);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.editor-block {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+label {
+    color: var(--accent);
+    font-size: 0.9rem;
+}
+
+/* Textareas style */
+textarea.editor {
+    background-color: var(--bg);
+    color: var(--text);
+    border-radius: 5px;
+    padding: 10px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9rem;
+    resize: vertical;
+    min-height: 150px;
+    line-height: 1.5;
+}
+
+textarea.editor:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px #007acc33;
+}
+
+/* Output panel */
+.preview-panel {
+    flex: 1;
+    border-top: 1px solid #333;
+    background-color: #fff;
+}
+
+.preview-panel iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Desktop layout */
+@media (min-width: 700px) {
+    .main-layout {
+        flex-direction: row;
+    }
+
+    .editor-panel {
+        width: 35%;
+        height: 100%;
+        border-right: 1px solid #333;
+        overflow-y: auto;
+    }
+
+    .preview-panel {
+        width: 65%;
+        height: 100%;
+        border-top: none;
+    }
+}
