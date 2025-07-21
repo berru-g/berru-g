@@ -1,6 +1,146 @@
+<!-- ✅ Version pimpée avec CodeMirror, thème dynamique, sauvegarde, coloration custom sans rien casser -->
 <!DOCTYPE html>
 <html lang="fr">
 
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Éditeur HTML/CSS/JS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+  <!-- CodeMirror CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/material.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/eclipse.min.css">
+  <style>
+    .CodeMirror {
+      border-radius: 5px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      background-color: var(--bg);
+      color: var(--text);
+      caret-color: var(--text);
+      min-height: 150px;
+    }
+    .cm-tag { color: #4aa3ff; }
+    .cm-attribute { color: #ffe100; }
+    .cm-string { color: #a6e22e; }
+    .cm-bracket { color: #ff5e99; }
+    .cm-qualifier { color: #ffe100; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Live Code Editor</h1>
+    <div class="controls">
+      <button id="themeToggle"><i class="fa-solid fa-palette"></i> Thème</button>
+      <button id="reset"><i class="fa-solid fa-trash-arrow-up"></i> Reset</button>
+      <button id="save"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+      <a href="https://github.com/berru-g/berru-g/blob/main/codepen/"><button>⬅️ Berru</button></a>
+    </div>
+  </header>
+
+  <div class="main-layout">
+    <div class="editor-panel">
+      <div class="editor-block">
+        <label for="htmlEditor">HTML</label>
+        <textarea id="htmlEditor" placeholder="Dev by berru-g"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"><h1>Mise en abyme of a code editor</h1></textarea>
+      </div>
+      <div class="editor-block">
+        <label for="cssEditor">CSS</label>
+        <textarea id="cssEditor">h1, p {
+  color: #ab9ff2;
+  text-align: center;
+  margin-top: 40px;
+}</textarea>
+      </div>
+    </div>
+    <div class="preview-panel">
+      <iframe id="preview"></iframe>
+    </div>
+  </div>
+
+  <!-- CodeMirror JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/htmlmixed/htmlmixed.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/css/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/matchbrackets.min.js"></script>
+
+  <script>
+    const htmlEditor = CodeMirror.fromTextArea(document.getElementById("htmlEditor"), {
+      mode: "htmlmixed",
+      theme: "material",
+      lineNumbers: true,
+      tabSize: 2,
+      autoCloseBrackets: true,
+      matchBrackets: true
+    });
+
+    const cssEditor = CodeMirror.fromTextArea(document.getElementById("cssEditor"), {
+      mode: "css",
+      theme: "material",
+      lineNumbers: true,
+      tabSize: 2,
+      autoCloseBrackets: true,
+      matchBrackets: true
+    });
+
+    const iframe = document.getElementById("preview");
+
+    function updatePreview() {
+      const html = htmlEditor.getValue();
+      const css = cssEditor.getValue();
+      const content = `
+        <html>
+          <head><style>${css}</style></head>
+          <body>${html}</body>
+        </html>
+      `;
+      const preview = iframe.contentDocument || iframe.contentWindow.document;
+      preview.open();
+      preview.write(content);
+      preview.close();
+    }
+
+    htmlEditor.on("change", updatePreview);
+    cssEditor.on("change", updatePreview);
+
+    // LocalStorage save/load
+    if (localStorage.getItem("htmlCode")) htmlEditor.setValue(localStorage.getItem("htmlCode"));
+    if (localStorage.getItem("cssCode")) cssEditor.setValue(localStorage.getItem("cssCode"));
+
+    htmlEditor.on("change", () => localStorage.setItem("htmlCode", htmlEditor.getValue()));
+    cssEditor.on("change", () => localStorage.setItem("cssCode", cssEditor.getValue()));
+
+    document.getElementById("reset").addEventListener("click", () => {
+      localStorage.clear();
+      htmlEditor.setValue("");
+      cssEditor.setValue("");
+      updatePreview();
+    });
+
+    // Theme switch
+    let isDark = true;
+    document.getElementById("themeToggle").addEventListener("click", () => {
+      isDark = !isDark;
+      const theme = isDark ? "material" : "eclipse";
+      htmlEditor.setOption("theme", theme);
+      cssEditor.setOption("theme", theme);
+      document.body.classList.toggle("light");
+    });
+
+    updatePreview();
+  </script>
+</body>
+
+</html>
+
+<!--<!DOCTYPE html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,9 +158,6 @@
             <a href="../index.html"><button>⬅️ Berru</button></a>
         </div>
     </header>
-
-
-
     <div class="main-layout">
         <div class="editor-panel">
             <div class="editor-block">
@@ -42,5 +179,4 @@
     </div>
     <script src="script.js"></script>
 </body>
-
-</html>
+</html>-->
