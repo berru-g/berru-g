@@ -1,7 +1,13 @@
 <?php
-// Connexion DB nb: créer un config pour cacher les log 
-$pdo = new PDO('mysql:host=localhost;dbname= u446441289_berru_g_devis', 'root', 'root');
+/* Connexion DB test. pour le deploy créer un config pour cacher les log 
+$pdo = new PDO('mysql:host=localhost;dbname= u446441289_berru_g_devis', 'root', 'root');*/
+$dbHost = getenv('DB_HOST');
+$dbName = getenv('DB_NAME');
+$dbUser = getenv('DB_USER');
+$dbPass = getenv('DB_PASS');
 
+$pdo = new PDO("mysql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
+// step 2 restreindre l'accés IP et utiliser un préfixe de table perso
 // Récupération des données
 $data = [
     'numero' => $_POST['numero'],
