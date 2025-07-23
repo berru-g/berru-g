@@ -1,8 +1,9 @@
-CREATE DATABASE IF NOT EXISTS `berru-g-devis` 
+CREATE DATABASE IF NOT EXISTS ` u446441289_berru_g_devis
+` 
 CHARACTER SET utf8mb4 
 COLLATE utf8mb4_unicode_ci;  /* Meilleur support Unicode */
 
-USE `berru-g-devis`;
+USE ` u446441289_berru_g_devis`;
 
 CREATE TABLE IF NOT EXISTS `devis` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
