@@ -94,6 +94,7 @@ header h1 {
 label {
     color: var(--accent);
     font-size: 0.9rem;
+    height: 45%;
 }
 
 /* Textareas style */
@@ -105,7 +106,7 @@ textarea.editor {
     font-family: 'Fira Code', monospace;
     font-size: 0.9rem;
     resize: vertical;
-    min-height: 150px;
+    min-height: 250px;
     line-height: 1.5;
 }
 

@@ -1,6 +1,6 @@
 <?php
 // Connexion DB nb: créer un config pour cacher les log 
-$pdo = new PDO('mysql:host=localhost;dbname=berru-g-devis', 'root', 'root');
+$pdo = new PDO('mysql:host=localhost;dbname= u446441289_berru_g_devis', 'root', 'root');
 
 // Récupération des données
 $data = [
