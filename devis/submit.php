@@ -1,7 +1,7 @@
 <?php
 /* Connexion DB test. pour le deploy créer un config pour cacher les log 
 $pdo = new PDO('mysql:host=localhost;dbname= namedevis', 'root', 'root');*/
-$env = parse_ini_file(__DIR__.'/.env');
+$env = parse_ini_file(__DIR__.'/config-secret.php');
 $dbHost = getenv('DB_HOST');
 $dbName = getenv('DB_NAME');
 $dbUser = getenv('DB_USER');
