@@ -1,17 +1,15 @@
 <?php
-// Désactive l'affichage des erreurs (logs cachés)
-error_reporting(0);
+// Désactive l'affichage des erreurs (mais les loggue)
+error_reporting(E_ALL);
 ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__.'/php_errors.log');
 
-// 1. Charge la config DB depuis config-secret.php
+// 1. Charge la config
 $env = parse_ini_file(__DIR__.'/config-secret.php');
-
 if (!$env) {
     header('Content-Type: application/json');
-    echo json_encode([
-        'success' => false,
-        'error' => 'Erreur: Fichier config-secret.php introuvable ou invalide'
-    ]);
+    echo json_encode(['success' => false, 'error' => 'Config manquante']);
     exit;
 }
 
@@ -21,26 +19,16 @@ try {
         "mysql:host={$env['DB_HOST']};dbname={$env['DB_NAME']};charset=utf8mb4",
         $env['DB_USER'],
         $env['DB_PASS'],
-        [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-        ]
+        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
     );
 
-    // 3. Récupère les données du formulaire (noms exacts de ton HTML)
-    $requiredFields = ['numero', 'date', 'client_nom', 'client_email', 'total'];
-    foreach ($requiredFields as $field) {
-        if (empty($_POST[$field])) {
-            throw new Exception("Le champ $field est requis");
-        }
-    }
-
+    // 3. Prépare les données (adapté à ta structure DB)
     $data = [
         'numero' => $_POST['numero'],
-        'date' => $_POST['date'], // Format d/m/Y comme dans ton HTML
+        'date_devis' => DateTime::createFromFormat('d/m/Y', $_POST['date'])->format('Y-m-d'),
         'client_nom' => $_POST['client_nom'],
         'client_email' => $_POST['client_email'],
-        'total' => $_POST['total'],
+        'total' => (float)str_replace(['€', ' '], '', $_POST['total']),
         'developpement_vitrine' => isset($_POST['developpement_vitrine']) ? 1 : 0,
         'formulaire_simple' => isset($_POST['formulaire_simple']) ? 1 : 0,
         'formulaire_complexe' => isset($_POST['formulaire_complexe']) ? 1 : 0,
@@ -51,47 +39,42 @@ try {
         'hebergement' => isset($_POST['hebergement']) ? 1 : 0
     ];
 
-    // 4. Insertion en DB
-    $stmt = $pdo->prepare("
-        INSERT INTO devis (
-            numero, date, client_nom, client_email, total,
-            developpement_vitrine, formulaire_simple, formulaire_complexe,
-            optimisation_seo, systeme_paiement, interface_admin,
-            nom_domaine, hebergement, date_creation
-        ) VALUES (
-            :numero, :date, :client_nom, :client_email, :total,
-            :developpement_vitrine, :formulaire_simple, :formulaire_complexe,
-            :optimisation_seo, :systeme_paiement, :interface_admin,
-            :nom_domaine, :hebergement, NOW()
-        )
-    ");
+    // 4. Requête SQL EXACTEMENT adaptée à ta table
+    $sql = "INSERT INTO devis (
+        numero, date_devis, client_nom, client_email, total,
+        developpement_vitrine, formulaire_simple, formulaire_complexe,
+        optimisation_seo, systeme_paiement, interface_admin,
+        nom_domaine, hebergement
+    ) VALUES (
+        :numero, :date_devis, :client_nom, :client_email, :total,
+        :developpement_vitrine, :formulaire_simple, :formulaire_complexe,
+        :optimisation_seo, :systeme_paiement, :interface_admin,
+        :nom_domaine, :hebergement
+    )";
+
+    $stmt = $pdo->prepare($sql);
     $stmt->execute($data);
 
-    // 5. Envoi de l'email
-    $services = [
-        'developpement_vitrine' => "Site vitrine (550 €)",
-        'formulaire_simple' => "Formulaire simple (50 €)",
-        'formulaire_complexe' => "Formulaire + BDD (400 €)",
-        'optimisation_seo' => "Optimisation SEO (100 €)",
-        'systeme_paiement' => "Système de paiement (500 €)",
-        'interface_admin' => "Interface admin (100 €/an)",
-        'nom_domaine' => "Nom de domaine (10 €/an)",
-        'hebergement' => "Hébergement (80 €/an)"
-    ];
-
+    // 5. Envoi d'email (version simplifiée)
     $message = "Nouveau devis #{$data['numero']}\n\n";
     $message .= "Client: {$data['client_nom']}\n";
     $message .= "Email: {$data['client_email']}\n";
-    $message .= "Date: {$data['date']}\n\n";
-    $message .= "Services:\n";
-
+    $message .= "Total: {$_POST['total']}\n\n";
+    
+    $services = [
+        'developpement_vitrine' => "Site vitrine",
+        'formulaire_simple' => "Formulaire simple",
+        'formulaire_complexe' => "Formulaire complexe",
+        'optimisation_seo' => "Optimisation SEO",
+        'systeme_paiement' => "Système de paiement",
+        'interface_admin' => "Interface admin",
+        'nom_domaine' => "Nom de domaine",
+        'hebergement' => "Hébergement"
+    ];
+    
     foreach ($services as $key => $label) {
-        if ($data[$key] == 1) {
-            $message .= "- $label\n";
-        }
+        if ($data[$key]) $message .= "- $label\n";
     }
-
-    $message .= "\nTotal: {$data['total']}\n";
 
     $headers = "From: noreply@gael-berru.com\r\n" .
                "Reply-To: {$data['client_email']}\r\n" .
@@ -101,17 +84,17 @@ try {
 
     // 6. Réponse JSON
     header('Content-Type: application/json');
-    echo json_encode(['success' => true, 'redirect' => 'merci.html']);
-    exit;
+    echo json_encode(['success' => true, 'redirect' => '../index.html']);
 
-} catch (Exception $e) {
-    // Gestion centralisée des erreurs (renvoie toujours du JSON)
+} catch (PDOException $e) {
+    error_log("Erreur DB: ".$e->getMessage());
     header('Content-Type: application/json');
     http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'error' => 'Erreur: ' . $e->getMessage()
-    ]);
-    exit;
+    echo json_encode(['success' => false, 'error' => 'Erreur base de données']);
+} catch (Exception $e) {
+    error_log("Erreur générale: ".$e->getMessage());
+    header('Content-Type: application/json');
+    http_response_code(500);
+    echo json_encode(['success' => false, 'error' => 'Erreur du serveur']);
 }
 ?>
