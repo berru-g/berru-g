@@ -85,7 +85,6 @@ document.addEventListener('DOMContentLoaded', function() {
 document.getElementById('devisForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
-    // Préparer les données
     const formData = new FormData();
     formData.append('numero', document.getElementById('invoice-number').textContent);
     formData.append('date', document.getElementById('invoice-date').textContent);
@@ -93,24 +92,44 @@ document.getElementById('devisForm').addEventListener('submit', function(e) {
     formData.append('client_email', document.getElementById('client-email').value);
     formData.append('total', document.getElementById('invoice-total').textContent);
     
-    // Ajouter chaque checkbox
-    document.querySelectorAll('.item').forEach(item => {
-        const name = item.dataset.label.toLowerCase().replace(/ /g, '_');
-        formData.append(name, item.checked ? '1' : '0');
+    // Ajout systématique de toutes les checkboxes
+    const checkboxes = {
+        'site_vitrine': 'Développement site vitrine',
+        'formulaire_simple': 'Formulaire simple',
+        'formulaire_et_bdd': 'Formulaire et bdd',
+        'optimisation_seo': 'Optimisation SEO',
+        'systeme_de_paiement': 'Système de paiement',
+        'interface_administrative': 'Interface administrative',
+        'nom_de_domaine': 'Nom de domaine',
+        'hebergement': 'Hébergement'
+    };
+
+    Object.keys(checkboxes).forEach(key => {
+        const el = document.querySelector(`input[data-label="${checkboxes[key]}"]`);
+        formData.append(key, el.checked ? '1' : '0');
     });
 
-    // Envoyer
     fetch('submit.php', {
         method: 'POST',
         body: formData
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) throw new Error('Erreur réseau');
+        return response.json();
+    })
     .then(data => {
-        alert('Devis envoyé avec succès !');
-        localStorage.setItem('factureCount', parseInt(factureCount) + 1);
-        location.reload();
+        if (data.success) {
+            alert('Devis envoyé avec succès !');
+            localStorage.setItem('factureCount', parseInt(factureCount) + 1);
+            if (data.redirect) {
+                window.location.href = data.redirect;
+            }
+        } else {
+            throw new Error(data.error || 'Erreur inconnue');
+        }
     })
     .catch(error => {
+        console.error('Erreur:', error);
         alert('Erreur: ' + error.message);
     });
 });
