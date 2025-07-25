@@ -1,11 +1,10 @@
-CREATE DATABASE IF NOT EXISTS ` u446441289_berru_g_devis
-` 
+CREATE DATABASE IF NOT EXISTS `u667977963_devis` 
 CHARACTER SET utf8mb4 
 COLLATE utf8mb4_unicode_ci;  /* Meilleur support Unicode */
 
-USE ` u446441289_berru_g_devis`;
+USE `u667977963_devis`;
 
-CREATE TABLE IF NOT EXISTS `devis` (
+CREATE TABLE IF NOT EXISTS `u667977963_devis` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `numero` VARCHAR(20) NOT NULL,
   `date_devis` DATE NOT NULL,
