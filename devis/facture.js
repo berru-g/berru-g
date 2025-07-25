@@ -92,15 +92,15 @@ document.getElementById('devisForm').addEventListener('submit', function(e) {
     formData.append('client_email', document.getElementById('client-email').value);
     formData.append('total', document.getElementById('invoice-total').textContent);
     
-    // Ajout systématique de toutes les checkboxes
+    // Arrete de copier coller tes ancien projet les nom ne correspondent plus et tu te fais baiser ç chaque fois, vas te coucher
     const checkboxes = {
-        'site_vitrine': 'Développement site vitrine',
+        'developpement_vitrine': 'Développement site vitrine',
         'formulaire_simple': 'Formulaire simple',
-        'formulaire_et_bdd': 'Formulaire et bdd',
+        'formulaire_complexe': 'Formulaire et bdd',
         'optimisation_seo': 'Optimisation SEO',
-        'systeme_de_paiement': 'Système de paiement',
-        'interface_administrative': 'Interface administrative',
-        'nom_de_domaine': 'Nom de domaine',
+        'systeme_paiement': 'Système de paiement',
+        'interface_admin': 'Interface administrative',
+        'nom_domaine': 'Nom de domaine',
         'hebergement': 'Hébergement'
     };
 
