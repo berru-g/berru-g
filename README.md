@@ -2,7 +2,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <body>
 <h3 align="left">I'm not a developer, I code for fun when I have time.</h3>
-<h4 align="left">Skills ➡️ Full stack, Stripe, Supabase, auth, front, debug, design…</h4>
+
 
     npm like list
       +-- learn@7.7.7 
