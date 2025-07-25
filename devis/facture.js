@@ -87,7 +87,7 @@ document.getElementById('devisForm').addEventListener('submit', function(e) {
     
     const formData = new FormData();
     formData.append('numero', document.getElementById('invoice-number').textContent);
-    formData.append('date', document.getElementById('invoice-date').textContent);
+    formData.append('date_devis', document.getElementById('invoice-date').textContent);
     formData.append('client_nom', document.getElementById('client-name').value);
     formData.append('client_email', document.getElementById('client-email').value);
     formData.append('total', document.getElementById('invoice-total').textContent);
