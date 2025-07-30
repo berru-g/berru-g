@@ -1,63 +1,16 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /board/
     
-    # Bloque l'accès direct aux fichiers sensibles
-    <FilesMatch "\.(php|ini|log|htaccess)$">
+    # Bloquer l'accès direct aux includes
+    RewriteRule ^includes/ - [F,L]
+    
+    # Protection des fichiers sensibles
+    <FilesMatch "^(config|db_config)\.php$">
         Require all denied
     </FilesMatch>
     
-    # Exceptions pour les fichiers nécessaires
-    <Files "login.php">
-        Require all granted
-    </Files>
-    
-    # Protection contre les injections
-    RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
-    RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
-    RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2})
-    RewriteRule ^(.*)$ - [F,L]
-    
-    # Empêche le listage des répertoires
-    Options -Indexes
-    
-    # Cache les fichiers sensibles
-    <FilesMatch "\.(db_config|config)\.php$">
-        Order allow,deny
-        Deny from all
-    </FilesMatch>
-    
-    # Protection contre les attaques par force brute
-    # (À combiner avec votre système de session existant)
-    <Limit POST>
-        # 5 requêtes POST par minute depuis une même IP
-        SetEnvIf X-Forwarded-For "^(\d+\.\d+\.\d+\.\d+)" client_ip=$1
-        SetEnvIfNoCase REMOTE_ADDR "^(\d+\.\d+\.\d+\.\d+)" client_ip=$1
-        
-        # Compteur de requêtes
-        RewriteMap bruteforcecounter txt:/path/to/bf_counter.map
-        RewriteCond ${bruteforcecounter:%{ENV:client_ip}|NOTFOUND} ^([0-9]+)$
-        RewriteRule ^ - [E=BF_COUNT:%1]
-        
-        RewriteCond %{ENV:BF_COUNT} ^5$
-        RewriteRule ^ - [F,L]
-    </Limit>
-    
-    # Redirection vers login.php pour les URLs non existantes
+    # Redirection propre
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule . login.php [L]
+    RewriteRule ^(.*)$ /login.php [L]
 </IfModule>
-
-# Headers de sécurité supplémentaires
-<IfModule mod_headers.c>
-    Header always set X-Content-Type-Options "nosniff"
-    Header always set X-Frame-Options "SAMEORIGIN"
-    Header always set X-XSS-Protection "1; mode=block"
-    Header always set Referrer-Policy "strict-origin-when-cross-origin"
-</IfModule>
-
-# Désactive l'exécution PHP dans les répertoires uploads
-<DirectoryMatch "uploads">
-    php_flag engine off
-</DirectoryMatch>
