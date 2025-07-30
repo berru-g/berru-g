@@ -33,7 +33,17 @@ try {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+    <!-- amCharts -->
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <style>
+        .chart {
+            width: 100%;
+            height: 400px;
+            margin-bottom: 30px;
+        }
+    </style>
 </head>
 
 <body>
@@ -54,7 +64,7 @@ try {
                         <a href="bdd-2.php"><i class="fas fa-table"></i> Bdd Agora</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fas fa-chart-line"></i> Statistiques</a>
+                        <a href="stat.php"><i class="fas fa-chart-line"></i> Statistiques</a>
                     </li>
                     <li>
                         <a href="./facture.html"><i class="fas fa-file-invoice"></i> Factures</a>

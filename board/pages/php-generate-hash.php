@@ -35,15 +35,6 @@ require_once __DIR__ . '/../includes/header.php';
             --success: #3ad38b;
         }
 
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: var(--background);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
 
         .container {
             background: white;
