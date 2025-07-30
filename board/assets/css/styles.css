@@ -420,10 +420,37 @@ table {
     width: 100%;
     border-collapse: collapse;
 }
+.tab-container {
+    display: flex;
+    margin-bottom: 20px;
+}
+.tab-btn {
+    padding: 10px 20px;
+    background: #f1f1f1;
+    border: none;
+    cursor: pointer;
+}
+.tab-btn.active {
+    background: #6c5ce7;
+    color: white;
+}
+.tab-content {
+    display: none;
+}
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.data-table th, .data-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
 
 th, td {
     padding: 1rem;
     text-align: left;
+    max-height: 50px;
     border-bottom: 1px solid var(--border-color);
 }
 

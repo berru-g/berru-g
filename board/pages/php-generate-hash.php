@@ -1,4 +1,8 @@
 <?php
+$title = "Hash generator";
+require_once __DIR__ . '/../includes/header.php';
+
+
 $generatedHash = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['password'])) {
     $password = $_POST['password'];
