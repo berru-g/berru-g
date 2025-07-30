@@ -1,16 +1,11 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    RewriteBase /
     
-    # Bloquer l'accès direct aux includes
-    RewriteRule ^includes/ - [F,L]
+    # Autoriser l'accès aux fichiers existants
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
     
-    # Protection des fichiers sensibles
-    <FilesMatch "^(config|db_config)\.php$">
-        Require all denied
-    </FilesMatch>
-    
-    # Redirection propre
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
+    # Rediriger toutes les autres requêtes
     RewriteRule ^(.*)$ /login.php [L]
 </IfModule>
