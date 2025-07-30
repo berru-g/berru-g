@@ -453,9 +453,7 @@ th, td {
     
     border-bottom: 1px solid var(--border-color);
 }
-td {
-    max-height: 50px;
-}
+
 th {
     background: var(--primary-color);
     color: white;
@@ -463,7 +461,7 @@ th {
     position: relative;
     cursor: pointer;
     user-select: none;
-    max-height: 50px;
+
 }
 
 th i {
@@ -478,7 +476,9 @@ th:hover {
 tr:nth-child(even) {
     background: #f8f9fa;
 }
-
+tr:nth-child(even):hover {
+    background: #a3c7ea;
+}
 tr:hover {
     background: rgba(108, 92, 231, 0.05);
 }
