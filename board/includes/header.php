@@ -51,7 +51,7 @@ try {
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <h1><i class="fas fa-database"></i> GDbdd</h1>
+                <h1><i class="fas fa-database"></i> BDD</h1>
                 <p class="version">v2.0</p>
             </div>
 
@@ -62,6 +62,12 @@ try {
                     </li>
                     <li class="<?= basename($_SERVER['PHP_SELF']) === 'bdd-2.php' ? 'active' : '' ?>">
                         <a href="bdd-2.php"><i class="fas fa-table"></i> Bdd Agora</a>
+                    </li>
+                    <li class="<?= basename($_SERVER['PHP_SELF']) === 'bdd-2.php' ? 'active' : '' ?>">
+                        <a href="bdd-2.php"><i class="fas fa-table"></i> Bdd Pixel</a>
+                    </li>
+                    <li class="<?= basename($_SERVER['PHP_SELF']) === 'bdd-2.php' ? 'active' : '' ?>">
+                        <a href="bdd-2.php"><i class="fas fa-table"></i> Bdd 4</a>
                     </li>
                     <li>
                         <a href="stat.php"><i class="fas fa-chart-line"></i> Statistiques</a>
@@ -94,7 +100,7 @@ try {
                     <button id="mobileMenuBtn" class="mobile-menu-btn">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h2>Fullbdd</h2>
+                    <h2>Full Data</h2>
                 </div>
 
                 <div class="header-right">

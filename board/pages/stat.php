@@ -1,118 +1,122 @@
 <?php
+// Active le debuggage
 ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-$title = "Tableau de bord statistique";
+$title = "Statistiques";
 require_once __DIR__.'/../includes/header.php';
 
-// 1. Récupération des données avec gestion d'erreur
+// 1. Charge les configs EXISTANTES
+$config1 = require __DIR__.'/../db_config.php';
+$config2 = require __DIR__.'/../db2_config.php';
+
+// 2. Connexion aux BDD (sans modifier votre structure)
 try {
-    // Données pour graphiques
-    $stats = [
-        'contacts' => $pdo->query("
-            SELECT DATE(created_at) as date, COUNT(*) as count 
-            FROM contacts 
-            GROUP BY DATE(created_at)
-            LIMIT 7
-        ")->fetchAll(),
-        
-        'comments' => $pdo2->query("
-            SELECT u.name, COUNT(c.id) as comment_count
-            FROM users u
-            LEFT JOIN comments c ON c.user_id = u.id
-            GROUP BY u.id
-            LIMIT 10
-        ")->fetchAll(),
-        
-        // KPIs
-        'total_contacts' => $pdo->query("SELECT COUNT(*) FROM contacts")->fetchColumn(),
-        'active_users' => $pdo2->query("
-            SELECT COUNT(*) 
-            FROM users 
-            WHERE last_login > NOW() - INTERVAL 30 DAY
-        ")->fetchColumn()
-    ];
+    // BDD 1 (principale)
+    $pdo1 = new PDO(
+        "mysql:host={$config1['host']};dbname={$config1['db']};charset={$config1['charset']}",
+        $config1['user'],
+        $config1['pass']
+    );
+    
+    // BDD 2 (messagerie)
+    $pdo2 = new PDO(
+        "mysql:host={$config2['host']};dbname={$config2['db']};charset={$config2['charset']}",
+        $config2['user'],
+        $config2['pass']
+    );
+
+    // 3. Récupère les données
+    $contacts = $pdo1->query("SELECT DATE(created_at) as date, COUNT(*) as count FROM contacts GROUP BY date LIMIT 7")->fetchAll();
+    $users = $pdo2->query("SELECT name, COUNT(comments.id) as comments FROM users LEFT JOIN comments ON users.id = comments.user_id GROUP BY users.id LIMIT 5")->fetchAll();
 
 } catch (PDOException $e) {
-    die("<div class='error'>Erreur SQL: " . $e->getMessage() . "</div>");
+    die("Erreur BDD: " . $e->getMessage());
 }
 ?>
 
+<!-- Intègre amCharts -->
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
 <div class="content-body">
-    <h2>Statistiques combinées</h2>
+    <h2>Statistiques</h2>
+
+    <!-- Graphique Contacts -->
+    <div id="chartContacts" style="width:100%; height:400px;"></div>
     
-    <!-- KPIs -->
-    <div class="kpi-cards">
-        <div class="kpi">
-            <h3>Contacts total</h3>
-            <p><?= htmlspecialchars($stats['total_contacts']) ?></p>
-        </div>
-        <div class="kpi">
-            <h3>Utilisateurs actifs</h3>
-            <p><?= htmlspecialchars($stats['active_users']) ?></p>
-        </div>
-    </div>
-    
-    <!-- Graphiques -->
-    <div id="chartContacts" class="chart"></div>
-    <div id="chartComments" class="chart"></div>
+    <!-- Graphique Utilisateurs -->
+    <div id="chartUsers" style="width:100%; height:400px;"></div>
 </div>
 
 <script>
-// Données sécurisées pour JS
-const statsData = <?= json_encode($stats) ?>;
+// Données PHP -> JS
+const stats = {
+    contacts: <?= json_encode($contacts) ?>,
+    users: <?= json_encode($users) ?>
+};
 
 // Graphique Contacts
 am5.ready(function() {
-    const root = am5.Root.new("chartContacts");
+    let root = am5.Root.new("chartContacts");
     root.setThemes([am5.themes.Animated.new(root)]);
     
-    const chart = root.container.children.push(
-        am5xy.XYChart.new(root, {
-            panX: false,
-            panY: false
-        })
-    );
+    let chart = root.container.children.push(am5xy.XYChart.new(root, {}));
     
-    // Configuration des axes...
-    const xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+    // Axe X
+    let xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
         categoryField: "date",
         renderer: am5xy.AxisRendererX.new(root, {})
     }));
     
-    const yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+    // Axe Y
+    let yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
         renderer: am5xy.AxisRendererY.new(root, {})
     }));
     
-    const series = chart.series.push(am5xy.ColumnSeries.new(root, {
+    // Série
+    let series = chart.series.push(am5xy.ColumnSeries.new(root, {
         xAxis: xAxis,
         yAxis: yAxis,
         valueYField: "count",
         categoryXField: "date"
     }));
     
-    series.data.setAll(statsData.contacts);
-    xAxis.data.setAll(statsData.contacts);
+    series.data.setAll(stats.contacts);
+    xAxis.data.setAll(stats.contacts);
 });
 
-// Graphique Commentaires
+// Graphique Utilisateurs
 am5.ready(function() {
-    const root = am5.Root.new("chartComments");
+    let root = am5.Root.new("chartUsers");
     root.setThemes([am5.themes.Animated.new(root)]);
     
-    const chart = root.container.children.push(
-        am5percent.PieChart.new(root, {
-            layout: root.verticalLayout
-        })
-    );
+    let chart = root.container.children.push(am5xy.XYChart.new(root, {}));
     
-    const series = chart.series.push(
-        am5percent.PieSeries.new(root, {
-            valueField: "comment_count",
-            categoryField: "name"
-        })
-    );
+    // Axe X
+    let xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+        categoryField: "name",
+        renderer: am5xy.AxisRendererX.new(root, {})
+    }));
     
-    series.data.setAll(statsData.comments);
+    // Axe Y
+    let yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+        renderer: am5xy.AxisRendererY.new(root, {})
+    }));
+    
+    // Série
+    let series = chart.series.push(am5xy.ColumnSeries.new(root, {
+        xAxis: xAxis,
+        yAxis: yAxis,
+        valueYField: "comments",
+        categoryXField: "name"
+    }));
+    
+    series.data.setAll(stats.users);
+    xAxis.data.setAll(stats.users);
 });
 </script>
+
+<?php require_once __DIR__.'/../includes/footer.php'; ?>
