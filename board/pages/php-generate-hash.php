@@ -34,10 +34,16 @@ require_once __DIR__ . '/../includes/header.php';
             --border: #ddd;
             --success: #3ad38b;
         }
-
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
         .container {
-            background: white;
+            display: flex;
+            margin: 0 auto;
+            background: transparent;
             padding: 2rem;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
