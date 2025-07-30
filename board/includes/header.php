@@ -5,12 +5,11 @@ if (!isset($_SESSION['admin_logged_in'])) {
     exit();
 }
 
-// Configuration UNIQUE de la base de données
 try {
     $dbConfig = require __DIR__ . '/db_config.php';
     $pdo = new PDO(
-        "mysql:host={$dbConfig['host']};dbname={$dbConfig['db']};charset={$dbConfig['charset']}",
-        $dbConfig['user'],
+        "mysql:host={$dbConfig['host']};dbname={$dbConfig['db']};charset={$dbConfig['charset']}", 
+        $dbConfig['user'], 
         $dbConfig['pass'],
         [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -18,8 +17,7 @@ try {
         ]
     );
 } catch (PDOException $e) {
-    //die("Erreur de connexion à la base de données");
-    // error_log($e->getMessage()); // Pour le débogage
+    error_log('Database error: ' . $e->getMessage());
     header('Location: error.php?code=db');
     exit();
 }

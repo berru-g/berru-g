@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /admin/
+    RewriteBase /board/
     
     # Bloque l'accès direct aux fichiers sensibles
     <FilesMatch "\.(php|ini|log|htaccess)$">

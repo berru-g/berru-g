@@ -1,6 +1,6 @@
 <?php
 $title = "Base de données 1";
-require __DIR__.'/../includes/header.php';
+require __DIR__.'/includes/header.php';
 
 try {
     $messages = $pdo->query("SELECT * FROM contacts ORDER BY created_at DESC")->fetchAll();
