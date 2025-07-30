@@ -11,11 +11,18 @@ if (!isset($_SESSION['login_attempts'])) {
 }
 
 // Vérifie si l'utilisateur est bloqué
-$block_duration = 1800; // 30 minutes en secondes
-if ($_SESSION['login_attempts'] >= 3 && (time() - $_SESSION['last_attempt_time']) < $block_duration) {
-    $remaining_time = $block_duration - (time() - $_SESSION['last_attempt_time']);
-    $error = "Trop de tentatives. Réessayez dans ".gmdate("i\m s\s", $remaining_time);
-} 
+$block_duration = 1800; // 30 minutes
+
+if ($_SESSION['login_attempts'] >= 3) {
+    if ((time() - $_SESSION['last_attempt_time']) < $block_duration) {
+        $error = "Trop de tentatives. Réessayez dans ".gmdate("i\m s\s", $remaining_time);
+        // Bloquer l'accès
+    } else {
+        // Réinitialiser après le délai
+        $_SESSION['login_attempts'] = 0;
+    }
+}
+
 else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Réinitialise le compteur si le délai est expiré
     if ((time() - $_SESSION['last_attempt_time']) > $block_duration) {
@@ -26,7 +33,7 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Réussite : réinitialise le compteur
         $_SESSION['login_attempts'] = 0;
         $_SESSION['admin_logged_in'] = true;
-        header('Location: dashboard.php');
+        header('Location: pages/bdd-1.php');
         exit();
     } else {
         // Échec : incrémente le compteur

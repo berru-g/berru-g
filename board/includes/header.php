@@ -6,11 +6,9 @@ if (!isset($_SESSION['admin_logged_in'])) {
 }
 
 // Configuration de la base de données
-$host = 'localhost';
-$db = 'u667977963_golden_dessert';
-$user = 'u667977963_berru_nico';
-$pass = 'm@bddSQL25';
-$charset = 'utf8mb4';
+$dbConfig = require __DIR__ . '/db_config.php';
+$pdo = new PDO("mysql:host={$dbConfig['host']};dbname={$dbConfig['db']};charset={$dbConfig['charset']}", 
+               $dbConfig['user'], $dbConfig['pass']);
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$db;charset=$charset", $user, $pass, [
@@ -18,6 +16,7 @@ try {
     ]);
 } catch (PDOException $e) {
     die("Erreur DB : " . $e->getMessage());
+    //error_log($e->getMessage());
 }
 ?>
 <!DOCTYPE html>
