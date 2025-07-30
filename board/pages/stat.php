@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 $title = "Tableau de bord statistique";
-require_once __DIR__.'/../includes/_header.php';
+require_once __DIR__.'/../includes/header.php';
 
 // 1. Récupération des données avec gestion d'erreur
 try {

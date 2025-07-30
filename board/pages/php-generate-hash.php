@@ -41,7 +41,7 @@ require_once __DIR__ . '/../includes/header.php';
 }
 
         .container {
-            display: flex;
+            display: block;
             margin: 0 auto;
             background: transparent;
             padding: 2rem;
