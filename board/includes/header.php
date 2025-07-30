@@ -33,7 +33,7 @@ try {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="/board/assets/js/script2.js"></script>
+    
 </head>
 
 <body>
@@ -97,6 +97,11 @@ try {
                         <button id="exportJsonBtn" class="action-btn export" title="Exporter">
                             <i class="fas fa-file-export"></i>
                         </button>
+
+                        <div class="notification-badge" id="unreadBadge" title="Messages non lus">
+                            <i class="fas fa-envelope"></i>
+                            <span id="unreadCount"><?= $unread_count ?></span>
+                        </div>
                     </div>
                 </div>
             </header>
