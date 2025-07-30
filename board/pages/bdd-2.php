@@ -8,7 +8,7 @@ require_once __DIR__ . '/../includes/header.php';
 
 // Connexion sécurisée
 try {
-    $config2 = require __DIR__ . '/../config2.php';
+    $config2 = require __DIR__ . '/../db2_config.php';
     
     $dsn = "mysql:host={$config2['host']};dbname={$config2['db']};charset={$config2['charset']}";
     $pdo2 = new PDO($dsn, $config2['user'], $config2['pass'], [
@@ -32,6 +32,33 @@ try {
     die("<div class='error'>Erreur critique : " . $e->getMessage() . "</div>");
 }
 ?>
+<style>::after.tab-container {
+    display: flex;
+    margin-bottom: 20px;
+}
+.tab-btn {
+    padding: 10px 20px;
+    background: #f1f1f1;
+    border: none;
+    cursor: pointer;
+}
+.tab-btn.active {
+    background: #6c5ce7;
+    color: white;
+}
+.tab-content {
+    display: none;
+}
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.data-table th, .data-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+</style>
 
 <div class="content-body">
     <?php foreach ($data as $table => $rows): ?>
