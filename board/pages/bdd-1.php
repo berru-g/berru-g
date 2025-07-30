@@ -1,9 +1,5 @@
 <?php
-session_start();
-if (!isset($_SESSION['admin_logged_in'])) {
-    header('Location: login.php');
-    exit();
-}
+
 $title = "Base de données 1";
 require __DIR__ . '/../includes/header.php';
 require __DIR__ . '/../db_config.php';
