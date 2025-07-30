@@ -63,11 +63,11 @@ try {
                     <li class="<?= basename($_SERVER['PHP_SELF']) === 'bdd-2.php' ? 'active' : '' ?>">
                         <a href="bdd-2.php"><i class="fas fa-table"></i> Bdd Agora</a>
                     </li>
-                    <li class="<?= basename($_SERVER['PHP_SELF']) === 'bdd-2.php' ? 'active' : '' ?>">
-                        <a href="bdd-2.php"><i class="fas fa-table"></i> Bdd Pixel</a>
+                    <li class="<?= basename($_SERVER['PHP_SELF']) === 'bdd-3.php' ? 'active' : '' ?>">
+                        <a href="bdd-3.php"><i class="fas fa-table"></i> Bdd Pixel</a>
                     </li>
-                    <li class="<?= basename($_SERVER['PHP_SELF']) === 'bdd-2.php' ? 'active' : '' ?>">
-                        <a href="bdd-2.php"><i class="fas fa-table"></i> Bdd 4</a>
+                    <li class="<?= basename($_SERVER['PHP_SELF']) === 'bdd-4.php' ? 'active' : '' ?>">
+                        <a href="bdd-4.php"><i class="fas fa-table"></i> Bdd 4</a>
                     </li>
                     <li>
                         <a href="stat.php"><i class="fas fa-chart-line"></i> Statistiques</a>
