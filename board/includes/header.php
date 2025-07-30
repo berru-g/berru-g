@@ -33,6 +33,7 @@ try {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/board/assets/js/script2.js"></script>
 </head>
 
 <body>
@@ -47,10 +48,10 @@ try {
             <nav class="sidebar-nav">
                 <ul>
                     <li class="<?= basename($_SERVER['PHP_SELF']) === 'bdd-1.php' ? 'active' : '' ?>">
-                        <a href="bdd-1.php"><i class="fas fa-table"></i> Base de données 1</a>
+                        <a href="bdd-1.php"><i class="fas fa-table"></i> Bdd Golden</a>
                     </li>
                     <li class="<?= basename($_SERVER['PHP_SELF']) === 'bdd-2.php' ? 'active' : '' ?>">
-                        <a href="bdd-2.php"><i class="fas fa-table"></i> Base de données 2</a>
+                        <a href="bdd-2.php"><i class="fas fa-table"></i> Bdd Agora</a>
                     </li>
                     <li>
                         <a href="#"><i class="fas fa-chart-line"></i> Statistiques</a>
