@@ -1,0 +1,16 @@
+# admin/.htaccess for host
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /admin/  # Important si ton admin est dans un sous-dossier
+    
+    # Exclude actual files and directories from rewrite
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    
+    # Rewrite all other queries to login.php
+    RewriteRule . login.php [L]
+</IfModule>
+
+# Protection brute force
+# par la suite limiter les tentatives avec session ou blocage IP après X essais

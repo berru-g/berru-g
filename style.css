@@ -427,6 +427,10 @@ strong {
     font-size: 1.4rem;
 }
 
+.zoom:hover {
+    transform: scale(2);
+}
+
 /* REALISATIONS SECTION - Avec screenshots */
 .projects-section {
     padding: 60px 0;
