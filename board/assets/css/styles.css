@@ -425,7 +425,6 @@ table {
 th, td {
     padding: 1rem;
     text-align: left;
-    max-height: 40px;
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -456,6 +455,9 @@ tr:hover {
     background: rgba(108, 92, 231, 0.05);
 }
 
+.message-row {
+    max-height: 60px;
+}
 .message-row.unread {
     background: rgba(253, 203, 110, 0.1) !important;
     font-weight: 500;
