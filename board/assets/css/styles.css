@@ -476,9 +476,7 @@ th:hover {
 tr:nth-child(even) {
     background: #f8f9fa;
 }
-tr:nth-child(even):hover {
-    background: #a3c7ea;
-}
+
 tr:hover {
     background: rgba(108, 92, 231, 0.05);
 }
