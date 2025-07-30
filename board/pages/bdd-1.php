@@ -2,7 +2,9 @@
 
 $title = "Base de données 1";
 require __DIR__ . '/../includes/header.php';
-require __DIR__ . '/../db_config.php';
+$dbConfig = require __DIR__ . '/db_config.php';
+$pdo = new PDO("mysql:host={$dbConfig['host']};dbname={$dbConfig['db']};charset={$dbConfig['charset']}", 
+               $dbConfig['user'], $dbConfig['pass']);
 
 // Récupérer les données spécifiques à cette base
 $messages = $pdo->query("SELECT * FROM contacts ORDER BY created_at DESC")->fetchAll();
