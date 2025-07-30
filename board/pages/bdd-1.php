@@ -1,11 +1,27 @@
 <?php
+session_start();
+if (!isset($_SESSION['admin_logged_in'])) {
+    header('Location: login.php');
+    exit();
+}
 $title = "Base de données 1";
 require __DIR__ . '/../includes/header.php';
+require __DIR__ . '/../db_config.php';
 
 // Récupérer les données spécifiques à cette base
 $messages = $pdo->query("SELECT * FROM contacts ORDER BY created_at DESC")->fetchAll();
 $unread_count = $pdo->query("SELECT COUNT(*) FROM contacts WHERE is_read = 0")->fetchColumn();
 $total_messages = count($messages);
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=$charset", $user, $pass, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    ]);// récupérer l'état 'is_read'
+    $messages = $pdo->query("SELECT * FROM contacts ORDER BY created_at DESC")->fetchAll();
+    $unread_count = $pdo->query("SELECT COUNT(*) FROM contacts WHERE is_read = 0")->fetchColumn();
+    $total_messages = count($messages);
+} catch (PDOException $e) {
+    die("Erreur DB : " . $e->getMessage());
+}
 ?>
 
 <div class="content-body">
