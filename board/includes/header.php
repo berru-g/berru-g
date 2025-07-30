@@ -59,6 +59,9 @@ try {
                     <li>
                         <a href="./facture.html"><i class="fas fa-file-invoice"></i> Factures</a>
                     </li>
+                    <li>
+                        <a href="./php-generate-hash.php"><i class="fa-solid fa-hashtag"></i> Hash</a>
+                    </li>
                 </ul>
             </nav>
 
@@ -81,7 +84,7 @@ try {
                     <button id="mobileMenuBtn" class="mobile-menu-btn">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h2>InterSQL</h2>
+                    <h2>Fullbdd</h2>
                 </div>
 
                 <div class="header-right">

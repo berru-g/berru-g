@@ -33,7 +33,7 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Réussite : réinitialise le compteur
         $_SESSION['login_attempts'] = 0;
         $_SESSION['admin_logged_in'] = true;
-        header('Location: /berru-g/board/pages/bdd-1.php');
+        header('Location: /board/pages/bdd-1.php');
         exit();
     } else {
         // Échec : incrémente le compteur
