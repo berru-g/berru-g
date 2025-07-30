@@ -1,5 +1,4 @@
-</main>
-</div>
+
 <div class="table-footer">
     <div class="table-info">
         Affichage de <span id="startItem">1</span> à <span id="endItem">10</span> sur <span
@@ -26,7 +25,7 @@
 </main>
 </div>
 
-<script src="../script2.js"></script>
+<script src="/board/assets/js/script2.js"></script>
 </body>
 
 </html>
