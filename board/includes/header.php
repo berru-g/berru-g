@@ -1,9 +1,9 @@
 <?php
-require_once __DIR__.'/../includes/_auth.php';
+require_once __DIR__ . '/../includes/_auth.php';
 
 // Configuration DB unique
 try {
-    $dbConfig = require __DIR__.'/../db_config.php';
+    $dbConfig = require __DIR__ . '/../db_config.php';
     $pdo = new PDO(
         "mysql:host={$dbConfig['host']};dbname={$dbConfig['db']};charset={$dbConfig['charset']}",
         $dbConfig['user'],
@@ -14,7 +14,7 @@ try {
         ]
     );
 } catch (PDOException $e) {
-    error_log('DB Error: '.$e->getMessage());
+    error_log('DB Error: ' . $e->getMessage());
     header('Location: /error.php?code=db');
     exit();
 }
@@ -29,7 +29,7 @@ try {
     <link rel="shortcut icon" href="../logobdd.png" />
     <link rel="apple-touch-icon" href="../logobdd.png" />
     <meta name="description" content="Tableau de bord admin">
-    <link href="/assets/css/styles.css" rel="stylesheet">
+    <link href="/board/assets/css/styles.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
