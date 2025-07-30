@@ -1,24 +1,15 @@
 <?php
-
 $title = "Base de données 1";
-require __DIR__ . '/../includes/header.php';
-$dbConfig = require __DIR__ . '/db_config.php';
-$pdo = new PDO("mysql:host={$dbConfig['host']};dbname={$dbConfig['db']};charset={$dbConfig['charset']}", 
-               $dbConfig['user'], $dbConfig['pass']);
+require __DIR__.'/../includes/header.php';
 
-// Récupérer les données spécifiques à cette base
-$messages = $pdo->query("SELECT * FROM contacts ORDER BY created_at DESC")->fetchAll();
-$unread_count = $pdo->query("SELECT COUNT(*) FROM contacts WHERE is_read = 0")->fetchColumn();
-$total_messages = count($messages);
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=$charset", $user, $pass, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    ]);// récupérer l'état 'is_read'
     $messages = $pdo->query("SELECT * FROM contacts ORDER BY created_at DESC")->fetchAll();
     $unread_count = $pdo->query("SELECT COUNT(*) FROM contacts WHERE is_read = 0")->fetchColumn();
     $total_messages = count($messages);
 } catch (PDOException $e) {
-    die("Erreur DB : " . $e->getMessage());
+    error_log('Query error: ' . $e->getMessage());
+    header('Location: error.php?code=query');
+    exit();
 }
 ?>
 

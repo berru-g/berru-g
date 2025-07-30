@@ -5,22 +5,28 @@ if (!isset($_SESSION['admin_logged_in'])) {
     exit();
 }
 
-// Configuration de la base de données
-$dbConfig = require __DIR__ . '/db_config.php';
-$pdo = new PDO("mysql:host={$dbConfig['host']};dbname={$dbConfig['db']};charset={$dbConfig['charset']}", 
-               $dbConfig['user'], $dbConfig['pass']);
-
+// Configuration UNIQUE de la base de données
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=$charset", $user, $pass, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    ]);
+    $dbConfig = require __DIR__ . '/db_config.php';
+    $pdo = new PDO(
+        "mysql:host={$dbConfig['host']};dbname={$dbConfig['db']};charset={$dbConfig['charset']}",
+        $dbConfig['user'],
+        $dbConfig['pass'],
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+        ]
+    );
 } catch (PDOException $e) {
-    die("Erreur DB : " . $e->getMessage());
-    //error_log($e->getMessage());
+    //die("Erreur de connexion à la base de données");
+    // error_log($e->getMessage()); // Pour le débogage
+    header('Location: error.php?code=db');
+    exit();
 }
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard | GDbdd</title>
@@ -28,11 +34,12 @@ try {
     <link rel="shortcut icon" href="../logobdd.png" />
     <link rel="apple-touch-icon" href="../logobdd.png" />
     <meta name="description" content="Tableau de bord admin">
-    <link href="../styles.css" rel="stylesheet">
+    <link href="../board/styles.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body>
     <div class="admin-container">
         <!-- Sidebar Navigation -->
@@ -41,7 +48,7 @@ try {
                 <h1><i class="fas fa-database"></i> GDbdd</h1>
                 <p class="version">v2.0</p>
             </div>
-            
+
             <nav class="sidebar-nav">
                 <ul>
                     <li class="<?= basename($_SERVER['PHP_SELF']) === 'bdd-1.php' ? 'active' : '' ?>">
@@ -58,7 +65,7 @@ try {
                     </li>
                 </ul>
             </nav>
-            
+
             <div class="sidebar-footer">
                 <a href="logout.php" class="logout-btn">
                     <i class="fas fa-sign-out-alt"></i> Déconnexion
@@ -80,13 +87,13 @@ try {
                     </button>
                     <h2>InterSQL</h2>
                 </div>
-                
+
                 <div class="header-right">
                     <div class="search-box">
                         <i class="fas fa-search"></i>
                         <input type="text" id="searchInput" placeholder="Rechercher...">
                     </div>
-                    
+
                     <div class="header-actions">
                         <button id="importJsonBtn" class="action-btn import" title="Importer">
                             <i class="fas fa-file-import"></i>
