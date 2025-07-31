@@ -6,12 +6,12 @@ error_reporting(E_ALL);
 
 $title = "Statistiques";
 require_once __DIR__.'/../includes/header.php';
-
+require_once __DIR__.'/../includes/function.php';
 // 1. Charge les configs EXISTANTES
 $config1 = require __DIR__.'/../db_config.php';
 $config2 = require __DIR__.'/../db2_config.php';
 
-/* 2. Connexion aux BDD (sans modifier votre structure)
+// 2. Connexion aux BDD (sans modifier votre structure)
 try {
     // BDD 1 (principale)
     $pdo1 = new PDO(
@@ -33,16 +33,8 @@ try {
 
 } catch (PDOException $e) {
     die("Erreur BDD: " . $e->getMessage());
-}*/
-// Connexion sécurisée
-try {
-    $config2 = require __DIR__ . '/../db2_config.php';
-    
-    $dsn = "mysql:host={$config2['host']};dbname={$config2['db']};charset={$config2['charset']}";
-    $pdo2 = new PDO($dsn, $config2['user'], $config2['pass'], [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-    ]);
+}
+
 // Récupération des stats globales
 $stats = [];
 // Récupérer le top des utilisateurs actifs
@@ -106,7 +98,7 @@ foreach ($top_active_users as &$user) {
     $user['xp_percentage'] = $level_info['xp_percentage'];
 }
 
-}
+
 require_once '../includes/header.php';
 ?>
 <div class="container">
