@@ -51,7 +51,7 @@ try {
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <h1><i class="fas fa-database"></i> BDD</h1>
+                <h1><i class="fas fa-database"></i> Data</h1>
                 <p class="version">v2.0</p>
             </div>
 
@@ -100,7 +100,7 @@ try {
                     <button id="mobileMenuBtn" class="mobile-menu-btn">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h2>Full Data</h2>
+                    <h2>Dashboard</h2>
                 </div>
 
                 <div class="header-right">

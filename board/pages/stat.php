@@ -38,7 +38,7 @@ try {
 // Récupération des stats globales
 $stats = [];
 // Récupérer le top des utilisateurs actifs
-$top_active_users = getTopActiveUsers($pdo, 5);
+//$top_active_users = getTopActiveUsers($pdo, 5);
 // Utilisateurs
 $stats['total_users'] = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
 $stats['new_users_last_30'] = $pdo->query("SELECT COUNT(*) FROM users WHERE created_at >= NOW() - INTERVAL 30 DAY")->fetchColumn();
