@@ -1,4 +1,33 @@
 <?php
+require_once 'db.php';
+
+// Fonction pour vérifier si un utilisateur est connecté
+function isLoggedIn()
+{
+    return isset($_SESSION['user_id']);
+}
+
+// refresh
+function refreshUserData() {
+    if (isLoggedIn()) {
+        $_SESSION['user_data'] = getUserById($_SESSION['user_id']);
+        return $_SESSION['user_data'];
+    }
+    return null;
+}
+// Protection des URLs
+function safe_url($path) {
+    $base = rtrim(BASE_URL, '/');
+    $path = ltrim($path, '/');
+    
+    // Validation des caractères autorisés
+    if (!preg_match('/^[a-zA-Z0-9\-_\/\.]+$/', $path)) {
+        error_log("Tentative de path traversal: " . $_SERVER['REMOTE_ADDR']);
+        $path = 'index.php'; // Fallback sécurisé
+    }
+    
+    return htmlspecialchars($base . '/' . $path, ENT_QUOTES, 'UTF-8');
+}
 
 // Fonction pour obtenir les informations de l'utilisateur
 function getUserById($id) {
@@ -8,6 +37,34 @@ function getUserById($id) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+// Fonction pour ajouter un commentaire ( cohérence avec la table gael putain!!!!)
+function addComment($user_id, $content, $parent_id = null, $file_path = null, $file_type = null)
+{
+    global $pdo;
+    $stmt = $pdo->prepare("INSERT INTO comments (user_id, content, parent_id, file_path, file_type, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
+    return $stmt->execute([$user_id, $content, $parent_id, $file_path, $file_type]);
+}
+
+
+// Fonction pour liker un commentaire
+function likeComment($user_id, $comment_id)
+{
+    global $pdo;
+
+    // Vérifier si l'utilisateur a déjà liké ce commentaire
+    $stmt = $pdo->prepare("SELECT id FROM likes WHERE user_id = ? AND comment_id = ?");
+    $stmt->execute([$user_id, $comment_id]);
+
+    if ($stmt->rowCount() > 0) {
+        // Retirer le like
+        $stmt = $pdo->prepare("DELETE FROM likes WHERE user_id = ? AND comment_id = ?");
+        return $stmt->execute([$user_id, $comment_id]);
+    } else {
+        // Ajouter le like
+        $stmt = $pdo->prepare("INSERT INTO likes (user_id, comment_id) VALUES (?, ?)");
+        return $stmt->execute([$user_id, $comment_id]);
+    }
+}
 // pour voir si user à liké ou non le post
 function hasUserLiked($commentId, $userId)
 {

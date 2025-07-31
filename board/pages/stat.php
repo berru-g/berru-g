@@ -29,7 +29,7 @@ try {
 
     // 3. Récupère les données
     $contacts = $pdo1->query("SELECT DATE(created_at) as date, COUNT(*) as count FROM contacts GROUP BY date LIMIT 7")->fetchAll();
-    $users = $pdo2->query("SELECT name, COUNT(comments.id) as comments FROM users LEFT JOIN comments ON users.id = comments.user_id GROUP BY users.id LIMIT 5")->fetchAll();
+    $users = $pdo2->query("SELECT user_name, COUNT(comments.id) as comments FROM users LEFT JOIN comments ON users.id = comments.user_id GROUP BY users.id LIMIT 5")->fetchAll();
 
 } catch (PDOException $e) {
     die("Erreur BDD: " . $e->getMessage());
@@ -56,7 +56,7 @@ $stats['likes_count'] = $pdo->query("SELECT COUNT(*) FROM likes")->fetchColumn()
 $stats['top_uploaders'] = $pdo->query("SELECT u.username, COUNT(f.id) as uploads FROM users u JOIN user_files f ON u.id = f.user_id GROUP BY u.id ORDER BY uploads DESC LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
 $stats['top_commented'] = $pdo->query("SELECT u.username, COUNT(c.id) as comments FROM users u JOIN comments c ON u.id = c.user_id GROUP BY u.id ORDER BY comments DESC LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
 
-// stat img
+/* stat img
 $stats['image_extensions'] = $pdo->query("
     SELECT 
         CASE 
@@ -71,7 +71,7 @@ $stats['image_extensions'] = $pdo->query("
     GROUP BY extension
 ")->fetchAll(PDO::FETCH_ASSOC);
 
-/* RANK */
+ --RANK--
 $stmt = $pdo->prepare("
     SELECT 
         u.id, 
@@ -97,7 +97,7 @@ foreach ($top_active_users as &$user) {
     $user['next_level_xp'] = $level_info['next_level_xp'];
     $user['xp_percentage'] = $level_info['xp_percentage'];
 }
-
+*/
 
 require_once '../includes/header.php';
 ?>
