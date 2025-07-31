@@ -1,5 +1,5 @@
 <?php
-require_once 'db.php';
+
 
 // Fonction pour vérifier si un utilisateur est connecté
 function isLoggedIn()
