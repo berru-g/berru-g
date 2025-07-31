@@ -29,7 +29,7 @@ try {
 
     // 3. Récupère les données
     $contacts = $pdo1->query("SELECT DATE(created_at) as date, COUNT(*) as count FROM contacts GROUP BY date LIMIT 7")->fetchAll();
-    $users = $pdo2->query("SELECT user_name, COUNT(comments.id) as comments FROM users LEFT JOIN comments ON users.id = comments.user_id GROUP BY users.id LIMIT 5")->fetchAll();
+    $users = $pdo2->query("SELECT username, COUNT(comments.id) as comments FROM users LEFT JOIN comments ON users.id = comments.user_id GROUP BY users.id LIMIT 5")->fetchAll();
 
 } catch (PDOException $e) {
     die("Erreur BDD: " . $e->getMessage());
