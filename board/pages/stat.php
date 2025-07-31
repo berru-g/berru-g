@@ -11,7 +11,7 @@ require_once __DIR__.'/../includes/function.php';
 $config1 = require __DIR__.'/../db_config.php';
 $config2 = require __DIR__.'/../db2_config.php';
 
-// 2. Connexion aux BDD (sans modifier votre structure)
+// 2. Connexion aux BDD 
 try {
     // BDD 1 (principale)
     $pdo1 = new PDO(
@@ -56,7 +56,7 @@ $stats['likes_count'] = $pdo->query("SELECT COUNT(*) FROM likes")->fetchColumn()
 $stats['top_uploaders'] = $pdo->query("SELECT u.username, COUNT(f.id) as uploads FROM users u JOIN user_files f ON u.id = f.user_id GROUP BY u.id ORDER BY uploads DESC LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
 $stats['top_commented'] = $pdo->query("SELECT u.username, COUNT(c.id) as comments FROM users u JOIN comments c ON u.id = c.user_id GROUP BY u.id ORDER BY comments DESC LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
 
-/* stat img
+// stat img
 $stats['image_extensions'] = $pdo->query("
     SELECT 
         CASE 
@@ -71,7 +71,7 @@ $stats['image_extensions'] = $pdo->query("
     GROUP BY extension
 ")->fetchAll(PDO::FETCH_ASSOC);
 
- --RANK--
+ //--RANK--
 $stmt = $pdo->prepare("
     SELECT 
         u.id, 
@@ -97,7 +97,7 @@ foreach ($top_active_users as &$user) {
     $user['next_level_xp'] = $level_info['next_level_xp'];
     $user['xp_percentage'] = $level_info['xp_percentage'];
 }
-*/
+
 
 require_once '../includes/header.php';
 ?>
