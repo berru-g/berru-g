@@ -378,7 +378,7 @@ function getAvatarUrl($user_id) {
     return file_exists("../$avatar_path") ? BASE_URL . "/$avatar_path" : BASE_URL . "/assets/images/default-avatar.jpg";
 }
 
-// Fonction pour récupérer le top des utilisateurs actifs
+/* Fonction pour récupérer le top des utilisateurs actifs
 function getTopActiveUsers($pdo, $limit = 5) {
     $stmt = $pdo->prepare("
         SELECT 
@@ -427,6 +427,6 @@ function addUserXp($pdo, $user_id, $action_type) {
     
     return true;
 }
-
+*/
 
 ?>
