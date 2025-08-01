@@ -32,38 +32,13 @@ try {
     die("<div class='error'>Erreur critique : " . $e->getMessage() . "</div>");
 }
 ?>
-<style>::after.tab-container {
-    display: flex;
-    margin-bottom: 20px;
-}
-.tab-btn {
-    padding: 10px 20px;
-    background: #f1f1f1;
-    border: none;
-    cursor: pointer;
-}
-.tab-btn.active {
-    background: #6c5ce7;
-    color: white;
-}
-.tab-content {
-    display: none;
-}
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-.data-table th, .data-table td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-</style>
+
 
 <div class="content-body">
     <?php foreach ($data as $table => $rows): ?>
     <h2>Table <?= htmlspecialchars($table) ?></h2>
-    <table>
+    <div class="table-responsive">
+    <table class="data-table">
         <?php if (isset($rows[0])): ?>
         <thead>
             <tr>
@@ -83,6 +58,7 @@ try {
             <?php endforeach; ?>
         </tbody>
     </table>
+    </div>
     <?php endforeach; ?>
 </div>
 <script>
