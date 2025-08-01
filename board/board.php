@@ -6,15 +6,9 @@ if (!isset($_SESSION['admin_logged_in'])) {
 }
 
 //voir secur.md pour finir la config 
-//require __DIR__.'./db_config.php'; 
+require __DIR__.'./db_config.php'; 
 //$dsn = "mysql:host={$config['host']};dbname={$config['db']};charset={$config['charset']}";
 //$pdo = new PDO($dsn, $config['user'], $config['pass']);
-
-$host = 'localhost';
-$db = 'u667977963_golden_dessert';
-$user = 'u667977963_berru_nico';
-$pass = 'm@bddSQL25'; // 
-$charset = 'utf8mb4';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$db;charset=$charset", $user, $pass, [

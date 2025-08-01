@@ -11,7 +11,7 @@ if (!isset($_SESSION['login_attempts'])) {
 }
 
 // Vérifie si l'utilisateur est bloqué
-$block_duration = 1800; // 30 minutes
+$block_duration = 10; // 1800 = 30 minutes
 
 if ($_SESSION['login_attempts'] >= 3) {
     if ((time() - $_SESSION['last_attempt_time']) < $block_duration) {
@@ -223,7 +223,7 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     
     <div class="footer">
-        <a href="https://gael-berru.netlify.app#formulaire" rel="noopener" target="_blank">
+        <a href="https://gael-berru.com" rel="noopener" target="_blank">
             <span>Interface développée par berru-g</span>
             <i class="fas fa-headset"></i>
         </a>
