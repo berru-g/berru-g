@@ -92,7 +92,7 @@ try {
                 </div>
             </div>
         </aside>
-
+        <div class="sidebar-overlay"></div>
         <!-- Main Content Area -->
         <main class="main-content">
             <header class="content-header">
