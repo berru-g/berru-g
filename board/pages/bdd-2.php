@@ -36,10 +36,6 @@ try {
     display: flex;
     margin-bottom: 20px;
 }
-table {
-    display: flex;
-    width: 100%;
-}
 .tab-btn {
     padding: 10px 20px;
     background: #f1f1f1;
