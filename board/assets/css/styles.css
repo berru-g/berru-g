@@ -26,12 +26,13 @@ body {
     background-color: #f8f9fa;
     color: var(--dark-color);
     line-height: 1.6;
+    width: 100%;
 }
 
 .admin-container {
     display: flex;
     height: auto;
-    width:auto;
+    width:100%;
 }
 
 /* Sidebar Styles */
