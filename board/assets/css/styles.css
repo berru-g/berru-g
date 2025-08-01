@@ -30,7 +30,7 @@ body {
 
 .admin-container {
     display: flex;
-    min-height: 100vh;
+    height: auto;
     width:auto;
 }
 
@@ -537,6 +537,10 @@ tr:hover {
     flex-wrap: wrap;
     gap: 1rem;
 }
+.table-container {
+  overflow-x: auto;
+}
+
 
 .table-info {
     font-size: 0.9rem;
@@ -773,9 +777,12 @@ tr:hover {
         left: 0;
     }
     
-    .main-content {
-        margin-left: 0;
-    }
+    @media (max-width: 1000px) {
+  .main-content {
+    margin-left: 0 !important;
+  }
+}
+
     
     .mobile-menu-btn {
         display: block;
