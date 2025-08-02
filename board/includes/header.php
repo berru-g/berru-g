@@ -1,10 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/_auth.php';
 
-if (!isLoggedIn()) {
-    header("Location: ./board/pages/login.php");
-    exit;
-}
 
 // Configuration DB unique
 try {
