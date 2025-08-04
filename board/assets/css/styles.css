@@ -366,7 +366,7 @@ body {
 /* Content Body Styles */
 .content-body {
     flex: 1;
-    padding: 2rem;
+    padding: 0.5rem;
     background: #f8f9fa;
     overflow-y: auto;
 }
@@ -838,7 +838,7 @@ table {
 
 
 /* ================= RESPONSIVE ================= */
-@media (max-width: 1000px) {
+@media (max-width: 768px) {
     .sidebar {
         position: fixed;
         left: -280px;

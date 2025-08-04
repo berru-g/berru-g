@@ -87,7 +87,7 @@ try {
                     <i class="fas fa-sign-out-alt"></i> Déconnexion
                 </a>
                 <div class="developer-info">
-                    <a href="https://gael-berru.netlify.app" target="_blank">
+                    <a href="https://gael-berru.com" target="_blank">
                         <i class="fas fa-code"></i> par berru-g
                     </a>
                 </div>

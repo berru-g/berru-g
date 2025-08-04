@@ -17,7 +17,7 @@ try {
     ]);
     
     // Requêtes avec gestion d'erreur individuelle
-    $tables = ['users', 'comments', 'likes'];
+    $tables = ['users']; //, 'comments', 'likes'
     $data = [];
     
     foreach ($tables as $table) {
@@ -37,7 +37,7 @@ try {
 <div class="content-body">
     <?php foreach ($data as $table => $rows): ?>
     <h2>Table <?= htmlspecialchars($table) ?></h2>
-    <div class="table-responsive">
+    <div class="table-container">
     <table class="data-table">
         <?php if (isset($rows[0])): ?>
         <thead>
