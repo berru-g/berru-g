@@ -1217,3 +1217,43 @@ a {
     border-radius: 5px;
     z-index: 1000;
 }
+
+/* Animation 3D threejs */
+#container3D {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 0;
+}
+.loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.5s;
+}
+
+.loader .spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid white;
+    border-radius: 50%;
+    border-top-color: var(--primary-color);
+    animation: spin 1s ease-in-out infinite;
+}
+
+
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
