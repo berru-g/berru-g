@@ -409,7 +409,7 @@ function loadModel() {
 
 function showFallbackModel() {
     // Créer un cube à la place si le modèle ne charge pas
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const geometry = new THREE.BoxGeometry(3, 3, 3);
     const material = new THREE.MeshPhongMaterial({
         color: 0x6b5ce7,
         shininess: 100,

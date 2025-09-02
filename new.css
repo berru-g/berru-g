@@ -1257,3 +1257,69 @@ a {
         transform: rotate(360deg);
     }
 }
+
+.dev-card {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  max-width: 400px;
+  margin: 0 auto;
+  background: linear-gradient(145deg, #1e1e2f 0%, #2d2d4e 100%);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  color: #f0f0f5;
+  text-align: center;
+}
+
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.profile-img {
+  margin-top: -87px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 5px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.dev-name {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--primary-color), #4fc3f7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.dev-description {
+  margin: 20px 20px;
+  line-height: 1.6;
+  font-size: 16px;
+  color: #d1d1e0;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .dev-card {
+    max-width: 320px;
+    padding: 20px;
+  }
+  
+  .profile-img {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .dev-name {
+    font-size: 24px;
+  }
+}
