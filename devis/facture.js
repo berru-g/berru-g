@@ -8,13 +8,13 @@ const body = document.getElementById('invoice-body');
 const totalDisplay = document.getElementById('invoice-total');
 
 form.addEventListener('change', () => {
-    body.innerHTML = '';
-    let total = 0;
-    document.querySelectorAll('.item:checked').forEach(item => {
-        const label = item.getAttribute('data-label');
-        const price = parseFloat(item.getAttribute('data-price'));
-        total += price;
-        body.innerHTML += `
+  body.innerHTML = '';
+  let total = 0;
+  document.querySelectorAll('.item:checked').forEach(item => {
+    const label = item.getAttribute('data-label');
+    const price = parseFloat(item.getAttribute('data-price'));
+    total += price;
+    body.innerHTML += `
           <tr>
             <td>${label}</td>
             <td>1</td>
@@ -22,32 +22,32 @@ form.addEventListener('change', () => {
             <td>${price.toFixed(2)} €</td>
           </tr>
         `;
-    });
-    totalDisplay.textContent = `${total.toFixed(2)} €`;
+  });
+  totalDisplay.textContent = `${total.toFixed(2)} €`;
 });
 
 function downloadPDF() {
-    localStorage.setItem('factureCount', parseInt(factureCount) + 1);
+  localStorage.setItem('factureCount', parseInt(factureCount) + 1);
 
-    const name = document.getElementById('client-name').value;
-    const email = document.getElementById('client-email').value;
-    const clientInfo = `${name}\nEmail : ${email}`;
-    const clientPara = document.createElement('p');
-    clientPara.innerText = clientInfo;
-    document.querySelector('h2 + p').replaceWith(clientPara);
+  const name = document.getElementById('client-name').value;
+  const email = document.getElementById('client-email').value;
+  const clientInfo = `${name}\nEmail : ${email}`;
+  const clientPara = document.createElement('p');
+  clientPara.innerText = clientInfo;
+  document.querySelector('h2 + p').replaceWith(clientPara);
 
-    setTimeout(() => {
-        html2pdf().set({
-            margin: 1,
-            filename: `Facture_BerruDev_${invoiceNumber}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-        }).from(document.getElementById('invoice')).save();
-    }, 300);
+  setTimeout(() => {
+    html2pdf().set({
+      margin: 1,
+      filename: `Facture_BerruDev_${invoiceNumber}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    }).from(document.getElementById('invoice')).save();
+  }, 300);
 }
 // gestion des variables checklist
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const form = document.getElementById('service-form');
   const complexFormCheckbox = form.querySelector('input[data-label="Formulaire et bdd"]');
   const simpleFormCheckbox = form.querySelector('input[data-label="Formulaire simple"]');
@@ -76,60 +76,70 @@ document.addEventListener('DOMContentLoaded', function() {
   // Écouteurs d'événements
   complexFormCheckbox.addEventListener('change', handleFormInteractions);
   simpleFormCheckbox.addEventListener('change', handleFormInteractions);
-  
+
   // Initialisation au chargement
   handleFormInteractions.call({});
 });
 
 // Gestion de l'envoi du formulaire
-document.getElementById('devisForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const formData = new FormData();
-    formData.append('numero', document.getElementById('invoice-number').textContent);
-    formData.append('date_devis', document.getElementById('invoice-date').textContent);
-    formData.append('client_nom', document.getElementById('client-name').value);
-    formData.append('client_email', document.getElementById('client-email').value);
-    formData.append('total', document.getElementById('invoice-total').textContent);
-    
-    // Arrete de copier coller tes ancien projet les nom ne correspondent plus et tu te fais baiser ç chaque fois, vas te coucher
-    const checkboxes = {
-        'developpement_vitrine': 'Développement site vitrine',
-        'formulaire_simple': 'Formulaire simple',
-        'formulaire_complexe': 'Formulaire et bdd',
-        'optimisation_seo': 'Optimisation SEO',
-        'systeme_paiement': 'Système de paiement',
-        'interface_admin': 'Interface administrative',
-        'nom_domaine': 'Nom de domaine',
-        'hebergement': 'Hébergement'
-    };
+document.getElementById('devisForm').addEventListener('submit', function (e) {
+  e.preventDefault();
 
-    Object.keys(checkboxes).forEach(key => {
-        const el = document.querySelector(`input[data-label="${checkboxes[key]}"]`);
-        formData.append(key, el.checked ? '1' : '0');
-    });
+  const formData = new FormData();
+  formData.append('numero', document.getElementById('invoice-number').textContent);
+  formData.append('date_devis', document.getElementById('invoice-date').textContent);
+  formData.append('client_nom', document.getElementById('client-name').value);
+  formData.append('client_email', document.getElementById('client-email').value);
+  formData.append('total', document.getElementById('invoice-total').textContent);
 
-    fetch('submit.php', {
-        method: 'POST',
-        body: formData
-    })
+  // Arrete de copier coller tes ancien projet les nom ne correspondent plus et tu te fais baiser ç chaque fois, vas te coucher
+  const checkboxes = {
+    'developpement_vitrine': 'Développement site vitrine',
+    'formulaire_simple': 'Formulaire simple',
+    'formulaire_complexe': 'Formulaire et bdd',
+    'optimisation_seo': 'Optimisation SEO',
+    'systeme_paiement': 'Système de paiement',
+    'interface_admin': 'Interface administrative',
+    'nom_domaine': 'Nom de domaine',
+    'hebergement': 'Hébergement'
+  };
+  /*
+      Object.keys(checkboxes).forEach(key => {
+          const el = document.querySelector(`input[data-label="${checkboxes[key]}"]`);
+          formData.append(key, el.checked ? '1' : '0');
+      });
+  */
+  Object.keys(checkboxes).forEach(key => {
+    const el = document.querySelector(`input[data-label="${checkboxes[key]}"]`);
+    if (el) {
+      formData.append(key, el.checked ? '1' : '0');
+    } else {
+      formData.append(key, '0'); // Valeur par défaut si l'élément n'existe pas
+      console.warn(`Élément non trouvé: ${checkboxes[key]}`);
+    }
+  });
+
+  fetch('submit.php', {
+    method: 'POST',
+    body: formData
+  })
     .then(response => {
-        if (!response.ok) throw new Error('Erreur réseau');
-        return response.json();
+      if (!response.ok) throw new Error('Erreur réseau');
+      return response.json();
     })
     .then(data => {
-        if (data.success) {
-            alert('Devis envoyé avec succès !');
-            localStorage.setItem('factureCount', parseInt(factureCount) + 1);
-            if (data.redirect) {
-                window.location.href = data.redirect;
-            }
-        } else {
-            throw new Error(data.error || 'Erreur inconnue');
+      if (data.success) {
+        alert('Devis envoyé avec succès !');
+        localStorage.setItem('factureCount', parseInt(factureCount) + 1);
+        if (data.redirect) {
+          window.location.href = data.redirect;
         }
+      } else {
+        throw new Error(data.error || 'Erreur inconnue');
+      }
     })
     .catch(error => {
-        console.error('Erreur:', error);
-        alert('Erreur: ' + error.message);
+      console.error('Erreur:', error);
+      alert('Erreur: ' + error.message);
     });
 });
