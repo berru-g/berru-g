@@ -341,7 +341,7 @@
         <button class="close-card" onclick="closeCard('contact-card')">×</button>
         <h2>Contact</h2>
         <form class="contact-form">
-            
+
             <input type="email" placeholder="Votre email" required>
             <textarea placeholder="Votre message" rows="5" required></textarea>
             <button type="submit" class="btn">Envoyer le message</button>
@@ -602,20 +602,56 @@
             return aircraftGroup;
         }
 
+        // function loadAircraftGLB
+        // version pour objet avec animation native
         function loadAircraftGLB() {
             const loader = new THREE.GLTFLoader();
 
-            // URLs de modèles d'avion GLB gratuits
-            const aircraftURLs = [
-                'https://raw.githubusercontent.com/berru-g/plane/main/avion/cessna172.glb'
-                //'https://threejs.org/examples/models/gltf/plane/scene.gltf',
-                //'https://raw.githubusercontent.com/berru-g/plane/main/avion/cessna172.glb'
+            const droneURLs = [
+                'https://raw.githubusercontent.com/berru-g/berru-g/main/img/scene.gltf',
+                // URLs de drones avec animations
             ];
 
-            // Essayer chaque URL jusqu'à ce qu'un fonctionne
-            tryLoadGLB(loader, aircraftURLs, 0);
+            loader.load(droneURLs[0], (gltf) => {
+                scene.remove(aircraft);
+
+                aircraft = gltf.scene;
+                aircraft.scale.set(8, 8, 8);
+                aircraft.position.set(0, 50, 0);
+
+                // Essayer d'abord les animations natives
+                if (gltf.animations && gltf.animations.length > 0) {
+                    mixer = new THREE.AnimationMixer(aircraft);
+                    gltf.animations.forEach(clip => {
+                        mixer.clipAction(clip).play();
+                    });
+                    console.log('✅ Animations natives chargées');
+                } else {
+                    // Fallback: animations manuelles
+                    droneAnimSystem = new DroneAnimationSystem(aircraft);
+                    console.log('🔄 Animations manuelles activées');
+                }
+
+                scene.add(aircraft);
+            });
         }
 
+        /*
+                // version pour glb simple sans animation
+                function loadAircraftGLB() {
+                    const loader = new THREE.GLTFLoader();
+        
+                    // URLs de modèles d'avion GLB gratuits
+                    const aircraftURLs = [
+                        'https://raw.githubusercontent.com/berru-g/berru-g/main/img/animated_drone_with_camera_free.glb'//"Animated Drone" (https://skfb.ly/6WOAz) by hartwelkisaka is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+                        //'https://threejs.org/examples/models/gltf/plane/scene.gltf',
+                        //'https://raw.githubusercontent.com/berru-g/plane/main/avion/cessna172.glb'
+                    ];
+        
+                    // Essayer chaque URL jusqu'à ce qu'un fonctionne
+                    tryLoadGLB(loader, aircraftURLs, 0);
+                }
+        */
         function tryLoadGLB(loader, urls, index) {
             if (index >= urls.length) {
                 console.log('ℹ️ Tous les modèles GLB ont échoué, utilisation de l\'avion par défaut');
