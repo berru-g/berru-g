@@ -6,6 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exploration Aérienne - Portfolio 3D</title>
     <style>
+        :root {
+            --background-color: #f1f1f1;
+            --text-color: #000000;
+            --titre-color: grey;
+            --primary-color: #ab9ff2;
+            --border-color: #dcdcdc;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --input-background: #f9f9f9;
+            --secondary-color: #2575fc;
+            --success-color: #60d394;
+            --error-color: #ee6055;
+            --jaune-color: #ffd97d;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -32,7 +46,7 @@
             top: 20px;
             left: 20px;
             z-index: 1000;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 50%;
@@ -52,7 +66,7 @@
             left: -400px;
             width: 350px;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(20px);
             border-right: 1px solid rgba(255, 255, 255, 0.1);
             padding: 80px 30px 30px;
@@ -70,7 +84,7 @@
         }
 
         .menu-section h3 {
-            color: #ffaa00;
+            color: var(--primary-color);
             margin-bottom: 15px;
             font-size: 16px;
         }
@@ -78,10 +92,10 @@
         .btn {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(45deg, #ffaa00, #ff6b6b);
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             border: none;
             border-radius: 8px;
-            color: black;
+            color: white;
             font-weight: bold;
             cursor: pointer;
             transition: transform 0.2s;
@@ -121,11 +135,18 @@
         .hud-value {
             font-size: 16px;
             font-weight: bold;
-            color: #ffaa00;
+            color: var(--primary-color);
         }
 
         .hidden {
             display: none !important;
+        }
+
+        .intro-img {
+            display: flex;
+            width: 100px;
+            border-radius: 12px;
+            margin: 0 auto;
         }
 
         .info-card {
@@ -133,7 +154,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(20px);
             border: 2px solid #ffffff;
             border-radius: 15px;
@@ -142,7 +163,7 @@
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
-            z-index: 1000;
+            z-index: 900;
             display: none;
         }
 
@@ -152,7 +173,7 @@
             right: 15px;
             background: none;
             border: none;
-            color: #ffaa00;
+            color: var(--primary-color);
             font-size: 20px;
             cursor: pointer;
         }
@@ -257,14 +278,9 @@
         <button class="close-card" onclick="closeCard('intro-card')">×</button>
         <h2>Expérience immersive</h2>
         <p><strong>Bienvenue dans ce prototype !</strong></p>
-        <p>Site en cours .....</p>
         <br>
-        <h3>Naviguation</h3>
-        <ul>
-            <li>Barre Espace pour avancer</li>
-            <li>⬅️➡️</li>
-            <li>⬆️⬇️</li>
-        </ul>
+        <img src="../img/key.png" class="intro-img">
+
         <button class="btn" onclick="closeCard('intro-card')" style="width: 100%; margin-top: 20px;">Commencer</button>
     </div>
 
@@ -277,26 +293,26 @@
                 <img src="../img/messagerie.png">
                 <strong>Site E-commerce 3D</strong>
                 <p>Expérience shopping immersive</p>
-                <a href="#" style="color: #ffaa00;">Voir le projet →</a>
+                <a href="#" style="color: #ab9ff2;">Voir le projet →</a>
             </div>
             <div class="gallery-item">
                 <div style="background: #4ecdc4; height: 100px; border-radius: 5px;"></div>
                 <strong>Portfolio Artistique</strong>
                 <p>Galerie virtuelle interactive</p>
-                <a href="#" style="color: #ffaa00;">Voir le projet →</a>
+                <a href="#" style="color: #ab9ff2;">Voir le projet →</a>
             </div>
             <div class="gallery-item">
 
                 <img src="../img/messagerie.png">
                 <strong>Site E-commerce 3D</strong>
                 <p>Expérience shopping immersive</p>
-                <a href="#" style="color: #ffaa00;">Voir le projet →</a>
+                <a href="#" style="color: #ab9ff2;">Voir le projet →</a>
             </div>
             <div class="gallery-item">
                 <div style="background: #4ecdc4; height: 100px; border-radius: 5px;"></div>
                 <strong>Portfolio Artistique</strong>
                 <p>Galerie virtuelle interactive</p>
-                <a href="#" style="color: #ffaa00;">Voir le projet →</a>
+                <a href="#" style="color: #ab9ff2;">Voir le projet →</a>
             </div>
         </div>
     </div>
@@ -325,14 +341,13 @@
         <button class="close-card" onclick="closeCard('contact-card')">×</button>
         <h2>Contact</h2>
         <form class="contact-form">
-            <input type="text" placeholder="Votre nom" required>
+            
             <input type="email" placeholder="Votre email" required>
             <textarea placeholder="Votre message" rows="5" required></textarea>
             <button type="submit" class="btn">Envoyer le message</button>
         </form>
         <div style="margin-top: 20px; text-align: center;">
-            <p><strong>Email:</strong> contact@monportfolio.com</p>
-            <p><strong>Téléphone:</strong> +33 6 12 34 56 78</p>
+            <!--<p><strong>Email:</strong> gael-berru.com</p>-->
         </div>
     </div>
 
@@ -501,7 +516,7 @@
             // Dégradé lever de soleil
             const gradient = context.createLinearGradient(0, 0, 0, canvas.height);
             gradient.addColorStop(0, '#ff6b6b');
-            gradient.addColorStop(0.3, '#ffaa00');
+            gradient.addColorStop(0.3, '#ab9ff2');
             gradient.addColorStop(0.6, '#87ceeb');
             gradient.addColorStop(1, '#1a237e');
 
@@ -523,9 +538,9 @@
 
             // Texture de ciel réaliste (choisir une des URLs)
             const skyTextures = [
-                'https://raw.githubusercontent.com/berru-g/plane/main/avion/ciel-nuage.webp',
+                'https://raw.githubusercontent.com/berru-g/img/main/sky.jpg',
                 'https://raw.githubusercontent.com/berru-g/plane/main/avion/sunrise.jpg',
-                'https://raw.githubusercontent.com/berru-g/plane/main/avion/layered.jpg',
+                'https://raw.githubusercontent.com/berru-g/plane/main/avion/ciel-nuage.webp',
                 'https://raw.githubusercontent.com/berru-g/plane/main/avion/cloudy.png'
             ];
 
@@ -838,7 +853,7 @@
                 );
 
                 // Couleur différente pour chaque POI
-                const colors = [0xff6b35, 0x00ff88, 0x4ecdc4, 0xffd166];
+                const colors = [0xab9ff2, 0x2575fc, 0x60d394, 0xee6055];
                 const poiColor = colors[index % colors.length];
 
                 // Appliquer la couleur au matériau principal
