@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exploration Aérienne - Portfolio 3D</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            background: #000;
+            font-family: 'Arial', sans-serif;
+            color: white;
+        }
+
+        #container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #menu-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 20px;
+        }
+
+        #menu-panel {
+            position: fixed;
+            top: 0;
+            left: -400px;
+            width: 350px;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 80px 30px 30px;
+            z-index: 999;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+        }
+
+        #menu-panel.active {
+            left: 0;
+        }
+
+        .menu-section {
+            margin-bottom: 30px;
+        }
+
+        .menu-section h3 {
+            color: #ffaa00;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #ffaa00, #ff6b6b);
+            border: none;
+            border-radius: 8px;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin: 5px 0;
+        }
+
+        .btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        #hud {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            border-radius: 25px;
+            z-index: 100;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .hud-item {
+            text-align: center;
+        }
+
+        .hud-label {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+
+        .hud-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffaa00;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .info-card {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border: 2px solid #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .close-card {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #ffaa00;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .gallery-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            color: white;
+        }
+
+        .review-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+        }
+
+        .stars {
+            color: #ffd700;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+    <div id="menu-toggle" onclick="toggleMenu()">☰</div>
+
+    <div id="menu-panel">
+        <!--<div class="menu-section">
+            <h3>CONTRÔLES AVION</h3>
+            <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
+                <div>🔼 Monter</div>
+                <div>🔽 Descendre</div>
+                <div>◀️ Tourner gauche</div>
+                <div>▶️ Tourner droite</div>
+                <div>Espace: Accélérer</div>
+                <div>S: Ralentir</div>
+                <div style="margin-top: 15px; opacity: 0.8; font-size: 12px;">
+                    🖱️ Regarder autour<br>
+                    🔄  Zoomer
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-section">
+            <h3>IMPORTER UN MODÈLE</h3>
+            <input type="file" id="glb-file" class="file-input" accept=".glb,.gltf"
+                style="width: 100%; padding: 10px; margin: 10px 0;">
+            <button class="btn secondary" onclick="resetAircraft()">🔄 Reset position</button>
+        </div>-->
+
+        <div class="menu-section">
+            <h3>berru-g</h3>
+            <div id="poi-list"></div>
+        </div>
+    </div>
+
+    <div id="hud">
+        <div class="hud-item">
+            <div class="hud-label">VITESSE</div>
+            <div class="hud-value" id="speed-display">0 km/h</div>
+        </div>
+        <div class="hud-item">
+            <div class="hud-label">ALTITUDE</div>
+            <div class="hud-value" id="altitude-display">0 m</div>
+        </div>
+        <div class="hud-item">
+            <div class="hud-label">DESTINATION</div>
+            <div class="hud-value" id="target-display">Exploration</div>
+        </div>
+    </div>
+
+    <!-- Cartes d'information -->
+    <div id="intro-card" class="info-card">
+        <button class="close-card" onclick="closeCard('intro-card')">×</button>
+        <h2>Expérience immersive</h2>
+        <p><strong>Bienvenue dans ce prototype !</strong></p>
+        <p>Site en cours .....</p>
+        <br>
+        <h3>Naviguation</h3>
+        <ul>
+            <li>Barre Espace pour avancer</li>
+            <li>⬅️➡️</li>
+            <li>⬆️⬇️</li>
+        </ul>
+        <button class="btn" onclick="closeCard('intro-card')" style="width: 100%; margin-top: 20px;">Commencer</button>
+    </div>
+
+    <div id="projects-card" class="info-card">
+        <button class="close-card" onclick="closeCard('projects-card')">×</button>
+        <h2>Projets</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+
+                <img src="../img/messagerie.png">
+                <strong>Site E-commerce 3D</strong>
+                <p>Expérience shopping immersive</p>
+                <a href="#" style="color: #ffaa00;">Voir le projet →</a>
+            </div>
+            <div class="gallery-item">
+                <div style="background: #4ecdc4; height: 100px; border-radius: 5px;"></div>
+                <strong>Portfolio Artistique</strong>
+                <p>Galerie virtuelle interactive</p>
+                <a href="#" style="color: #ffaa00;">Voir le projet →</a>
+            </div>
+            <div class="gallery-item">
+
+                <img src="../img/messagerie.png">
+                <strong>Site E-commerce 3D</strong>
+                <p>Expérience shopping immersive</p>
+                <a href="#" style="color: #ffaa00;">Voir le projet →</a>
+            </div>
+            <div class="gallery-item">
+                <div style="background: #4ecdc4; height: 100px; border-radius: 5px;"></div>
+                <strong>Portfolio Artistique</strong>
+                <p>Galerie virtuelle interactive</p>
+                <a href="#" style="color: #ffaa00;">Voir le projet →</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="skills-card" class="info-card">
+        <button class="close-card" onclick="closeCard('skills-card')">×</button>
+        <h2>Compétences</h2>
+        <div class="review-item">
+            <div class="stars">★★★★★</div>
+            <p><strong>Three.js / WebGL</strong></p>
+            <p>Création d'expériences 3D interactives dans le navigateur</p>
+        </div>
+        <div class="review-item">
+            <div class="stars">★★★★★</div>
+            <p><strong>Développement Frontend</strong></p>
+            <p>React, Vue.js, JavaScript moderne</p>
+        </div>
+        <div class="review-item">
+            <div class="stars">★★★★☆</div>
+            <p><strong>Design 3D</strong></p>
+            <p>Modélisation et intégration d'assets 3D</p>
+        </div>
+    </div>
+
+    <div id="contact-card" class="info-card">
+        <button class="close-card" onclick="closeCard('contact-card')">×</button>
+        <h2>Contact</h2>
+        <form class="contact-form">
+            <input type="text" placeholder="Votre nom" required>
+            <input type="email" placeholder="Votre email" required>
+            <textarea placeholder="Votre message" rows="5" required></textarea>
+            <button type="submit" class="btn">Envoyer le message</button>
+        </form>
+        <div style="margin-top: 20px; text-align: center;">
+            <p><strong>Email:</strong> contact@monportfolio.com</p>
+            <p><strong>Téléphone:</strong> +33 6 12 34 56 78</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
+
+    <script>
+        // Variables globales
+        let scene, camera, renderer, controls, aircraft;
+        let aircraftSpeed = 0, maxSpeed = 1.5, acceleration = 0.03;
+        let clock = new THREE.Clock();
+        let pointsOfInterest = [];
+        let activePoi = null;
+        let experienceStarted = true;
+        let currentCard = null;
+        let aircraftGLB = null; // Nouvelle variable pour le GLB
+
+        // État des touches
+        const keys = {
+            'ArrowUp': false, 'ArrowDown': false, 'ArrowLeft': false, 'ArrowRight': false,
+            ' ': false, 's': false, 'S': false
+        };
+
+        // Points d'intérêt dans les nuages
+        const predefinedPOIs = [
+            {
+                id: 'intro',
+                title: 'Introduction',
+                description: 'Découvrez mon parcours',
+                position: new THREE.Vector3(0, 80, 0)
+            },
+            {
+                id: 'projects',
+                title: 'Projets',
+                description: 'Mes réalisations',
+                position: new THREE.Vector3(-120, 100, -80)
+            },
+            {
+                id: 'skills',
+                title: 'Compétences',
+                description: 'Mes expertises',
+                position: new THREE.Vector3(150, 90, 60)
+            },
+            {
+                id: 'contact',
+                title: 'Contact',
+                description: 'Travaillons ensemble',
+                position: new THREE.Vector3(100, 110, -150)
+            }
+        ];
+
+        function init() {
+            console.log('🚀 Initialisation de l\'expérience aérienne...');
+            setupThreeJS();
+            setupUI(); // <-- IMPORTANT : cette ligne doit être avant createScene()
+            createScene();
+            setupControls();
+            animate();
+        }
+        function setupThreeJS() {
+            // Scene avec ciel dégradé
+            scene = new THREE.Scene();
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+            camera.position.set(0, 10, 20);
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({
+                antialias: true,
+                alpha: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.domElement.setAttribute('tabindex', '0');
+            renderer.domElement.style.outline = 'none';
+            document.getElementById('container').appendChild(renderer.domElement);
+
+            // Controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.minDistance = 5;
+            controls.maxDistance = 100;
+        }
+
+        function setupUI() {
+            // Générer la liste des POIs dans le menu
+            const poiList = document.getElementById('poi-list');
+            predefinedPOIs.forEach(poi => {
+                const poiElement = document.createElement('div');
+                poiElement.style.cssText = `
+            background: rgba(255,255,255,0.05); 
+            padding: 10px; 
+            margin: 5px 0; 
+            border-radius: 5px; 
+            cursor: pointer;
+            transition: all 0.3s;
+        `;
+                poiElement.innerHTML = `
+            <strong>${poi.title}</strong><br>
+            <small style="opacity:0.7">${poi.description}</small>
+        `;
+                poiElement.addEventListener('click', () => navigateToPOI(poi.id));
+                poiElement.addEventListener('mouseenter', () => {
+                    poiElement.style.background = 'rgba(255,170,0,0.2)';
+                });
+                poiElement.addEventListener('mouseleave', () => {
+                    poiElement.style.background = 'rgba(255,255,255,0.05)';
+                });
+                poiList.appendChild(poiElement);
+            });
+
+            // Gestion du formulaire
+            document.querySelector('.contact-form').addEventListener('submit', function (e) {
+                e.preventDefault();
+                alert('Message envoyé ! Merci pour votre contact.');
+                closeCard('contact-card');
+            });
+
+            // Liens de la gallery - OUVRE LES LIENS DANS UN NOUVEL ONGLET
+            document.querySelectorAll('.gallery-item a').forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    // Ouvrir le lien dans un nouvel onglet
+                    window.open(this.href, '_blank');
+                });
+            });
+
+            // Setup l'upload GLB
+            setupGLBUpload();
+        }
+
+        function createScene() {
+            // Créer un ciel dégradé (lever de soleil)
+            createSky();
+
+            // Lumière directionnelle (soleil)
+            const sunLight = new THREE.DirectionalLight(0xffaa00, 1.5);
+            sunLight.position.set(100, 100, 50);
+            sunLight.castShadow = true;
+            scene.add(sunLight);
+
+            // Lumière ambiante chaude
+            const ambientLight = new THREE.AmbientLight(0xffddaa, 0.3);
+            scene.add(ambientLight);
+
+            // Créer l'avion
+            createAircraft();
+
+            // Créer les nuages décoratifs
+            createDecorativeClouds();
+
+            // Créer les points d'intérêt (nuages colorés)
+            createPointsOfInterest();
+        }
+
+        /*function createSky() {
+            const skyGeometry = new THREE.SphereGeometry(1000, 32, 32);
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 256;
+            const context = canvas.getContext('2d');
+
+            // Dégradé lever de soleil
+            const gradient = context.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#ff6b6b');
+            gradient.addColorStop(0.3, '#ffaa00');
+            gradient.addColorStop(0.6, '#87ceeb');
+            gradient.addColorStop(1, '#1a237e');
+
+            context.fillStyle = gradient;
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            const skyMaterial = new THREE.MeshBasicMaterial({
+                map: texture,
+                side: THREE.BackSide
+            });
+
+            const sky = new THREE.Mesh(skyGeometry, skyMaterial);
+            scene.add(sky);
+        }*/
+        function createSky() {
+            // Utiliser une texture de ciel réaliste de Three.js
+            const skyGeometry = new THREE.SphereGeometry(1000, 32, 32);
+
+            // Texture de ciel réaliste (choisir une des URLs)
+            const skyTextures = [
+                'https://raw.githubusercontent.com/berru-g/plane/main/avion/ciel-nuage.webp',
+                'https://raw.githubusercontent.com/berru-g/plane/main/avion/sunrise.jpg',
+                'https://raw.githubusercontent.com/berru-g/plane/main/avion/layered.jpg',
+                'https://raw.githubusercontent.com/berru-g/plane/main/avion/cloudy.png'
+            ];
+
+            const textureLoader = new THREE.TextureLoader();
+            const skyTexture = textureLoader.load(skyTextures[0], () => {
+                console.log('✅ Texture de ciel chargée');
+            });
+
+            skyTexture.colorSpace = THREE.SRGBColorSpace;
+
+            const skyMaterial = new THREE.MeshBasicMaterial({
+                map: skyTexture,
+                side: THREE.BackSide
+            });
+
+            const sky = new THREE.Mesh(skyGeometry, skyMaterial);
+            scene.add(sky);
+        }
+
+        function createAircraft() {
+            // D'abord créer un avion simple temporaire
+            const tempAircraft = createTempAircraft();
+            aircraft = tempAircraft;
+            aircraft.position.set(0, 80, 0);
+            aircraft.rotation.y = Math.PI;
+            scene.add(aircraft);
+
+            // Essayer de charger un GLB d'avion
+            loadAircraftGLB();
+        }
+
+        function createTempAircraft() {
+            // Avion simple temporaire
+            const aircraftGroup = new THREE.Group();
+
+            const fuselage = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.5, 0.3, 8, 8),
+                new THREE.MeshPhongMaterial({ color: 0xffffff })
+            );
+            fuselage.rotation.z = Math.PI / 2;
+            aircraftGroup.add(fuselage);
+
+            const wings = new THREE.Mesh(
+                new THREE.BoxGeometry(10, 0.2, 2),
+                new THREE.MeshPhongMaterial({ color: 0xcccccc })
+            );
+            aircraftGroup.add(wings);
+
+            const tail = new THREE.Mesh(
+                new THREE.BoxGeometry(1, 3, 0.2),
+                new THREE.MeshPhongMaterial({ color: 0xffffff })
+            );
+            tail.position.set(-3, 1, 0);
+            aircraftGroup.add(tail);
+
+            return aircraftGroup;
+        }
+
+        function loadAircraftGLB() {
+            const loader = new THREE.GLTFLoader();
+
+            // URLs de modèles d'avion GLB gratuits
+            const aircraftURLs = [
+                'https://raw.githubusercontent.com/berru-g/plane/main/avion/cessna172.glb'
+                //'https://threejs.org/examples/models/gltf/plane/scene.gltf',
+                //'https://raw.githubusercontent.com/berru-g/plane/main/avion/cessna172.glb'
+            ];
+
+            // Essayer chaque URL jusqu'à ce qu'un fonctionne
+            tryLoadGLB(loader, aircraftURLs, 0);
+        }
+
+        function tryLoadGLB(loader, urls, index) {
+            if (index >= urls.length) {
+                console.log('ℹ️ Tous les modèles GLB ont échoué, utilisation de l\'avion par défaut');
+                return;
+            }
+
+            loader.load(urls[index], (gltf) => {
+                // Supprimer l'avion temporaire
+                scene.remove(aircraft);
+
+                // Configurer le nouvel avion GLB
+                aircraftGLB = gltf.scene;
+                aircraftGLB.scale.set(12, 12, 12); // Ajuster l'échelle de l'avion
+                aircraftGLB.position.set(0, 80, 0);
+                aircraftGLB.rotation.set(0, Math.PI, 0);
+
+                // Activer les ombres
+                aircraftGLB.traverse((child) => {
+                    if (child.isMesh) {
+                        child.castShadow = true;
+                        child.receiveShadow = true;
+                    }
+                });
+
+                scene.add(aircraftGLB);
+                aircraft = aircraftGLB;
+
+                console.log('✅ Avion GLB chargé avec succès:', urls[index]);
+
+            }, undefined, (error) => {
+                console.log('❌ Échec du chargement:', urls[index]);
+                // Essayer l'URL suivant
+                tryLoadGLB(loader, urls, index + 1);
+            });
+        }
+
+        function createDecorativeClouds() {
+            // Nuages décoratifs blancs
+            const cloudCount = 40;
+
+            for (let i = 0; i < cloudCount; i++) {
+                createCloud(
+                    (Math.random() - 0.5) * 800,
+                    Math.random() * 150 + 30,
+                    (Math.random() - 0.5) * 800,
+                    false // Pas un POI
+                );
+            }
+        }
+
+        /*function createCloud(x, y, z, isPOI = false) {
+            const cloudGroup = new THREE.Group();
+            const cloudGeometry = new THREE.SphereGeometry(4, 6, 6);
+
+            // Couleur différente pour les POIs #baacfa
+            const cloudMaterial = new THREE.MeshPhongMaterial({
+                color: isPOI ? 0xbaacfa : 0xbaacfa,
+                transparent: true,
+                opacity: isPOI ? 1 : 1
+            });
+
+            const spherePositions = [
+                [0, 0, 0], [3, 1, -2], [-3, 1, 2],
+                [4, -1, 0], [-4, -1, 0], [0, 3, 3]
+            ];
+
+            spherePositions.forEach(pos => {
+                const sphere = new THREE.Mesh(cloudGeometry, cloudMaterial);
+                sphere.position.set(pos[0], pos[1], pos[2]);
+                sphere.scale.set(
+                    Math.random() * 0.6 + 0.7,
+                    Math.random() * 0.4 + 0.6,
+                    Math.random() * 0.6 + 0.7
+                );
+                cloudGroup.add(sphere);
+            });
+
+            cloudGroup.position.set(x, y, z);
+
+            // Agrandir les POIs
+            if (isPOI) {
+                cloudGroup.scale.set(3, 3, 3);
+
+                // Ajouter une lumière pour les POIs
+                const pointLight = new THREE.PointLight(0xbaacfa, 2, 100);
+                pointLight.position.set(0, 5, 0);
+                cloudGroup.add(pointLight);
+            }
+
+            scene.add(cloudGroup);
+            return cloudGroup;
+        }*/
+        function createCloud(x, y, z, isPOI = false) {
+            const cloudGroup = new THREE.Group();
+
+            if (isPOI) {
+                // NUAGE POI - FORME ET COULEUR DISTINCTIVE
+                createPOICloud(cloudGroup, x, y, z);
+            } else {
+                // NUAGE DÉCORATIF CLASSIQUE
+                createDecorativeCloud(cloudGroup, x, y, z);
+            }
+
+            scene.add(cloudGroup);
+            return cloudGroup;
+        }
+
+        function createPOICloud(cloudGroup, x, y, z) {
+            // Forme plus structurée et géométrique pour les POIs
+            const geometries = [
+                new THREE.OctahedronGeometry(6, 0),  // Forme cristalline
+                new THREE.TorusGeometry(4, 1.5, 8, 12),  // Anneau
+                new THREE.ConeGeometry(5, 8, 6),  // Cône
+                new THREE.DodecahedronGeometry(5, 0)  // Polyèdre
+            ];
+
+            const poiGeometry = geometries[Math.floor(Math.random() * geometries.length)];
+            const poiMaterial = new THREE.MeshPhongMaterial({
+                color: 0xff6b35,  // Orange vif
+                emissive: 0xff4500,
+                emissiveIntensity: 0.8,
+                transparent: true,
+                opacity: 0.9,
+                shininess: 100
+            });
+
+            const mainShape = new THREE.Mesh(poiGeometry, poiMaterial);
+            cloudGroup.add(mainShape);
+
+            // Effet de pulsation lumineuse
+            const pointLight = new THREE.PointLight(0xff6b35, 2, 50);
+            pointLight.position.set(0, 3, 0);
+            cloudGroup.add(pointLight);
+
+            // Anneau lumineux autour du POI
+            const ringGeometry = new THREE.TorusGeometry(8, 0.3, 4, 24);
+            const ringMaterial = new THREE.MeshBasicMaterial({
+                color: 0x00ff88,
+                transparent: true,
+                opacity: 0.6
+            });
+            const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+            ring.rotation.x = Math.PI / 2;
+            cloudGroup.add(ring);
+
+            // Particules flottantes autour
+            for (let i = 0; i < 8; i++) {
+                const particleGeometry = new THREE.SphereGeometry(0.5, 4, 4);
+                const particleMaterial = new THREE.MeshBasicMaterial({
+                    color: 0x00ff88,
+                    transparent: true,
+                    opacity: 0.7
+                });
+                const particle = new THREE.Mesh(particleGeometry, particleMaterial);
+
+                const angle = (i / 8) * Math.PI * 2;
+                const radius = 10 + Math.random() * 5;
+                particle.position.set(
+                    Math.cos(angle) * radius,
+                    Math.random() * 6 - 3,
+                    Math.sin(angle) * radius
+                );
+                cloudGroup.add(particle);
+            }
+
+            cloudGroup.position.set(x, y, z);
+            cloudGroup.scale.set(1.2, 1.2, 1.2);
+        }
+
+        function createDecorativeCloud(cloudGroup, x, y, z) {
+            // Nuage décoratif classique - doux et naturel
+            const cloudGeometry = new THREE.SphereGeometry(4, 6, 6);
+            const cloudMaterial = new THREE.MeshPhongMaterial({
+                color: 0xffffff,
+                transparent: true,
+                opacity: 0.6
+            });
+
+            const spherePositions = [
+                [0, 0, 0], [3, 1, -2], [-3, 1, 2],
+                [4, -1, 0], [-4, -1, 0], [0, 3, 3],
+                [2, -2, -1], [-2, -2, 1]
+            ];
+
+            spherePositions.forEach(pos => {
+                const sphere = new THREE.Mesh(cloudGeometry, cloudMaterial);
+                sphere.position.set(pos[0], pos[1], pos[2]);
+                sphere.scale.set(
+                    Math.random() * 0.6 + 0.7,
+                    Math.random() * 0.4 + 0.6,
+                    Math.random() * 0.6 + 0.7
+                );
+                cloudGroup.add(sphere);
+            });
+
+            cloudGroup.position.set(x, y, z);
+
+            // Légère animation pour les nuages décoratifs
+            cloudGroup.userData = {
+                originalY: y,
+                speed: Math.random() * 0.02 + 0.01,
+                time: Math.random() * Math.PI * 2
+            };
+        }
+
+        function animateClouds() {
+            scene.children.forEach(child => {
+                if (child.userData && child.userData.originalY !== undefined) {
+                    // Animation de flottement pour les nuages décoratifs
+                    child.userData.time += child.userData.speed;
+                    child.position.y = child.userData.originalY + Math.sin(child.userData.time) * 2;
+                }
+
+                if (child.userData && child.userData.poiInfo) {
+                    // Animation de pulsation pour les POIs
+                    const scale = 1 + Math.sin(Date.now() * 0.001) * 0.1;
+                    child.scale.setScalar(scale);
+
+                    // Faire tourner l'anneau
+                    const ring = child.children.find(child => child.geometry instanceof THREE.TorusGeometry);
+                    if (ring) {
+                        ring.rotation.y += 0.01;
+                    }
+                }
+            });
+        }
+
+
+
+
+        function createPointsOfInterest() {
+            predefinedPOIs.forEach((poi, index) => {
+                const poiCloud = createCloud(
+                    poi.position.x,
+                    poi.position.y,
+                    poi.position.z,
+                    true // C'est un POI
+                );
+
+                // Couleur différente pour chaque POI
+                const colors = [0xff6b35, 0x00ff88, 0x4ecdc4, 0xffd166];
+                const poiColor = colors[index % colors.length];
+
+                // Appliquer la couleur au matériau principal
+                const mainMesh = poiCloud.children[0];
+                if (mainMesh && mainMesh.material) {
+                    mainMesh.material.color.set(poiColor);
+                    mainMesh.material.emissive.set(poiColor);
+                }
+
+                poiCloud.userData = {
+                    poiInfo: poi,
+                    color: poiColor
+                };
+                pointsOfInterest.push(poiCloud);
+            });
+        }
+
+        function setupControls() {
+            document.addEventListener('keydown', (event) => {
+                if (keys.hasOwnProperty(event.key)) {
+                    keys[event.key] = true;
+                    event.preventDefault();
+                }
+            });
+
+            document.addEventListener('keyup', (event) => {
+                if (keys.hasOwnProperty(event.key)) {
+                    keys[event.key] = false;
+                    event.preventDefault();
+                }
+            });
+
+            renderer.domElement.addEventListener('click', () => {
+                renderer.domElement.focus();
+            });
+
+            renderer.domElement.focus();
+        }
+
+        function updateAircraft() {
+            if (!aircraft || !experienceStarted) return;
+
+            // CONTRÔLES CORRIGÉS :
+            // ESPACE pour avancer, S pour ralentir
+            if (keys[' ']) { // ESPACE
+                aircraftSpeed = Math.min(aircraftSpeed + acceleration, maxSpeed);
+            }
+            if (keys['s'] || keys['S']) {
+                aircraftSpeed = Math.max(aircraftSpeed - acceleration, -maxSpeed * 0.2);
+            }
+
+            // FLÈCHES pour l'altitude et la direction
+            if (keys['ArrowUp']) {
+                aircraft.position.y += 0.8; // Monter
+            }
+            if (keys['ArrowDown']) {
+                aircraft.position.y = Math.max(aircraft.position.y - 0.8, 20); // Descendre (min 20m)
+            }
+
+            // Rotation avec inclinaison
+            if (keys['ArrowLeft']) {
+                aircraft.rotation.z = Math.PI / 6; // Inclinaison gauche
+                aircraft.rotation.y += 0.015;
+            } else if (keys['ArrowRight']) {
+                aircraft.rotation.z = -Math.PI / 6; // Inclinaison droite
+                aircraft.rotation.y -= 0.015;
+            } else {
+                aircraft.rotation.z *= 0.9; // Retour progressif au niveau
+            }
+
+            // Appliquer le mouvement vers l'avant
+            const direction = new THREE.Vector3(0, 0, -1);
+            direction.applyQuaternion(aircraft.quaternion);
+            aircraft.position.add(direction.multiplyScalar(aircraftSpeed));
+
+            // Friction
+            aircraftSpeed *= 0.97;
+            if (Math.abs(aircraftSpeed) < 0.001) aircraftSpeed = 0;
+
+            // Mettre à jour la caméra
+            updateCamera();
+
+            // Vérifier les points d'intérêt
+            checkPOIProximity();
+
+            // Mettre à jour le HUD
+            updateHUD();
+        }
+
+        function updateCamera() {
+            if (!aircraft) return;
+
+            const cameraOffset = new THREE.Vector3(0, 4, 10);
+            cameraOffset.applyQuaternion(aircraft.quaternion);
+
+            const targetCameraPos = aircraft.position.clone().add(cameraOffset);
+            camera.position.lerp(targetCameraPos, 0.1);
+
+            const lookAtPos = aircraft.position.clone();
+            const lookAtOffset = new THREE.Vector3(0, 0, -15);
+            lookAtOffset.applyQuaternion(aircraft.quaternion);
+            camera.lookAt(lookAtPos.add(lookAtOffset));
+
+            controls.target.copy(aircraft.position);
+        }
+
+        function checkPOIProximity() {
+            if (!aircraft) return;
+
+            let nearestPoi = null;
+            let minDistance = Infinity;
+
+            pointsOfInterest.forEach(poiCloud => {
+                const distance = aircraft.position.distanceTo(poiCloud.position);
+                if (distance < 35 && distance < minDistance) {
+                    minDistance = distance;
+                    nearestPoi = poiCloud.userData.poiInfo;
+                }
+            });
+
+            if (nearestPoi && nearestPoi !== activePoi) {
+                activePoi = nearestPoi;
+                document.getElementById('target-display').textContent = nearestPoi.title;
+                openCard(nearestPoi.id + '-card');
+            } else if (!nearestPoi && activePoi) {
+                activePoi = null;
+                document.getElementById('target-display').textContent = 'Exploration';
+                if (currentCard) closeCard(currentCard);
+            }
+        }
+
+        function updateHUD() {
+            const speed = Math.abs(Math.round(aircraftSpeed * 300));
+            const altitude = Math.round(aircraft.position.y);
+
+            document.getElementById('speed-display').textContent = speed + ' km/h';
+            document.getElementById('altitude-display').textContent = altitude + ' m';
+        }
+
+        function toggleMenu() {
+            document.getElementById('menu-panel').classList.toggle('active');
+        }
+
+        function navigateToPOI(poiId) {
+            const poi = predefinedPOIs.find(p => p.id === poiId);
+            if (poi && aircraft) {
+                aircraft.position.copy(poi.position);
+                aircraft.position.x += 30; // Arriver à côté du POI
+                aircraft.rotation.y = Math.PI; // Faire face au POI
+
+                // Fermer le menu
+                toggleMenu();
+
+                // Ouvrir la carte correspondante
+                openCard(poiId + '-card');
+            }
+        }
+
+        // AJOUTE cette fonction pour gérer les fichiers GLB personnalisés :
+        function setupGLBUpload() {
+            const fileInput = document.getElementById('glb-file');
+            if (fileInput) {
+                fileInput.addEventListener('change', function (e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const url = URL.createObjectURL(file);
+                        loadCustomAircraftGLB(url);
+                    }
+                });
+            }
+        }
+
+        function loadCustomAircraftGLB(url) {
+            const loader = new THREE.GLTFLoader();
+
+            loader.load(url, (gltf) => {
+                // Supprimer l'ancien avion
+                if (aircraftGLB) {
+                    scene.remove(aircraftGLB);
+                }
+                if (aircraft && aircraft !== aircraftGLB) {
+                    scene.remove(aircraft);
+                }
+
+                // Configurer le nouveau modèle
+                aircraftGLB = gltf.scene;
+                aircraftGLB.scale.set(4, 4, 4);
+                aircraftGLB.position.set(0, 80, 0);
+                aircraftGLB.rotation.set(0, Math.PI, 0);
+
+                // Ajuster l'échelle automatiquement selon la taille
+                const box = new THREE.Box3().setFromObject(aircraftGLB);
+                const size = box.getSize(new THREE.Vector3());
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const scale = 10 / maxDim; // Ajuster pour avoir ~10 unités de taille max
+                aircraftGLB.scale.set(scale, scale, scale);
+
+                aircraftGLB.traverse((child) => {
+                    if (child.isMesh) {
+                        child.castShadow = true;
+                        child.receiveShadow = true;
+                    }
+                });
+
+                scene.add(aircraftGLB);
+                aircraft = aircraftGLB;
+
+                console.log('✅ Avion personnalisé chargé avec succès');
+
+            }, undefined, (error) => {
+                console.error('❌ Erreur chargement avion personnalisé:', error);
+                alert('Erreur lors du chargement du fichier GLB');
+            });
+        }
+
+        function resetAircraft() {
+            if (aircraft) {
+                aircraft.position.set(0, 80, 0);
+                aircraft.rotation.set(0, Math.PI, 0);
+                aircraftSpeed = 0;
+            }
+            toggleMenu();
+        }
+
+        function openCard(cardId) {
+            if (currentCard) closeCard(currentCard);
+            const card = document.getElementById(cardId);
+            if (card) {
+                card.style.display = 'block';
+                currentCard = cardId;
+            }
+        }
+
+        function closeCard(cardId) {
+            const card = document.getElementById(cardId);
+            if (card) {
+                card.style.display = 'none';
+                currentCard = null;
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            updateAircraft();
+            animateClouds();
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Démarrer
+        init();
+    </script>
+</body>
+
+</html>
