@@ -231,6 +231,7 @@
             font-size: 20px;
             margin-bottom: 10px;
         }
+
         a {
             color: white;
             text-decoration: none;
@@ -325,7 +326,8 @@
                 <img src="../img/devcryptotool.png">
                 <strong>Crypto Free Tools</strong>
                 <p>Suite d'outils pour traders avec utilisation des API de CoinGecko et Binance.</p>
-                <a href="https://crypto-free-tools.netlify.app/" target="_blank" style="color: #ab9ff2;">Voir le projet →</a>
+                <a href="https://crypto-free-tools.netlify.app/" target="_blank" style="color: #ab9ff2;">Voir le projet
+                    →</a>
             </div>
         </div>
     </div>
@@ -337,13 +339,13 @@
             <div class="stars">★★★★★</div>
             <p><strong>Nico Golden dessert</strong></p>
             <p>"Gaël a livré un site parfaitement propre en 1 semaine seulement.
-                        Il nous à même fait cadeaux d'une interface admin. Je recommande !"</p>
+                Il nous à même fait cadeaux d'une interface admin. Je recommande !"</p>
         </div>
         <div class="review-item">
             <div class="stars">★★★★★</div>
             <p><strong>Eustis tool</strong></p>
             <p>"Développeur réactif et compétent. Il a su comprendre mes besoins
-                        complexes en matière d'intégration API."</p>
+                complexes en matière d'intégration API."</p>
         </div>
         <div class="review-item">
             <div class="stars">★★★★☆</div>
@@ -380,7 +382,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         // Initialisation de AOS
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             AOS.init({
                 duration: 1200,
                 once: true,
@@ -578,8 +580,8 @@
             // SRC = https://polyhaven.com/hdris/
             // ou free tools = Hugin
             const skyTextures = [
-                'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/cgpt.png',
                 'https://raw.githubusercontent.com/berru-g/plane/main/avion/ciel-nuage.webp',
+                'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/cgpt.png',
                 'https://cdn.polyhaven.com/asset_img/primary/dikhololo_night.png?height=760&quality=95',
                 'https://raw.githubusercontent.com/imgntn/j360/refs/heads/master/screencap2.jpg',
                 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/nebula-hdri.webp',
@@ -682,10 +684,10 @@
 
             // URLs de modèles d'avion GLB gratuits
             const aircraftURLs = [
-            'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/wing.glb', //"A-IR Wing - Rebel Grey Skin" (https://skfb.ly/6zzUI) by Pixel Make is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-                'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb', // "Drone" (https://skfb.ly/Ro8Q) by Renafox is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
+                'https://raw.githubusercontent.com/berru-g/plane/main/avion/cessna172.glb',
+                //'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/guardian.glb', //"A-IR Wing - Rebel Grey Skin" (https://skfb.ly/6zzUI) by Pixel Make is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+                //'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb', // "Drone" (https://skfb.ly/Ro8Q) by Renafox is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
                 //'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/animated_drone_with_camera_free.glb'//"Animated Drone" (https://skfb.ly/6WOAz) by hartwelkisaka is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-                //'https://raw.githubusercontent.com/berru-g/plane/main/avion/cessna172.glb',
                 //'#',  // "TMP Guardian Starfighter" (https://skfb.ly/6wxOo) by Robin Butler is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
             ];
 
@@ -705,7 +707,7 @@
 
                 // Configurer le nouvel avion GLB
                 aircraftGLB = gltf.scene;
-                aircraftGLB.scale.set(4, 4, 4); // Ajuster l'échelle de l'avion
+                aircraftGLB.scale.set(12, 12, 12); // Ajuster l'échelle de l'avion
                 aircraftGLB.position.set(0, 80, 0);
                 aircraftGLB.rotation.set(0, Math.PI, 0);
 
@@ -973,45 +975,63 @@
             renderer.domElement.focus();
         }
 
+        // function updateAircraft smooth fluide
         function updateAircraft() {
             if (!aircraft || !experienceStarted) return;
 
-            // CONTRÔLES CORRIGÉS :
-            // ESPACE pour avancer, S pour ralentir
-            if (keys[' ']) { // ESPACE
-                aircraftSpeed = Math.min(aircraftSpeed + acceleration, maxSpeed);
-            }
-            if (keys['s'] || keys['S']) {
-                aircraftSpeed = Math.max(aircraftSpeed - acceleration, -maxSpeed * 0.2);
+            const delta = clock.getDelta(); // Utiliser le delta time pour la fluidité
+
+            // CONTRÔLES FLUIDES avec interpolation
+            if (keys[' ']) { // ESPACE - Accélération progressive
+                aircraftSpeed = THREE.MathUtils.lerp(aircraftSpeed, maxSpeed, 0.1 * delta * 60);
+            } else if (keys['s'] || keys['S']) { // S - Freinage progressif
+                aircraftSpeed = THREE.MathUtils.lerp(aircraftSpeed, -maxSpeed * 0.2, 0.15 * delta * 60);
+            } else {
+                // Friction naturelle progressive
+                aircraftSpeed = THREE.MathUtils.lerp(aircraftSpeed, 0, 0.05 * delta * 60);
             }
 
-            // FLÈCHES pour l'altitude et la direction
+            // Limiter la vitesse de manière fluide
+            aircraftSpeed = Math.max(Math.min(aircraftSpeed, maxSpeed), -maxSpeed * 0.3);
+
+            // MOUVEMENTS D'ALTITUDE FLUIDES
+            let targetPitch = 0; // Inclinaison avant/arrière cible
+            let verticalSpeed = 0; // Vitesse verticale
+
             if (keys['ArrowUp']) {
-                aircraft.position.y += 0.8; // Monter
+                targetPitch = -0.1; // Légère inclinaison vers l'avant pour monter
+                verticalSpeed = 0.4;
             }
             if (keys['ArrowDown']) {
-                aircraft.position.y = Math.max(aircraft.position.y - 0.8, 20); // Descendre (min 20m)
+                targetPitch = 0.1; // Légère inclinaison vers l'arrière pour descendre
+                verticalSpeed = -0.4;
             }
 
-            // Rotation avec inclinaison
+            // Appliquer l'altitude avec interpolation
+            aircraft.position.y += verticalSpeed * delta * 60;
+            aircraft.position.y = Math.max(aircraft.position.y, 10); // Limite minimale
+
+            // ROTATIONS FLUIDES avec interpolation
+            let targetRoll = 0; // Inclinaison gauche/droite cible
+            let rotationSpeed = 0; // Vitesse de rotation horizontale
+
             if (keys['ArrowLeft']) {
-                aircraft.rotation.z = Math.PI / 6; // Inclinaison gauche
-                aircraft.rotation.y += 0.015;
+                targetRoll = 0.2; // Inclinaison gauche
+                rotationSpeed = 0.02;
             } else if (keys['ArrowRight']) {
-                aircraft.rotation.z = -Math.PI / 6; // Inclinaison droite
-                aircraft.rotation.y -= 0.015;
-            } else {
-                aircraft.rotation.z *= 0.9; // Retour progressif au niveau
+                targetRoll = -0.2; // Inclinaison droite
+                rotationSpeed = -0.02;
             }
 
-            // Appliquer le mouvement vers l'avant
+            // Appliquer les rotations avec interpolation fluide
+            aircraft.rotation.z = THREE.MathUtils.lerp(aircraft.rotation.z, targetRoll, 0.2 * delta * 60);
+            aircraft.rotation.y += rotationSpeed * delta * 60;
+            aircraft.rotation.x = THREE.MathUtils.lerp(aircraft.rotation.x, targetPitch, 0.15 * delta * 60);
+
+            // MOUVEMENT AVANT avec la direction actuelle
             const direction = new THREE.Vector3(0, 0, -1);
             direction.applyQuaternion(aircraft.quaternion);
-            aircraft.position.add(direction.multiplyScalar(aircraftSpeed));
-
-            // Friction
-            aircraftSpeed *= 0.97;
-            if (Math.abs(aircraftSpeed) < 0.001) aircraftSpeed = 0;
+            aircraft.position.add(direction.multiplyScalar(aircraftSpeed * delta * 60));
 
             // Mettre à jour la caméra
             updateCamera();
@@ -1023,6 +1043,57 @@
             updateHUD();
         }
 
+        /*
+                function updateAircraft() {
+                    if (!aircraft || !experienceStarted) return;
+        
+                    // CONTRÔLES CORRIGÉS :
+                    // ESPACE pour avancer, S pour ralentir
+                    if (keys[' ']) { // ESPACE
+                        aircraftSpeed = Math.min(aircraftSpeed + acceleration, maxSpeed);
+                    }
+                    if (keys['s'] || keys['S']) {
+                        aircraftSpeed = Math.max(aircraftSpeed - acceleration, -maxSpeed * 0.2);
+                    }
+        
+                    // FLÈCHES pour l'altitude et la direction
+                    if (keys['ArrowUp']) {
+                        aircraft.position.y += 0.8; // Monter
+                    }
+                    if (keys['ArrowDown']) {
+                        aircraft.position.y = Math.max(aircraft.position.y - 0.8, 20); // Descendre (min 20m)
+                    }
+        
+                    // Rotation avec inclinaison
+                    if (keys['ArrowLeft']) {
+                        aircraft.rotation.z = Math.PI / 6; // Inclinaison gauche
+                        aircraft.rotation.y += 0.015;
+                    } else if (keys['ArrowRight']) {
+                        aircraft.rotation.z = -Math.PI / 6; // Inclinaison droite
+                        aircraft.rotation.y -= 0.015;
+                    } else {
+                        aircraft.rotation.z *= 0.9; // Retour progressif au niveau
+                    }
+        
+                    // Appliquer le mouvement vers l'avant
+                    const direction = new THREE.Vector3(0, 0, -1);
+                    direction.applyQuaternion(aircraft.quaternion);
+                    aircraft.position.add(direction.multiplyScalar(aircraftSpeed));
+        
+                    // Friction
+                    aircraftSpeed *= 0.97;
+                    if (Math.abs(aircraftSpeed) < 0.001) aircraftSpeed = 0;
+        
+                    // Mettre à jour la caméra
+                    updateCamera();
+        
+                    // Vérifier les points d'intérêt
+                    checkPOIProximity();
+        
+                    // Mettre à jour le HUD
+                    updateHUD();
+                }
+        */
         function updateCamera() {
             if (!aircraft) return;
 
