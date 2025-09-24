@@ -682,9 +682,11 @@
 
             // URLs de modèles d'avion GLB gratuits
             const aircraftURLs = [
+            'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/wing.glb', //"A-IR Wing - Rebel Grey Skin" (https://skfb.ly/6zzUI) by Pixel Make is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
                 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb', // "Drone" (https://skfb.ly/Ro8Q) by Renafox is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
                 //'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/animated_drone_with_camera_free.glb'//"Animated Drone" (https://skfb.ly/6WOAz) by hartwelkisaka is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
                 //'https://raw.githubusercontent.com/berru-g/plane/main/avion/cessna172.glb',
+                //'#',  // "TMP Guardian Starfighter" (https://skfb.ly/6wxOo) by Robin Butler is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
             ];
 
             // Essayer chaque URL jusqu'à ce qu'un fonctionne
@@ -703,7 +705,7 @@
 
                 // Configurer le nouvel avion GLB
                 aircraftGLB = gltf.scene;
-                aircraftGLB.scale.set(12, 12, 12); // Ajuster l'échelle de l'avion
+                aircraftGLB.scale.set(4, 4, 4); // Ajuster l'échelle de l'avion
                 aircraftGLB.position.set(0, 80, 0);
                 aircraftGLB.rotation.set(0, Math.PI, 0);
 
