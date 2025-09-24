@@ -1,0 +1,393 @@
+:root {
+    --deep-blue: #0a1128;
+    --electric-purple: #7b4bff;
+    --neon-cyan: #00e0ff;
+    --magenta: #ff2a78;
+    --dark-bg: #050a18;
+    --light-text: #f0f6ff;
+    --glow: 0 0 15px currentColor;
+    --transition-slow: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-fast: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--dark-bg);
+    color: var(--light-text);
+    font-family: 'Outfit', sans-serif;
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* Container 3D en arrière-plan */
+#container3D {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1;
+    mix-blend-mode: screen;
+}
+
+/* Contenu principal */
+.content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem;
+}
+
+/* Hero section avec superposition 3D */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    padding: 2rem;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 3;
+    max-width: 800px;
+}
+
+/* Typographie immersive */
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, var(--light-text) 0%, var(--neon-cyan) 50%, var(--electric-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: var(--glow);
+    line-height: 1.1;
+}
+
+.hero-tagline {
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 300;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Sections de contenu */
+.content-section {
+    position: relative;
+    z-index: 4;
+    padding: 8rem 2rem;
+    background: transparent;
+
+}
+
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    margin-bottom: 3rem;
+    text-align: center;
+    background: linear-gradient(135deg, var(--neon-cyan) 0%, var(--electric-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Grille immersive */
+.grid-immersive {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 4rem 0;
+}
+
+.grid-item-3d {
+    background: rgba(10, 17, 40, 0.7);
+    border: 1px solid rgba(123, 75, 255, 0.2);
+    border-radius: 16px;
+    padding: 2.5rem;
+    transition: var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.grid-item-3d::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent, rgba(123, 75, 255, 0.1), transparent);
+    opacity: 0;
+    transition: var(--transition-fast);
+}
+
+.grid-item-3d:hover {
+    transform: translateY(-5px) scale(1.02);
+    border-color: var(--electric-purple);
+    box-shadow: 0 10px 30px rgba(123, 75, 255, 0.2);
+}
+
+.grid-item-3d:hover::before {
+    opacity: 1;
+}
+
+/* Icônes */
+.grid-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, var(--neon-cyan) 0%, var(--electric-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Témoignages */
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 4rem 0;
+}
+
+.testimonial-card {
+    background: rgba(10, 17, 40, 0.7);
+    border: 1px solid rgba(0, 224, 255, 0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    position: relative;
+    backdrop-filter: blur(10px);
+}
+
+.testimonial-card::after {
+    content: '"';
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 4rem;
+    font-family: 'Playfair Display', serif;
+    color: rgba(123, 75, 255, 0.2);
+}
+
+/* Boutons */
+.btn-immersive {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, var(--electric-purple) 0%, var(--magenta) 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-immersive::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: var(--transition-slow);
+}
+
+.btn-immersive:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(123, 75, 255, 0.4);
+}
+
+.btn-immersive:hover::before {
+    left: 100%;
+}
+
+/* Loader stylisé */
+.loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--dark-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.8s ease-out;
+}
+
+.loader-content {
+    text-align: center;
+}
+
+.loader-spinner {
+    width: 60px;
+    height: 60px;
+    border: 3px solid rgba(123, 75, 255, 0.3);
+    border-top-color: var(--neon-cyan);
+    border-radius: 50%;
+    animation: spin 1.2s ease-in-out infinite;
+    margin-bottom: 1.5rem;
+}
+
+.loader-text {
+    font-size: 1.2rem;
+    opacity: 0.8;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Navigation */
+.nav-immersive {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    z-index: 10;
+    display: flex;
+    gap: 1rem;
+}
+
+.nav-btn {
+    padding: 0.8rem 1.5rem;
+    background: rgba(10, 17, 40, 0.7);
+    border: 1px solid rgba(123, 75, 255, 0.3);
+    border-radius: 25px;
+    color: var(--light-text);
+    text-decoration: none;
+    transition: var(--transition-fast);
+    backdrop-filter: blur(10px);
+}
+
+.nav-btn:hover {
+    background: var(--electric-purple);
+    border-color: var(--electric-purple);
+}
+
+/* Animations */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.float-animation {
+    animation: float 6s ease-in-out infinite;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .content {
+        padding: 1rem;
+    }
+
+    .hero {
+        padding: 1rem;
+    }
+
+    .content-section {
+        padding: 4rem 1rem;
+    }
+
+    .grid-immersive,
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nav-immersive {
+        top: 1rem;
+        right: 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+/* Effets de particules (simulés avec CSS) */
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.particle {
+    position: absolute;
+    background: var(--neon-cyan);
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: float 8s ease-in-out infinite;
+}
+
+/* Scroll indicator */
+.scroll-indicator {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--neon-cyan);
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0.7;
+    transition: var(--transition-fast);
+}
+
+.scroll-indicator i {
+    font-size: 2rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-10px);
+    }
+
+    60% {
+        transform: translateY(-5px);
+    }
+}

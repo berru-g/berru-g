@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<!--https://gael-berru.com-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modèle 3D avec Animation au Scroll</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <div class="loader-text">Bienvenue dans l'univers</div>
+        </div>
+    </div>
+
+    <div id="container3D"></div>
+
+    <div class="particles" id="particles"></div>
+  
+  <div id="tooltip">
+</div>
+
+
+   <!-- <nav class="nav-immersive" data-aos="fade-up" data-aos-delay="200">
+        <a href="#about" class="nav-btn">Découvrir</a>
+        <a href="#products" class="nav-btn">Collection</a>
+        <a href="https://gael-berru.com" class="nav-btn">Contact</a>
+    </nav>-->
+
+    <div class="content">
+        <!-- Hero section avec superposition 3D -->
+        <section class="hero" data-aos="fade-up" data-aos-delay="200">
+            <div class="hero-content">
+                <h1 class="float-animation">Archi</h1>
+                <p class="hero-tagline">Plongez dans une expérience où l'art et la technologie fusionnent pour créer l'extraordinaire</p>
+                
+            </div>
+        </section>
+    </div>
+
+    <!-- Sections de contenu (passent au-dessus du 3D au scroll) -->
+    <section id="discover" class="content-section" data-aos="fade-up" data-aos-delay="200">
+        <h2 class="section-title">Une Expérience Transcendante</h2>
+        
+        <div class="grid-immersive">
+            <div class="grid-item-3d" data-aos="fade-up" data-aos-delay="200">
+                <div class="grid-icon">
+                    <i class="fas fa-atom"></i>
+                </div>
+                <h3>Réalité Augmentée</h3>
+                <p>Interagissez avec nos créations dans votre espace grâce à la technologie de réalité augmentée de pointe.</p>
+            </div>
+            
+            <div class="grid-item-3d" data-aos="fade-up" data-aos-delay="200">
+                <div class="grid-icon">
+                    <i class="fas fa-palette"></i>
+                </div>
+                <h3>Design Algorithmique</h3>
+                <p>Chaque pièce est générée par des algorithmes uniques, garantissant son caractère exceptionnel.</p>
+            </div>
+            
+            <div class="grid-item-3d" data-aos="fade-up" data-aos-delay="200">
+                <div class="grid-icon">
+                    <i class="fas fa-infinity"></i>
+                </div>
+                <h3>Dimensions Multiples</h3>
+                <p>Explorez nos créations sous différents angles et dans diverses configurations spatiales.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section" style="background: rgba(122, 75, 255, 0.05);">
+        <h2 class="section-title">Témoignages Cosmiques</h2>
+        
+        <div class="testimonials-grid">
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                <p>"Cette expérience a radicalement transformé ma perception de l'art numérique. Absolument fascinant."</p>
+                <p><strong>— Élise R.</strong><br>Artiste numérique</p>
+            </div>
+            
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
+                <p>"Je n'avais jamais rien vu de semblable. L'immersion est totale, les sensations incomparables."</p>
+                <p><strong>— Thomas L.</strong><br>Collectionneur</p>
+            </div>
+            
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="300">
+                <p>"La fusion entre technologie et art atteint ici des sommets inexplorés. Une révélation."</p>
+                <p><strong>— Dr. Sophie M.</strong><br>Critique d'art</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2 class="section-title">Collection Singularité</h2>
+        
+        <div class="grid-immersive" data-aos="fade-up" data-aos-delay="200">
+            <div class="grid-item-3d">
+                <h3>Nébuleuse Digitale</h3>
+                <p>Œuvre évolutive qui se transforme en interaction avec son environnement.</p>
+                <a href="#" class="btn-immersive" style="margin-top: 1.5rem;">
+                    <i class="fas fa-eye"></i>
+                    Voir en détail
+                </a>
+            </div>
+            
+            <div class="grid-item-3d">
+                <h3>Écho Dimensionnel</h3>
+                <p>Installation responsive qui réagit au son et au mouvement.</p>
+                <a href="#" class="btn-immersive" style="margin-top: 1.5rem;">
+                    <i class="fas fa-eye"></i>
+                    Voir en détail
+                </a>
+            </div>
+            
+            <div class="grid-item-3d">
+                <h3>Quantum Sculpture</h3>
+                <p>Sculpture virtuelle existant dans plusieurs états simultanément.</p>
+                <a href="#" class="btn-immersive" style="margin-top: 1.5rem;">
+                    <i class="fas fa-eye"></i>
+                    Voir en détail
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="scroll-indicator">
+        <i class="fas fa-chevron-down"></i>
+    </div>
+
+    <script>
+        // Simuler le chargement
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.querySelector('.loader').style.opacity = '0';
+                setTimeout(function() {
+                    document.querySelector('.loader').style.display = 'none';
+                }, 500);
+            }, 1500);
+        });
+
+        // Animation au scroll
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        fadeElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // anim au scroll
+        AOS.init({
+            duration: 800,        // Durée de l'animation en ms
+            easing: 'ease-out',   // Type d'effet
+            once: true,           // Ne joue l'animation qu'une fois
+        });
+
+    </script>
+    
+    <script src="./script.js"></script>
+</body>
+
+</html>
