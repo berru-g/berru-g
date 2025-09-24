@@ -4,7 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exploration Aérienne - Portfolio 3D</title>
+    <title>Gaël Leberruyer 3D Expérience</title>
+    <link rel="shortcut icon" href="/img/logo.png" />
+    <link rel="apple-touch-icon" href="/img/logo.png" />
+    <meta name="description"
+        content="Développeur autodidacte et passionné par les solutions web et web3. Je conçois des projets concrets alliant technologie, durabilité et impact social.">
+    <meta name="keywords"
+        content="site web 3D immersif, dev web sur mesure, Gael Leberruyer, Gael Berru, web3, crypto enthusiast, vente de pixel, codeur de site nantes, developpeur nantes,">
+    <meta name="author" content="Gael Berru.">
+    <meta name="robots" content="noai">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         :root {
             --background-color: #f1f1f1;
@@ -93,6 +102,7 @@
             width: 100%;
             padding: 12px;
             background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            text-align: center;
             border: none;
             border-radius: 8px;
             color: white;
@@ -144,8 +154,8 @@
 
         .intro-img {
             display: flex;
-            width: 100px;
-            border-radius: 12px;
+            width: 100%;
+            border-radius: 8px;
             margin: 0 auto;
         }
 
@@ -221,6 +231,10 @@
             font-size: 20px;
             margin-bottom: 10px;
         }
+        a {
+            color: white;
+            text-decoration: none;
+        }
     </style>
 </head>
 
@@ -255,6 +269,7 @@
         <div class="menu-section">
             <h3>berru-g</h3>
             <div id="poi-list"></div>
+            <h3 class="btn"><a href="../index.html">Revenir au site</a></h3>
         </div>
     </div>
 
@@ -273,7 +288,7 @@
         </div>
     </div>
 
-    <!-- Cartes d'information -->
+    <!-- Cartes d'information -- data-aos="zoom-in" data-aos-delay="100"-->
     <div id="intro-card" class="info-card">
         <button class="close-card" onclick="closeCard('intro-card')">×</button>
         <h2>Expérience immersive</h2>
@@ -289,58 +304,58 @@
         <h2>Projets</h2>
         <div class="gallery-grid">
             <div class="gallery-item">
-
                 <img src="../img/messagerie.png">
-                <strong>Site E-commerce 3D</strong>
-                <p>Expérience shopping immersive</p>
-                <a href="#" style="color: #ab9ff2;">Voir le projet →</a>
+                <strong>Réseau social & tool DataAnalyst</strong>
+                <p>DataViz et editeur sql</p>
+                <a href="https://agora-dataviz.com/" target="_blank" style="color: #ab9ff2;">Voir le projet →</a>
             </div>
             <div class="gallery-item">
-                <div style="background: #4ecdc4; height: 100px; border-radius: 5px;"></div>
-                <strong>Portfolio Artistique</strong>
-                <p>Galerie virtuelle interactive</p>
-                <a href="#" style="color: #ab9ff2;">Voir le projet →</a>
+                <img src="../img/devpixel.png">
+                <strong>Pixel earth</strong>
+                <p>Plateforme de vente de pixel avec système de paiement ( Stripe ) et base de données.</p>
+                <a href="https://pixelearth.netlify.app/" target="_blank" style="color: #ab9ff2;">Voir le projet →</a>
             </div>
             <div class="gallery-item">
-
-                <img src="../img/messagerie.png">
-                <strong>Site E-commerce 3D</strong>
-                <p>Expérience shopping immersive</p>
-                <a href="#" style="color: #ab9ff2;">Voir le projet →</a>
+                <img src="../img/admin2.png">
+                <strong>Interface Admin.</strong>
+                <p>Accédez à toute vos bases de données dans un dashboard.</p>
+                <a href="../board/login.php" target="_blank" style="color: #ab9ff2;">Voir le projet →</a>
             </div>
             <div class="gallery-item">
-                <div style="background: #4ecdc4; height: 100px; border-radius: 5px;"></div>
-                <strong>Portfolio Artistique</strong>
-                <p>Galerie virtuelle interactive</p>
-                <a href="#" style="color: #ab9ff2;">Voir le projet →</a>
+                <img src="../img/devcryptotool.png">
+                <strong>Crypto Free Tools</strong>
+                <p>Suite d'outils pour traders avec utilisation des API de CoinGecko et Binance.</p>
+                <a href="https://crypto-free-tools.netlify.app/" target="_blank" style="color: #ab9ff2;">Voir le projet →</a>
             </div>
         </div>
     </div>
 
     <div id="skills-card" class="info-card">
         <button class="close-card" onclick="closeCard('skills-card')">×</button>
-        <h2>Compétences</h2>
+        <h2>Avis</h2>
         <div class="review-item">
             <div class="stars">★★★★★</div>
-            <p><strong>Three.js / WebGL</strong></p>
-            <p>Création d'expériences 3D interactives dans le navigateur</p>
+            <p><strong>Nico Golden dessert</strong></p>
+            <p>"Gaël a livré un site parfaitement propre en 1 semaine seulement.
+                        Il nous à même fait cadeaux d'une interface admin. Je recommande !"</p>
         </div>
         <div class="review-item">
             <div class="stars">★★★★★</div>
-            <p><strong>Développement Frontend</strong></p>
-            <p>React, Vue.js, JavaScript moderne</p>
+            <p><strong>Eustis tool</strong></p>
+            <p>"Développeur réactif et compétent. Il a su comprendre mes besoins
+                        complexes en matière d'intégration API."</p>
         </div>
         <div class="review-item">
             <div class="stars">★★★★☆</div>
-            <p><strong>Design 3D</strong></p>
-            <p>Modélisation et intégration d'assets 3D</p>
+            <p><strong>Antoine</strong></p>
+            <p>"Toujours un plaisir de bosser avec Gael, il sait s'adapter à nos besoins."</p>
         </div>
     </div>
 
     <div id="contact-card" class="info-card">
         <button class="close-card" onclick="closeCard('contact-card')">×</button>
         <h2>Contact</h2>
-        <form class="contact-form">
+        <form action="https://formspree.io/f/xrbklnwy" method="POST" class="contact-form">
 
             <input type="email" placeholder="Votre email" required>
             <textarea placeholder="Votre message" rows="5" required></textarea>
@@ -350,6 +365,29 @@
             <!--<p><strong>Email:</strong> gael-berru.com</p>-->
         </div>
     </div>
+
+    <script>
+        document.querySelectorAll('.zoom-img').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const imgSrc = this.getAttribute('href');
+                const instance = basicLightbox.create(`<img src="${imgSrc}" style="max-width:100%; max-height:100vh;">`);
+                instance.show();
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialisation de AOS
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                duration: 1200,
+                once: true,
+                easing: 'ease-out-back'
+            });
+        });
+    </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
@@ -377,7 +415,7 @@
             {
                 id: 'intro',
                 title: 'Introduction',
-                description: 'Découvrez mon parcours',
+                description: 'Comment naviguer ?',
                 position: new THREE.Vector3(0, 80, 0)
             },
             {
@@ -388,8 +426,8 @@
             },
             {
                 id: 'skills',
-                title: 'Compétences',
-                description: 'Mes expertises',
+                title: 'Avis',
+                description: 'Retour de mes clients',
                 position: new THREE.Vector3(150, 90, 60)
             },
             {
@@ -397,7 +435,7 @@
                 title: 'Contact',
                 description: 'Travaillons ensemble',
                 position: new THREE.Vector3(100, 110, -150)
-            }
+            },
         ];
 
         function init() {
@@ -644,8 +682,7 @@
             // URLs de modèles d'avion GLB gratuits
             const aircraftURLs = [
                 //'https://raw.githubusercontent.com/berru-g/berru-g/main/img/animated_drone_with_camera_free.glb'//"Animated Drone" (https://skfb.ly/6WOAz) by hartwelkisaka is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-                //'https://raw.githubusercontent.com/berru-g/plane/main/avion/cessna172.glb',
-                'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/hubble.glb',
+                'https://raw.githubusercontent.com/berru-g/plane/main/avion/cessna172.glb',
             ];
 
             // Essayer chaque URL jusqu'à ce qu'un fonctionne
