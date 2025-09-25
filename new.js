@@ -269,10 +269,10 @@ const tips = [
     "🔒 La sécurité (https) inspire confiance à vos visiteurs.",
     "📊 53% des visiteurs quittent un site qui met plus de 3 secondes à charger. (Google, 2023)",
     "🛒 78% des clients vérifient un site avant d’acheter, même en magasin physique. (RetailDive)",
-    "📱 En 2025, 75% du trafic web viendra des mobiles. (Statista)",
+    "📱 En 2026, 75% du trafic web viendra des mobiles. (Statista)",
     "🎨 94% des premières impressions sont liées au design d’un site. (ResearchGate)",
     "🔍 75% des utilisateurs ne cliquent que sur les 5 premiers résultats Google. (Advanced Web Ranking)",
-    "🥚 Ce site contient 7 Easter Egg ( curiosité à découvrir )",
+    "🥚 Ce site contient 8 Easter Egg ( curiosité à découvrir )",
     "🔒 85% des acheteurs en ligne évitent les sites non sécurisés (sans HTTPS). (GlobalSign)"
 ];
 
@@ -297,7 +297,7 @@ document.getElementById("show-tip").addEventListener("click", (e) => {
 // Variables globales
 let scene, camera, renderer, model, mixer;
 let controls, clock;
-let initialScale = 4; // Stocker l'échelle initiale
+let initialScale = 6; // Stocker l'échelle initiale
 
 // Initialisation de Three.js
 function init() {
@@ -358,7 +358,7 @@ function loadModel() {
 
     // Utilisation d'un modèle 3D glb ou gltf plus léger
     //const modelUrl = 'https://raw.githubusercontent.com/berru-g/3d-scroll-animate/main/assets/scene.gltf';
-    const modelUrl = '#';
+    const modelUrl = 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb';
 
     loader.load(
         modelUrl,
@@ -367,9 +367,9 @@ function loadModel() {
             scene.add(model);
 
             // Ajuster l'échelle et la position si nécessaire
-            initialScale = 4; // Définir l'échelle initiale
+            initialScale = 6; // Définir l'échelle initiale
             model.scale.set(initialScale, initialScale, initialScale);
-            model.position.set(0, 10, 0); // Ajusté pour mieux centrer
+            model.position.set(20, 10, 40); // Ajusté pour mieux centrer
 
             // Configurer les animations s'il y en a
             if (gltf.animations && gltf.animations.length) {
@@ -483,7 +483,7 @@ function onScroll() {
     model.rotation.y = scrollPercentage * Math.PI * 2;
     
     // Translation horizontale
-    model.position.x = (scrollPercentage - 0.5) * 4;
+    model.position.x = (scrollPercentage - 0.5) * 6;
 }
 
 // Apparition progressive + rotation
@@ -505,23 +505,6 @@ function onScroll() {
 }
     
 
-// variante zoom + tour sur lui meme
-function onScroll() {
-    if (!model) return;
-
-    const scrollY = window.scrollY;
-    const totalHeight = document.body.scrollHeight - window.innerHeight;
-    const scrollPercentage = Math.min(scrollY / totalHeight, 1);
-
-    // Rotation simple
-    model.rotation.y = scrollPercentage * Math.PI * 2;
-    
-    // Zoom progressif
-    const scale = initialScale + scrollPercentage;
-    model.scale.set(scale, scale, scale);
-}
-*/
-
 // Rotation avec oscillation (effet de vague)
 function onScroll() {
     if (!model) return;
@@ -537,7 +520,22 @@ function onScroll() {
     model.rotation.x = Math.sin(scrollPercentage * Math.PI * 4) * 0.5;
     model.position.y = Math.sin(scrollPercentage * Math.PI * 2) * 2;
 }
+*/
+// variante zoom + tour sur lui meme
+function onScroll() {
+    if (!model) return;
 
+    const scrollY = window.scrollY;
+    const totalHeight = document.body.scrollHeight - window.innerHeight;
+    const scrollPercentage = Math.min(scrollY / totalHeight, 1);
+
+    // Rotation simple
+    model.rotation.y = scrollPercentage * Math.PI * 2;
+    
+    // Zoom progressif
+    const scale = initialScale + scrollPercentage;
+    model.scale.set(scale, scale, scale);
+}
 
 // Animate function
 function animate() {

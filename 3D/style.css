@@ -1,3 +1,17 @@
+:root {
+    --background-color: #f1f1f1;
+    --text-color: #000000;
+    --titre-color: grey;
+    --primary-color: #ab9ff2;
+    --border-color: #dcdcdc;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --input-background: #f9f9f9;
+    --secondary-color: #2575fc;
+    --success-color: #60d394;
+    --error-color: #ee6055;
+    --jaune-color: #ffd97d;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -19,13 +33,12 @@ body {
     height: 100%;
 }
 
-/* Menu hamburger */
 #menu-toggle {
     position: fixed;
     top: 20px;
     left: 20px;
     z-index: 1000;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
@@ -39,19 +52,13 @@ body {
     font-size: 20px;
 }
 
-#menu-toggle:hover {
-    background: rgba(0, 0, 0, 0.9);
-    transform: scale(1.1);
-}
-
-/* Panel menu */
 #menu-panel {
     position: fixed;
     top: 0;
     left: -400px;
     width: 350px;
     height: 100%;
-    background: rgba(0, 0, 0, 0.95);
+    background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(20px);
     border-right: 1px solid rgba(255, 255, 255, 0.1);
     padding: 80px 30px 30px;
@@ -69,28 +76,23 @@ body {
 }
 
 .menu-section h3 {
-    color: #00ff88;
+    color: var(--primary-color);
     margin-bottom: 15px;
     font-size: 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 5px;
 }
 
 .btn {
     width: 100%;
     padding: 12px;
-    background: linear-gradient(45deg, #00ff88, #00ccff);
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    text-align: center;
     border: none;
     border-radius: 8px;
-    color: black;
+    color: white;
     font-weight: bold;
     cursor: pointer;
     transition: transform 0.2s;
     margin: 5px 0;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
 }
 
 .btn.secondary {
@@ -98,18 +100,6 @@ body {
     color: white;
 }
 
-.file-input {
-    width: 100%;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px dashed rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    color: white;
-    cursor: pointer;
-    margin: 10px 0;
-}
-
-/* HUD */
 #hud {
     position: fixed;
     bottom: 20px;
@@ -138,101 +128,43 @@ body {
 .hud-value {
     font-size: 16px;
     font-weight: bold;
-    color: #00ff88;
-}
-
-/* Écran de chargement */
-#loading {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-}
-
-.spinner {
-    width: 50px;
-    height: 50px;
-    border: 4px solid rgba(255, 255, 255, 0.1);
-    border-left: 4px solid #00ff88;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 20px;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
+    color: var(--primary-color);
 }
 
 .hidden {
     display: none !important;
 }
 
-/* Instructions */
-#instructions {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(10px);
-    padding: 30px;
-    border-radius: 15px;
-    text-align: center;
-    z-index: 1000;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+.intro-img {
+    display: flex;
+    width: 100%;
+    border-radius: 8px;
+    margin: 0 auto;
 }
 
-/* Noms des POIs au-dessus des cônes */
-.poi-label {
-    position: absolute;
-    background: rgba(0, 0, 0, 0.8);
-    color: #00ff88;
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 12px;
-    font-weight: bold;
-    white-space: nowrap;
-    transform: translate(-50%, -100%);
-    margin-top: -10px;
-    border: 1px solid #00ff88;
+.intro-logo {
+    display: flex;
+    width: 140px;
+    border-radius: 50px;
+    margin: 0 auto;
 }
 
-/* Cartes d'information */
 .info-card {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.95);
+    background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(20px);
-    border: 2px solid #00ff88;
+    border: 2px solid #ffffff;
     border-radius: 15px;
     padding: 30px;
     max-width: 500px;
     width: 90%;
     max-height: 80vh;
     overflow-y: auto;
-    z-index: 1000;
+    z-index: 900;
     display: none;
-}
-
-.info-card h2 {
-    color: #00ff88;
-    margin-bottom: 20px;
-    text-align: center;
 }
 
 .close-card {
@@ -241,12 +173,11 @@ body {
     right: 15px;
     background: none;
     border: none;
-    color: #00ff88;
+    color: var(--primary-color);
     font-size: 20px;
     cursor: pointer;
 }
 
-/* Gallery */
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -263,13 +194,10 @@ body {
 
 .gallery-item img {
     width: 100%;
-    height: 100px;
-    object-fit: cover;
     border-radius: 5px;
     margin-bottom: 10px;
 }
 
-/* Formulaire de contact */
 .contact-form input,
 .contact-form textarea {
     width: 100%;
@@ -281,19 +209,20 @@ body {
     color: white;
 }
 
-.contact-form button {
-    width: 100%;
-    padding: 12px;
-    background: #00ff88;
-    color: black;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
+.contact-form input:focus,
+.contact-form textarea:focus {
+    outline: 2px solid var(--primary-color);
 }
 
-/* Avis clients */
+/* Styles pour éviter la capture des touches dans les formulaires */
+.form-control-active {
+    pointer-events: auto !important;
+}
+
+.form-control-active * {
+    pointer-events: auto !important;
+}
+
 .review-item {
     background: rgba(255, 255, 255, 0.05);
     padding: 15px;
@@ -304,5 +233,128 @@ body {
 .stars {
     color: #ffd700;
     font-size: 20px;
+    margin-bottom: 10px;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+#mini-map {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 150px;
+    height: 150px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    z-index: 100;
+    overflow: hidden;
+}
+
+#radar-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.radar-sweep {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: conic-gradient(transparent 90%, rgba(171, 159, 242, 0.3) 90%);
+    border-radius: 50%;
+    animation: radarSweep 4s linear infinite;
+}
+
+.player-dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #00ff00;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
+.poi-dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+@keyframes radarSweep {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* POPUP FIN DE QUÊTE */
+#quest-complete {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(20px);
+    border: 3px solid var(--success-color);
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    z-index: 1000;
+    display: none;
+    text-align: center;
+}
+
+#quest-complete h2 {
+    color: var(--success-color);
+    margin-bottom: 20px;
+}
+
+.quest-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.stat-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+/* VIDEO GALLERY */
+.video-gallery {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.video-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.video-item iframe {
+    width: 100%;
+    height: 200px;
+    border-radius: 5px;
     margin-bottom: 10px;
 }
