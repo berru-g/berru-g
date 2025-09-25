@@ -269,6 +269,7 @@ body {
     border-width: 5px;
     border-style: solid;
     border-color: #333 transparent transparent transparent;
+    z-index: 5000;
 }
 
 .nav-item:hover .tooltip {
