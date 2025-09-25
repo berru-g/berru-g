@@ -158,6 +158,12 @@
             border-radius: 8px;
             margin: 0 auto;
         }
+        .intro-logo {
+            display: flex;
+            width: 140px;
+            border-radius: 50px;
+            margin: 0 auto;
+        }
 
         .info-card {
             position: fixed;
@@ -218,6 +224,19 @@
             border-radius: 5px;
             color: white;
         }
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: 2px solid var(--primary-color);
+        }
+
+        /* Styles pour éviter la capture des touches dans les formulaires */
+        .form-control-active {
+            pointer-events: auto !important;
+        }
+
+        .form-control-active * {
+            pointer-events: auto !important;
+        }
 
         .review-item {
             background: rgba(255, 255, 255, 0.05);
@@ -235,6 +254,118 @@
         a {
             color: white;
             text-decoration: none;
+        }
+        #mini-map {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 150px;
+            height: 150px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        #radar-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .radar-sweep {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(transparent 90%, rgba(171, 159, 242, 0.3) 90%);
+            border-radius: 50%;
+            animation: radarSweep 4s linear infinite;
+        }
+
+        .player-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #00ff00;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+
+        .poi-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        @keyframes radarSweep {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* POPUP FIN DE QUÊTE */
+        #quest-complete {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border: 3px solid var(--success-color);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            z-index: 1000;
+            display: none;
+            text-align: center;
+        }
+
+        #quest-complete h2 {
+            color: var(--success-color);
+            margin-bottom: 20px;
+        }
+
+        .quest-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        /* VIDEO GALLERY */
+        .video-gallery {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .video-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .video-item iframe {
+            width: 100%;
+            height: 200px;
+            border-radius: 5px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -274,6 +405,19 @@
         </div>
     </div>
 
+    <!-- Affichage des points 
+        <div class="menu-section">
+            <h3>PROGRESSION</h3>
+            <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
+                <div>Points: <span id="points-display">0</span>/100</div>
+                <div style="margin-top: 10px; font-size: 12px; opacity: 0.8;">
+                    ✓ 10 points par POI visité<br>
+                    ✓ 40 points pour contact
+                </div>
+            </div>
+        </div>
+    </div>-->
+
     <div id="hud">
         <div class="hud-item">
             <div class="hud-label">VITESSE</div>
@@ -281,7 +425,7 @@
         </div>
         <div class="hud-item">
             <div class="hud-label">ALTITUDE</div>
-            <div class="hud-value" id="altitude-display">0 m</div>
+            <div class="hud-value" id="altitude-display">0 km</div>
         </div>
         <div class="hud-item">
             <div class="hud-label">DESTINATION</div>
@@ -289,11 +433,21 @@
         </div>
     </div>
 
+    <!-- Mini-map Radar 
+    <div id="mini-map">
+        <div id="radar-content">
+            <div class="radar-sweep"></div>
+            <div class="player-dot"></div>
+            
+        </div>
+    </div>-->
+
     <!-- Cartes d'information -- data-aos="zoom-in" data-aos-delay="100"-->
     <div id="intro-card" class="info-card">
         <button class="close-card" onclick="closeCard('intro-card')">×</button>
-        <h2>Expérience immersive</h2>
-        <p><strong>Bienvenue dans ce prototype !</strong></p>
+        <img src="../img/drone-logo.png" class="intro-logo">
+        <h2 style="text-align: center;">Bienvenue dans cette immersion</h2>
+        <p style="text-align: center;"><strong>Utilisez les touches de votre clavier </strong></p>
         <br>
         <img src="../img/key.png" class="intro-img">
 
@@ -368,6 +522,68 @@
         </div>
     </div>
 
+    <div id="video-gallery-card" class="info-card">
+        <button class="close-card" onclick="closeCard('video-gallery-card')">×</button>
+        <h2>Galerie Vidéo</h2>
+        <div class="video-gallery">
+            <div class="video-item">
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
+                <strong>Présentation des projets</strong>
+                <p>Découvrez mes réalisations en vidéo</p>
+            </div>
+            <div class="video-item">
+                <iframe src="https://www.youtube.com/embed/VIDEO_ID_2" frameborder="0" allowfullscreen></iframe>
+                <strong>Tutoriels développement</strong>
+                <p>Quelques tips et astuces</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="portal-card" class="info-card">
+        <button class="close-card" onclick="closeCard('portal-card')">×</button>
+        <h2>🌌 Portail Dimensionnel</h2>
+        <p style="text-align: center; margin: 20px 0;">
+            <strong>Attention ! Vous êtes sur le point de quitter cette dimension.</strong>
+        </p>
+        <div style="text-align: center; font-size: 60px; margin: 30px 0;">🌀</div>
+        <p style="text-align: center; opacity: 0.8;">
+            Ce portail vous transportera vers mon site principal.
+        </p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px;">
+            <button class="btn secondary" onclick="closeCard('portal-card')">Rester ici</button>
+            <button class="btn" onclick="window.open('../index.html', '_blank')">Aller vers l'inconnu</button>
+        </div>
+    </div>
+
+    <!-- Popup de fin de quête -->
+    <div id="quest-complete">
+        <h2>🎉 Quête Accomplie !</h2>
+        <p>Félicitations ! Vous avez exploré tout l'univers Gaël Leberruyer.</p>
+        
+        <div class="quest-stats">
+            <div class="stat-item">
+                <strong>Points</strong><br>
+                <span style="color: var(--success-color); font-size: 24px;">100/100</span>
+            </div>
+            <div class="stat-item">
+                <strong>POIs Visités</strong><br>
+                <span style="color: var(--primary-color); font-size: 24px;" id="pois-visited">6/6</span>
+            </div>
+        </div>
+
+        <p>Votre avis est précieux pour m'aider à m'améliorer !</p>
+        
+        <div style="margin: 25px 0;">
+            <button class="btn" onclick="leaveReview()" style="margin-bottom: 10px;">
+                📝 Laisser un avis Google
+            </button>
+            <br>
+            <button class="btn secondary" onclick="closeQuestComplete()">
+                Continuer l'exploration
+            </button>
+        </div>
+    </div>
+
     <script>
         document.querySelectorAll('.zoom-img').forEach(link => {
             link.addEventListener('click', function (e) {
@@ -404,7 +620,7 @@
         let activePoi = null;
         let experienceStarted = true;
         let currentCard = null;
-        let aircraftGLB = null; // Nouvelle variable pour le GLB
+        let aircraftGLB = null; // variable pour le GLB
 
         // État des touches
         const keys = {
@@ -1141,7 +1357,7 @@
             const altitude = Math.round(aircraft.position.y);
 
             document.getElementById('speed-display').textContent = speed + ' km/h';
-            document.getElementById('altitude-display').textContent = altitude + ' m';
+            document.getElementById('altitude-display').textContent = altitude + ' km';
         }
 
         function toggleMenu() {
