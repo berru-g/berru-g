@@ -129,8 +129,7 @@ function playPOISound(poiId) {
 }
 
 
-
-// Variables globales
+// Variables globales Début du jeu 3D avec threejs
 let scene, camera, renderer, controls, aircraft;
 let aircraftSpeed = 0, maxSpeed = 1.5, acceleration = 0.03;
 let clock = new THREE.Clock();
@@ -192,8 +191,111 @@ const predefinedPOIs = [
     },
 ];
 
+// System de point a chaque POI ouvert + compteur
+// SYSTÈME DE POINTS GAMIFIÉ POUR LES POI
+const POINTS_PAR_POI = 10;
+let userPoints = 0;
+let openedPOI = {}; // { poiId: true }
+const TOTAL_POI = predefinedPOIs.length;
+
+// Load saved state from localStorage (pour persistance sur refresh)
+function loadGamificationState() {
+    const savedPoints = localStorage.getItem('userPoints');
+    const savedOpened = localStorage.getItem('openedPOI');
+    userPoints = savedPoints ? parseInt(savedPoints, 10) : 0;
+    openedPOI = savedOpened ? JSON.parse(savedOpened) : {};
+    updatePointsHUD();
+}
+
+function saveGamificationState() {
+    localStorage.setItem('userPoints', userPoints);
+    localStorage.setItem('openedPOI', JSON.stringify(openedPOI));
+}
+
+function addPointsForPOI(poiId) {
+    if (!openedPOI[poiId]) {
+        userPoints += POINTS_PAR_POI;
+        openedPOI[poiId] = true;
+        updatePointsHUD();
+        saveGamificationState();
+        playAddPointAnimation(); // Optionnel : animation affichant "+10"
+        // Vérifier si le joueur a gagné
+        if (Object.keys(openedPOI).length === TOTAL_POI) {
+            showDiscountPopup();
+        }
+    }
+}
+
+// Affiche un popup de succès avec animation
+function showDiscountPopup() {
+    const popup = document.createElement('div');
+    popup.innerHTML = `
+    <div style="font-size:2.3em;font-weight:700;color:#fff;background:linear-gradient(90deg,#60d394,#2575fc,#ee6055);border-radius:24px;padding:32px;box-shadow:0 0 32px #0008;text-align:center;animation:popup-win 1s;">
+        BRAVO !<br>Tu obtiens <span style="font-size:1.4em;color:#ffe953;">10% de réduction</span> sur ta prochaine commande de site.<br>
+        <small>Code promo : <strong>10POI-CG</strong></small>
+    </div>
+    <style>@keyframes popup-win{0%{transform:scale(0.5);opacity:0;}50%{transform:scale(1.15);opacity:1;}100%{transform:scale(1);}}</style>
+    `;
+    popup.style.position = 'fixed';
+    popup.style.top = '50%';
+    popup.style.left = '50%';
+    popup.style.transform = 'translate(-50%,-50%)';
+    popup.style.zIndex = 2000;
+    document.body.appendChild(popup);
+    setTimeout(() => {
+        popup.style.transition = 'opacity 1s';
+        popup.style.opacity = '0';
+        setTimeout(() => document.body.removeChild(popup), 1000);
+    }, 5800); // Affiche ~6s
+}
+
+// Optionnel : animation "+10" over HUD
+function playAddPointAnimation() {
+    const el = document.createElement('div');
+    el.textContent = '+10 pts';
+    el.style.position = 'fixed';
+    el.style.top = '20%';
+    el.style.left = '50%';
+    el.style.transform = 'translate(-50%,0)';
+    el.style.fontSize = '2em';
+    el.style.fontWeight = 600;
+    el.style.color = '#00ff88';
+    el.style.textShadow = '0 2px 20px #222';
+    el.style.zIndex = 2000;
+    el.style.opacity = '1';
+    el.style.transition = 'all .9s cubic-bezier(.2,1.2,.2,1)';
+    document.body.appendChild(el);
+    setTimeout(() => {
+        el.style.transform = 'translate(-50%,-110px)';
+        el.style.opacity = '0';
+        setTimeout(() => el.remove(), 800);
+    }, 30);
+}
+
+// HUD Points : créer un simple affichage quelque part (ex : dans setupUI)
+function updatePointsHUD() {
+    let el = document.getElementById('points-hud');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'points-hud';
+        el.style.position = 'fixed';
+        el.style.top = '12px';
+        el.style.right = '14px';
+        el.style.padding = '10px 18px';
+        el.style.background = 'rgba(30,30,40,0.88)';
+        el.style.color = '#ffe953';
+        el.style.fontWeight = 'bold';
+        el.style.borderRadius = '13px';
+        el.style.fontSize = '1.1em';
+        el.style.zIndex = 1001;
+        document.body.appendChild(el);
+    }
+    el.textContent = `Score : ${userPoints} pts`;
+}
+// INIT INIT INIT 
 function init() {
     console.log('🚀 Initialisation de l\'expérience aérienne...');
+    loadGamificationState();
     setupThreeJS();
     setupUI(); // 
     createScene();
@@ -1019,6 +1121,9 @@ function openCard(cardId) {
     if (card) {
         card.style.display = 'block';
         currentCard = cardId;
+        // prendre l'id du poi
+        const poiBaseId = cardId.replace('-card', '');
+        addPointsForPOI(poiBaseId);
     }
 }
 
