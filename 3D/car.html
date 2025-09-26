@@ -1,80 +1,119 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio 3D - Exploration Interactive</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Gaël Leberruyer 3D Expérience</title>
+    <link rel="shortcut icon" href="/img/logo.png" />
+    <link rel="apple-touch-icon" href="/img/logo.png" />
+    <meta name="description"
+        content="Créateur de site web 3D intéractif. Je conçois des projets concrets alliant technologie, durabilité et impact social.">
+    <meta name="keywords"
+        content="site web 3D immersif, dev web sur mesure, Gael Leberruyer, Gael Berru, web3, crypto enthusiast, vente de pixel, codeur de site nantes, developpeur nantes,">
+    <meta name="author" content="Gael Berru.">
+    <meta name="robots" content="noai">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Gaël Leberruyer (Berru-G)",
+  "url": "https://gael-berru.com",
+  "description": "Créateur de site web 3D intéractif",
+  "jobTitle": "Créateur de sites web 3D",
+  "image": "https://berru-g.github.io/berru-g/img/logo.png",
+  "sameAs": [
+    "https://github.com/berru-g",
+    "https://codepen.io/h-lautre",
+    "https://medium.com/@gael-berru",
+    "https://www.instagram.com/berru_aka/"
+  ],
+  "skills": ["Interactiv website", "Site immersif 3D"],
+  "hasOccupation": {
+    "@type": "Site",
+    "name": "Développeur site 3D",
+    "description": "Conception d'outils",
+    "skills": ["PHP", "SQL", "API", "JavaScript"]
+  },
+  "knowsAbout": [
+    "Site immersif 3D",
+    "Vivez une expérience unique",
+    "Développeur web sur mesure"
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T4S7CNXGK4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-T4S7CNXGK4');
+</script>
+
 </head>
+
 <body>
-    <!-- Écran de chargement -->
-    <div id="loading">
-        <div class="spinner"></div>
-        <div>Chargement de l'univers 3D...</div>
-    </div>
-
-    <!-- Instructions -->
-    <div id="instructions">
-        <h3>PRÊT À EXPLORER ?</h3>
-        <p>Cliquez sur la scène pour commencer</p>
-        <p>Utilisez les <strong>flèches directionnelles</strong> pour vous déplacer</p>
-        <button class="btn" onclick="startExperience()">Commencer l'exploration</button>
-    </div>
-
-    <!-- Container Three.js -->
     <div id="container"></div>
-
-    <!-- Menu hamburger -->
     <div id="menu-toggle" onclick="toggleMenu()">☰</div>
 
-    <!-- Panel menu -->
     <div id="menu-panel">
-        <div class="menu-section">
-            <h3>CONTRÔLES</h3>
+        <!--<div class="menu-section">
+            <h3>CONTRÔLES AVION</h3>
             <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
-                <div style="margin-bottom: 10px;">
-                    <span style="display: inline-block; width: 100px;">🔼</span> Avancer
-                </div>
-                <div style="margin-bottom: 10px;">
-                    <span style="display: inline-block; width: 100px;">🔽</span> Reculer
-                </div>
-                <div style="margin-bottom: 10px;">
-                    <span style="display: inline-block; width: 100px;">◀️</span> Tourner à gauche
-                </div>
-                <div style="margin-bottom: 10px;">
-                    <span style="display: inline-block; width: 100px;">▶️</span> Tourner à droite
-                </div>
+                <div>🔼 Monter</div>
+                <div>🔽 Descendre</div>
+                <div>◀️ Tourner gauche</div>
+                <div>▶️ Tourner droite</div>
+                <div>Espace: Accélérer</div>
+                <div>S: Ralentir</div>
                 <div style="margin-top: 15px; opacity: 0.8; font-size: 12px;">
-                    🖱️ Souris: Regarder autour<br>
-                    🔄 Molette: Zoomer
+                    🖱️ Regarder autour<br>
+                    🔄  Zoomer
                 </div>
             </div>
         </div>
 
         <div class="menu-section">
             <h3>IMPORTER UN MODÈLE</h3>
-            <input type="file" id="glb-file" class="file-input" accept=".glb,.gltf">
-            <button class="btn secondary" onclick="loadSampleScene()">🎯 Charger la scène par défaut</button>
-            <button class="btn secondary" onclick="resetVehicle()">🔄 Reset position</button>
-        </div>
+            <input type="file" id="glb-file" class="file-input" accept=".glb,.gltf"
+                style="width: 100%; padding: 10px; margin: 10px 0;">
+            <button class="btn secondary" onclick="resetAircraft()">🔄 Reset position</button>
+        </div>-->
 
         <div class="menu-section">
-            <h3>POINTS D'INTÉRÊT</h3>
-            <div id="poi-list">
-                <!-- Généré dynamiquement -->
-            </div>
+            <h3>berru-g</h3>
+            <div id="poi-list"></div>
+            <!--<h3 class="btn"><a href="../index.html">Revenir au site</a></h3>-->
         </div>
     </div>
 
-    <!-- HUD -->
+    <!-- Affichage des points 
+        <div class="menu-section">
+            <h3>PROGRESSION</h3>
+            <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
+                <div>Points: <span id="points-display">0</span>/100</div>
+                <div style="margin-top: 10px; font-size: 12px; opacity: 0.8;">
+                    ✓ 10 points par POI visité<br>
+                    ✓ 40 points pour contact
+                </div>
+            </div>
+        </div>
+    </div>-->
+
     <div id="hud">
         <div class="hud-item">
             <div class="hud-label">VITESSE</div>
             <div class="hud-value" id="speed-display">0 km/h</div>
         </div>
         <div class="hud-item">
-            <div class="hud-label">POSITION</div>
-            <div class="hud-value" id="position-display">0, 0</div>
+            <div class="hud-label">ALTITUDE</div>
+            <div class="hud-value" id="altitude-display">0 km</div>
         </div>
         <div class="hud-item">
             <div class="hud-label">DESTINATION</div>
@@ -82,683 +121,275 @@
         </div>
     </div>
 
-    <!-- Carte Introduction -->
-<div id="intro-card" class="info-card">
-    <button class="close-card" onclick="closeCard('intro-card')">×</button>
-    <h2>Introduction</h2>
-    <div class="card-content">
-        <p><strong>Bienvenue dans mon univers créatif !</strong></p>
-        <p>Je suis passionné par le développement web et la création d'expériences interactives innovantes.</p>
-        
-        <h3>Mes compétences</h3>
-        <ul>
-            <li>Développement Frontend (Three.js, React, Vue.js)</li>
-            <li>Design 3D et expériences interactives</li>
-            <li>Intégration d'API et solutions backend</li>
-            <li>Optimisation des performances</li>
-        </ul>
-
-        <h3>Mon parcours</h3>
-        <p>Plus de 5 ans d'expérience dans la création de projets digitaux innovants...</p>
-        
-        <button class="btn" style="width: 100%; margin-top: 20px;">Me contacter</button>
-    </div>
-</div>
-
-<!-- Carte Gallery -->
-<div id="gallery-card" class="info-card">
-    <button class="close-card" onclick="closeCard('gallery-card')">×</button>
-    <h2>Galerie Projets</h2>
-    <div class="gallery-grid">
-        <div class="gallery-item">
-            <div style="background-image: url('../img/messagerie.png');"></div>
-            <strong>Site E-commerce 3D</strong>
-            <p>Expérience shopping immersive</p>
-            <a href="/" style="color: #00ff88;">Voir le projet →</a>
+    <!-- Mini-map Radar 
+    <div id="mini-map">
+        <div id="radar-content">
+            <div class="radar-sweep"></div>
+            <div class="player-dot"></div>
+            
         </div>
-        <div class="gallery-item">
-            <div style="background: #4ecdc4; height: 100px; border-radius: 5px;"></div>
-            <strong>Portfolio Artistique</strong>
-            <p>Galerie virtuelle interactive</p>
-            <a href="#" style="color: #00ff88;">Voir le projet →</a>
+    </div>-->
+
+    <!-- Cartes d'information -- data-aos="zoom-in" data-aos-delay="100"-->
+    <div id="intro-card" class="info-card">
+        <button class="close-card" onclick="closeCard('intro-card')">×</button>
+        <h1 style="text-align: center;">berru Dev Web 3D</h1>
+        <img src="../img/drone-logo.png" class="intro-logo">
+
+        <h2 style="text-align: center;">Bienvenue dans cette immersion</h2>
+        <p style="text-align: center;"><strong>Utilisez les touches de votre clavier pour flâner</strong></p>
+        <br>
+        <img src="../img/key.png" class="intro-img">
+
+        <button class="btn" onclick="closeCard('intro-card')" style="width: 100%; margin-top: 20px;">Commencer</button>
+    </div>
+
+    <div id="wam-card" class="info-card">
+        <button class="close-card" onclick="closeCard('wam-card')">×</button>
+        <img src="../img/wamcache.png" class="intro-logo">
+
+        <h2 style="text-align: center;">Qui suis-je ?</h2>
+        <p style="text-align: center;"><strong>Créatif autodidacte, j'aime offrir des expériences digitales
+                sur mesure et adapté à vos besoins.</strong></p>
+
+        <button class="btn" onclick="closeCard('wam-card')" style="width: 100%; margin-top: 20px;">Continuer</button>
+    </div>
+
+    <div id="projects-card" class="gallery-card">
+        <button class="close-card" onclick="closeCard('projects-card')">×</button>
+        <h2>Projets</h2>
+        <div class="gallery-grid">
+
+            <div class="gallery-item">
+                <img src="../img/messagerie.png">
+                <strong>Réseau social & tool DataAnalyst</strong>
+                <p>DataViz et editeur sql</p>
+                <a href="https://agora-dataviz.com/" target="_blank" style="color: #ab9ff2;">Essayer gratuitement →</a>
+            </div>
+
+            <div class="gallery-item">
+                <img src="../img/archi.png">
+                <strong>Archi : Immersion 3D</strong>
+                <p>Offrez une expérience immersive à vos clients.</p>
+                <a href="./archi/index.html" target="_blank" style="color: #ab9ff2;">Immersion 3D →</a>
+            </div>
+
+            <div class="gallery-item">
+                <img src="../img/devpixel.png">
+                <strong>Pixel earth</strong>
+                <p>Plateforme de vente de pixel avec système de paiement ( Stripe ) et base de données.</p>
+                <a href="https://pixelearth.netlify.app/" target="_blank" style="color: #ab9ff2;">Visiter →</a>
+            </div>
+
+            <div class="gallery-item">
+                <img src="../img/admin2.png">
+                <strong>Interface Admin.</strong>
+                <p>Accédez à toute vos bases de données dans un dashboard.</p>
+                <a href="../board/login.php" target="_blank" style="color: #ab9ff2;">Voir le projet →</a>
+            </div>
+
+            <div class="gallery-item">
+                <img src="../img/devcryptotool.png">
+                <strong>Crypto Free Tools</strong>
+                <p>Suite d'outils pour investisseurs avec utilisation des API de CoinGecko et Binance.</p>
+                <a href="https://crypto-free-tools.netlify.app/" target="_blank" style="color: #ab9ff2;">S'éduquer
+                    →</a>
+            </div>
+
+            <div class="gallery-item">
+                <img src="../img/devgoldendessert.png">
+                <strong>Golden dessert</strong>
+                <p>Site vitrine avec formulaire et envoie de mail automatique.</p>
+                <a href="#" target="_blank" style="color: #ab9ff2;">Visiter →</a>
+            </div>
+
         </div>
-        <div class="gallery-item">
-            <div style="background: #45b7d1; height: 100px; border-radius: 5px;"></div>
-            <strong>Jeux Web GL</strong>
-            <p>Expérience gaming navigateur</p>
-            <a href="#" style="color: #00ff88;">Voir le projet →</a>
+    </div>
+
+    <div id="skills-card" class="info-card">
+        <button class="close-card" onclick="closeCard('skills-card')">×</button>
+        <h2>Avis</h2>
+        <div class="review-item">
+            <div class="stars">★★★★★</div>
+            <p><strong>Nico Golden dessert</strong></p>
+            <p>"Gaël a livré un site parfaitement propre en 1 semaine seulement.
+                Il nous à même fait cadeaux d'une interface admin. Je recommande !"</p>
         </div>
-        <div class="gallery-item">
-            <div style="background: #96ceb4; height: 100px; border-radius: 5px;"></div>
-            <strong>Application VR</strong>
-            <p>Réalité virtuelle immersive</p>
-            <a href="#" style="color: #00ff88;">Voir le projet →</a>
+        <div class="review-item">
+            <div class="stars">★★★★★</div>
+            <p><strong>Eustis tool</strong></p>
+            <p>"Développeur réactif et compétent. Il a su comprendre mes besoins
+                complexes en matière d'intégration API."</p>
+        </div>
+        <div class="review-item">
+            <div class="stars">★★★★☆</div>
+            <p><strong>Antoine</strong></p>
+            <p>"Toujours un plaisir de bosser avec Gael, il sait s'adapter à nos besoins."</p>
         </div>
     </div>
-</div>
 
-<!-- Carte Avis Clients -->
-<div id="testimonials-card" class="info-card">
-    <button class="close-card" onclick="closeCard('testimonials-card')">×</button>
-    <h2>⭐ Avis Clients</h2>
-    
-    <div class="review-item">
-        <div class="stars">★★★★★</div>
-        <p><strong>Sarah M. - Directrice Marketing</strong></p>
-        <p>"Un travail exceptionnel ! L'expérience 3D a totalement transformé notre présence en ligne."</p>
+    <div id="contact-card" class="info-card">
+        <button class="close-card" onclick="closeCard('contact-card')">×</button>
+        <img src="../img/drone-logo.png" class="intro-logo">
+        <h2>Contact</h2>
+        <form action="https://formspree.io/f/xrbklnwy" method="POST" class="contact-form">
+
+            <input type="Votre mail ici" placeholder="Votre email" required>
+            <textarea placeholder="Quel sont vos besoins ?" rows="5" required></textarea>
+            <button type="submit" class="btn">Envoyer</button>
+        </form>
+        <div style="margin-top: 20px; text-align: center;">
+            <!--<p><strong>Email:</strong> gael-berru.com</p>-->
+        </div>
     </div>
 
-    <div class="review-item">
-        <div class="stars">★★★★★</div>
-        <p><strong>Pierre L. - Startup Tech</strong></p>
-        <p>"Développeur talentueux et très professionnel. Livraison dans les temps et qualité impeccable."</p>
+    <div id="video-gallery-card" class="info-card">
+        <button class="close-card" onclick="closeCard('video-gallery-card')">×</button>
+        <h2>Galerie Vidéo</h2>
+        <div class="video-gallery">
+            <div class="video-item">
+                <iframe src="https://youtube.com/shorts/sNAk7pqmWBY?si=A12JG1xjouJDoP8Z" frameborder="0"
+                    allowfullscreen></iframe>
+                <strong>Evolution de mon portfolio depuis 2020</strong>
+                <p>Découvrez mes réalisations en vidéo</p>
+            </div>
+            <div class="video-item">
+                <iframe src="https://youtube.com/shorts/8u2sGHpPyJ8?si=Jna44Qz1G3-pb2iV" frameborder="0"
+                    allowfullscreen></iframe>
+                <strong>Motion Design</strong>
+                <p>Pour Les Flâneries 2022</p>
+            </div>
+            <div class="video-item">
+                <iframe src="https://youtube.com/shorts/XRlEr9VIdyc?si=t02ll_nJR_8uIlWP" frameborder="0"
+                    allowfullscreen></iframe>
+                <strong>Stop Motion</strong>
+                <p>Pour Balek @gangueastral 2023 / Animation stop motion et IA</p>
+            </div>
+        </div>
     </div>
 
-    <div class="review-item">
-        <div class="stars">★★★★☆</div>
-        <p><strong>Marie K. - Artiste Digitale</strong></p>
-        <p>"Mon portfolio n'a jamais été aussi vivant ! Une collaboration très enrichissante."</p>
+    <div id="portal-card" class="info-card">
+        <button class="close-card" onclick="closeCard('portal-card')">×</button>
+        <h2>Portail Dimensionnel</h2>
+        <p style="text-align: center; margin: 20px 0;">
+            <strong>Attention ! Vous êtes sur le point de quitter cette dimension.</strong>
+        </p>
+        <img src="../img/drone-logo.png" class="intro-logo">
+        <p style="text-align: center; opacity: 0.8;">
+            Ce portail vous transportera vers mon site principal.
+        </p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px;">
+            <button class="btn secondary" onclick="closeCard('portal-card')">Rester ici</button>
+            <button class="btn" onclick="window.open('../index.html', '_blank')">Continuer le voyage</button>
+        </div>
     </div>
 
-    <div class="review-item">
-        <div class="stars">★★★★★</div>
-        <p><strong>Thomas B. - Agence Creative</strong></p>
-        <p>"Expert Three.js rare. A su comprendre parfaitement notre vision et la matérialiser."</p>
+    <!-- Popup de fin de quête -->
+    <div id="quest-card" class="info-card">
+        <h2>Votre avis compte</h2>
+        <p>Comment noteriez-vous votre expérience ici ?</p>
+
+        <p>Votre avis est précieux pour m'aider à m'améliorer !</p>
+
+        <div style="margin: 25px 0;">
+            <button class="btn" onclick="window.open('https://g.page/r/CarAb_ew1G-_EAE/review', '_blank')">
+                Laisser un avis Google
+            </button>
+            <br>
+            <button class="btn secondary" onclick="closeCard('quest-card')">
+                Continuer l'exploration
+            </button>
+        </div>
     </div>
-</div>
 
-<!-- Carte Contact -->
-<div id="contact-card" class="info-card">
-    <button class="close-card" onclick="closeCard('contact-card')">×</button>
-    <h2> Contact</h2>
-    
-    <form class="contact-form">
-        <input type="text" placeholder="Votre nom" required>
-        <input type="email" placeholder="Votre email" required>
-        <input type="text" placeholder="Sujet" required>
-        <textarea placeholder="Votre message" rows="5" required></textarea>
-        <button type="submit">Envoyer le message</button>
-    </form>
+    <div id="promo-card" class="info-card">
+        <h2>Offre d'hiver</h2>
 
-    <div style="margin-top: 20px; text-align: center;">
-        <p><strong>📧 Email:</strong> contact@monportfolio.com</p>
-        <p><strong>📱 Téléphone:</strong> +33 6 12 34 56 78</p>
-        <p><strong>💼 LinkedIn:</strong> linkedin.com/in/monprofil</p>
+        <p>-10% sur votre commande avec le code fournie lorsque tu auras visiter chaque info.</p>
+
+        <div style="margin: 25px 0;">
+            <button class="btn secondary" onclick="closeCard('promo-card')">
+                Continuer l'exploration
+            </button>
+        </div>
     </div>
-</div>
 
-    <!-- Three.js -->
+    <div id="social-card" class="info-card">
+        <button class="close-card" onclick="closeCard('social-card')">×</button>
+
+        <h2 style="text-align: center; margin-bottom: 25px;">Mes réseaux</h2>
+
+        <div class="social-links">
+            <a href="https://github.com/berru-g/" target="_blank" class="social-link">
+                <div class="social-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor"
+                            d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                    </svg>
+                </div>
+                <span>GitHub</span>
+            </a>
+
+            <a href="https://codepen.io/h-lautre" target="_blank" class="social-link">
+                <div class="social-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor"
+                            d="M24 8.182l-.017-.087v-.785l.017-.087-11.983-6.48-12 6.48.017.087v.785l-.017.087 12 6.489 11.983-6.489zm-12 5.893l-5.996-3.24 5.996-3.244 6.009 3.244-6.009 3.24zm-7.029-4.243l-4.971 2.685v5.349l7.039 3.789v-6.62l-2.068-1.203v-3.8zm14.058 0v3.8l-2.068 1.203v6.62l7.039-3.789v-5.349l-4.971-2.685z" />
+                    </svg>
+                </div>
+                <span>CodePen</span>
+            </a>
+
+            <a href="https://instagram.com/berru_aka" target="_blank" class="social-link">
+                <div class="social-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor"
+                            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                    </svg>
+                </div>
+                <span>Instagram</span>
+            </a>
+
+            <a href="https://tiktok.com/@berru_create" target="_blank" class="social-link">
+                <div class="social-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor"
+                            d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-5.394 10.692 6.33 6.33 0 0 0 10.857-4.424V8.687a8.182 8.182 0 0 0 4.773 1.526V6.79a4.831 4.831 0 0 1-1.003-.104z" />
+                    </svg>
+                </div>
+                <span>TikTok</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.zoom-img').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const imgSrc = this.getAttribute('href');
+                const instance = basicLightbox.create(`<img src="${imgSrc}" style="max-width:100%; max-height:100vh;">`);
+                instance.show();
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialisation de AOS
+        document.addEventListener('DOMContentLoaded', function () {
+            AOS.init({
+                duration: 1200,
+                once: true,
+                easing: 'ease-out-back'
+            });
+        });
+    </script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
 
-    <script>
-        // Variables globales
-let currentCard = null;
-
-// Modifie la fonction createPointsOfInterest pour ajouter les labels
-function createPointsOfInterest() {
-    predefinedPOIs.forEach(poi => {
-        // Repère 3D visible
-        const poiGeometry = new THREE.ConeGeometry(3, 8, 4);
-        const poiMaterial = new THREE.MeshPhongMaterial({
-            color: 0x00ff88,
-            emissive: 0x00aa55,
-            emissiveIntensity: 0.5
-        });
-        const poiMesh = new THREE.Mesh(poiGeometry, poiMaterial);
-        poiMesh.position.copy(poi.position);
-        poiMesh.position.y = 4;
-        poiMesh.rotation.x = Math.PI;
-        poiMesh.userData = { poiInfo: poi };
-        poiMesh.castShadow = true;
-        scene.add(poiMesh);
-
-        // Créer un label texte au-dessus
-        createPOILabel(poiMesh, poi.title);
-
-        // Lumière
-        const pointLight = new THREE.PointLight(0x00ff88, 1, 30);
-        pointLight.position.copy(poi.position);
-        pointLight.position.y = 6;
-        scene.add(pointLight);
-
-        pointsOfInterest.push(poiMesh);
-    });
-}
-
-// Fonction pour créer les labels des POIs
-function createPOILabel(poiMesh, title) {
-    // Cette fonction serait idéalement avec Three.js TextGeometry, 
-    // mais pour simplifier on utilisera du HTML/CSS
-    // On gérera l'affichage via la fonction updatePOILabels
-}
-
-
-let scene, camera, renderer, controls, vehicle;
-let vehicleSpeed = 0, maxSpeed = 0.3, acceleration = 0.02;
-let clock = new THREE.Clock();
-let pointsOfInterest = [];
-let activePoi = null;
-let experienceStarted = false;
-
-// État des touches
-const keys = {
-    'ArrowUp': false,
-    'ArrowDown': false,
-    'ArrowLeft': false,
-    'ArrowRight': false
-};
-
-// Points d'intérêt
-const predefinedPOIs = [
-    {
-        id: 'intro',
-        title: 'Introduction',
-        description: 'Découvrez mon parcours et mes compétences',
-        position: new THREE.Vector3(-50, 0, -30)
-    },
-    {
-        id: 'gallery',
-        title: 'Galerie Projets',
-        description: 'Explorez mes réalisations et créations',
-        position: new THREE.Vector3(40, 0, -20)
-    },
-    {
-        id: 'testimonials',
-        title: '⭐ Avis Clients',
-        description: 'Ce que disent mes clients et collaborateurs',
-        position: new THREE.Vector3(-20, 0, 50)
-    },
-    {
-        id: 'contact',
-        title: 'Contact',
-        description: 'Travaillons ensemble sur votre projet',
-        position: new THREE.Vector3(30, 0, 40)
-    }
-];
-
-function startExperience() {
-    document.getElementById('instructions').classList.add('hidden');
-    document.getElementById('loading').classList.add('hidden');
-    experienceStarted = true;
-
-    // Focus sur le renderer pour capturer les touches
-    renderer.domElement.focus();
-    setupControls();
-}
-
-function init() {
-    console.log('Initialisation du portfolio 3D...');
-
-    setupThreeJS();
-    createScene();
-    setupUI();
-
-    // Cacher le loading après un délai
-    setTimeout(() => {
-        if (!experienceStarted) {
-            document.getElementById('loading').classList.add('hidden');
-        }
-    }, 2000);
-}
-
-function setupThreeJS() {
-    // Scene
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x001122);
-    scene.fog = new THREE.Fog(0x001122, 50, 300);
-
-    // Camera - positionnée pour bien voir le véhicule
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 5, 8);
-
-    // Renderer
-    renderer = new THREE.WebGLRenderer({
-        antialias: true,
-        alpha: true
-    });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    renderer.domElement.setAttribute('tabindex', '0');
-    renderer.domElement.style.outline = 'none';
-    document.getElementById('container').appendChild(renderer.domElement);
-
-    // Controls
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.minDistance = 3;
-    controls.maxDistance = 50;
-}
-
-function setupUI() {
-    // Générer la liste des POIs
-    const poiList = document.getElementById('poi-list');
-    predefinedPOIs.forEach(poi => {
-        const poiElement = document.createElement('div');
-        poiElement.style.cssText = `
-                    background: rgba(255,255,255,0.05); 
-                    padding: 10px; 
-                    margin: 5px 0; 
-                    border-radius: 5px; 
-                    cursor: pointer;
-                    transition: all 0.3s;
-                `;
-        poiElement.innerHTML = `
-                    <strong>${poi.title}</strong><br>
-                    <small style="opacity:0.7">${poi.description}</small>
-                `;
-        poiElement.addEventListener('click', () => navigateToPOI(poi.id));
-        poiList.appendChild(poiElement);
-    });
-
-    // Gestion des fichiers
-    document.getElementById('glb-file').addEventListener('change', handleFileSelect);
-}
-
-function setupControls() {
-    // Gestion robuste des touches
-    document.addEventListener('keydown', (event) => {
-        if (keys.hasOwnProperty(event.key)) {
-            keys[event.key] = true;
-            event.preventDefault();
-        }
-    });
-
-    document.addEventListener('keyup', (event) => {
-        if (keys.hasOwnProperty(event.key)) {
-            keys[event.key] = false;
-            event.preventDefault();
-        }
-    });
-
-    // Re-focus quand on clique sur la scène
-    renderer.domElement.addEventListener('click', () => {
-        renderer.domElement.focus();
-    });
-}
-
-function createScene() {
-    // Lumière ambiante
-    const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
-    scene.add(ambientLight);
-
-    // Lumière directionnelle
-    const sunLight = new THREE.DirectionalLight(0xffffff, 1);
-    sunLight.position.set(50, 100, 50);
-    sunLight.castShadow = true;
-    scene.add(sunLight);
-
-    // Terrain avec collines
-    createTerrain();
-
-    // Véhicule
-    createVehicle();
-
-    // Points d'intérêt
-    createPointsOfInterest();
-
-    // Décorations
-    createEnvironmentDecorations();
-}
-
-function createTerrain() {
-    // Terrain procédural avec collines
-    const groundGeometry = new THREE.PlaneGeometry(300, 300, 100, 100);
-    const groundMaterial = new THREE.MeshLambertMaterial({
-        color: 0x4a7b3d
-    });
-
-    const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-    ground.rotation.x = -Math.PI / 2;
-    ground.receiveShadow = true;
-
-    // Collines procédurales
-    const vertices = groundGeometry.attributes.position;
-    for (let i = 0; i < vertices.count; i++) {
-        const x = vertices.getX(i) * 0.05;
-        const y = vertices.getY(i) * 0.05;
-        const height = Math.sin(x) * Math.cos(y) * 10 +
-            Math.sin(x * 0.3) * Math.cos(y * 0.3) * 5;
-        vertices.setZ(i, height);
-    }
-    vertices.needsUpdate = true;
-    groundGeometry.computeVertexNormals();
-
-    scene.add(ground);
-
-    /* Grille de référence
-    const gridHelper = new THREE.GridHelper(300, 30, 0x000000, 0x333333);
-    gridHelper.position.y = 0.1;
-    scene.add(gridHelper);*/
-}
-
-function createVehicle() {
-    const carGroup = new THREE.Group();
-
-    // Corps principal
-    const bodyGeometry = new THREE.BoxGeometry(2.5, 1.2, 5);
-    const bodyMaterial = new THREE.MeshPhongMaterial({
-        color: 0xff3366,
-        shininess: 100
-    });
-    const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-    body.castShadow = true;
-    carGroup.add(body);
-
-    // Habitacle
-    const cabinGeometry = new THREE.BoxGeometry(1.8, 0.8, 2.5);
-    const cabinMaterial = new THREE.MeshPhongMaterial({ color: 0xcc2255 });
-    const cabin = new THREE.Mesh(cabinGeometry, cabinMaterial);
-    cabin.position.set(0, 1.1, -0.5);
-    carGroup.add(cabin);
-
-    // Roues
-    const wheelGeometry = new THREE.CylinderGeometry(0.6, 0.6, 0.4, 16);
-    const wheelMaterial = new THREE.MeshPhongMaterial({ color: 0x222222 });
-
-    const wheelPositions = [
-        [1.2, -0.6, 1.8], [-1.2, -0.6, 1.8],
-        [1.2, -0.6, -1.8], [-1.2, -0.6, -1.8]
-    ];
-
-    wheelPositions.forEach(pos => {
-        const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
-        wheel.position.set(pos[0], pos[1], pos[2]);
-        wheel.rotation.z = Math.PI / 2;
-        wheel.castShadow = true;
-        carGroup.add(wheel);
-    });
-
-    vehicle = carGroup;
-    vehicle.position.set(0, 3, 0);
-    scene.add(vehicle);
-}
-
-function createPointsOfInterest() {
-    predefinedPOIs.forEach(poi => {
-        // Repère 3D visible
-        const poiGeometry = new THREE.ConeGeometry(3, 8, 4);
-        const poiMaterial = new THREE.MeshPhongMaterial({
-            color: 0x00ff88,
-            emissive: 0x00aa55,
-            emissiveIntensity: 0.5
-        });
-        const poiMesh = new THREE.Mesh(poiGeometry, poiMaterial);
-        poiMesh.position.copy(poi.position);
-        poiMesh.position.y = 4;
-        poiMesh.rotation.x = Math.PI;
-        poiMesh.userData = { poiInfo: poi };
-        poiMesh.castShadow = true;
-        scene.add(poiMesh);
-
-        // Lumière
-        const pointLight = new THREE.PointLight(0x00ff88, 1, 30);
-        pointLight.position.copy(poi.position);
-        pointLight.position.y = 6;
-        scene.add(pointLight);
-
-        pointsOfInterest.push(poiMesh);
-    });
-}
-
-function createEnvironmentDecorations() {
-    // Arbres
-    for (let i = 0; i < 50; i++) {
-        createTree(
-            (Math.random() - 0.5) * 280,
-            (Math.random() - 0.5) * 280
-        );
-    }
-
-    // Rochers
-    for (let i = 0; i < 30; i++) {
-        createRock(
-            (Math.random() - 0.5) * 280,
-            (Math.random() - 0.5) * 280
-        );
-    }
-}
-
-function createTree(x, z) {
-    const treeGroup = new THREE.Group();
-
-    const trunkGeometry = new THREE.CylinderGeometry(0.3, 0.5, 4, 8);
-    const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
-    const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
-    treeGroup.add(trunk);
-
-    const leavesGeometry = new THREE.SphereGeometry(2.5, 8, 6);
-    const leavesMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
-    const leaves = new THREE.Mesh(leavesGeometry, leavesMaterial);
-    leaves.position.y = 3;
-    treeGroup.add(leaves);
-
-    treeGroup.position.set(x, 2, z);
-    scene.add(treeGroup);
-}
-
-function createRock(x, z) {
-    const rockGeometry = new THREE.DodecahedronGeometry(1 + Math.random() * 2, 1);
-    const rockMaterial = new THREE.MeshLambertMaterial({ color: 0x666666 });
-    const rock = new THREE.Mesh(rockGeometry, rockMaterial);
-    rock.position.set(x, 1, z);
-    rock.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
-    scene.add(rock);
-}
-
-function updateVehicle() {
-    if (!vehicle || !experienceStarted) return;
-
-    const delta = clock.getDelta();
-
-    // Contrôles
-    if (keys['ArrowUp']) {
-        vehicleSpeed = Math.min(vehicleSpeed + acceleration, maxSpeed);
-    }
-    if (keys['ArrowDown']) {
-        vehicleSpeed = Math.max(vehicleSpeed - acceleration, -maxSpeed * 0.5);
-    }
-
-    if (keys['ArrowLeft']) {
-        vehicle.rotation.y += 0.03;
-    }
-    if (keys['ArrowRight']) {
-        vehicle.rotation.y -= 0.03;
-    }
-
-    // Appliquer le mouvement
-    const direction = new THREE.Vector3(0, 0, -1);
-    direction.applyQuaternion(vehicle.quaternion);
-    vehicle.position.add(direction.multiplyScalar(vehicleSpeed));
-
-    // Ajuster la hauteur selon le terrain
-    adjustVehicleHeight();
-
-    // Friction
-    vehicleSpeed *= 0.95;
-    if (Math.abs(vehicleSpeed) < 0.001) vehicleSpeed = 0;
-
-    // Mettre à jour la caméra pour suivre parfaitement le véhicule
-    updateCamera();
-
-    // Vérifier les points d'intérêt
-    checkPOIProximity();
-
-    // Mettre à jour l'interface
-    updateHUD();
-}
-
-function adjustVehicleHeight() {
-    // Simulation de hauteur de terrain
-    const terrainHeight = Math.sin(vehicle.position.x * 0.02) * Math.cos(vehicle.position.z * 0.02) * 8 + 2;
-    vehicle.position.y = terrainHeight + 1.5;
-}
-
-function updateCamera() {
-    if (!vehicle) return;
-
-    // La caméra suit le véhicule de manière fixe
-    // Position relative derrière et au-dessus du véhicule
-    const cameraOffset = new THREE.Vector3(0, 3, 6);
-    cameraOffset.applyQuaternion(vehicle.quaternion);
-
-    const targetCameraPos = vehicle.position.clone().add(cameraOffset);
-
-    // Déplacement progressif de la caméra
-    camera.position.lerp(targetCameraPos, 0.1);
-
-    // Regarder légèrement devant le véhicule
-    const lookAtPos = vehicle.position.clone();
-    const lookAtOffset = new THREE.Vector3(0, 0, -3);
-    lookAtOffset.applyQuaternion(vehicle.quaternion);
-    camera.lookAt(lookAtPos.add(lookAtOffset));
-
-    // Mettre à jour le point de focus des contrôles orbitaux
-    controls.target.copy(vehicle.position);
-    controls.target.y += 1;
-}
-
-function checkPOIProximity() {
-    if (!vehicle) return;
-
-    let nearestPoi = null;
-    let minDistance = Infinity;
-
-    pointsOfInterest.forEach(poiMesh => {
-        const distance = vehicle.position.distanceTo(poiMesh.position);
-        if (distance < 15 && distance < minDistance) {
-            minDistance = distance;
-            nearestPoi = poiMesh.userData.poiInfo;
-        }
-    });
-
-    if (nearestPoi && nearestPoi !== activePoi) {
-        activePoi = nearestPoi;
-        document.getElementById('target-display').textContent = nearestPoi.title;
-        document.getElementById('target-display').style.color = '#00ff88';
-
-        // Ouvre automatiquement la carte quand on arrive sur le POI
-        openCard(nearestPoi.id + '-card');
-    } else if (!nearestPoi && activePoi) {
-        activePoi = null;
-        document.getElementById('target-display').textContent = 'Exploration';
-        document.getElementById('target-display').style.color = '#00ff88';
-
-        // Ferme la carte quand on quitte le POI
-        if (currentCard) {
-            closeCard(currentCard);
-        }
-    }
-}
-
-// Fonctions pour gérer les cartes
-function openCard(cardId) {
-    // Ferme la carte actuelle si il y en a une
-    if (currentCard) {
-        closeCard(currentCard);
-    }
-
-    // Ouvre la nouvelle carte
-    const card = document.getElementById(cardId);
-    if (card) {
-        card.style.display = 'block';
-        currentCard = cardId;
-    }
-}
-
-function closeCard(cardId) {
-    const card = document.getElementById(cardId);
-    if (card) {
-        card.style.display = 'none';
-        currentCard = null;
-    }
-}
-
-// Gestion du formulaire de contact
-document.querySelector('.contact-form')?.addEventListener('submit', function (e) {
-    e.preventDefault();
-    alert('Message envoyé ! Merci pour votre contact.');
-    closeCard('contact-card');
-});
-
-// Pour les liens de la gallery
-document.querySelectorAll('.gallery-item a').forEach(link => {
-    link.addEventListener('click', function (e) {
-        e.preventDefault();
-        alert('Ouverture du projet en détail...');
-    });
-});
-
-function updateHUD() {
-    const speed = Math.abs(Math.round(vehicleSpeed * 100));
-    const posX = Math.round(vehicle.position.x);
-    const posZ = Math.round(vehicle.position.z);
-
-    document.getElementById('speed-display').textContent = `${speed} km/h`;
-    document.getElementById('position-display').textContent = `${posX}, ${posZ}`;
-}
-
-function toggleMenu() {
-    document.getElementById('menu-panel').classList.toggle('active');
-}
-
-function navigateToPOI(poiId) {
-    const poi = predefinedPOIs.find(p => p.id === poiId);
-    if (poi && vehicle) {
-        vehicle.position.copy(poi.position);
-        vehicle.position.x += 8;
-        vehicle.rotation.y = Math.PI;
-        toggleMenu();
-    }
-}
-
-function handleFileSelect(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    console.log('Chargement du fichier:', file.name);
-    // Implémentation du chargement GLB à venir
-    // https://raw.githubusercontent.com/berru-g/3d-scroll-animate/main/assets/bike/scene.gltf
-}
-
-function loadSampleScene() {
-    while (scene.children.length > 0) {
-        scene.remove(scene.children[0]);
-    }
-    createScene();
-    toggleMenu();
-}
-
-function resetVehicle() {
-    if (vehicle) {
-        vehicle.position.set(0, 3, 0);
-        vehicle.rotation.set(0, 0, 0);
-        vehicleSpeed = 0;
-    }
-    toggleMenu();
-}
-
-function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-}
-
-function animate() {
-    requestAnimationFrame(animate);
-    updateVehicle();
-    controls.update();
-    renderer.render(scene, camera);
-}
-
-// Initialisation
-window.addEventListener('resize', onWindowResize);
-init();
-animate();
-
-console.log('Clique sur "Commencer l\'exploration" puis utilise les flèches !');
-    </script>
+    <script src="script.js"></script>
 </body>
+
 </html>

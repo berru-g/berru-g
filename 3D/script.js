@@ -281,7 +281,7 @@ function playAddPointAnimation() {
     el.style.textShadow = '0 2px 20px #222';
     el.style.zIndex = 2000;
     el.style.opacity = '1';
-    el.style.transition = 'all .9s cubic-bezier(.2,1.2,.2,1)';
+    el.style.transition = 'all 1.2s cubic-bezier(.2,1.2,.2,1)';
     document.body.appendChild(el);
     setTimeout(() => {
         el.style.transform = 'translate(-50%,-110px)';
