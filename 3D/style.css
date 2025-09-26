@@ -135,6 +135,77 @@ body {
     display: none !important;
 }
 
+iframe {
+    display: flex;
+    width: 100%;
+    border-radius: 8px;
+    border: none;
+    margin: 0 auto;
+}
+
+.social-links {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.social-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    transition: transform 0.3s ease;
+    width: 80px;
+}
+
+.social-link:hover {
+    transform: translateY(-5px);
+}
+
+.social-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    transition: background 0.3s ease;
+    animation: bounce 2s infinite;
+}
+
+.social-link:hover .social-icon {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.social-link svg {
+    color: white;
+    
+}
+.social-icon:first-child {
+    animation-delay: 0.2s;
+}
+.social-icon:nth-child(2) {
+    animation-delay: 0.3s;
+}
+.social-icon:last-child {
+    animation-delay: 0.4s;
+}
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.social-link span {
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-align: center;
+}
+
 .intro-img {
     display: flex;
     width: 100%;
@@ -159,7 +230,24 @@ body {
     border: 2px solid #ffffff;
     border-radius: 15px;
     padding: 30px;
-    max-width: 500px;
+    max-width: 550px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 900;
+    display: none;
+}
+.gallery-card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    border: 2px solid #ffffff;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 900px;
     width: 90%;
     max-height: 80vh;
     overflow-y: auto;

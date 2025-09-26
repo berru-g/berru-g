@@ -154,6 +154,12 @@ const predefinedPOIs = [
         position: new THREE.Vector3(0, 80, 0)
     },
     {
+        id: 'wam',
+        title: 'Qui suis-je ?',
+        description: 'Brève présentation',
+        position: new THREE.Vector3(-90, 180, -10)
+    },
+    {
         id: 'projects',
         title: 'Projets',
         description: 'Mes réalisations',
@@ -188,6 +194,18 @@ const predefinedPOIs = [
         title: 'Revenir au site',
         description: 'Portal vers mon portfolio',
         position: new THREE.Vector3(-24, 3, 87)
+    },
+    {
+        id: 'promo',
+        title: 'Offre',
+        description: '10% de réduction caché dans ce site',
+        position: new THREE.Vector3(-100, 115, 150)
+    },
+    { 
+        id: 'social',
+        title: 'Follow me',
+        description: '...',
+        position: new THREE.Vector3(-140, 125, -60)
     },
 ];
 
@@ -230,9 +248,9 @@ function addPointsForPOI(poiId) {
 function showDiscountPopup() {
     const popup = document.createElement('div');
     popup.innerHTML = `
-    <div style="font-size:2.3em;font-weight:700;color:#fff;background:linear-gradient(90deg,#60d394,#2575fc,#ee6055);border-radius:24px;padding:32px;box-shadow:0 0 32px #0008;text-align:center;animation:popup-win 1s;">
+    <div style="font-size:2.3em;font-weight:700;color:#fff;background:#333;border-radius:24px;padding:32px;box-shadow:0 0 32px #0008;text-align:center;animation:popup-win 1s;">
         BRAVO !<br>Tu obtiens <span style="font-size:1.4em;color:#ffe953;">10% de réduction</span> sur ta prochaine commande de site.<br>
-        <small>Code promo : <strong>10POI-CG</strong></small>
+        <small>Code promo : <strong>@mour</strong></small>
     </div>
     <style>@keyframes popup-win{0%{transform:scale(0.5);opacity:0;}50%{transform:scale(1.15);opacity:1;}100%{transform:scale(1);}}</style>
     `;
@@ -259,7 +277,7 @@ function playAddPointAnimation() {
     el.style.transform = 'translate(-50%,0)';
     el.style.fontSize = '2em';
     el.style.fontWeight = 600;
-    el.style.color = '#00ff88';
+    el.style.color = '#60d394';
     el.style.textShadow = '0 2px 20px #222';
     el.style.zIndex = 2000;
     el.style.opacity = '1';
@@ -283,7 +301,7 @@ function updatePointsHUD() {
         el.style.right = '14px';
         el.style.padding = '10px 18px';
         el.style.background = 'rgba(30,30,40,0.88)';
-        el.style.color = '#ffe953';
+        el.style.color = '#f1f1f1';
         el.style.fontWeight = 'bold';
         el.style.borderRadius = '13px';
         el.style.fontSize = '1.1em';
