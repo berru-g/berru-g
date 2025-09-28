@@ -24,12 +24,12 @@ function initAudio() {
 }
 
 function loadBackgroundMusic() {
-    const audio = new Audio('mon-fichier.mp3'); // ou .wav mais ne fonctionne pas, raw files or src direct ?
+    const audio = new Audio('./ENCORE.wav'); // mp3 ou .wav mais ne fonctionne pas, prob url raw files ou conflit avec > oscillator.start(); ?
     audio.loop = true; // boucle
-    audio.volume = 0.2; // volume (0 → 1)
+    audio.volume = 0.4; // volume (0 → 1)
     audio.play().catch(err => console.log("⚠️ Lecture auto bloquée:", err));
 
-    backgroundMusic = audio; // garder la ref si besoin (pause/stop)
+    backgroundMusic = audio; // garder la ref si besoin (pause/stop) en front
 }
 
 

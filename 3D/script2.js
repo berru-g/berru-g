@@ -24,14 +24,13 @@ function initAudio() {
 }
 
 function loadBackgroundMusic() {
-    const audio = new Audio('mon-fichier.mp3'); // ou .wav mais ne fonctionne pas, raw files or src direct ?
+    const audio = new Audio('./ENCORE.wav'); // mp3 ou .wav mais ne fonctionne pas, prob url raw files ou conflit avec > oscillator.start(); ?
     audio.loop = true; // boucle
-    audio.volume = 0.2; // volume (0 → 1)
+    audio.volume = 0.4; // volume (0 → 1)
     audio.play().catch(err => console.log("⚠️ Lecture auto bloquée:", err));
 
-    backgroundMusic = audio; // garder la ref si besoin (pause/stop)
+    backgroundMusic = audio; // garder la ref si besoin (pause/stop) en front
 }
-
 
 function loadPOISounds() {
     // Sons différents pour chaque type de POI
@@ -141,9 +140,7 @@ let activePoi = null;
 let experienceStarted = true;
 let currentCard = null;
 let aircraftGLB = null; // variable pour le GLB
-let animationMixer = null;
-let currentAnimations = [];
-let autoAnimationEnabled = true;
+let environmentGLB = null; // NOUVEAU: variable pour l'environnement GLB
 
 // État des touches
 const keys = {
@@ -317,6 +314,7 @@ function updatePointsHUD() {
     }
     el.textContent = `Score : ${userPoints} 💎`;
 }
+
 // INIT INIT INIT 
 function init() {
     console.log('🚀 Initialisation de l\'expérience aérienne...');
@@ -329,6 +327,7 @@ function init() {
     setupIdleAnimation();
     animate();
 }
+
 function setupThreeJS() {
     // Scene avec ciel dégradé
     scene = new THREE.Scene();
@@ -404,8 +403,8 @@ function setupUI() {
 }
 
 function createScene() {
-    // Créer un ciel dégradé (lever de soleil)
-    createSky();
+    // NOUVEAU: Charger l'environnement GLB au lieu de la sphère
+    loadEnvironmentGLB();
 
     // Lumière directionnelle (soleil)
     const sunLight = new THREE.DirectionalLight(0xffaa00, 1.5);
@@ -427,7 +426,57 @@ function createScene() {
     createPointsOfInterest();
 }
 
-/*function createSky() {
+// NOUVELLE FONCTION: Charger l'environnement GLB
+function loadEnvironmentGLB() {
+    const loader = new THREE.GLTFLoader();
+    
+    // URLs d'environnements GLB gratuits 
+    const environmentURLs = [
+        'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/space.glb', //"Map_tkgcz" (https://skfb.ly/pyOyZ) by amogusstrikesback2 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+       // 'https://raw.githubusercontent.com/berru-g/3d-scroll-animate/main/assets/cave_on_an_alien_planet_skybox.glb',
+        // Ajoute d'autres URLs de backup ici
+    ];
+
+    function tryLoadEnvironment(urlIndex) {
+        if (urlIndex >= environmentURLs.length) {
+            console.log('ℹ️ Tous les environnements GLB ont échoué, utilisation du ciel par défaut');
+            createDefaultSky();
+            return;
+        }
+
+        loader.load(environmentURLs[urlIndex], (gltf) => {
+            environmentGLB = gltf.scene;
+            
+            // Ajuster l'échelle et la position
+            environmentGLB.scale.set(100, 100, 100);
+            environmentGLB.position.set(0, 0, 0);
+            
+            // Configurer les matériaux pour l'environnement
+            environmentGLB.traverse((child) => {
+                if (child.isMesh) {
+                    child.receiveShadow = true;
+                    // S'assurer que l'environnement ne bloque pas la vue
+                    if (child.material) {
+                        child.material.side = THREE.BackSide;
+                    }
+                }
+            });
+
+            scene.add(environmentGLB);
+            console.log('✅ Environnement GLB chargé avec succès');
+
+        }, undefined, (error) => {
+            console.log('❌ Échec du chargement environnement:', environmentURLs[urlIndex]);
+            // Essayer l'URL suivant
+            tryLoadEnvironment(urlIndex + 1);
+        });
+    }
+
+    tryLoadEnvironment(0);
+}
+
+// FONCTION DE SECOURS: Ciel par défaut si les GLB échouent
+function createDefaultSky() {
     const skyGeometry = new THREE.SphereGeometry(1000, 32, 32);
     const canvas = document.createElement('canvas');
     canvas.width = 256;
@@ -447,37 +496,6 @@ function createScene() {
     const texture = new THREE.CanvasTexture(canvas);
     const skyMaterial = new THREE.MeshBasicMaterial({
         map: texture,
-        side: THREE.BackSide
-    });
-
-    const sky = new THREE.Mesh(skyGeometry, skyMaterial);
-    scene.add(sky);
-}*/
-function createSky() {
-    // Utiliser une texture de ciel réaliste de Three.js
-    const skyGeometry = new THREE.SphereGeometry(1000, 32, 32);
-
-    // Texture de ciel 
-    // SRC = https://polyhaven.com/hdris/
-    // ou free tools = Hugin
-    const skyTextures = [
-        'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/cgpt.png',
-        'https://raw.githubusercontent.com/berru-g/plane/main/avion/ciel-nuage.webp',
-        'https://cdn.polyhaven.com/asset_img/primary/dikhololo_night.png?height=760&quality=95',
-        'https://raw.githubusercontent.com/imgntn/j360/refs/heads/master/screencap2.jpg',
-        'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/nebula-hdri.webp',
-        'https://raw.githubusercontent.com/berru-g/plane/main/avion/cloudy.png'
-    ];
-
-    const textureLoader = new THREE.TextureLoader();
-    const skyTexture = textureLoader.load(skyTextures[0], () => {
-        console.log('✅ Texture de ciel chargée');
-    });
-
-    skyTexture.colorSpace = THREE.SRGBColorSpace;
-
-    const skyMaterial = new THREE.MeshBasicMaterial({
-        map: skyTexture,
         side: THREE.BackSide
     });
 
@@ -524,195 +542,17 @@ function createTempAircraft() {
     return aircraftGroup;
 }
 
-        
-// FONCTION UNIVERSELLE loadAircraftGLB()
 function loadAircraftGLB() {
     const loader = new THREE.GLTFLoader();
 
-    const droneURLs = [
-        'https://raw.githubusercontent.com/berru-g/berru-g/main/img/animated_drone_with_camera_free.glb',                
+    // URLs de modèles d'avion GLB gratuits
+    const aircraftURLs = [
+        'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb',
     ];
 
-    loader.load(droneURLs[0], (gltf) => {
-        scene.remove(aircraft);
-        aircraft = gltf.scene;
-        aircraft.scale.set(8, 8, 8);
-        aircraft.position.set(0, 50, 0);
-
-        // SYSTÈME UNIVERSEL D'ANIMATION
-        setupUniversalAnimationSystem(gltf);
-
-        scene.add(aircraft);
-        console.log('✅ Modèle GLB chargé avec système d\'animation universel');
-    });
+    // Essayer chaque URL jusqu'à ce qu'un fonctionne
+    tryLoadGLB(loader, aircraftURLs, 0);
 }
-
-// SYSTÈME UNIVERSEL D'ANIMATION
-function setupUniversalAnimationSystem(gltf) {
-    // Réinitialiser les animations précédentes
-    if (animationMixer) {
-        animationMixer.stopAllAction();
-        animationMixer = null;
-    }
-    currentAnimations = [];
-
-    // 1. DÉTECTION AUTOMATIQUE DES ANIMATIONS
-    if (gltf.animations && gltf.animations.length > 0) {
-        console.log('🎬 Animations détectées:', gltf.animations.length);
-        
-        // Afficher les infos des animations
-        gltf.animations.forEach((anim, index) => {
-            console.log(`   ${index}: "${anim.name}" (${anim.duration.toFixed(2)}s)`);
-        });
-
-        // 2. CONFIGURATION INTELLIGENTE
-        animationMixer = new THREE.AnimationMixer(aircraft);
-        setupSmartAnimationPlayback(gltf.animations);
-        
-    } else {
-        console.log('ℹ️ Aucune animation native détectée dans le GLB');
-        // Fallback: animation manuelle simple si souhaité
-        setupFallbackAnimation();
-    }
-}
-
-// CONFIGURATION INTELLIGENTE DE LECTURE
-function setupSmartAnimationPlayback(animations) {
-    // PRIORITÉ 1: Chercher une animation "idle" ou "hover"
-    const preferredAnimations = animations.filter(anim => 
-        anim.name.toLowerCase().includes('idle') ||
-        anim.name.toLowerCase().includes('hover') || 
-        anim.name.toLowerCase().includes('float') ||
-        anim.name.toLowerCase().includes('rest')
-    );
-
-    // PRIORITÉ 2: Si pas d'animation spécifique, prendre la première
-    const animationToPlay = preferredAnimations.length > 0 ? 
-                           preferredAnimations[0] : animations[0];
-
-    // CONFIGURATION DE L'ANIMATION
-    const action = animationMixer.clipAction(animationToPlay);
-    
-    // Réglages pour éviter les conflits
-    action.setEffectiveTimeScale(1.0); // Vitesse normale
-    action.setEffectiveWeight(1.0);    // Poids maximum
-    action.clampWhenFinished = false;  // Ne pas clamp à la fin
-    action.loop = THREE.LoopRepeat;    // Boucler
-    
-    // Jouer l'animation
-    action.play();
-    currentAnimations.push(action);
-    
-    console.log('🎯 Animation sélectionnée:', animationToPlay.name);
-    console.log('⚙️  Configuration: boucle, poids 1.0, vitesse normale');
-
-    // OPTION: Jouer d'autres animations en parallèle si besoin
-    if (animations.length > 1 && !preferredAnimations.length) {
-        // Jouer une deuxième animation si elle est courte (effets spéciaux)
-        const secondaryAnim = animations.find(anim => 
-            anim.duration < 3.0 && // Animation courte
-            !anim.name.toLowerCase().includes('position') // Éviter les déplacements
-        );
-        
-        if (secondaryAnim) {
-            const secondaryAction = animationMixer.clipAction(secondaryAnim);
-            secondaryAction.setEffectiveWeight(0.3); // Poids léger
-            secondaryAction.play();
-            currentAnimations.push(secondaryAction);
-            console.log('🎭 Animation secondaire:', secondaryAnim.name);
-        }
-    }
-}
-
-// ANIMATION DE FALLBACK SI PAS D'ANIMATION NATIVE
-function setupFallbackAnimation() {
-    // Animation manuelle très légère pour donner de la vie
-    aircraft.userData.fallbackAnimation = {
-        time: 0,
-        originalY: aircraft.position.y
-    };
-}
-
-// GESTION DYNAMIQUE DES ANIMATIONS PENDANT LE JEU
-function updateAnimations(delta) {
-    // 1. ANIMATIONS NATIVES (si mixer existe)
-    if (animationMixer) {
-        handleNativeAnimations(delta);
-    }
-    // 2. ANIMATION FALLBACK (si pas d'animations natives)
-    else if (aircraft.userData.fallbackAnimation) {
-        handleFallbackAnimation(delta);
-    }
-}
-
-// GESTION DES ANIMATIONS NATIVES
-function handleNativeAnimations(delta) {
-    if (!animationMixer || !autoAnimationEnabled) return;
-
-    // Ajuster la vitesse en fonction du mouvement
-    const speedFactor = calculateAnimationSpeedFactor();
-    animationMixer.timeScale = speedFactor;
-
-    // Mettre à jour le mixer
-    animationMixer.update(delta);
-}
-
-// CALCUL DU FACTEUR DE VITESSE INTELLIGENT
-function calculateAnimationSpeedFactor() {
-    if (Math.abs(aircraftSpeed) < 0.1) {
-        return 1.0; // Vitesse normale à l'arrêt
-    } else if (aircraftSpeed > 0) {
-        return 1.0 + (aircraftSpeed * 0.5); // Accélérer en avançant
-    } else {
-        return 0.5; // Ralentir en reculant
-    }
-}
-
-// GESTION DE L'ANIMATION FALLBACK
-function handleFallbackAnimation(delta) {
-    if (!aircraft.userData.fallbackAnimation) return;
-
-    const animData = aircraft.userData.fallbackAnimation;
-    animData.time += delta;
-
-    // Seulement si l'avion est relativement immobile
-    if (Math.abs(aircraftSpeed) < 0.2) {
-        // Léger flottement vertical
-        aircraft.position.y = animData.originalY + Math.sin(animData.time) * 0.3;
-        
-        // Très légère rotation sur place
-        aircraft.rotation.z = Math.sin(animData.time * 0.5) * 0.05;
-    }
-}
-
-// FONCTION POUR CHANGER D'ANIMATION MANUELLEMENT
-function switchAnimation(animationIndexOrName) {
-    if (!animationMixer) return;
-
-    // Arrêter toutes les animations actuelles
-    currentAnimations.forEach(action => action.stop());
-    currentAnimations = [];
-
-    // Trouver la nouvelle animation
-    const animations = animationMixer._root._animations || [];
-    let newAnimation = null;
-
-    if (typeof animationIndexOrName === 'number') {
-        newAnimation = animations[animationIndexOrName];
-    } else {
-        newAnimation = animations.find(anim => 
-            anim.name.toLowerCase().includes(animationIndexOrName.toLowerCase())
-        );
-    }
-
-    if (newAnimation) {
-        const action = animationMixer.clipAction(newAnimation);
-        action.play();
-        currentAnimations.push(action);
-        console.log('🔄 Animation changée:', newAnimation.name);
-    }
-}
-
 
 // SYSTÈME D'ANIMATION DRONE AU REPOS
 function setupIdleAnimation() {
@@ -729,8 +569,6 @@ function setupIdleAnimation() {
 }
 
 let isDroneAnimating = false;
-// stopIdleAnimation()
-
 
 function startIdleAnimation() {
     if (isDroneAnimating) return;
@@ -756,7 +594,6 @@ function stopIdleAnimation() {
     isDroneAnimating = false;
     console.log('⏹️ Animation drone repos arrêtée');
 }
-
 
 function tryLoadGLB(loader, urls, index) {
     if (index >= urls.length) {
@@ -943,9 +780,6 @@ function animateClouds() {
     });
 }
 
-
-
-
 function createPointsOfInterest() {
     predefinedPOIs.forEach((poi, index) => {
         const poiCloud = createCloud(
@@ -1087,57 +921,6 @@ function updateAircraft() {
     updateHUD();
 }
 
-/*
-        function updateAircraft() {
-            if (!aircraft || !experienceStarted) return;
- 
-            // CONTRÔLES CORRIGÉS :
-            // ESPACE pour avancer, S pour ralentir
-            if (keys[' ']) { // ESPACE
-                aircraftSpeed = Math.min(aircraftSpeed + acceleration, maxSpeed);
-            }
-            if (keys['s'] || keys['S']) {
-                aircraftSpeed = Math.max(aircraftSpeed - acceleration, -maxSpeed * 0.2);
-            }
- 
-            // FLÈCHES pour l'altitude et la direction
-            if (keys['ArrowUp']) {
-                aircraft.position.y += 0.8; // Monter
-            }
-            if (keys['ArrowDown']) {
-                aircraft.position.y = Math.max(aircraft.position.y - 0.8, 20); // Descendre (min 20m)
-            }
- 
-            // Rotation avec inclinaison
-            if (keys['ArrowLeft']) {
-                aircraft.rotation.z = Math.PI / 6; // Inclinaison gauche
-                aircraft.rotation.y += 0.015;
-            } else if (keys['ArrowRight']) {
-                aircraft.rotation.z = -Math.PI / 6; // Inclinaison droite
-                aircraft.rotation.y -= 0.015;
-            } else {
-                aircraft.rotation.z *= 0.9; // Retour progressif au niveau
-            }
- 
-            // Appliquer le mouvement vers l'avant
-            const direction = new THREE.Vector3(0, 0, -1);
-            direction.applyQuaternion(aircraft.quaternion);
-            aircraft.position.add(direction.multiplyScalar(aircraftSpeed));
- 
-            // Friction
-            aircraftSpeed *= 0.97;
-            if (Math.abs(aircraftSpeed) < 0.001) aircraftSpeed = 0;
- 
-            // Mettre à jour la caméra
-            updateCamera();
- 
-            // Vérifier les points d'intérêt
-            checkPOIProximity();
- 
-            // Mettre à jour le HUD
-            updateHUD();
-        }
-*/
 function updateCamera() {
     if (!aircraft) return;
 
@@ -1299,20 +1082,10 @@ function closeCard(cardId) {
 
 function animate() {
     requestAnimationFrame(animate);
-    const delta = clock.getDelta();
-    updateAnimations(delta);
     updateAircraft();
     animateClouds();
     controls.update();
     renderer.render(scene, camera);
-}
-// FONCTION POUR DÉSACTIVER/RÉACTIVER LES ANIMATIONS
-function toggleAnimations(enabled) {
-    autoAnimationEnabled = enabled;
-    if (animationMixer) {
-        animationMixer.timeScale = enabled ? 1.0 : 0;
-    }
-    console.log(enabled ? '▶️ Animations activées' : '⏸️ Animations désactivées');
 }
 
 window.addEventListener('resize', () => {
