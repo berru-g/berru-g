@@ -430,7 +430,7 @@ function createScene() {
 function loadEnvironmentGLB() {
     const loader = new THREE.GLTFLoader();
     
-    // URLs d'environnements GLB gratuits 
+    // URLs d'environnements GLB 
     const environmentURLs = [
        // 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/space.glb', //"Map_tkgcz" (https://skfb.ly/pyOyZ) by amogusstrikesback2 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
         'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/space_boi.glb', //"space boi" (https://skfb.ly/oyXLG) by silvercrow101 is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
