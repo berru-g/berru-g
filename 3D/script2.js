@@ -432,9 +432,9 @@ function loadEnvironmentGLB() {
     
     // URLs d'environnements GLB gratuits 
     const environmentURLs = [
-        'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/space.glb', //"Map_tkgcz" (https://skfb.ly/pyOyZ) by amogusstrikesback2 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-       // 'https://raw.githubusercontent.com/berru-g/3d-scroll-animate/main/assets/cave_on_an_alien_planet_skybox.glb',
-        // Ajoute d'autres URLs de backup ici
+       // 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/space.glb', //"Map_tkgcz" (https://skfb.ly/pyOyZ) by amogusstrikesback2 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+        'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/space_boi.glb', //"space boi" (https://skfb.ly/oyXLG) by silvercrow101 is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
+        //'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/need_some_space.glb',// "Need some space?" (https://skfb.ly/6QV7A) by Loïc Norgeot is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
     ];
 
     function tryLoadEnvironment(urlIndex) {
@@ -548,6 +548,8 @@ function loadAircraftGLB() {
     // URLs de modèles d'avion GLB gratuits
     const aircraftURLs = [
         'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb',
+        // "Drone" (https://skfb.ly/Ro8Q) by Renafox is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
+        //'https://raw.githubusercontent.com/berru-g/plane/main/avion/cessna172.glb',
     ];
 
     // Essayer chaque URL jusqu'à ce qu'un fonctionne
