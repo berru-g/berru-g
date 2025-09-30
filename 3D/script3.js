@@ -550,7 +550,9 @@ function loadEnvironmentGLB() {
     const environmentURLs = [
         //'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/space_boi.glb',
         //'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/space.glb', //"Map_tkgcz" (https://skfb.ly/pyOyZ) by amogusstrikesback2 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-        'https://raw.githubusercontent.com/berru-g/3d-scroll-animate/main/assets/meteor.glb',
+        //'https://raw.githubusercontent.com/berru-g/3d-scroll-animate/main/assets/meteor.glb',
+        'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/cyberpunk_city.glb',
+        //'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/double.glb', 
 
     ];
 
@@ -722,15 +724,16 @@ function tryLoadGLB(loader, urls, index) {
 }
 
 function createDecorativeClouds() {
-    // Nuages décoratifs blancs
-    const cloudCount = 40;
+    // crzate nebulas
+    const cloudCount = 25;
 
     for (let i = 0; i < cloudCount; i++) {
         createCloud(
-            (Math.random() - 0.5) * 800,
-            Math.random() * 150 + 30,
-            (Math.random() - 0.5) * 800,
-            false // Pas un POI
+            (Math.random() - 0.5) * 1500,
+            Math.random() * 800 + 100,
+            (Math.random() - 0.5) * 1500,
+            Math.random() * 100 + 50,
+           false // Pas un POI
         );
     }
 }
@@ -761,7 +764,7 @@ function createPOICloud(cloudGroup, x, y, z) {
 
     const poiGeometry = geometries[Math.floor(Math.random() * geometries.length)];
     const poiMaterial = new THREE.MeshPhongMaterial({
-        color: 0xff6b35,  // Orange vif
+        color: 0x4B0082, // Couleur violet
         emissive: 0xff4500,
         emissiveIntensity: 0.8,
         transparent: true,
@@ -780,7 +783,7 @@ function createPOICloud(cloudGroup, x, y, z) {
     // Anneau lumineux autour du POI
     const ringGeometry = new THREE.TorusGeometry(8, 0.3, 4, 24);
     const ringMaterial = new THREE.MeshBasicMaterial({
-        color: 0x00ff88,
+        color: 0x32CD32,
         transparent: true,
         opacity: 0.6
     });
@@ -818,7 +821,7 @@ function createDecorativeCloud(cloudGroup, x, y, z) {
     const cloudMaterial = new THREE.MeshPhongMaterial({
         color: 0xffffff,
         transparent: true,
-        opacity: 0.6
+        opacity: 0.3
     });
 
     const spherePositions = [
@@ -1195,7 +1198,7 @@ function navigateToPOI(poiId) {
     }
 }
 
-// AJOUTE cette fonction pour gérer les fichiers GLB personnalisés :
+// GESTION DES Fichiers GLB personnalisés :
 function setupGLBUpload() {
     const fileInput = document.getElementById('glb-file');
     if (fileInput) {
@@ -1271,37 +1274,7 @@ function openCard(cardId) {
         const poiBaseId = cardId.replace('-card', '');
         addPointsForPOI(poiBaseId);
     }
-
-    // Appels à l'action contextuels a revoir !!!
-    switch(cardId) {
-        case 'projects-card':
-            showProjectCTA();
-            break;
-        case 'contact-card':
-            showContactCTA();
-            break;
-        case 'skills-card':
-            showTestimonialsCTA();
-            break;
-    }
 }
-
-function showProjectCTA() {
-    setTimeout(() => {
-        const cta = document.createElement('div');
-        cta.innerHTML = `
-            <div style="background:#667eea; color:white; padding:15px; border-radius:15px; margin-top:20px; text-align:center;">
-                <strong>Envie d'un projet similaire ?</strong><br>
-                <small>Discutons de ton idée !</small>
-                <button onclick="navigateToPOI('contact')" style="background:white; color:#667eea; border:none; padding:8px 20px; border-radius:20px; margin-top:10px; cursor:pointer;">
-                    Me contacter
-                </button>
-            </div>
-        `;
-        document.getElementById('projects-card').appendChild(cta);
-    }, 2000);
-}
-
 
 function closeCard(cardId) {
     const card = document.getElementById(cardId);
