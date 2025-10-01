@@ -552,8 +552,7 @@ function loadEnvironmentGLB() {
         //'https://raw.githubusercontent.com/berru-g/crypto-tool/main/heatmap-forest/assets/iss.glb',
         //'https://raw.githubusercontent.com/berru-g/3d-scroll-animate/main/assets/....glb',
         'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb', //"Flying Island - Low Poly" (https://skfb.ly/6v6y8) by ChojoThePony is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-        
-
+        //'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/lowpoly_city.glb', 
     ];
 
     function tryLoadEnvironment(urlIndex) {
