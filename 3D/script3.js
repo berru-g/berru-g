@@ -160,7 +160,7 @@ const missionSystem = {
         points: 20
     },
     'projects': {
-        title: "Explorer mes projets", 
+        title: "Explorer mes projets",
         action: "Voir 3 projets minimum",
         reward: "+30 💎",
         points: 30
@@ -191,15 +191,15 @@ function completeMission(poiId) {
     if (mission && !completedMissions.includes(poiId)) {
         completedMissions.push(poiId);
         userPoints += mission.points;
-        
+
         // Animation de récompense
         showMissionComplete(mission);
-        
+
         // Bonus spécial pour le contact
         if (mission.bonus) {
             showSpecialOffer();
         }
-        
+
         updatePointsHUD();
         updateMissionsHUD();
         saveGamificationState();
@@ -220,17 +220,242 @@ function showMissionComplete(mission) {
         z-index: 2000; animation: missionComplete 0.8s;
     `;
     document.body.appendChild(popup);
-    
+
     setTimeout(() => popup.remove(), 3000);
 }
 
-// État des touches
-const keys = {
-    'ArrowUp': false, 'ArrowDown': false, 'ArrowLeft': false, 'ArrowRight': false,
-    ' ': false, 's': false, 'S': false
+// État des touches sur mobile
+// AJOUTER CES VARIABLES
+let touchControls = {
+    forward: false,
+    backward: false,
+    left: false,
+    right: false,
+    up: false,
+    down: false
 };
 
-// Points d'intérêt dans les nuages
+let joystick = {
+    active: false,
+    startX: 0,
+    startY: 0,
+    currentX: 0,
+    currentY: 0
+};
+
+// MODIFIER LES CONTRÔLES EXISTANTS POUR INCLURE LE TOUCH
+const keys = {
+    'ArrowUp': false, 'ArrowDown': false, 'ArrowLeft': false, 'ArrowRight': false,
+    ' ': false, 's': false, 'S': false,
+    // Ajouter les contrôles tactiles
+    'forward': false, 'backward': false, 'left': false, 'right': false, 'up': false, 'down': false
+};
+
+function setupMobileControls() {
+    // Créer l'interface de contrôle mobile
+    createTouchInterface();
+
+    // Détection automatique du mobile
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        enableMobileMode();
+    }
+
+    // Événements tactiles pour le joystick
+    setupTouchEvents();
+}
+
+function createTouchInterface() {
+    const controlsContainer = document.createElement('div');
+    controlsContainer.id = 'mobile-controls';
+    controlsContainer.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        pointer-events: none;
+        display: none;
+    `;
+
+    // Joystick de mouvement
+    const joystickArea = document.createElement('div');
+    joystickArea.innerHTML = `
+        <div style="position: relative; width: 120px; height: 120px; margin-left: 30px;">
+            <div id="joystick-base" style="width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; position: absolute; top: 20px; left: 20px; border: 2px solid rgba(255,255,255,0.5);"></div>
+            <div id="joystick-handle" style="width: 40px; height: 40px; background: rgba(255,255,255,0.8); border-radius: 50%; position: absolute; top: 40px; left: 40px; transition: transform 0.1s;"></div>
+        </div>
+    `;
+    joystickArea.style.pointerEvents = 'auto';
+
+    // Contrôles d'altitude
+    const altitudeControls = document.createElement('div');
+    altitudeControls.innerHTML = `
+        <div style="display: flex; flex-direction: column; align-items: center; margin-right: 30px;">
+            <button id="btn-up" style="width: 60px; height: 60px; background: rgba(0, 0, 0, 0.4);; border: none; border-radius: 50%; margin-bottom: 10px; font-size: 24px; color: white; touch-action: manipulation;">⬆</button>
+            <button id="btn-down" style="width: 60px; height: 60px; background: rgba(0, 0, 0, 0.4);; border: none; border-radius: 50%; font-size: 24px; color: white; touch-action: manipulation;">⬇</button>
+        </div>
+    `;
+    altitudeControls.style.cssText = 'pointer-events: auto; display: flex; flex-direction: column; align-items: center;';
+
+    // Conteneur principal
+    const mainControls = document.createElement('div');
+    mainControls.style.cssText = `
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        padding: 0 20px;
+    `;
+
+    mainControls.appendChild(joystickArea);
+    mainControls.appendChild(altitudeControls);
+    controlsContainer.appendChild(mainControls);
+
+    document.body.appendChild(controlsContainer);
+}
+
+function setupTouchEvents() {
+    const joystickBase = document.getElementById('joystick-base');
+    const joystickHandle = document.getElementById('joystick-handle');
+    const btnUp = document.getElementById('btn-up');
+    const btnDown = document.getElementById('btn-down');
+
+    if (!joystickBase) return;
+
+    // Joystick events
+    joystickBase.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const rect = joystickBase.getBoundingClientRect();
+
+        joystick.active = true;
+        joystick.startX = rect.left + rect.width / 2;
+        joystick.startY = rect.top + rect.height / 2;
+        joystick.currentX = touch.clientX;
+        joystick.currentY = touch.clientY;
+
+        updateJoystick();
+    });
+
+    document.addEventListener('touchmove', (e) => {
+        if (!joystick.active) return;
+        e.preventDefault();
+
+        const touch = e.touches[0];
+        joystick.currentX = touch.clientX;
+        joystick.currentY = touch.clientY;
+
+        updateJoystick();
+    });
+
+    document.addEventListener('touchend', (e) => {
+        if (!joystick.active) return;
+
+        joystick.active = false;
+        resetJoystick();
+    });
+
+    // Boutons d'altitude
+    btnUp.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keys['up'] = true;
+        btnUp.style.background = 'rgba(211, 211, 211, 0.3)';
+    });
+
+    btnUp.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keys['up'] = false;
+        btnUp.style.background = 'rgba(211, 211, 211, 0.9)';
+    });
+
+    btnDown.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keys['down'] = true;
+        btnDown.style.background = 'rgba(211, 211, 211, 0.3)';
+    });
+
+    btnDown.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keys['down'] = false;
+        btnDown.style.background = 'rgba(211, 211, 211, 0.9)';
+    });
+}
+
+function updateJoystick() {
+    if (!joystick.active) return;
+
+    const joystickHandle = document.getElementById('joystick-handle');
+    if (!joystickHandle) return;
+
+    const deltaX = joystick.currentX - joystick.startX;
+    const deltaY = joystick.currentY - joystick.startY;
+
+    // Limiter le mouvement du joystick
+    const maxDistance = 35;
+    const distance = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY), maxDistance);
+    const angle = Math.atan2(deltaY, deltaX);
+
+    const moveX = Math.cos(angle) * distance;
+    const moveY = Math.sin(angle) * distance;
+
+    // Mettre à jour la position visuelle du joystick
+    joystickHandle.style.transform = `translate(${moveX}px, ${moveY}px)`;
+
+    // Mettre à jour les contrôles (seuils ajustés pour mobile)
+    const deadZone = 15;
+
+    // Avant/Arrière
+    keys['forward'] = deltaY < -deadZone;
+    keys['backward'] = deltaY > deadZone;
+
+    // Gauche/Droite
+    keys['left'] = deltaX < -deadZone;
+    keys['right'] = deltaX > deadZone;
+}
+
+function resetJoystick() {
+    const joystickHandle = document.getElementById('joystick-handle');
+    if (joystickHandle) {
+        joystickHandle.style.transform = 'translate(0px, 0px)';
+    }
+
+    // Réinitialiser tous les contrôles
+    keys['forward'] = false;
+    keys['backward'] = false;
+    keys['left'] = false;
+    keys['right'] = false;
+}
+
+function enableMobileMode() {
+    const mobileControls = document.getElementById('mobile-controls');
+    if (mobileControls) {
+        mobileControls.style.display = 'block';
+    }
+
+    // Ajuster les paramètres pour mobile
+    maxSpeed = 1.0; // Vitesse réduite pour mobile
+    acceleration = 0.02;
+
+    // Message d'instructions pour mobile
+    showMobileInstructions();
+}
+
+function showMobileInstructions() {
+    const instructions = document.createElement('div');
+    instructions.innerHTML = `
+        <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); background: rgba(0,0,0,0.9); color: white; padding: 20px; border-radius: 15px; text-align: center; z-index: 2000; max-width: 300px;">
+            <h3>🚀 Contrôles Mobile</h3>
+            <p>• <strong>Joystick gauche</strong> : Avancer/Reculer/Tourner</p>
+            <p>• <strong>Boutons droite</strong> : Monter/Descendre</p>
+            <p>• <strong>Glisser l'écran</strong> : Regarder autour</p>
+            <button onclick="this.parentElement.remove()" style="background: #667eea; color: white; border: none; padding: 10px 20px; border-radius: 20px; margin-top: 15px; cursor: pointer;">
+                Compris !
+            </button>
+        </div>
+    `;
+    document.body.appendChild(instructions);
+}
+
+// POI Points d'intérêt dans les nuages POI
 const predefinedPOIs = [
     {
         id: 'intro',
@@ -405,6 +630,7 @@ function init() {
     setupUI(); // 
     createScene();
     setupControls();
+    setupMobileControls();// CONTROLES MOBILE a regler
     initAudio(); // SON
     setupIdleAnimation();
     animate();
@@ -551,8 +777,7 @@ function loadEnvironmentGLB() {
         //'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/space.glb', //"Map_tkgcz" (https://skfb.ly/pyOyZ) by amogusstrikesback2 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
         //'https://raw.githubusercontent.com/berru-g/crypto-tool/main/heatmap-forest/assets/iss.glb',
         //'https://raw.githubusercontent.com/berru-g/3d-scroll-animate/main/assets/....glb',
-        'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb', //"Flying Island - Low Poly" (https://skfb.ly/6v6y8) by ChojoThePony is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-        //'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/lowpoly_city.glb', 
+        'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb',
     ];
 
     function tryLoadEnvironment(urlIndex) {
@@ -732,7 +957,7 @@ function createDecorativeClouds() {
             Math.random() * 800 + 100,
             (Math.random() - 0.5) * 1500,
             Math.random() * 100 + 50,
-           false // Pas un POI
+            false // Pas un POI
         );
     }
 }
@@ -908,6 +1133,52 @@ function setupControls() {
             lastUserAction = Date.now();
             event.preventDefault();
         }
+        // AJOUTER LES CONTRÔLES TACTILES POUR LA CAMÉRA
+        renderer.domElement.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) { // Un seul doigt = rotation caméra
+                isMouseDown = true;
+                isFreeLookMode = true;
+                previousMousePosition = {
+                    x: e.touches[0].clientX,
+                    y: e.touches[0].clientY
+                };
+                controls.enabled = false;
+                lastUserAction = Date.now();
+                stopIdleAnimation();
+            }
+        }, { passive: false });
+
+        renderer.domElement.addEventListener('touchmove', (e) => {
+            if (isMouseDown && isFreeLookMode && e.touches.length === 1) {
+                e.preventDefault();
+
+                const deltaMove = {
+                    x: e.touches[0].clientX - previousMousePosition.x,
+                    y: e.touches[0].clientY - previousMousePosition.y
+                };
+
+                // Sensibilité adaptée pour mobile
+                const rotationSpeed = 0.008;
+
+                camera.rotation.y -= deltaMove.x * rotationSpeed;
+                camera.rotation.x -= deltaMove.y * rotationSpeed;
+                camera.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, camera.rotation.x));
+
+                previousMousePosition = {
+                    x: e.touches[0].clientX,
+                    y: e.touches[0].clientY
+                };
+                lastUserAction = Date.now();
+            }
+        }, { passive: false });
+
+        renderer.domElement.addEventListener('touchend', () => {
+            isMouseDown = false;
+            isFreeLookMode = false;
+            controls.enabled = true;
+            lastUserAction = Date.now();
+        });
+
     });
 
     document.addEventListener('keyup', (event) => {
@@ -924,10 +1195,10 @@ function setupControls() {
         isMouseDown = true;
         isFreeLookMode = true;
         previousMousePosition = { x: event.clientX, y: event.clientY };
-        
+
         // Désactiver temporairement OrbitControls
         controls.enabled = false;
-        
+
         // Style du curseur
         renderer.domElement.style.cursor = 'grabbing';
         lastUserAction = Date.now();
@@ -943,13 +1214,13 @@ function setupControls() {
 
             // Sensibilité de rotation
             const rotationSpeed = 0.005;
-            
+
             // Rotation horizontale (autour de l'axe Y)
             camera.rotation.y -= deltaMove.x * rotationSpeed;
-            
+
             // Rotation verticale (autour de l'axe X) avec limites
             camera.rotation.x -= deltaMove.y * rotationSpeed;
-            camera.rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, camera.rotation.x));
+            camera.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, camera.rotation.x));
 
             previousMousePosition = { x: event.clientX, y: event.clientY };
             lastUserAction = Date.now();
@@ -994,7 +1265,7 @@ function setupControls() {
     });
 
     renderer.domElement.focus();
-} 
+}
 
 
 
@@ -1002,63 +1273,64 @@ function setupControls() {
 function updateAircraft() {
     if (!aircraft || !experienceStarted) return;
 
-    const delta = clock.getDelta(); // Utiliser le delta time pour la fluidité
+    const delta = clock.getDelta();
+
+    // Détection d'input (inclut maintenant le mobile)
     const hasUserInput = keys[' '] || keys['s'] || keys['S'] ||
-        keys['ArrowUp'] || keys['ArrowDown'] ||
-        keys['ArrowLeft'] || keys['ArrowRight'];
+        keys['ArrowUp'] || keys['ArrowDown'] || keys['ArrowLeft'] || keys['ArrowRight'] ||
+        keys['forward'] || keys['backward'] || keys['left'] || keys['right'] || keys['up'] || keys['down'];
 
     if (hasUserInput) {
         lastUserAction = Date.now();
     }
 
-    // CONTRÔLES FLUIDES avec interpolation
-    if (keys[' ']) { // ESPACE - Accélération progressive
+    // CONTRÔLES UNIFIÉS (Desktop + Mobile)
+    let targetPitch = 0;
+    let verticalSpeed = 0;
+    let targetRoll = 0;
+    let rotationSpeed = 0;
+
+    // AVANT/ARRIÈRE (Espace/S + Joystick avant/arrière)
+    if (keys[' '] || keys['forward']) {
         aircraftSpeed = THREE.MathUtils.lerp(aircraftSpeed, maxSpeed, 0.1 * delta * 60);
-    } else if (keys['s'] || keys['S']) { // S - Freinage progressif
+    } else if (keys['s'] || keys['S'] || keys['backward']) {
         aircraftSpeed = THREE.MathUtils.lerp(aircraftSpeed, -maxSpeed * 0.2, 0.15 * delta * 60);
     } else {
-        // Friction naturelle progressive
         aircraftSpeed = THREE.MathUtils.lerp(aircraftSpeed, 0, 0.05 * delta * 60);
     }
 
-    // Limiter la vitesse de manière fluide
+    // LIMITER LA VITESSE
     aircraftSpeed = Math.max(Math.min(aircraftSpeed, maxSpeed), -maxSpeed * 0.3);
 
-    // MOUVEMENTS D'ALTITUDE FLUIDES
-    let targetPitch = 0; // Inclinaison avant/arrière cible
-    let verticalSpeed = 0; // Vitesse verticale
-
-    if (keys['ArrowUp']) {
-        targetPitch = -0.1; // Légère inclinaison vers l'avant pour monter
-        verticalSpeed = 0.4;
+    // ALTITUDE (Flèches + Boutons mobile)
+    if (keys['ArrowUp'] || keys['up']) {
+        targetPitch = -0.1;
+        verticalSpeed = 0.3; // Réduit pour mobile
     }
-    if (keys['ArrowDown']) {
-        targetPitch = 0.1; // Légère inclinaison vers l'arrière pour descendre
-        verticalSpeed = -0.4;
+    if (keys['ArrowDown'] || keys['down']) {
+        targetPitch = 0.1;
+        verticalSpeed = -0.3; // Réduit pour mobile
     }
 
-    // Appliquer l'altitude avec interpolation
+    // ROTATION (Flèches + Joystick gauche/droite)
+    if (keys['ArrowLeft'] || keys['left']) {
+        targetRoll = 0.2;
+        rotationSpeed = 0.015; // Réduit pour mobile
+    } else if (keys['ArrowRight'] || keys['right']) {
+        targetRoll = -0.2;
+        rotationSpeed = -0.015; // Réduit pour mobile
+    }
+
+    // APPLIQUER LES MOUVEMENTS
     aircraft.position.y += verticalSpeed * delta * 60;
-    aircraft.position.y = Math.max(aircraft.position.y, 10); // Limite minimale
+    aircraft.position.y = Math.max(aircraft.position.y, 10);
 
-    // ROTATIONS FLUIDES avec interpolation
-    let targetRoll = 0; // Inclinaison gauche/droite cible
-    let rotationSpeed = 0; // Vitesse de rotation horizontale
-
-    if (keys['ArrowLeft']) {
-        targetRoll = 0.2; // Inclinaison gauche
-        rotationSpeed = 0.02;
-    } else if (keys['ArrowRight']) {
-        targetRoll = -0.2; // Inclinaison droite
-        rotationSpeed = -0.02;
-    }
-
-    // Appliquer les rotations avec interpolation fluide
+    // ROTATIONS FLUIDES
     aircraft.rotation.z = THREE.MathUtils.lerp(aircraft.rotation.z, targetRoll, 0.2 * delta * 60);
     aircraft.rotation.y += rotationSpeed * delta * 60;
     aircraft.rotation.x = THREE.MathUtils.lerp(aircraft.rotation.x, targetPitch, 0.15 * delta * 60);
 
-    // MOUVEMENT AVANT avec la direction actuelle
+    // MOUVEMENT AVANT
     const direction = new THREE.Vector3(0, 0, -1);
     direction.applyQuaternion(aircraft.quaternion);
     aircraft.position.add(direction.multiplyScalar(aircraftSpeed * delta * 60));

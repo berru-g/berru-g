@@ -446,3 +446,41 @@ a {
     border-radius: 5px;
     margin-bottom: 10px;
 }
+
+/* Ajouter dans ton CSS existant */
+@media (max-width: 768px) {
+    #menu-panel {
+        width: 90vw;
+        max-width: 400px;
+    }
+    
+    .card {
+        width: 95vw;
+        max-width: 500px;
+        padding: 20px;
+    }
+    
+    #points-hud {
+        top: 10px;
+        right: 10px;
+        padding: 8px 15px;
+        font-size: 1em;
+    }
+    
+    #target-display, #speed-display, #altitude-display {
+        font-size: 0.9em;
+        padding: 8px 12px;
+    }
+}
+
+/* Empêcher le zoom sur les boutons */
+button {
+    touch-action: manipulation;
+}
+
+/* Améliorer l'expérience tactile */
+@media (hover: none) and (pointer: coarse) {
+    .card, #menu-panel {
+        -webkit-overflow-scrolling: touch;
+    }
+}
