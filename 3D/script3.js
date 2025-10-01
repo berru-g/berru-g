@@ -548,11 +548,11 @@ function loadEnvironmentGLB() {
 
     // URLs d'environnements GLB 
     const environmentURLs = [
-        //'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/space_boi.glb',
         //'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/space.glb', //"Map_tkgcz" (https://skfb.ly/pyOyZ) by amogusstrikesback2 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-        //'https://raw.githubusercontent.com/berru-g/3d-scroll-animate/main/assets/meteor.glb',
-        'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/cyberpunk_city.glb',
-        //'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/double.glb', 
+        //'https://raw.githubusercontent.com/berru-g/crypto-tool/main/heatmap-forest/assets/iss.glb',
+        //'https://raw.githubusercontent.com/berru-g/3d-scroll-animate/main/assets/....glb',
+        'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/flying_island.glb', //"Flying Island - Low Poly" (https://skfb.ly/6v6y8) by ChojoThePony is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+        
 
     ];
 
@@ -883,7 +883,7 @@ function createPointsOfInterest() {
         );
 
         // Couleur différente pour chaque POI
-        const colors = [0xab9ff2, 0x2575fc, 0x60d394, 0xee6055];
+        const colors = [0xab9ff2, 0x2575fc, 0x60d394, 0xee6055, 0xffff00];
         const poiColor = colors[index % colors.length];
 
         // Appliquer la couleur au matériau principal
@@ -920,7 +920,7 @@ function setupControls() {
         }
     });
 
-    // NOUVEAUX ÉVÉNEMENTS SOURIS POUR REGARDER AUTOUR
+    // ÉVÉNEMENTS SOURIS POUR REGARDER AUTOUR
     renderer.domElement.addEventListener('mousedown', (event) => {
         isMouseDown = true;
         isFreeLookMode = true;
