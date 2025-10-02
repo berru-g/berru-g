@@ -24,7 +24,7 @@ function initAudio() {
 }
 
 function loadBackgroundMusic() {
-    const audio = new Audio('./ENCORE.wav'); // mp3 ou .wav mais ne fonctionne pas, prob url raw files ou conflit avec > oscillator.start(); ?
+    const audio = new Audio('../img/mixkit-relax-beat-292.mp3'); // mp3 ou .wav mais ne fonctionne pas, prob url raw files ou conflit avec > oscillator.start(); ?
     audio.loop = true; // boucle
     audio.volume = 0.4; // volume (0 → 1)
     audio.play().catch(err => console.log("⚠️ Lecture auto bloquée:", err));
