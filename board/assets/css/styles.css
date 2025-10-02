@@ -427,7 +427,7 @@ body {
 /* Table Styles */
 .table-container {
     background: white;
-    width: 100%;
+    width: 90%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     /* Smooth scrolling on iOS */

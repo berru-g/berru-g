@@ -1,4 +1,7 @@
-// SYSTÈME AUDIO -
+//V3 en cours... collision deconne
+// Ajout du son, du glg décor, collision du décor.
+
+// SYSTÈME AUDIO 
 let audioContext;
 let backgroundMusic;
 let poiSounds = {};
@@ -130,6 +133,189 @@ function playPOISound(poiId) {
     }
 }
 
+// VARIABLES GLOBALES DE COLLISION
+let collisionObjects = [];
+let isColliding = false;
+let collisionCooldown = false;
+
+function setupCollisions() {
+    if (!environmentGLB) return;
+    
+    // Parcourir l'environnement GLB et identifier les objets de collision
+    environmentGLB.traverse((child) => {
+        if (child.isMesh) {
+            // Créer une boîte de collision pour chaque mesh
+            const collisionBox = {
+                mesh: child,
+                box: new THREE.Box3().setFromObject(child),
+                originalPosition: child.position.clone()
+            };
+            collisionObjects.push(collisionBox);
+        }
+    });
+    
+    console.log(`✅ ${collisionObjects.length} objets de collision détectés`);
+}
+
+function checkCollisions() {
+    if (!aircraft || collisionCooldown) return;
+    
+    // Boîte de collision du drone
+    const aircraftBox = new THREE.Box3().setFromObject(aircraft);
+    
+    // Vérifier les collisions avec tous les objets
+    for (let i = 0; i < collisionObjects.length; i++) {
+        const collisionObj = collisionObjects[i];
+        
+        if (aircraftBox.intersectsBox(collisionObj.box)) {
+            handleCollision(collisionObj);
+            return true;
+        }
+    }
+    
+    // Pas de collision
+    if (isColliding) {
+        endCollision();
+    }
+    
+    return false;
+}
+
+function handleCollision(collisionObj) {
+    if (isColliding) return;
+    
+    isColliding = true;
+    collisionCooldown = true;
+    
+    // Effet visuel de collision
+    createCollisionEffect();
+    
+    // Son de collision
+    playCollisionSound();
+    
+    // Repousser le drone
+    pushAircraftAway(collisionObj);
+    
+    // Vibration (si supporté)
+    vibrateDevice();
+    
+    // Reset du cooldown
+    setTimeout(() => {
+        collisionCooldown = false;
+    }, 500);
+}
+
+function pushAircraftAway(collisionObj) {
+    if (!aircraft) return;
+    
+    // Calculer la direction de repoussement
+    const collisionDirection = new THREE.Vector3()
+        .subVectors(aircraft.position, collisionObj.mesh.position)
+        .normalize();
+    
+    // Appliquer une force de repoussement
+    const pushForce = 5;
+    aircraft.position.add(collisionDirection.multiplyScalar(pushForce));
+    
+    // Réduire la vitesse
+    aircraftSpeed = Math.max(aircraftSpeed * 0.3, 0);
+    
+    // Petit effet de recul
+    const recoil = collisionDirection.clone().multiplyScalar(-2);
+    aircraft.position.add(recoil);
+}
+
+function createCollisionEffect() {
+    // Flash rouge temporaire
+    const flash = document.createElement('div');
+    flash.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 0, 0, 0.3);
+        z-index: 999;
+        pointer-events: none;
+        animation: collisionFlash 0.3s ease-out;
+    `;
+    
+    document.body.appendChild(flash);
+    
+    // Supprimer après l'animation
+    setTimeout(() => {
+        if (flash.parentNode) {
+            flash.parentNode.removeChild(flash);
+        }
+    }, 300);
+}
+
+function playCollisionSound() {
+    if (!isSoundEnabled) return;
+    
+    try {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.type = 'sawtooth';
+        oscillator.frequency.setValueAtTime(150, audioContext.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(50, audioContext.currentTime + 0.2);
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.3);
+    } catch (error) {
+        console.log('❌ Son de collision non supporté');
+    }
+}
+
+function vibrateDevice() {
+    // Vibration du téléphone (si supporté)
+    if (navigator.vibrate) {
+        navigator.vibrate(100);
+    }
+}
+
+function endCollision() {
+    isColliding = false;
+}
+
+// CSS pour l'animation de collision
+const collisionCSS = `
+@keyframes collisionFlash {
+    0% { opacity: 0.6; }
+    100% { opacity: 0; }
+}
+
+.collision-warning {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    z-index: 1000;
+    animation: bounce 0.5s;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.1); }
+}
+`;
+
+// Injecter le CSS
+const style = document.createElement('style');
+style.textContent = collisionCSS;
+document.head.appendChild(style);
+
 // 3D 3D 3D 3D 3D 3D 3D
 // Variables globales Début du jeu 3D avec threejs
 let scene, camera, renderer, controls, aircraft;
@@ -146,7 +332,7 @@ let isMouseDown = false;
 let previousMousePosition = { x: 0, y: 0 };
 let isFreeLookMode = false;
 
-// AJOUTER CES VARIABLES
+// MISSIONS GAMIFIÉES
 let professionalMissions = [];
 let completedMissions = [];
 let currentMission = null;
@@ -209,8 +395,8 @@ function completeMission(poiId) {
 function showMissionComplete(mission) {
     const popup = document.createElement('div');
     popup.innerHTML = `
-        <div style="font-size:1.5em; font-weight:700; color:#fff; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius:20px; padding:25px; text-align:center; animation:missionComplete 0.8s;">
-            🎉 MISSION ACCOMPLIE !<br>
+        <div style="font-size:1.5em; font-weight:700; color:#fff; background:linear-gradient(135deg, #2575fc 0%, #ab9ff2 100%); border-radius:20px; padding:25px; text-align:center; animation:missionComplete 0.8s;">
+            MISSION ACCOMPLIE !<br>
             <span style="font-size:0.8em; opacity:0.9;">${mission.title}</span><br>
             <div style="margin-top:15px; font-size:1.2em; color:#ffe953;">${mission.reward}</div>
         </div>
@@ -225,7 +411,7 @@ function showMissionComplete(mission) {
 }
 
 // État des touches sur mobile
-// AJOUTER CES VARIABLES
+// MOBILE TOUCH CONTROLS
 let touchControls = {
     forward: false,
     backward: false,
@@ -442,11 +628,10 @@ function enableMobileMode() {
 function showMobileInstructions() {
     const instructions = document.createElement('div');
     instructions.innerHTML = `
-        <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); background: rgba(0,0,0,0.9); color: white; padding: 20px; border-radius: 15px; text-align: center; z-index: 2000; max-width: 300px;">
-            <h3>🚀 Contrôles Mobile</h3>
+        <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); background: rgba(0,0,0,0.9); border: 1px solid white; color: white; padding: 20px; border-radius: 12px; text-align: center; z-index: 2000; max-width: 300px;">
+            <h3>Contrôles Mobile</h3>
             <p>• <strong>Joystick gauche</strong> : Avancer/Reculer/Tourner</p>
             <p>• <strong>Boutons droite</strong> : Monter/Descendre</p>
-            <p>• <strong>Glisser l'écran</strong> : Regarder autour</p>
             <button onclick="this.parentElement.remove()" style="background: #667eea; color: white; border: none; padding: 10px 20px; border-radius: 20px; margin-top: 15px; cursor: pointer;">
                 Compris !
             </button>
@@ -456,24 +641,31 @@ function showMobileInstructions() {
 }
 
 // POI Points d'intérêt dans les nuages POI
+/* Les 3 axes dans Three.js :
+        position: new THREE.Vector3(X, Y, Z)
+// X = Gauche/Droite (horizontal)
+// Y = Haut/Bas (vertical)  
+// Z = Avant/Arrière (profondeur)
+*/
+
 const predefinedPOIs = [
     {
         id: 'intro',
         title: 'Introduction',
         description: 'Comment naviguer ?',
-        position: new THREE.Vector3(0, 80, 0)
+        position: new THREE.Vector3(-100, 80, 0)
     },
     {
         id: 'wam',
         title: 'Qui suis-je ?',
         description: 'Brève présentation',
-        position: new THREE.Vector3(-90, 180, -10)
+        position: new THREE.Vector3(0, 180, -10)
     },
     {
         id: 'projects',
         title: 'Projets',
         description: 'Mes réalisations',
-        position: new THREE.Vector3(-120, 100, -80)
+        position: new THREE.Vector3(-160, 100, -80)
     },
     {
         id: 'skills',
@@ -503,7 +695,7 @@ const predefinedPOIs = [
         id: 'portal',
         title: 'Revenir au site',
         description: 'Portal vers mon portfolio',
-        position: new THREE.Vector3(-24, 3, 87)
+        position: new THREE.Vector3(-24, 0, 80) //position: new THREE.Vector3(Gauche/Droite, Haut/Bas, Avant/Arrière)
     },
     {
         id: 'promo',
@@ -781,49 +973,48 @@ function loadEnvironmentGLB() {
     ];
 
     function tryLoadEnvironment(urlIndex) {
-        if (urlIndex >= environmentURLs.length) {
-            console.log('ℹ️ Tous les environnements GLB ont échoué, continuation sans environnement 3D');
-            return;
-        }
+        if (urlIndex >= environmentURLs.length) return;
 
         loader.load(environmentURLs[urlIndex], (gltf) => {
             environmentGLB = gltf.scene;
-
-            // Ajuster l'échelle et la position
             environmentGLB.scale.set(100, 100, 100);
             environmentGLB.position.set(0, 0, 0);
 
-            // Configurer les matériaux pour l'environnement
             environmentGLB.traverse((child) => {
                 if (child.isMesh) {
                     child.receiveShadow = true;
                     child.castShadow = true;
-                    // Transparence de l'environnement 3D
                     if (child.material) {
                         child.material.transparent = true;
-                        child.material.opacity = 1; // 0 -> 1 = opaque 
+                        child.material.opacity = 1;
                     }
                 }
             });
 
             scene.add(environmentGLB);
-            console.log('✅ Environnement GLB chargé avec succès');
+            
+            // ✅ INITIALISER LES COLLISIONS APRÈS CHARGEMENT
+            setTimeout(() => {
+                setupCollisions();
+            }, 1000);
+            
+            console.log('✅ Environnement GLB chargé avec collisions');
 
         }, undefined, (error) => {
-            console.log('❌ Échec du chargement environnement:', environmentURLs[urlIndex]);
-            // Essayer l'URL suivant
+            console.log('❌ Échec du chargement environnement');
             tryLoadEnvironment(urlIndex + 1);
         });
     }
 
     tryLoadEnvironment(0);
 }
+
 // au cas ou l'obj 3D ne charge pas, on a un avion temporaire 
 function createAircraft() {
     // D'abord créer un avion simple temporaire
     const tempAircraft = createTempAircraft();
     aircraft = tempAircraft;
-    aircraft.position.set(0, 80, 0);
+    aircraft.position.set(-100, 80, 0);
     aircraft.rotation.y = Math.PI;
     scene.add(aircraft);
 
@@ -924,7 +1115,7 @@ function tryLoadGLB(loader, urls, index) {
         // Configurer le nouvel avion GLB
         aircraftGLB = gltf.scene;
         aircraftGLB.scale.set(2, 2, 2); // Ajuster l'échelle de l'avion
-        aircraftGLB.position.set(0, 80, 0);
+        aircraftGLB.position.set(-100, 80, 0);
         aircraftGLB.rotation.set(0, Math.PI, 0);
 
         // Activer les ombres
@@ -1274,8 +1465,6 @@ function updateAircraft() {
     if (!aircraft || !experienceStarted) return;
 
     const delta = clock.getDelta();
-
-    // Détection d'input (inclut maintenant le mobile)
     const hasUserInput = keys[' '] || keys['s'] || keys['S'] ||
         keys['ArrowUp'] || keys['ArrowDown'] || keys['ArrowLeft'] || keys['ArrowRight'] ||
         keys['forward'] || keys['backward'] || keys['left'] || keys['right'] || keys['up'] || keys['down'];
@@ -1284,13 +1473,13 @@ function updateAircraft() {
         lastUserAction = Date.now();
     }
 
-    // CONTRÔLES UNIFIÉS (Desktop + Mobile)
+    // CONTRÔLES UNIFIÉS
     let targetPitch = 0;
     let verticalSpeed = 0;
     let targetRoll = 0;
     let rotationSpeed = 0;
 
-    // AVANT/ARRIÈRE (Espace/S + Joystick avant/arrière)
+    // AVANT/ARRIÈRE
     if (keys[' '] || keys['forward']) {
         aircraftSpeed = THREE.MathUtils.lerp(aircraftSpeed, maxSpeed, 0.1 * delta * 60);
     } else if (keys['s'] || keys['S'] || keys['backward']) {
@@ -1302,23 +1491,23 @@ function updateAircraft() {
     // LIMITER LA VITESSE
     aircraftSpeed = Math.max(Math.min(aircraftSpeed, maxSpeed), -maxSpeed * 0.3);
 
-    // ALTITUDE (Flèches + Boutons mobile)
+    // ALTITUDE
     if (keys['ArrowUp'] || keys['up']) {
         targetPitch = -0.1;
-        verticalSpeed = 0.3; // Réduit pour mobile
+        verticalSpeed = 0.3;
     }
     if (keys['ArrowDown'] || keys['down']) {
         targetPitch = 0.1;
-        verticalSpeed = -0.3; // Réduit pour mobile
+        verticalSpeed = -0.3;
     }
 
-    // ROTATION (Flèches + Joystick gauche/droite)
+    // ROTATION
     if (keys['ArrowLeft'] || keys['left']) {
         targetRoll = 0.2;
-        rotationSpeed = 0.015; // Réduit pour mobile
+        rotationSpeed = 0.015;
     } else if (keys['ArrowRight'] || keys['right']) {
         targetRoll = -0.2;
-        rotationSpeed = -0.015; // Réduit pour mobile
+        rotationSpeed = -0.015;
     }
 
     // APPLIQUER LES MOUVEMENTS
@@ -1333,7 +1522,18 @@ function updateAircraft() {
     // MOUVEMENT AVANT
     const direction = new THREE.Vector3(0, 0, -1);
     direction.applyQuaternion(aircraft.quaternion);
+    
+    // SAUVEGARDER LA POSITION AVANT DÉPLACEMENT
+    const previousPosition = aircraft.position.clone();
+    
+    // APPLIQUER LE MOUVEMENT
     aircraft.position.add(direction.multiplyScalar(aircraftSpeed * delta * 60));
+    
+    // ✅ VÉRIFIER LES COLLISIONS APRÈS LE MOUVEMENT
+    if (checkCollisions()) {
+        // Si collision, revenir à la position précédente
+        aircraft.position.copy(previousPosition);
+    }
 
     // Mettre à jour la caméra
     updateCamera();
@@ -1343,6 +1543,64 @@ function updateAircraft() {
 
     // Mettre à jour le HUD
     updateHUD();
+}
+
+// VERSION OPTIMISÉE POUR LES PERFORMANCES
+function setupCollisions() {
+    if (!environmentGLB) return;
+    
+    collisionObjects = [];
+    
+    // Seulement les gros objets (optimisation)
+    environmentGLB.traverse((child) => {
+        if (child.isMesh && isCollisionObject(child)) {
+            const box = new THREE.Box3().setFromObject(child);
+            const size = box.getSize(new THREE.Vector3());
+            
+            // Ignorer les petits objets (optimisation)
+            if (size.x > 5 || size.y > 5 || size.z > 5) {
+                collisionObjects.push({
+                    mesh: child,
+                    box: box,
+                    size: size
+                });
+            }
+        }
+    });
+    
+    console.log(`✅ ${collisionObjects.length} objets de collision (optimisés)`);
+}
+
+function isCollisionObject(mesh) {
+    // Filtrer les objets qui doivent avoir des collisions
+    const ignoreNames = ['ground', 'sky', 'particle', 'light'];
+    const name = mesh.name.toLowerCase();
+    
+    return !ignoreNames.some(ignore => name.includes(ignore));
+}
+
+// COLLISION SPHÈRE (plus performant)
+function checkCollisionsSphere() {
+    if (!aircraft || collisionCooldown) return;
+    
+    // Utiliser une sphère pour la collision (plus rapide)
+    const aircraftSphere = new THREE.Sphere();
+    aircraftSphere.setFromObject(aircraft);
+    
+    for (let i = 0; i < collisionObjects.length; i++) {
+        const collisionObj = collisionObjects[i];
+        
+        if (aircraftSphere.intersectsBox(collisionObj.box)) {
+            handleCollision(collisionObj);
+            return true;
+        }
+    }
+    
+    if (isColliding) {
+        endCollision();
+    }
+    
+    return false;
 }
 
 // MODIFIER updateCamera() POUR GÉRER LES DEUX MODES
@@ -1498,7 +1756,7 @@ function loadCustomAircraftGLB(url) {
         // Configurer le nouveau modèle
         aircraftGLB = gltf.scene;
         aircraftGLB.scale.set(4, 4, 4);
-        aircraftGLB.position.set(0, 80, 0);
+        aircraftGLB.position.set(-100, 80, 0);
         aircraftGLB.rotation.set(0, Math.PI, 0);
 
         // Ajuster l'échelle automatiquement selon la taille
@@ -1528,7 +1786,7 @@ function loadCustomAircraftGLB(url) {
 
 function resetAircraft() {
     if (aircraft) {
-        aircraft.position.set(0, 80, 0);
+        aircraft.position.set(-100, 80, 0);
         aircraft.rotation.set(0, Math.PI, 0);
         aircraftSpeed = 0;
     }

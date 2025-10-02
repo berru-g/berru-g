@@ -11,6 +11,6 @@ if (empty($_SESSION['IPfixed'])) {
 }
 
 if (!isset($_SESSION['admin_logged_in'])) {
-    header('Location: /login.php');
+    header('Location: board/login.php');
     exit();
 }
