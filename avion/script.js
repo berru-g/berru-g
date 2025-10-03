@@ -1,4 +1,4 @@
-// 3D website V2 avec hero.glb + decor.glb + sphere.hdri + son.mp3 + modal (POI) + gamification
+// 3D website V2 avec hero.glb + decor.glb + sphere.hdri + son.mp3 + modal (POI) + gamification + mobile control
 //gael-berru.com/3D/
 
 // SYSTÈME AUDIO -
@@ -536,15 +536,7 @@ let userPoints = 0;
 let openedPOI = {}; // { poiId: true }
 const TOTAL_POI = predefinedPOIs.length;
 
-/* Saved points dans le localStorage
-
-// juste pour bosser sur les POI et repartir le compteur a zéro depuis la console : 
-// localStorage.clear(); location.reload();
-//  ou
-localStorage.removeItem('userPoints');
-// PUIS REFRESH
-location.reload();
-*/
+// Load saved state from localStorage (pour persistance sur refresh)
 function loadGamificationState() {
     const savedPoints = localStorage.getItem('userPoints');
     const savedOpened = localStorage.getItem('openedPOI');
@@ -574,80 +566,26 @@ function addPointsForPOI(poiId) {
 }
 
 // Affiche un popup de succès avec animation
-// showDiscountPopup(); dans la console ;)
 function showDiscountPopup() {
     const popup = document.createElement('div');
     popup.innerHTML = `
-        <div class="special-offer-overlay">
-            <div class="special-offer-content">
-                <div class="offer-header">
-                    <div class="confetti">💎</div>
-                    <h3>OFFRE SPÉCIALE DÉCOUVREUR !</h3>
-                    <div class="confetti">🪙</div>
-                </div>
-                
-                <div class="offer-badge">EXCLUSIF</div>
-                
-                <p class="offer-subtitle">Pour avoir exploré tout mon univers, je t'offre :</p>
-                
-                <div class="offer-features">
-                    <div class="feature-item">
-                        <span class="feature-icon">✅</span>
-                        <div>
-                            <strong>un Audit gratuit</strong> de ton site actuel
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-icon">✅</span>
-                        <div>
-                            <strong>Conseil stratégique 30min</strong> personnalisé
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-icon">✅</span>
-                        <div>
-                            <strong>10% de réduction</strong> sur ton projet
-                        </div>
-                    </div>
-                </div>
-
-                <div class="offer-highlight">
-                    <span class="discount-badge">-10%</span>
-                    <span class="offer-code">Code: <strong>EXPLORER-25</strong></span>
-                </div>
-
-                <button onclick="openCard('contact-card'); this.closest('.special-offer-overlay').remove()" class="offer-btn">
-                 Clamer mon offre exclusive
-                </button>
-                
-                <div class="offer-footer">
-                    <small>Offre valable pour les explorateurs audacieux ✨</small>
-                </div>
-                
-                <button class="close-offer" onclick="this.closest('.special-offer-overlay').remove()">×</button>
-            </div>
-        </div>
+    <div style="font-size:2.3em;font-weight:700;color:#fff;background:#333;border-radius:24px;padding:32px;box-shadow:0 0 32px #0008;text-align:center;animation:popup-win 1s;">
+        BRAVO !<br>Tu obtiens <span style="font-size:1.4em;color:#ffe953;">10% de réduction</span> sur ta prochaine commande de site.<br>
+        <small>Code promo : <strong>@mour</strong></small>
+    </div>
+    <style>@keyframes popup-win{0%{transform:scale(0.5);opacity:0;}50%{transform:scale(1.15);opacity:1;}100%{transform:scale(1);}}</style>
     `;
-
+    popup.style.position = 'fixed';
+    popup.style.top = '50%';
+    popup.style.left = '50%';
+    popup.style.transform = 'translate(-50%,-50%)';
+    popup.style.zIndex = 2000;
     document.body.appendChild(popup);
-    
-    // Animation d'entrée
     setTimeout(() => {
-        const content = popup.querySelector('.special-offer-content');
-        content.style.transform = 'scale(1)';
-        content.style.opacity = '1';
-    }, 100);
-
-    // Fermeture automatique après 15 secondes
-    setTimeout(() => {
-        if (popup.parentNode) {
-            popup.style.opacity = '0';
-            popup.style.transition = 'opacity 0.8s ease';
-            setTimeout(() => {
-                if (popup.parentNode) document.body.removeChild(popup);
-            }, 800);
-        }
-    }, 15000);
+        popup.style.transition = 'opacity 1s';
+        popup.style.opacity = '0';
+        setTimeout(() => document.body.removeChild(popup), 1000);
+    }, 5800); // Affiche ~6s
 }
 
 // Optionnel : animation "+10" over HUD
@@ -815,10 +753,6 @@ function createSky() {
 
     // Texture de ciel HDRI rendu sphérique 
     const skyTextures = [
-        'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/cgpt.png',
-        'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/nebula-hdri.webp',
-
-        'https://raw.githubusercontent.com/imgntn/j360/refs/heads/master/screencap2.jpg',
         'https://raw.githubusercontent.com/berru-g/plane/main/avion/ciel-nuage.webp',
         'https://cdn.polyhaven.com/asset_img/primary/dikhololo_night.png?height=760&quality=95',
         'https://raw.githubusercontent.com/berru-g/plane/main/avion/cloudy.png'
@@ -846,10 +780,8 @@ function loadEnvironmentGLB() {
 
     // URLs d'environnements GLB 
     const environmentURLs = [
-        //'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/space.glb', //"Map_tkgcz" (https://skfb.ly/pyOyZ) by amogusstrikesback2 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-        //'https://raw.githubusercontent.com/berru-g/crypto-tool/main/heatmap-forest/assets/iss.glb',
-        //'https://raw.githubusercontent.com/berru-g/3d-scroll-animate/main/assets/....glb',
-        'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/fantasy_town.glb',
+       // 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/fantasy_town.glb',
+       '#',
     ];
 
     function tryLoadEnvironment(urlIndex) {
@@ -935,7 +867,7 @@ function loadAircraftGLB() {
 
     // URLs de modèles d'avion GLB gratuits
     const aircraftURLs = [
-        'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb',
+        'https://raw.githubusercontent.com/berru-g/plane/main/avion/cessna172.glb',
     ];
 
     // Essayer chaque URL jusqu'à ce qu'un fonctionne
@@ -995,7 +927,7 @@ function tryLoadGLB(loader, urls, index) {
 
         // Configurer le nouvel avion GLB
         aircraftGLB = gltf.scene;
-        aircraftGLB.scale.set(2, 2, 2); // Ajuster l'échelle de l'avion
+        aircraftGLB.scale.set(12, 12, 12); // Ajuster l'échelle de l'avion
         aircraftGLB.position.set(-100, 80, 0);
         aircraftGLB.rotation.set(0, Math.PI, 0);
 

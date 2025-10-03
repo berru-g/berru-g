@@ -458,7 +458,7 @@ function createSky() {
     // SRC = https://polyhaven.com/hdris/
     // ou free tools = Hugin
     const skyTextures = [
-        'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/cgpt.png',
+       // 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/cgpt.png',
         'https://raw.githubusercontent.com/berru-g/plane/main/avion/ciel-nuage.webp',
         'https://cdn.polyhaven.com/asset_img/primary/dikhololo_night.png?height=760&quality=95',
         'https://raw.githubusercontent.com/imgntn/j360/refs/heads/master/screencap2.jpg',
@@ -561,8 +561,8 @@ function loadAircraftGLB() {
 
     // URLs de modèles d'avion GLB gratuits
     const aircraftURLs = [
-        'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb', // "Drone" (https://skfb.ly/Ro8Q) by Renafox is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
-        //'https://raw.githubusercontent.com/berru-g/plane/main/avion/cessna172.glb',
+        //'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb', // "Drone" (https://skfb.ly/Ro8Q) by Renafox is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
+        'https://raw.githubusercontent.com/berru-g/plane/main/avion/cessna172.glb',
         //'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/guardian.glb', //"A-IR Wing - Rebel Grey Skin" (https://skfb.ly/6zzUI) by Pixel Make is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
         //'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/animated_drone_with_camera_free.glb'//"Animated Drone" (https://skfb.ly/6WOAz) by hartwelkisaka is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
         //'#',  // "TMP Guardian Starfighter" (https://skfb.ly/6wxOo) by Robin Butler is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
@@ -629,7 +629,7 @@ function tryLoadGLB(loader, urls, index) {
 
         // Configurer le nouvel avion GLB
         aircraftGLB = gltf.scene;
-        aircraftGLB.scale.set(2, 2, 2); // Ajuster l'échelle de l'avion
+        aircraftGLB.scale.set(8, 8, 8); // Ajuster l'échelle de l'avion
         aircraftGLB.position.set(0, 80, 0);
         aircraftGLB.rotation.set(0, Math.PI, 0);
 

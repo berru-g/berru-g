@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaël Leberruyer 3D Expérience</title>
+    <link rel="shortcut icon" href="/img/logo.png" />
+    <link rel="apple-touch-icon" href="/img/logo.png" />
+    <!--<meta name="description"
+        content="Créateur de site web 3D intéractif. Je conçois des projets concrets alliant technologie, durabilité et impact social.">
+    <meta name="keywords"
+        content="site web 3D immersif, dev web sur mesure, Gael Leberruyer, Gael Berru, web3, crypto enthusiast, vente de pixel, codeur de site nantes, developpeur nantes,">
+    <meta name="author" content="Gael Berru.">
+    <meta name="robots" content="noai">-->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+
+   
+</head>
+
+<body>
+    <div id="container"></div>
+    <div id="menu-toggle" onclick="toggleMenu()">☰</div>
+
+    <div id="menu-panel">
+        
+        <div class="menu-section">
+            <h3>berru-g</h3>
+            <div id="poi-list"></div>
+            <!--<h3 class="btn"><a href="../index.html">Revenir au site</a></h3>-->
+        </div>
+    </div>
+
+
+    <div id="hud">
+        <div class="hud-item">
+            <div class="hud-label">VITESSE</div>
+            <div class="hud-value" id="speed-display">0 km/h</div>
+        </div>
+        <div class="hud-item">
+            <div class="hud-label">ALTITUDE</div>
+            <div class="hud-value" id="altitude-display">0 km</div>
+        </div>
+        <div class="hud-item">
+            <div class="hud-label">DESTINATION</div>
+            <div class="hud-value" id="target-display">Exploration</div>
+        </div>
+    </div>
+
+
+    <!-- Cartes d'information -- data-aos="zoom-in" data-aos-delay="100"-->
+    <div id="intro-card" class="info-card">
+        <button class="close-card" onclick="closeCard('intro-card')">×</button>
+        <h1 style="text-align: center;">votre site</h1>
+        <img src="../img/drone-logo.png" class="intro-logo">
+
+        <h2 style="text-align: center;">Bienvenue dans cette immersion</h2>
+        <p style="text-align: center;"><strong>Utilisez les touches de votre clavier pour voler vers ...</strong></p>
+        <br>
+        <img src="../img/key.png" class="intro-img">
+
+        <button class="btn" onclick="closeCard('intro-card')" style="width: 100%; margin-top: 20px;">Commencer</button>
+    </div>
+
+    <div id="wam-card" class="info-card">
+        <button class="close-card" onclick="closeCard('wam-card')">×</button>
+        <img src="../img/wamcache.png" class="intro-logo">
+
+        <h2 style="text-align: center;">Qui suis-je ?</h2>
+        <p style="text-align: center;"><strong>Créatif autodidacte,J'aime créer des expériences web immersives en 3D qui transforment la visite de site en aventure mémorable.</strong></p>
+
+        <button class="btn" onclick="closeCard('wam-card')" style="width: 100%; margin-top: 20px;">Continuer</button>
+    </div>
+
+    <div id="projects-card" class="gallery-card">
+        <button class="close-card" onclick="closeCard('projects-card')">×</button>
+        <h2>Projets</h2>
+        <div class="gallery-grid">
+
+            <div class="gallery-item">
+                <img src="../img/messagerie.png">
+                <strong>Réseau social & tool DataAnalyst</strong>
+                <p>DataViz et editeur sql</p>
+                <a href="https://agora-dataviz.com/" target="_blank" style="color: #ab9ff2;">Essayer gratuitement →</a>
+            </div>
+
+            <div class="gallery-item">
+                <img src="../img/archi.png">
+                <strong>Archi : Immersion 3D</strong>
+                <p>Offrez une expérience immersive à vos clients.</p>
+                <a href="./archi/index.html" target="_blank" style="color: #ab9ff2;">Immersion 3D →</a>
+            </div>
+
+            <div class="gallery-item">
+                <img src="../img/devpixel.png">
+                <strong>Pixel earth</strong>
+                <p>Plateforme de vente de pixel avec système de paiement ( Stripe ) et base de données.</p>
+                <a href="https://pixelearth.netlify.app/" target="_blank" style="color: #ab9ff2;">Visiter →</a>
+            </div>
+
+            <div class="gallery-item">
+                <img src="../img/admin2.png">
+                <strong>Interface Admin.</strong>
+                <p>Accédez à toute vos bases de données dans un dashboard.</p>
+                <a href="../board/login.php" target="_blank" style="color: #ab9ff2;">Voir le projet →</a>
+            </div>
+
+            <div class="gallery-item">
+                <img src="../img/devcryptotool.png">
+                <strong>Crypto Free Tools</strong>
+                <p>Suite d'outils pour investisseurs avec utilisation des API de CoinGecko et Binance.</p>
+                <a href="https://crypto-free-tools.netlify.app/" target="_blank" style="color: #ab9ff2;">S'éduquer
+                    →</a>
+            </div>
+
+            <div class="gallery-item">
+                <img src="../img/devgoldendessert.png">
+                <strong>Golden dessert</strong>
+                <p>Site vitrine avec formulaire et envoie de mail automatique.</p>
+                <a href="#" target="_blank" style="color: #ab9ff2;">Visiter →</a>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="skills-card" class="info-card">
+        <button class="close-card" onclick="closeCard('skills-card')">×</button>
+        <h2>Avis</h2>
+        <div class="review-item">
+            <div class="stars">★★★★★</div>
+            <p><strong>Nico Golden dessert</strong></p>
+            <p>"Gaël a livré un site parfaitement propre en 1 semaine seulement.
+                Il nous à même fait cadeaux d'une interface admin. Je recommande !"</p>
+        </div>
+        <div class="review-item">
+            <div class="stars">★★★★★</div>
+            <p><strong>Eustis tool</strong></p>
+            <p>"Développeur réactif et compétent. Il a su comprendre mes besoins
+                complexes en matière d'intégration API."</p>
+        </div>
+        <div class="review-item">
+            <div class="stars">★★★★☆</div>
+            <p><strong>Antoine</strong></p>
+            <p>"Toujours un plaisir de bosser avec Gael, il sait s'adapter à nos besoins."</p>
+        </div>
+    </div>
+
+    <div id="contact-card" class="info-card">
+        <button class="close-card" onclick="closeCard('contact-card')">×</button>
+        <img src="../img/drone-logo.png" class="intro-logo">
+        <h2>Contact</h2>
+        <form action="https://formspree.io/f/#" method="POST" class="contact-form">
+
+            <input type="Votre mail ici" placeholder="Votre email" required>
+            <textarea placeholder="Quel sont vos besoins ?" rows="5" required></textarea>
+            <button type="submit" class="btn">Envoyer</button>
+        </form>
+        <div style="margin-top: 20px; text-align: center;">
+            <!--<p><strong>Email:</strong> gael-berru.com</p>-->
+        </div>
+    </div>
+
+    <div id="video-gallery-card" class="info-card">
+        <button class="close-card" onclick="closeCard('video-gallery-card')">×</button>
+        <h2>Galerie Vidéo</h2>
+        <div class="video-gallery">
+            <div class="video-item">
+                <iframe src="https://youtube.com/shorts/sNAk7pqmWBY?si=A12JG1xjouJDoP8Z" frameborder="0"
+                    allowfullscreen></iframe>
+                <strong>Evolution de mon portfolio depuis 2020</strong>
+                <p>Découvrez mes réalisations en vidéo</p>
+            </div>
+            <div class="video-item">
+                <iframe src="https://youtube.com/shorts/8u2sGHpPyJ8?si=Jna44Qz1G3-pb2iV" frameborder="0"
+                    allowfullscreen></iframe>
+                <strong>Motion Design</strong>
+                <p>Pour Les Flâneries 2022</p>
+            </div>
+            <div class="video-item">
+                <iframe src="https://youtube.com/shorts/XRlEr9VIdyc?si=t02ll_nJR_8uIlWP" frameborder="0"
+                    allowfullscreen></iframe>
+                <strong>Stop Motion</strong>
+                <p>Pour Balek @gangueastral 2023 / Animation stop motion et IA</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="portal-card" class="info-card">
+        <button class="close-card" onclick="closeCard('portal-card')">×</button>
+        <h2>Portail Dimensionnel</h2>
+        <p style="text-align: center; margin: 20px 0;">
+            <strong>Attention ! Vous êtes sur le point de quitter cette dimension.</strong>
+        </p>
+        <img src="../img/drone-logo.png" class="intro-logo">
+        <p style="text-align: center; opacity: 0.8;">
+            Ce portail vous transportera vers mon site principal.
+        </p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px;">
+            <button class="btn secondary" onclick="closeCard('portal-card')">Rester ici</button>
+            <button class="btn" onclick="window.open('../index.html', '_blank')">Continuer le voyage</button>
+        </div>
+    </div>
+
+    <!-- Popup de fin de quête -->
+    <div id="quest-card" class="info-card">
+        <h2>Votre avis compte</h2>
+        <p>Comment noteriez-vous votre expérience ici ?</p>
+
+        <p>Votre avis est précieux pour m'aider à m'améliorer !</p>
+
+        <div style="margin: 25px 0;">
+            <button class="btn" onclick="window.open('https://g.page/r/CarAb_ew1G-_EAE/review', '_blank')">
+                Laisser un avis Google
+            </button>
+            <br>
+            <button class="btn secondary" onclick="closeCard('quest-card')">
+                Continuer l'exploration
+            </button>
+        </div>
+    </div>
+
+    <div id="promo-card" class="info-card">
+        <h2>Offre d'hiver</h2>
+
+        <p>-10% sur votre commande avec le code fournie lorsque tu auras visiter chaque info.</p>
+
+        <div style="margin: 25px 0;">
+            <button class="btn secondary" onclick="closeCard('promo-card')">
+                Continuer l'exploration
+            </button>
+        </div>
+    </div>
+
+    <div id="social-card" class="info-card">
+        <button class="close-card" onclick="closeCard('social-card')">×</button>
+
+        <h2 style="text-align: center; margin-bottom: 25px;">Mes réseaux</h2>
+
+        <div class="social-links">
+            <a href="https://github.com/berru-g/" target="_blank" class="social-link">
+                <div class="social-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor"
+                            d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                    </svg>
+                </div>
+                <span>GitHub</span>
+            </a>
+
+            <a href="https://codepen.io/h-lautre" target="_blank" class="social-link">
+                <div class="social-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor"
+                            d="M24 8.182l-.017-.087v-.785l.017-.087-11.983-6.48-12 6.48.017.087v.785l-.017.087 12 6.489 11.983-6.489zm-12 5.893l-5.996-3.24 5.996-3.244 6.009 3.244-6.009 3.24zm-7.029-4.243l-4.971 2.685v5.349l7.039 3.789v-6.62l-2.068-1.203v-3.8zm14.058 0v3.8l-2.068 1.203v6.62l7.039-3.789v-5.349l-4.971-2.685z" />
+                    </svg>
+                </div>
+                <span>CodePen</span>
+            </a>
+
+            <a href="https://instagram.com/berru_aka" target="_blank" class="social-link">
+                <div class="social-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor"
+                            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                    </svg>
+                </div>
+                <span>Instagram</span>
+            </a>
+
+            <a href="https://tiktok.com/@berru_create" target="_blank" class="social-link">
+                <div class="social-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor"
+                            d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 0 1 3.183-4.51v-3.5a6.329 6.329 0 0 0-5.394 10.692 6.33 6.33 0 0 0 10.857-4.424V8.687a8.182 8.182 0 0 0 4.773 1.526V6.79a4.831 4.831 0 0 1-1.003-.104z" />
+                    </svg>
+                </div>
+                <span>TikTok</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.zoom-img').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const imgSrc = this.getAttribute('href');
+                const instance = basicLightbox.create(`<img src="${imgSrc}" style="max-width:100%; max-height:100vh;">`);
+                instance.show();
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialisation de AOS
+        document.addEventListener('DOMContentLoaded', function () {
+            AOS.init({
+                duration: 1200,
+                once: true,
+                easing: 'ease-out-back'
+            });
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
