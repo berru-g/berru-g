@@ -446,6 +446,7 @@ function init() {
     scene.add(directionalLight);
     
     // Charger votre modèle (remplacez l'URL)
+    //ex: 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb'
     const loader = new THREE.GLTFLoader();
     loader.load('URL_DE_VOTRE_MODELE.glb', function(gltf) {
         model = gltf.scene;
