@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Éditeur d'Animation 3D avec Scroll</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background: #1e1e2e;
+            color: #cdd6f4;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: #181825;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #313244;
+            overflow-y: auto;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .viewer-container {
+            flex: 1;
+            position: relative;
+            background: #11111b;
+        }
+
+        #viewer {
+            width: 100%;
+            height: 100%;
+        }
+
+        .scroll-ruler {
+            height: 60px;
+            background: #181825;
+            border-top: 1px solid #313244;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .ruler-track {
+            flex: 1;
+            height: 6px;
+            background: #313244;
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .ruler-marker {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background: #f5c2e7;
+            top: -7px;
+            transform: translateX(-50%);
+            cursor: pointer;
+        }
+
+        .ruler-percentage {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #313244;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #cdd6f4;
+            white-space: nowrap;
+        }
+
+        .ruler-handle {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #f5c2e7;
+            border-radius: 50%;
+            top: -5px;
+            transform: translateX(-50%);
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #f5c2e7;
+            font-weight: 600;
+        }
+
+        .btn {
+            background: #cba6f7;
+            color: #1e1e2e;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            background: #b692f6;
+        }
+
+        .btn-secondary {
+            background: #585b70;
+            color: #cdd6f4;
+        }
+
+        .btn-secondary:hover {
+            background: #6c7086;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #a6adc8;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #313244;
+            background: #11111b;
+            color: #cdd6f4;
+        }
+
+        .keyframes-list {
+            max-height: 200px;
+            overflow-y: auto;
+            background: #11111b;
+            border-radius: 6px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .keyframe-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid #313244;
+            cursor: pointer;
+        }
+
+        .keyframe-item:hover {
+            background: #313244;
+        }
+
+        .keyframe-item.active {
+            background: #45475a;
+        }
+
+        .keyframe-percentage {
+            font-weight: bold;
+            color: #f5c2e7;
+        }
+
+        .keyframe-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .keyframe-actions button {
+            background: none;
+            border: none;
+            color: #a6adc8;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .keyframe-actions button:hover {
+            color: #f5c2e7;
+        }
+
+        .code-editor {
+            height: 200px;
+            background: #11111b;
+            border-radius: 6px;
+            padding: 10px;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 14px;
+            color: #cdd6f4;
+            border: 1px solid #313244;
+            resize: vertical;
+        }
+
+        .preview-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(24, 24, 37, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #313244;
+            z-index: 100;
+        }
+
+        .preview-title {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #f5c2e7;
+        }
+
+        .preview-scroll {
+            width: 200px;
+            height: 10px;
+            background: #313244;
+            border-radius: 5px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .preview-handle {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #f5c2e7;
+            border-radius: 50%;
+            top: -3px;
+            left: 0;
+            transform: translateX(-50%);
+            cursor: pointer;
+        }
+
+        .preview-percentage {
+            margin-top: 8px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .instructions {
+            font-size: 12px;
+            color: #a6adc8;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+
+        .tab-container {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .tab {
+            padding: 8px 15px;
+            background: #11111b;
+            border: 1px solid #313244;
+            cursor: pointer;
+            border-radius: 6px 6px 0 0;
+            margin-right: 5px;
+        }
+
+        .tab.active {
+            background: #313244;
+            border-bottom: 1px solid #313244;
+        }
+
+        .tab-content {
+            display: block;
+        }
+
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #f5c2e7;
+            font-size: 18px;
+        }
+
+        .code-exporter {
+            background: #181825;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px;
+        }
+
+        .code-tab {
+            display: none;
+        }
+
+        .code-tab.active {
+            display: block;
+        }
+
+        .code-exporter .tab-container {
+            margin-bottom: 15px;
+        }
+
+        .code-exporter .tab {
+            padding: 8px 15px;
+            background: #11111b;
+            border: 1px solid #313244;
+            cursor: pointer;
+            border-radius: 6px 6px 0 0;
+            margin-right: 5px;
+        }
+
+        .code-exporter .tab.active {
+            background: #313244;
+            border-bottom: 1px solid #313244;
+        }
+
+        .code-exporter .code-editor {
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="section">
+            <h2 class="section-title">Importation 3D</h2>
+            <input type="file" id="model-input" accept=".glb,.gltf" style="display: none;">
+            <button class="btn" id="import-btn">Importer un modèle 3D</button>
+            <div class="input-group">
+                <label for="model-scale">Échelle du modèle</label>
+                <input type="range" id="model-scale" min="0.1" max="3" step="0.1" value="1">
+            </div>
+            <button class="btn btn-secondary" onclick="loadTestModel()">Charger modèle test</button>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Animation par Scroll</h2>
+            <div class="tab-container">
+                <div class="tab active" data-tab="position">Position</div>
+                <div class="tab" data-tab="rotation">Rotation</div>
+                <div class="tab" data-tab="scale">Échelle</div>
+            </div>
+
+            <div class="input-group">
+                <label for="keyframe-percentage">Pourcentage de scroll</label>
+                <input type="range" id="keyframe-percentage" min="0" max="100" value="0">
+                <div style="text-align: center; margin-top: 5px;" id="percentage-value">0%</div>
+            </div>
+
+            <div id="position-controls" class="tab-content">
+                <div class="input-group">
+                    <label for="pos-x">Position X</label>
+                    <input type="range" id="pos-x" min="-10" max="10" step="0.1" value="0">
+                </div>
+                <div class="input-group">
+                    <label for="pos-y">Position Y</label>
+                    <input type="range" id="pos-y" min="-10" max="10" step="0.1" value="0">
+                </div>
+                <div class="input-group">
+                    <label for="pos-z">Position Z</label>
+                    <input type="range" id="pos-z" min="-10" max="10" step="0.1" value="0">
+                </div>
+            </div>
+
+            <div id="rotation-controls" class="tab-content" style="display: none;">
+                <div class="input-group">
+                    <label for="rot-x">Rotation X (degrés)</label>
+                    <input type="range" id="rot-x" min="0" max="360" step="1" value="0">
+                </div>
+                <div class="input-group">
+                    <label for="rot-y">Rotation Y (degrés)</label>
+                    <input type="range" id="rot-y" min="0" max="360" step="1" value="0">
+                </div>
+                <div class="input-group">
+                    <label for="rot-z">Rotation Z (degrés)</label>
+                    <input type="range" id="rot-z" min="0" max="360" step="1" value="0">
+                </div>
+            </div>
+
+            <div id="scale-controls" class="tab-content" style="display: none;">
+                <div class="input-group">
+                    <label for="scale-x">Échelle X</label>
+                    <input type="range" id="scale-x" min="0.1" max="3" step="0.1" value="1">
+                </div>
+                <div class="input-group">
+                    <label for="scale-y">Échelle Y</label>
+                    <input type="range" id="scale-y" min="0.1" max="3" step="0.1" value="1">
+                </div>
+                <div class="input-group">
+                    <label for="scale-z">Échelle Z</label>
+                    <input type="range" id="scale-z" min="0.1" max="3" step="0.1" value="1">
+                </div>
+            </div>
+
+            <button class="btn" id="add-keyframe">Ajouter une keyframe</button>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Keyframes</h2>
+            <div class="keyframes-list" id="keyframes-list">
+                <div style="text-align: center; color: #a6adc8; padding: 20px;">Aucune keyframe ajoutée</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Code Généré</h2>
+            <textarea class="code-editor" id="generated-code"
+                readonly>// Importez un modèle et ajoutez des keyframes pour générer le code</textarea>
+            <button class="btn btn-secondary" id="copy-code">Copier le code</button>
+        </div>
+
+        <div class="instructions">
+            <p><strong>Instructions :</strong></p>
+            <p>1. Importez un modèle 3D (GLB/GLTF)</p>
+            <p>2. Utilisez les contrôles pour positionner votre modèle</p>
+            <p>3. Définissez le pourcentage de scroll et ajustez les propriétés</p>
+            <p>4. Ajoutez des keyframes pour créer l'animation</p>
+            <p>5. Copiez le code généré pour l'utiliser sur votre site</p>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="viewer-container">
+            <div id="viewer"></div>
+            <div id="loading" class="loading" style="display: none;">Chargement...</div>
+            <div class="preview-container">
+                <div class="preview-title">Aperçu du Scroll</div>
+                <div class="preview-scroll" id="preview-scroll">
+                    <div class="preview-handle" id="preview-handle"></div>
+                </div>
+                <div class="preview-percentage" id="preview-percentage">0%</div>
+            </div>
+        </div>
+        <div class="scroll-ruler">
+            <div class="ruler-track" id="ruler-track">
+                <div class="ruler-handle" id="ruler-handle"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Éditeur de code complet -->
+    <div class="code-exporter"
+        style="margin-top: 20px; border-top: 1px solid #313244; padding: 20px; background: #181825;">
+        <h2 class="section-title">Code Complet à Copier</h2>
+
+        <div class="tab-container">
+            <div class="tab active" data-tab="html-code">HTML</div>
+            <div class="tab" data-tab="css-code">CSS</div>
+            <div class="tab" data-tab="js-code">JS</div>
+        </div>
+
+        <div id="html-code" class="code-tab active">
+            <textarea class="code-editor" id="full-html-code" readonly style="height: 300px;"></textarea>
+        </div>
+
+        <div id="css-code" class="code-tab" style="display: none;">
+            <textarea class="code-editor" id="full-css-code" readonly style="height: 300px;"></textarea>
+        </div>
+
+        <div id="js-code" class="code-tab" style="display: none;">
+            <textarea class="code-editor" id="full-js-code" readonly style="height: 300px;"></textarea>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <button class="btn" id="copy-html">Copier HTML</button>
+            <button class="btn" id="copy-css">Copier CSS</button>
+            <button class="btn" id="copy-js">Copier JS</button>
+            <button class="btn btn-secondary" id="copy-all">Tout Copier</button>
+        </div>
+
+        <div class="instructions" style="margin-top: 15px;">
+            <p><strong>Instructions :</strong></p>
+            <p>1. Copiez les trois fichiers (HTML, CSS, JS)</p>
+            <p>2. Créez un nouveau projet avec ces fichiers</p>
+            <p>3. Remplacez "URL_DE_VOTRE_MODELE.glb" par l'URL de votre modèle</p>
+            <p>4. Ouvrez le HTML dans votre navigateur</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
