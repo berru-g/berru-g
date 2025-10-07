@@ -448,7 +448,7 @@ function init() {
     // Charger votre modèle (remplacez l'URL)
     //ex: 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb'
     const loader = new THREE.GLTFLoader();
-    loader.load('URL_DE_VOTRE_MODELE.glb', function(gltf) {
+    loader.load('https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb', function(gltf) {
         model = gltf.scene;
         scene.add(model);
         
@@ -795,7 +795,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Boutons de copie
+    /* Boutons de copie
     document.getElementById('copy-html').addEventListener('click', function() {
         copyToClipboard('full-html-code');
         alert('✅ HTML copié !');
@@ -816,6 +816,7 @@ document.addEventListener('DOMContentLoaded', function() {
         copyTextToClipboard(allCode);
         alert('✅ Tout le code copié !');
     });
+    */
     
     // Fonction utilitaire de copie
     function copyToClipboard(elementId) {
