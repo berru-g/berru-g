@@ -678,7 +678,7 @@ function generateHTMLCode() {
         <div class="scroll-space"></div>
         
         <footer>
-            <p>Créé avec l'Éditeur 3D Scroll Animator No-Code by <a href="https://gael-berru.com/editor3D/">berru-g</a></p>
+            <p>Créé avec l'Éditeur <a href="https://gael-berru.com/editor3D/">3D Scroll Animator No-Code</a> by berru-g</p>
         </footer>
     </div>
 
@@ -846,6 +846,12 @@ function setupEventListeners() {
         textarea.select();
         document.execCommand('copy');
         notify.success('✅ Code copié !');
+    });
+
+    // connexion pour prévenir de la V2
+    document.getElementById('connect-soon').addEventListener('click', function() {
+        const textarea = document.getElementById('connect-soon');
+        notify.info('A venir / Soon');
     });
     
     // Ruler interaction

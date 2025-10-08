@@ -991,7 +991,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 // ======================================
-// AUTHENTIFICATION ET ABONNEMENT
+// AUTHENTIFICATION ET ABONNEMENT daf 
 // ======================================
 
 // ⚙️ Initialisation Supabase
