@@ -988,49 +988,23 @@ document.addEventListener('DOMContentLoaded', function () {
     waitForThreeJS();
 });
 
+
+
+// ======================================
 // AUTHENTIFICATION ET ABONNEMENT
 // ======================================
 
-// Chargement sécurisé de la config Supabase
-// (Ces variables doivent être définies côté serveur ou via un fichier séparé non exposé)
+// ⚙️ Initialisation Supabase
 const supabaseUrl = window.ENV_SUPABASE_URL || 'https://dlmiodxspdwsyawbeohi.supabase.co';
 const supabaseAnonKey = window.ENV_SUPABASE_KEY || '';
-
-// Création du client Supabase
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-// Gestion de l'état utilisateur
+// 🧠 Variables globales
 let currentUser = null;
 let userSubscription = 'free'; // 'free' or 'pro'
 
-// Simulation d'authentification (pour compatibilité avec ton code existant)
-function simulateAuth(user) {
-    currentUser = user;
-    userSubscription = user.subscription || 'free';
-    updateUI();
-    closeAuthModal();
-    notify.success(`Bienvenue ${user.name} !`, 'Connexion réussie');
-}
+// 🧩 Fonctions principales
 
-// Connexion via GitHub (simulation)
-function signInWithGithub() {
-    simulateAuth({
-        id: '2',
-        name: 'USER GitHub',
-        email: 'user@github.com',
-        subscription: 'free'
-    });
-}
-
-// Déconnexion
-function logout() {
-    currentUser = null;
-    userSubscription = 'free';
-    updateUI();
-    notify.info('Vous êtes déconnecté', 'Déconnexion');
-}
-
-// Mise à jour de l'interface
 function updateUI() {
     const guestMenu = document.getElementById('guest-menu');
     const userMenu = document.getElementById('user-menu');
@@ -1064,7 +1038,31 @@ function updateUI() {
     }
 }
 
-// Gestion de la modal
+function simulateAuth(user) {
+    currentUser = user;
+    userSubscription = user.subscription || 'free';
+    updateUI();
+    closeAuthModal();
+    notify.success(`Bienvenue ${user.name} !`, 'Connexion réussie');
+}
+
+function signInWithGithub() {
+    simulateAuth({
+        id: '2',
+        name: 'USER GitHub',
+        email: 'user@github.com',
+        subscription: 'free'
+    });
+}
+
+function logout() {
+    currentUser = null;
+    userSubscription = 'free';
+    updateUI();
+    notify.info('Vous êtes déconnecté', 'Déconnexion');
+}
+
+// 🪟 Modal
 function showAuthModal() {
     document.getElementById('auth-modal').style.display = 'flex';
 }
@@ -1073,14 +1071,12 @@ function closeAuthModal() {
     document.getElementById('auth-modal').style.display = 'none';
 }
 
-// Connexion Google via Supabase
+// 🔐 Connexion Google
 async function signInWithGoogle() {
     try {
         const { error } = await supabaseClient.auth.signInWithOAuth({
             provider: 'google',
-            options: {
-                redirectTo: `${window.location.origin}/auth/callback`
-            }
+            options: { redirectTo: `${window.location.origin}/auth/callback` }
         });
         if (error) throw error;
     } catch (error) {
@@ -1088,7 +1084,7 @@ async function signInWithGoogle() {
     }
 }
 
-// Écoute des changements d'état d'authentification
+// 🪄 Écoute des changements d’état d’authentification
 supabaseClient.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN' && session?.user) {
         const user = {
@@ -1096,7 +1092,7 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
             name: session.user.user_metadata.full_name || session.user.email,
             email: session.user.email,
             avatar: session.user.user_metadata.avatar_url,
-            subscription: 'free' // À définir depuis ton backend
+            subscription: 'free'
         };
         simulateAuth(user);
     } else if (event === 'SIGNED_OUT') {
@@ -1104,7 +1100,7 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
     }
 });
 
-// Fonctions de navigation
+// 🚀 Fonctions diverses
 function openDashboard() {
     notify.info('Redirection vers le dashboard...', 'Dashboard');
     // window.location.href = '/dashboard';
@@ -1131,18 +1127,18 @@ function publishToGallery() {
     }
 }
 
-// Fermer la modal en cliquant à l'extérieur
+// 🖱️ Fermer la modal en cliquant à l’extérieur
 document.getElementById('auth-modal').addEventListener('click', function (e) {
-    if (e.target === this) {
-        closeAuthModal();
-    }
+    if (e.target === this) closeAuthModal();
 });
 
-// Initialisation au chargement
+// ⚡ Initialisation au chargement
 document.addEventListener('DOMContentLoaded', function () {
     updateUI();
 
-    // Vérifier si l'utilisateur était déjà connecté
+    // Restaure utilisateur depuis localStorage
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) simulateAuth(JSON.parse(savedUser));
+
+    console.log('Supabase prêt :', supabaseUrl);
 });
