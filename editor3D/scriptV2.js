@@ -989,15 +989,21 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // AUTHENTIFICATION ET ABONNEMENT
-// Auth supabase via google or github
-const supabaseUrl = 'https://dlmiodxspdwsyawbeohi.supabase.co/auth/v1/callback';
-const supabaseKey = 'Kmc33JCpGzKoVh31';
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// ======================================
+
+// Chargement sécurisé de la config Supabase
+// (Ces variables doivent être définies côté serveur ou via un fichier séparé non exposé)
+const supabaseUrl = window.ENV_SUPABASE_URL || 'https://dlmiodxspdwsyawbeohi.supabase.co';
+const supabaseAnonKey = window.ENV_SUPABASE_KEY || '';
+
+// Création du client Supabase
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
+
 // Gestion de l'état utilisateur
 let currentUser = null;
 let userSubscription = 'free'; // 'free' or 'pro'
 
-// Simulation d'authentification (à remplacer par Supabase)
+// Simulation d'authentification (pour compatibilité avec ton code existant)
 function simulateAuth(user) {
     currentUser = user;
     userSubscription = user.subscription || 'free';
@@ -1006,6 +1012,7 @@ function simulateAuth(user) {
     notify.success(`Bienvenue ${user.name} !`, 'Connexion réussie');
 }
 
+// Connexion via GitHub (simulation)
 function signInWithGithub() {
     simulateAuth({
         id: '2',
@@ -1015,6 +1022,7 @@ function signInWithGithub() {
     });
 }
 
+// Déconnexion
 function logout() {
     currentUser = null;
     userSubscription = 'free';
@@ -1022,6 +1030,7 @@ function logout() {
     notify.info('Vous êtes déconnecté', 'Déconnexion');
 }
 
+// Mise à jour de l'interface
 function updateUI() {
     const guestMenu = document.getElementById('guest-menu');
     const userMenu = document.getElementById('user-menu');
@@ -1032,7 +1041,6 @@ function updateUI() {
     const userName = document.getElementById('user-name');
 
     if (currentUser) {
-        // Utilisateur connecté
         guestMenu.style.display = 'none';
         userMenu.style.display = 'flex';
         codeGuest.style.display = 'none';
@@ -1048,7 +1056,6 @@ function updateUI() {
             codeProUser.style.display = 'none';
         }
     } else {
-        // Utilisateur non connecté
         guestMenu.style.display = 'block';
         userMenu.style.display = 'none';
         codeGuest.style.display = 'block';
@@ -1057,7 +1064,7 @@ function updateUI() {
     }
 }
 
-// Modal functions
+// Gestion de la modal
 function showAuthModal() {
     document.getElementById('auth-modal').style.display = 'flex';
 }
@@ -1066,37 +1073,36 @@ function closeAuthModal() {
     document.getElementById('auth-modal').style.display = 'none';
 }
 
-// Singin in google via supabase
+// Connexion Google via Supabase
 async function signInWithGoogle() {
     try {
-        const { data, error } = await supabase.auth.signInWithOAuth({
+        const { error } = await supabaseClient.auth.signInWithOAuth({
             provider: 'google',
             options: {
                 redirectTo: `${window.location.origin}/auth/callback`
             }
         });
-
         if (error) throw error;
     } catch (error) {
         notify.error('Erreur de connexion Google', error.message);
     }
 }
 
-// Écouter les changements d'authentification
-supabase.auth.onAuthStateChange((event, session) => {
+// Écoute des changements d'état d'authentification
+supabaseClient.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN' && session?.user) {
         const user = {
             id: session.user.id,
             name: session.user.user_metadata.full_name || session.user.email,
             email: session.user.email,
             avatar: session.user.user_metadata.avatar_url,
-            subscription: 'free' // À déterminer via ton backend
+            subscription: 'free' // À définir depuis ton backend
         };
         simulateAuth(user);
+    } else if (event === 'SIGNED_OUT') {
+        logout();
     }
 });
-
-
 
 // Fonctions de navigation
 function openDashboard() {
@@ -1132,13 +1138,11 @@ document.getElementById('auth-modal').addEventListener('click', function (e) {
     }
 });
 
-// Initialisation
+// Initialisation au chargement
 document.addEventListener('DOMContentLoaded', function () {
     updateUI();
 
-    // Vérifier si l'utilisateur était déjà connecté (localStorage)
+    // Vérifier si l'utilisateur était déjà connecté
     const savedUser = localStorage.getItem('currentUser');
-    if (savedUser) {
-        simulateAuth(JSON.parse(savedUser));
-    }
+    if (savedUser) simulateAuth(JSON.parse(savedUser));
 });
