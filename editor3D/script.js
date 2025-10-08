@@ -1,5 +1,129 @@
 // Éditeur 3D No-Code - Approche éprouvée
-// Variables globales
+
+// systeme d'alert 
+// Système de notifications élégant
+class NotificationSystem {
+    constructor() {
+        this.container = document.getElementById('notification-container');
+        this.notifications = new Set();
+    }
+
+    show(options) {
+        const {
+            type = 'info',
+            title = '',
+            message = '',
+            duration = 5000,
+            dismissible = true
+        } = options;
+
+        // Créer la notification
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        
+        const icons = {
+            success: '✅',
+            error: '❌',
+            warning: '⚠️',
+            info: 'ℹ️'
+        };
+
+        notification.innerHTML = `
+            <div class="notification-icon">${icons[type]}</div>
+            <div class="notification-content">
+                ${title ? `<div class="notification-title">${title}</div>` : ''}
+                <div class="notification-message">${message}</div>
+            </div>
+            ${dismissible ? '<button class="notification-close">✕</button>' : ''}
+            <div class="notification-progress"></div>
+        `;
+
+        // Ajouter au container
+        this.container.appendChild(notification);
+
+        // Animation d'entrée
+        requestAnimationFrame(() => {
+            notification.classList.add('show');
+        });
+
+        // Gestion de la fermeture
+        const closeNotification = () => {
+            notification.classList.remove('show');
+            notification.classList.add('hide');
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+                this.notifications.delete(notification);
+            }, 300);
+        };
+
+        // Bouton de fermeture
+        if (dismissible) {
+            const closeBtn = notification.querySelector('.notification-close');
+            closeBtn.addEventListener('click', closeNotification);
+        }
+
+        // Fermeture automatique
+        if (duration > 0) {
+            setTimeout(closeNotification, duration);
+        }
+
+        this.notifications.add(notification);
+        return notification;
+    }
+
+    // Méthodes pratiques
+    success(message, title = 'Succès') {
+        return this.show({ type: 'success', title, message });
+    }
+
+    error(message, title = 'Erreur') {
+        return this.show({ type: 'error', title, message });
+    }
+
+    warning(message, title = 'Attention') {
+        return this.show({ type: 'warning', title, message });
+    }
+
+    info(message, title = 'Information') {
+        return this.show({ type: 'info', title, message });
+    }
+
+    // Fermer toutes les notifications
+    clearAll() {
+        this.notifications.forEach(notification => {
+            notification.classList.remove('show');
+            notification.classList.add('hide');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        });
+        this.notifications.clear();
+    }
+}
+
+// Instance globale
+const notify = new NotificationSystem();
+
+// Remplacer toutes les alert() existantes
+function showAlert(message, type = 'info') {
+    const titles = {
+        info: 'Information',
+        success: 'Succès',
+        error: 'Erreur',
+        warning: 'Attention'
+    };
+    
+    notify[type](message, titles[type]);
+}
+
+
+
+// Variables globales 3D
 let scene, camera, renderer, controls;
 let model = null;
 let keyframes = [];
@@ -118,7 +242,7 @@ function loadModel(file) {
     
     // Vérifier l'extension
     if (!file.name.toLowerCase().endsWith('.glb') && !file.name.toLowerCase().endsWith('.gltf')) {
-        alert('Veuillez sélectionner un fichier GLB ou GLTF');
+        notify.info('Veuillez sélectionner un fichier GLB ou GLTF');
         return;
     }
 
@@ -138,18 +262,18 @@ function loadModel(file) {
                 // Erreur
                 function(error) {
                     console.error('❌ Erreur de parsing:', error);
-                    alert('Erreur de chargement du modèle: ' + error.message);
+                    notify.error('Erreur de chargement du modèle: ' + error.message);
                 }
             );
         } catch (parseError) {
             console.error('❌ Erreur lors du parsing:', parseError);
-            alert('Format de fichier non supporté');
+            notify.error('Format de fichier non supporté');
         }
     };
 
     reader.onerror = function(error) {
         console.error('❌ Erreur de lecture:', error);
-        alert('Erreur de lecture du fichier');
+        notify.error('Erreur de lecture du fichier');
     };
 
     reader.onprogress = function(event) {
@@ -547,14 +671,14 @@ function generateHTMLCode() {
 <body>
     <div class="container">
         <header>
-            <h1>Animation 3D Interactive</h1>
+            <h1>3D Scroll Animator</h1>
             <p>Faites défiler pour voir l'animation</p>
         </header>
         
         <div class="scroll-space"></div>
         
         <footer>
-            <p>Créé avec l'Éditeur 3D No-Code</p>
+            <p>Créé avec l'Éditeur 3D Scroll Animator No-Code</p>
         </footer>
     </div>
 
@@ -576,7 +700,7 @@ function generateCSSCode() {
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1e1e2e 0%, #181825 100%);
+    background: linear-gradient(135deg, #313131 0%, #515151 100%);
     color: #cdd6f4;
     overflow-x: hidden;
 }
@@ -632,6 +756,7 @@ canvas {
     width: 100%;
     height: 100%;
     z-index: 0;
+    background: linear-gradient(135deg, #515151 0%, #212121 100%);
 }
 
 /* Responsive */
@@ -716,7 +841,7 @@ function setupEventListeners() {
         const textarea = document.getElementById('generated-code');
         textarea.select();
         document.execCommand('copy');
-        alert('✅ Code copié !');
+        notify.success('✅ Code copié !');
     });
     
     // Ruler interaction
