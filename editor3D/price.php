@@ -94,7 +94,7 @@
 }
 
 .pricing-card {
-    background: #181825;
+    background: #F1F1F1;
     border: 1px solid #313244;
     border-radius: 12px;
     padding: 2rem;

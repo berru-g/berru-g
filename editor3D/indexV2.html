@@ -104,31 +104,77 @@
 }
 </script>
 </head>
+
 <body>
-<!-- Notifications Toast -->
-<div id="notification-container" class="notification-container"></div>
+    <!-- Notifications Toast -->
+    <div id="notification-container" class="notification-container"></div>
 
     <header class="header">
-        <a href="../3D/index.html" class="logo">
-            <!--3DScrollCraft - ScrollAnimator 3D - ScrollForge 3D -->
+        <a href="/" class="logo">
             3D Scroll Animator
         </a>
 
         <nav class="nav-links">
-            <a href="#">Éditeur</a>
-            <a href="#">Galerie</a>
-            <a href="#">Tarifs</a>
+            <a href="#editor">Éditeur</a>
+            <a href="#gallery">Galerie</a>
+            <a href="#pricing">Tarifs</a>
         </nav>
 
         <div class="auth-section">
-            <div class="user-menu">
-                <a href="#" class="btn btn-secondary">Dashboard</a>
-                <form method="POST" action="#" style="display: inline;">
-                </form>
+            <!-- État non connecté -->
+            <div id="guest-menu" class="auth-buttons">
+                <button class="btn btn-secondary" onclick="showAuthModal()">
+                    <i class="fab fa-google"></i> Connexion
+                </button>
             </div>
-            <a href="#" class="btn btn-secondary">Connexion</a>
+
+            <!-- État connecté -->
+            <div id="user-menu" class="user-menu" style="display: none;">
+                <span class="user-avatar" id="user-avatar">U</span>
+                <span class="user-name" id="user-name">Utilisateur</span>
+                <button class="btn btn-secondary" onclick="openDashboard()">Dashboard</button>
+                <button class="btn btn-secondary" onclick="logout()">Déconnexion</button>
+            </div>
         </div>
     </header>
+
+    <!--modal inscrit  -->
+    <!-- Modal d'Authentification -->
+    <div id="auth-modal" class="auth-modal" style="display: none;">
+        <div class="auth-modal-content">
+            <div class="auth-modal-header">
+                <h2>Connectez-vous pour exporter votre code</h2>
+                <button class="close-btn" onclick="closeAuthModal()">×</button>
+            </div>
+
+            <div class="auth-options">
+                <button class="auth-btn google-btn" onclick="signInWithGoogle()">
+                    <i class="fab fa-google"></i>
+                    Continuer avec Google
+                </button>
+
+                <button class="auth-btn github-btn" onclick="signInWithGithub()">
+                    <i class="fab fa-github"></i>
+                    Continuer avec GitHub
+                </button>
+            </div>
+
+            <div class="auth-benefits">
+                <h4>En vous connectant, vous pourrez :</h4>
+                <ul>
+                    <li>✅ Voir le code complet de votre animation</li>
+                    <li>✅ Exporter vers CodePen en 1 clic</li>
+                    <li>✅ Sauvegarder vos projets</li>
+                    <li>🎁 <strong>Gratuit</strong> - Aucune carte requise</li>
+                </ul>
+            </div>
+
+            <div class="auth-footer">
+                <p>En continuant, vous acceptez nos <a href="#">CGU</a> et <a href="#">Politique de confidentialité</a>
+                </p>
+            </div>
+        </div>
+    </div>
 
 
     <div class="top-section">
@@ -141,7 +187,7 @@
                     <label for="model-scale">Échelle du modèle</label>
                     <input type="range" id="model-scale" min="0.1" max="3" step="0.1" value="1">
                 </div>
-                <!--<button class="btn btn-secondary" onclick="loadTestModel()">Charger modèle test</button>-->
+                <button class="btn btn-secondary" onclick="loadTestModel()">Charger modèle test</button>
             </div>
 
             <div class="section">
@@ -251,11 +297,24 @@
     </div>
 
     <!-- Éditeur de code complet -->
+    <!-- Éditeur de code complet -->
     <div class="code-exporter">
         <h2 class="section-title">Code Complet à Copier</h2>
 
-        <div class="code-editors">
-            <!-- HTML -->
+        <!-- État non connecté -->
+        <div id="code-guest" class="code-guest">
+            <div class="guest-message">
+                <div class="guest-icon">🔒</div>
+                <h3>Connectez-vous pour débloquer l'export</h3>
+                <p>Accédez au code complet et à l'export CodePen en vous connectant gratuitement</p>
+                <button class="btn btn-primary" onclick="showAuthModal()">
+                    <i class="fab fa-google"></i> Se connecter avec Google
+                </button>
+            </div>
+        </div>
+
+        <!-- État connecté (gratuit) -->
+        <div id="code-free-user" class="code-editors" style="display: none;">
             <div class="code-box">
                 <div class="code-box-title">HTML</div>
                 <div class="copy-icon" onclick="copyCode('full-html-code')" title="Copier le HTML">
@@ -264,7 +323,6 @@
                 <textarea id="full-html-code" readonly></textarea>
             </div>
 
-            <!-- CSS -->
             <div class="code-box">
                 <div class="code-box-title">CSS</div>
                 <div class="copy-icon" onclick="copyCode('full-css-code')" title="Copier le CSS">
@@ -273,7 +331,6 @@
                 <textarea id="full-css-code" readonly></textarea>
             </div>
 
-            <!-- JS -->
             <div class="code-box">
                 <div class="code-box-title">JavaScript</div>
                 <div class="copy-icon" onclick="copyCode('full-js-code')" title="Copier le JS">
@@ -281,22 +338,47 @@
                 </div>
                 <textarea id="full-js-code" readonly></textarea>
             </div>
+
+            <button class="btn" id="open-codepen">
+                <i class="fa-brands fa-codepen" style="margin-right:6px;"></i>Ouvrir dans CodePen
+            </button>
+
+            <!-- Call to Action Upgrade -->
+            <div class="upgrade-cta">
+                <div class="upgrade-badge">💎 PRO</div>
+                <h4>Passez Pro pour sauvegarder et partager</h4>
+                <p>Avec le plan Pro à 9,90€/mois, vous pourrez :</p>
+                <ul>
+                    <li>✅ Sauvegarder vos projets dans le cloud</li>
+                    <li>✅ Apparaître dans la galerie communautaire</li>
+                    <li>✅ Accéder à votre historique complet</li>
+                    <li>✅ Obtenir un profil public</li>
+                </ul>
+                <button class="btn btn-premium" onclick="openPricing()">
+                    <i class="fas fa-crown"></i> Devenir Pro - 9,90€/mois
+                </button>
+            </div>
         </div>
 
-        <button class="btn" id="open-codepen">
-            <i class="fa-brands fa-codepen" style="margin-right:6px;"></i>Ouvrir dans CodePen
-        </button>
+        <!-- État connecté (Pro) -->
+        <div id="code-pro-user" class="code-pro-features" style="display: none;">
+            <!-- Même contenu que code-free-user mais sans le CTA upgrade -->
+            <div class="code-editors">
+                <!-- ... même structure que code-free-user ... -->
+            </div>
 
-
-        <div class="instructions" style="margin-top: 15px;">
-            <p><strong>Instructions :</strong></p>
-            <p>1. Copiez les trois fichiers (HTML, CSS, JS)</p>
-            <p>2. Créez un nouveau projet avec ces fichiers</p>
-            <p>3. Remplacez "URL_DE_VOTRE_MODELE.glb" par l'URL de votre modèle // ex :
-                'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb'</p>
-            <p>4. Ouvrez le HTML dans votre navigateur</p>
+            <!-- Boutons Pro -->
+            <div class="pro-actions">
+                <button class="btn btn-primary" onclick="saveProject()">
+                    <i class="fas fa-cloud-upload-alt"></i> Sauvegarder le projet
+                </button>
+                <button class="btn btn-secondary" onclick="publishToGallery()">
+                    <i class="fas fa-share"></i> Publier dans la galerie
+                </button>
+            </div>
         </div>
     </div>
+
     <br>
     <p style="text-align: center">Dev by <a href="https://gael-berru.com"
             style="color: white; text-decoration: none;">berru-g</a></p>
@@ -352,7 +434,7 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
 
-    <script src="script.js"></script>
+    <script src="scriptV2.js"></script>
 </body>
 
 </html>

@@ -20,7 +20,7 @@ class NotificationSystem {
         // Créer la notification
         const notification = document.createElement('div');
         notification.className = `notification ${type}`;
-        
+
         const icons = {
             success: '✅',
             error: '❌',
@@ -50,7 +50,7 @@ class NotificationSystem {
         const closeNotification = () => {
             notification.classList.remove('show');
             notification.classList.add('hide');
-            
+
             setTimeout(() => {
                 if (notification.parentNode) {
                     notification.parentNode.removeChild(notification);
@@ -117,7 +117,7 @@ function showAlert(message, type = 'info') {
         error: 'Erreur',
         warning: 'Attention'
     };
-    
+
     notify[type](message, titles[type]);
 }
 
@@ -137,17 +137,17 @@ let appInitialized = false;
 // Initialisation principale
 function initApplication() {
     if (appInitialized) return;
-    
+
     console.log('🚀 Initialisation de l\'application...');
-    
+
     try {
         initThreeJS();
         setupEventListeners();
         generateCode();
-        
+
         appInitialized = true;
         console.log('✅ Application initialisée avec succès');
-        
+
     } catch (error) {
         console.error('❌ Erreur initialisation:', error);
         // Réessayer après 1s
@@ -158,7 +158,7 @@ function initApplication() {
 // Initialisation Three.js (similaire à ton exemple)
 function initThreeJS() {
     console.log('🎮 Initialisation Three.js...');
-    
+
     // Créer la scène
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x11111b);
@@ -169,7 +169,7 @@ function initThreeJS() {
     camera.position.set(5, 5, 5);
 
     // Créer le renderer
-    renderer = new THREE.WebGLRenderer({ 
+    renderer = new THREE.WebGLRenderer({
         antialias: true,
         alpha: true
     });
@@ -198,22 +198,22 @@ function initThreeJS() {
 
     // Démarrer l'animation
     animate();
-    
+
     console.log('✅ Three.js initialisé');
 }
 
 // Créer un modèle par défaut
 function createDefaultModel() {
     const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshStandardMaterial({ 
+    const material = new THREE.MeshStandardMaterial({
         color: 0xcba6f7,
         metalness: 0.3,
         roughness: 0.4
     });
-    
+
     model = new THREE.Mesh(geometry, material);
     scene.add(model);
-    
+
     updateModelControls();
     console.log('✅ Modèle par défaut créé');
 }
@@ -221,11 +221,11 @@ function createDefaultModel() {
 // Fonction d'animation (identique à ton exemple)
 function animate() {
     requestAnimationFrame(animate);
-    
+
     if (controls) {
         controls.update();
     }
-    
+
     if (renderer && scene && camera) {
         renderer.render(scene, camera);
     }
@@ -237,9 +237,9 @@ function loadModel(file) {
         console.log('❌ Aucun fichier sélectionné');
         return;
     }
-    
-    console.log('📁 Chargement du fichier:', file.name, `(${Math.round(file.size/1024)} KB)`);
-    
+
+    console.log('📁 Chargement du fichier:', file.name, `(${Math.round(file.size / 1024)} KB)`);
+
     // Vérifier l'extension
     if (!file.name.toLowerCase().endsWith('.glb') && !file.name.toLowerCase().endsWith('.gltf')) {
         notify.info('Veuillez sélectionner un fichier GLB ou GLTF');
@@ -249,18 +249,18 @@ function loadModel(file) {
     const loader = new THREE.GLTFLoader();
     const reader = new FileReader();
 
-    reader.onload = function(event) {
+    reader.onload = function (event) {
         console.log('✅ Fichier lu en mémoire');
-        
+
         try {
-            loader.parse(event.target.result, '', 
+            loader.parse(event.target.result, '',
                 // Succès
-                function(gltf) {
+                function (gltf) {
                     console.log('✅ Modèle 3D parsé avec succès');
                     handleLoadedModel(gltf.scene);
                 },
                 // Erreur
-                function(error) {
+                function (error) {
                     console.error('❌ Erreur de parsing:', error);
                     notify.error('Erreur de chargement du modèle: ' + error.message);
                 }
@@ -271,12 +271,12 @@ function loadModel(file) {
         }
     };
 
-    reader.onerror = function(error) {
+    reader.onerror = function (error) {
         console.error('❌ Erreur de lecture:', error);
         notify.error('Erreur de lecture du fichier');
     };
 
-    reader.onprogress = function(event) {
+    reader.onprogress = function (event) {
         if (event.lengthComputable) {
             const percent = Math.round((event.loaded / event.total) * 100);
             console.log(`📥 Progression: ${percent}%`);
@@ -302,7 +302,7 @@ function handleLoadedModel(loadedModel) {
     // Configuration du modèle
     setupModel();
     updateModelControls();
-    
+
     console.log('🎉 Modèle chargé et configuré avec succès!');
 }
 
@@ -329,7 +329,7 @@ function setupModel() {
     const maxDim = Math.max(size.x, size.y, size.z);
     const fov = camera.fov * (Math.PI / 180);
     const cameraDistance = Math.max(maxDim * 2, 5); // Au moins 5 unités
-    
+
     camera.position.set(cameraDistance, cameraDistance, cameraDistance);
     controls.target.set(0, 0, 0);
     controls.update();
@@ -340,15 +340,15 @@ function setupModel() {
 // Mettre à jour les contrôles UI
 function updateModelControls() {
     if (!model) return;
-    
+
     document.getElementById('pos-x').value = model.position.x;
     document.getElementById('pos-y').value = model.position.y;
     document.getElementById('pos-z').value = model.position.z;
-    
+
     document.getElementById('rot-x').value = THREE.MathUtils.radToDeg(model.rotation.x);
     document.getElementById('rot-y').value = THREE.MathUtils.radToDeg(model.rotation.y);
     document.getElementById('rot-z').value = THREE.MathUtils.radToDeg(model.rotation.z);
-    
+
     document.getElementById('scale-x').value = model.scale.x;
     document.getElementById('scale-y').value = model.scale.y;
     document.getElementById('scale-z').value = model.scale.z;
@@ -357,18 +357,18 @@ function updateModelControls() {
 // GESTION DES KEYFRAMES
 function addKeyframe() {
     const percentage = parseInt(document.getElementById('keyframe-percentage').value);
-    
+
     const keyframe = {
         percentage: percentage,
         position: { x: model.position.x, y: model.position.y, z: model.position.z },
-        rotation: { 
-            x: model.rotation.x, 
-            y: model.rotation.y, 
-            z: model.rotation.z 
+        rotation: {
+            x: model.rotation.x,
+            y: model.rotation.y,
+            z: model.rotation.z
         },
         scale: { x: model.scale.x, y: model.scale.y, z: model.scale.z }
     };
-    
+
     // Remplacer ou ajouter
     const existingIndex = keyframes.findIndex(k => k.percentage === percentage);
     if (existingIndex !== -1) {
@@ -377,7 +377,7 @@ function addKeyframe() {
         keyframes.push(keyframe);
         keyframes.sort((a, b) => a.percentage - b.percentage);
     }
-    
+
     updateKeyframesList();
     updateRulerMarkers();
     generateCode();
@@ -386,12 +386,12 @@ function addKeyframe() {
 function updateKeyframesList() {
     const list = document.getElementById('keyframes-list');
     list.innerHTML = '';
-    
+
     if (keyframes.length === 0) {
         list.innerHTML = '<div style="text-align: center; color: #a6adc8; padding: 20px;">Aucune keyframe</div>';
         return;
     }
-    
+
     keyframes.forEach((keyframe, index) => {
         const item = document.createElement('div');
         item.className = 'keyframe-item';
@@ -409,17 +409,17 @@ function updateKeyframesList() {
         `;
         list.appendChild(item);
     });
-    
+
     // Événements
     document.querySelectorAll('.edit-keyframe').forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function () {
             const index = parseInt(this.getAttribute('data-index'));
             editKeyframe(index);
         });
     });
-    
+
     document.querySelectorAll('.delete-keyframe').forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function () {
             const index = parseInt(this.getAttribute('data-index'));
             deleteKeyframe(index);
         });
@@ -428,18 +428,18 @@ function updateKeyframesList() {
 
 function editKeyframe(index) {
     const keyframe = keyframes[index];
-    
+
     // Mettre à jour l'UI
     document.getElementById('keyframe-percentage').value = keyframe.percentage;
     document.getElementById('percentage-value').textContent = `${keyframe.percentage}%`;
-    
+
     // Mettre à jour le modèle
     if (model) {
         model.position.set(keyframe.position.x, keyframe.position.y, keyframe.position.z);
         model.rotation.set(keyframe.rotation.x, keyframe.rotation.y, keyframe.rotation.z);
         model.scale.set(keyframe.scale.x, keyframe.scale.y, keyframe.scale.z);
     }
-    
+
     updateRulerPosition(keyframe.percentage);
     updateModelControls();
 }
@@ -455,22 +455,22 @@ function deleteKeyframe(index) {
 function updateRulerMarkers() {
     const track = document.getElementById('ruler-track');
     track.querySelectorAll('.ruler-marker').forEach(marker => marker.remove());
-    
+
     keyframes.forEach(keyframe => {
         const marker = document.createElement('div');
         marker.className = 'ruler-marker';
         marker.style.left = `${keyframe.percentage}%`;
-        
+
         const label = document.createElement('div');
         label.className = 'ruler-percentage';
         label.textContent = `${keyframe.percentage}%`;
         marker.appendChild(label);
-        
+
         marker.addEventListener('click', () => {
             const index = keyframes.findIndex(k => k.percentage === keyframe.percentage);
             if (index !== -1) editKeyframe(index);
         });
-        
+
         track.appendChild(marker);
     });
 }
@@ -484,10 +484,10 @@ function updateRulerPosition(percentage) {
 
 function updateModelByScroll(percentage) {
     if (!model || keyframes.length === 0) return;
-    
+
     // Trouver les keyframes adjacentes
     let prev = null, next = null;
-    
+
     for (let i = 0; i < keyframes.length; i++) {
         if (keyframes[i].percentage <= percentage) prev = keyframes[i];
         if (keyframes[i].percentage >= percentage) {
@@ -495,26 +495,26 @@ function updateModelByScroll(percentage) {
             break;
         }
     }
-    
+
     if (!prev && next) prev = next;
     if (!next && prev) next = prev;
-    
+
     // Interpolation
     if (prev && next && prev !== next) {
         const t = (percentage - prev.percentage) / (next.percentage - prev.percentage);
-        
+
         model.position.x = THREE.MathUtils.lerp(prev.position.x, next.position.x, t);
         model.position.y = THREE.MathUtils.lerp(prev.position.y, next.position.y, t);
         model.position.z = THREE.MathUtils.lerp(prev.position.z, next.position.z, t);
-        
+
         model.rotation.x = THREE.MathUtils.lerp(prev.rotation.x, next.rotation.x, t);
         model.rotation.y = THREE.MathUtils.lerp(prev.rotation.y, next.rotation.y, t);
         model.rotation.z = THREE.MathUtils.lerp(prev.rotation.z, next.rotation.z, t);
-        
+
         model.scale.x = THREE.MathUtils.lerp(prev.scale.x, next.scale.x, t);
         model.scale.y = THREE.MathUtils.lerp(prev.scale.y, next.scale.y, t);
         model.scale.z = THREE.MathUtils.lerp(prev.scale.z, next.scale.z, t);
-        
+
     } else if (prev) {
         model.position.set(prev.position.x, prev.position.y, prev.position.z);
         model.rotation.set(prev.rotation.x, prev.rotation.y, prev.rotation.z);
@@ -527,26 +527,30 @@ function updateModelByScroll(percentage) {
 function generateCode() {
     if (keyframes.length === 0) {
         document.getElementById('generated-code').value = '// Ajoutez des keyframes pour générer le code';
-        document.getElementById('full-html-code').value = '<!-- Ajoutez des keyframes pour générer le code complet -->';
-        document.getElementById('full-css-code').value = '/* Ajoutez des keyframes pour générer le code complet */';
-        document.getElementById('full-js-code').value = '// Ajoutez des keyframes pour générer le code complet';
+        // Mettre à jour les éditeurs de code complet seulement si l'utilisateur est connecté
+        if (currentUser) {
+            document.getElementById('full-html-code').value = '<!-- Ajoutez des keyframes pour générer le code complet -->';
+            document.getElementById('full-css-code').value = '/* Ajoutez des keyframes pour générer le code complet */';
+            document.getElementById('full-js-code').value = '// Ajoutez des keyframes pour générer le code complet';
+        }
         return;
     }
-    
+
     // Générer le JS (identique à avant)
     const jsCode = generateJSCode();
     document.getElementById('generated-code').value = jsCode;
-    
-    // Générer le HTML complet
-    const htmlCode = generateHTMLCode();
-    document.getElementById('full-html-code').value = htmlCode;
-    
-    // Générer le CSS complet
-    const cssCode = generateCSSCode();
-    document.getElementById('full-css-code').value = cssCode;
-    
-    // Générer le JS pour l'export
-    document.getElementById('full-js-code').value = jsCode;
+
+    // Générer le code complet seulement si l'utilisateur est connecté
+    if (currentUser) {
+        const htmlCode = generateHTMLCode();
+        const cssCode = generateCSSCode();
+
+        document.getElementById('full-html-code').value = htmlCode;
+        document.getElementById('full-css-code').value = cssCode;
+        document.getElementById('full-js-code').value = jsCode;
+
+        notify.success('Code complet généré', 'Prêt à exporter');
+    }
 }
 
 function generateJSCode() {
@@ -751,7 +755,7 @@ footer a {
     text-decoration: none;
     color: #f38ba8;
 }
-    
+
 /* Canvas Three.js */
 canvas {
     position: fixed;
@@ -781,41 +785,41 @@ function setupEventListeners() {
     document.getElementById('import-btn').addEventListener('click', () => {
         document.getElementById('model-input').click();
     });
-    
+
     document.getElementById('model-input').addEventListener('change', (e) => {
         if (e.target.files[0]) loadModel(e.target.files[0]);
     });
-    
+
     // Tabs
     document.querySelectorAll('.tab').forEach(tab => {
-        tab.addEventListener('click', function() {
+        tab.addEventListener('click', function () {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             this.classList.add('active');
-            
+
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.style.display = 'none';
             });
-            
+
             currentTab = this.getAttribute('data-tab');
             document.getElementById(`${currentTab}-controls`).style.display = 'block';
         });
     });
-    
+
     // Percentage slider
-    document.getElementById('keyframe-percentage').addEventListener('input', function() {
+    document.getElementById('keyframe-percentage').addEventListener('input', function () {
         const percentage = this.value;
         document.getElementById('percentage-value').textContent = `${percentage}%`;
         updateRulerPosition(parseInt(percentage));
     });
-    
+
     // Model controls
     const controls = ['pos-x', 'pos-y', 'pos-z', 'rot-x', 'rot-y', 'rot-z', 'scale-x', 'scale-y', 'scale-z'];
     controls.forEach(control => {
-        document.getElementById(control).addEventListener('input', function() {
+        document.getElementById(control).addEventListener('input', function () {
             if (!model) return;
-            
+
             const value = parseFloat(this.value);
-            
+
             if (control.startsWith('pos-')) {
                 const axis = control.split('-')[1];
                 model.position[axis] = value;
@@ -828,68 +832,68 @@ function setupEventListeners() {
             }
         });
     });
-    
+
     // Model scale
-    document.getElementById('model-scale').addEventListener('input', function() {
+    document.getElementById('model-scale').addEventListener('input', function () {
         if (model) {
             const scale = parseFloat(this.value);
             model.scale.set(scale, scale, scale);
         }
     });
-    
+
     // Add keyframe
     document.getElementById('add-keyframe').addEventListener('click', addKeyframe);
-    
+
     // Copy code
-    document.getElementById('copy-code').addEventListener('click', function() {
+    document.getElementById('copy-code').addEventListener('click', function () {
         const textarea = document.getElementById('generated-code');
         textarea.select();
         document.execCommand('copy');
         notify.success('✅ Code copié !');
     });
-    
+
     // Ruler interaction
     const rulerTrack = document.getElementById('ruler-track');
     rulerTrack.addEventListener('mousedown', (e) => {
         isDragging = true;
         updateRulerFromEvent(e);
     });
-    
+
     document.addEventListener('mousemove', (e) => {
         if (isDragging) updateRulerFromEvent(e);
     });
-    
+
     document.addEventListener('mouseup', () => {
         isDragging = false;
     });
-    
+
     function updateRulerFromEvent(e) {
         const rect = rulerTrack.getBoundingClientRect();
         let percentage = ((e.clientX - rect.left) / rect.width) * 100;
         percentage = Math.max(0, Math.min(100, Math.round(percentage)));
-        
+
         document.getElementById('keyframe-percentage').value = percentage;
         document.getElementById('percentage-value').textContent = `${percentage}%`;
         updateRulerPosition(percentage);
     }
-    
+
     // Preview scroll
     const previewScroll = document.getElementById('preview-scroll');
     previewScroll.addEventListener('mousedown', (e) => {
         isDragging = true;
         updatePreviewFromEvent(e);
     });
-    
+
     function updatePreviewFromEvent(e) {
         const rect = previewScroll.getBoundingClientRect();
         let percentage = ((e.clientX - rect.left) / rect.width) * 100;
         percentage = Math.max(0, Math.min(100, Math.round(percentage)));
-        
+
         document.getElementById('keyframe-percentage').value = percentage;
         document.getElementById('percentage-value').textContent = `${percentage}%`;
         updateRulerPosition(percentage);
     }
-    
+
     // Window resize
     window.addEventListener('resize', () => {
         if (renderer && camera) {
@@ -902,28 +906,28 @@ function setupEventListeners() {
 }
 
 // DÉMARRAGE DE L'APPLICATION
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     console.log('📄 DOM chargé, démarrage de l\'application...');
 
-        // Gestion des onglets de code
+    // Gestion des onglets de code
     document.querySelectorAll('.code-exporter .tab').forEach(tab => {
-        tab.addEventListener('click', function() {
+        tab.addEventListener('click', function () {
             // Désactiver tous les tabs
             document.querySelectorAll('.code-exporter .tab').forEach(t => t.classList.remove('active'));
             // Activer ce tab
             this.classList.add('active');
-            
+
             // Cacher tous les contenus
             document.querySelectorAll('.code-tab').forEach(content => {
                 content.style.display = 'none';
             });
-            
+
             // Afficher le contenu correspondant
             const tabId = this.getAttribute('data-tab');
             document.getElementById(tabId).style.display = 'block';
         });
     });
-    
+
     /* Boutons de copie
     document.getElementById('copy-html').addEventListener('click', function() {
         copyToClipboard('full-html-code');
@@ -946,14 +950,14 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('✅ Tout le code copié !');
     });
     */
-    
+
     // Fonction utilitaire de copie
     function copyToClipboard(elementId) {
         const textarea = document.getElementById(elementId);
         textarea.select();
         document.execCommand('copy');
     }
-    
+
     function copyTextToClipboard(text) {
         const textArea = document.createElement('textarea');
         textArea.value = text;
@@ -962,7 +966,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.execCommand('copy');
         document.body.removeChild(textArea);
     }
-    
+
     // Attendre que Three.js soit disponible
     function waitForThreeJS() {
         if (typeof THREE === 'undefined') {
@@ -970,16 +974,171 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(waitForThreeJS, 100);
             return;
         }
-        
+
         if (typeof THREE.OrbitControls === 'undefined' || typeof THREE.GLTFLoader === 'undefined') {
             console.log('⏳ En attente des modules Three.js...');
             setTimeout(waitForThreeJS, 100);
             return;
         }
-        
+
         console.log('✅ Three.js et modules détectés');
         initApplication();
     }
-    
+
     waitForThreeJS();
+});
+
+// AUTHENTIFICATION ET ABONNEMENT
+// Auth supabase via google or github
+const supabaseUrl = 'https://dlmiodxspdwsyawbeohi.supabase.co/auth/v1/callback';
+const supabaseKey = 'Kmc33JCpGzKoVh31';
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Gestion de l'état utilisateur
+let currentUser = null;
+let userSubscription = 'free'; // 'free' or 'pro'
+
+// Simulation d'authentification (à remplacer par Supabase)
+function simulateAuth(user) {
+    currentUser = user;
+    userSubscription = user.subscription || 'free';
+    updateUI();
+    closeAuthModal();
+    notify.success(`Bienvenue ${user.name} !`, 'Connexion réussie');
+}
+
+function signInWithGithub() {
+    simulateAuth({
+        id: '2',
+        name: 'USER GitHub',
+        email: 'user@github.com',
+        subscription: 'free'
+    });
+}
+
+function logout() {
+    currentUser = null;
+    userSubscription = 'free';
+    updateUI();
+    notify.info('Vous êtes déconnecté', 'Déconnexion');
+}
+
+function updateUI() {
+    const guestMenu = document.getElementById('guest-menu');
+    const userMenu = document.getElementById('user-menu');
+    const codeGuest = document.getElementById('code-guest');
+    const codeFreeUser = document.getElementById('code-free-user');
+    const codeProUser = document.getElementById('code-pro-user');
+    const userAvatar = document.getElementById('user-avatar');
+    const userName = document.getElementById('user-name');
+
+    if (currentUser) {
+        // Utilisateur connecté
+        guestMenu.style.display = 'none';
+        userMenu.style.display = 'flex';
+        codeGuest.style.display = 'none';
+
+        userAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
+        userName.textContent = currentUser.name;
+
+        if (userSubscription === 'pro') {
+            codeFreeUser.style.display = 'none';
+            codeProUser.style.display = 'block';
+        } else {
+            codeFreeUser.style.display = 'block';
+            codeProUser.style.display = 'none';
+        }
+    } else {
+        // Utilisateur non connecté
+        guestMenu.style.display = 'block';
+        userMenu.style.display = 'none';
+        codeGuest.style.display = 'block';
+        codeFreeUser.style.display = 'none';
+        codeProUser.style.display = 'none';
+    }
+}
+
+// Modal functions
+function showAuthModal() {
+    document.getElementById('auth-modal').style.display = 'flex';
+}
+
+function closeAuthModal() {
+    document.getElementById('auth-modal').style.display = 'none';
+}
+
+// Singin in google via supabase
+async function signInWithGoogle() {
+    try {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: `${window.location.origin}/auth/callback`
+            }
+        });
+
+        if (error) throw error;
+    } catch (error) {
+        notify.error('Erreur de connexion Google', error.message);
+    }
+}
+
+// Écouter les changements d'authentification
+supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && session?.user) {
+        const user = {
+            id: session.user.id,
+            name: session.user.user_metadata.full_name || session.user.email,
+            email: session.user.email,
+            avatar: session.user.user_metadata.avatar_url,
+            subscription: 'free' // À déterminer via ton backend
+        };
+        simulateAuth(user);
+    }
+});
+
+
+
+// Fonctions de navigation
+function openDashboard() {
+    notify.info('Redirection vers le dashboard...', 'Dashboard');
+    // window.location.href = '/dashboard';
+}
+
+function openPricing() {
+    notify.info('Redirection vers les tarifs...', 'Abonnement');
+    // window.location.href = '/pricing';
+}
+
+function saveProject() {
+    if (userSubscription === 'pro') {
+        notify.success('Projet sauvegardé dans le cloud', 'Sauvegarde');
+    } else {
+        notify.warning('Fonctionnalité réservée aux abonnés Pro', 'Upgrade requis');
+    }
+}
+
+function publishToGallery() {
+    if (userSubscription === 'pro') {
+        notify.success('Projet publié dans la galerie', 'Publication');
+    } else {
+        notify.warning('Fonctionnalité réservée aux abonnés Pro', 'Upgrade requis');
+    }
+}
+
+// Fermer la modal en cliquant à l'extérieur
+document.getElementById('auth-modal').addEventListener('click', function (e) {
+    if (e.target === this) {
+        closeAuthModal();
+    }
+});
+
+// Initialisation
+document.addEventListener('DOMContentLoaded', function () {
+    updateUI();
+
+    // Vérifier si l'utilisateur était déjà connecté (localStorage)
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+        simulateAuth(JSON.parse(savedUser));
+    }
 });
