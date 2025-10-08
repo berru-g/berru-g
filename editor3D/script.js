@@ -279,8 +279,8 @@ function updateKeyframesList() {
                 </div>
             </div>
             <div class="keyframe-actions">
-                <button class="edit-keyframe" data-index="${index}">✏️</button>
-                <button class="delete-keyframe" data-index="${index}">🗑️</button>
+                <button class="edit-keyframe" data-index="${index}"><i class="fa-solid fa-pencil"></i></button>
+                <button class="delete-keyframe" data-index="${index}"><i class="fa-solid fa-eraser"></i></button>
             </div>
         `;
         list.appendChild(item);

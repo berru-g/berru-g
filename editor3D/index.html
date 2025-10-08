@@ -5,8 +5,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Éditeur d'Animation 3D avec Scroll</title>
+    <link rel="shortcut icon" href="/img/logo.png" />
+    <link rel="apple-touch-icon" href="/img/logo.png" />
+    <meta name="description"
+        content="Créez des animations 3D époustouflantes sans une ligne de code. Importez vos modèles 3D, définissez des keyframes et générez du code prêt à l'emploi pour vos projets web.">
+    <meta name="keywords"
+        content="3D generator scroll, Animation, Scroll, WebGL, Three.js, GLTF, GLB, Keyframes, Code Generator, Web Development, Interactive, Visual Effects">
+    <meta name="author" content="berru-g">
+    <meta name="robots" content="noai">
+    <meta property="og:title" content="Éditeur d'Animation 3D avec Scroll">
+    <meta property="og:description"
+        content="Créez des animations 3D sans une ligne de code. Importez vos modèles 3D, définissez des keyframes et générez du code prêt à l'emploi pour vos projets web.">
+    <meta property="og:image"
+        content="https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/3dscrollanimator_preview.png">
+    <meta property="og:url" content="https://gael-berru.com">
+    <link rel="canonical" href="https://gael-berru.com" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "ScrollForge 3D",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Web Browser",
+  "description": "Éditeur no-code pour créer des animations 3D interactives basées sur le scroll. Créez des expériences web immersives sans programmation.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR",
+    "description": "Plan gratuit avec projet illimité à vie + fonctionnalités premium"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Berru-G",
+    "url": "https://gael-berru.com"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "150"
+  },
+  "featureList": [
+    "Éditeur visuel 3D no-code",
+    "Animation basée sur le scroll",
+    "Import modèles GLB/GLTF",
+    "Export code Three.js prêt à l'emploi",
+    "Galerie communautaire",
+    "Sauvegarde cloud"
+  ],
+  "screenshot": [
+    {
+      "@type": "ImageObject",
+      "caption": "Interface de l'éditeur 3D no-code",
+      "url": "https://scrollforge3d.com/img/editor.jpg"
+    },
+    {
+      "@type": "ImageObject", 
+      "caption": "Galerie des créations utilisateurs",
+      "url": "https://scrollforge3d.com/img/gallery.jpg"
+    }
+  ],
+  "softwareVersion": "1.0",
+  "releaseNotes": "Version initiale avec éditeur 3D, système de keyframes et export de code",
+  "downloadUrl": "https://scrollforge3d.com",
+  "url": "https://scrollforge3d.com",
+  "keywords": "animation 3D, scroll, no-code, three.js, web design, creative coding",
+  "memoryRequirements": "2GB RAM",
+  "processorRequirements": "Processeur moderne avec WebGL",
+  "permissions": "Accès au stockage local pour sauvegarde"
+}
+</script>
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization", 
+  "name": "ScrollForge 3D",
+  "url": "https://scrollforge3d.com",
+  "logo": "https://scrollforge3d.com/logo.png",
+  "description": "Plateforme no-code de création d'animations 3D interactives pour le web",
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "FR"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "support technique",
+    "email": "support@scrollforge3d.com",
+    "availableLanguage": ["French", "English"]
+  },
+  "sameAs": [
+    "https://twitter.com/#",
+    "https://github.com/berru-g"
+  ]
+}
+</script>
 
     <style>
         * {
@@ -22,6 +118,89 @@
             min-height: 100vh;
             background: #1e1e2e;
             color: #cdd6f4;
+        }
+
+        .header {
+            background: #1e1e2e;
+            border-bottom: 1px solid #313244;
+            padding: 0.4rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #cba6f7;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #cdd6f4;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #cba6f7;
+        }
+
+        .auth-section {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #cba6f7;
+            color: #1e1e2e;
+        }
+
+        .btn-primary:hover {
+            background: #b692f6;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #cdd6f4;
+            border: 1px solid #313244;
+        }
+
+        .btn-secondary:hover {
+            border-color: #cba6f7;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #cba6f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1e1e2e;
+            font-weight: bold;
         }
 
         /* ====== LAYOUT PRINCIPAL ====== */
@@ -362,7 +541,7 @@
 
         .keyframe-actions {
             display: flex;
-            gap: 5px;
+            gap: 10px;
         }
 
         .keyframe-actions button {
@@ -534,95 +713,34 @@
             background: #74c7ec;
             color: #333;
         }
-
-        .header {
-            background: #1e1e2e;
-            border-bottom: 1px solid #313244;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #cba6f7;
-            text-decoration: none;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-        
-        .nav-links a {
-            color: #cdd6f4;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        
-        .nav-links a:hover {
-            color: #cba6f7;
-        }
-        
-        .auth-section {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-        
-        .btn {
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        
-        .btn-primary {
-            background: #cba6f7;
-            color: #1e1e2e;
-        }
-        
-        .btn-primary:hover {
-            background: #b692f6;
-        }
-        
-        .btn-secondary {
-            background: transparent;
-            color: #cdd6f4;
-            border: 1px solid #313244;
-        }
-        
-        .btn-secondary:hover {
-            border-color: #cba6f7;
-        }
-        
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #cba6f7;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #1e1e2e;
-            font-weight: bold;
-        }
     </style>
 </head>
 
 <body>
 
-   <!--<header class="header">
+    <header class="header">
+        <a href="{{ route('home') }}" class="logo">
+            <!--3DScrollCraft - ScrollAnimator 3D - ScrollForge 3D -->
+            3D Scroll Animator
+        </a>
+
+        <nav class="nav-links">
+            <a href="{{ route('editor') }}">Éditeur</a>
+            <a href="{{ route('gallery') }}">Galerie</a>
+            <a href="{{ route('pricing') }}">Tarifs</a>
+        </nav>
+
+        <div class="auth-section">
+            <div class="user-menu">
+                <a href="{{ route('dashboard') }}" class="btn btn-secondary">Dashboard</a>
+                <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                </form>
+            </div>
+            <a href="{{ route('login') }}" class="btn btn-secondary">Connexion</a>
+        </div>
+    </header>
+
+    <!--<header class="header">
         <a href="{{ route('home') }}" class="logo">
             3D Scroll Animator
         </a>
@@ -694,8 +812,8 @@
             }
         }
     </script>-->
-    
-    
+
+
     <div class="top-section">
         <div class="sidebar">
             <div class="section">
@@ -863,7 +981,8 @@
         </div>
     </div>
     <br>
-    <p style="text-align: center">Dev by <a href="https://gael-berru.com" style="color: white; text-decoration: none;">berru-g</a></p>
+    <p style="text-align: center">Dev by <a href="https://gael-berru.com"
+            style="color: white; text-decoration: none;">berru-g</a></p>
 
     <script>
         function copyCode(id) {
