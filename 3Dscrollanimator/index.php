@@ -17,8 +17,8 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Éditeur d'Animation 3D avec Scroll</title>
-    <link rel="shortcut icon" href="/img/logo.png" />
-    <link rel="apple-touch-icon" href="/img/logo.png" />
+    <link rel="shortcut icon" href="/img/drone-logo.png" />
+    <link rel="apple-touch-icon" href="/img/drone-logo.png" />
     <meta name="description"
         content="Créez des animations 3D époustouflantes sans une ligne de code. Importez vos modèles 3D, définissez des keyframes et générez du code prêt à l'emploi pour vos projets web.">
     <meta name="keywords"
@@ -36,49 +36,96 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 
-    <!-- Schema.org JSON-LD (identique à avant) -->
     <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "3D Scroll Animator",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Web Browser",
+  "description": "Éditeur no-code pour créer des animations 3D interactives basées sur le scroll. Créez des expériences web immersives sans programmation.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR",
+    "description": "Plan gratuit avec projet illimité à vie + fonctionnalités premium"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Berru-G",
+    "url": "https://gael-berru.com"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "150"
+  },
+  "featureList": [
+    "Éditeur visuel 3D no-code",
+    "Animation basée sur le scroll",
+    "Import modèles GLB/GLTF",
+    "Export code Three.js prêt à l'emploi",
+    "Galerie communautaire",
+    "Sauvegarde cloud"
+  ],
+  "screenshot": [
     {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "ScrollForge 3D",
-      "applicationCategory": "MultimediaApplication",
-      "operatingSystem": "Web Browser",
-      "description": "Éditeur no-code pour créer des animations 3D interactives basées sur le scroll. Créez des expériences web immersives sans programmation.",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "EUR",
-        "description": "Plan gratuit avec projet illimité à vie + fonctionnalités premium"
-      },
-      "author": {
-        "@type": "Organization",
-        "name": "Berru-G",
-        "url": "https://gael-berru.com"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "150"
-      },
-      "featureList": [
-        "Éditeur visuel 3D no-code",
-        "Animation basée sur le scroll",
-        "Import modèles GLB/GLTF",
-        "Export code Three.js prêt à l'emploi",
-        "Galerie communautaire",
-        "Sauvegarde cloud"
-      ],
-      "softwareVersion": "1.0",
-      "releaseNotes": "Version initiale avec éditeur 3D, système de keyframes et export de code",
-      "downloadUrl": "https://scrollforge3d.com",
-      "url": "https://scrollforge3d.com",
-      "keywords": "animation 3D, scroll, no-code, three.js, web design, creative coding",
-      "memoryRequirements": "2GB RAM",
-      "processorRequirements": "Processeur moderne avec WebGL",
-      "permissions": "Accès au stockage local pour sauvegarde"
+      "@type": "ImageObject",
+      "caption": "Interface de l'éditeur 3D no-code",
+      "url": "https://gael-berru.com/img/3Dscrollanimator.png"
+    },
+    {
+      "@type": "ImageObject", 
+      "caption": "Galerie des créations utilisateurs",
+      "url": "https://gael-berru.com/img/3Dscrollanimator.png"
     }
+  ],
+  "softwareVersion": "1.0",
+  "releaseNotes": "Version initiale avec éditeur 3D, système de keyframes et export de code",
+  "downloadUrl": "https://gael-berru.com/3Dscrollanimator/",
+  "url": "https://gael-berru.com/3Dscrollanimator/",
+  "keywords": "animation 3D, scroll, no-code, three.js, web design, creative coding",
+  "memoryRequirements": "2GB RAM",
+  "processorRequirements": "Processeur moderne avec WebGL",
+  "permissions": "Accès au stockage local pour sauvegarde"
+}
+</script>
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization", 
+  "name": "3D Scroll Animator",
+  "url": "https://gael-berru.com/3Dscrollanimator/",
+  "logo": "https://gael-berru.com/img/drone-logo.png",
+  "description": "Plateforme no-code de création d'animations 3D interactives pour le web",
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "FR"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "support technique",
+    "email": "support@gael-berru.com",
+    "availableLanguage": ["French", "English"]
+  },
+  "sameAs": [
+    "https://twitter.com/#",
+    "https://github.com/berru-g"
+  ]
+}
+</script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1ZHDWFP01H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-1ZHDWFP01H');
     </script>
+
 </head>
 
 <body>
@@ -163,7 +210,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                 <!-- Bouton Record pour utilisateurs connectés -->
                 <?php if (Auth::isLoggedIn()): ?>
                     <button class="btn" id="record-btn" onclick="saveProject()" style="margin-top: 10px;">
-                        💾 Enregistrer le projet
+                        <i class="fa-solid fa-floppy-disk"></i> Save Project
                     </button>
                     <div class="input-group" style="margin-top: 10px; margin-left: 20px;">Rendre public
                         <label>
