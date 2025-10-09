@@ -1225,5 +1225,5 @@ document.addEventListener('DOMContentLoaded', function () {
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) simulateAuth(JSON.parse(savedUser));
 
-    console.log('Supabase prêt :', supabaseUrl);
+    console.log('Lets go');
 });
