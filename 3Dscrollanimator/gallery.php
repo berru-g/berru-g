@@ -117,9 +117,9 @@ try {
                             font-size: 0.8rem;
                             margin-bottom: 1rem;
                         ">
-                            <span>❤️ <?= $project['like_count'] ?> likes</span>
+                            <!--<span>❤️ <?= $project['like_count'] ?> likes</span>
                             <span>💬 <?= $project['comment_count'] ?> commentaires</span>
-                            <span>👁️ <?= $project['view_count'] ?> vues</span>
+                            <span>👁️ <?= $project['view_count'] ?> vues</span>-->
                         </div>
 
                         <div class="project-actions" style="display: flex; gap: 0.5rem;">

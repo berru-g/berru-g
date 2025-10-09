@@ -7,8 +7,8 @@
        -- play@1.2.3
 
 
-<h1 align="center"> <a href="https://gael-berru.netlify.app/" target="_blank" style="text-decoration: none;"> 🛠️ Skills </a> </h1> 
-<!--<div align="center"> <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&text_color=a1a1a1&bg_color=a7a7a700&hide_border=true&title_color=a1a1a1&custom_title=Favorite-language&langs_count=10&card_height=100&layout=compact" alt="Top Langs" /> </div>-->
+<h1 align="center"> <a href="https://gael-berru.com/" target="_blank" style="text-decoration: none;"> 🛠️ Skills </a> </h1> 
+<div align="center"> <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=berru-g&text_color=a1a1a1&bg_color=a7a7a700&hide_border=true&title_color=a1a1a1&custom_title=Favorite-language&langs_count=10&card_height=100&layout=compact" alt="Top Langs" /> </div>
 
 <h2 align="center">🚀 Tech Stack<h2>
   

@@ -19,21 +19,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
         'website' => $_POST['website'] ?? '',
         'bio' => $_POST['bio'] ?? ''
     ];
-    
+
     // Gestion de l'avatar (simplifié)
     if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
         $uploadDir = 'uploads/avatars/';
-        if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
-        
+        if (!is_dir($uploadDir))
+            mkdir($uploadDir, 0755, true);
+
         $fileExt = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION);
         $fileName = 'avatar_' . $_SESSION['user_id'] . '_' . time() . '.' . $fileExt;
         $filePath = $uploadDir . $fileName;
-        
+
         if (move_uploaded_file($_FILES['avatar']['tmp_name'], $filePath)) {
             $updateData['avatar_url'] = '/' . $filePath;
         }
     }
-    
+
     $success = Auth::updateProfile($_SESSION['user_id'], $updateData);
     if ($success) {
         header('Location: dashboard.php?success=1');
@@ -43,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body>
     <header class="header">
         <a href="index.php" class="logo">3D Scroll Animator</a>
@@ -90,43 +93,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                 padding: 2rem;
             ">
                 <h2 style="color: var(--primary); margin-bottom: 1.5rem;">Mon Profil</h2>
-                
+
                 <form method="POST" enctype="multipart/form-data">
                     <div style="text-align: center; margin-bottom: 2rem;">
-                        <img src="<?= htmlspecialchars($user['avatar_url']) ?>" 
-                             alt="Avatar"
-                             style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 1rem;">
+                        <img src="<?= htmlspecialchars($user['avatar_url']) ?>" alt="Avatar"
+                            style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 1rem;">
                         <input type="file" name="avatar" accept="image/*" style="margin-top: 0.5rem;">
                     </div>
 
                     <div style="margin-bottom: 1rem;">
-                        <label style="display: block; margin-bottom: 0.5rem; color: var(--rose);">Nom d'utilisateur</label>
-                        <input type="text" name="username" value="<?= htmlspecialchars($user['username']) ?>" 
-                               style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border); background: var(--grey); color: white;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--rose);">Nom
+                            d'utilisateur</label>
+                        <input type="text" name="username" value="<?= htmlspecialchars($user['username']) ?>"
+                            style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border); background: var(--grey); color: white;">
                     </div>
 
                     <div style="margin-bottom: 1rem;">
                         <label style="display: block; margin-bottom: 0.5rem; color: var(--rose);">Email</label>
-                        <input type="email" value="<?= htmlspecialchars($user['email']) ?>" 
-                               style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border); background: var(--grey-light); color: #a6adc8;" disabled>
+                        <input type="email" value="<?= htmlspecialchars($user['email']) ?>"
+                            style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border); background: var(--grey-light); color: #a6adc8;"
+                            disabled>
                         <small style="color: #a6adc8;">L'email ne peut pas être modifié</small>
                     </div>
 
                     <div style="margin-bottom: 1rem;">
                         <label style="display: block; margin-bottom: 0.5rem; color: var(--rose);">Site Web</label>
-                        <input type="url" name="website" value="<?= htmlspecialchars($user['website'] ?? '') ?>" 
-                               style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border); background: var(--grey); color: white;">
+                        <input type="url" name="website" value="<?= htmlspecialchars($user['website'] ?? '') ?>"
+                            style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border); background: var(--grey); color: white;">
                     </div>
 
                     <div style="margin-bottom: 1.5rem;">
                         <label style="display: block; margin-bottom: 0.5rem; color: var(--rose);">Bio</label>
-                        <textarea name="bio" rows="4" style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border); background: var(--grey); color: white; resize: vertical;"><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
+                        <textarea name="bio" rows="4"
+                            style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border); background: var(--grey); color: white; resize: vertical;"><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
                     </div>
 
                     <button type="submit" name="update_profile" class="btn btn-primary" style="width: 100%;">
                         <i class="fas fa-save"></i> Mettre à jour le profil
                     </button>
                 </form>
+
+                <?php if (Auth::isLoggedIn() && $_SESSION['user_id'] == 1): ?>
+                    <a href="dashboard_admin.php">Dashboard Admin</a>
+                <?php endif; ?>
 
                 <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border);">
                     <h4 style="color: var(--primary); margin-bottom: 1rem;">Statistiques</h4>
@@ -196,4 +205,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
         </div>
     </main>
 </body>
+
 </html>
