@@ -86,36 +86,31 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
     <div id="notification-container" class="notification-container"></div>
 
     <header class="header">
-        <a href="index.php" class="logo">
-            3D Scroll Animator
-        </a>
+        <a href="index.php" class="logo">3D Scroll Animator</a>
 
         <nav class="nav-links">
-            <a href="#editor">Editor</a>
-            <a href="gallery.php">Gallery</a>
+            <a href="#editor">Éditeur</a>
+            <a href="gallery.php">Galerie</a>
             <a href="dashboard.php">Dashboard</a>
         </nav>
 
         <div class="auth-section">
             <?php if (Auth::isLoggedIn()): ?>
                 <!-- État connecté -->
-                <div class="user-menu">
-                    <span class="user-avatar">
+                <div id="user-menu" class="user-menu">
+                    <span class="user-avatar" id="user-avatar">
                         <?= strtoupper(substr($_SESSION['user_name'], 0, 1)) ?>
                     </span>
-                    <span class="user-name"><?= htmlspecialchars($_SESSION['user_name']) ?></span>
+                    <span class="user-name" id="user-name"><?= htmlspecialchars($_SESSION['user_name']) ?></span>
                     <a href="dashboard.php" class="btn btn-secondary">Dashboard</a>
                     <a href="?logout" class="btn btn-secondary">Déconnexion</a>
                 </div>
             <?php else: ?>
                 <!-- État non connecté -->
-                <div class="auth-buttons">
-                    <a href="login.php" class="btn btn-secondary">
+                <div id="guest-menu" class="auth-buttons">
+                    <button class="btn btn-secondary" onclick="showAuthModal()">
                         <i class="fas fa-sign-in-alt"></i> Connexion
-                    </a>
-                    <a href="register.php" class="btn btn-primary">
-                        <i class="fas fa-user-plus"></i> Inscription
-                    </a>
+                    </button>
                 </div>
             <?php endif; ?>
         </div>
@@ -134,7 +129,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                     <i class="fas fa-sign-in-alt"></i>
                     Se connecter
                 </a>
-                
+
                 <a href="register.php" class="auth-btn" style="text-decoration: none; text-align: center;">
                     <i class="fas fa-user-plus"></i>
                     Créer un compte
@@ -164,16 +159,23 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                     <input type="range" id="model-scale" min="0.1" max="3" step="0.1" value="1">
                 </div>
                 <button class="btn btn-secondary" onclick="loadTestModel()">Charger modèle test</button>
-                
+
                 <!-- Bouton Record pour utilisateurs connectés -->
                 <?php if (Auth::isLoggedIn()): ?>
                     <button class="btn" id="record-btn" onclick="saveProject()" style="margin-top: 10px;">
                         💾 Enregistrer le projet
                     </button>
-                    <div class="input-group" style="margin-top: 10px;">
+                    <div class="input-group" style="margin-top: 10px; margin-left: 20px;">Rendre public
                         <label>
-                            <input type="checkbox" id="make-public"> Rendre public
+                            <input type="checkbox" id="make-public"> 
                         </label>
+                    </div>
+                <?php else: ?>
+                    <div style="background: var(--grey-light); padding: 10px; border-radius: 6px; margin-top: 10px;">
+                        <p style="margin: 0; color: var(--rose); font-size: 0.9rem;">
+                            <a href="login.php" style="color: var(--primary);">Connectez-vous</a> pour sauvegarder vos
+                            projets
+                        </p>
                     </div>
                 <?php endif; ?>
             </div>
@@ -263,7 +265,8 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                 <p>5. Copiez le code généré pour l'utiliser sur votre site</p>
                 <?php if (!Auth::isLoggedIn()): ?>
                     <p style="color: var(--primary); margin-top: 10px;">
-                        <strong>💡 Astuce :</strong> <a href="register.php" style="color: var(--primary);">Inscrivez-vous</a> pour sauvegarder vos projets !
+                        <strong>💡 Astuce :</strong> <a href="register.php"
+                            style="color: var(--primary);">Inscrivez-vous</a> pour sauvegarder vos projets !
                     </p>
                 <?php endif; ?>
             </div>
@@ -294,7 +297,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
         <h2 class="section-title">Code Complet à Copier</h2>
 
         <!-- État non connecté -->
-        <div id="code-guest" class="code-guest" style="<?= Auth::isLoggedIn() ? 'display:none;' : 'display:block;' ?>">
+        <div id="code-guest" class="code-guest" style="display: none;"> <!-- Toujours caché -->
             <div class="guest-message">
                 <div class="guest-icon">🔒</div>
                 <h3>Connectez-vous pour débloquer l'export</h3>
@@ -303,13 +306,15 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                     <i class="fas fa-sign-in-alt"></i> Se connecter
                 </a>
                 <p style="margin-top: 1rem; font-size: 0.9rem;">
-                    Pas encore de compte ? <a href="register.php" style="color: var(--primary);">Inscription gratuite</a>
+                    Pas encore de compte ? <a href="register.php" style="color: var(--primary);">Inscription
+                        gratuite</a>
                 </p>
             </div>
         </div>
 
         <!-- État connecté (gratuit) -->
-        <div id="code-free-user" class="code-editors" style="<?= (Auth::isLoggedIn() && $_SESSION['subscription'] === 'free') ? 'display:flex;' : 'display:none;' ?>">
+        <div id="code-free-user" class="code-editors"
+            style="<?= (Auth::isLoggedIn() && $_SESSION['subscription'] === 'free') ? 'display:flex;' : 'display:none;' ?>">
             <div class="code-box">
                 <div class="code-box-title">HTML</div>
                 <div class="copy-icon" onclick="copyCode('full-html-code')" title="Copier le HTML">
@@ -338,7 +343,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                 <i class="fa-brands fa-codepen" style="margin-right:6px;"></i>Ouvrir dans CodePen
             </button>
 
-            <!-- Call to Action Upgrade -->
+            <!-- Call to Action Upgrade 
             <div class="upgrade-cta">
                 <div class="upgrade-badge">💎 PRO</div>
                 <h4>Passez Pro pour sauvegarder et partager</h4>
@@ -353,117 +358,118 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                     <i class="fas fa-crown"></i> Devenir Pro - 9,90€/mois
                 </button>
             </div>
-        </div>
+        </div>-->
 
-        <!-- État connecté (Pro) -->
-        <div id="code-pro-user" class="code-pro-features" style="<?= (Auth::isLoggedIn() && $_SESSION['subscription'] === 'pro') ? 'display:block;' : 'display:none;' ?>">
-            <div class="code-editors">
-                <div class="code-box">
-                    <div class="code-box-title">HTML</div>
-                    <div class="copy-icon" onclick="copyCode('full-html-code')" title="Copier le HTML">
-                        <i class="fa-regular fa-copy"></i>
+            <!-- État connecté (Pro) -->
+            <div id="code-pro-user" class="code-pro-features"
+                style="<?= (Auth::isLoggedIn() && $_SESSION['subscription'] === 'pro') ? 'display:block;' : 'display:none;' ?>">
+                <div class="code-editors">
+                    <div class="code-box">
+                        <div class="code-box-title">HTML</div>
+                        <div class="copy-icon" onclick="copyCode('full-html-code')" title="Copier le HTML">
+                            <i class="fa-regular fa-copy"></i>
+                        </div>
+                        <textarea id="full-html-code" readonly></textarea>
                     </div>
-                    <textarea id="full-html-code" readonly></textarea>
+
+                    <div class="code-box">
+                        <div class="code-box-title">CSS</div>
+                        <div class="copy-icon" onclick="copyCode('full-css-code')" title="Copier le CSS">
+                            <i class="fa-regular fa-copy"></i>
+                        </div>
+                        <textarea id="full-css-code" readonly></textarea>
+                    </div>
+
+                    <div class="code-box">
+                        <div class="code-box-title">JavaScript</div>
+                        <div class="copy-icon" onclick="copyCode('full-js-code')" title="Copier le JS">
+                            <i class="fa-regular fa-copy"></i>
+                        </div>
+                        <textarea id="full-js-code" readonly></textarea>
+                    </div>
                 </div>
 
-                <div class="code-box">
-                    <div class="code-box-title">CSS</div>
-                    <div class="copy-icon" onclick="copyCode('full-css-code')" title="Copier le CSS">
-                        <i class="fa-regular fa-copy"></i>
-                    </div>
-                    <textarea id="full-css-code" readonly></textarea>
-                </div>
+                <button class="btn" id="open-codepen">
+                    <i class="fa-brands fa-codepen" style="margin-right:6px;"></i>Ouvrir dans CodePen
+                </button>
 
-                <div class="code-box">
-                    <div class="code-box-title">JavaScript</div>
-                    <div class="copy-icon" onclick="copyCode('full-js-code')" title="Copier le JS">
-                        <i class="fa-regular fa-copy"></i>
-                    </div>
-                    <textarea id="full-js-code" readonly></textarea>
+                <!-- Boutons Pro -->
+                <div class="pro-actions">
+                    <button class="btn btn-primary" onclick="saveProject()">
+                        <i class="fas fa-cloud-upload-alt"></i> Sauvegarder le projet
+                    </button>
+                    <button class="btn btn-secondary" onclick="publishToGallery()">
+                        <i class="fas fa-share"></i> Publier dans la galerie
+                    </button>
                 </div>
             </div>
-
-            <button class="btn" id="open-codepen">
-                <i class="fa-brands fa-codepen" style="margin-right:6px;"></i>Ouvrir dans CodePen
-            </button>
-
-            <!-- Boutons Pro -->
-            <div class="pro-actions">
-                <button class="btn btn-primary" onclick="saveProject()">
-                    <i class="fas fa-cloud-upload-alt"></i> Sauvegarder le projet
-                </button>
-                <button class="btn btn-secondary" onclick="publishToGallery()">
-                    <i class="fas fa-share"></i> Publier dans la galerie
-                </button>
-            </div>
         </div>
-    </div>
 
-    <br>
-    <p style="text-align: center">Dev by <a href="https://gael-berru.com"
-            style="color: white; text-decoration: none;">berru-g</a></p>
+        <br>
+        <p style="text-align: center">Dev by <a href="https://gael-berru.com"
+                style="color: white; text-decoration: none;">berru-g</a></p>
 
-    <script>
-        function copyCode(id) {
-            const textarea = document.getElementById(id);
-            textarea.select();
-            document.execCommand("copy");
+        <script>
+            function copyCode(id) {
+                const textarea = document.getElementById(id);
+                textarea.select();
+                document.execCommand("copy");
 
-            const icon = event.currentTarget;
-            const old = icon.textContent;
-            icon.textContent = "✅";
-            setTimeout(() => (icon.textContent = old), 1000);
-        }
-    </script>
-
-    <script>
-        // Export dans codepen
-        document.getElementById("open-codepen").addEventListener("click", () => {
-            const html = document.getElementById("full-html-code").value;
-            const css = document.getElementById("full-css-code").value;
-            const js = document.getElementById("full-js-code").value;
-
-            const data = {
-                title: "Animation 3D Scroll – Export",
-                html: html,
-                css: css,
-                js: js,
-                editors: "101", // HTML/CSS/JS actifs
-            };
-
-            const form = document.createElement("form");
-            form.method = "POST";
-            form.action = "https://codepen.io/pen/define";
-            form.target = "_blank";
-
-            const input = document.createElement("input");
-            input.type = "hidden";
-            input.name = "data";
-            input.value = JSON.stringify(data);
-            form.appendChild(input);
-
-            document.body.appendChild(form);
-            form.submit();
-            document.body.removeChild(form);
-        });
-    </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
-    <script src="scriptV2.js"></script>
-    
-    <script>
-        // Variable globale pour le chargement de projet
-        const loadProjectId = <?= $loadProjectId ? $loadProjectId : 'null' ?>;
-        
-        // Après l'initialisation de l'application
-        setTimeout(() => {
-            if (loadProjectId) {
-                loadProject(loadProjectId);
+                const icon = event.currentTarget;
+                const old = icon.textContent;
+                icon.textContent = "✅";
+                setTimeout(() => (icon.textContent = old), 1000);
             }
-        }, 1000);
-    </script>
+        </script>
+
+        <script>
+            // Export dans codepen
+            document.getElementById("open-codepen").addEventListener("click", () => {
+                const html = document.getElementById("full-html-code").value;
+                const css = document.getElementById("full-css-code").value;
+                const js = document.getElementById("full-js-code").value;
+
+                const data = {
+                    title: "Animation 3D Scroll – Export",
+                    html: html,
+                    css: css,
+                    js: js,
+                    editors: "101", // HTML/CSS/JS actifs
+                };
+
+                const form = document.createElement("form");
+                form.method = "POST";
+                form.action = "https://codepen.io/pen/define";
+                form.target = "_blank";
+
+                const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "data";
+                input.value = JSON.stringify(data);
+                form.appendChild(input);
+
+                document.body.appendChild(form);
+                form.submit();
+                document.body.removeChild(form);
+            });
+        </script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
+        <script src="scriptV2.js"></script>
+
+        <script>
+            // Variable globale pour le chargement de projet
+            const loadProjectId = <?= $loadProjectId ? $loadProjectId : 'null' ?>;
+
+            // Après l'initialisation de l'application
+            setTimeout(() => {
+                if (loadProjectId) {
+                    loadProject(loadProjectId);
+                }
+            }, 1000);
+        </script>
 </body>
 
 </html>

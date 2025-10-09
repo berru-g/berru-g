@@ -522,35 +522,94 @@ function updateModelByScroll(percentage) {
     }
 }
 
+// debug save
+async function saveProject() {
+    console.log("🔧 saveProject() appelée");
+    console.log("🔧 currentUser:", currentUser);
+
+    if (!currentUser) {
+        console.log("❌ Utilisateur non connecté - affichage modal");
+        showAuthModal();
+        return;
+    }
+
+    const title = prompt('Donnez un titre à votre projet:', 'Mon animation 3D');
+    console.log("🔧 Titre saisi:", title);
+    if (!title) return;
+
+    const description = prompt('Description (optionnelle):', '');
+
+    const projectData = {
+        keyframes: keyframes,
+        modelSettings: {
+            position: model ? { x: model.position.x, y: model.position.y, z: model.position.z } : { x: 0, y: 0, z: 0 },
+            rotation: model ? { x: model.rotation.x, y: model.rotation.y, z: model.rotation.z } : { x: 0, y: 0, z: 0 },
+            scale: model ? { x: model.scale.x, y: model.scale.y, z: model.scale.z } : { x: 1, y: 1, z: 1 }
+        },
+        camera: {
+            position: camera ? { x: camera.position.x, y: camera.position.y, z: camera.position.z } : { x: 5, y: 5, z: 5 }
+        },
+        timestamp: new Date().toISOString()
+    };
+
+    console.log("🔧 Données à sauvegarder:", projectData);
+
+    try {
+        const formData = new FormData();
+        formData.append('action', 'save_project');
+        formData.append('title', title);
+        formData.append('description', description);
+        formData.append('model_data', JSON.stringify(projectData));
+        const makePublicCheckbox = document.getElementById('make-public');
+        formData.append('is_public', makePublicCheckbox && makePublicCheckbox.checked ? 'true' : 'false');
+
+        console.log("🔧 Envoi vers api.php...");
+
+        const response = await fetch('api.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        console.log("🔧 Réponse reçue, statut:", response.status);
+
+        const result = await response.json();
+        console.log("🔧 Résultat API:", result);
+
+        if (result.success) {
+            notify.success('Projet sauvegardé avec succès!', 'Sauvegarde');
+        } else {
+            notify.error('Erreur lors de la sauvegarde', result.message);
+        }
+    } catch (error) {
+        console.error('❌ Erreur sauvegarde:', error);
+        notify.error('Erreur réseau', 'Impossible de sauvegarder');
+    }
+}
+
 // GÉNÉRATION DE CODE
 // GÉNÉRATION DE CODE COMPLET
 function generateCode() {
     if (keyframes.length === 0) {
         document.getElementById('generated-code').value = '// Ajoutez des keyframes pour générer le code';
-        // Mettre à jour les éditeurs de code complet seulement si l'utilisateur est connecté
-        if (currentUser) {
-            document.getElementById('full-html-code').value = '<!-- Ajoutez des keyframes pour générer le code complet -->';
-            document.getElementById('full-css-code').value = '/* Ajoutez des keyframes pour générer le code complet */';
-            document.getElementById('full-js-code').value = '// Ajoutez des keyframes pour générer le code complet';
-        }
+        document.getElementById('full-html-code').value = '<!-- Ajoutez des keyframes pour générer le code complet -->';
+        document.getElementById('full-css-code').value = '/* Ajoutez des keyframes pour générer le code complet */';
+        document.getElementById('full-js-code').value = '// Ajoutez des keyframes pour générer le code complet';
         return;
     }
 
-    // Générer le JS (identique à avant)
+    // Générer le JS
     const jsCode = generateJSCode();
     document.getElementById('generated-code').value = jsCode;
 
-    // Générer le code complet seulement si l'utilisateur est connecté
-    if (currentUser) {
-        const htmlCode = generateHTMLCode();
-        const cssCode = generateCSSCode();
+    // Générer le code complet POUR TOUS
+    const htmlCode = generateHTMLCode();
+    const cssCode = generateCSSCode();
 
-        document.getElementById('full-html-code').value = htmlCode;
-        document.getElementById('full-css-code').value = cssCode;
-        document.getElementById('full-js-code').value = jsCode;
+    document.getElementById('full-html-code').value = htmlCode;
+    document.getElementById('full-css-code').value = cssCode;
+    document.getElementById('full-js-code').value = jsCode;
 
-        notify.success('Code complet généré', 'Prêt à exporter');
-    }
+    notify.success('Code complet généré', 'Prêt à exporter');
 }
 
 function generateJSCode() {
@@ -905,57 +964,7 @@ function setupEventListeners() {
     });
 }
 
-// Sauvegarde du proejct
-// Sauvegarder le projet
-async function saveProject() {
-    if (!currentUser) {
-        showAuthModal();
-        return;
-    }
 
-    const title = prompt('Donnez un titre à votre projet:', 'Mon animation 3D');
-    if (!title) return;
-
-    const description = prompt('Description (optionnelle):', '');
-    
-    const projectData = {
-        keyframes: keyframes,
-        modelSettings: {
-            position: model ? model.position : { x: 0, y: 0, z: 0 },
-            rotation: model ? model.rotation : { x: 0, y: 0, z: 0 },
-            scale: model ? model.scale : { x: 1, y: 1, z: 1 }
-        },
-        camera: {
-            position: camera ? camera.position : { x: 5, y: 5, z: 5 }
-        },
-        timestamp: new Date().toISOString()
-    };
-
-    try {
-        const formData = new FormData();
-        formData.append('action', 'save_project');
-        formData.append('title', title);
-        formData.append('description', description);
-        formData.append('model_data', JSON.stringify(projectData));
-        formData.append('is_public', document.getElementById('make-public').checked);
-
-        const response = await fetch('api.php', {
-            method: 'POST',
-            body: formData
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-            notify.success('Projet sauvegardé avec succès!', 'Sauvegarde');
-        } else {
-            notify.error('Erreur lors de la sauvegarde', result.message);
-        }
-    } catch (error) {
-        console.error('Erreur sauvegarde:', error);
-        notify.error('Erreur réseau', 'Impossible de sauvegarder');
-    }
-}
 
 // Charger un projet
 async function loadProject(projectId) {
@@ -966,33 +975,33 @@ async function loadProject(projectId) {
         if (result.success) {
             const project = result.project;
             const modelData = JSON.parse(project.model_data);
-            
+
             // Appliquer les keyframes
             keyframes = modelData.keyframes || [];
             updateKeyframesList();
             updateRulerMarkers();
-            
+
             // Appliquer les paramètres du modèle
             if (model && modelData.modelSettings) {
                 const settings = modelData.modelSettings;
                 model.position.set(
-                    settings.position.x, 
-                    settings.position.y, 
+                    settings.position.x,
+                    settings.position.y,
                     settings.position.z
                 );
                 model.rotation.set(
-                    settings.rotation.x, 
-                    settings.rotation.y, 
+                    settings.rotation.x,
+                    settings.rotation.y,
                     settings.rotation.z
                 );
                 model.scale.set(
-                    settings.scale.x, 
-                    settings.scale.y, 
+                    settings.scale.x,
+                    settings.scale.y,
                     settings.scale.z
                 );
                 updateModelControls();
             }
-            
+
             notify.success('Projet chargé avec succès!', 'Chargement');
         } else {
             notify.error('Erreur chargement', result.message);
@@ -1012,7 +1021,7 @@ function updateProjectUI() {
         recordBtn.className = 'btn';
         recordBtn.innerHTML = '💾 Enregistrer le projet';
         recordBtn.onclick = saveProject;
-        
+
         const section = document.querySelector('.section:nth-child(3)');
         section.insertBefore(recordBtn, section.querySelector('.keyframes-list'));
     }
@@ -1103,29 +1112,38 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-
 // ======================================
-// AUTHENTIFICATION ET ABONNEMENT daf 
+// AUTHENTIFICATION SIMPLIFIÉE
 // ======================================
 
 let currentUser = null;
 let userSubscription = 'free';
 
-// Vérifier la session au chargement
-async function checkAuthStatus() {
-    try {
-        const response = await fetch('api.php?action=auth_status');
-        const result = await response.json();
+// Au chargement, récupérer l'état de connexion depuis le HTML
+function initAuth() {
+    // Vérifier si l'utilisateur est connecté via les éléments PHP
+    const userMenu = document.getElementById('user-menu');
+    const guestMenu = document.getElementById('guest-menu');
+    
+    if (userMenu && userMenu.style.display !== 'none') {
+        // Utilisateur connecté - récupérer les infos depuis le DOM
+        const userNameElement = document.getElementById('user-name');
+        const userAvatarElement = document.getElementById('user-avatar');
         
-        if (result.success && result.user) {
-            currentUser = result.user;
-            userSubscription = result.user.subscription_type;
-            updateUI();
-            updateProjectUI();
+        if (userNameElement) {
+            currentUser = {
+                username: userNameElement.textContent,
+                avatar: userAvatarElement ? userAvatarElement.textContent : 'U'
+            };
+            userSubscription = 'free'; // Par défaut gratuit
+            console.log('✅ Utilisateur connecté:', currentUser.username);
         }
-    } catch (error) {
-        console.log('Utilisateur non connecté');
+    } else {
+        console.log('❌ Utilisateur non connecté');
+        currentUser = null;
     }
+    
+    updateUI();
 }
 
 // Mettre à jour l'interface
@@ -1137,93 +1155,51 @@ function updateUI() {
     const codeProUser = document.getElementById('code-pro-user');
 
     if (currentUser) {
-        guestMenu.style.display = 'none';
-        userMenu.style.display = 'flex';
-        codeGuest.style.display = 'none';
+        if (guestMenu) guestMenu.style.display = 'none';
+        if (userMenu) userMenu.style.display = 'flex';
+        if (codeGuest) codeGuest.style.display = 'none';
 
         if (userSubscription === 'pro') {
-            codeFreeUser.style.display = 'none';
-            codeProUser.style.display = 'block';
+            if (codeFreeUser) codeFreeUser.style.display = 'none';
+            if (codeProUser) codeProUser.style.display = 'block';
         } else {
-            codeFreeUser.style.display = 'block';
-            codeProUser.style.display = 'none';
+            if (codeFreeUser) codeFreeUser.style.display = 'block';
+            if (codeProUser) codeProUser.style.display = 'none';
         }
-        
-        // Mettre à jour les infos utilisateur
-        document.getElementById('user-avatar').textContent = currentUser.username.charAt(0).toUpperCase();
-        document.getElementById('user-name').textContent = currentUser.username;
     } else {
-        guestMenu.style.display = 'block';
-        userMenu.style.display = 'none';
-        codeGuest.style.display = 'block';
-        codeFreeUser.style.display = 'none';
-        codeProUser.style.display = 'none';
+        if (guestMenu) guestMenu.style.display = 'block';
+        if (userMenu) userMenu.style.display = 'none';
+        if (codeGuest) codeGuest.style.display = 'block';
+        if (codeFreeUser) codeFreeUser.style.display = 'none';
+        if (codeProUser) codeProUser.style.display = 'none';
     }
 }
 
 // 🪟 Modal
 function showAuthModal() {
     document.getElementById('auth-modal').style.display = 'flex';
-    window.location.href = 'login.php';
 }
 
 function closeAuthModal() {
     document.getElementById('auth-modal').style.display = 'none';
-    window.location.href = 'index.php';
 }
 
-// Au chargement du DOM
+// 🖱️ Fermer la modal en cliquant à l'extérieur
+document.getElementById('auth-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeAuthModal();
+});
+
+// Au chargement
 document.addEventListener('DOMContentLoaded', function() {
-    checkAuthStatus();
+    // Initialiser l'auth après le chargement complet
+    setTimeout(initAuth, 100);
     
     // Vérifier si on doit charger un projet
     const urlParams = new URLSearchParams(window.location.search);
     const loadProjectId = urlParams.get('load_project');
     if (loadProjectId) {
-        loadProject(loadProjectId);
+        setTimeout(() => {
+            loadProject(loadProjectId);
+        }, 2000);
     }
-});
-
-
-// 🚀 Fonctions diverses
-function openDashboard() {
-    notify.info('Redirection vers le dashboard...', 'Dashboard');
-    // window.location.href = '/dashboard';
-}
-
-function openPricing() {
-    notify.info('Redirection vers les tarifs...', 'Abonnement');
-    // window.location.href = '/pricing';
-}
-
-function saveProject() {
-    if (userSubscription === 'pro') {
-        notify.success('Projet sauvegardé dans le cloud', 'Sauvegarde');
-    } else {
-        notify.warning('Fonctionnalité réservée aux abonnés Pro', 'Upgrade requis');
-    }
-}
-
-function publishToGallery() {
-    if (userSubscription === 'pro') {
-        notify.success('Projet publié dans la galerie', 'Publication');
-    } else {
-        notify.warning('Fonctionnalité réservée aux abonnés Pro', 'Upgrade requis');
-    }
-}
-
-// 🖱️ Fermer la modal en cliquant à l’extérieur
-document.getElementById('auth-modal').addEventListener('click', function (e) {
-    if (e.target === this) closeAuthModal();
-});
-
-// ⚡ Initialisation au chargement
-document.addEventListener('DOMContentLoaded', function () {
-    updateUI();
-
-    // Restaure utilisateur depuis localStorage
-    const savedUser = localStorage.getItem('currentUser');
-    if (savedUser) simulateAuth(JSON.parse(savedUser));
-
-    console.log('Lets go');
 });
