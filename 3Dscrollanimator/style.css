@@ -66,6 +66,9 @@ body {
     gap: 1rem;
     align-items: center;
 }
+.auth-buttons {
+    gap: 10px;
+}
 
 .btn {
     padding: 0.5rem 1rem;
