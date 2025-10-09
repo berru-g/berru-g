@@ -1,18 +1,22 @@
 <?php
-// auth.php
+// auth.php - VERSION CORRIGÉE
 require_once 'config.php';
 
+// DÉMARRER LA SESSION TOUJOURS EN PREMIER
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 class Auth {
+    
     public static function initSession() {
         if (session_status() === PHP_SESSION_NONE) {
-            session_name(Config::SESSION_NAME);
-            session_set_cookie_params(Config::SESSION_LIFETIME);
             session_start();
         }
     }
     
     public static function login($email, $password) {
-        self::initSession();
+        self::initSession(); // AJOUTÉ
         $db = getDB();
         $stmt = $db->prepare("SELECT * FROM users WHERE email = ?");
         $stmt->execute([$email]);
@@ -32,7 +36,7 @@ class Auth {
     }
     
     public static function register($username, $email, $password) {
-        self::initSession();
+        self::initSession(); // RESTE
         $db = getDB();
         
         // Vérifier si l'email ou username existe déjà
@@ -55,13 +59,13 @@ class Auth {
     }
     
     public static function logout() {
-        self::initSession();
+        self::initSession(); // RESTE
         $_SESSION = array();
         session_destroy();
     }
     
     public static function isLoggedIn() {
-        self::initSession();
+        self::initSession(); // RESTE
         return isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
     }
     

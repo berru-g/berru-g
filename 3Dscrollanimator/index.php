@@ -5,6 +5,10 @@ require_once 'auth.php';
 
 // Vérifier si un projet doit être chargé
 $loadProjectId = $_GET['load_project'] ?? null;
+// DEBUG
+error_log("=== INDEX.PHP ===");
+error_log("Session ID: " . session_id());
+error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -87,33 +91,33 @@ $loadProjectId = $_GET['load_project'] ?? null;
         </a>
 
         <nav class="nav-links">
-            <a href="#editor">Éditeur</a>
-            <a href="gallery.php">Galerie</a>
+            <a href="#editor">Editor</a>
+            <a href="gallery.php">Gallery</a>
             <a href="dashboard.php">Dashboard</a>
         </nav>
 
         <div class="auth-section">
-            <!-- État non connecté -->
-            <div id="guest-menu" class="auth-buttons" style="<?= Auth::isLoggedIn() ? 'display:none;' : 'display:flex;' ?>">
-                <a href="login.php" class="btn btn-secondary">
-                    <i class="fas fa-sign-in-alt"></i> Connexion
-                </a>
-                <a href="register.php" class="btn btn-primary">
-                    <i class="fas fa-user-plus"></i> Inscription
-                </a>
-            </div>
-
-            <!-- État connecté -->
-            <div id="user-menu" class="user-menu" style="<?= Auth::isLoggedIn() ? 'display:flex;' : 'display:none;' ?>">
-                <?php if (Auth::isLoggedIn()): ?>
-                    <span class="user-avatar" id="user-avatar">
+            <?php if (Auth::isLoggedIn()): ?>
+                <!-- État connecté -->
+                <div class="user-menu">
+                    <span class="user-avatar">
                         <?= strtoupper(substr($_SESSION['user_name'], 0, 1)) ?>
                     </span>
-                    <span class="user-name" id="user-name"><?= htmlspecialchars($_SESSION['user_name']) ?></span>
+                    <span class="user-name"><?= htmlspecialchars($_SESSION['user_name']) ?></span>
                     <a href="dashboard.php" class="btn btn-secondary">Dashboard</a>
                     <a href="?logout" class="btn btn-secondary">Déconnexion</a>
-                <?php endif; ?>
-            </div>
+                </div>
+            <?php else: ?>
+                <!-- État non connecté -->
+                <div class="auth-buttons">
+                    <a href="login.php" class="btn btn-secondary">
+                        <i class="fas fa-sign-in-alt"></i> Connexion
+                    </a>
+                    <a href="register.php" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i> Inscription
+                    </a>
+                </div>
+            <?php endif; ?>
         </div>
     </header>
 

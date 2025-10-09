@@ -1,16 +1,29 @@
 <?php
-// gallery.php
+// gallery.php - VERSION SIMPLIFIÉE
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once 'config.php';
 require_once 'auth.php';
-require_once 'projects.php';
 
-$page = $_GET['page'] ?? 1;
-$limit = 12;
-$offset = ($page - 1) * $limit;
+echo "<!-- Debug: Session started -->";
 
-$projects = ProjectManager::getPublicProjects($limit, $offset);
-$totalProjects = count(ProjectManager::getPublicProjects(1000, 0)); // Simple count
-$totalPages = ceil($totalProjects / $limit);
+$projects = [];
+try {
+    $db = getDB();
+    $stmt = $db->prepare("
+        SELECT p.*, u.username, u.avatar_url 
+        FROM projects p 
+        JOIN users u ON p.user_id = u.id 
+        WHERE p.is_public = 1 
+        ORDER BY p.created_at DESC 
+        LIMIT 20
+    ");
+    $stmt->execute();
+    $projects = $stmt->fetchAll();
+} catch (Exception $e) {
+    echo "<!-- Error: " . $e->getMessage() . " -->";
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">

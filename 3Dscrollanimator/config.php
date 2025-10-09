@@ -18,21 +18,12 @@ function getDB() {
                 "mysql:host=" . Config::DB_HOST . ";dbname=" . Config::DB_NAME . ";charset=utf8",
                 Config::DB_USER,
                 Config::DB_PASS,
-                [
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-                ]
+                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
             );
         } catch (PDOException $e) {
-            die("Erreur base de données: " . $e->getMessage());
+            die("Erreur BDD: " . $e->getMessage());
         }
     }
     return $db;
 }
-
-/* Démarrer la session ou laisser aut s'en charger 
-session_name(Config::SESSION_NAME);
-session_set_cookie_params(Config::SESSION_LIFETIME);
-session_start();
-*/
 ?>
