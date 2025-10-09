@@ -1,6 +1,6 @@
 -- database.sql
-CREATE DATABASE IF NOT EXISTS scroll3d_editor;
-USE scroll3d_editor;
+CREATE DATABASE IF NOT EXISTS scroll3d_edit;
+USE scroll3d_edit;
 
 -- Table des utilisateurs
 CREATE TABLE users (

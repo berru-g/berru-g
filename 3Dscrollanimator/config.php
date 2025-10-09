@@ -2,9 +2,9 @@
 // config.php
 class Config {
     const DB_HOST = 'localhost';
-    const DB_NAME = 'scroll3d_editor';
-    const DB_USER = 'ton_username';
-    const DB_PASS = 'ton_password';
+    const DB_NAME = 'u667977963_scroll3d_edit';
+    const DB_USER = 'u667977963_3dedit';
+    const DB_PASS = '@m#ur2Saas';
     const SESSION_NAME = 'scroll3d_auth';
     const SESSION_LIFETIME = 86400; // 24 heures
 }
