@@ -82,19 +82,19 @@ $loadProjectId = $_GET['load_project'] ?? null;
     <div id="notification-container" class="notification-container"></div>
 
     <header class="header">
-        <a href="/" class="logo">
+        <a href="index.php" class="logo">
             3D Scroll Animator
         </a>
 
         <nav class="nav-links">
             <a href="#editor">Éditeur</a>
             <a href="gallery.php">Galerie</a>
-            <a href="#pricing">Tarifs</a>
+            <a href="dashboard.php">Dashboard</a>
         </nav>
 
         <div class="auth-section">
             <!-- État non connecté -->
-            <div id="guest-menu" class="auth-buttons" style="<?= Auth::isLoggedIn() ? 'display:none;' : 'display:block;' ?>">
+            <div id="guest-menu" class="auth-buttons" style="<?= Auth::isLoggedIn() ? 'display:none;' : 'display:flex;' ?>">
                 <a href="login.php" class="btn btn-secondary">
                     <i class="fas fa-sign-in-alt"></i> Connexion
                 </a>

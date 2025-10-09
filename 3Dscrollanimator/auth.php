@@ -3,7 +3,16 @@
 require_once 'config.php';
 
 class Auth {
+    public static function initSession() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_name(Config::SESSION_NAME);
+            session_set_cookie_params(Config::SESSION_LIFETIME);
+            session_start();
+        }
+    }
+    
     public static function login($email, $password) {
+        self::initSession();
         $db = getDB();
         $stmt = $db->prepare("SELECT * FROM users WHERE email = ?");
         $stmt->execute([$email]);
@@ -15,6 +24,7 @@ class Auth {
             $_SESSION['user_name'] = $user['username'];
             $_SESSION['user_avatar'] = $user['avatar_url'];
             $_SESSION['subscription'] = $user['subscription_type'];
+            $_SESSION['logged_in'] = true;
             
             return true;
         }
@@ -22,6 +32,7 @@ class Auth {
     }
     
     public static function register($username, $email, $password) {
+        self::initSession();
         $db = getDB();
         
         // Vérifier si l'email ou username existe déjà
@@ -37,19 +48,21 @@ class Auth {
         $result = $stmt->execute([$username, $email, $passwordHash]);
         
         if ($result) {
+            // Se connecter automatiquement après l'inscription
             return self::login($email, $password);
         }
         return false;
     }
     
     public static function logout() {
+        self::initSession();
+        $_SESSION = array();
         session_destroy();
-        header('Location: index.php');
-        exit;
     }
     
     public static function isLoggedIn() {
-        return isset($_SESSION['user_id']);
+        self::initSession();
+        return isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
     }
     
     public static function getCurrentUser() {
@@ -81,5 +94,12 @@ class Auth {
         $stmt = $db->prepare($sql);
         return $stmt->execute($params);
     }
+}
+
+// Gestion de la déconnexion
+if (isset($_GET['logout'])) {
+    Auth::logout();
+    header('Location: index.php');
+    exit;
 }
 ?>

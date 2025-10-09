@@ -30,8 +30,9 @@ function getDB() {
     return $db;
 }
 
-// Démarrer la session
+/* Démarrer la session ou laisser aut s'en charger 
 session_name(Config::SESSION_NAME);
 session_set_cookie_params(Config::SESSION_LIFETIME);
 session_start();
+*/
 ?>

@@ -3,7 +3,7 @@
 require_once 'auth.php';
 
 if (Auth::isLoggedIn()) {
-    header('Location: dashboard.php');
+    header('Location: index.php');
     exit;
 }
 
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Le mot de passe doit faire au moins 6 caractères';
     } else {
         if (Auth::register($username, $email, $password)) {
-            header('Location: dashboard.php');
+            header('Location: index.php');
             exit;
         } else {
             $error = 'Cet email ou nom d\'utilisateur est déjà utilisé';
@@ -50,12 +50,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form method="POST">
                 <div style="margin-bottom: 1rem;">
                     <label style="display: block; margin-bottom: 0.5rem; color: var(--rose);">Nom d'utilisateur</label>
-                    <input type="text" name="username" required style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border); background: var(--grey); color: white;">
+                    <input type="text" name="username" required value="<?= htmlspecialchars($_POST['username'] ?? '') ?>" style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border); background: var(--grey); color: white;">
                 </div>
                 
                 <div style="margin-bottom: 1rem;">
                     <label style="display: block; margin-bottom: 0.5rem; color: var(--rose);">Email</label>
-                    <input type="email" name="email" required style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border); background: var(--grey); color: white;">
+                    <input type="email" name="email" required value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border); background: var(--grey); color: white;">
                 </div>
                 
                 <div style="margin-bottom: 1rem;">

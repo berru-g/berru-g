@@ -3,7 +3,7 @@
 require_once 'auth.php';
 
 if (Auth::isLoggedIn()) {
-    header('Location: dashboard.php');
+    header('Location: index.php');
     exit;
 }
 
@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     
     if (Auth::login($email, $password)) {
-        header('Location: dashboard.php');
+        header('Location: index.php');
         exit;
     } else {
         $error = 'Email ou mot de passe incorrect';
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form method="POST">
                 <div style="margin-bottom: 1rem;">
                     <label style="display: block; margin-bottom: 0.5rem; color: var(--rose);">Email</label>
-                    <input type="email" name="email" required style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border); background: var(--grey); color: white;">
+                    <input type="email" name="email" required value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border); background: var(--grey); color: white;">
                 </div>
                 
                 <div style="margin-bottom: 1.5rem;">
