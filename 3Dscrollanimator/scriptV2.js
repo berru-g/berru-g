@@ -1,5 +1,4 @@
 // Éditeur 3D No-Code - Approche éprouvée
-
 // systeme d'alert 
 // Système de notifications élégant
 class NotificationSystem {
@@ -1115,36 +1114,12 @@ document.addEventListener('DOMContentLoaded', function () {
 // ======================================
 // AUTHENTIFICATION SIMPLIFIÉE
 // ======================================
+// ======================================
+// AUTHENTIFICATION - UNE SEULE SECTION
+// ======================================
 
-let currentUser = null;
-let userSubscription = 'free';
-
-// Au chargement, récupérer l'état de connexion depuis le HTML
-function initAuth() {
-    // Vérifier si l'utilisateur est connecté via les éléments PHP
-    const userMenu = document.getElementById('user-menu');
-    const guestMenu = document.getElementById('guest-menu');
-    
-    if (userMenu && userMenu.style.display !== 'none') {
-        // Utilisateur connecté - récupérer les infos depuis le DOM
-        const userNameElement = document.getElementById('user-name');
-        const userAvatarElement = document.getElementById('user-avatar');
-        
-        if (userNameElement) {
-            currentUser = {
-                username: userNameElement.textContent,
-                avatar: userAvatarElement ? userAvatarElement.textContent : 'U'
-            };
-            userSubscription = 'free'; // Par défaut gratuit
-            console.log('✅ Utilisateur connecté:', currentUser.username);
-        }
-    } else {
-        console.log('❌ Utilisateur non connecté');
-        currentUser = null;
-    }
-    
-    updateUI();
-}
+let currentUser = window.currentUser || null;
+let userSubscription = window.userSubscription || 'free';
 
 // Mettre à jour l'interface
 function updateUI() {
@@ -1153,6 +1128,8 @@ function updateUI() {
     const codeGuest = document.getElementById('code-guest');
     const codeFreeUser = document.getElementById('code-free-user');
     const codeProUser = document.getElementById('code-pro-user');
+
+    console.log('updateUI() - currentUser:', currentUser);
 
     if (currentUser) {
         if (guestMenu) guestMenu.style.display = 'none';
@@ -1184,15 +1161,10 @@ function closeAuthModal() {
     document.getElementById('auth-modal').style.display = 'none';
 }
 
-// 🖱️ Fermer la modal en cliquant à l'extérieur
-document.getElementById('auth-modal').addEventListener('click', function(e) {
-    if (e.target === this) closeAuthModal();
-});
-
 // Au chargement
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialiser l'auth après le chargement complet
-    setTimeout(initAuth, 100);
+    console.log('DOM loaded - currentUser:', currentUser);
+    updateUI();
     
     // Vérifier si on doit charger un projet
     const urlParams = new URLSearchParams(window.location.search);
@@ -1202,4 +1174,9 @@ document.addEventListener('DOMContentLoaded', function() {
             loadProject(loadProjectId);
         }, 2000);
     }
+});
+
+// 🖱️ Fermer la modal en cliquant à l'extérieur
+document.getElementById('auth-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeAuthModal();
 });

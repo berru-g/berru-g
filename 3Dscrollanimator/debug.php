@@ -1,26 +1,24 @@
 <?php
-// debug_sessions.php
-session_start();
-echo "<h1>Debug Sessions</h1>";
+echo "=== DÉBUT DEBUG ===<br>";
 
-echo "<h3>Session ID: " . session_id() . "</h3>";
-echo "<h3>Session Status: " . session_status() . "</h3>";
+// Test config.php
+echo "1. Chargement config.php... ";
+require_once 'config.php';
+echo "OK<br>";
 
-echo "<h3>Session Data:</h3>";
-echo "<pre>";
-print_r($_SESSION);
-echo "</pre>";
+// Test auth.php  
+echo "2. Chargement auth.php... ";
+require_once 'auth.php';
+echo "OK<br>";
 
-echo "<h3>Cookies:</h3>";
-echo "<pre>";
-print_r($_COOKIE);
-echo "</pre>";
+// Test si Auth fonctionne
+echo "3. Test Auth::isLoggedIn()... ";
+var_dump(Auth::isLoggedIn());
+echo "<br>";
 
-// Test de connexion manuelle
-if (isset($_GET['test_login'])) {
-    $_SESSION['user_id'] = 1;
-    $_SESSION['user_name'] = "Test User";
-    $_SESSION['logged_in'] = true;
-    echo "<p style='color: green;'>Session forcée - Recharge la page</p>";
-}
+echo "4. Session data: ";
+var_dump($_SESSION);
+echo "<br>";
+
+echo "=== FIN DEBUG ===<br>";
 ?>

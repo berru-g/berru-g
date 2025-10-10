@@ -27,6 +27,7 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,8 +35,10 @@ try {
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body>
-    <header class="header">
+    <?php require_once 'header.php'; ?>
+    <!--<header class="header">
         <a href="index.php" class="logo">3D Scroll Animator</a>
         <nav class="nav-links">
             <a href="index.php">Éditeur</a>
@@ -57,7 +60,7 @@ try {
                 </div>
             <?php endif; ?>
         </div>
-    </header>
+    </header>-->
 
     <main style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
         <h1 style="text-align: center; margin-bottom: 2rem; color: var(--primary);">
@@ -93,13 +96,16 @@ try {
                             align-items: center;
                             margin-bottom: 1rem;
                         ">
-                            <img src="<?= htmlspecialchars($project['avatar_url']) ?>" 
-                                 alt="<?= htmlspecialchars($project['username']) ?>"
-                                 style="width: 40px; height: 40px; border-radius: 50%; margin-right: 1rem;">
+                            <img src="<?= htmlspecialchars($project['avatar_url']) ?>"
+                                alt="<?= htmlspecialchars($project['username']) ?>"
+                                style="width: 40px; height: 40px; border-radius: 50%; margin-right: 1rem;">
                             <div>
                                 <h4 style="margin: 0; color: var(--rose);"><?= htmlspecialchars($project['title']) ?></h4>
                                 <p style="margin: 0; color: var(--primary); font-size: 0.9rem;">
-                                    par <?= htmlspecialchars($project['username']) ?>
+                                    par <a href="user_profile.php?id=<?= $project['user_id'] ?>"
+                                        style="color: var(--primary); text-decoration: none; font-weight: 600;">
+                                        <?= htmlspecialchars($project['username']) ?>
+                                    </a>
                                 </p>
                             </div>
                         </div>
@@ -124,11 +130,11 @@ try {
 
                         <div class="project-actions" style="display: flex; gap: 0.5rem;">
                             <button class="btn btn-secondary" style="flex: 1; font-size: 0.8rem;"
-                                    onclick="viewProject(<?= $project['id'] ?>)">
+                                onclick="viewProject(<?= $project['id'] ?>)">
                                 <i class="fas fa-eye"></i> Voir
                             </button>
                             <button class="btn btn-secondary" style="flex: 1; font-size: 0.8rem;"
-                                    onclick="likeProject(<?= $project['id'] ?>, this)">
+                                onclick="likeProject(<?= $project['id'] ?>, this)">
                                 <i class="far fa-heart"></i> Like
                             </button>
                         </div>
@@ -140,9 +146,8 @@ try {
             <?php if ($totalPages > 1): ?>
                 <div style="text-align: center;">
                     <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <a href="?page=<?= $i ?>" 
-                           class="btn <?= $i == $page ? 'btn-primary' : 'btn-secondary' ?>"
-                           style="margin: 0 0.25rem;">
+                        <a href="?page=<?= $i ?>" class="btn <?= $i == $page ? 'btn-primary' : 'btn-secondary' ?>"
+                            style="margin: 0 0.25rem;">
                             <?= $i ?>
                         </a>
                     <?php endfor; ?>
@@ -152,34 +157,35 @@ try {
     </main>
 
     <script>
-    function viewProject(projectId) {
-        window.location.href = `project.php?id=${projectId}`;
-    }
-
-    async function likeProject(projectId, button) {
-        try {
-            const formData = new FormData();
-            formData.append('action', 'like_project');
-            formData.append('project_id', projectId);
-
-            const response = await fetch('api.php', {
-                method: 'POST',
-                body: formData
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                button.innerHTML = '<i class="fas fa-heart"></i> Liké!';
-                button.style.background = 'var(--primary)';
-            } else {
-                alert('Erreur: ' + result.message);
-            }
-        } catch (error) {
-            console.error('Erreur:', error);
-            alert('Erreur réseau');
+        function viewProject(projectId) {
+            window.location.href = `project.php?id=${projectId}`;
         }
-    }
+
+        async function likeProject(projectId, button) {
+            try {
+                const formData = new FormData();
+                formData.append('action', 'like_project');
+                formData.append('project_id', projectId);
+
+                const response = await fetch('api.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    button.innerHTML = '<i class="fas fa-heart"></i> Liké!';
+                    button.style.background = 'var(--primary)';
+                } else {
+                    alert('Erreur: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Erreur réseau');
+            }
+        }
     </script>
 </body>
+
 </html>

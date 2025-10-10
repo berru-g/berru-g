@@ -2,24 +2,27 @@
 // projects.php
 require_once 'config.php';
 
-class ProjectManager {
-    public static function saveProject($userId, $title, $description, $modelData, $isPublic = false) {
+class ProjectManager
+{
+    public static function saveProject($userId, $title, $description, $modelData, $isPublic = false)
+    {
         $db = getDB();
         $stmt = $db->prepare("
             INSERT INTO projects (user_id, title, description, model_data, is_public) 
             VALUES (?, ?, ?, ?, ?)
         ");
-        
+
         return $stmt->execute([
-            $userId, 
-            $title, 
-            $description, 
-            json_encode($modelData), 
+            $userId,
+            $title,
+            $description,
+            json_encode($modelData),
             $isPublic ? 1 : 0
         ]);
     }
-    
-    public static function getUserProjects($userId) {
+
+    public static function getUserProjects($userId)
+    {
         $db = getDB();
         $stmt = $db->prepare("
             SELECT * FROM projects 
@@ -29,8 +32,9 @@ class ProjectManager {
         $stmt->execute([$userId]);
         return $stmt->fetchAll();
     }
-    
-    public static function getPublicProjects($limit = 20, $offset = 0) {
+
+    public static function getPublicProjects($limit = 20, $offset = 0)
+    {
         $db = getDB();
         $stmt = $db->prepare("
             SELECT p.*, u.username, u.avatar_url,
@@ -45,8 +49,9 @@ class ProjectManager {
         $stmt->execute([$limit, $offset]);
         return $stmt->fetchAll();
     }
-    
-    public static function getProject($projectId) {
+
+    public static function getProject($projectId)
+    {
         $db = getDB();
         $stmt = $db->prepare("
             SELECT p.*, u.username, u.avatar_url, u.website
@@ -57,8 +62,9 @@ class ProjectManager {
         $stmt->execute([$projectId]);
         return $stmt->fetch();
     }
-    
-    public static function likeProject($projectId, $userId) {
+
+    public static function likeProject($projectId, $userId)
+    {
         $db = getDB();
         try {
             $stmt = $db->prepare("
@@ -71,8 +77,9 @@ class ProjectManager {
             return false;
         }
     }
-    
-    public static function unlikeProject($projectId, $userId) {
+
+    public static function unlikeProject($projectId, $userId)
+    {
         $db = getDB();
         $stmt = $db->prepare("
             DELETE FROM project_likes 
@@ -80,8 +87,9 @@ class ProjectManager {
         ");
         return $stmt->execute([$projectId, $userId]);
     }
-    
-    public static function addComment($projectId, $userId, $comment) {
+
+    public static function addComment($projectId, $userId, $comment)
+    {
         $db = getDB();
         $stmt = $db->prepare("
             INSERT INTO project_comments (project_id, user_id, comment) 
@@ -89,8 +97,9 @@ class ProjectManager {
         ");
         return $stmt->execute([$projectId, $userId, $comment]);
     }
-    
-    public static function getProjectComments($projectId) {
+
+    public static function getProjectComments($projectId)
+    {
         $db = getDB();
         $stmt = $db->prepare("
             SELECT c.*, u.username, u.avatar_url
@@ -102,8 +111,9 @@ class ProjectManager {
         $stmt->execute([$projectId]);
         return $stmt->fetchAll();
     }
-    
-    public static function isLikedByUser($projectId, $userId) {
+
+    public static function isLikedByUser($projectId, $userId)
+    {
         $db = getDB();
         $stmt = $db->prepare("
             SELECT id FROM project_likes 
@@ -111,6 +121,21 @@ class ProjectManager {
         ");
         $stmt->execute([$projectId, $userId]);
         return $stmt->fetch() !== false;
+    }
+    // Dans projects.php, ajoute cette fonction :
+    public static function getUserPublicProjects($userId)
+    {
+        $db = getDB();
+        $stmt = $db->prepare("
+        SELECT p.*,
+        (SELECT COUNT(*) FROM project_likes WHERE project_id = p.id) as like_count,
+        (SELECT COUNT(*) FROM project_comments WHERE project_id = p.id) as comment_count
+        FROM projects p 
+        WHERE p.user_id = ? AND p.is_public = TRUE 
+        ORDER BY p.created_at DESC
+    ");
+        $stmt->execute([$userId]);
+        return $stmt->fetchAll();
     }
 }
 ?>
