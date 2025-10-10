@@ -1,3 +1,26 @@
+:root {
+    --white: #f1f1f1;
+    --dark: #151517;
+    --grey: #1b1b1c;
+    --grey-light: #2c2c2e;
+    --primary: #ab9ff2;
+    --rose: #cba6f7;
+    --border: #dcdcdc;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --input: #f9f9f9;
+    --secondary: #2575fc;
+    --success: #60d394;
+    --error: #ee6055;
+    --jaune: #ffd97d;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .modern-header {
     background: rgba(21, 21, 23, 0.95);
     backdrop-filter: blur(10px);
@@ -18,13 +41,19 @@
 }
 
 .logo {
-    font-size: 1.8rem;
-    font-weight: bold;
+    font-size: 0.7rem;
+    font-weight: lighter;
     color: var(--rose);
     text-decoration: none;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+}
+h1 {
+    font-size: 0.1rem;
+    font-weight:lighter;
+    color: var(--rose);
+    text-decoration: none;
 }
 
 .logo-icon {

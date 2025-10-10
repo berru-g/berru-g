@@ -63,9 +63,44 @@ try {
     </header>-->
 
     <main style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
-        <h1 style="text-align: center; margin-bottom: 2rem; color: var(--primary);">
-            Galerie des Projets Communautaires
-        </h1>
+        <!--<h1 style="text-align: left; margin-bottom: 2rem; color: var(--primary);">
+            Galerie
+        </h1>-->
+
+        <!-- barre de recherche -->
+        <div class="search-autocomplete">
+            <input type="text" id="search-input" placeholder="Search..." autocomplete="off">
+            <div id="suggestions-container"></div>
+        </div>
+
+        <script>
+            document.getElementById('search-input').addEventListener('input', function (e) {
+                const term = e.target.value;
+
+                if (term.length < 2) {
+                    document.getElementById('suggestions-container').innerHTML = '';
+                    return;
+                }
+
+                fetch(`search_ajax.php?term=${encodeURIComponent(term)}`)
+                    .then(response => response.json())
+                    .then(suggestions => {
+                        const container = document.getElementById('suggestions-container');
+                        container.innerHTML = '';
+
+                        suggestions.forEach(item => {
+                            const div = document.createElement('div');
+                            div.textContent = item.name;
+                            div.className = 'suggestion-item';
+                            div.addEventListener('click', () => {
+                                document.getElementById('search-input').value = item.name;
+                                container.innerHTML = '';
+                            });
+                            container.appendChild(div);
+                        });
+                    });
+            });
+        </script>
 
         <?php if (empty($projects)): ?>
             <div style="text-align: center; padding: 4rem; color: var(--rose);">

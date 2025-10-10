@@ -245,7 +245,7 @@ require_once 'auth.php';
     <header class="modern-header">
         <div class="header-left">
             <a href="index.php" class="logo">
-                <i class="fas fa-cube logo-icon"></i>
+                
                 <span>3DScrollAnimate</span>
             </a>
             

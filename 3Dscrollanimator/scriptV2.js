@@ -1116,6 +1116,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // ======================================
 
 let currentUser = window.currentUser || null;
+// pro par defaut en attendant de mettre en place le systeme de paiment 
 let userSubscription = window.userSubscription || 'pro'; // function a revoir car bug le deverrouillage en ligne mais fonctionne en local
 // Mettre à jour l'interface
 function updateUI() {

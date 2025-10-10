@@ -229,11 +229,15 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                     <button class="btn" id="record-btn" onclick="saveProject()" style="margin-top: 10px;">
                         <i class="fa-solid fa-floppy-disk"></i> Save Project
                     </button>
-                    <div class="input-group" style="margin-top: 10px; margin-left: 20px;">Rendre public
-                        <label>
-                            <input type="checkbox" id="make-public">
+
+                    <div class="toggle-container" style="margin-top: 10px; margin-left: 0px;">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="make-public" class="toggle-input">
+                            <span class="toggle-slider"></span>
+                            <span class="toggle-text">Rendre public</span>
                         </label>
                     </div>
+
                 <?php else: ?>
                     <div style="background: var(--grey-light); padding: 10px; border-radius: 6px; margin-top: 10px;">
                         <p style="margin: 0; color: var(--rose); font-size: 0.9rem;">
