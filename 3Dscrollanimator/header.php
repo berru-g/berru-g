@@ -252,11 +252,11 @@ require_once 'auth.php';
             <div class="nav-icons">
                 <a href="index.php" class="nav-icon <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
                     <i class="fas fa-edit"></i>
-                    <span>Éditeur</span>
+                    <span>Editor</span>
                 </a>
                 <a href="gallery.php" class="nav-icon <?= basename($_SERVER['PHP_SELF']) == 'gallery.php' ? 'active' : '' ?>">
                     <i class="fas fa-images"></i>
-                    <span>Galerie</span>
+                    <span>Trending</span>
                 </a>
             </div>
         </div>

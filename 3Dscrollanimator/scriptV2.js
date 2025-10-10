@@ -1127,10 +1127,10 @@ function updateUI() {
 
     console.log('updateUI() - currentUser:', currentUser);
 
-    if (currentUser) {
+    if (currentUser) {//connected
         if (guestMenu) guestMenu.style.display = 'none';
         if (userMenu) userMenu.style.display = 'flex';
-        if (codeGuest) codeGuest.style.display = 'block'; // none de base
+        if (codeGuest) codeGuest.style.display = 'flex'; // none de base
 
         if (userSubscription === 'pro') {
             if (codeFreeUser) codeFreeUser.style.display = 'none';
@@ -1139,7 +1139,7 @@ function updateUI() {
             if (codeFreeUser) codeFreeUser.style.display = 'block';
             if (codeProUser) codeProUser.style.display = 'none';
         }
-    } else {
+    } else {//deconnnected
         if (guestMenu) guestMenu.style.display = 'block';
         if (userMenu) userMenu.style.display = 'none';
         if (codeGuest) codeGuest.style.display = 'block';
