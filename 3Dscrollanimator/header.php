@@ -1,23 +1,10 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// header_start.php
 require_once 'config.php';
 require_once 'auth.php';
-
-if (isset($_SESSION['user_id'])) {
-    echo "<script>
-        window.currentUser = " . json_encode($_SESSION['username']) . ";
-        window.userSubscription = " . json_encode($_SESSION['subscription'] ?? 'free') . ";
-    </script>";
-} else {
-    echo "<script>
-        window.currentUser = null;
-        window.userSubscription = 'free';
-    </script>";
-}
 ?>
-
+<!DOCTYPE html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -126,8 +113,7 @@ if (isset($_SESSION['user_id'])) {
             display: flex;
             gap: 0.8rem;
         }
-
-        /*
+/*
         .btn {
             padding: 0.6rem 1.2rem;
             border-radius: 25px;
@@ -239,73 +225,69 @@ if (isset($_SESSION['user_id'])) {
             .modern-header {
                 padding: 0.8rem 1rem;
             }
-
+            
             .nav-icon span {
                 display: none;
             }
-
+            
             .nav-icon {
                 padding: 0.6rem;
             }
-
+            
             .btn {
                 padding: 0.6rem 1rem;
                 font-size: 0.8rem;
             }
         }
     </style>
-    <script src="scriptV2.js"></script>
 </head>
-
 <body>
     <header class="modern-header">
         <div class="header-left">
             <a href="index.php" class="logo">
                 <i class="fas fa-cube logo-icon"></i>
-                <span>3DScrollAnimator</span>
+                <span>3DScrollAnimate</span>
             </a>
-
+            
             <div class="nav-icons">
-                <a href="index.php"
-                    class="nav-icon <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
+                <a href="index.php" class="nav-icon <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
                     <i class="fas fa-edit"></i>
-                    <span>Editor</span>
+                    <span>Edit</span>
                 </a>
-                <a href="gallery.php"
-                    class="nav-icon <?= basename($_SERVER['PHP_SELF']) == 'gallery.php' ? 'active' : '' ?>">
+                <a href="gallery.php" class="nav-icon <?= basename($_SERVER['PHP_SELF']) == 'gallery.php' ? 'active' : '' ?>">
                     <i class="fas fa-images"></i>
                     <span>Trending</span>
                 </a>
             </div>
         </div>
-
+        
         <div class="header-right">
             <?php if (Auth::isLoggedIn()): ?>
                 <div class="user-menu">
                     <div class="user-avatar">
                         <?= strtoupper(substr($_SESSION['user_name'], 0, 1)) ?>
                     </div>
-
+                    
                     <div class="user-dropdown">
                         <div class="user-dropdown-item">
                             <i class="fas fa-user"></i>
                             <span><?= htmlspecialchars($_SESSION['user_name']) ?></span>
                         </div>
-
+                        
                         <div class="user-dropdown-divider"></div>
-
+                        
                         <a href="dashboard.php" class="user-dropdown-item">
                             <i class="fas fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </a>
-
-
-
+                        
+                        
+                        
                         <div class="user-dropdown-divider"></div>
-
+                        
                         <a href="?logout" class="user-dropdown-item">
                             <i class="fas fa-sign-out-alt"></i>
-                            <span>Déconnexion</span>
+                            <span>Log Out</span>
                         </a>
                     </div>
                 </div>
@@ -313,11 +295,11 @@ if (isset($_SESSION['user_id'])) {
                 <div class="auth-buttons">
                     <a href="login.php" class="btn btn-secondary">
                         <i class="fas fa-sign-in-alt"></i>
-                        <span>Connexion</span>
+                        <span>Log In</span>
                     </a>
                     <a href="register.php" class="btn btn-primary">
                         <i class="fas fa-user-plus"></i>
-                        <span>Inscription</span>
+                        <span>Sign Up</span>
                     </a>
                 </div>
             <?php endif; ?>
@@ -325,3 +307,4 @@ if (isset($_SESSION['user_id'])) {
     </header>
 
     <main>
+        
