@@ -3,8 +3,7 @@
 require_once 'config.php';
 require_once 'auth.php';
 ?>
-<!DOCTYPE html>
-<html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -113,7 +112,8 @@ require_once 'auth.php';
             display: flex;
             gap: 0.8rem;
         }
-/*
+
+        /*
         .btn {
             padding: 0.6rem 1.2rem;
             border-radius: 25px;
@@ -225,22 +225,24 @@ require_once 'auth.php';
             .modern-header {
                 padding: 0.8rem 1rem;
             }
-            
+
             .nav-icon span {
                 display: none;
             }
-            
+
             .nav-icon {
                 padding: 0.6rem;
             }
-            
+
             .btn {
                 padding: 0.6rem 1rem;
                 font-size: 0.8rem;
             }
         }
     </style>
+    <script src="scriptV2.js"></script>
 </head>
+
 <body>
     <header class="modern-header">
         <div class="header-left">
@@ -249,42 +251,50 @@ require_once 'auth.php';
                 <span>3DScrollAnimator</span>
             </a>
             
+            <?php
+            echo '<pre>SESSION: ';
+            print_r($_SESSION);
+            echo '</pre>';
+            ?>
+
             <div class="nav-icons">
-                <a href="index.php" class="nav-icon <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
+                <a href="index.php"
+                    class="nav-icon <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
                     <i class="fas fa-edit"></i>
                     <span>Editor</span>
                 </a>
-                <a href="gallery.php" class="nav-icon <?= basename($_SERVER['PHP_SELF']) == 'gallery.php' ? 'active' : '' ?>">
+                <a href="gallery.php"
+                    class="nav-icon <?= basename($_SERVER['PHP_SELF']) == 'gallery.php' ? 'active' : '' ?>">
                     <i class="fas fa-images"></i>
                     <span>Trending</span>
                 </a>
             </div>
         </div>
-        
+
         <div class="header-right">
             <?php if (Auth::isLoggedIn()): ?>
                 <div class="user-menu">
                     <div class="user-avatar">
                         <?= strtoupper(substr($_SESSION['user_name'], 0, 1)) ?>
                     </div>
-                    
+
                     <div class="user-dropdown">
                         <div class="user-dropdown-item">
                             <i class="fas fa-user"></i>
                             <span><?= htmlspecialchars($_SESSION['user_name']) ?></span>
                         </div>
-                        
+
                         <div class="user-dropdown-divider"></div>
-                        
+
                         <a href="dashboard.php" class="user-dropdown-item">
                             <i class="fas fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </a>
-                        
-                        
-                        
+
+
+
                         <div class="user-dropdown-divider"></div>
-                        
+
                         <a href="?logout" class="user-dropdown-item">
                             <i class="fas fa-sign-out-alt"></i>
                             <span>Déconnexion</span>
@@ -307,4 +317,3 @@ require_once 'auth.php';
     </header>
 
     <main>
-        

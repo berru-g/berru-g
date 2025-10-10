@@ -1130,7 +1130,7 @@ function updateUI() {
     if (currentUser) {//connected
         if (guestMenu) guestMenu.style.display = 'none';
         if (userMenu) userMenu.style.display = 'flex';
-        if (codeGuest) codeGuest.style.display = 'flex'; // none de base
+        if (codeGuest) codeGuest.style.display = 'none'; // none de base
 
         if (userSubscription === 'pro') {
             if (codeFreeUser) codeFreeUser.style.display = 'none';
