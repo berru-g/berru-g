@@ -1116,7 +1116,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // ======================================
 
 let currentUser = window.currentUser || null;
-let userSubscription = window.userSubscription || 'free'; // function a revoir car bug le deverrouillage en ligne mais fonctionne en local
+let userSubscription = window.userSubscription || 'pro'; // function a revoir car bug le deverrouillage en ligne mais fonctionne en local
 // Mettre à jour l'interface
 function updateUI() {
     const guestMenu = document.getElementById('guest-menu');
