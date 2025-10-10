@@ -1,7 +1,21 @@
 <?php
-// header_start.php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once 'config.php';
 require_once 'auth.php';
+
+if (isset($_SESSION['user_id'])) {
+    echo "<script>
+        window.currentUser = " . json_encode($_SESSION['username']) . ";
+        window.userSubscription = " . json_encode($_SESSION['subscription'] ?? 'free') . ";
+    </script>";
+} else {
+    echo "<script>
+        window.currentUser = null;
+        window.userSubscription = 'free';
+    </script>";
+}
 ?>
 
 <head>
@@ -250,12 +264,6 @@ require_once 'auth.php';
                 <i class="fas fa-cube logo-icon"></i>
                 <span>3DScrollAnimator</span>
             </a>
-            
-            <?php
-            echo '<pre>SESSION: ';
-            print_r($_SESSION);
-            echo '</pre>';
-            ?>
 
             <div class="nav-icons">
                 <a href="index.php"
