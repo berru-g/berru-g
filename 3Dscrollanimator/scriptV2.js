@@ -1112,15 +1112,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 // ======================================
-// AUTHENTIFICATION SIMPLIFIÉE
-// ======================================
-// ======================================
-// AUTHENTIFICATION - UNE SEULE SECTION
+// AUTHENTIFICATION ET AUTORISATION USER = FREE / PRO
 // ======================================
 
 let currentUser = window.currentUser || null;
-let userSubscription = window.userSubscription || 'free';
-
+let userSubscription = window.userSubscription || 'pro'; // function a revoir car bug au deverrouillage
 // Mettre à jour l'interface
 function updateUI() {
     const guestMenu = document.getElementById('guest-menu');
