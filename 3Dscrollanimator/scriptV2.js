@@ -1116,7 +1116,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // ======================================
 
 let currentUser = window.currentUser || null;
-let userSubscription = window.userSubscription || 'pro'; // function a revoir car bug au deverrouillage
+let userSubscription = window.userSubscription || 'free'; // function a revoir car bug le deverrouillage en ligne mais fonctionne en local
 // Mettre à jour l'interface
 function updateUI() {
     const guestMenu = document.getElementById('guest-menu');
@@ -1130,7 +1130,7 @@ function updateUI() {
     if (currentUser) {
         if (guestMenu) guestMenu.style.display = 'none';
         if (userMenu) userMenu.style.display = 'flex';
-        if (codeGuest) codeGuest.style.display = 'none';
+        if (codeGuest) codeGuest.style.display = 'block'; // none de base
 
         if (userSubscription === 'pro') {
             if (codeFreeUser) codeFreeUser.style.display = 'none';

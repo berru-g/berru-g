@@ -246,7 +246,7 @@ require_once 'auth.php';
         <div class="header-left">
             <a href="index.php" class="logo">
                 <i class="fas fa-cube logo-icon"></i>
-                <span>ScrollForge3D</span>
+                <span>3DScrollAnimator</span>
             </a>
             
             <div class="nav-icons">
