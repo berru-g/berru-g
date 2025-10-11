@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Éditeur d'Animation 3D avec Scroll</title>
+    <link rel="shortcut icon" href="/img/drone-logo.png" />
+    <link rel="apple-touch-icon" href="/img/drone-logo.png" />
+    <meta name="description"
+        content="Créez des animations 3D époustouflantes sans une ligne de code. Importez vos modèles 3D, définissez des keyframes et générez du code prêt à l'emploi pour vos projets web.">
+    <meta name="keywords"
+        content="3D generator scroll, Animation, Scroll, WebGL, Three.js, GLTF, GLB, Keyframes, Code Generator, Web Development, Interactive, Visual Effects">
+    <meta name="author" content="berru-g">
+    <meta name="robots" content="noai">
+    <meta property="og:title" content="Éditeur d'Animation 3D avec Scroll">
+    <meta property="og:description"
+        content="Créez des animations 3D sans une ligne de code. Importez vos modèles 3D, définissez des keyframes et générez du code prêt à l'emploi pour vos projets web.">
+    <meta property="og:image"
+        content="https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/3dscrollanimator_preview.png">
+    <meta property="og:url" content="https://gael-berru.com">
+    <link rel="canonical" href="https://gael-berru.com" />
+
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "3D Scroll Animator",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Web Browser",
+  "description": "Éditeur no-code pour créer des animations 3D interactives basées sur le scroll. Créez des expériences web immersives sans programmation.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR",
+    "description": "Plan gratuit avec projet illimité à vie + fonctionnalités premium"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Berru-G",
+    "url": "https://gael-berru.com"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "150"
+  },
+  "featureList": [
+    "Éditeur visuel 3D no-code",
+    "Animation basée sur le scroll",
+    "Import modèles GLB/GLTF",
+    "Export code Three.js prêt à l'emploi",
+    "Galerie communautaire",
+    "Sauvegarde cloud"
+  ],
+  "screenshot": [
+    {
+      "@type": "ImageObject",
+      "caption": "Interface de l'éditeur 3D no-code",
+      "url": "https://gael-berru.com/img/3Dscrollanimator.png"
+    },
+    {
+      "@type": "ImageObject", 
+      "caption": "Galerie des créations utilisateurs",
+      "url": "https://gael-berru.com/img/3Dscrollanimator.png"
+    }
+  ],
+  "softwareVersion": "1.0",
+  "releaseNotes": "Version initiale avec éditeur 3D, système de keyframes et export de code",
+  "downloadUrl": "https://gael-berru.com/3Dscrollanimator/",
+  "url": "https://gael-berru.com/3Dscrollanimator/",
+  "keywords": "animation 3D, scroll, no-code, three.js, web design, creative coding",
+  "memoryRequirements": "2GB RAM",
+  "processorRequirements": "Processeur moderne avec WebGL",
+  "permissions": "Accès au stockage local pour sauvegarde"
+}
+</script>
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization", 
+  "name": "3D Scroll Animator",
+  "url": "https://gael-berru.com/3Dscrollanimator/",
+  "logo": "https://gael-berru.com/img/drone-logo.png",
+  "description": "Plateforme no-code de création d'animations 3D interactives pour le web",
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "FR"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "support technique",
+    "email": "support@gael-berru.com",
+    "availableLanguage": ["French", "English"]
+  },
+  "sameAs": [
+    "https://twitter.com/#",
+    "https://github.com/berru-g"
+  ]
+}
+</script>
+
+    <!-- Google tag (gtag.js) -->
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- ====== LANDING PAGE: 3D SCROLL ANIMATOR (INSERT AFTER YOUR PHP HEADER) ====== -->
+    <style>
+        :root {
+            --bg: #1e1e2e;
+            --card: #181825;
+            --muted: #a6adc8;
+            --accent: #f5c2e7;
+            --accent-2: #cba6f7;
+            --panel: #11111b;
+            --border: #313244;
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+
+        .lp-container {
+            font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            color: #cdd6f4;
+            background: radial-gradient(1200px 400px at 10% 10%, rgba(203, 166, 247, 0.06), transparent),
+                radial-gradient(1000px 300px at 90% 90%, rgba(245, 194, 231, 0.03), transparent),
+                var(--bg);
+            padding: 60px 24px;
+        }
+
+        /* Hero */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            display: grid;
+            grid-template-columns: 1fr 520px;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .hero-left {
+            padding: 24px;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            background: linear-gradient(90deg, var(--accent-2), var(--accent));
+            color: #0f0f16;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        .hero-title {
+            font-size: clamp(28px, 4.2vw, 44px);
+            line-height: 1.03;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .hero-sub {
+            color: var(--muted);
+            font-size: 16px;
+            margin-bottom: 22px;
+            max-width: 50ch;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--accent-2), var(--accent));
+            color: #0f0f16;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(203, 166, 247, 0.08);
+            display: inline-flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .hero-features {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .feature-pill {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            border-radius: 999px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* Right demo preview */
+        .hero-preview {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 12px;
+            position: relative;
+            min-height: 320px;
+            display: flex;
+            gap: 12px;
+            flex-direction: column;
+        }
+
+        .preview-frame {
+            flex: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            background: linear-gradient(180deg, #0d0d12 0%, #08080b 100%);
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .preview-actions .small-ctas {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Demo / features section */
+        .demo-section {
+            max-width: 1200px;
+            margin: 44px auto;
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 28px;
+            align-items: start;
+        }
+
+        .demo-grid {
+            display: grid;
+            gap: 12px;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .demo-iframe {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            height: 220px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .demo-iframe img {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+        }
+
+        /* Features list */
+        .cards {
+            display: grid;
+            gap: 12px;
+        }
+
+        .card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), transparent);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 12px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .card i {
+            font-size: 20px;
+            color: var(--accent-2);
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            background: rgba(203, 166, 247, 0.08);
+            border-radius: 8px;
+        }
+
+        .card h4 {
+            margin: 0 0 6px;
+            color: var(--accent);
+            font-size: 15px;
+        }
+
+        .card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* Stats / testimonials */
+        .stats {
+            max-width: 1200px;
+            margin: 48px auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            align-items: start;
+        }
+
+        .stat-box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .kpi {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .kpi .num {
+            font-size: 34px;
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        .kpi .label {
+            color: var(--muted);
+        }
+
+        .testimonials {
+            display: grid;
+            gap: 12px;
+        }
+
+        .testimonial {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            padding: 14px;
+            border-radius: 10px;
+        }
+
+        .testimonial p {
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .testimonial .meta {
+            color: var(--accent-2);
+            font-weight: 700;
+        }
+
+        /* CTA band */
+        .cta-band {
+            margin: 60px auto 0;
+            max-width: 1200px;
+            background: linear-gradient(90deg, rgba(203, 166, 247, 0.06), rgba(245, 194, 231, 0.02));
+            border: 1px solid var(--border);
+            padding: 28px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cta-band .text h3 {
+            font-size: 20px;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .cta-band .text p {
+            color: var(--muted);
+            margin: 0;
+        }
+
+        .cta-band .action {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        /* Footer small */
+        .lp-footer {
+            max-width: 1200px;
+            margin: 28px auto 80px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .hero {
+                grid-template-columns: 1fr;
+            }
+
+            .demo-section {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-band {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<!-- HERO -->
+<section class="lp-container">
+    <div class="hero" data-aos="fade-up" data-aos-duration="900">
+        <div class="hero-left">
+            <div class="eyebrow">Nouveau — 3D Scroll Animator</div>
+            <h1 class="hero-title">Créez des animations 3D fluides synchronisées au scroll — sans coder</h1>
+            <p class="hero-sub">Importez votre modèle, définissez des keyframes visuelles liés au pourcentage de scroll,
+                exportez un package HTML/CSS/JS prêt à l'emploi ou ouvrez-le directement dans CodePen.</p>
+
+            <div class="hero-ctas">
+                <a class="btn-primary" href="https://gael-berru.com/3Dscrollanimator/" title="Essayer gratuitement">
+                    <i class="fa-solid fa-rocket"></i> Essayer gratuitement
+                </a>
+                <button class="btn-ghost"
+                    onclick="document.getElementById('demo-scroll').scrollIntoView({behavior:'smooth'})">
+                    Voir la démo
+                </button>
+            </div>
+
+            <div class="hero-features" aria-hidden>
+                <span class="feature-pill">GLB / GLTF</span>
+                <span class="feature-pill">Export HTML/CSS/JS</span>
+                <span class="feature-pill">Intégration CodePen</span>
+                <span class="feature-pill">Responsive</span>
+            </div>
+        </div>
+
+        <div class="hero-preview" data-aos="zoom-in" data-aos-duration="900" data-aos-delay="150">
+            <!-- Large live preview iframe (placeholder, remplace l'URL par ton mini demo) loading="lazy" -->
+            <div class="preview-frame" title="Aperçu interactif">
+                <img src="../img/3Dscrollanimator.png" style="width:100%;height:100%;" alt="Aperçu de l'outil">
+            </div>
+
+            <div class="preview-actions">
+                <div class="small-ctas">
+                    <button class="btn-ghost"
+                        onclick="window.open('https://gael-berru.com/3Dscrollanimator/','_blank')"><i
+                            class="fa-solid fa-arrow-up-right-from-square"></i> Ouvrir l'outil</button>
+                    <button class="btn-ghost" onclick="copyDemoURL()"><i class="fa-solid fa-link"></i> Copier
+                        lien</button>
+                </div>
+                <div style="color:var(--muted); font-size:13px;">Aperçu en direct — interactif</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DEMO + FEATURES -->
+    <div id="demo-scroll" class="demo-section">
+        <div data-aos="fade-up" data-aos-duration="900">
+            <div class="demo-grid">
+                <div class="demo-iframe" data-aos="fade-right" data-aos-duration="700">
+                    <!-- iframe preview 1 -->
+                    <iframe src="/3Dscrollanimator/?embed=1" title="Démo interactive 1"></iframe>
+                </div>
+                <div class="demo-iframe" data-aos="fade-left" data-aos-duration="700">
+                    <!-- GIF / short video placeholder -->
+                    <img src="/path/to/demo-animated.gif" alt="Demo GIF"
+                        style="width:100%;height:100%;object-fit:cover;">
+                </div>
+                <div class="demo-iframe" data-aos="fade-up" data-aos-duration="700">
+                    <iframe src="/3Dscrollanimator/?embed=mini" title="Démo interactive 2"></iframe>
+                </div>
+                <div class="demo-iframe" data-aos="fade-up" data-aos-duration="700">
+                    <img src="/path/to/demo-2.gif" alt="Demo GIF 2" style="width:100%;height:100%;object-fit:cover;">
+                </div>
+            </div>
+        </div>
+
+        <aside data-aos="fade-left" data-aos-duration="900">
+            <div class="cards">
+                <div class="card">
+                    <i class="fa-solid fa-brush"></i>
+                    <div>
+                        <h4>Interface visuelle</h4>
+                        <p>Manipulez la position, rotation et échelle via sliders et keyframes — tout en temps réel.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <i class="fa-solid fa-code"></i>
+                    <div>
+                        <h4>Code propre & export</h4>
+                        <p>Génération automatique du bundle HTML/CSS/JS — prêt pour la production ou pour CodePen.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <i class="fa-solid fa-bolt"></i>
+                    <div>
+                        <h4>Rapide & léger</h4>
+                        <p>Basé sur Three.js, optimisé pour de petites scènes d'animation 3D liées au scroll.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <i class="fa-solid fa-share-nodes"></i>
+                    <div>
+                        <h4>Partage facile</h4>
+                        <p>Exporter, ouvrir dans CodePen, ou partager un lien d’aperçu instantané.</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- STATS & TESTIMONIALS -->
+    <div class="stats">
+        <div class="stat-box" data-aos="fade-up" data-aos-duration="700">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                <div>
+                    <div class="kpi">
+                        <!-- PHP: Remplace $userCount par ta variable récupérée en backend -->
+                        <!-- Ex: <?php $userCount = getUserCountFromDB(); ?> -->
+                        <div class="num" id="user-count"
+                            data-count="<?php echo isset($userCount) ? $userCount : 127; ?>">0</div>
+                        <div class="label">Utilisateurs actifs</div>
+                    </div>
+                    <div style="color:var(--muted);margin-top:8px;">Des créateurs & devs utilisent déjà l'outil</div>
+                </div>
+                <div style="text-align:right;color:var(--muted);font-size:13px;">
+                    <div>Version beta</div>
+                    <div style="margin-top:6px;"><span
+                            style="background:var(--panel);padding:6px 10px;border-radius:999px;border:1px solid var(--border);">Essai
+                            gratuit</span></div>
+                </div>
+            </div>
+
+            <!-- mini features -->
+            <div style="display:flex;gap:12px;margin-top:12px;">
+                <div style="flex:1;">
+                    <strong style="color:var(--accent)">GLB</strong>
+                    <div style="color:var(--muted);font-size:13px;">Support natif</div>
+                </div>
+                <div style="flex:1;">
+                    <strong style="color:var(--accent)">CodePen</strong>
+                    <div style="color:var(--muted);font-size:13px;">One-click</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-box" data-aos="fade-up" data-aos-duration="700" data-aos-delay="120">
+            <h3 style="color:var(--accent);margin:0 0 12px;">Ce que disent les utilisateurs</h3>
+            <div class="testimonials">
+                <div class="testimonial" data-aos="fade-up" data-aos-delay="80">
+                    <p>“J’ai réduit mon temps de prototypage de 3D à 20 minutes — incroyable.”</p>
+                    <div class="meta">— Léa, Motion Designer</div>
+                </div>
+                <div class="testimonial" data-aos="fade-up" data-aos-delay="120">
+                    <p>“Parfait pour protos interactifs et pages produit animées.”</p>
+                    <div class="meta">— Karim, Front-end dev</div>
+                </div>
+                <div class="testimonial" data-aos="fade-up" data-aos-delay="160">
+                    <p>“La génération de code est propre et facile à intégrer.”</p>
+                    <div class="meta">— Anna, Freelance</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-band" data-aos="fade-up" data-aos-duration="900">
+        <div class="text">
+            <h3>Prêt à créer ta première animation 3D au scroll ?</h3>
+            <p>Essaye gratuitement — import, animation, export et partage sans installation.</p>
+        </div>
+        <div class="action">
+            <a class="btn-primary" href="/3Dscrollanimator/" title="Essayer gratuitement">
+                <i class="fa-solid fa-rocket"></i> Essayer gratuitement
+            </a>
+            <a class="btn-ghost" href="/contact">Contact / Démo personnalisée</a>
+        </div>
+    </div>
+
+    <div class="lp-footer">
+        © <strong>3D Scroll Animator</strong> — Built with <i class="fa-brands fa-js-square"></i> Three.js · <span
+            style="color:var(--muted)">Mentions légales</span>
+    </div>
+</section>
+
+<!-- SCRIPTS: AOS + GSAP (insert before </body> or keep here) -->
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script>
+    // Init AOS
+    AOS.init({ once: true, duration: 800, easing: 'ease-out-cubic' });
+
+    // Small helper to copy demo URL
+    function copyDemoURL() {
+        const url = window.location.origin + '/3Dscrollanimator/';
+        navigator.clipboard.writeText(url).then(() => {
+            // subtle feedback
+            gsap.fromTo('.btn-ghost', { scale: 1 }, { scale: 1.02, duration: 0.12, yoyo: true, repeat: 1 });
+            alert('Lien du demo copié dans le presse-papier');
+        });
+    }
+
+    // Animated KPI counter reading server value (PHP should set data-count on #user-count)
+    document.addEventListener('DOMContentLoaded', () => {
+        const el = document.getElementById('user-count');
+        if (!el) return;
+        const target = parseInt(el.getAttribute('data-count')) || parseInt(el.innerText) || 0;
+        let start = 0;
+        const duration = 1200;
+        gsap.to({ val: start }, {
+            val: target,
+            duration: duration / 1000,
+            ease: "power1.out",
+            onUpdate() {
+                el.innerText = Math.floor(this.targets()[0].val).toLocaleString();
+            }
+        });
+    });
+
+    // Nice CTA micro animation
+    gsap.from(".hero-title", { y: 20, opacity: 0, duration: 0.9, ease: "power2.out", delay: 0.15 });
+    gsap.from(".hero-preview", { x: 30, opacity: 0, duration: 0.9, ease: "power2.out", delay: 0.25 });
+
+    // Optional: lazy load iframes (replace src on intersection)
+    const lazyIframes = document.querySelectorAll('.demo-iframe iframe');
+    if ('IntersectionObserver' in window && lazyIframes.length) {
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const iframe = entry.target;
+                    // if src already set, skip
+                    if (iframe.getAttribute('data-loaded')) return;
+                    const src = iframe.getAttribute('src');
+                    // if you want to set dynamic src from data-src: iframe.src = iframe.dataset.src;
+                    iframe.setAttribute('data-loaded', '1');
+                    // no change because we used src directly; keep for future
+                }
+            });
+        }, { threshold: 0.2 });
+        lazyIframes.forEach(f => io.observe(f));
+    }
+</script>
