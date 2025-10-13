@@ -5,6 +5,8 @@
     --grey-light: #2c2c2e;
     --primary: #ab9ff2;
     --rose: #cba6f7;
+    --rose2: #f5c2e7;
+    --violet2: #cba6f7;
     --border: #dcdcdc;
     --shadow: rgba(0, 0, 0, 0.1);
     --input: #f9f9f9;
@@ -84,7 +86,7 @@ body {
 }
 
 .btn-primary:hover {
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--violet2), var(--rose));
 }
 
 .btn-secondary {
@@ -1093,6 +1095,8 @@ select {
 /* Suggestions */
 .search-autocomplete {
     position: relative;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 #suggestions-container {
