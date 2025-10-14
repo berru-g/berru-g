@@ -261,7 +261,7 @@ require_once 'auth.php';
     <header class="modern-header">
         <div class="header-left">
             <a href="index.php" class="logo">
-                <img src="../img/mascotte.png" >
+                <img src="../img/mascotte-code.png" >
                 <span>3DScrollAnimate</span>
             </a>
 
