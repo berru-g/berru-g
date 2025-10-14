@@ -30,7 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--dark);">
+       
         <div style="background: var(--grey-light); padding: 2rem; border-radius: 12px; border: 1px solid var(--border); width: 100%; max-width: 400px;">
+             <img src="../img/mascotte.png" style="width:120px; height: 120px; border-radius: 50%; display: flex;margin: 0 auto;">
             <h2 style="text-align: center; color: var(--primary); margin-bottom: 2rem;">Connexion</h2>
             
             <?php if ($error): ?>

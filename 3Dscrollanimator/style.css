@@ -952,6 +952,10 @@ select {
     font-size: 4rem;
     margin-bottom: 1rem;
 }
+.guest-icon img {
+    width: 120px;
+    height: auto;
+}
 
 .guest-message h3 {
     color: #cdd6f4;

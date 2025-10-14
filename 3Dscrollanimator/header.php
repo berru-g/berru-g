@@ -39,7 +39,7 @@ require_once 'auth.php';
         }
 
         .modern-header {
-            background: rgba(21, 21, 23, 0.95);
+            background: rgba(21, 21, 23, 0.95); /*#0a0718*/
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--rose);
             padding: 0.8rem 2rem;
@@ -55,6 +55,11 @@ require_once 'auth.php';
             display: flex;
             align-items: center;
             gap: 2rem;
+        }
+        .header-left img {
+            height: 40px;
+            width: auto;
+            border-radius: 100%;
         }
 
         .logo {
@@ -256,7 +261,7 @@ require_once 'auth.php';
     <header class="modern-header">
         <div class="header-left">
             <a href="index.php" class="logo">
-                <i class="fa-solid fa-cube"></i>
+                <img src="../img/mascotte.png" >
                 <span>3DScrollAnimate</span>
             </a>
 

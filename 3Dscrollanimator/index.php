@@ -367,7 +367,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
         <!-- État non connecté -->
         <div id="code-guest" class="code-guest" style="display: none;"> <!-- Toujours caché -->
             <div class="guest-message">
-                <div class="guest-icon">🔒</div>
+                <div class="guest-icon"><img src="../img/mascotte-code.png"></div>
                 <h3>Connectez-vous pour débloquer l'export</h3>
                 <p>Accédez au code complet et à l'export CodePen en vous connectant gratuitement</p>
                 <a href="login.php" class="btn btn-primary">
