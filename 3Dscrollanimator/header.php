@@ -310,7 +310,7 @@ require_once 'PointsManager.php';
         <div class="header-right">
             <div class="points-info">
                 <span><?= htmlspecialchars($_SESSION['user_name']) ?></span>
-                <span id="current-points"><?= $_SESSION['user_points'] ?? 200 ?></span> 🪙
+                <strong><span id="current-points"><?= $_SESSION['user_points'] ?? 200 ?></span></strong> 🪙
             </div>
             <?php if (Auth::isLoggedIn()): ?>
                 <div class="user-menu">

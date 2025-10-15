@@ -804,7 +804,6 @@ select {
     border-radius: 6px;
     margin: 10px 0;
     text-align: center;
-    border-left: 4px solid var(--primary);
 }
 
 .points-cost {
