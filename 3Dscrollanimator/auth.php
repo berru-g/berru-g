@@ -1,6 +1,7 @@
 <?php
 // auth.php - VERSION CORRIGÉE
 require_once 'config.php';
+require_once 'RewardSystem.php';
 
 // DÉMARRER LA SESSION TOUJOURS EN PREMIER
 if (session_status() === PHP_SESSION_NONE) {

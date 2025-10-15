@@ -660,6 +660,34 @@ function updateUserPointsDisplay(newPoints) {
     }
 }
 
+// Bonus de connexion quotidienne - À appeler au chargement de la page
+async function claimDailyBonus() {
+    if (!currentUser) return;
+    
+    try {
+        const response = await fetch('api.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'action=daily_login_bonus'
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+            notify.success('Bonus quotidien: +10 🪙', 'Récompense');
+            refreshUserPoints();
+        }
+    } catch (error) {
+        console.error('Erreur bonus quotidien:', error);
+    }
+}
+
+// Au chargement de la page pour les utilisateurs connectés
+document.addEventListener('DOMContentLoaded', function() {
+    if (currentUser) {
+        setTimeout(claimDailyBonus, 2000); // Attendre 2s après le chargement
+    }
+});
+
 // Fonction pour récupérer le solde actuel
 async function refreshUserPoints() {
     if (!currentUser) return;

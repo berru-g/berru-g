@@ -89,3 +89,6 @@ INSERT INTO point_packs (name, points_amount, price_eur) VALUES
 ('Pack Starter', 100, 4.90),
 ('Pack Pro', 500, 19.90),
 ('Pack Expert', 1500, 49.90);
+
+-- Ajout de la colonne last_login pour suivre la dernière connexion des utilisateurs
+ALTER TABLE users ADD COLUMN last_login DATE NULL;

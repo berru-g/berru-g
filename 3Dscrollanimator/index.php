@@ -522,7 +522,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                     <h4>Pack Starter</h4>
                     <div class="points-amount">100 🪙</div>
                     <div class="price">4,90 €</div>
-                    <button class="btn btn-primary buy-points">Acheter</button>
+                    <button class="btn btn-primary buy-points">Obtenir</button>
                 </div>
 
                 <div class="point-pack popular" data-pack-id="2">
@@ -530,14 +530,14 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                     <h4>Pack Pro</h4>
                     <div class="points-amount">500 🪙</div>
                     <div class="price">19,90 €</div>
-                    <button class="btn btn-primary buy-points">Acheter</button>
+                    <button class="btn btn-primary buy-points">Obtenir</button>
                 </div>
 
                 <div class="point-pack" data-pack-id="3">
                     <h4>Pack Expert</h4>
                     <div class="points-amount">1500 🪙</div>
                     <div class="price">49,90 €</div>
-                    <button class="btn btn-primary buy-points">Acheter</button>
+                    <button class="btn btn-primary buy-points">Obtenir</button>
                 </div>
             </div>
         </div>
