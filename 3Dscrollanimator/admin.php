@@ -204,23 +204,8 @@ $recent_comments = $stmt->fetchAll();
     </style>
 </head>
 <body>
-    <header class="header">
-        <a href="index.php" class="logo">3D Scroll Animator</a>
-        <nav class="nav-links">
-            <a href="index.php">Éditeur</a>
-            <a href="gallery.php">Galerie</a>
-            <a href="dashboard.php">Mon Profil</a>
-            <a href="dashboard_admin.php" class="active">Dashboard Admin</a>
-        </nav>
-        <div class="auth-section">
-            <div class="user-menu">
-                <span class="user-avatar"><?= strtoupper(substr($_SESSION['user_name'], 0, 1)) ?></span>
-                <span class="user-name"><?= htmlspecialchars($_SESSION['user_name']) ?></span>
-                <a href="dashboard.php" class="btn btn-secondary">Mon Profil</a>
-                <a href="?logout" class="btn btn-secondary">Déconnexion</a>
-            </div>
-        </div>
-    </header>
+   <br>
+        <?php require_once 'header.php'; ?>
 
     <main style="padding: 2rem; max-width: 1400px; margin: 0 auto;">
         <h1 style="text-align: center; color: var(--primary); margin-bottom: 2rem;">
@@ -352,6 +337,8 @@ $recent_comments = $stmt->fetchAll();
             </div>
         </div>
     </main>
+    <br>
+        <?php require_once 'footer.php'; ?>
 
     <script>
         // Graphique des inscriptions

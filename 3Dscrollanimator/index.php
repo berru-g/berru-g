@@ -542,8 +542,8 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
         </div>
 
         <br>
-        <p style="text-align: center">Dev by <a href="https://gael-berru.com"
-                style="color: white; text-decoration: none;">berru-g</a></p>
+        <?php require_once 'footer.php'; ?>
+
 
         <script>
             function copyCode(id) {

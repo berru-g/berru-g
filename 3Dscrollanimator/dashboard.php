@@ -241,6 +241,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
 
 
     </main>
+
+    <br>
+        <?php require_once 'footer.php'; ?>
 </body>
 
 </html>

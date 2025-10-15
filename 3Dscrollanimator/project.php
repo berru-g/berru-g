@@ -153,6 +153,9 @@ $isLiked = Auth::isLoggedIn() ? ProjectManager::isLikedByUser($projectId, $_SESS
         </article>
     </main>
 
+    <br>
+        <?php require_once 'footer.php'; ?>
+
     <script>
     async function toggleLike(projectId) {
         try {

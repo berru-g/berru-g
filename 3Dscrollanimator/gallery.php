@@ -191,6 +191,9 @@ try {
         <?php endif; ?>
     </main>
 
+    <br>
+        <?php require_once 'footer.php'; ?>
+
     <script>
         function viewProject(projectId) {
             window.location.href = `project.php?id=${projectId}`;
