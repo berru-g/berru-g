@@ -308,6 +308,10 @@ require_once 'PointsManager.php';
         </div>
 
         <div class="header-right">
+            <div class="points-info">
+                <span><?= htmlspecialchars($_SESSION['user_name']) ?></span>
+                <span id="current-points"><?= $_SESSION['user_points'] ?? 200 ?></span> 🪙
+            </div>
             <?php if (Auth::isLoggedIn()): ?>
                 <div class="user-menu">
                     <div class="user-avatar">
@@ -315,15 +319,6 @@ require_once 'PointsManager.php';
                     </div>
 
                     <div class="user-dropdown">
-                        <div class="user-dropdown-item">
-
-                            <div class="points-info">
-                                <span><?= htmlspecialchars($_SESSION['user_name']) ?></span>
-                                <span id="current-points"><?= $_SESSION['user_points'] ?? 200 ?></span> 🪙
-                            </div>
-                        </div>
-
-                        <div class="user-dropdown-divider"></div>
 
                         <a href="dashboard.php" class="user-dropdown-item">
                             <i class="fas fa-user"></i>
