@@ -699,7 +699,7 @@ select {
 
 /* SHOP DE POINTS */
 .points-shop {
-    background: var(--grey-light);
+    background-image: url('../img/mascotte-easy2.png');
     padding: 20px;
     border-radius: 10px;
     margin: 20px 0;
@@ -1073,12 +1073,12 @@ select {
 }
 
 .points-mascot {
-    width: 400px;
-    height: auto;
-    border-radius: 18px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
 }
 
 .guest-message h3 {

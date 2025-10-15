@@ -497,8 +497,6 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
             </div>
         </div>
 
-            <img src="../img/mascotte-easy2.png" alt="Mascotte" class="points-mascot">
-
 
 
         <!-- Achat de points à config avec stripe ou lemonsqueezie -->
