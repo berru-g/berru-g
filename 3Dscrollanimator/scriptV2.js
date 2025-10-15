@@ -677,7 +677,7 @@ async function refreshUserPoints() {
 }
 
 
-// Remplacer l'ancien événement par celui-ci :
+// Open with codepen :
 document.getElementById("open-codepen").addEventListener("click", async () => {
     if (!currentUser) {
         showAuthModal();
@@ -1109,7 +1109,226 @@ function setupEventListeners() {
     });
 }
 
+// Fonction pour charger un modèle de test
+function loadTestModel() {
+    console.log(' Chargement du modèle test...');
+    
+    const loader = new THREE.GLTFLoader();
+    
+    // URL du modèle test (drone.glb depuis ton repo GitHub)
+    const modelUrl = 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb';
+    
+    // Afficher le loading
+    const loadingElement = document.getElementById('loading');
+    if (loadingElement) {
+        loadingElement.style.display = 'block';
+        loadingElement.textContent = 'Chargement du modèle test...';
+    }
+    
+    notify.info('Chargement du modèle drone de test...', 'Modèle Test');
+    
+    loader.load(
+        modelUrl,
+        // Succès
+        function(gltf) {
+            console.log('✅ Modèle test chargé avec succès');
+            
+            // Cacher le loading
+            if (loadingElement) {
+                loadingElement.style.display = 'none';
+            }
+            
+            handleLoadedModel(gltf.scene);
+            notify.success('Modèle test chargé !', 'Succès');
+            
+            // Ajouter quelques keyframes d'exemple automatiquement
+            setTimeout(() => {
+                addExampleKeyframes();
+            }, 1000);
+        },
+        // Progression
+        function(xhr) {
+            if (loadingElement) {
+                const percent = Math.round((xhr.loaded / xhr.total) * 100);
+                loadingElement.textContent = `Chargement du modèle test... ${percent}%`;
+            }
+        },
+        // Erreur
+        function(error) {
+            console.error('❌ Erreur chargement modèle test:', error);
+            
+            if (loadingElement) {
+                loadingElement.style.display = 'none';
+            }
+            
+            notify.error('Erreur de chargement du modèle test', 'Erreur');
+            
+            // Fallback: créer un modèle simple
+            createFallbackModel();
+        }
+    );
+}
 
+// Fonction pour ajouter des keyframes d'exemple
+function addExampleKeyframes() {
+    if (!model || keyframes.length > 0) return;
+    
+    console.log('➕ Ajout des keyframes d\'exemple...');
+    
+    // Keyframe à 0%
+    model.position.set(0, 0, 0);
+    model.rotation.set(0, 0, 0);
+    model.scale.set(1, 1, 1);
+    
+    let keyframe = {
+        percentage: 0,
+        position: { x: 0, y: 0, z: 0 },
+        rotation: { x: 0, y: 0, z: 0 },
+        scale: { x: 1, y: 1, z: 1 }
+    };
+    keyframes.push(keyframe);
+    
+    // Keyframe à 25%
+    keyframe = {
+        percentage: 25,
+        position: { x: 2, y: 1, z: -1 },
+        rotation: { x: 0, y: Math.PI / 4, z: 0 },
+        scale: { x: 1.2, y: 1.2, z: 1.2 }
+    };
+    keyframes.push(keyframe);
+    
+    // Keyframe à 50%
+    keyframe = {
+        percentage: 50,
+        position: { x: 0, y: 2, z: -2 },
+        rotation: { x: Math.PI / 6, y: Math.PI / 2, z: 0 },
+        scale: { x: 0.8, y: 0.8, z: 0.8 }
+    };
+    keyframes.push(keyframe);
+    
+    // Keyframe à 75%
+    keyframe = {
+        percentage: 75,
+        position: { x: -2, y: 1, z: -1 },
+        rotation: { x: 0, y: Math.PI * 1.5, z: Math.PI / 8 },
+        scale: { x: 1.1, y: 1.1, z: 1.1 }
+    };
+    keyframes.push(keyframe);
+    
+    // Keyframe à 100%
+    keyframe = {
+        percentage: 100,
+        position: { x: 0, y: 0, z: 0 },
+        rotation: { x: 0, y: Math.PI * 2, z: 0 },
+        scale: { x: 1, y: 1, z: 1 }
+    };
+    keyframes.push(keyframe);
+    
+    // Mettre à jour l'interface
+    updateKeyframesList();
+    updateRulerMarkers();
+    generateCode();
+    
+    // Positionner à 0%
+    updateRulerPosition(0);
+    
+    notify.success('Keyframes d\'exemple ajoutées !', 'Animation Prête');
+    console.log('✅ Keyframes d\'exemple ajoutées');
+}
+
+// Fonction de fallback si le modèle distant échoue
+function createFallbackModel() {
+    console.log('🔄 Création d\'un modèle de fallback...');
+    
+    // Créer un groupe pour un modèle plus complexe
+    const modelGroup = new THREE.Group();
+    
+    // Corps principal
+    const bodyGeometry = new THREE.CylinderGeometry(0.5, 0.3, 1, 8);
+    const bodyMaterial = new THREE.MeshStandardMaterial({ 
+        color: 0x4CAF50,
+        metalness: 0.3,
+        roughness: 0.4
+    });
+    const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+    body.rotation.x = Math.PI / 2;
+    modelGroup.add(body);
+    
+    // Hélices
+    const propellerGeometry = new THREE.BoxGeometry(2, 0.1, 0.3);
+    const propellerMaterial = new THREE.MeshStandardMaterial({ 
+        color: 0x2196F3 
+    });
+    
+    for (let i = 0; i < 4; i++) {
+        const propeller = new THREE.Mesh(propellerGeometry, propellerMaterial);
+        const angle = (i / 4) * Math.PI * 2;
+        propeller.position.set(
+            Math.cos(angle) * 0.8,
+            Math.sin(angle) * 0.8,
+            0
+        );
+        propeller.rotation.z = angle;
+        modelGroup.add(propeller);
+        
+        // Support d'hélice
+        const supportGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.8, 6);
+        const supportMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x607D8B 
+        });
+        const support = new THREE.Mesh(supportGeometry, supportMaterial);
+        support.position.set(
+            Math.cos(angle) * 0.4,
+            Math.sin(angle) * 0.4,
+            0
+        );
+        support.rotation.z = angle + Math.PI / 2;
+        modelGroup.add(support);
+    }
+    
+    // Caméra/objectif
+    const cameraGeometry = new THREE.SphereGeometry(0.2, 8, 6);
+    const cameraMaterial = new THREE.MeshStandardMaterial({ 
+        color: 0x000000 
+    });
+    const camera = new THREE.Mesh(cameraGeometry, cameraMaterial);
+    camera.position.set(0, 0, 0.6);
+    modelGroup.add(camera);
+    
+    // Pattes d'atterrissage
+    const legGeometry = new THREE.CylinderGeometry(0.03, 0.03, 0.6, 6);
+    const legMaterial = new THREE.MeshStandardMaterial({ 
+        color: 0x795548 
+    });
+    
+    const legPositions = [
+        { x: 0.3, y: 0.3, z: -0.5 },
+        { x: -0.3, y: 0.3, z: -0.5 },
+        { x: 0.3, y: -0.3, z: -0.5 },
+        { x: -0.3, y: -0.3, z: -0.5 }
+    ];
+    
+    legPositions.forEach(pos => {
+        const leg = new THREE.Mesh(legGeometry, legMaterial);
+        leg.position.set(pos.x, pos.y, pos.z);
+        leg.rotation.x = Math.PI / 4;
+        modelGroup.add(leg);
+    });
+    
+    handleLoadedModel(modelGroup);
+    notify.info('Modèle drone généré localement', 'Fallback');
+    
+    // Ajouter les keyframes d'exemple
+    setTimeout(() => {
+        addExampleKeyframes();
+    }, 500);
+}
+
+// S'assurer que le bouton est connecté
+document.addEventListener('DOMContentLoaded', function() {
+    // Le bouton est déjà connecté via onclick="loadTestModel()" dans ton HTML
+    console.log('✅ Fonction loadTestModel() prête');
+});
 
 // Charger un projet
 async function loadProject(projectId) {
