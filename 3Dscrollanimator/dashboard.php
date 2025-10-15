@@ -55,6 +55,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
 
 <body>
     <?php require_once 'header.php'; ?>
+
+    <!-- Achat de point à config avec stripe ou lemonsqueezie -->
+        <div class="points-shop">
+            <h3>🪙 Acheter des Points</h3>
+            <p>Votre solde actuel : <strong id="current-points-balance"><?= $_SESSION['user_points'] ?? 0 ?></strong> 🪙
+            </p>
+
+            <div class="point-packs">
+                <div class="point-pack" data-pack-id="1">
+                    <h4>Pack Starter</h4>
+                    <div class="points-amount">100 🪙</div>
+                    <div class="price">4,90 €</div>
+                    <button class="btn btn-primary buy-points">Acheter</button>
+                </div>
+
+                <div class="point-pack popular" data-pack-id="2">
+                    <div class="badge">Populaire</div>
+                    <h4>Pack Pro</h4>
+                    <div class="points-amount">500 🪙</div>
+                    <div class="price">19,90 €</div>
+                    <button class="btn btn-primary buy-points">Acheter</button>
+                </div>
+
+                <div class="point-pack" data-pack-id="3">
+                    <h4>Pack Expert</h4>
+                    <div class="points-amount">1500 🪙</div>
+                    <div class="price">49,90 €</div>
+                    <button class="btn btn-primary buy-points">Acheter</button>
+                </div>
+            </div>
+        </div>
+        
     <!--<header class="header">
         <a href="index.php" class="logo">3D Scroll Animator</a>
         <nav class="nav-links">
@@ -204,6 +236,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                 <?php endif; ?>
             </div>
         </div>
+
+        
+
+
     </main>
 </body>
 

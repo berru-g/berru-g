@@ -2,6 +2,7 @@
 // header_start.php
 require_once 'config.php';
 require_once 'auth.php';
+require_once 'PointsManager.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -39,9 +40,10 @@ require_once 'auth.php';
         }
 
         .modern-header {
-            background: rgba(21, 21, 23, 0.95); /*#0a0718*/
+            background: rgba(21, 21, 23, 0.95);
+            /*#0a0718*/
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--rose);
+            border-bottom: 1px solid var(--border);
             padding: 0.8rem 2rem;
             display: flex;
             align-items: center;
@@ -56,6 +58,7 @@ require_once 'auth.php';
             align-items: center;
             gap: 2rem;
         }
+
         .header-left img {
             height: 40px;
             width: auto;
@@ -63,9 +66,9 @@ require_once 'auth.php';
         }
 
         .logo {
-            font-size: 1.8rem;
+            font-size: 1.2rem;
             font-weight: bold;
-            color: var(--grey-light);
+            color: var(--dark);
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -101,8 +104,8 @@ require_once 'auth.php';
         }
 
         .nav-icon.active {
-            background: var(--primary);
-            color: var(--dark);
+            background: rgba(241, 241, 241, 0.14);
+            color: var(--white);
         }
 
         .nav-icon i {
@@ -254,14 +257,39 @@ require_once 'auth.php';
                 font-size: 0.8rem;
             }
         }
+
+        /* system de points */
+        .user-points {
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-left: 8px;
+            font-weight: bold;
+        }
+
+        .points-info {
+            background: var(--grey-light);
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            text-align: center;
+            /*border-left: 4px solid var(--primary);*/
+        }
+
+        .points-cost {
+            color: var(--rose);
+            font-weight: bold;
+        }
     </style>
 </head>
 
 <body>
     <header class="modern-header">
         <div class="header-left">
-            <a href="index.php" class="logo">
-                <img src="../img/mascotte-code.png" >
+            <a href="landing.html" class="logo">
+                <img src="../img/mascotte-code.png">
                 <span>3DScrollAnimate</span>
             </a>
 
@@ -288,14 +316,17 @@ require_once 'auth.php';
 
                     <div class="user-dropdown">
                         <div class="user-dropdown-item">
-                            <i class="fas fa-user"></i>
-                            <span><?= htmlspecialchars($_SESSION['user_name']) ?></span>
+
+                            <div class="points-info">
+                                <span><?= htmlspecialchars($_SESSION['user_name']) ?></span>
+                                <span id="current-points"><?= $_SESSION['user_points'] ?? 200 ?></span> 🪙
+                            </div>
                         </div>
 
                         <div class="user-dropdown-divider"></div>
 
                         <a href="dashboard.php" class="user-dropdown-item">
-                            <i class="fas fa-tachometer-alt"></i>
+                            <i class="fas fa-user"></i>
                             <span>Profil</span>
                         </a>
 

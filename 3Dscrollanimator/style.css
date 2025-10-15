@@ -121,13 +121,14 @@ body {
 .top-section {
     display: flex;
     max-height: 600px;
+  
     flex: 1;
     overflow: hidden;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--dark);
 }
 
 .sidebar {
-    max-width: 600px;
+    max-width: 400px;
     background: var(--dark);
     padding: 20px;
     border-right: 1px solid var(--border);
@@ -155,7 +156,7 @@ body {
 #viewer {
     width: 100%;
     height: 100%;
-    max-width: 700px;
+    max-width: 750px;
 }
 
 /* ====== SCROLL RULER ====== */
@@ -202,6 +203,7 @@ body {
 }
 
 .code-editors {
+    
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -217,7 +219,7 @@ body {
     position: relative;
     padding: 10px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }
 
 .code-box textarea {
@@ -271,11 +273,16 @@ body {
     }
 }
 
-
+.section {
+  background: var(--grey-light);
+  padding: 10px 10px;
+  border-radius: 8px;
+  border: 1px solid grey;
+}
 .section-title {
     font-size: 16px;
     margin-bottom: 12px;
-    color: var(--primary);
+    color: red;
     font-weight: 600;
 }
 /* rendre public  */
@@ -336,16 +343,17 @@ body {
 
 
 /* ====== RESPONSIVE ====== */
-@media (max-width: 1024px) {
+@media (max-width: 724px) {
     .top-section {
         flex-direction: column;
     }
 
     .sidebar {
-        max-width: 700px;
+        max-width: 400px;
         border-right: none;
         border-bottom: 1px solid var(--border);
-        height: 20%;
+        height: 10%;
+      z-index: 1000;
     }
 
     .viewer-container {
@@ -609,7 +617,7 @@ select {
 .tab.active {
     background: var(--grey-light);
     color: var(--input);
-    border: 1px solid var(--primary);
+    border: 1px solid var(--grey-light);
 }
 
 .tab-content {
@@ -685,7 +693,92 @@ select {
     background: linear-gradient(135deg, #ab9ff2 0%, #cba6f7 100%);
     color: #333;
 }
+/* SHOP DE POINTS */
+.points-shop {
+    background: var(--grey-light);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
 
+.point-packs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.point-pack {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.point-pack:hover {
+    border-color: var(--primary);
+    transform: translateY(-5px);
+}
+
+.point-pack.popular {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+}
+
+.point-pack .badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.points-amount {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary);
+    margin: 10px 0;
+}
+
+.price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 10px 0;
+    color: var(--text);
+}
+
+/* system de points */
+.user-points {
+    background: var(--primary);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    margin-left: 8px;
+    font-weight: bold;
+}
+
+.points-info {
+    background: var(--grey-light);
+    padding: 10px;
+    border-radius: 6px;
+    margin: 10px 0;
+    text-align: center;
+    border-left: 4px solid var(--primary);
+}
+
+.points-cost {
+    color: var(--rose);
+    font-weight: bold;
+}
 /* SYSTEM DE NOTIF */
 .notification-container {
     position: fixed;

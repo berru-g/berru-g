@@ -128,12 +128,40 @@
             box-sizing: border-box;
         }
 
+        body {
+            color: #cdd6f4;
+            overflow-x: hidden;
+            z-index: 10;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .scroll-space {
+            height: 200vh;
+            position: relative;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            z-index: -10;
+            background: linear-gradient(135deg, #ab9ff2 0%, #cba6f7 100%);
+
+        }
+
         .lp-container {
             font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
             color: #cdd6f4;
-            background: radial-gradient(1200px 400px at 10% 10%, rgba(203, 166, 247, 0.06), transparent),
+            /*background: radial-gradient(1200px 400px at 10% 10%, rgba(203, 166, 247, 0.06), transparent),
                 radial-gradient(1000px 300px at 90% 90%, rgba(245, 194, 231, 0.03), transparent),
-                var(--bg);
+                var(--bg);*/
+            background-color: transparent;
             padding: 60px 24px;
         }
 
@@ -445,6 +473,9 @@
         }
     </style>
 </head>
+<div class="container">
+    <div class="scroll-space"></div>
+</div>
 <!-- HERO -->
 <section class="lp-container">
     <div class="hero" data-aos="fade-up" data-aos-duration="900">
@@ -588,7 +619,7 @@
             </div>
         </div>
 
-        
+
 
         <div class="stat-box" data-aos="fade-up" data-aos-duration="700" data-aos-delay="120">
             <h3 style="color:var(--accent);margin:0 0 12px;">Ce que disent les utilisateurs</h3>
@@ -638,6 +669,9 @@
 <!-- SCRIPTS: AOS + GSAP (insert before </body> or keep here) -->
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
 
 <script>
     // Init AOS
@@ -692,4 +726,202 @@
         }, { threshold: 0.2 });
         lazyIframes.forEach(f => io.observe(f));
     }*/
+    // Code généré - Éditeur 3D No-Code
+    let scene, camera, renderer, model;
+    const keyframes = [
+        {
+            "percentage": 0,
+            "position": {
+                "x": 0.06645547485210357,
+                "y": -0.2887740442493608,
+                "z": 0.12075226453063792
+            },
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1.2,
+                "y": 1.2,
+                "z": 1.2
+            }
+        },
+        {
+            "percentage": 24,
+            "position": {
+                "x": 0.06645547485210357,
+                "y": 0.4,
+                "z": 0.12075226453063792
+            },
+            "rotation": {
+                "x": 0,
+                "y": 1.239183768915974,
+                "z": 0
+            },
+            "scale": {
+                "x": 1.7,
+                "y": 1.7,
+                "z": 1.7
+            }
+        },
+        {
+            "percentage": 50,
+            "position": {
+                "x": 0.06645547485210357,
+                "y": 1.1,
+                "z": 0.12075226453063792
+            },
+            "rotation": {
+                "x": 0,
+                "y": 2.705260340591211,
+                "z": 0
+            },
+            "scale": {
+                "x": 2.2,
+                "y": 2.2,
+                "z": 2.2
+            }
+        },
+        {
+            "percentage": 77,
+            "position": {
+                "x": 0.06645547485210357,
+                "y": 1.9,
+                "z": 0.12075226453063792
+            },
+            "rotation": {
+                "x": 0,
+                "y": 4.241150082346221,
+                "z": 0
+            },
+            "scale": {
+                "x": 2.6,
+                "y": 2.6,
+                "z": 2.6
+            }
+        },
+        {
+            "percentage": 100,
+            "position": {
+                "x": 0.06645547485210357,
+                "y": 2.7,
+                "z": 0.12075226453063792
+            },
+            "rotation": {
+                "x": 0,
+                "y": 6.283185307179586,
+                "z": 0
+            },
+            "scale": {
+                "x": 3,
+                "y": 3,
+                "z": 3
+            }
+        }
+    ];
+
+    function init() {
+        // Initialisation de base
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Lumières
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(10, 20, 15);
+        scene.add(directionalLight);
+
+        // Charger votre modèle (remplacez l'URL)
+        //ex: 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb'
+        const loader = new THREE.GLTFLoader();
+        loader.load('https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/fantasy_town.glb', function (gltf) {
+            model = gltf.scene;
+            scene.add(model);
+
+            // Centrage automatique
+            const box = new THREE.Box3().setFromObject(model);
+            const center = box.getCenter(new THREE.Vector3());
+            model.position.sub(center);
+
+            // Configuration caméra
+            camera.position.set(5, 5, 5);
+            camera.lookAt(0, 0, 0);
+
+            updateModelByScroll(0);
+        });
+
+        // Événements
+        window.addEventListener('resize', onWindowResize);
+        window.addEventListener('scroll', onScroll);
+
+        // Animation
+        animate();
+    }
+
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    function onScroll() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercentage = (scrollTop / scrollHeight) * 100;
+
+        updateModelByScroll(scrollPercentage);
+    }
+
+    function updateModelByScroll(percentage) {
+        if (!model || keyframes.length === 0) return;
+
+        let prev = null, next = null;
+
+        // Trouver les keyframes adjacentes
+        for (let i = 0; i < keyframes.length; i++) {
+            if (keyframes[i].percentage <= percentage) prev = keyframes[i];
+            if (keyframes[i].percentage >= percentage) {
+                next = keyframes[i];
+                break;
+            }
+        }
+
+        if (!prev && next) prev = next;
+        if (!next && prev) next = prev;
+
+        if (prev && next && prev !== next) {
+            const t = (percentage - prev.percentage) / (next.percentage - prev.percentage);
+
+            // Interpolation linéaire
+            model.position.x = THREE.MathUtils.lerp(prev.position.x, next.position.x, t);
+            model.position.y = THREE.MathUtils.lerp(prev.position.y, next.position.y, t);
+            model.position.z = THREE.MathUtils.lerp(prev.position.z, next.position.z, t);
+
+            model.rotation.x = THREE.MathUtils.lerp(prev.rotation.x, next.rotation.x, t);
+            model.rotation.y = THREE.MathUtils.lerp(prev.rotation.y, next.rotation.y, t);
+            model.rotation.z = THREE.MathUtils.lerp(prev.rotation.z, next.rotation.z, t);
+
+            model.scale.x = THREE.MathUtils.lerp(prev.scale.x, next.scale.x, t);
+            model.scale.y = THREE.MathUtils.lerp(prev.scale.y, next.scale.y, t);
+            model.scale.z = THREE.MathUtils.lerp(prev.scale.z, next.scale.z, t);
+
+        } else if (prev) {
+            model.position.set(prev.position.x, prev.position.y, prev.position.z);
+            model.rotation.set(prev.rotation.x, prev.rotation.y, prev.rotation.z);
+            model.scale.set(prev.scale.x, prev.scale.y, prev.scale.z);
+        }
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    }
+
+    // Démarrer
+    init();
 </script>

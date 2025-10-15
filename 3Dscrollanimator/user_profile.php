@@ -182,6 +182,8 @@ $stats = $stmt->fetch();
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
+
+        
     </main>
 </body>
 </html>

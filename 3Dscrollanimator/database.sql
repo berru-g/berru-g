@@ -61,3 +61,31 @@ CREATE TABLE user_sessions (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+-- Table des abonnements (pour les utilisateurs Pro)
+ALTER TABLE users ADD COLUMN points INT DEFAULT 200;
+
+CREATE TABLE point_transactions (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    points_amount INT,
+    amount_eur DECIMAL(10,2),
+    payment_intent_id VARCHAR(255),
+    status ENUM('pending', 'completed', 'failed'),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE point_packs (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
+    points_amount INT,
+    price_eur DECIMAL(10,2),
+    is_active BOOLEAN DEFAULT true
+);
+
+-- Packs initiaux
+INSERT INTO point_packs (name, points_amount, price_eur) VALUES
+('Pack Starter', 100, 4.90),
+('Pack Pro', 500, 19.90),
+('Pack Expert', 1500, 49.90);

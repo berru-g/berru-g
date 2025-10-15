@@ -28,6 +28,7 @@ class Auth {
             $_SESSION['user_name'] = $user['username'];
             $_SESSION['user_avatar'] = $user['avatar_url'];
             $_SESSION['subscription'] = $user['subscription_type'];
+            $_SESSION['user_points'] = $user['points'];
             $_SESSION['logged_in'] = true;
             
             return true;

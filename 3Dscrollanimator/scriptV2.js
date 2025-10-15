@@ -524,17 +524,31 @@ function updateModelByScroll(percentage) {
 // debug save
 async function saveProject() {
     console.log("🔧 saveProject() appelée");
-    console.log("🔧 currentUser:", currentUser);
-
+    
     if (!currentUser) {
         console.log("❌ Utilisateur non connecté - affichage modal");
         showAuthModal();
         return;
     }
 
+    // Vérifier et déduire les points
+    const pointsCheck = await checkAndDeductPoints('save');
+    if (!pointsCheck.success) {
+        notify.error(pointsCheck.message, 'Points insuffisants');
+        
+        // Proposer d'acheter des points
+        if (confirm("Points insuffisants ! Voulez-vous acheter plus de points ?")) {
+            window.location.href = 'dashboard.php#points';
+        }
+        return;
+    }
+
     const title = prompt('Donnez un titre à votre projet:', 'Mon animation 3D');
-    console.log("🔧 Titre saisi:", title);
-    if (!title) return;
+    if (!title) {
+        // Remettre les points si annulation
+        await addPoints(50);
+        return;
+    }
 
     const description = prompt('Description (optionnelle):', '');
 
@@ -575,15 +589,147 @@ async function saveProject() {
         console.log("🔧 Résultat API:", result);
 
         if (result.success) {
-            notify.success('Projet sauvegardé avec succès!', 'Sauvegarde');
+            // Mettre à jour l'affichage des points
+            updateUserPointsDisplay(pointsCheck.new_balance);
+            notify.success('Projet sauvegardé avec succès! -50 🪙', 'Sauvegarde');
         } else {
+            // Remettre les points en cas d'erreur
+            await addPoints(50);
             notify.error('Erreur lors de la sauvegarde', result.message);
         }
     } catch (error) {
+        // Remettre les points en cas d'erreur réseau
+        await addPoints(50);
         console.error('❌ Erreur sauvegarde:', error);
         notify.error('Erreur réseau', 'Impossible de sauvegarder');
     }
 }
+// === NOUVELLES FONCTIONS POUR LA GESTION DES POINTS ===
+
+// Fonctions de gestion des points
+async function checkAndDeductPoints(actionType) {
+    try {
+        const response = await fetch('api.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `action=deduct_points&action_type=${actionType}`
+        });
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Erreur déduction points:', error);
+        return { success: false, message: 'Erreur réseau' };
+    }
+}
+
+async function addPoints(points) {
+    try {
+        const response = await fetch('api.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `action=add_points&points=${points}`
+        });
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Erreur ajout points:', error);
+        return { success: false, message: 'Erreur réseau' };
+    }
+}
+
+function updateUserPointsDisplay(newPoints) {
+    // Mettre à jour l'affichage dans le header
+    const pointsElement = document.getElementById('user-points');
+    if (pointsElement) {
+        pointsElement.textContent = `🪙 ${newPoints}`;
+    }
+    
+    // Mettre à jour l'affichage dans la section points-info
+    const currentPointsElement = document.getElementById('current-points');
+    if (currentPointsElement) {
+        currentPointsElement.textContent = newPoints;
+    }
+    
+    // Mettre à jour la variable currentUser
+    if (currentUser) {
+        currentUser.points = newPoints;
+    }
+}
+
+// Fonction pour récupérer le solde actuel
+async function refreshUserPoints() {
+    if (!currentUser) return;
+    
+    try {
+        const response = await fetch('api.php?action=get_user_points');
+        const result = await response.json();
+        
+        if (result.success) {
+            updateUserPointsDisplay(result.points);
+        }
+    } catch (error) {
+        console.error('Erreur rafraîchissement points:', error);
+    }
+}
+
+
+// Remplacer l'ancien événement par celui-ci :
+document.getElementById("open-codepen").addEventListener("click", async () => {
+    if (!currentUser) {
+        showAuthModal();
+        return;
+    }
+
+    // Vérifier et déduire les points
+    const pointsCheck = await checkAndDeductPoints('codepen');
+    if (!pointsCheck.success) {
+        notify.error(pointsCheck.message, 'Points insuffisants');
+        
+        // Proposer d'acheter des points
+        if (confirm("Points insuffisants ! Voulez-vous acheter plus de points ?")) {
+            window.location.href = 'dashboard.php#points';
+        }
+        return;
+    }
+
+    // Mettre à jour l'affichage
+    updateUserPointsDisplay(pointsCheck.new_balance);
+
+    // Le reste de ta fonction d'export CodePen existante
+    const html = document.getElementById("full-html-code").value;
+    const css = document.getElementById("full-css-code").value;
+    const js = document.getElementById("full-js-code").value;
+
+    const data = {
+        title: "Animation 3D Scroll – Export",
+        html: html,
+        css: css,
+        js: js,
+        editors: "101",
+    };
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "https://codepen.io/pen/define";
+    form.target = "_blank";
+
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "data";
+    input.value = JSON.stringify(data);
+    form.appendChild(input);
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+
+    notify.success('Export CodePen réussi! -50 🪙', 'Export');
+});
+
 
 // GÉNÉRATION DE CODE
 // GÉNÉRATION DE CODE COMPLET
@@ -1149,6 +1295,69 @@ function updateUI() {
     }
 }
 
+// Gestion de l'achat de points
+document.querySelectorAll('.buy-points').forEach(button => {
+    button.addEventListener('click', async function() {
+        const packElement = this.closest('.point-pack');
+        const packId = packElement.getAttribute('data-pack-id');
+        
+        try {
+            const response = await fetch('api.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=create_checkout_session&pack_id=${packId}`
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                // Rediriger vers Stripe Checkout
+                const stripe = Stripe('pk_test_ta_cle_publique');
+                const { error } = await stripe.redirectToCheckout({
+                    sessionId: result.sessionId
+                });
+                
+                if (error) {
+                    notify.error('Erreur de redirection', error.message);
+                }
+            } else {
+                notify.error('Erreur', result.message);
+            }
+        } catch (error) {
+            console.error('Erreur achat:', error);
+            notify.error('Erreur réseau', 'Impossible de procéder au paiement');
+        }
+    });
+});
+
+// Vérifier le statut après retour de paiement
+async function checkPaymentStatus() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('session_id');
+    
+    if (sessionId) {
+        try {
+            const response = await fetch(`api.php?action=check_payment&session_id=${sessionId}`);
+            const result = await response.json();
+            
+            if (result.success) {
+                notify.success(`Achat réussi ! +${result.points_added} 🪙`, 'Points ajoutés');
+                updateUserPointsDisplay(result.new_balance);
+                
+                // Nettoyer l'URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        } catch (error) {
+            console.error('Erreur vérification paiement:', error);
+        }
+    }
+}
+
+
+
+
 // 🪟 Modal
 function showAuthModal() {
     document.getElementById('auth-modal').style.display = 'flex';
@@ -1162,6 +1371,7 @@ function closeAuthModal() {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded - currentUser:', currentUser);
     updateUI();
+    checkPaymentStatus();
     
     // Vérifier si on doit charger un projet
     const urlParams = new URLSearchParams(window.location.search);

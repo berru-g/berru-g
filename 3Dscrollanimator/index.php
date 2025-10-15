@@ -2,6 +2,7 @@
 // index.php
 require_once 'config.php';
 require_once 'auth.php';
+require_once 'PointsManager.php';
 
 // Vérifier si un projet doit être chargé
 $loadProjectId = $_GET['load_project'] ?? null;
@@ -141,12 +142,30 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
             'id' => $_SESSION['user_id'],
             'username' => $_SESSION['user_name'],
             'email' => $_SESSION['user_email'],
-            'subscription' => $_SESSION['subscription']
+            'subscription' => $_SESSION['subscription'],
+            'points' => $_SESSION['user_points'] ?? 200
         ]) : 'null' ?>;
         window.userSubscription = '<?= Auth::isLoggedIn() ? $_SESSION['subscription'] : 'free' ?>';
 
         console.log('Auth initialized:', window.currentUser);
     </script>
+    <!-- system de points
+    <?php if (Auth::isLoggedIn()): ?>
+        <div id="user-menu" class="user-menu">
+            <span class="user-avatar" id="user-avatar">
+                <?= strtoupper(substr($_SESSION['user_name'], 0, 1)) ?>
+            </span>
+            <span class="user-name" id="user-name">
+                <?= htmlspecialchars($_SESSION['user_name']) ?>
+                <span class="user-points" id="user-points">
+                    🪙 <?= $_SESSION['user_points'] ?? 200 ?>
+                </span>
+            </span>
+            <a href="dashboard.php" class="btn btn-secondary">Dashboard</a>
+            <a href="?logout" class="btn btn-secondary">Déconnexion</a>
+        </div>
+    <?php endif; ?>-->
+
 
 
     <!--<header class="header">
@@ -215,7 +234,25 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
     <div class="top-section">
         <div class="sidebar">
             <div class="section">
+                <h1>3D Scroll Animator</h1>
                 <h2 class="section-title">Importation 3D</h2>
+
+                <div class="instructions">
+                    <p><strong>Instructions :</strong></p>
+                    <p>1. Importez un modèle 3D (GLB/GLTF)</p>
+                    <p>2. Utilisez les contrôles pour positionner votre modèle</p>
+                    <p>3. Définissez le pourcentage de scroll et ajustez les propriétés</p>
+                    <p>4. Ajoutez des keyframes pour créer l'animation</p>
+                    <p>5. Copiez le code généré pour l'utiliser sur votre site</p>
+                    <?php if (!Auth::isLoggedIn()): ?>
+                        <p style="color: var(--primary); margin-top: 10px;">
+                            <strong>💡 Astuce :</strong> <a href="register.php"
+                                style="color: var(--primary);">Inscrivez-vous</a> pour sauvegarder vos projets !
+                        </p>
+                    <?php endif; ?>
+                </div>
+                <br>
+
                 <input type="file" id="model-input" accept=".glb,.gltf" style="display: none;">
                 <button class="btn" id="import-btn">Importer un modèle 3D</button>
                 <div class="input-group">
@@ -324,20 +361,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                 <button class="btn btn-secondary" id="copy-code">Copier le code</button>
             </div>
 
-            <div class="instructions">
-                <p><strong>Instructions :</strong></p>
-                <p>1. Importez un modèle 3D (GLB/GLTF)</p>
-                <p>2. Utilisez les contrôles pour positionner votre modèle</p>
-                <p>3. Définissez le pourcentage de scroll et ajustez les propriétés</p>
-                <p>4. Ajoutez des keyframes pour créer l'animation</p>
-                <p>5. Copiez le code généré pour l'utiliser sur votre site</p>
-                <?php if (!Auth::isLoggedIn()): ?>
-                    <p style="color: var(--primary); margin-top: 10px;">
-                        <strong>💡 Astuce :</strong> <a href="register.php"
-                            style="color: var(--primary);">Inscrivez-vous</a> pour sauvegarder vos projets !
-                    </p>
-                <?php endif; ?>
-            </div>
+
         </div>
 
         <div class="main-content">
@@ -473,6 +497,50 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
             </div>
         </div>
 
+
+
+
+        <!-- Achat de points à config avec stripe ou lemonsqueezie -->
+        <div class="points-shop">
+            <h3>🪙 Acheter des Points</h3>
+            <?php if (Auth::isLoggedIn()): ?>
+                <div id="user-menu" class="user-menu">
+
+                    <span class="user-name" id="user-name">
+                        <?= htmlspecialchars($_SESSION['user_name']) ?>
+                        <span class="user-points" id="user-points">
+                            🪙 <?= $_SESSION['user_points'] ?? 200 ?>
+                        </span>
+                    </span>
+                </div>
+            <?php endif; ?>
+            </p>
+
+            <div class="point-packs">
+                <div class="point-pack" data-pack-id="1">
+                    <h4>Pack Starter</h4>
+                    <div class="points-amount">100 🪙</div>
+                    <div class="price">4,90 €</div>
+                    <button class="btn btn-primary buy-points">Acheter</button>
+                </div>
+
+                <div class="point-pack popular" data-pack-id="2">
+                    <div class="badge">Populaire</div>
+                    <h4>Pack Pro</h4>
+                    <div class="points-amount">500 🪙</div>
+                    <div class="price">19,90 €</div>
+                    <button class="btn btn-primary buy-points">Acheter</button>
+                </div>
+
+                <div class="point-pack" data-pack-id="3">
+                    <h4>Pack Expert</h4>
+                    <div class="points-amount">1500 🪙</div>
+                    <div class="price">49,90 €</div>
+                    <button class="btn btn-primary buy-points">Acheter</button>
+                </div>
+            </div>
+        </div>
+
         <br>
         <p style="text-align: center">Dev by <a href="https://gael-berru.com"
                 style="color: white; text-decoration: none;">berru-g</a></p>
@@ -537,6 +605,30 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                     loadProject(loadProjectId);
                 }
             }, 1000);
+
+
+            // DEBUG
+            async function debugAll() {
+                console.log('=== DEBUG COMPLET ===');
+
+                // Test 1: Points actuels
+                const response1 = await fetch('api.php?action=get_user_points');
+                const points = await response1.json();
+                console.log('1. Points actuels:', points);
+
+                // Test 2: Déduction
+                const response2 = await fetch('api.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'action=deduct_points'
+                });
+                const deduct = await response2.json();
+                console.log('2. Déduction:', deduct);
+
+                // Test 3: Vérifie la session
+                console.log('3. Session PHP:', <?= json_encode($_SESSION ?? []) ?>);
+            }
+            debugAll();
         </script>
 </body>
 
