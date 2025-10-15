@@ -497,12 +497,13 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
             </div>
         </div>
 
+            <img src="../img/mascotte-easy2.png" alt="Mascotte" class="points-mascot">
 
 
 
         <!-- Achat de points à config avec stripe ou lemonsqueezie -->
         <div class="points-shop">
-            <h3>🪙 Acheter des Points</h3>
+            <h3>🪙 Gagner du temps avec les Packs </h3>
             <?php if (Auth::isLoggedIn()): ?>
                 <div id="user-menu" class="user-menu">
 
@@ -516,7 +517,9 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
             <?php endif; ?>
             </p>
 
+
             <div class="point-packs">
+
                 <div class="point-pack" data-pack-id="1">
                     <h4>Pack Starter</h4>
                     <div class="points-amount">100 🪙</div>
