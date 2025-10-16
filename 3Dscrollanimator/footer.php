@@ -72,7 +72,7 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
                     <li><a href="index.php">Éditeur</a></li>
                     <li><a href="gallery.php">Galerie</a></li>
                     <li><a href="dashboard.php">Dashboard</a></li>
-                    <li><a href="dashboard.php">Points & Tarifs</a></li>
+                    <li><a href="tarif.php">Points & Tarifs</a></li>
                 </ul>
             </div>
 
@@ -184,7 +184,7 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
 
     /* Styles pour le footer */
     .footer {
-        background: linear-gradient(135deg, #151517 30%, #ab9ff2 100%);
+        background: linear-gradient(135deg, #151517 70%, #ab9ff2 100%);
         color: #cdd6f4;
         border-top: 1px solid #313244;
         margin-top: 4rem;
@@ -224,7 +224,7 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
 
     .stat-item:hover {
         transform: translateY(-5px);
-        border-color: #cba6f7;
+        border-color: #ab9ff2;
     }
 
     .stat-number {
@@ -247,7 +247,7 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
     }
 
     .footer-brand h3 {
-        color: #cba6f7;
+        color: #ab9ff2;
         margin-bottom: 1rem;
         font-size: 1.5rem;
     }
@@ -266,7 +266,7 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
 
     .feature-tag {
         background: rgba(203, 166, 247, 0.1);
-        color: #cba6f7;
+        color: #ab9ff2;
         padding: 0.4rem 0.8rem;
         border-radius: 20px;
         font-size: 0.8rem;
@@ -281,7 +281,7 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
     }
 
     .link-group h4 {
-        color: #cba6f7;
+        color: #ab9ff2;
         margin-bottom: 1rem;
         font-size: 1.1rem;
     }
@@ -302,7 +302,7 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
     }
 
     .link-group a:hover {
-        color: #cba6f7;
+        color: #ab9ff2;
     }
 
     .footer-faq {
@@ -311,7 +311,7 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
     }
 
     .footer-faq h4 {
-        color: #cba6f7;
+        color: #ab9ff2;
         margin-bottom: 1rem;
     }
 
@@ -364,7 +364,7 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
     }
 
     .footer-resources h4 {
-        color: #cba6f7;
+        color: #ab9ff2;
         margin-bottom: 1rem;
     }
 
@@ -389,8 +389,8 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
 
     .resource-link:hover {
         background: rgba(203, 166, 247, 0.1);
-        color: #cba6f7;
-        border-color: #cba6f7;
+        color: #ab9ff2;
+        border-color: #ab9ff2;
         transform: translateY(-2px);
     }
 
@@ -421,7 +421,7 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
     }
 
     .footer-copyright a {
-        color: #cba6f7;
+        color: #ab9ff2;
         text-decoration: none;
     }
 
@@ -441,7 +441,7 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
     }
 
     .footer-legal a:hover {
-        color: #cba6f7;
+        color: #ab9ff2;
     }
 
     .footer-social {

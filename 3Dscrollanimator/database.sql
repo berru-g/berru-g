@@ -92,3 +92,21 @@ INSERT INTO point_packs (name, points_amount, price_eur) VALUES
 
 -- Ajout de la colonne last_login pour suivre la dernière connexion des utilisateurs
 ALTER TABLE users ADD COLUMN last_login DATE NULL;
+
+-- || BETA TESTERS PACKS CADEAUX ||
+-- || Ajouter des points directement aux utilisateurs beta testers
+-- UPDATE users SET points = 500 WHERE id IN (2, 3, 4, 5);
+-- || Ou pour des valeurs différentes par utilisateur
+-- UPDATE users SET points = 1000 WHERE id = 2;   -- Super beta tester
+-- UPDATE users SET points = 750 WHERE id = 3;    -- Beta tester actif
+-- UPDATE users SET points = 500 WHERE id = 4;    -- Beta tester régulier
+-- UPDATE users SET points = 300 WHERE id = 5;    -- Nouveau beta tester
+
+
+-- 1. Ajouter les points à l'utilisateur avec id = 2
+UPDATE users SET points = points + 500 WHERE id = 2;
+-- 2. Enregistrer la transaction
+INSERT INTO point_transactions (user_id, points_amount, amount_eur, status, payment_intent_id, created_at) 
+VALUES (2, 500, 19.90, 'completed', 'pi_test_beta_tester_1', NOW() - INTERVAL 7 DAY);
+
+-- FIN - BETA TESTERS PACKS CADEAUX
