@@ -115,7 +115,7 @@
             --bg: #1e1e2e;
             --card: #181825;
             --muted: #a6adc8;
-            --accent: #f5c2e7;
+            --accent: #ab9ff2;
             --accent-2: #cba6f7;
             --panel: #11111b;
             --border: #313244;
@@ -140,8 +140,9 @@
         }
 
         .scroll-space {
-            height: 200vh;
+            height: auto;
             position: relative;
+
         }
 
         canvas {
@@ -194,7 +195,7 @@
             font-size: clamp(28px, 4.2vw, 44px);
             line-height: 1.03;
             font-weight: 700;
-            color: var(--accent);
+            color: var(--accent2);
             margin-bottom: 16px;
         }
 
@@ -262,6 +263,7 @@
             display: flex;
             gap: 12px;
             flex-direction: column;
+            backdrop-filter: blur(20px);
         }
 
         .preview-frame {
@@ -270,6 +272,7 @@
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.02);
             background: linear-gradient(180deg, #0d0d12 0%, #08080b 100%);
+
         }
 
         .preview-actions {
@@ -277,6 +280,7 @@
             gap: 10px;
             align-items: center;
             justify-content: space-between;
+            backdrop-filter: blur(20px);
         }
 
         .preview-actions .small-ctas {
@@ -326,7 +330,8 @@
         }
 
         .card {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), transparent);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent);
+            backdrop-filter: blur(20px);
             border: 1px solid var(--border);
             padding: 16px;
             border-radius: 12px;
@@ -338,12 +343,13 @@
         .card i {
             font-size: 20px;
             color: var(--accent-2);
+            padding: 10px 10px;
             width: 36px;
             height: 36px;
             display: grid;
             place-items: center;
             background: rgba(203, 166, 247, 0.08);
-            border-radius: 8px;
+            border-radius: 12px;
         }
 
         .card h4 {
@@ -379,6 +385,12 @@
             display: flex;
             gap: 18px;
             align-items: center;
+        }
+
+        .illu {
+            width: 24px;
+            height: auto;
+
         }
 
         .kpi .num {
@@ -424,6 +436,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            backdrop-filter: blur(20px);
         }
 
         .cta-band .text h3 {
@@ -543,7 +556,7 @@
                 <div class="demo-iframe" data-aos="fade-up" data-aos-duration="700">
                     <!--<iframe src="../img/tuto.mp4?embed=1" title="Démo interactive 2"></iframe>-->
                     <img src="../img/mascotte-sunset.png" alt="Demo GIF" style="width:100%;height:auto;">
-                </div> 
+                </div>
 
             </div>
         </div>
@@ -554,7 +567,8 @@
                     <i class="fa-solid fa-brush"></i>
                     <div>
                         <h4>Interface visuelle</h4>
-                        <p>NO-CODE. Manipulez la position, rotation et échelle via sliders et keyframes — tout en temps réel.</p>
+                        <p>NO-CODE. Manipulez la position, rotation et échelle via sliders et keyframes — tout en temps
+                            réel.</p>
                     </div>
                 </div>
 
@@ -593,6 +607,7 @@
                     <div class="kpi">
                         <!-- PHP: Remplace $userCount par ta variable récupérée en backend -->
                         <!-- Ex: <?php $userCount = getUserCountFromDB(); ?> -->
+                        <img class="illu" src="../img/mascotte-code.png">
                         <div class="num" id="user-count"
                             data-count="<?php echo isset($userCount) ? $userCount : 127; ?>">24</div>
                         <div class="label">Utilisateurs actifs</div>
@@ -623,6 +638,7 @@
 
 
         <div class="stat-box" data-aos="fade-up" data-aos-duration="700" data-aos-delay="120">
+
             <h3 style="color:var(--accent);margin:0 0 12px;">Ce que disent les utilisateurs</h3>
             <div class="testimonials">
                 <div class="testimonial" data-aos="fade-up" data-aos-delay="80">
@@ -831,7 +847,7 @@
         document.body.appendChild(renderer.domElement);
 
         // Lumières
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 2);//0.6
         scene.add(ambientLight);
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
         directionalLight.position.set(10, 20, 15);
