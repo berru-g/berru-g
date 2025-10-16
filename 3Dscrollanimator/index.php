@@ -233,10 +233,8 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
 
     <div class="top-section">
         <div class="sidebar">
+            <h1>3D Scroll Animator</h1>
             <div class="section">
-                <h1>3D Scroll Animator</h1>
-                <h2 class="section-title">Importation 3D</h2>
-
                 <div class="instructions">
                     <p><strong>Instructions :</strong></p>
                     <p>1. Importez un modèle 3D (GLB/GLTF)</p>
@@ -252,6 +250,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                     <?php endif; ?>
                 </div>
                 <br>
+                <h2 class="section-title">Importation 3D</h2>
 
                 <input type="file" id="model-input" accept=".glb,.gltf" style="display: none;">
                 <button class="btn" id="import-btn">Importer un modèle 3D</button>
