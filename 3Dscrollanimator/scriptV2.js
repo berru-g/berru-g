@@ -617,6 +617,7 @@ function updateModelByScroll(percentage) {
     }
 }
 
+/*
 // SAVE LOAD PROJECTS & points MANAGEMENT
 async function saveProject() {
     console.log("🔧 saveProject() appelée");
@@ -697,6 +698,142 @@ async function saveProject() {
         notify.error('Erreur réseau', 'Impossible de sauvegarder');
     }
 }
+*/
+// Remplacer la fonction saveProject() existante
+function openSaveModal() {
+    console.log("🔧 openSaveModal() appelée");
+    
+    if (!currentUser) {
+        showAuthModal();
+        return;
+    }
+    
+    // Réinitialiser la modal
+    document.getElementById('project-title').value = '';
+    document.getElementById('project-description').value = '';
+    document.getElementById('title-chars').textContent = '0';
+    document.getElementById('desc-chars').textContent = '0';
+    
+    // Synchroniser la checkbox avec celle de la sidebar
+    const sidebarCheckbox = document.getElementById('make-public');
+    const modalCheckbox = document.getElementById('modal-make-public');
+    if (sidebarCheckbox && modalCheckbox) {
+        modalCheckbox.checked = sidebarCheckbox.checked;
+    }
+    
+    // Afficher la modal
+    document.getElementById('save-project-modal').style.display = 'flex';
+    
+    // Focus sur le champ titre
+    setTimeout(() => {
+        document.getElementById('project-title').focus();
+    }, 100);
+}
+
+function closeSaveModal() {
+    document.getElementById('save-project-modal').style.display = 'none';
+}
+
+// Compteurs de caractères
+document.getElementById('project-title').addEventListener('input', function() {
+    document.getElementById('title-chars').textContent = this.value.length;
+});
+
+document.getElementById('project-description').addEventListener('input', function() {
+    document.getElementById('desc-chars').textContent = this.value.length;
+});
+
+// Soumission du formulaire
+async function confirmSaveProject() {
+    const title = document.getElementById('project-title').value.trim();
+    const description = document.getElementById('project-description').value.trim();
+    const isPublic = document.getElementById('modal-make-public').checked;
+    
+    if (!title) {
+        notify.error('Veuillez donner un titre à votre projet', 'Titre requis');
+        document.getElementById('project-title').focus();
+        return;
+    }
+    
+    // Synchroniser avec la checkbox de la sidebar
+    const sidebarCheckbox = document.getElementById('make-public');
+    if (sidebarCheckbox) {
+        sidebarCheckbox.checked = isPublic;
+    }
+    
+    await saveProjectData(title, description, isPublic);
+    closeSaveModal();
+}
+
+// Fonction de sauvegarde principale
+async function saveProjectData(title, description, isPublic) {
+    console.log("🔧 saveProjectData() appelée");
+
+    const projectData = {
+        keyframes: keyframes,
+        modelSettings: {
+            position: model ? { x: model.position.x, y: model.position.y, z: model.position.z } : { x: 0, y: 0, z: 0 },
+            rotation: model ? { x: model.rotation.x, y: model.rotation.y, z: model.rotation.z } : { x: 0, y: 0, z: 0 },
+            scale: model ? { x: model.scale.x, y: model.scale.y, z: model.scale.z } : { x: 1, y: 1, z: 1 }
+        },
+        camera: {
+            position: camera ? { x: camera.position.x, y: camera.position.y, z: camera.position.z } : { x: 5, y: 5, z: 5 }
+        },
+        timestamp: new Date().toISOString()
+    };
+
+    try {
+        const formData = new FormData();
+        formData.append('action', 'save_project');
+        formData.append('title', title);
+        formData.append('description', description);
+        formData.append('model_data', JSON.stringify(projectData));
+        formData.append('is_public', isPublic ? 'true' : 'false');
+
+        const response = await fetch('api.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            const pointsResult = await addPoints(10);
+            
+            if (pointsResult.success) {
+                showPointsAnimation(10, 'Projet sauvegardé !');
+                
+                const message = isPublic 
+                    ? 'Projet publié avec succès ! +10 💎' 
+                    : 'Projet sauvegardé en privé ! +10 💎';
+                    
+                notify.success(message, 'Sauvegarde');
+                refreshUserPoints();
+            } else {
+                notify.success('Projet sauvegardé ! (erreur attribution points)', 'Sauvegarde');
+            }
+        } else {
+            notify.error('Erreur lors de la sauvegarde', result.message);
+        }
+    } catch (error) {
+        console.error('❌ Erreur sauvegarde:', error);
+        notify.error('Erreur réseau', 'Impossible de sauvegarder');
+    }
+}
+
+// Fermer la modal en cliquant à l'extérieur
+document.getElementById('save-project-modal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeSaveModal();
+    }
+});
+
+// Soumission avec Enter
+document.getElementById('project-title').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        confirmSaveProject();
+    }
+});
 
 // === NOUVELLES FONCTIONS POUR LA GESTION DES POINTS ===
 

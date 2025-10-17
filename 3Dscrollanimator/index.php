@@ -231,6 +231,189 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
         </div>
     </div>
 
+    <!-- Modal de sauvegarde de projet -->
+    <div id="save-project-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Sauvegarder le projet</h3>
+                <button class="close-btn" onclick="closeSaveModal()">×</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="project-title">Titre du projet *</label>
+                    <input type="text" id="project-title" placeholder="Mon animation 3D" maxlength="100">
+                    <div class="char-count"><span id="title-chars">0</span>/100</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="project-description">Description (optionnelle)</label>
+                    <textarea id="project-description" placeholder="Décrivez votre projet..." rows="3"
+                        maxlength="500"></textarea>
+                    <div class="char-count"><span id="desc-chars">0</span>/500</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="modal-make-public">
+                        <span class="checkmark"></span>
+                        Rendre ce projet public
+                    </label>
+                    <small style="color: var(--text-light); margin-top: 0.5rem; display: block;">
+                        Contribué dans la communauté
+                    </small>
+                </div>
+
+                <div class="reward-notice">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--accent);">
+                        <span>🎁</span>
+                        <strong>Bonus : +10 points pour chaque sauvegarde !</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeSaveModal()">Annuler</button>
+                <button class="btn btn-primary" onclick="confirmSaveProject()">
+                    Sauvegarder le projet
+                </button>
+            </div>
+        </div>
+    </div>
+    <style>
+        /* Styles pour la modal de sauvegarde */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: var(--text);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+
+        .close-btn:hover {
+            color: var(--text);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--background);
+            color: var(--text);
+            font-size: 0.875rem;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .checkbox-label input {
+            width: auto;
+            margin: 0;
+        }
+
+        .reward-notice {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+    </style>
+
+    <!-- ÉDITEUR PARAMETRE -->
     <div class="top-section">
         <div class="sidebar">
             <h1>3D Scroll Animator</h1>
@@ -260,8 +443,9 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
 
                 <!-- Bouton Record pour utilisateurs connectés -->
                 <?php if (Auth::isLoggedIn()): ?>
-                    <button class="btn" id="record-btn" onclick="saveProject()" style="margin-top: 10px;">
+                    <button class="btn" id="record-btn" onclick="openSaveModal()" style="margin-top: 10px;">
                         <i class="fa-solid fa-floppy-disk"></i> Save Project
+                        <span> +10 💎</span>
                     </button>
 
                     <div class="toggle-container" style="margin-top: 10px; margin-left: 0px;">
@@ -442,6 +626,8 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
 
             <button class="btn" id="open-codepen">
                 <i class="fa-brands fa-codepen" style="margin-right:6px;"></i>Ouvrir dans CodePen
+                
+                <span>  -50 💎</span>
             </button>
 
             <!-- Call to Action Upgrade 

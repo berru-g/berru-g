@@ -10,7 +10,7 @@ if (!Auth::isLoggedIn() || $_SESSION['user_id'] != 1) {
 $db = getDB();
 $action = $_GET['action'] ?? '';
 
-// Gestion des actions de messagerie
+/* Gestion des actions de messagerie
 if ($_POST['action'] === 'reply_feedback') {
     $feedback_id = $_POST['feedback_id'];
     $reply_message = trim($_POST['reply_message']);
@@ -21,7 +21,7 @@ if ($_POST['action'] === 'reply_feedback') {
         $message = "Réponse envoyée !";
     }
 }
-
+*/
 // Récupération des données
 $stats = [
     'total_users' => $db->query("SELECT COUNT(*) FROM users")->fetchColumn(),
@@ -29,8 +29,8 @@ $stats = [
     'total_likes' => $db->query("SELECT COUNT(*) FROM project_likes")->fetchColumn(),
     'total_comments' => $db->query("SELECT COUNT(*) FROM project_comments")->fetchColumn(),
     'public_projects' => $db->query("SELECT COUNT(*) FROM projects WHERE is_public = 1")->fetchColumn(),
-    'private_projects' => $db->query("SELECT COUNT(*) FROM projects WHERE is_public = 0")->fetchColumn(),
-    'unread_feedback' => $db->query("SELECT COUNT(*) FROM feedback WHERE admin_reply IS NULL")->fetchColumn()
+    'private_projects' => $db->query("SELECT COUNT(*) FROM projects WHERE is_public = 0")->fetchColumn()
+   // 'unread_feedback' => $db->query("SELECT COUNT(*) FROM feedback WHERE admin_reply IS NULL")->fetchColumn()
 ];
 
 // Messagerie - Récupération des feedbacks

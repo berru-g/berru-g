@@ -32,7 +32,7 @@ class RewardSystem {
         return ['success' => false, 'message' => 'Déjà connecté aujourdhui'];
     }
     
-    // Récompense pour partage sur les réseaux
+    /* Récompense pour partage sur les réseaux
     public static function addSocialSharePoints($userId, $platform) {
         $points = match($platform) {
             'twitter' => 25,
@@ -42,7 +42,7 @@ class RewardSystem {
         };
         
         return PointsManager::addPoints($userId, $points);
-    }
+    }*/
     
     // Récompense pour complétion de tutoriel
     public static function addTutorialCompletion($userId, $tutorialId) {
