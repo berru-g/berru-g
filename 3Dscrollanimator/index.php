@@ -249,15 +249,13 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                         </p>
                     <?php endif; ?>
                 </div>
-                <br>
-                <h2 class="section-title">Importation 3D</h2>
-
+            </div>
+            <br>
+            <h2 class="section-title">Importation 3D</h2>
+            <div class="section">
                 <input type="file" id="model-input" accept=".glb,.gltf" style="display: none;">
                 <button class="btn" id="import-btn">Importer un modèle 3D</button>
-                <div class="input-group">
-                    <label for="model-scale">Échelle du modèle</label>
-                    <input type="range" id="model-scale" min="0.1" max="3" step="0.1" value="1">
-                </div>
+
                 <button class="btn btn-secondary" onclick="loadTestModel()">Charger modèle test</button>
 
                 <!-- Bouton Record pour utilisateurs connectés -->
@@ -285,11 +283,9 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
             </div>
 
             <div class="section">
-                <h2 class="section-title">Animation par Scroll</h2>
-                <div class="tab-container">
-                    <div class="tab active" data-tab="position">Position</div>
-                    <div class="tab" data-tab="rotation">Rotation</div>
-                    <div class="tab" data-tab="scale">Échelle</div>
+                <div class="input-group">
+                    <label for="model-scale">Échelle du modèle</label>
+                    <input type="range" id="model-scale" min="0.1" max="3" step="0.1" value="1">
                 </div>
 
                 <div class="input-group">
@@ -297,6 +293,20 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                     <input type="range" id="keyframe-percentage" min="0" max="100" value="0">
                     <div style="text-align: center; margin-top: 5px;" id="percentage-value">0%</div>
                 </div>
+
+            </div>
+
+            <h2 class="section-title">Animation par Scroll</h2>
+
+            <div class="section">
+
+                <div class="tab-container">
+                    <div class="tab active" data-tab="position">Position</div>
+                    <div class="tab" data-tab="rotation">Rotation</div>
+                    <div class="tab" data-tab="scale">Échelle</div>
+                </div>
+
+
 
                 <div id="position-controls" class="tab-content">
                     <div class="input-group">
@@ -558,7 +568,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
             }
         </script>
 
-        <script>
+        <!--<script>
             // Export dans codepen
             document.getElementById("open-codepen").addEventListener("click", () => {
                 const html = document.getElementById("full-html-code").value;
@@ -588,7 +598,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                 form.submit();
                 document.body.removeChild(form);
             });
-        </script>
+        </script>-->
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>

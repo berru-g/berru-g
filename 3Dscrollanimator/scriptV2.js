@@ -719,7 +719,7 @@ document.getElementById("open-codepen").addEventListener("click", async () => {
         
         // Proposer d'acheter des points
         if (confirm("Points insuffisants ! Voulez-vous acheter plus de points ?")) {
-            window.location.href = 'dashboard.php#points';
+            window.location.href = 'tarif.php';
         }
         return;
     }
