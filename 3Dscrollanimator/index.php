@@ -415,7 +415,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
 
         <!-- État connecté (gratuit) -->
         <div id="code-free-user" class="code-editors"
-            style="<?= (Auth::isLoggedIn() && $_SESSION['subscription'] === 'free') ? 'display:flex;' : 'display:none;' ?>">
+            style="<?= (Auth::isLoggedIn() && $_SESSION['subscription'] === 'pro') ? 'display:flex;' : 'display:none;' ?>">
             <div class="code-box">
                 <div class="code-box-title">HTML</div>
                 <div class="copy-icon" onclick="copyCode('full-html-code')" title="Copier le HTML">
@@ -463,7 +463,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
 
             <!-- État connecté (Pro) -->
             <div id="code-pro-user" class="code-pro-features"
-                style="<?= (Auth::isLoggedIn() && $_SESSION['subscription'] === 'pro') ? 'display:block;' : 'display:none;' ?>">
+                style="<?= (Auth::isLoggedIn() && $_SESSION['subscription'] === 'free') ? 'display:block;' : 'display:none;' ?>">
                 <div class="code-editors">
                     <div class="code-box">
                         <div class="code-box-title">HTML</div>
@@ -510,7 +510,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
 
         <!-- Achat de points à config avec stripe ou lemonsqueezie -->
         <div class="points-shop">
-            <h3>🪙 Gagner du temps avec les Packs </h3>
+            <h3>🪙 Gagner du temps avec les Packs ! Bientôt disponible</h3>
             <?php if (Auth::isLoggedIn()): ?>
                 <div id="user-menu" class="user-menu">
 

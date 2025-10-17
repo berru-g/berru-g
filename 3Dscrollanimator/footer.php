@@ -30,7 +30,7 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
             <div class="stats-grid">
                 <div class="stat-item">
                     <div class="stat-number"><?= $totalUsers ?></div>
-                    <div class="stat-label">Créateurs</div>
+                    <div class="stat-label">Beta Tester</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number"><?= $publicProjects ?></div>
@@ -52,7 +52,7 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
             <div class="footer-brand">
                 <h3>3D Scroll Animator</h3>
                 <p class="footer-description">
-                    Plateforme no-code pour créer des animations 3D époustouflantes synchronisées au scroll.
+                    Plateforme no-code pour créer des animations 3D synchronisées au scroll.
                     Importez vos modèles, définissez des keyframes et générez du code prêt à l'emploi.
                 </p>
                 <div class="footer-features">
@@ -123,12 +123,12 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
         <div class="footer-resources">
             <h4>Ressources</h4>
             <div class="resource-links">
-                <a href="https://github.com" target="_blank" class="resource-link" title="GitHub - Dépôts de code">
+                <a href="https://github.com/berru-g/3Dscrollanimator/" target="_blank" class="resource-link" title="GitHub - Dépôts de code">
                     <img src="https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/github.svg" alt="GitHub">
                     <span>GitHub</span>
                 </a>
 
-                <a href="https://codepen.io" target="_blank" class="resource-link" title="CodePen - Éditeur en ligne">
+                <a href="https://codepen.io/h-lautre/" target="_blank" class="resource-link" title="CodePen - Éditeur en ligne">
                     <img src="https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/codepen.svg" alt="CodePen">
                     <span>CodePen</span>
                 </a>
@@ -153,9 +153,9 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
         <!-- Copyright & Legal -->
         <div class="footer-bottom">
             <div class="footer-copyright">
-                <p>&copy; 2024 3D Scroll Animator. Créé par <a href="https://gael-berru.com" target="_blank">berru-g</a>
+                <p>&copy; 2025 3D Scroll Animator V_1.0. Créé par <a href="https://gael-berru.com" target="_blank">berru-g</a>
                 </p>
-                <p>Fait pour les créateurs, par les créateurs.</p>
+                <p>Fait pour les créateurs, par les créateurs. Saas en phase de test. Faites nous vos retours.</p>
             </div>
 
             <div class="footer-legal">
