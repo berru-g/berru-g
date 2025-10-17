@@ -110,3 +110,17 @@ INSERT INTO point_transactions (user_id, points_amount, amount_eur, status, paym
 VALUES (2, 500, 19.90, 'completed', 'pi_test_beta_tester_1', NOW() - INTERVAL 7 DAY);
 
 -- FIN - BETA TESTERS PACKS CADEAUX
+
+-- FORMULAIRE DE CONTACT
+CREATE TABLE IF NOT EXISTS feedback (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NULL,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    type ENUM('bug', 'feature', 'improvement', 'uiux', 'other') NOT NULL,
+    message TEXT NOT NULL,
+    status ENUM('new', 'reviewed', 'in_progress', 'completed') DEFAULT 'new',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+);
