@@ -358,7 +358,7 @@ function loadModel() {
 
     // Utilisation d'un modèle 3D glb ou gltf plus léger
     //const modelUrl = 'https://raw.githubusercontent.com/berru-g/3d-scroll-animate/main/assets/scene.gltf';
-    const modelUrl = 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb';
+    const modelUrl = 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/fantasy_town.glb';
 
     loader.load(
         modelUrl,

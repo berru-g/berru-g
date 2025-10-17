@@ -354,7 +354,7 @@ if (Auth::isLoggedIn()) {
                 <img src="https://github.com/berru-g/berru-g/blob/main/img/mascotte-easy2.png?raw=true"
                     alt="Mascotte 3D Scroll Animator" class="mascotte-img">
                 <div class="mascotte-text">
-                    <h2>Salut ! Je suis Scrollizy, votre assistant 3D</h2>
+                    <h2 style="color: grey;">Salut ! Je suis Scrollizy, votre assistant 3D</h2>
                     <p>Chez 3D Scroll Animator, nous croyons que les meilleures idées viennent de notre communauté.
                         Partagez vos suggestions, bug rencontrés ou idées de fonctionnalités - chaque feedback nous aide
                         à améliorer l'outil pour tous !</p>
