@@ -1,7 +1,7 @@
 <?php
 require_once 'config.php';
 require_once 'auth.php';
-
+require_once 'PointsManager.php';
 // Traitement du formulaire
 $message = '';
 $message_type = '';
@@ -33,12 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($user_id) {
                 $stmt = $pdo->prepare("
                     UPDATE users 
-                    SET gems = gems + 500 
+                    SET points = points + 500 
                     WHERE id = ?
                 ");
                 $stmt->execute([$user_id]);
 
-                $_SESSION['user_gems'] += 500;
+                $_SESSION['points'] += 500;
             }
 
             $message = 'Merci pour votre feedback ! ' . ($user_id ? '500 💎 ont été ajoutées à votre compte.' : '');
@@ -414,7 +414,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <h3>Votre profil</h3>
                     <div class="stat-item">
                         <span>Gemmes actuelles :</span>
-                        <span class="gems-badge"><?= $_SESSION['user_gems'] ?? 0 ?> 💎</span>
+                        <span class="gems-badge"><?= $_SESSION['points'] ?? 0 ?> 💎</span>
                     </div>
                     <div class="stat-item">
                         <span>Feedback envoyés :</span>
@@ -477,7 +477,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }, 300);
         });
     </script>
-</body>
-<?php require_once 'footer.php'; ?>
 
+<?php require_once 'footer.php'; ?>
+</body>
 </html>
