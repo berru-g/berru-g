@@ -416,6 +416,17 @@ if (Auth::isLoggedIn()) {
                 </button>
             </form>
 
+            <?php if ($user_id && $message_type === 'success'): ?>
+                <script>
+                    // Afficher l'animation après l'envoi du formulaire
+                    document.addEventListener('DOMContentLoaded', function () {
+                        setTimeout(() => {
+                            showPointsAnimation(500, 'Merci pour votre feedback !');
+                        }, 1000);
+                    });
+                </script>
+            <?php endif; ?>
+
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon"><i class="fa-regular fa-map"></i></div>
