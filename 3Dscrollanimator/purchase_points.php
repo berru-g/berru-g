@@ -39,7 +39,7 @@ class PointPurchase
                         'price_data' => [
                             'currency' => 'eur',
                             'product_data' => [
-                                'name' => $pack['name'] . ' - ' . $pack['points_amount'] . ' 🪙',
+                                'name' => $pack['name'] . ' - ' . $pack['points_amount'] . ' 💎',
                                 'description' => 'Points pour l\'éditeur 3D Scroll Animator'
                             ],
                             'unit_amount' => $pack['price_eur'] * 100, // Stripe utilise les centimes

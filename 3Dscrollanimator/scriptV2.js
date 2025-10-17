@@ -591,7 +591,7 @@ async function saveProject() {
         if (result.success) {
             // Mettre à jour l'affichage des points
             updateUserPointsDisplay(pointsCheck.new_balance);
-            notify.success('Projet sauvegardé avec succès! -50 🪙', 'Sauvegarde');
+            notify.success('Projet sauvegardé avec succès! -50 💎', 'Sauvegarde');
         } else {
             // Remettre les points en cas d'erreur
             await addPoints(50);
@@ -645,7 +645,7 @@ function updateUserPointsDisplay(newPoints) {
     // Mettre à jour l'affichage dans le header
     const pointsElement = document.getElementById('user-points');
     if (pointsElement) {
-        pointsElement.textContent = `🪙 ${newPoints}`;
+        pointsElement.textContent = `💎 ${newPoints}`;
     }
 
     // Mettre à jour l'affichage dans la section points-info
@@ -673,7 +673,7 @@ async function claimDailyBonus() {
 
         const result = await response.json();
         if (result.success) {
-            notify.success('Bonus quotidien: +10 🪙', 'Récompense');
+            notify.success('Bonus quotidien: +10 💎', 'Récompense');
             refreshUserPoints();
         }
     } catch (error) {
@@ -755,7 +755,7 @@ document.getElementById("open-codepen").addEventListener("click", async () => {
     form.submit();
     document.body.removeChild(form);
 
-    notify.success('Export CodePen réussi! -50 🪙', 'Export');
+    notify.success('Export CodePen réussi! -50 💎', 'Export');
 });
 
 
@@ -1629,7 +1629,7 @@ async function checkPaymentStatus() {
             const result = await response.json();
 
             if (result.success) {
-                notify.success(`Achat réussi ! +${result.points_added} 🪙`, 'Points ajoutés');
+                notify.success(`Achat réussi ! +${result.points_added} 💎`, 'Points ajoutés');
                 updateUserPointsDisplay(result.new_balance);
 
                 // Nettoyer l'URL

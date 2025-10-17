@@ -26,7 +26,7 @@ class PointsManager {
             if ($currentPoints < $points) {
                 return [
                     'success' => false, 
-                    'message' => 'Points insuffisants. Il vous reste ' . $currentPoints . ' 🪙'
+                    'message' => 'Points insuffisants. Il vous reste ' . $currentPoints . ' 💎'
                 ];
             }
             

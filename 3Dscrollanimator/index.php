@@ -158,7 +158,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
             <span class="user-name" id="user-name">
                 <?= htmlspecialchars($_SESSION['user_name']) ?>
                 <span class="user-points" id="user-points">
-                    🪙 <?= $_SESSION['user_points'] ?? 200 ?>
+                    💎 <?= $_SESSION['user_points'] ?? 200 ?>
                 </span>
             </span>
             <a href="dashboard.php" class="btn btn-secondary">Dashboard</a>
@@ -510,14 +510,14 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
 
         <!-- Achat de points à config avec stripe ou lemonsqueezie -->
         <div class="points-shop">
-            <h3>🪙 Gagner du temps avec les Packs ! Bientôt disponible</h3>
+            <h3>💎 Gagnez du temps avec les Packs ! Bientôt disponible</h3>
             <?php if (Auth::isLoggedIn()): ?>
                 <div id="user-menu" class="user-menu">
 
                     <span class="user-name" id="user-name">
                         <?= htmlspecialchars($_SESSION['user_name']) ?>
                         <span class="user-points" id="user-points">
-                            🪙 <?= $_SESSION['user_points'] ?? 200 ?>
+                            💎 <?= $_SESSION['user_points'] ?? 200 ?>
                         </span>
                     </span>
                 </div>
@@ -529,7 +529,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
 
                 <div class="point-pack" data-pack-id="1">
                     <h4>Pack Starter</h4>
-                    <div class="points-amount">100 🪙</div>
+                    <div class="points-amount">100 💎</div>
                     <div class="price">4,90 €</div>
                     <button class="btn btn-primary buy-points">Obtenir</button>
                 </div>
@@ -537,14 +537,14 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                 <div class="point-pack popular" data-pack-id="2">
                     <div class="badge">Populaire</div>
                     <h4>Pack Pro</h4>
-                    <div class="points-amount">500 🪙</div>
+                    <div class="points-amount">500 💎</div>
                     <div class="price">19,90 €</div>
                     <button class="btn btn-primary buy-points">Obtenir</button>
                 </div>
 
                 <div class="point-pack" data-pack-id="3">
                     <h4>Pack Expert</h4>
-                    <div class="points-amount">1500 🪙</div>
+                    <div class="points-amount">1500 💎</div>
                     <div class="price">49,90 €</div>
                     <button class="btn btn-primary buy-points">Obtenir</button>
                 </div>
