@@ -2,7 +2,7 @@
 require_once 'config.php';
 require_once 'auth.php';
 require_once 'PointsManager.php';
-// Traitement du formulaire
+
 $message = '';
 $message_type = '';
 
@@ -21,34 +21,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message_type = 'error';
     } else {
         try {
-            $stmt = $pdo->prepare("
+            $db = getDB();
+            $db->beginTransaction();
+
+            // Insérer le feedback
+            $stmt = $db->prepare("
                 INSERT INTO feedback 
                 (user_id, name, email, type, message, created_at) 
                 VALUES (?, ?, ?, ?, ?, NOW())
             ");
-
             $stmt->execute([$user_id, $name, $email, $type, $message_content]);
 
-            // Ajouter les gemmes si l'utilisateur est connecté
+            // Ajouter les points si utilisateur connecté
             if ($user_id) {
-                $stmt = $pdo->prepare("
-                    UPDATE users 
-                    SET points = points + 500 
-                    WHERE id = ?
-                ");
-                $stmt->execute([$user_id]);
-
-                $_SESSION['points'] += 500;
+                $result = PointsManager::addPoints($user_id, 500);
+                if (!$result['success']) {
+                    throw new Exception($result['message']);
+                }
             }
 
-            $message = 'Merci pour votre feedback ! ' . ($user_id ? '500 💎 ont été ajoutées à votre compte.' : '');
+            $db->commit();
+
+            $message = 'Merci pour votre feedback ! ' .
+                ($user_id ? '500 points ont été ajoutés à votre compte.' : '');
             $message_type = 'success';
 
-        } catch (PDOException $e) {
-            $message = 'Erreur lors de l\'envoi du message.';
+        } catch (Exception $e) {
+            $db->rollBack();
+            $message = 'Erreur lors de l\'envoi du message: ' . $e->getMessage();
             $message_type = 'error';
+            error_log("Feedback Error: " . $e->getMessage());
         }
     }
+}
+
+// Récupérer les stats utilisateur pour l'affichage
+$user_stats = [
+    'points' => 0,
+    'feedback_count' => 0,
+    'total_points_earned' => 0
+];
+
+if (Auth::isLoggedIn()) {
+    $user_id = $_SESSION['user_id'];
+    $db = getDB();
+
+    // Points actuels
+    $user_stats['points'] = PointsManager::getPoints($user_id);
+
+    // Nombre de feedbacks
+    $stmt = $db->prepare("SELECT COUNT(*) FROM feedback WHERE user_id = ?");
+    $stmt->execute([$user_id]);
+    $user_stats['feedback_count'] = $stmt->fetchColumn();
+
+    // Total points gagnés
+    $user_stats['total_points_earned'] = $user_stats['feedback_count'] * 500;
 }
 ?>
 
@@ -413,28 +440,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="user-stats">
                     <h3>Votre profil</h3>
                     <div class="stat-item">
-                        <span>Gemmes actuelles :</span>
-                        <span class="gems-badge"><?= $_SESSION['points'] ?? 0 ?> 💎</span>
+                        <span>Points actuels :</span>
+                        <span class="points-badge"><?= $user_stats['points'] ?> 💎</span>
                     </div>
                     <div class="stat-item">
                         <span>Feedback envoyés :</span>
-                        <span>
-                            <?php
-                            $stmt = $pdo->prepare("SELECT COUNT(*) FROM feedback WHERE user_id = ?");
-                            $stmt->execute([$_SESSION['user_id']]);
-                            echo $stmt->fetchColumn();
-                            ?>
-                        </span>
+                        <span><?= $user_stats['feedback_count'] ?></span>
                     </div>
                     <div class="stat-item">
-                        <span>Gemmes gagnées :</span>
-                        <span class="gems-badge">
-                            <?php
-                            $stmt = $pdo->prepare("SELECT COUNT(*) * 500 FROM feedback WHERE user_id = ?");
-                            $stmt->execute([$_SESSION['user_id']]);
-                            echo $stmt->fetchColumn() . ' 💎';
-                            ?>
-                        </span>
+                        <span>Points gagnés :</span>
+                        <span class="points-badge"><?= $user_stats['total_points_earned'] ?> 💎</span>
                     </div>
                 </div>
             <?php endif; ?>
@@ -462,6 +477,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </div>
+    <?php require_once 'footer.php'; ?>
 
     <script>
         // Animation simple pour le formulaire
@@ -478,6 +494,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
     </script>
 
-<?php require_once 'footer.php'; ?>
 </body>
+
 </html>

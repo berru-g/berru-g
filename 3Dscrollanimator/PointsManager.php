@@ -4,15 +4,12 @@ require_once 'config.php';
 class PointsManager {
     public static function deductPoints($userId, $points = 50) {
         try {
-            // DÉMARRER LA SESSION
             if (session_status() === PHP_SESSION_NONE) {
                 session_start();
             }
             
-            //$db = Database::getConnection();
             $db = getDB();
             
-            // Vérifier si l'utilisateur a assez de points
             $stmt = $db->prepare("SELECT points FROM users WHERE id = ?");
             $stmt->execute([$userId]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -26,16 +23,14 @@ class PointsManager {
             if ($currentPoints < $points) {
                 return [
                     'success' => false, 
-                    'message' => 'Points insuffisants. Il vous reste ' . $currentPoints . ' 💎'
+                    'message' => 'Points insuffisants. Il vous reste ' . $currentPoints . ' points'
                 ];
             }
             
-            // Déduire les points
             $newPoints = $currentPoints - $points;
             $stmt = $db->prepare("UPDATE users SET points = ? WHERE id = ?");
             $stmt->execute([$newPoints, $userId]);
             
-            // Mettre à jour la session
             $_SESSION['user_points'] = $newPoints;
             
             return [
@@ -52,7 +47,7 @@ class PointsManager {
     
     public static function getPoints($userId) {
         try {
-            $db = Database::getConnection();
+            $db = getDB();
             $stmt = $db->prepare("SELECT points FROM users WHERE id = ?");
             $stmt->execute([$userId]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -67,12 +62,16 @@ class PointsManager {
     
     public static function addPoints($userId, $points) {
         try {
-            $db = Database::getConnection();
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+            
+            $db = getDB();
             
             $stmt = $db->prepare("UPDATE users SET points = points + ? WHERE id = ?");
             $stmt->execute([$points, $userId]);
             
-            // Mettre à jour la session si c'est l'utilisateur courant
+            // Mettre à jour la session
             if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $userId) {
                 $_SESSION['user_points'] = self::getPoints($userId);
             }
@@ -85,3 +84,4 @@ class PointsManager {
         }
     }
 }
+?>
