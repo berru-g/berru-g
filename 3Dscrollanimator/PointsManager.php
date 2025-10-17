@@ -2,7 +2,7 @@
 require_once 'config.php';
 
 class PointsManager {
-    public static function deductPoints($userId, $points = 50) {
+    public static function deductPoints($userId, $points = 50) {//deduit des point lors de la naviguation...bug a trouvé icic 
         try {
             if (session_status() === PHP_SESSION_NONE) {
                 session_start();

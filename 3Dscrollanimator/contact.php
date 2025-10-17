@@ -489,6 +489,7 @@ if (Auth::isLoggedIn()) {
         </div>
     </div>
     <?php require_once 'footer.php'; ?>
+    <script src="scriptV2.js"></script>
 
     <script>
         // Animation simple pour le formulaire

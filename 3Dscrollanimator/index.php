@@ -626,7 +626,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                 const points = await response1.json();
                 console.log('1. Points actuels:', points);
 
-                // Test 2: Déduction
+                /* Test 2: Déduction
                 const response2 = await fetch('api.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -634,7 +634,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                 });
                 const deduct = await response2.json();
                 console.log('2. Déduction:', deduct);
-
+*/
                 // Test 3: Vérifie la session
                 console.log('3. Session PHP:', <?= json_encode($_SESSION ?? []) ?>);
             }
