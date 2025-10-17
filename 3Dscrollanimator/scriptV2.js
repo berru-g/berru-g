@@ -617,7 +617,7 @@ function updateModelByScroll(percentage) {
     }
 }
 
-// debug save
+// SAVE LOAD PROJECTS & points MANAGEMENT
 async function saveProject() {
     console.log("🔧 saveProject() appelée");
 
@@ -627,26 +627,12 @@ async function saveProject() {
         return;
     }
 
-    // Vérifier et déduire les points
-    const pointsCheck = await checkAndDeductPoints('save');
-    if (!pointsCheck.success) {
-        notify.error(pointsCheck.message, 'Points insuffisants');
-
-        // Proposer d'acheter des points
-        if (confirm("Points insuffisants ! Voulez-vous acheter plus de points ?")) {
-            window.location.href = 'tarif.php';
-        }
-        return;
-    }
-
     const title = prompt('Donnez un titre à votre projet:', 'Mon animation 3D');
-    if (!title) {
-        // Remettre les points si annulation
-        await addPoints(50);
-        return;
-    }
+    if (!title) return;
 
     const description = prompt('Description (optionnelle):', '');
+    const makePublicCheckbox = document.getElementById('make-public');
+    const isPublic = makePublicCheckbox && makePublicCheckbox.checked;
 
     const projectData = {
         keyframes: keyframes,
@@ -669,8 +655,7 @@ async function saveProject() {
         formData.append('title', title);
         formData.append('description', description);
         formData.append('model_data', JSON.stringify(projectData));
-        const makePublicCheckbox = document.getElementById('make-public');
-        formData.append('is_public', makePublicCheckbox && makePublicCheckbox.checked ? 'true' : 'false');
+        formData.append('is_public', isPublic ? 'true' : 'false');
 
         console.log("🔧 Envoi vers api.php...");
 
@@ -685,21 +670,34 @@ async function saveProject() {
         console.log("🔧 Résultat API:", result);
 
         if (result.success) {
-            // Mettre à jour l'affichage des points
-            updateUserPointsDisplay(pointsCheck.new_balance);
-            notify.success('Projet sauvegardé avec succès! -50 💎', 'Sauvegarde');
+            // ✅ DONNER 10 POINTS au lieu d'en enlever
+            const pointsResult = await addPoints(10);
+            
+            if (pointsResult.success) {
+                // Animation de gain de points
+                showPointsAnimation(10, 'Projet sauvegardé !');
+                
+                // Message différent selon public/privé
+                const message = isPublic 
+                    ? 'Projet publié avec succès ! +10 💎' 
+                    : 'Projet sauvegardé en privé ! +10 💎';
+                    
+                notify.success(message, 'Sauvegarde');
+                
+                // Mettre à jour l'affichage des points
+                refreshUserPoints();
+            } else {
+                notify.success('Projet sauvegardé ! (erreur attribution points)', 'Sauvegarde');
+            }
         } else {
-            // Remettre les points en cas d'erreur
-            await addPoints(50);
             notify.error('Erreur lors de la sauvegarde', result.message);
         }
     } catch (error) {
-        // Remettre les points en cas d'erreur réseau
-        await addPoints(50);
         console.error('❌ Erreur sauvegarde:', error);
         notify.error('Erreur réseau', 'Impossible de sauvegarder');
     }
 }
+
 // === NOUVELLES FONCTIONS POUR LA GESTION DES POINTS ===
 
 // Fonctions de gestion des points
@@ -1768,6 +1766,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 2000);
     }
 });
+
+// Notification de mise à jour
+notify.success('Merci de patienter pour tout bug rencontré', 'Mise à jour');
 
 // 🖱️ Fermer la modal en cliquant à l'extérieur
 document.getElementById('auth-modal').addEventListener('click', function (e) {

@@ -102,12 +102,11 @@ ALTER TABLE users ADD COLUMN last_login DATE NULL;
 -- UPDATE users SET points = 500 WHERE id = 4;    -- Beta tester régulier
 -- UPDATE users SET points = 300 WHERE id = 5;    -- Nouveau beta tester
 
-
--- 1. Ajouter les points à l'utilisateur avec id = 2
-UPDATE users SET points = points + 500 WHERE id = 2;
--- 2. Enregistrer la transaction
-INSERT INTO point_transactions (user_id, points_amount, amount_eur, status, payment_intent_id, created_at) 
-VALUES (2, 500, 19.90, 'completed', 'pi_test_beta_tester_1', NOW() - INTERVAL 7 DAY);
+-- || 1. Ajouter les points à l'utilisateur avec id = 2
+-- UPDATE users SET points = points + 500 WHERE id = 2;
+-- || 2. Enregistrer la transaction
+-- INSERT INTO point_transactions (user_id, points_amount, amount_eur, status, payment_intent_id, created_at) 
+-- VALUES (2, 500, 19.90, 'completed', 'pi_test_beta_tester_1', NOW() - INTERVAL 7 DAY);
 
 -- FIN - BETA TESTERS PACKS CADEAUX
 
