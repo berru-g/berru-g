@@ -3,6 +3,7 @@
 require_once 'auth.php';
 require_once 'projects.php';
 require_once 'PointsManager.php';
+require_once 'RewardSystem.php';
 
 header('Content-Type: application/json');
 
@@ -84,7 +85,6 @@ switch ($action) {
         echo json_encode(['success' => $success, 'message' => $success ? 'Commentaire ajouté' : 'Erreur']);
         break;
 
-    // Dans api.php - Ajoute dans le switch
 
     case 'daily_login_bonus':
         if (!Auth::isLoggedIn()) {
