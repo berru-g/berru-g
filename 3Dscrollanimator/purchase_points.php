@@ -96,7 +96,7 @@ class PointPurchase
         $transactionId = $session->metadata->transaction_id;
 
         // CORRECTION : Récupérer le pack pour connaître le nombre de points
-        $db = Database::getConnection();
+        $db = Database::getConnection(); //Database::getConnection(); - or - getDB(); ???
         $stmt = $db->prepare("SELECT points_amount FROM point_packs WHERE id = ?");
         $stmt->execute([$session->metadata->pack_id]);
         $pack = $stmt->fetch(PDO::FETCH_ASSOC);

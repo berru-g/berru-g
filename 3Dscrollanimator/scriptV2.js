@@ -1905,7 +1905,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Notification de mise à jour
-notify.success('Merci de patienter pour tout bug rencontré', 'Mise à jour');
+notify.success('Vous pourrez bientôt obtenir des packs 💎', 'Mise à jour');
 
 // 🖱️ Fermer la modal en cliquant à l'extérieur
 document.getElementById('auth-modal').addEventListener('click', function (e) {

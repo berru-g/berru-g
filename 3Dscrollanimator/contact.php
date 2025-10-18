@@ -177,8 +177,8 @@ if (Auth::isLoggedIn()) {
         }
 
         .mascotte-img {
-            width: 120px;
-            height: 120px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid var(--primary);
@@ -351,19 +351,19 @@ if (Auth::isLoggedIn()) {
             </div>
 
             <div class="mascotte-section">
-                <img src="https://github.com/berru-g/berru-g/blob/main/img/mascotte-easy2.png?raw=true"
+                <img src="../img/mascotte-sav.png"
                     alt="Mascotte 3D Scroll Animator" class="mascotte-img">
                 <div class="mascotte-text">
                     <h2 style="color: grey;">Salut ! Je suis Scrollizy, votre assistant 3D</h2>
-                    <p>Chez 3D Scroll Animator, nous croyons que les meilleures idées viennent de notre communauté.
+                    <p style="color: white;">Chez 3D Scroll Animator, nous croyons que les meilleures idées viennent de notre communauté.
                         Partagez vos suggestions, bug rencontrés ou idées de fonctionnalités - chaque feedback nous aide
                         à améliorer l'outil pour tous !</p>
                 </div>
             </div>
 
             <div class="rewards-card">
-                <h3>Récompense spéciale : 500 💎 par feedback</h3>
-                <p>Pour chaque feedback constructif que vous nous envoyez, nous vous offrons <strong>500 gemmes</strong>
+                <h3 style="color: grey;">Récompense spéciale : 500 💎 par feedback</h3>
+                <p>Pour chaque feedback constructif que vous nous envoyez, nous vous offrons <strong>500 crédits</strong>
                     à utiliser sur la plateforme !</p>
                 <p><small>Les gemmes vous permettent de débloquer des fonctionnalités premium et des modèles
                         exclusifs.</small></p>
@@ -430,17 +430,17 @@ if (Auth::isLoggedIn()) {
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon"><i class="fa-regular fa-map"></i></div>
-                    <h4>Roadmap Publique</h4>
+                    <h4 style="color: grey;">Roadmap Publique</h4>
                     <p>Suivez l'évolution des features demandées par la communauté</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon"><i class="fa-solid fa-trophy"></i></div>
-                    <h4>Top Contributeurs</h4>
+                    <h4 style="color: grey;">Top Contributeurs</h4>
                     <p>Les meilleurs feedbacks sont récompensés mensuellement</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon"><i class="fa-regular fa-message"></i></div>
-                    <h4>Réponse Garantie</h4>
+                    <h4 style="color: grey;">Réponse Garantie</h4>
                     <p>Nous répondons à tous les messages sous 48h</p>
                 </div>
             </div>
