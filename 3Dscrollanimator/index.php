@@ -266,8 +266,8 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
 
                 <div class="reward-notice">
                     <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--accent);">
-                        <span>🎁</span>
-                        <strong>Bonus : +10 points pour chaque sauvegarde !</strong>
+                        <span>💎</span>
+                        <strong>Bonus : +10 crédits pour chaque sauvegarde !</strong>
                     </div>
                 </div>
             </div>
@@ -288,7 +288,8 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
             justify-content: center;
