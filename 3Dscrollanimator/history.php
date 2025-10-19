@@ -246,7 +246,7 @@ $totalPages = ceil($totalCount / $limit);
     <?php require_once 'header.php'; ?>
 
     <div class="dashboard-container">
-        <h1>📊 Dashboard Transactions</h1>
+        <h1>Dashboard Transactions</h1>
         
         <!-- Stats Globales -->
         <div class="stats-grid">
@@ -254,25 +254,25 @@ $totalPages = ceil($totalCount / $limit);
                 <div class="stat-number"><?= $stats['total_transactions'] ?></div>
                 <div class="stat-label">Transactions Total</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" style="border-left: 4px solid #60d394;">
                 <div class="stat-number"><?= $stats['completed'] ?></div>
                 <div class="stat-label">Complétées</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" style="border-left: 4px solid #ffd97d;">
                 <div class="stat-number"><?= $stats['pending'] ?></div>
                 <div class="stat-label">En Attente</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" style="border-left: 4px solid #ee6055">
                 <div class="stat-number"><?= $stats['failed'] ?></div>
                 <div class="stat-label">Échouées</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number"><?= number_format($stats['total_points_sold']) ?></div>
-                <div class="stat-label">🪙 Vendus</div>
+                <div class="stat-label">💎 Vendus</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number"><?= number_format($stats['total_revenue'], 2) ?>€</div>
-                <div class="stat-label">Chiffre d'Affaires</div>
+                <div class="stat-label" style="background-color: cornflowerblue;">Chiffre d'Affaires</div>
             </div>
         </div>
 
@@ -302,15 +302,15 @@ $totalPages = ceil($totalCount / $limit);
                     <input type="date" name="date_to" value="<?= $dateTo ?>">
                 </div>
                 <div class="filter-group" style="justify-content: flex-end;">
-                    <button type="submit" class="btn btn-primary">🔍 Appliquer</button>
-                    <a href="transactions_dashboard.php" class="btn btn-secondary">🔄 Reset</a>
+                    <button type="submit" class="btn btn-primary">Appliquer</button>
+                    <a href="history.php" class="btn btn-secondary">Reset</a>
                 </div>
             </form>
         </div>
 
         <!-- Bouton Export -->
-        <button class="export-btn" onclick="exportToCSV()">📥 Export CSV</button>
-
+        <button class="export-btn" onclick="exportToCSV()">Export CSV</button>
+        <a href="admin.php" class="btn btn-secondary">Dashboard</a>
         <!-- Tableau des Transactions -->
         <div class="transactions-table">
             <div class="table-header">
@@ -329,9 +329,9 @@ $totalPages = ceil($totalCount / $limit);
                 <div>
                     <strong><?= htmlspecialchars($transaction['username'] ?? 'N/A') ?></strong><br>
                     <small><?= htmlspecialchars($transaction['email'] ?? '') ?></small><br>
-                    <small>Solde: <?= $transaction['user_current_points'] ?> 🪙</small>
+                    <small>Solde: <?= $transaction['user_current_points'] ?> 💎</small>
                 </div>
-                <div><?= $transaction['points_amount'] ?> 🪙</div>
+                <div><?= $transaction['points_amount'] ?> 💎</div>
                 <div><?= $transaction['amount_eur'] ?> €</div>
                 <div>
                     <span class="status-badge status-<?= $transaction['status'] ?>">

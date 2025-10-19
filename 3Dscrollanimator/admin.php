@@ -209,8 +209,10 @@ $recent_comments = $stmt->fetchAll();
 
     <main style="padding: 2rem; max-width: 1400px; margin: 0 auto;">
         <h1 style="text-align: center; color: var(--primary); margin-bottom: 2rem;">
-            📊 Dashboard Administrateur
+            Dashboard Administrateur
         </h1>
+        <a href="history.php" class="btn btn-secondary">Historique</a>
+        <a href="admin2.php" class="btn btn-secondary">Messagerie</a>
 
         <!-- Statistiques principales -->
         <div class="stats-grid">
@@ -338,7 +340,6 @@ $recent_comments = $stmt->fetchAll();
         </div>
     </main>
     <br>
-        <?php require_once 'footer.php'; ?>
 
     <script>
         // Graphique des inscriptions

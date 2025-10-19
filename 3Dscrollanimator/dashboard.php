@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                 </div>
             </div>
         </div>-->
-        
+
 
     <main style="padding: 2rem; max-width: 1000px; margin: 0 auto;">
         <?php if (isset($_GET['success'])): ?>
@@ -153,8 +153,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
 
                 <?php if (Auth::isLoggedIn() && $_SESSION['user_id'] == 1): ?>
                     <a href="admin.php" class="btn btn-primary" style="margin-top: 1rem;">Dashboard Admin</a>
-</br>
-<a href="history.php" class="btn btn-primary" style="margin-top: 1rem;">Historique de transaction</a>
+                    </br>
+                    <a href="history.php" class="btn btn-primary" style="margin-top: 1rem;">Historique de transaction</a>
                 <?php endif; ?>
 
                 <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border);">
@@ -183,10 +183,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
 
                 <?php if (empty($userProjects)): ?>
                     <div style="text-align: center; padding: 3rem; color: var(--rose);">
-                        <i class="fas fa-cube" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <i class="fas fa-cube" style="font-size: 3rem; margin-bottom: 2rem;"></i>
                         <h3>Aucun projet créé</h3>
                         <p>Commencez par créer votre première animation !</p>
-                        <a href="index.php" class="btn btn-primary" style="margin-top: 1rem;">
+                        <a href="index.php" class="btn btn-primary" style="margin-top: 2rem;">
                             Créer un projet
                         </a>
                     </div>
@@ -224,13 +224,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
             </div>
         </div>
 
-        
+
 
 
     </main>
 
     <br>
-        <?php require_once 'footer.php'; ?>
+    <?php require_once 'footer.php'; ?>
 </body>
 
 </html>
