@@ -175,11 +175,13 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
 </footer>
 
 <style>
+    @import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Muli', sans-serif;
     }
 
     /* Styles pour le footer */

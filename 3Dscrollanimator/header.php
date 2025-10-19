@@ -328,11 +328,13 @@ require_once 'PointsManager.php';
 
                         <?php if (Auth::isLoggedIn() && $_SESSION['user_id'] == 1): ?>
                             <a href="admin.php" class="user-dropdown-item">
-                            <span>Dashboard</span>
+                            <i class="fa-solid fa-hexagon-nodes"></i>
+                            <span>Stat</span>
                         </a>
                         <div class="user-dropdown-divider"></div>
                             <a href="history.php" class="user-dropdown-item">
-                                <span>Historique de transaction</span>
+                                <i class="fa-solid fa-hexagon-nodes-bolt"></i>
+                                <span>History TR</span>
                             </a>
                         <?php endif; ?>
 

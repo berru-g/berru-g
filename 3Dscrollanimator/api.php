@@ -132,6 +132,86 @@ switch ($action) {
         echo json_encode($result);
         break;
 
+    // === CHART du CA ===
+    case 'get_revenue_stats':
+        if (!Auth::isLoggedIn() || $_SESSION['user_id'] != 1) {
+            echo json_encode(['success' => false, 'message' => 'Non autorisé']);
+            exit;
+        }
+
+        $period = intval($_GET['period'] ?? 30); // Jours
+        $db = getDB();
+
+        // Calculer la date de début
+        $startDate = date('Y-m-d', strtotime("-$period days"));
+
+        // Requête pour les données quotidiennes
+        $sql = "SELECT 
+                DATE(created_at) as date,
+                SUM(amount_eur) as daily_revenue,
+                COUNT(*) as transaction_count,
+                SUM(points_amount) as points_sold
+            FROM point_transactions 
+            WHERE status = 'completed' 
+            AND created_at >= ?
+            GROUP BY DATE(created_at)
+            ORDER BY date";
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$startDate]);
+        $dailyData = $stmt->fetchAll();
+
+        // Générer toutes les dates de la période (même celles sans transactions)
+        $allDates = [];
+        $currentDate = $startDate;
+        $today = date('Y-m-d');
+
+        while ($currentDate <= $today) {
+            $allDates[] = $currentDate;
+            $currentDate = date('Y-m-d', strtotime($currentDate . ' +1 day'));
+        }
+
+        // Fusionner avec les données réelles
+        $dataByDate = [];
+        foreach ($dailyData as $row) {
+            $dataByDate[$row['date']] = $row;
+        }
+
+        $chartData = [
+            'labels' => [],
+            'revenue' => [],
+            'transactions' => [],
+            'points' => []
+        ];
+
+        foreach ($allDates as $date) {
+            $chartData['labels'][] = date('d/m', strtotime($date));
+            $chartData['revenue'][] = floatval($dataByDate[$date]['daily_revenue'] ?? 0);
+            $chartData['transactions'][] = intval($dataByDate[$date]['transaction_count'] ?? 0);
+            $chartData['points'][] = intval($dataByDate[$date]['points_sold'] ?? 0);
+        }
+
+        // Stats supplémentaires
+        $statsSql = "SELECT 
+                    SUM(amount_eur) as total_revenue,
+                    COUNT(*) as total_transactions,
+                    AVG(amount_eur) as avg_transaction_value
+                FROM point_transactions 
+                WHERE status = 'completed' 
+                AND created_at >= ?";
+
+        $statsStmt = $db->prepare($statsSql);
+        $statsStmt->execute([$startDate]);
+        $periodStats = $statsStmt->fetch();
+
+        echo json_encode([
+            'success' => true,
+            'chartData' => $chartData,
+            'periodStats' => $periodStats,
+            'period' => $period
+        ]);
+        break;
+
     // === ACTIONS GET ===
     case 'get_project':
         $projectId = $_GET['id'] ?? 0;

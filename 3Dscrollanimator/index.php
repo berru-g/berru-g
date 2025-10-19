@@ -626,9 +626,9 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
             </div>
 
             <button class="btn" id="open-codepen">
-                <i class="fa-brands fa-codepen" style="margin-right:6px;"></i>Ouvrir dans CodePen
+                <i class="fa-brands fa-codepen" style="margin-right:6px;"></i>Ouvrir dans CodePen 
                 
-                <span>  -50 💎</span>
+                <span> -50 💎</span>
             </button>
 
             <!-- Call to Action Upgrade 
