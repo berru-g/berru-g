@@ -152,7 +152,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                 </form>
 
                 <?php if (Auth::isLoggedIn() && $_SESSION['user_id'] == 1): ?>
-                    <a href="admin.php">Dashboard Admin</a>
+                    <a href="admin.php" class="btn btn-primary" style="margin-top: 1rem;">Dashboard Admin</a>
+</br>
+<a href="history.php" class="btn btn-primary" style="margin-top: 1rem;">Historique de transaction</a>
                 <?php endif; ?>
 
                 <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border);">
