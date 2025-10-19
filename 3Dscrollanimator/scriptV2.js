@@ -1025,9 +1025,14 @@ const keyframes = ${JSON.stringify(keyframes, null, 2)};
 function init() {
     // Initialisation de base
     scene = new THREE.Scene();
+    
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer = new THREE.WebGLRenderer({ 
+        antialias: true,
+        alpha: true // ⬅️ ACTIVER LA TRANSPARENCE
+    });
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000, 0); // ⬅️ COULEUR DE FOND TRANSPARENTE
     document.body.appendChild(renderer.domElement);
     
     // Lumières
@@ -1038,7 +1043,6 @@ function init() {
     scene.add(directionalLight);
     
     // Charger votre modèle (remplacez l'URL)
-    //ex: 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb'
     const loader = new THREE.GLTFLoader();
     loader.load('https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb', function(gltf) {
         model = gltf.scene;
@@ -1180,7 +1184,7 @@ function generateCSSCode() {
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #cba6f7 30%, #f5c2e7 100%);
+    background: none;
     color: #cdd6f4;
     overflow-x: hidden;
 }
@@ -1267,7 +1271,7 @@ canvas {
     width: 100%;
     height: 100%;
     z-index: 0;
-    background: linear-gradient(135deg, #cba6f7 50%, #f5c2e7 100%);
+    background: linear-gradient(135deg, #ab9ff2 4%, #333 100%)
 }
 
 /* Responsive */

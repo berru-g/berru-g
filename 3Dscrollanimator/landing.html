@@ -152,7 +152,7 @@
             width: 100%;
             height: auto;
             z-index: -10;
-            background: linear-gradient(135deg, #ab9ff2 0%, #cba6f7 100%);
+            background: linear-gradient(135deg, #181825 30%, #444 100%)
 
         }
 
@@ -957,16 +957,16 @@
             // Nettoyer après l'animation
             setTimeout(() => this.clearAnimations(), 2000);
         }
-/*
-        animateCounter() {
-            // Animer le compteur de points dans le header
-            const counter = document.querySelector('.user-points, .points-counter, [class*="points"]');
-            if (counter) {
-                counter.classList.add('pulse');
-                setTimeout(() => counter.classList.remove('pulse'), 600);
-            }
-        }
-*/
+        /*
+                animateCounter() {
+                    // Animer le compteur de points dans le header
+                    const counter = document.querySelector('.user-points, .points-counter, [class*="points"]');
+                    if (counter) {
+                        counter.classList.add('pulse');
+                        setTimeout(() => counter.classList.remove('pulse'), 600);
+                    }
+                }
+        */
         clearAnimations() {
             if (this.container) {
                 this.container.innerHTML = '';
@@ -1132,20 +1132,24 @@
     function init() {
         // Initialisation de base
         scene = new THREE.Scene();
+
         camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            alpha: true // ⬅️ ACTIVER LA TRANSPARENCE
+        });
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x000000, 0); // ⬅️ COULEUR DE FOND TRANSPARENTE
         document.body.appendChild(renderer.domElement);
 
         // Lumières
-        const ambientLight = new THREE.AmbientLight(0xffffff, 2);//0.6
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
         scene.add(ambientLight);
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 2); //0.8 de base
         directionalLight.position.set(10, 20, 15);
         scene.add(directionalLight);
 
         // Charger votre modèle (remplacez l'URL)
-        //ex: 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb'
         const loader = new THREE.GLTFLoader();
         loader.load('https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/fantasy_town.glb', function (gltf) {
             model = gltf.scene;
