@@ -83,6 +83,52 @@ $countStmt = $db->prepare($countSql);
 $countStmt->execute($params);
 $totalCount = $countStmt->fetch()['total'];
 $totalPages = ceil($totalCount / $limit);
+
+
+// Données pour les 30 derniers jours
+$chartSql = "SELECT 
+                DATE(created_at) as date,
+                SUM(amount_eur) as daily_revenue,
+                COUNT(*) as daily_transactions
+            FROM point_transactions 
+            WHERE status = 'completed' 
+            AND created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+            GROUP BY DATE(created_at)
+            ORDER BY date";
+
+$chartStmt = $db->prepare($chartSql);
+$chartStmt->execute();
+$chartData = $chartStmt->fetchAll();
+
+// Préparer les données pour Chart.js
+$labels = [];
+$revenue = [];
+$transactions = [];
+
+// Remplir avec les 30 derniers jours (même les jours sans transactions)
+$startDate = new DateTime('-30 days');
+$endDate = new DateTime();
+
+for ($date = $startDate; $date <= $endDate; $date->modify('+1 day')) {
+    $dateStr = $date->format('Y-m-d');
+    $labels[] = $date->format('d/m');
+
+    // Trouver les données pour cette date
+    $found = false;
+    foreach ($chartData as $row) {
+        if ($row['date'] == $dateStr) {
+            $revenue[] = floatval($row['daily_revenue']);
+            $transactions[] = intval($row['daily_transactions']);
+            $found = true;
+            break;
+        }
+    }
+
+    if (!$found) {
+        $revenue[] = 0;
+        $transactions[] = 0;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -255,89 +301,6 @@ $totalPages = ceil($totalCount / $limit);
                 color: var(--primary);
             }
         }
-
-        .chart-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .chart-card {
-            background: transparent;
-            padding: 1.5rem;
-            border-radius: 10px;
-            border: 1px solid var(--primary);
-        }
-
-        .chart-period-selector {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .period-btn {
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--grey);
-            background: white;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .period-btn:hover {
-            background: var(--grey-light);
-        }
-
-        .period-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .period-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--grey);
-        }
-
-        .period-stat {
-            text-align: center;
-            padding: 1rem;
-            background: rgba(108, 112, 134, 0.1);
-            border-radius: 8px;
-        }
-
-        .period-stat-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        .period-stat-label {
-            font-size: 0.8rem;
-            color: var(--text-light);
-            margin-top: 0.5rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .stats-section {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .period-stats {
-                grid-template-columns: 1fr;
-            }
-
-            .chart-period-selector {
-                flex-wrap: wrap;
-            }
-        }
     </style>
 </head>
 
@@ -375,17 +338,55 @@ $totalPages = ceil($totalCount / $limit);
             </div>
         </div>
 
-        <div class="chart-container">
-            <div class="chart-card">
-                <div class="chart-period-selector">
-                    <button class="period-btn active" data-period="7">7J</button>
-                    <button class="period-btn" data-period="30">30J</button>
-                    <button class="period-btn" data-period="90">90J</button>
-                    <button class="period-btn" data-period="365">1AN</button>
-                </div>
-                <canvas id="revenueChart"></canvas>
-            </div>
+
+
+        <!-- HTML - Même structure mais plus simple -->
+        <div class="chart-card">
+            <h3>C.A</h3>
+            <canvas id="revenueChart" data-labels='<?= json_encode($labels) ?>'
+                data-revenue='<?= json_encode($revenue) ?>'
+                data-transactions='<?= json_encode($transactions) ?>'></canvas>
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const canvas = document.getElementById('revenueChart');
+                const ctx = canvas.getContext('2d');
+
+                // Récupérer les données depuis les data-attributs
+                const labels = JSON.parse(canvas.dataset.labels);
+                const revenue = JSON.parse(canvas.dataset.revenue);
+                const transactions = JSON.parse(canvas.dataset.transactions);
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Chiffre d\'Affaires (€)',
+                            data: revenue,
+                            borderColor: '#ab9ff2',
+                            backgroundColor: 'rgba(203, 166, 247, 0.1)',
+                            borderWidth: 2,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function (value) {
+                                        return value + '€';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
 
         <!-- Filtres -->
         <div class="filters">
@@ -482,197 +483,6 @@ $totalPages = ceil($totalCount / $limit);
             // Rediriger vers l'export
             window.location.href = 'export_transactions.php?' + params.toString();
         }
-    </script>
-    <script>
-        let revenueChart = null;
-
-        // Charger les données du graphique
-        async function loadRevenueChart(period = 30) {
-            try {
-                const response = await fetch(`api.php?action=get_revenue_stats&period=${period}`);
-                const result = await response.json();
-
-                if (result.success) {
-                    updateChart(result.chartData, result.periodStats, period);
-                    updatePeriodButtons(period);
-                }
-            } catch (error) {
-                console.error('Erreur chargement graphique:', error);
-            }
-        }
-
-        // Mettre à jour le graphique
-        function updateChart(chartData, periodStats, period) {
-            const ctx = document.getElementById('revenueChart').getContext('2d');
-
-            // Détruire le graphique existant
-            if (revenueChart) {
-                revenueChart.destroy();
-            }
-
-            // Créer le nouveau graphique
-            revenueChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: chartData.labels,
-                    datasets: [
-                        {
-                            label: 'Chiffre d\'Affaires (€)',
-                            data: chartData.revenue,
-                            borderColor: '#cba6f7',
-                            backgroundColor: 'rgba(203, 166, 247, 0.1)',
-                            borderWidth: 3,
-                            fill: true,
-                            tension: 0.4,
-                            yAxisID: 'y'
-                        },
-                        {
-                            label: 'Nombre de Transactions',
-                            data: chartData.transactions,
-                            borderColor: '#f38ba8',
-                            backgroundColor: 'rgba(243, 139, 168, 0.1)',
-                            borderWidth: 2,
-                            borderDash: [5, 5],
-                            fill: false,
-                            tension: 0.4,
-                            yAxisID: 'y1'
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false
-                    },
-                    scales: {
-                        x: {
-                            grid: {
-                                color: 'rgba(108, 112, 134, 0.2)'
-                            }
-                        },
-                        y: {
-                            type: 'linear',
-                            display: true,
-                            position: 'left',
-                            title: {
-                                display: true,
-                                text: 'CA (€)'
-                            },
-                            grid: {
-                                color: 'rgba(108, 112, 134, 0.1)'
-                            },
-                            ticks: {
-                                callback: function (value) {
-                                    return value + '€';
-                                }
-                            }
-                        },
-                        y1: {
-                            type: 'linear',
-                            display: true,
-                            position: 'right',
-                            title: {
-                                display: true,
-                                text: 'Transactions'
-                            },
-                            grid: {
-                                drawOnChartArea: false
-                            },
-                            ticks: {
-                                precision: 0
-                            }
-                        }
-                    },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function (context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.datasetIndex === 0) {
-                                        label += context.parsed.y + '€';
-                                    } else {
-                                        label += context.parsed.y + ' transactions';
-                                    }
-                                    return label;
-                                }
-                            }
-                        },
-                        legend: {
-                            position: 'top',
-                        }
-                    }
-                }
-            });
-
-            // Mettre à jour les stats de période
-            updatePeriodStats(periodStats, period);
-        }
-
-        // Mettre à jour les stats de période
-        function updatePeriodStats(stats, period) {
-            const statsContainer = document.getElementById('periodStats');
-            if (!statsContainer) {
-                // Créer le container si il n'existe pas
-                const chartCard = document.querySelector('.chart-card');
-                const statsHtml = `
-            <div class="period-stats" id="periodStats">
-                <div class="period-stat">
-                    <div class="period-stat-value">${parseFloat(stats.total_revenue || 0).toFixed(2)}€</div>
-                    <div class="period-stat-label">CA Total</div>
-                </div>
-                <div class="period-stat">
-                    <div class="period-stat-value">${stats.total_transactions || 0}</div>
-                    <div class="period-stat-label">Transactions</div>
-                </div>
-                <div class="period-stat">
-                    <div class="period-stat-value">${parseFloat(stats.avg_transaction_value || 0).toFixed(2)}€</div>
-                    <div class="period-stat-label">Panier Moyen</div>
-                </div>
-            </div>
-        `;
-                chartCard.insertAdjacentHTML('beforeend', statsHtml);
-            } else {
-                // Mettre à jour les valeurs
-                statsContainer.innerHTML = `
-            <div class="period-stat">
-                <div class="period-stat-value">${parseFloat(stats.total_revenue || 0).toFixed(2)}€</div>
-                <div class="period-stat-label">CA Total</div>
-            </div>
-            <div class="period-stat">
-                <div class="period-stat-value">${stats.total_transactions || 0}</div>
-                <div class="period-stat-label">Transactions</div>
-            </div>
-            <div class="period-stat">
-                <div class="period-stat-value">${parseFloat(stats.avg_transaction_value || 0).toFixed(2)}€</div>
-                <div class="period-stat-label">Panier Moyen</div>
-            </div>
-        `;
-            }
-        }
-
-        // Gérer les boutons de période
-        function updatePeriodButtons(activePeriod) {
-            document.querySelectorAll('.period-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.period == activePeriod);
-            });
-        }
-
-        // Événements
-        document.addEventListener('DOMContentLoaded', function () {
-            // Charger le graphique initial
-            loadRevenueChart(30);
-
-            // Gérer les clics sur les boutons de période
-            document.querySelectorAll('.period-btn').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    loadRevenueChart(this.dataset.period);
-                });
-            });
-        });
     </script>
 </body>
 
