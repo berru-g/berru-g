@@ -157,10 +157,10 @@ $csrfToken = generateCsrfToken();
                 width: 100%;
                 padding: 0.5rem 2%;
                 display: flex;
-                justify-content: right;
+                justify-content: center;
                 align-items: center;
                 margin-bottom: 1rem;
-                margin-right: 1rem;
+                margin-top: 1rem;
             }
 
             .admin-controls {
@@ -416,6 +416,22 @@ $csrfToken = generateCsrfToken();
         <!-- GALLERY INTERACTIV -->
         <section class="gallery">
             <h2 class="section-title">Mes derniers travaux :</h2>
+            <!-- connexion au CMS -->
+        <div class="admin-bar">
+            <?php if (!$isAdmin): ?>
+                <button onclick="showLogin()"
+                    style="background: transparent; color: white; border: 1px solid white; padding: 10px 10px; border-radius: 50%;">
+                    <i class="fas fa-cog"></i>
+                </button>
+            <?php else: ?>
+                <a href="?logout=1" class="cta-button" style="background: #ff977dff; border: none;">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+                <button class="cta-button" onclick="showAddImage()" style="background: #6ea3feff; border: none; margin-left: 10px;">
+                    <i class="fas fa-plus"></i> Ajouter
+                </button>
+            <?php endif; ?>
+        </div>
 
             <div class="gallery-grid" id="galleryGrid">
                 <?php foreach ($images as $image): ?>
@@ -499,22 +515,6 @@ $csrfToken = generateCsrfToken();
             </div>
         </div>
 
-        <!-- connexion au CMS -->
-        <div class="admin-bar">
-            <?php if (!$isAdmin): ?>
-                <button onclick="showLogin()"
-                    style="background: transparent; color: white; border: 1px solid white; padding: 10px 10px; border-radius: 50%;">
-                    <i class="fas fa-cog"></i>
-                </button>
-            <?php else: ?>
-                <a href="?logout=1" class="cta-button" style="background: #ff977dff; border: none;">
-                    <i class="fas fa-sign-out-alt"></i> Déconnexion
-                </a>
-                <button class="cta-button" onclick="showAddImage()" style="background: #6ea3feff; border: none; margin-left: 10px;">
-                    <i class="fas fa-plus"></i> Ajouter
-                </button>
-            <?php endif; ?>
-        </div>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
