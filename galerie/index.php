@@ -153,13 +153,14 @@ $csrfToken = generateCsrfToken();
 
             /* ADMIN */
             .admin-bar {
-                position: fixed;
+                position: relative;
                 width: 100%;
                 padding: 0.5rem 2%;
                 display: flex;
                 justify-content: right;
                 align-items: center;
                 margin-bottom: 1rem;
+                margin-right: 1rem;
             }
 
             .admin-controls {
