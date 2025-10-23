@@ -420,7 +420,7 @@ $csrfToken = generateCsrfToken();
                 <?php foreach ($images as $image): ?>
                     <div class="gallery-item" data-id="<?= htmlspecialchars($image['id']) ?>">
                         <img src="<?= htmlspecialchars($image['image_path']) ?>"
-                            alt="<?= htmlspecialchars($image['title']) ?>" />
+                            alt="<?= htmlspecialchars($image['title']) ?>" data-aos="fade-up" data-aos-delay="300" />
                         <?php if ($isAdmin): ?>
                             <div class="admin-controls">
                                 <button class="edit-btn" onclick="changeImage(<?= htmlspecialchars($image['id']) ?>)">

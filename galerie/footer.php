@@ -81,5 +81,5 @@
         });
     });
 </script>
-<script src="./new.js"></script>
+<script src="../new.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
