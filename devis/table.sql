@@ -4,7 +4,7 @@ COLLATE utf8mb4_unicode_ci;  /* Meilleur support Unicode */
 
 USE `u667977963_devis`;
 
-CREATE TABLE IF NOT EXISTS `u667977963_devis` (
+CREATE TABLE IF NOT EXISTS `u667977963_devis_table` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `numero` VARCHAR(20) NOT NULL,
   `date_devis` DATE NOT NULL,

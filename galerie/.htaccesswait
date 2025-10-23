@@ -1,0 +1,31 @@
+# Protection uploads
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+
+# Bloquer exécution de scripts uploadés
+<FilesMatch "\.(php|phtml|php3|php4|php5|phps|pl|py|jsp|asp|sh|cgi)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Autoriser uniquement les images
+<FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+# Headers de sécurité
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline';"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Empêcher hotlinking
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteCond %{HTTP_REFERER} !^$
+    RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)?goldendessert\.fr [NC]
+    RewriteRule \.(jpg|jpeg|png|gif|webp)$ - [F,NC,L]
+</IfModule>
