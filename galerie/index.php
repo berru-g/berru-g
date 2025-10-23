@@ -17,29 +17,10 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS galerie_images (
 $count = $pdo->query("SELECT COUNT(*) FROM galerie_images")->fetchColumn();
 if ($count == 0) {
     $defaultImages = [
-        ['../img/3Dscrollanimator', 'Saas no code'],
-        ['../img/framboise-intense.jpg', 'Entremet framboise intense'],
-        ['../img/Macarons en création.jpg', 'Macarons en création'],
-        ['../img/Phare 2 _ La Mangue.jpg', 'Phare 2 - La Mangue'],
-        ['../img/Fondant au chocolat.jpg', 'Fondant au chocolat'],
-        ['../img/Mon cheesecake caramel.jpg', 'Mon cheesecake caramel'],
-        ['../img/Crumble pommes.jpg', 'Crumble pommes'],
-        ['../img/Passion chocolat lait.jpg', 'Passion chocolat lait'],
-        ['../img/Coques macarons.jpg', 'Coques macarons'],
-        ['../img/noixcoco.jpg', 'Noix de coco en trompe l\'oeil'],
-        ['../img/citrontrompeloeil.jpg', 'Mini citron en trompe l\'oeil'],
-        ['../img/Chou craquelin vanille.jpg', 'Chou craquelin vanille'],
-        ['../img/Mon Bounty.jpg', 'Mon Bounty'],
-        ['../img/Entremet rose litchi framboise.jpg', 'Entremet rose litchi framboise'],
-        ['../img/Ma noix de coco.jpg', 'Ma noix de coco'],
-        ['../img/Phare 3 _ Le Gâteau Nantais.jpg', 'Phare 3 - Le Gâteau Nantais'],
-        ['../img/Citron yuzu.jpg', 'Citron yuzu'],
-        ['../img/Royal.jpg', 'Royal'],
-        ['../img/Entremet Mojito.jpg', 'Entremet Mojito'],
-        ['../img/Crumble poire chocolat.jpg', 'Crumble poire chocolat'],
-        ['../img/Entremet façon Bueno.jpg', 'Entremet façon Bueno'],
-        ['../img/Phare 1 _ L_Entremet façon Raffaello.jpg', 'Phare 1 - L\'Entremet façon Raffaello'],
-        ['../img/Coco exotique mangue.jpg', 'Coco exotique mangue']
+        ['../img/3Dscrollanimator.png', 'Saas no code'],
+        ['../img/Interface-3Dscrollanimator.png', 'Interface facile'],
+        ['../img/mascotte-easy2.png', 'Géneration de code auto'],
+        ['../img/mascotte-sav.png', 'Gagne des crédits comme beta tester']
     ];
 
     $stmt = $pdo->prepare("INSERT INTO galerie_images (image_path, title, display_order) VALUES (?, ?, ?)");
@@ -112,6 +93,64 @@ $csrfToken = generateCsrfToken();
         <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
         <style>
+            /* Galerie */
+            .gallery {
+                padding: 8rem 10%;
+                text-align: center;
+                background-color: var(--dark-1);
+                border-radius: 12px;
+                margin: 20px;
+            }
+
+            .gallery h2 {
+                font-size: 2.5rem;
+                margin-bottom: 3rem;
+                color: linear-gradient(45deg, #eceaea, #c9a769);
+            }
+
+            .gallery-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .gallery-item {
+                overflow: hidden;
+                position: relative;
+                border-radius: 12px;
+            }
+
+            .gallery-item img {
+                width: 100%;
+                height: 300px;
+                object-fit: cover;
+                transition: transform 0.5s, filter 0.3s;
+                filter: brightness(0.8);
+                border-radius: 12px;
+            }
+
+            .gallery-item:hover img {
+                transform: scale(1.05);
+                filter: brightness(1);
+            }
+
+            .gallery-item-caption {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                padding: 1rem;
+                background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+                color: white;
+                transform: translateY(100%);
+                transition: transform 0.3s;
+                border-radius: 0 0 12px 12px;
+            }
+
+            .gallery-item:hover .gallery-item-caption {
+                transform: translateY(0);
+            }
+
             /* ADMIN */
             .admin-bar {
                 position: relative;
@@ -125,8 +164,8 @@ $csrfToken = generateCsrfToken();
 
             .admin-controls {
                 position: absolute;
-                top: 10px;
-                right: 10px;
+                top: 20px;
+                right: 20px;
                 display: flex;
                 gap: 5px;
                 opacity: 0;
@@ -236,9 +275,6 @@ $csrfToken = generateCsrfToken();
     </head>
 
     <body>
-        <div class="loader">
-            <div class="spinner"></div>
-        </div>
 
         <!-- original by https://codepen.io/themrsami/pen/KwpGYNX?editors=1100 -->
         <div class="floating-elements">
@@ -258,7 +294,7 @@ $csrfToken = generateCsrfToken();
                 <!-- Navigation Links -->
                 <ul class="navbar-nav" id="navbarNav">
                     <li class="nav-item">
-                        <a href="#home" class="nav-link active">
+                        <a href="../index.html" class="nav-link active">
                             <svg class="nav-icon" viewBox="0 0 24 24">
                                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                                 <polyline points="9,22 9,12 15,12 15,22"></polyline>
@@ -267,39 +303,39 @@ $csrfToken = generateCsrfToken();
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#skill" class="nav-link">
+                        <a href="../index.html#skill" class="nav-link">
                             <i class="fa-solid fa-palette"></i>
                             <span>skill</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="./devis/index.html" class="nav-link">
+                        <a href="../devis/index.html" class="nav-link">
                             <i class="fa-solid fa-list"></i>
                             <span>Devis</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#avis" class="nav-link">
+                        <a href="../index.html#avis" class="nav-link">
                             <i class="fa-solid fa-comment"></i>
 
                             <span>avis</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#contact" class="nav-link">
+                        <a href="../index.html#contact" class="nav-link">
                             <i class="fa-solid fa-envelope"></i>
                             <span>Contact</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="./3D/index.html" class="nav-link">
+                        <a href="../3D/index.html" class="nav-link">
                             <i class="fa-solid fa-cubes"></i>
                             <span>3D</span>
                         </a>
                         <div class="tooltip">Essayer l'expérience immersive</div>
                     </li>
                     <li class="nav-item"><!--fr.fiverr.com/berruaka/code-your-static-site-app-or-tools-->
-                        <a href="#contact" rel="noopener" target="_blank" class="cta-button">
+                        <a href="../index.html#contact" rel="noopener" target="_blank" class="cta-button">
                             Je veux un site
                         </a>
                     </li>
@@ -322,7 +358,7 @@ $csrfToken = generateCsrfToken();
         <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu">
             <div class="mobile-menu-header">
-                <a href="./paint/index.html" class="mobile-menu-brand" title="Egg#2">
+                <a href="../paint/index.html" class="mobile-menu-brand" title="Egg#2">
                     <div class="logo-icon"><i class="fa-solid fa-brush"></i></div>
                     <span class="brand-text"></span>
                 </a>
@@ -333,7 +369,7 @@ $csrfToken = generateCsrfToken();
 
             <ul class="mobile-menu-nav">
                 <li class="mobile-menu-item">
-                    <a href="#home" class="mobile-menu-link active">
+                    <a href="../index.html#home" class="mobile-menu-link active">
                         <svg class="mobile-menu-icon" viewBox="0 0 24 24">
                             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                             <polyline points="9,22 9,12 15,12 15,22"></polyline>
@@ -342,26 +378,26 @@ $csrfToken = generateCsrfToken();
                     </a>
                 </li>
                 <li class="mobile-menu-item">
-                    <a href="#skill" class="mobile-menu-link">
+                    <a href="../index.html#skill" class="mobile-menu-link">
                         <i class="fa-solid fa-palette"></i>
                         <span>skill</span>
                     </a>
                 </li>
                 <li class="mobile-menu-item">
-                    <a href="./devis/index.html" class="mobile-menu-link">
+                    <a href="../devis/index.html" class="mobile-menu-link">
                         <i class="fa-solid fa-list"></i>
                         <span>Devis</span>
                     </a>
                 </li>
                 <li class="mobile-menu-item">
-                    <a href="#avis" class="mobile-menu-link">
+                    <a href="../index.html#avis" class="mobile-menu-link">
                         <i class="fa-solid fa-comment"></i>
 
                         <span>avis</span>
                     </a>
                 </li>
                 <li class="mobile-menu-item">
-                    <a href="#contact" class="mobile-menu-link">
+                    <a href="../index.html#contact" class="mobile-menu-link">
                         <i class="fa-solid fa-envelope"></i>
                         <span>Contact</span>
                     </a>
@@ -369,31 +405,15 @@ $csrfToken = generateCsrfToken();
             </ul>
 
             <div class="mobile-cta">
-                <a href="#contact" rel="noopener" target="_blank" class="mobile-cta-button">
+                <a href="../index.html#contact" rel="noopener" target="_blank" class="mobile-cta-button">
                     Je veux un site
                 </a>
             </div>
         </div>
 
-        <!-- connexion au CMS -->
-        <div class="admin-bar">
-            <?php if (!$isAdmin): ?>
-                <button class="btn" onclick="showLogin()"
-                    style="background: transparent; color: transparent; border: none;">
-                    <i class="fas fa-cog"></i> Mode Admin
-                </button>
-            <?php else: ?>
-                <a href="?logout=1" class="btn" style="background: #e74c3c; border: none;">
-                    <i class="fas fa-sign-out-alt"></i> Déconnexion
-                </a>
-                <button class="btn" onclick="showAddImage()" style="background: #27ae60; border: none; margin-left: 10px;">
-                    <i class="fas fa-plus"></i> Ajouter
-                </button>
-            <?php endif; ?>
-        </div>
         <!-- GALLERY INTERACTIV -->
         <section class="gallery">
-            <h2 class="section-title">Quelques créations </h2>
+            <h2 class="section-title">3D scroll animator c'est quoi ? </h2>
 
             <div class="gallery-grid" id="galleryGrid">
                 <?php foreach ($images as $image): ?>
@@ -423,7 +443,10 @@ $csrfToken = generateCsrfToken();
                 <?php endforeach; ?>
             </div>
 
-            <a href="../index.html" class="btn">Revenir au site</a>
+        </section>
+
+        <section id="Devis" class="content-section" data-aos="zoom-in" data-aos-delay="100">
+            <a href="../3Dscrollanimator/landing.html" rel="noopener" target="_blank" class="cta-button">Essayer gratuitement</a>
         </section>
 
         <!-- POPUP LOGIN -->
@@ -474,8 +497,25 @@ $csrfToken = generateCsrfToken();
             </div>
         </div>
 
+        <!-- connexion au CMS -->
+        <div class="admin-bar">
+            <?php if (!$isAdmin): ?>
+                <button onclick="showLogin()"
+                    style="background: transparent; color: white; border: 1px solid white; padding: 10px 10px; border-radius: 50%;">
+                    <i class="fas fa-cog"></i>
+                </button>
+            <?php else: ?>
+                <a href="?logout=1" class="btn" style="background: #e74c3c; border: none;">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+                <button class="btn" onclick="showAddImage()" style="background: #27ae60; border: none; margin-left: 10px;">
+                    <i class="fas fa-plus"></i> Ajouter
+                </button>
+            <?php endif; ?>
+        </div>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-        <script src="../new.js"></script>
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script>
             const CSRF_TOKEN = '<?= htmlspecialchars($csrfToken) ?>';
             let currentImageId = null;
@@ -606,6 +646,164 @@ $csrfToken = generateCsrfToken();
             <?php if (isset($loginError)): ?>
                 showLogin();
             <?php endif; ?>
+
+            // Mobile Navigation Toggle
+            document.addEventListener('DOMContentLoaded', function () {
+                const mobileToggle = document.getElementById('mobileToggle');
+                const mobileMenu = document.getElementById('mobileMenu');
+                const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+                const mobileMenuClose = document.getElementById('mobileMenuClose');
+                const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+                const navLinks = document.querySelectorAll('.nav-link');
+
+                // Function to open mobile menu
+                function openMobileMenu() {
+                    console.log('Opening mobile menu');
+                    mobileToggle.classList.add('active');
+                    mobileMenu.classList.add('active');
+                    mobileMenuOverlay.classList.add('active');
+                    document.body.style.overflow = 'hidden'; // Prevent body scroll
+                }
+
+                // Function to close mobile menu
+                function closeMobileMenu() {
+                    console.log('Closing mobile menu');
+                    mobileToggle.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    mobileMenuOverlay.classList.remove('active');
+                    document.body.style.overflow = ''; // Restore body scroll
+                }
+
+                // Toggle mobile menu when hamburger is clicked
+                mobileToggle.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    if (mobileMenu.classList.contains('active')) {
+                        closeMobileMenu();
+                    } else {
+                        openMobileMenu();
+                    }
+                });
+
+                // Close mobile menu when close button is clicked
+                mobileMenuClose.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    closeMobileMenu();
+                });
+
+                // Close mobile menu when overlay is clicked
+                mobileMenuOverlay.addEventListener('click', function () {
+                    closeMobileMenu();
+                });
+
+                // Close mobile menu when clicking on mobile menu links
+                mobileMenuLinks.forEach(link => {
+                    link.addEventListener('click', function () {
+                        closeMobileMenu();
+
+                        // Remove active class from all mobile links
+                        mobileMenuLinks.forEach(l => l.classList.remove('active'));
+                        // Add active class to clicked link
+                        this.classList.add('active');
+
+                        // Also update desktop nav active state
+                        const href = this.getAttribute('href');
+                        navLinks.forEach(navLink => {
+                            navLink.classList.remove('active');
+                            if (navLink.getAttribute('href') === href) {
+                                navLink.classList.add('active');
+                            }
+                        });
+                    });
+                });
+
+                // Close mobile menu when clicking on desktop nav links
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function () {
+                        closeMobileMenu();
+
+                        // Remove active class from all links
+                        navLinks.forEach(l => l.classList.remove('active'));
+                        // Add active class to clicked link (except CTA button)
+                        if (!this.classList.contains('cta-button')) {
+                            this.classList.add('active');
+
+                            // Also update mobile nav active state
+                            const href = this.getAttribute('href');
+                            mobileMenuLinks.forEach(mobileLink => {
+                                mobileLink.classList.remove('active');
+                                if (mobileLink.getAttribute('href') === href) {
+                                    mobileLink.classList.add('active');
+                                }
+                            });
+                        }
+                    });
+                });
+
+                // Close mobile menu on escape key
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                        closeMobileMenu();
+                    }
+                });
+
+                // Navbar scroll effect - Remove auto-hide, keep it sticky
+                window.addEventListener('scroll', function () {
+                    const navbar = document.querySelector('.navbar-container');
+                    let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+                    // Add/remove scroll class for styling changes if needed
+                    if (scrollTop > 50) {
+                        navbar.classList.add('scrolled');
+                    } else {
+                        navbar.classList.remove('scrolled');
+                    }
+                });
+
+                // Add hover effect to floating circles
+                const floatingCircles = document.querySelectorAll('.floating-circle');
+                floatingCircles.forEach(circle => {
+                    circle.addEventListener('mouseenter', function () {
+                        this.style.transform = 'scale(1.2)';
+                    });
+
+                    circle.addEventListener('mouseleave', function () {
+                        this.style.transform = 'scale(1)';
+                    });
+                });
+
+                // Smooth scrolling for navigation links
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const target = document.querySelector(this.getAttribute('href'));
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    });
+                });
+
+                // Handle window resize
+                window.addEventListener('resize', function () {
+                    if (window.innerWidth > 992 && mobileMenu.classList.contains('active')) {
+                        closeMobileMenu();
+                    }
+                });
+            });
+
+
+            // Initialisation de AOS
+            document.addEventListener('DOMContentLoaded', function () {
+                AOS.init({
+                    duration: 1200,
+                    once: true,
+                    easing: 'ease-out-back'
+                });
+            });
         </script>
     </body>
 
