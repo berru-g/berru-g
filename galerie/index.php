@@ -153,13 +153,13 @@ $csrfToken = generateCsrfToken();
 
             /* ADMIN */
             .admin-bar {
-                position: relative;
+                position: fixed;
                 width: 100%;
                 padding: 0.5rem 2%;
                 display: flex;
-                justify-content: center;
+                justify-content: right;
                 align-items: center;
-                margin-top: 0rem;
+                margin-bottom: 1rem;
             }
 
             .admin-controls {
@@ -414,7 +414,7 @@ $csrfToken = generateCsrfToken();
 
         <!-- GALLERY INTERACTIV -->
         <section class="gallery">
-            <h2 class="section-title">3D scroll animator c'est quoi ? </h2>
+            <h2 class="section-title">Mes derniers travaux :</h2>
 
             <div class="gallery-grid" id="galleryGrid">
                 <?php foreach ($images as $image): ?>
@@ -447,7 +447,7 @@ $csrfToken = generateCsrfToken();
         </section>
 
         <section id="Devis" class="content-section" data-aos="zoom-in" data-aos-delay="100">
-            <a href="../3Dscrollanimator/landing.html" rel="noopener" target="_blank" class="cta-button">Essayer gratuitement</a>
+            <a href="../index.html#contact" rel="noopener" target="_blank" class="cta-button">Discutons de votre projet ?</a>
         </section>
 
         <!-- POPUP LOGIN -->
@@ -806,7 +806,5 @@ $csrfToken = generateCsrfToken();
                 });
             });
         </script>
-        <?php require_once 'footer.php'; ?>
     </body>
-
     </html>
