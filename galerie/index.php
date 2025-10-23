@@ -182,6 +182,7 @@ $csrfToken = generateCsrfToken();
                 color: white;
                 width: 30px;
                 height: 30px;
+                padding: 5px 5px;
                 border-radius: 50%;
                 cursor: pointer;
                 display: flex;
@@ -190,11 +191,11 @@ $csrfToken = generateCsrfToken();
             }
 
             .edit-btn {
-                background: #c9a769;
+                background: #ab9ff2;
             }
 
             .delete-btn {
-                background: #e74c3c;
+                background: #ee6055;
             }
 
             .edit-title-input {
@@ -232,7 +233,7 @@ $csrfToken = generateCsrfToken();
             }
 
             .popup h3 {
-                color: #c9a769;
+                color: #ab9ff2;
                 margin-bottom: 20px;
                 text-align: center;
             }
@@ -249,7 +250,7 @@ $csrfToken = generateCsrfToken();
             }
 
             .popup button {
-                background: #c9a769;
+                background: #2575fc;
                 border: none;
                 cursor: pointer;
                 font-weight: 600;
@@ -263,12 +264,12 @@ $csrfToken = generateCsrfToken();
             }
 
             .success {
-                background: #27ae60;
+                background: #60d394;
                 color: white;
             }
 
             .error {
-                background: #e74c3c;
+                background: #ee6055;
                 color: white;
             }
         </style>
@@ -505,10 +506,10 @@ $csrfToken = generateCsrfToken();
                     <i class="fas fa-cog"></i>
                 </button>
             <?php else: ?>
-                <a href="?logout=1" class="btn" style="background: #e74c3c; border: none;">
+                <a href="?logout=1" class="cta-button" style="background: #ff977dff; border: none;">
                     <i class="fas fa-sign-out-alt"></i> Déconnexion
                 </a>
-                <button class="btn" onclick="showAddImage()" style="background: #27ae60; border: none; margin-left: 10px;">
+                <button class="cta-button" onclick="showAddImage()" style="background: #6ea3feff; border: none; margin-left: 10px;">
                     <i class="fas fa-plus"></i> Ajouter
                 </button>
             <?php endif; ?>
@@ -805,6 +806,7 @@ $csrfToken = generateCsrfToken();
                 });
             });
         </script>
+        <?php require_once 'footer.php'; ?>
     </body>
 
     </html>
