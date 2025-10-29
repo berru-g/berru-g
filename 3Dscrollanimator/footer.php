@@ -124,7 +124,7 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
             <h4>Ressources</h4>
             <div class="resource-links">
                 <a href="https://github.com/berru-g/3Dscrollanimator/" target="_blank" class="resource-link" title="GitHub - Dépôts de code">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/github.svg" alt="GitHub">
+                    <i class="fa-brands fa-github"></i>
                     <span>GitHub</span>
                 </a>
 
@@ -166,9 +166,9 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
 
             <div class="footer-social">
                 <span>Suivez-nous :</span>
-                <a href="#" title="Twitter" class="social-link">🟦</a>
-                <a href="#" title="GitHub" class="social-link">🟪</a>
-                <a href="#" title="Discord" class="social-link">⬛</a>
+                <a href="#" title="Github" class="social-link"><i class="fa-brands fa-github"></i></a>
+                <a href="#" title="YouTube" class="social-link"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" title="Discord" class="social-link"><i class="fa-brands fa-tiktok"></i></a>
             </div>
         </div>
     </div>
@@ -429,6 +429,9 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
 
     .footer-copyright a:hover {
         text-decoration: underline;
+    }
+    .footer-social i {
+        color: white;
     }
 
     .footer-legal {

@@ -118,14 +118,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
 </script>
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1ZHDWFP01H"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
 
-        gtag('config', 'G-1ZHDWFP01H');
-    </script>
 
 </head>
 
@@ -149,55 +142,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
 
         console.log('Auth initialized:', window.currentUser);
     </script>
-    <!-- system de points
-    <?php if (Auth::isLoggedIn()): ?>
-        <div id="user-menu" class="user-menu">
-            <span class="user-avatar" id="user-avatar">
-                <?= strtoupper(substr($_SESSION['user_name'], 0, 1)) ?>
-            </span>
-            <span class="user-name" id="user-name">
-                <?= htmlspecialchars($_SESSION['user_name']) ?>
-                <span class="user-points" id="user-points">
-                    💎 <?= $_SESSION['user_points'] ?? 200 ?>
-                </span>
-            </span>
-            <a href="dashboard.php" class="btn btn-secondary">Dashboard</a>
-            <a href="?logout" class="btn btn-secondary">Déconnexion</a>
-        </div>
-    <?php endif; ?>-->
 
-
-
-    <!--<header class="header">
-        <a href="index.php" class="logo">3D Scroll Animator</a>
-
-        <nav class="nav-links">
-            <a href="#editor">Éditeur</a>
-            <a href="gallery.php">Galerie</a>
-            <a href="dashboard.php">Dashboard</a>
-        </nav>
-
-        <div class="auth-section">
-            <?php if (Auth::isLoggedIn()): ?>
-                
-                <div id="user-menu" class="user-menu">
-                    <span class="user-avatar" id="user-avatar">
-                        <?= strtoupper(substr($_SESSION['user_name'], 0, 1)) ?>
-                    </span>
-                    <span class="user-name" id="user-name"><?= htmlspecialchars($_SESSION['user_name']) ?></span>
-                    <a href="dashboard.php" class="btn btn-secondary">Dashboard</a>
-                    <a href="?logout" class="btn btn-secondary">Déconnexion</a>
-                </div>
-            <?php else: ?>
-               
-                <div id="guest-menu" class="auth-buttons">
-                    <button class="btn btn-secondary" onclick="showAuthModal()">
-                        <i class="fas fa-sign-in-alt"></i> Connexion
-                    </button>
-                </div>
-            <?php endif; ?>
-        </div>
-    </header>-->
 
     <!-- Modal d'Authentification simplifié -->
     <div id="auth-modal" class="auth-modal" style="display: none;">
@@ -438,19 +383,22 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
             <h2 class="section-title">Importation 3D</h2>
             <div class="section">
                 <input type="file" id="model-input" accept=".glb,.gltf" style="display: none;">
-                <button class="btn" id="import-btn">Importer un modèle 3D</button>
+                <button class="btn" id="import-btn">
+                    <i class="fa-regular fa-square-plus"></i> Importer un modèle
+                    3D</button>
 
                 <button class="btn btn-secondary" onclick="loadTestModel()">Charger modèle test</button>
 
                 <!-- Bouton Record pour utilisateurs connectés -->
                 <?php if (Auth::isLoggedIn()): ?>
                     <button class="btn" id="record-btn" onclick="openSaveModal()" style="margin-top: 10px;">
-                        <i class="fa-solid fa-floppy-disk"></i> Save Project
+                        <i class="fa-regular fa-floppy-disk"></i> Save Project
                         <span> +10 💎</span>
                     </button>
 
                     <div class="toggle-container" style="margin-top: 10px; margin-left: 0px;">
                         <label class="toggle-switch">
+                            <i class="fa-solid fa-ghost"></i>
                             <input type="checkbox" id="make-public" class="toggle-input">
                             <span class="toggle-slider"></span>
                             <span class="toggle-text">Rendre public</span>
@@ -548,7 +496,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                 </div>
             </div>
 
-            <div class="section">
+            <div class="section" style="display:none;">
                 <h2 class="section-title">Code Généré</h2>
                 <textarea class="code-editor" id="generated-code"
                     readonly>// Importez un modèle et ajoutez des keyframes pour générer le code</textarea>
@@ -626,71 +574,11 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
             </div>
 
             <button class="btn" id="open-codepen">
-                <i class="fa-brands fa-codepen" style="margin-right:6px;"></i>Ouvrir dans CodePen 
-                
+                <i class="fa-brands fa-codepen" style="margin-right:6px;"></i>Ouvrir dans CodePen
+
                 <span> -50 💎</span>
             </button>
 
-            <!-- Call to Action Upgrade 
-            <div class="upgrade-cta">
-                <div class="upgrade-badge">💎 PRO</div>
-                <h4>Passez Pro pour sauvegarder et partager</h4>
-                <p>Avec le plan Pro à 9,90€/mois, vous pourrez :</p>
-                <ul>
-                    <li>✅ Sauvegarder vos projets dans le cloud</li>
-                    <li>✅ Apparaître dans la galerie communautaire</li>
-                    <li>✅ Accéder à votre historique complet</li>
-                    <li>✅ Obtenir un profil public</li>
-                </ul>
-                <button class="btn btn-premium" onclick="openPricing()">
-                    <i class="fas fa-crown"></i> Devenir Pro - 9,90€/mois
-                </button>
-            </div>
-        </div>-->
-
-            <!-- État connecté (Pro) -->
-            <div id="code-pro-user" class="code-pro-features"
-                style="<?= (Auth::isLoggedIn() && $_SESSION['subscription'] === 'free') ? 'display:block;' : 'display:none;' ?>">
-                <div class="code-editors">
-                    <div class="code-box">
-                        <div class="code-box-title">HTML</div>
-                        <div class="copy-icon" onclick="copyCode('full-html-code')" title="Copier le HTML">
-                            <i class="fa-regular fa-copy"></i>
-                        </div>
-                        <textarea id="full-html-code" readonly></textarea>
-                    </div>
-
-                    <div class="code-box">
-                        <div class="code-box-title">CSS</div>
-                        <div class="copy-icon" onclick="copyCode('full-css-code')" title="Copier le CSS">
-                            <i class="fa-regular fa-copy"></i>
-                        </div>
-                        <textarea id="full-css-code" readonly></textarea>
-                    </div>
-
-                    <div class="code-box">
-                        <div class="code-box-title">JavaScript</div>
-                        <div class="copy-icon" onclick="copyCode('full-js-code')" title="Copier le JS">
-                            <i class="fa-regular fa-copy"></i>
-                        </div>
-                        <textarea id="full-js-code" readonly></textarea>
-                    </div>
-                </div>
-
-                <button class="btn" id="open-codepen">
-                    <i class="fa-brands fa-codepen" style="margin-right:6px;"></i>Ouvrir dans CodePen
-                </button>
-
-                <!-- Boutons Pro -->
-                <div class="pro-actions">
-                    <button class="btn btn-primary" onclick="saveProject()">
-                        <i class="fas fa-cloud-upload-alt"></i> Sauvegarder le projet
-                    </button>
-                    <button class="btn btn-secondary" onclick="publishToGallery()">
-                        <i class="fas fa-share"></i> Publier dans la galerie
-                    </button>
-                </div>
-            </div>
         </div>
 
 
@@ -755,38 +643,6 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
             }
         </script>
 
-        <!--<script>
-            // Export dans codepen
-            document.getElementById("open-codepen").addEventListener("click", () => {
-                const html = document.getElementById("full-html-code").value;
-                const css = document.getElementById("full-css-code").value;
-                const js = document.getElementById("full-js-code").value;
-
-                const data = {
-                    title: "Animation 3D Scroll – Export",
-                    html: html,
-                    css: css,
-                    js: js,
-                    editors: "101", // HTML/CSS/JS actifs
-                };
-
-                const form = document.createElement("form");
-                form.method = "POST";
-                form.action = "https://codepen.io/pen/define";
-                form.target = "_blank";
-
-                const input = document.createElement("input");
-                input.type = "hidden";
-                input.name = "data";
-                input.value = JSON.stringify(data);
-                form.appendChild(input);
-
-                document.body.appendChild(form);
-                form.submit();
-                document.body.removeChild(form);
-            });
-        </script>-->
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
@@ -812,16 +668,6 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                 const response1 = await fetch('api.php?action=get_user_points');
                 const points = await response1.json();
                 console.log('1. Points actuels:', points);
-
-                /* Test 2: Déduction
-                const response2 = await fetch('api.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: 'action=deduct_points'
-                });
-                const deduct = await response2.json();
-                console.log('2. Déduction:', deduct);
-*/
                 // Test 3: Vérifie la session
                 console.log('3. Session PHP:', <?= json_encode($_SESSION ?? []) ?>);
             }

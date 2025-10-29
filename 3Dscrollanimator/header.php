@@ -296,12 +296,12 @@ require_once 'PointsManager.php';
             <div class="nav-icons">
                 <a href="index.php"
                     class="nav-icon <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
-                    <i class="fas fa-pen"></i>
+                    <i class="fa-regular fa-pen-to-square"></i>
                     <span>Edit</span>
                 </a>
                 <a href="gallery.php"
                     class="nav-icon <?= basename($_SERVER['PHP_SELF']) == 'gallery.php' ? 'active' : '' ?>">
-                    <i class="fa-solid fa-folder"></i>
+                    <i class="fa-regular fa-folder-open"></i>
                     <span>Explore</span>
                 </a>
             </div>
@@ -310,7 +310,7 @@ require_once 'PointsManager.php';
         <div class="header-right">
             <?php if (Auth::isLoggedIn()): ?>
                 <div class="points-info">
-                    <span><?= htmlspecialchars($_SESSION['user_name']) ?></span>
+                    <!--<span><?= htmlspecialchars($_SESSION['user_name']) ?></span>-->
                     <strong><span id="current-points"><?= $_SESSION['user_points'] ?? 200 ?></span></strong> 💎
                 </div>
 
@@ -322,18 +322,18 @@ require_once 'PointsManager.php';
                     <div class="user-dropdown">
 
                         <a href="dashboard.php" class="user-dropdown-item">
-                            <i class="fas fa-user"></i>
+                            <i class="fa-regular fa-user"></i>
                             <span>Profil</span>
                         </a>
 
                         <?php if (Auth::isLoggedIn() && $_SESSION['user_id'] == 1): ?>
                             <a href="admin.php" class="user-dropdown-item">
-                            <i class="fa-solid fa-hexagon-nodes"></i>
+                            <i class="fa-solid fa-code-branch"></i>
                             <span>Stat</span>
                         </a>
                         <div class="user-dropdown-divider"></div>
                             <a href="history.php" class="user-dropdown-item">
-                                <i class="fa-solid fa-hexagon-nodes-bolt"></i>
+                                <i class="fa-solid fa-code-merge"></i>
                                 <span>History TR</span>
                             </a>
                         <?php endif; ?>
@@ -343,7 +343,7 @@ require_once 'PointsManager.php';
                         <div class="user-dropdown-divider"></div>
 
                         <a href="?logout" class="user-dropdown-item">
-                            <i class="fas fa-sign-out-alt"></i>
+                            <i class="fa-regular fa-share-from-square"></i>
                             <span>Log Out</span>
                         </a>
                     </div>
@@ -352,11 +352,11 @@ require_once 'PointsManager.php';
                 <div class="auth-buttons">
                     <a href="login.php" class="btn btn-secondary">
                         <i class="fas fa-sign-in-alt"></i>
-                        <span>Log In</span>
+                        <span>LogIn</span>
                     </a>
                     <a href="register.php" class="btn btn-primary">
                         <i class="fas fa-user-plus"></i>
-                        <span>Sign Up</span>
+                        <span>SignUp</span>
                     </a>
                 </div>
             <?php endif; ?>
