@@ -468,6 +468,31 @@ strong {
     padding: 15px;
 }
 
+.badge {
+    box-sizing: border-box;
+    display: inline-block;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-radius: 3rem; 
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 400;
+    padding: .05rem .8rem .1rem;
+    line-height: inherit;
+}
+.badge-saas {
+    background-color: var(--primary-color);
+    color: var(--primary-color);
+}
+.badge-site {
+    background-color: var(--jaune-color);
+    color: var(--jaune-color);
+}
+.badge-tool {
+    background-color: var(--success-color);
+    color: var(--success-color);
+}
+
 .project-content {
     padding: 20px;
 }

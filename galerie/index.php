@@ -234,7 +234,7 @@ $csrfToken = generateCsrfToken();
             }
 
             .popup h3 {
-                color: #ab9ff2;
+                color: #f8f8f8;
                 margin-bottom: 20px;
                 text-align: center;
             }
