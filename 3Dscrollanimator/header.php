@@ -123,39 +123,36 @@ require_once 'PointsManager.php';
             gap: 0.8rem;
         }
 
-        /*
-        .btn {
-            padding: 0.6rem 1.2rem;
-            border-radius: 25px;
+        .btn-cta {
+            background: linear-gradient(90deg, var(--primary), var(--rose));
+            color: #0f0f16;
             text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            padding: 12px 18px;
+            border-radius: 10px;
             border: none;
+            font-weight: 400;
             cursor: pointer;
-            font-size: 0.9rem;
+            box-shadow: 0 6px 20px rgba(203, 166, 247, 0.32);
+            display: inline-flex;
+            gap: 10px;
+            align-items: center;
         }
 
-        .btn-primary {
-            background: var(--primary);
-            color: var(--dark);
+        .btn-join {
+            background: linear-gradient(90deg, var(--border), var(--white));
+            color: #0f0f16;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 400;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(203, 166, 247, 0.32);
+            display: inline-flex;
+            gap: 10px;
+            align-items: center;
         }
 
-        .btn-primary:hover {
-            background: var(--rose);
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--white);
-            border: 1px solid var(--border);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
-        }
-*/
         /* Menu utilisateur */
         .user-menu {
             display: flex;
@@ -328,10 +325,10 @@ require_once 'PointsManager.php';
 
                         <?php if (Auth::isLoggedIn() && $_SESSION['user_id'] == 1): ?>
                             <a href="admin.php" class="user-dropdown-item">
-                            <i class="fa-solid fa-code-branch"></i>
-                            <span>Stat</span>
-                        </a>
-                        <div class="user-dropdown-divider"></div>
+                                <i class="fa-solid fa-code-branch"></i>
+                                <span>Stat</span>
+                            </a>
+                            <div class="user-dropdown-divider"></div>
                             <a href="history.php" class="user-dropdown-item">
                                 <i class="fa-solid fa-code-merge"></i>
                                 <span>History TR</span>
@@ -350,13 +347,13 @@ require_once 'PointsManager.php';
                 </div>
             <?php else: ?>
                 <div class="auth-buttons">
-                    <a href="login.php" class="btn btn-secondary">
-                        <i class="fas fa-sign-in-alt"></i>
-                        <span>LogIn</span>
+                    <a href="login.php" class="btn-cta">
+                        <i class="fa-regular fa-square-plus"></i>
+                        <span> Create</span>
                     </a>
-                    <a href="register.php" class="btn btn-primary">
-                        <i class="fas fa-user-plus"></i>
-                        <span>SignUp</span>
+                    <a href="register.php" class="btn-join">
+                        <i class="fa-solid fa-rocket"></i>
+                        <span> Join we</span>
                     </a>
                 </div>
             <?php endif; ?>

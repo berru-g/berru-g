@@ -1817,7 +1817,7 @@ function updateUI() {
     }
 }
 
-// Gestion de l'achat de points
+/* Gestion de l'achat de points
 document.querySelectorAll('.buy-points').forEach(button => {
     button.addEventListener('click', async function () {
         const packElement = this.closest('.point-pack');
@@ -1852,7 +1852,116 @@ document.querySelectorAll('.buy-points').forEach(button => {
             notify.error('Erreur réseau', 'Impossible de procéder au paiement');
         }
     });
+}); */
+// Nouvelle fonction pour l'achat via Lemon Squeezie
+document.querySelectorAll('.buy-points').forEach(button => {
+    button.addEventListener('click', async function () {
+        const packElement = this.closest('.point-pack');
+        const packId = packElement.getAttribute('data-pack-id');
+
+        try {
+            const response = await fetch('api.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=create_lemon_checkout&pack_id=${packId}`
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Redirection vers Lemon Squeezie
+                window.location.href = result.checkout_url;
+            } else {
+                notify.error('Erreur', result.message);
+            }
+        } catch (error) {
+            console.error('Erreur achat:', error);
+            notify.error('Erreur réseau', 'Impossible de procéder au paiement');
+        }
+    });
 });
+
+// BTN Fonction pour débloquer l'accès au code
+async function unlockCodePreview() {
+    if (!currentUser) {
+        showAuthModal();
+        return;
+    }
+
+    // Vérifier si déjà débloqué pour ce projet (stockage local)
+    const projectHash = generateProjectHash();
+    const unlockedProjects = JSON.parse(localStorage.getItem('unlockedProjects') || '[]');
+    
+    if (unlockedProjects.includes(projectHash)) {
+        // Déjà débloqué, afficher directement
+        showCodeEditors();
+        return;
+    }
+
+    // Vérifier les points
+    const pointsCheck = await checkAndDeductPoints('unlock_code');
+    if (!pointsCheck.success) {
+        notify.error(pointsCheck.message, 'Points insuffisants');
+        
+        // Proposition d'acheter des points
+        if (confirm("Points insuffisants ! Voulez-vous acheter plus de points ?")) {
+            showPointsShop();
+        }
+        return;
+    }
+
+    // Mettre à jour l'affichage des points
+    updateUserPointsDisplay(pointsCheck.new_balance);
+
+    // Marquer comme débloqué
+    unlockedProjects.push(projectHash);
+    localStorage.setItem('unlockedProjects', JSON.stringify(unlockedProjects));
+
+    // Afficher les éditeurs de code
+    showCodeEditors();
+    
+    notify.success('Code débloqué ! -50 💎', 'Succès');
+    showPointsAnimation(50,'Code débloqué !');
+}
+
+function generateProjectHash() {
+    // Générer un hash unique basé sur les keyframes actuelles
+    return btoa(JSON.stringify(keyframes)).substring(0, 16);
+}
+
+function showCodeEditors() {
+    document.getElementById('code-editors-section').style.display = 'flex';
+    document.querySelector('.unlock-code-section').style.display = 'none';
+    generateCode(); // Générer le code si pas déjà fait
+}
+
+// Vérifier au chargement si le projet est déjà débloqué
+function checkUnlockedProjects() {
+    if (!currentUser) return;
+    
+    const projectHash = generateProjectHash();
+    const unlockedProjects = JSON.parse(localStorage.getItem('unlockedProjects') || '[]');
+    
+    if (unlockedProjects.includes(projectHash)) {
+        showCodeEditors();
+    }
+}
+
+// Appeler au chargement
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(checkUnlockedProjects, 1000);
+});
+
+
+// Fonction pour afficher le shop de points
+function showPointsShop() {
+    // Scroll vers la section points
+    document.querySelector('.points-shop').scrollIntoView({ 
+        behavior: 'smooth' 
+    });
+}
 
 // Vérifier le statut après retour de paiement
 async function checkPaymentStatus() {

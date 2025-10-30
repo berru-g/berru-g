@@ -186,15 +186,16 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
 
     /* Styles pour le footer */
     .footer {
+        width: 100%;
         background: linear-gradient(135deg, #151517 70%, #ab9ff2 100%);
         color: #cdd6f4;
         border-top: 1px solid #313244;
         margin-top: 4rem;
-        padding: 3rem 0 1rem;
+        padding: 20px 10px;
     }
 
     .footer-container {
-        max-width: 1200px;
+        max-width: 1800px;
         margin: 0 auto;
         padding: 0 2rem;
         display: grid;

@@ -170,7 +170,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                     <li>✅ Voir le code complet de votre animation</li>
                     <li>✅ Exporter vers CodePen en 1 clic</li>
                     <li>✅ Sauvegarder vos projets</li>
-                    <li>🎁 <strong>Gratuit</strong> - Aucune carte requise</li>
+                    <li><strong>Offert</strong> - 200 💎 Crédits </li>
                 </ul>
             </div>
         </div>
@@ -225,139 +225,6 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
             </div>
         </div>
     </div>
-    <style>
-        /* Styles pour la modal de sauvegarde */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-        }
-
-        .modal-content {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            animation: modalSlideIn 0.3s ease;
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .modal-header h3 {
-            margin: 0;
-            color: var(--text);
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--text-light);
-            cursor: pointer;
-            padding: 0.25rem;
-        }
-
-        .close-btn:hover {
-            color: var(--text);
-        }
-
-        .modal-body {
-            padding: 1.5rem;
-        }
-
-        .modal-footer {
-            padding: 1.5rem;
-            border-top: 1px solid var(--border);
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text);
-            font-weight: 500;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            background: var(--background);
-            color: var(--text);
-            font-size: 0.875rem;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .char-count {
-            text-align: right;
-            font-size: 0.75rem;
-            color: var(--text-light);
-            margin-top: 0.25rem;
-        }
-
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            cursor: pointer;
-            font-weight: normal;
-        }
-
-        .checkbox-label input {
-            width: auto;
-            margin: 0;
-        }
-
-        .reward-notice {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid var(--accent);
-            border-radius: 6px;
-            padding: 1rem;
-            margin-top: 1rem;
-        }
-    </style>
 
     <!-- ÉDITEUR PARAMETRE -->
     <div class="top-section">
@@ -486,7 +353,8 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                     </div>
                 </div>
 
-                <button class="btn" id="add-keyframe">Ajouter une keyframe</button>
+                <button class="btn" id="add-keyframe"><i class="fa-solid fa-layer-group"></i> Ajouter une
+                    keyframe</button>
             </div>
 
             <div class="section">
@@ -527,28 +395,35 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
     </div>
 
     <!-- Éditeur de code complet -->
-    <div class="code-exporter">
-        <h2 class="section-title">Code Complet à Copier</h2>
+    <!-- Éditeur de code complet REVU -->
+<div class="code-exporter">
+    <h2 class="section-title">Export de Code</h2>
 
-        <!-- État non connecté -->
-        <div id="code-guest" class="code-guest" style="display: none;"> <!-- Toujours caché -->
-            <div class="guest-message">
-                <div class="guest-icon"><img src="../img/mascotte-code.png"></div>
-                <h3>Connectez-vous pour débloquer l'export</h3>
-                <p>Accédez au code complet et à l'export CodePen en vous connectant gratuitement</p>
-                <a href="login.php" class="btn btn-primary">
-                    <i class="fas fa-sign-in-alt"></i> Se connecter
-                </a>
-                <p style="margin-top: 1rem; font-size: 0.9rem;">
-                    Pas encore de compte ? <a href="register.php" style="color: var(--primary);">Inscription
-                        gratuite</a>
-                </p>
-            </div>
+    <!-- État non connecté -->
+    <?php if (!Auth::isLoggedIn()): ?>
+    <div class="guest-message">
+        <div class="guest-icon"><img src="../img/mascotte-code.png"></div>
+        <h3>Connectez-vous pour exporter votre code</h3>
+        <p>Accédez au code complet et à l'export CodePen en vous connectant gratuitement</p>
+        <a href="login.php" class="btn btn-primary">
+            <i class="fas fa-sign-in-alt"></i> Se connecter
+        </a>
+    </div>
+
+    <!-- État connecté -->
+    <?php else: ?>
+    <div class="code-actions">
+        <!-- Bouton pour débloquer le code -->
+        <div class="unlock-code-section">
+            <button class="btn btn-primary" id="unlock-code-btn" onclick="unlockCodePreview()">
+                <i class="fas fa-code"></i> Voir le code complet
+                <span class="cost-badge"> -50 💎</span>
+            </button>
+            <p class="cost-info">Débloquez une fois, accès illimité à ce projet</p>
         </div>
 
-        <!-- État connecté (gratuit) -->
-        <div id="code-free-user" class="code-editors"
-            style="<?= (Auth::isLoggedIn() && $_SESSION['subscription'] === 'pro') ? 'display:flex;' : 'display:none;' ?>">
+        <!-- Section code (cachée par défaut) -->
+        <div id="code-editors-section" class="code-editors" style="display: none;">
             <div class="code-box">
                 <div class="code-box-title">HTML</div>
                 <div class="copy-icon" onclick="copyCode('full-html-code')" title="Copier le HTML">
@@ -574,12 +449,13 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
             </div>
 
             <button class="btn" id="open-codepen">
-                <i class="fa-brands fa-codepen" style="margin-right:6px;"></i>Ouvrir dans CodePen
-
-                <span> -50 💎</span>
+                <i class="fa-brands fa-codepen"></i> Ouvrir dans CodePen
+                <span class="cost-badge">-50 💎</span>
             </button>
-
         </div>
+    </div>
+    <?php endif; ?>
+</div>
 
 
 

@@ -261,6 +261,51 @@ switch ($action) {
     default:
         echo json_encode(['success' => false, 'message' => 'Action inconnue: ' . $action]);
         break;
+
+    // Switch de Stripe à LemonSqueezie
+    case 'unlock_code':
+        if (!Auth::isLoggedIn()) {
+            echo json_encode(['success' => false, 'message' => 'Non connecté']);
+            exit;
+        }
+
+        $result = PointsManager::deductPoints($_SESSION['user_id'], 50);
+        echo json_encode($result);
+        break;
+
+    case 'create_lemon_checkout':
+        if (!Auth::isLoggedIn()) {
+            echo json_encode(['success' => false, 'message' => 'Non connecté']);
+            exit;
+        }
+
+        $packId = $_POST['pack_id'] ?? 0;
+        $packs = [
+            1 => ['points' => 100, 'price' => 4.90, 'product_id' => 'ton_product_id_100'],
+            2 => ['points' => 500, 'price' => 19.90, 'product_id' => 'ton_product_id_500'],
+            3 => ['points' => 1500, 'price' => 49.90, 'product_id' => 'ton_product_id_1500']
+        ];
+
+        if (!isset($packs[$packId])) {
+            echo json_encode(['success' => false, 'message' => 'Pack invalide']);
+            exit;
+        }
+
+        $pack = $packs[$packId];
+
+        // Créer une transaction en attente
+        $db = getDB();
+        $stmt = $db->prepare("INSERT INTO point_transactions (user_id, points_amount, amount_eur, status, provider) VALUES (?, ?, ?, 'pending', 'lemon')");
+        $stmt->execute([$_SESSION['user_id'], $pack['points'], $pack['price']]);
+        $transactionId = $db->lastInsertId();
+
+        // Rediriger vers Lemon Squeezie
+        $checkoutUrl = "https://tonstore.lemonsqueezy.com/checkout/buy/" . $pack['product_id'] . "?checkout[email]=" . urlencode($_SESSION['user_email']) . "&checkout[custom][transaction_id]=" . $transactionId;
+
+        echo json_encode(['success' => true, 'checkout_url' => $checkoutUrl]);
+        break;
+
 }
+
 
 ?>

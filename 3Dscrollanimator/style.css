@@ -100,6 +100,29 @@ body {
     border-color: var(--border);
 }
 
+.btn-cta {
+    background: linear-gradient(90deg, var(--accent-2), var(--accent));
+    color: #0f0f16;
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(203, 166, 247, 0.08);
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
 .user-menu {
     display: flex;
     align-items: center;
@@ -127,10 +150,11 @@ body {
     overflow: hidden;
     border-bottom: 1px solid var(--dark);
 }
+
 h1 {
     color: var(--primary);
-    font-size: 1.5rem;  
-    margin-bottom: 1rem;    
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .sidebar {
@@ -726,9 +750,20 @@ select {
 }
 
 @keyframes loadingDots {
-    0%, 20% { content: '.'; }
-    40% { content: '..'; }
-    60%, 100% { content: '...'; }
+
+    0%,
+    20% {
+        content: '.';
+    }
+
+    40% {
+        content: '..';
+    }
+
+    60%,
+    100% {
+        content: '...';
+    }
 }
 
 /* SHOP DE POINTS */
@@ -963,6 +998,138 @@ select {
     }
 }
 
+/* Styles pour la modal de sauvegarde */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.modal-content {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: var(--text);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 0.25rem;
+}
+
+.close-btn:hover {
+    color: var(--text);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--background);
+    color: var(--text);
+    font-size: 0.875rem;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.char-count {
+    text-align: right;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin-top: 0.25rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.checkbox-label input {
+    width: auto;
+    margin: 0;
+}
+
+.reward-notice {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
 /* Authentification Modal */
 .auth-modal {
     position: fixed;
@@ -1187,6 +1354,54 @@ select {
     background: linear-gradient(135deg, #e8b6d8 0%, #b692f6 100%);
     transform: translateY(-2px);
 }
+/* Nouveaux styles pour la section code */
+.unlock-code-section {
+    text-align: center;
+    padding: 2rem;
+    background: var(--grey-light);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.cost-badge {
+    background: var(--primary);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+}
+
+.cost-info {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-top: 0.5rem;
+}
+
+.code-actions {
+    transition: all 0.3s ease;
+}
+
+.point-pack {
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.point-pack:hover {
+    transform: translateY(-2px);
+}
+
+.badge {
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    background: var(--primary);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
 
 /* User Menu */
 .user-avatar {
@@ -1304,7 +1519,7 @@ select {
 }
 
 .gain-particle.points {
-    color: #fbbf24;
+    color: #fff;
     text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
 }
 
@@ -1323,14 +1538,17 @@ select {
         opacity: 0;
         transform: translateY(0) scale(0.5);
     }
+
     20% {
         opacity: 1;
         transform: translateY(-20px) scale(1.2);
     }
+
     80% {
         opacity: 1;
         transform: translateY(-80px) scale(1);
     }
+
     100% {
         opacity: 0;
         transform: translateY(-120px) scale(0.8);
@@ -1338,21 +1556,88 @@ select {
 }
 
 /* Variantes de positions */
-.gain-particle:nth-child(1) { animation-delay: 0s; left: -50px; }
-.gain-particle:nth-child(2) { animation-delay: 0.1s; left: -25px; }
-.gain-particle:nth-child(3) { animation-delay: 0.2s; left: 0px; }
-.gain-particle:nth-child(4) { animation-delay: 0.3s; left: 25px; }
-.gain-particle:nth-child(5) { animation-delay: 0.4s; left: 50px; }
+.gain-particle:nth-child(1) {
+    animation-delay: 0s;
+    left: -50px;
+}
+
+.gain-particle:nth-child(2) {
+    animation-delay: 0.1s;
+    left: -25px;
+}
+
+.gain-particle:nth-child(3) {
+    animation-delay: 0.2s;
+    left: 0px;
+}
+
+.gain-particle:nth-child(4) {
+    animation-delay: 0.3s;
+    left: 25px;
+}
+
+.gain-particle:nth-child(5) {
+    animation-delay: 0.4s;
+    left: 50px;
+}
 
 /* Animation de vibration pour le compteur */
 @keyframes pulseGain {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.3); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.3);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 .points-counter.pulse {
     animation: pulseGain 0.6s ease;
 }
 
-/*  */
+.credits-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.credits-info {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.credits-section .btn {
+    margin: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#code-editors {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.guest-message {
+    text-align: center;
+    padding: 2rem;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
