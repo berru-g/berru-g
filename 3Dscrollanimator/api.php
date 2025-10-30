@@ -34,7 +34,7 @@ switch ($action) {
             exit;
         }
 
-        $success = ProjectManager::saveProject(
+        $projectId = ProjectManager::saveProject(
             $_SESSION['user_id'],
             $title,
             $description,
@@ -42,7 +42,12 @@ switch ($action) {
             $isPublic
         );
 
-        echo json_encode(['success' => $success, 'message' => $success ? 'Projet sauvegardé' : 'Erreur sauvegarde']);
+        // RETOURNER L'ID du projet créé
+        echo json_encode([
+            'success' => (bool) $projectId,
+            'message' => $projectId ? 'Projet sauvegardé' : 'Erreur sauvegarde',
+            'project_id' => $projectId
+        ]);
         break;
 
     case 'like_project':
@@ -279,11 +284,25 @@ switch ($action) {
             exit;
         }
 
-        $packId = $_POST['pack_id'] ?? 0;
+        $packId = intval($_POST['pack_id'] ?? 0);
+
+        // Configuration des packs avec les VRAIS IDs Lemon
         $packs = [
-            1 => ['points' => 100, 'price' => 4.90, 'product_id' => 'ton_product_id_100'],
-            2 => ['points' => 500, 'price' => 19.90, 'product_id' => 'ton_product_id_500'],
-            3 => ['points' => 1500, 'price' => 49.90, 'product_id' => 'ton_product_id_1500']
+            1 => [
+                'points' => 100,
+                'price' => 4.90,
+                'product_id' => 'ton_id_pack_100' // À remplacer
+            ],
+            2 => [
+                'points' => 500,
+                'price' => 19.90,
+                'product_id' => 'ton_id_pack_500' // À remplacer
+            ],
+            3 => [
+                'points' => 1500,
+                'price' => 49.90,
+                'product_id' => 'ton_id_pack_1500' // À remplacer
+            ]
         ];
 
         if (!isset($packs[$packId])) {
@@ -295,12 +314,15 @@ switch ($action) {
 
         // Créer une transaction en attente
         $db = getDB();
-        $stmt = $db->prepare("INSERT INTO point_transactions (user_id, points_amount, amount_eur, status, provider) VALUES (?, ?, ?, 'pending', 'lemon')");
+        $stmt = $db->prepare("INSERT INTO point_transactions (user_id, points_amount, amount_eur, status, provider, created_at) VALUES (?, ?, ?, 'pending', 'lemon', NOW())");
         $stmt->execute([$_SESSION['user_id'], $pack['points'], $pack['price']]);
         $transactionId = $db->lastInsertId();
 
-        // Rediriger vers Lemon Squeezie
-        $checkoutUrl = "https://tonstore.lemonsqueezy.com/checkout/buy/" . $pack['product_id'] . "?checkout[email]=" . urlencode($_SESSION['user_email']) . "&checkout[custom][transaction_id]=" . $transactionId;
+        // URL de checkout Lemon Squeezie
+        $checkoutUrl = "https://tonstore.lemonsqueezy.com/checkout/buy/" . $pack['product_id'] .
+            "?checkout[email]=" . urlencode($_SESSION['user_email']) .
+            "&checkout[custom][user_id]=" . $_SESSION['user_id'] .
+            "&checkout[custom][transaction_id]=" . $transactionId;
 
         echo json_encode(['success' => true, 'checkout_url' => $checkoutUrl]);
         break;

@@ -36,13 +36,13 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
                     <div class="stat-number"><?= $publicProjects ?></div>
                     <div class="stat-label">Projets Publics</div>
                 </div>
-                <div class="stat-item">
+                <!--<div class="stat-item">
                     <div class="stat-number"><?= $pointPurchases ?></div>
                     <div class="stat-label">Achetés</div>
-                </div>
+                </div>-->
                 <div class="stat-item">
                     <div class="stat-number"><?= number_format($totalPoints) ?></div>
-                    <div class="stat-label">Points Distribués</div>
+                    <div class="stat-label">💎 Offerts</div>
                 </div>
             </div>
         </div>
@@ -53,7 +53,7 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
                 <h3>3D Scroll Animator</h3>
                 <p class="footer-description">
                     Plateforme no-code pour créer des animations 3D synchronisées au scroll.
-                    Importez vos modèles, définissez des keyframes et générez du code prêt à l'emploi.
+                    Importez vos modèles, définissez des keyframes, nous générons le code prêt à l'emploi.
                 </p>
                 <div class="footer-features">
                     <span class="feature-tag">No-Code</span>
@@ -109,12 +109,12 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
                 <details class="faq-item">
                     <summary>Les points sont-ils obligatoires ?</summary>
                     <p>Les 200 points offerts à l'inscription permettent de tester la plateforme. Les points
-                        supplémentaires permettent de sauvegarder plus de projets.</p>
+                        supplémentaires permettent de sauvegarder plus de projets. [ 50 💎 = 2 Projets + Code complet ].</p>
                 </details>
 
                 <details class="faq-item">
                     <summary>Puis-je utiliser le code généré commercialement ?</summary>
-                    <p>Oui ! Tout le code généré est 100% vôtre, sans restriction d'usage.</p>
+                    <p>Oui ! Tout le code généré est 100% vôtre, sans restriction d'usage et facilement implémentable dans n'importe quel site.</p>
                 </details>
             </div>
         </div>
@@ -129,7 +129,7 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
                 </a>
 
                 <a href="https://codepen.io/h-lautre/" target="_blank" class="resource-link" title="CodePen - Éditeur en ligne">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/codepen.svg" alt="CodePen">
+                    <i class="fa-brands fa-codepen"></i>
                     <span>CodePen</span>
                 </a>
 
@@ -191,7 +191,6 @@ $totalPoints = $stmt->fetch()['total_points'] ?? 0;
         color: #cdd6f4;
         border-top: 1px solid #313244;
         margin-top: 4rem;
-        padding: 20px 10px;
     }
 
     .footer-container {

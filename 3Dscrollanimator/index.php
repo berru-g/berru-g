@@ -1,5 +1,8 @@
 <?php
-// index.php
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+
 require_once 'config.php';
 require_once 'auth.php';
 require_once 'PointsManager.php';
@@ -170,7 +173,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                     <li>✅ Voir le code complet de votre animation</li>
                     <li>✅ Exporter vers CodePen en 1 clic</li>
                     <li>✅ Sauvegarder vos projets</li>
-                    <li><strong>Offert</strong> - 200 💎 Crédits </li>
+                    <li><strong>Offert</strong>  200 💎 Crédits </li>
                 </ul>
             </div>
         </div>
@@ -240,8 +243,8 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                     <p>5. Copiez le code généré pour l'utiliser sur votre site</p>
                     <?php if (!Auth::isLoggedIn()): ?>
                         <p style="color: var(--primary); margin-top: 10px;">
-                            <strong>💡 Astuce :</strong> <a href="register.php"
-                                style="color: var(--primary);">Inscrivez-vous</a> pour sauvegarder vos projets !
+                            <strong>100 💎 offert :</strong> <a href="register.php"
+                                style="color: var(--primary);">Essayer gratuitement</a>
                         </p>
                     <?php endif; ?>
                 </div>
@@ -275,8 +278,7 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                 <?php else: ?>
                     <div style="background: var(--grey-light); padding: 10px; border-radius: 6px; margin-top: 10px;">
                         <p style="margin: 0; color: var(--rose); font-size: 0.9rem;">
-                            <a href="login.php" style="color: var(--primary);">Connectez-vous</a> pour sauvegarder vos
-                            projets
+                            <a href="login.php" style="color: var(--primary);">Connectez-vous</a> pour commencer à créer
                         </p>
                     </div>
                 <?php endif; ?>
@@ -415,9 +417,9 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
     <div class="code-actions">
         <!-- Bouton pour débloquer le code -->
         <div class="unlock-code-section">
-            <button class="btn btn-primary" id="unlock-code-btn" onclick="unlockCodePreview()">
+            <button class="btn-cta" id="unlock-code-btn" onclick="unlockCodePreview()">
                 <i class="fas fa-code"></i> Voir le code complet
-                <span class="cost-badge"> -50 💎</span>
+                <span> -50 💎</span>
             </button>
             <p class="cost-info">Débloquez une fois, accès illimité à ce projet</p>
         </div>
@@ -448,9 +450,9 @@ error_log("Logged in: " . (Auth::isLoggedIn() ? 'YES' : 'NO'));
                 <textarea id="full-js-code" readonly></textarea>
             </div>
 
-            <button class="btn" id="open-codepen">
+            <button class="btn-cta" id="open-codepen">
                 <i class="fa-brands fa-codepen"></i> Ouvrir dans CodePen
-                <span class="cost-badge">-50 💎</span>
+                <span>-50 💎</span>
             </button>
         </div>
     </div>

@@ -768,8 +768,8 @@ select {
 
 /* SHOP DE POINTS */
 .points-shop {
-    background-image: url('../img/mascotte-cafe.png');
-    padding: 20px;
+    background-image: url('../img/mascotte-sunset.png');
+    padding: 75px 80px;
     border-radius: 10px;
     margin: 20px 0;
 }
@@ -793,7 +793,8 @@ select {
 
 .point-pack:hover {
     border-color: var(--primary);
-    transform: translateY(-5px);
+    transform: translateY(-25px);
+    box-shadow: 0 6px 20px rgba(203, 166, 247, 0.08);
 }
 
 .point-pack.popular {
@@ -1014,7 +1015,7 @@ select {
 }
 
 .modal-content {
-    background: var(--surface);
+    background: var(--grey);
     border: 1px solid var(--border);
     border-radius: 12px;
     width: 90%;
@@ -1524,8 +1525,8 @@ select {
 }
 
 .gain-particle.gems {
-    color: #10b981;
-    text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    color: #ee6055;
+    text-shadow: 0 0 10px rgba(185, 16, 16, 0.5);
 }
 
 .gain-particle.premium {

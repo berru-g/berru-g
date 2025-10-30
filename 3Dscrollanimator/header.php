@@ -60,7 +60,7 @@ require_once 'PointsManager.php';
         }
 
         .header-left img {
-            height: 40px;
+            height: 60px;
             width: auto;
             border-radius: 100%;
         }
@@ -286,7 +286,7 @@ require_once 'PointsManager.php';
     <header class="modern-header">
         <div class="header-left">
             <a href="landing.html" class="logo">
-                <img src="../img/mascotte-code.png">
+                <img src="../img/3Dscrollanimator-logo.png">
                 <span>3DScrollAnimate</span>
             </a>
 

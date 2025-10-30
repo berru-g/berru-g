@@ -156,7 +156,7 @@ class GainAnimator {
     createParticles(amount, type) {
         const symbols = {
             points: '💎',
-            gems: '✨', 
+            gems: '💎',
             premium: '👑',
             coin: '🪙',
             star: '⭐'
@@ -171,7 +171,7 @@ class GainAnimator {
             particle.className = `gain-particle ${type}`;
             particle.textContent = text;
             particle.style.setProperty('--index', i);
-            
+
             this.container.appendChild(particle);
         }
 
@@ -225,6 +225,8 @@ let keyframes = [];
 let currentTab = 'position';
 let isDragging = false;
 let currentPercentage = 0;
+
+let currentProjectId = null;
 
 // État de l'application
 let appInitialized = false;
@@ -617,113 +619,31 @@ function updateModelByScroll(percentage) {
     }
 }
 
-/*
-// SAVE LOAD PROJECTS & points MANAGEMENT
-async function saveProject() {
-    console.log("🔧 saveProject() appelée");
-
-    if (!currentUser) {
-        console.log("❌ Utilisateur non connecté - affichage modal");
-        showAuthModal();
-        return;
-    }
-
-    const title = prompt('Donnez un titre à votre projet:', 'Mon animation 3D');
-    if (!title) return;
-
-    const description = prompt('Description (optionnelle):', '');
-    const makePublicCheckbox = document.getElementById('make-public');
-    const isPublic = makePublicCheckbox && makePublicCheckbox.checked;
-
-    const projectData = {
-        keyframes: keyframes,
-        modelSettings: {
-            position: model ? { x: model.position.x, y: model.position.y, z: model.position.z } : { x: 0, y: 0, z: 0 },
-            rotation: model ? { x: model.rotation.x, y: model.rotation.y, z: model.rotation.z } : { x: 0, y: 0, z: 0 },
-            scale: model ? { x: model.scale.x, y: model.scale.y, z: model.scale.z } : { x: 1, y: 1, z: 1 }
-        },
-        camera: {
-            position: camera ? { x: camera.position.x, y: camera.position.y, z: camera.position.z } : { x: 5, y: 5, z: 5 }
-        },
-        timestamp: new Date().toISOString()
-    };
-
-    console.log("🔧 Données à sauvegarder:", projectData);
-
-    try {
-        const formData = new FormData();
-        formData.append('action', 'save_project');
-        formData.append('title', title);
-        formData.append('description', description);
-        formData.append('model_data', JSON.stringify(projectData));
-        formData.append('is_public', isPublic ? 'true' : 'false');
-
-        console.log("🔧 Envoi vers api.php...");
-
-        const response = await fetch('api.php', {
-            method: 'POST',
-            body: formData
-        });
-
-        console.log("🔧 Réponse reçue, statut:", response.status);
-
-        const result = await response.json();
-        console.log("🔧 Résultat API:", result);
-
-        if (result.success) {
-            // ✅ DONNER 10 POINTS au lieu d'en enlever
-            const pointsResult = await addPoints(10);
-            
-            if (pointsResult.success) {
-                // Animation de gain de points
-                showPointsAnimation(10, 'Projet sauvegardé !');
-                
-                // Message différent selon public/privé
-                const message = isPublic 
-                    ? 'Projet publié avec succès ! +10 💎' 
-                    : 'Projet sauvegardé en privé ! +10 💎';
-                    
-                notify.success(message, 'Sauvegarde');
-                
-                // Mettre à jour l'affichage des points
-                refreshUserPoints();
-            } else {
-                notify.success('Projet sauvegardé ! (erreur attribution points)', 'Sauvegarde');
-            }
-        } else {
-            notify.error('Erreur lors de la sauvegarde', result.message);
-        }
-    } catch (error) {
-        console.error('❌ Erreur sauvegarde:', error);
-        notify.error('Erreur réseau', 'Impossible de sauvegarder');
-    }
-}
-*/
 // Remplacer la fonction saveProject() existante
 function openSaveModal() {
     console.log("🔧 openSaveModal() appelée");
-    
+
     if (!currentUser) {
         showAuthModal();
         return;
     }
-    
+
     // Réinitialiser la modal
     document.getElementById('project-title').value = '';
     document.getElementById('project-description').value = '';
     document.getElementById('title-chars').textContent = '0';
     document.getElementById('desc-chars').textContent = '0';
-    
+
     // Synchroniser la checkbox avec celle de la sidebar
     const sidebarCheckbox = document.getElementById('make-public');
     const modalCheckbox = document.getElementById('modal-make-public');
     if (sidebarCheckbox && modalCheckbox) {
         modalCheckbox.checked = sidebarCheckbox.checked;
     }
-    
+
     // Afficher la modal
     document.getElementById('save-project-modal').style.display = 'flex';
-    
+
     // Focus sur le champ titre
     setTimeout(() => {
         document.getElementById('project-title').focus();
@@ -735,11 +655,11 @@ function closeSaveModal() {
 }
 
 // Compteurs de caractères
-document.getElementById('project-title').addEventListener('input', function() {
+document.getElementById('project-title').addEventListener('input', function () {
     document.getElementById('title-chars').textContent = this.value.length;
 });
 
-document.getElementById('project-description').addEventListener('input', function() {
+document.getElementById('project-description').addEventListener('input', function () {
     document.getElementById('desc-chars').textContent = this.value.length;
 });
 
@@ -748,19 +668,19 @@ async function confirmSaveProject() {
     const title = document.getElementById('project-title').value.trim();
     const description = document.getElementById('project-description').value.trim();
     const isPublic = document.getElementById('modal-make-public').checked;
-    
+
     if (!title) {
         notify.error('Veuillez donner un titre à votre projet', 'Titre requis');
         document.getElementById('project-title').focus();
         return;
     }
-    
+
     // Synchroniser avec la checkbox de la sidebar
     const sidebarCheckbox = document.getElementById('make-public');
     if (sidebarCheckbox) {
         sidebarCheckbox.checked = isPublic;
     }
-    
+
     await saveProjectData(title, description, isPublic);
     closeSaveModal();
 }
@@ -798,15 +718,22 @@ async function saveProjectData(title, description, isPublic) {
         const result = await response.json();
 
         if (result.success) {
+            // ✅ SIMPLE AJOUT: Stocker l'ID du projet pour le système de déblocage
+            // ❌ PROBLEME: Ça débloque automatiquement tous les projets sauvegardés
+            if (result.project_id) {
+                currentProjectId = result.project_id; // Juste stocker l'ID, PAS débloquer
+                console.log('✅ Projet sauvegardé avec ID:', currentProjectId);
+            }
+
             const pointsResult = await addPoints(10);
-            
+
             if (pointsResult.success) {
                 showPointsAnimation(10, 'Projet sauvegardé !');
-                
-                const message = isPublic 
-                    ? 'Projet publié avec succès ! +10 💎' 
+
+                const message = isPublic
+                    ? 'Projet publié avec succès ! +10 💎'
                     : 'Projet sauvegardé en privé ! +10 💎';
-                    
+
                 notify.success(message, 'Sauvegarde');
                 refreshUserPoints();
             } else {
@@ -822,14 +749,14 @@ async function saveProjectData(title, description, isPublic) {
 }
 
 // Fermer la modal en cliquant à l'extérieur
-document.getElementById('save-project-modal').addEventListener('click', function(e) {
+document.getElementById('save-project-modal').addEventListener('click', function (e) {
     if (e.target === this) {
         closeSaveModal();
     }
 });
 
 // Soumission avec Enter
-document.getElementById('project-title').addEventListener('keypress', function(e) {
+document.getElementById('project-title').addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
         confirmSaveProject();
     }
@@ -988,6 +915,7 @@ document.getElementById("open-codepen").addEventListener("click", async () => {
     document.body.removeChild(form);
 
     notify.success('Export CodePen réussi! -50 💎', 'Export');
+    showGemsAnimation(50, 'CodePen débloqué !');
 });
 
 
@@ -1641,6 +1569,8 @@ async function loadProject(projectId) {
 
         if (result.success) {
             const project = result.project;
+            currentProjectId = projectId;
+            console.log('🔄 Projet chargé, currentProjectId:', currentProjectId);
             const modelData = JSON.parse(project.model_data);
 
             // Appliquer les keyframes
@@ -1893,7 +1823,7 @@ async function unlockCodePreview() {
     // Vérifier si déjà débloqué pour ce projet (stockage local)
     const projectHash = generateProjectHash();
     const unlockedProjects = JSON.parse(localStorage.getItem('unlockedProjects') || '[]');
-    
+
     if (unlockedProjects.includes(projectHash)) {
         // Déjà débloqué, afficher directement
         showCodeEditors();
@@ -1904,7 +1834,7 @@ async function unlockCodePreview() {
     const pointsCheck = await checkAndDeductPoints('unlock_code');
     if (!pointsCheck.success) {
         notify.error(pointsCheck.message, 'Points insuffisants');
-        
+
         // Proposition d'acheter des points
         if (confirm("Points insuffisants ! Voulez-vous acheter plus de points ?")) {
             showPointsShop();
@@ -1915,20 +1845,38 @@ async function unlockCodePreview() {
     // Mettre à jour l'affichage des points
     updateUserPointsDisplay(pointsCheck.new_balance);
 
-    // Marquer comme débloqué
-    unlockedProjects.push(projectHash);
-    localStorage.setItem('unlockedProjects', JSON.stringify(unlockedProjects));
-
+    // Marquer comme débloqué (SEULEMENT si on a un projectId)
+    if (currentProjectId) {
+        const projectHash = 'project_' + currentProjectId;
+        if (!unlockedProjects.includes(projectHash)) {
+            unlockedProjects.push(projectHash);
+            localStorage.setItem('unlockedProjects', JSON.stringify(unlockedProjects));
+            console.log('🔓 Projet débloqué:', projectHash);
+        }
+    }
     // Afficher les éditeurs de code
     showCodeEditors();
-    
-    notify.success('Code débloqué ! -50 💎', 'Succès');
-    showPointsAnimation(50,'Code débloqué !');
-}
 
+    notify.success('Code débloqué ! -50 💎', 'Succès');
+    showGemsAnimation(50, 'Code débloqué !');
+}
+// Générer un hash unique basé sur les keyframes actuelles
+/* PROBLEME: Si l'utilisateur modifie UNE keyframe, le hash change!Le code ne s'affiche plus !
 function generateProjectHash() {
-    // Générer un hash unique basé sur les keyframes actuelles
     return btoa(JSON.stringify(keyframes)).substring(0, 16);
+}*/
+function generateProjectHash() {
+    // Si on a un ID de projet sauvegardé, l'utiliser
+    if (currentProjectId) {
+        return 'project_' + currentProjectId;
+    }
+
+    // Sinon, créer un hash basé sur les keyframes + timestamp
+    const projectData = {
+        keyframes: keyframes,
+        timestamp: Math.floor(Date.now() / (1000 * 60 * 60)) // Changera toutes les heures
+    };
+    return btoa(JSON.stringify(projectData)).substring(0, 16);
 }
 
 function showCodeEditors() {
@@ -1940,17 +1888,24 @@ function showCodeEditors() {
 // Vérifier au chargement si le projet est déjà débloqué
 function checkUnlockedProjects() {
     if (!currentUser) return;
-    
+
     const projectHash = generateProjectHash();
     const unlockedProjects = JSON.parse(localStorage.getItem('unlockedProjects') || '[]');
-    
+
+    console.log('🔍 Vérification déblocage:', {
+        projectHash,
+        currentProjectId,
+        unlockedProjects,
+        match: unlockedProjects.includes(projectHash)
+    });
+
     if (unlockedProjects.includes(projectHash)) {
         showCodeEditors();
     }
 }
 
 // Appeler au chargement
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     setTimeout(checkUnlockedProjects, 1000);
 });
 
@@ -1958,8 +1913,8 @@ document.addEventListener('DOMContentLoaded', function() {
 // Fonction pour afficher le shop de points
 function showPointsShop() {
     // Scroll vers la section points
-    document.querySelector('.points-shop').scrollIntoView({ 
-        behavior: 'smooth' 
+    document.querySelector('.points-shop').scrollIntoView({
+        behavior: 'smooth'
     });
 }
 

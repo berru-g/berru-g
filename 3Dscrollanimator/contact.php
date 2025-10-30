@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Ajouter les points si utilisateur connecté
             if ($user_id) {
-                $result = PointsManager::addPoints($user_id, 500);
+                $result = PointsManager::addPoints($user_id, 100);
                 if (!$result['success']) {
                     throw new Exception($result['message']);
                 }
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db->commit();
 
             $message = 'Merci pour votre feedback ! ' .
-                ($user_id ? '500 points ont été ajoutés à votre compte.' : '');
+                ($user_id ? '100 points ont été ajoutés à votre compte.' : '');
             $message_type = 'success';
 
         } catch (Exception $e) {
@@ -75,7 +75,7 @@ if (Auth::isLoggedIn()) {
     $user_stats['feedback_count'] = $stmt->fetchColumn();
 
     // Total points gagnés
-    $user_stats['total_points_earned'] = $user_stats['feedback_count'] * 500;
+    $user_stats['total_points_earned'] = $user_stats['feedback_count'] * 100;
 }
 ?>
 
@@ -362,8 +362,8 @@ if (Auth::isLoggedIn()) {
             </div>
 
             <div class="rewards-card">
-                <h3 style="color: grey;">Récompense spéciale : 500 💎 par feedback</h3>
-                <p>Pour chaque feedback constructif que vous nous envoyez, nous vous offrons <strong>500 crédits</strong>
+                <h3 style="color: grey;">Récompense spéciale : 100 💎 par feedback</h3>
+                <p>Pour chaque feedback constructif que vous nous envoyez, nous vous offrons <strong>100 crédits</strong>
                     à utiliser sur la plateforme !</p>
                 <p><small>Les gemmes vous permettent de débloquer des fonctionnalités premium et des modèles
                         exclusifs.</small></p>
@@ -412,7 +412,7 @@ if (Auth::isLoggedIn()) {
                 </div>
 
                 <button type="submit" class="submit-btn">
-                    Envoyer mon feedback & Recevoir 500 💎
+                    Envoyer mon feedback & Recevoir 100 💎
                 </button>
             </form>
 
@@ -421,7 +421,7 @@ if (Auth::isLoggedIn()) {
                     // Afficher l'animation après l'envoi du formulaire
                     document.addEventListener('DOMContentLoaded', function () {
                         setTimeout(() => {
-                            showPointsAnimation(500, 'Merci pour votre feedback !');
+                            showPointsAnimation(100, 'Merci pour votre feedback !');
                         }, 1000);
                     });
                 </script>
