@@ -27,6 +27,40 @@ body {
     overflow-x: hidden;
 }
 
+.cursor-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s ease;
+}
+
+.cursor-circle {
+    width: 30px;
+    height: 30px;
+    border: 2px solid var(--secondary-color);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.2s ease-out;
+}
+
+.cursor-dot.click,
+.cursor-circle.click {
+    transform: scale(1.5);
+    background-color: var(--primary-color);
+    border-color: var(--secondary-color);
+}
+
+/* Cache le curseur par défaut */
+body {
+    cursor: none;
+}
+
 .demo-container {
     display: block;
     margin: 0 auto;
@@ -720,6 +754,7 @@ body {
     color: var(--success-color);
     border: 2px solid var(--success-color);
 }
+
 .badge-game {
     background-color: var(--background-color);
     color: var(--jaune-color);

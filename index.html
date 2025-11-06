@@ -294,10 +294,11 @@
                 <img src="https://avatars.githubusercontent.com/u/61543927?v=4" alt="Photo de profil"
                     class="profile-img" data-aos="fade-up" data-aos-delay="400">
                 <p class="dev-name" data-aos="fade-up" data-aos-delay="500">Qui suis-je ?</p>
-                <p class="dev-description" data-aos="fade-up" data-aos-delay="600">Créatif passionné. J'explore et m'exprime sur le web depuis plus de 15 ans, donnant naissance à de nombreux projets.</p>
+                <p class="dev-description" data-aos="fade-up" data-aos-delay="600">Créatif passionné. J'explore et
+                    m'exprime sur le web depuis plus de 15 ans, donnant naissance à de nombreux projets.</p>
             </div>
         </div>
- 
+
         <!-- Benefits Section -->
         <section class="benefits">
             <div class="container">
@@ -306,7 +307,8 @@
                     <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
                         <div class="benefit-icon">💡</div>
                         <h3 data-aos="fade-right">Sur-mesure & unique</h3>
-                        <p>Votre site est codé à la main et à l'aide de l'IA, sans template, selon votre image et vos besoins.</p>
+                        <p>Votre site est codé à la main et à l'aide de l'IA, sans template, selon votre image et vos
+                            besoins.</p>
                     </div>
                     <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
                         <div class="benefit-icon">⚙️</div>
@@ -321,7 +323,8 @@
                     <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
                         <div class="benefit-icon">🚀</div>
                         <h3 data-aos="fade-right">Cléf en main</h3>
-                        <p>Je m'occupe du site, de l'hebergement et du nom de domaine. Possibilité d'intégration ou création d'API.</p>
+                        <p>Je m'occupe du site, de l'hebergement et du nom de domaine. Possibilité d'intégration ou
+                            création d'API.</p>
                     </div>
                 </div>
             </div>
@@ -348,8 +351,7 @@
                         <p>Créez des animations 3D, synchronisé au scroll de votre site en 2 min. Interface facile à
                             prendre en main et génération du code automatique prêt à l'emploi pour vos projets web.</p>
                         <div class="project-links">
-                            <a href="https://3dscrollanimator.com" target="_blank"
-                                title="Voir le site">
+                            <a href="https://3dscrollanimator.com" target="_blank" title="Voir le site">
                                 <i class="fa-solid fa-link"></i> Essaie gratuit
                             </a>
                         </div>
@@ -389,7 +391,9 @@
                     </div>
                     <span class="badge badge-site">Site </span>
                     <div class="project-content">
-                        <p>Site vitrine pour le Chef Patissier Nicolas Fossé, avec formulaire et envoie de mail automatique. Galerie photo CMS, pour ne plus dépendre de votre dev pour changer vos images.</p>
+                        <p>Site vitrine pour le Chef Patissier Nicolas Fossé, avec formulaire et envoie de mail
+                            automatique. Galerie photo CMS, pour ne plus dépendre de votre dev pour changer vos images.
+                        </p>
                         <div class="project-links">
                             <a href="https://goldendessert.fr" target="_blank" title="Voir le site">
                                 <i class="fa-solid fa-link"></i> Visiter
@@ -511,7 +515,8 @@
                     </div>
                     <span class="badge badge-game">Game</span>
                     <div class="project-content">
-                        <p>Visitez mon site en immersion. Plongez dans un univers avec des missions et système de gamification pour récupérez le
+                        <p>Visitez mon site en immersion. Plongez dans un univers avec des missions et système de
+                            gamification pour récupérez le
                             trésor caché.</p>
                         <div class="project-links">
                             <a href="./3D/index.html" target="_blank" title="Voir le site">
@@ -782,6 +787,62 @@
                 once: true,
                 easing: 'ease-out-back'
             });
+        });
+        
+        // Création des éléments curseur
+        const cursorDot = document.createElement('div');
+        const cursorCircle = document.createElement('div');
+        cursorDot.className = 'cursor-dot';
+        cursorCircle.className = 'cursor-circle';
+
+        document.body.appendChild(cursorDot);
+        document.body.appendChild(cursorCircle);
+
+        // Variables pour la position
+        let mouseX = 0, mouseY = 0;
+        let circleX = 0, circleY = 0;
+
+        // Événement de mouvement de souris
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorDot.style.left = mouseX - 4 + 'px';
+            cursorDot.style.top = mouseY - 4 + 'px';
+        });
+
+        // Animation fluide pour le cercle
+        function animateCursor() {
+            // Lag du cercle pour un effet smooth
+            circleX += (mouseX - circleX) * 0.2;
+            circleY += (mouseY - circleY) * 0.2;
+
+            cursorCircle.style.left = circleX - 15 + 'px';
+            cursorCircle.style.top = circleY - 15 + 'px';
+
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Effet au clic
+        document.addEventListener('mousedown', () => {
+            cursorDot.classList.add('click');
+            cursorCircle.classList.add('click');
+        });
+
+        document.addEventListener('mouseup', () => {
+            cursorDot.classList.remove('click');
+            cursorCircle.classList.remove('click');
+        });
+
+        // Réapparition du curseur si on quitte la fenêtre
+        document.addEventListener('mouseleave', () => {
+            cursorDot.style.opacity = '0';
+            cursorCircle.style.opacity = '0';
+        });
+
+        document.addEventListener('mouseenter', () => {
+            cursorDot.style.opacity = '1';
+            cursorCircle.style.opacity = '1';
         });
     </script>
     <script src="./new.js"></script>
