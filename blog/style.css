@@ -1,0 +1,437 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,400i,700");
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=Salsa&display=swap");
+
+:root {
+    --color-text: #333;
+    --color-article: #F4F5F6;
+    --color-header: #0d3b66;
+    --color-sommaire: #4c53af;
+    --color-lien: #ee964b;
+    --color-grey: #808080;
+    --color-grey-article: #555;
+    --color-button: #4d90fe;
+    --color-button-hover: #357ae8;
+}
+
+*,
+s *::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Général */
+body {
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    color: var(--color-text);
+    background-color: var(--color-article);
+}
+
+header {
+    background: var(--color-article);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+h1 {
+    color: var(--color-header);
+    font-family: 'Montserrat', sans-serif;
+}
+.mention {
+    text-align: center;
+    color: var(--color-grey);
+}
+h2 {
+    color: var(--color-grey);
+}
+
+nav {
+    margin: 1rem;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    margin: 0.5rem 0;
+    font-weight: 500;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: var(--color-sommaire);
+}
+
+nav ul li a:hover {
+    text-decoration: none;
+    color: var(--color-lien);
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-lien);
+}
+
+a:hover {
+    text-decoration: none;
+    color: grey;
+}
+
+section {
+    padding: 1rem;
+    margin: 1rem auto;
+    max-width: 800px;
+    background: white;
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+img, iframe {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    margin: 0px auto;
+}
+
+#small {
+    width: 60%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    margin: 0px auto;
+}
+
+#punch {
+    text-align: center;
+    color: var(--color-grey);
+    font-size: 0.2;
+}
+
+#info {
+    text-align: left;
+    color: #1a1a1a;
+    font-size: 0.3;
+    background: #e4e9fb;
+    border: 1px solid #1a1a1a;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+#info:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#read-time {
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+    font-size: 0.8rem;
+    color: grey;
+    margin-bottom: 1rem;
+}
+
+#espace-commentaire {
+    background-color: var(--color-header);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+#comments-section {
+    background-color: var(--color-article);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+[data-role="admin"] {
+    color: #007bff;
+}
+
+[data-role="user"] {
+    color: #333;
+}
+
+.formulaire {
+    margin: 1rem 0;
+}
+
+.formulaire {
+    display: flex;
+    flex-direction: column;
+    /* Aligne les éléments verticalement */
+    align-items: center;
+    /* Centre horizontalement les éléments */
+    justify-content: center;
+    /* Centre verticalement si nécessaire */
+    margin: 0 auto;
+    /* Centre le formulaire lui-même */
+    width: 100%;
+    /* Optionnel, selon la largeur que tu souhaites pour le formulaire */
+    max-width: 500px;
+    /* Limite la largeur du formulaire */
+}
+
+.formulaire input,
+textarea,
+label,
+button {
+    width: 100%;
+    max-width: 500px;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+    box-sizing: border-box;
+    /* Évite les soucis liés aux marges/paddings */
+}
+
+.formulaire button {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+.formulaire button:hover {
+    background: #0056b3;
+}
+
+.footer-bottom {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.info-icon {
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #007bff;
+}
+
+footer {
+    width: 100%;
+    height: auto;
+    background: var(--color-article);
+    color: var(--color-text);
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.footer-section {
+    margin: 1rem;
+}
+
+.footer-section h3 {
+    margin-bottom: 1rem;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-section ul li a {
+    color: var(--color-lien);
+    text-decoration: none;
+}
+
+.footer-section ul li a:hover {
+    color: #333;
+}
+
+.footer-bottom {
+    margin-top: 1rem;
+}
+
+/*
+#comment-form input,
+#comment-form textarea {
+    width: 95%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: var(--color-text);
+}
+
+#comment-form input:focus,
+#comment-form textarea:focus {
+    border-color: var(--color-button);
+    outline: none;
+}
+
+#comment-form button {
+    padding: 12px 20px;
+    background-color: var(--color-button);
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#comment-form button:hover {
+    background-color: var(--color-button-hover);
+}
+*/
+#comment-form {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: var(--color-header);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#comment-form label {
+    font-size: 1rem;
+    margin-bottom: 8px;
+    display: block;
+    font-weight: bold;
+    color: var(--color-header);
+}
+
+#comments-section {
+    margin-top: 40px;
+    background: var(--color-header);
+}
+
+#comments-section div {
+    padding: 1rem;
+    margin: 1rem auto;
+    max-width: 800px;
+    background: var(--color-article);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+#comments-section h4 {
+    font-size: 1.1rem;
+    color: var(--color-grey-article);
+    margin: 0 0 5px;
+}
+
+#comments-section p {
+    font-size: 1rem;
+    color: var(--color-text);
+}
+
+/* Style de la bande défilante */
+.donator-ticker {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-article);
+    /*border: 1px solid #ddd;*/
+    height: 50px;
+}
+
+.donator-ticker .ticker-content {
+    display: flex;
+    align-items: center;
+    animation: scroll-left 14s linear infinite;
+    white-space: nowrap;
+}
+
+.donator-ticker .donator {
+    margin: 0 50px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+/*
+.donator:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+    */
+/* Animation pour le défilement */
+@keyframes scroll-left {
+    0% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(-230%);
+    }
+}
+
+/* Conteneur principal centré */
+.share-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+/* Bouton principal centré */
+#shareButton {
+    background-color: white;
+    border: none;
+    border-radius: 8px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0 auto;
+    /* Centrage horizontal */
+}
+
+#shareButton:hover {
+    background-color: #ddd;
+}
+
+/* Popup de partage (ouvre vers le haut) */
+.share-popup {
+    position: absolute;
+    bottom: 80px;
+    /* Positionne le popup au-dessus */
+    right: 50;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px #0d3b66;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    z-index: 1000;
+}
+
+.share-popup button,
+.share-popup a {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    text-align: center;
+    border: none;
+    
+    color: #333;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.share-popup button:hover,
+.share-popup a:hover {
+    background-color: #ddd;
+}
