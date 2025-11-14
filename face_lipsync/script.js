@@ -34,7 +34,7 @@ const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
 scene.add(ambientLight);
 
 // Lumière directionnelle (simule le soleil)
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
 directionalLight.position.set(2, 5, 3); // Position de la lumière
 scene.add(directionalLight);
 
@@ -70,6 +70,7 @@ loader.load(
         scene.add(avatar);
         document.getElementById("status").textContent = "Avatar chargé ! Parlez-lui !";
         console.log("✅ Avatar chargé avec succès !");
+        notify("Avatar chargé !", "success");
     },
     // Fonction de progression (non utilisée ici)
     undefined,
@@ -124,6 +125,7 @@ function speakText(text) {
     // Vérifie que la synthèse vocale est supportée par le navigateur
     if (!window.speechSynthesis) {
         console.error("❌ Synthèse vocale non supportée par ce navigateur");
+        notifyError("Erreur chargement Synthèse vocale");
         return Promise.resolve();
     }
     
@@ -155,6 +157,7 @@ function speakText(text) {
         // Événement en cas d'erreur
         utterance.onerror = (error) => {
             console.error("❌ Erreur synthèse vocale:", error);
+            notifyError("Erreur chargement Voice");
             isSpeaking = false;
             resolve(); // Résoud quand même la promesse
         };
@@ -393,7 +396,7 @@ function animate() {
     
     // Animation de rotation lente de l'avatar (seulement quand il ne parle pas)
     if (avatar && !isSpeaking) {
-        avatar.rotation.y += 0.005; // Rotation très lente
+        //avatar.rotation.y += 0.005; // Rotation très lente
     }
     
     // Rend la scène avec la caméra
@@ -402,6 +405,7 @@ function animate() {
 
 // Démarre la boucle d'animation
 animate();
+
 
 // =============================================
 // GESTION DU REDIMENSIONNEMENT DE LA FENÊTRE
@@ -441,3 +445,108 @@ console.log("🔄 Les réponses sont maintenant dans l'ordre défini !");
 setTimeout(() => {
     console.log(`🔊 Voix actuelle: ${currentVoice.name}`);
 }, 1000);
+
+// ----------------------------
+// NOTIFY (system fallback -> in-page toast) 
+// ----------------------------
+
+/**
+ * Create an in-page toast (used as fallback)
+ * @param {string} message
+ * @param {"success"|"warn"|"error"|"info"} type
+ */
+function _createToastFallback(message, type = "info") {
+    const container = document.getElementById("toast-container");
+    if (!container) return;
+
+    const t = document.createElement("div");
+    t.className = "toast " + (type || "info");
+
+    let icon = "fa-circle-info";
+    if (type === "success") icon = "fa-check-circle";
+    if (type === "error") icon = "fa-times-circle";
+    if (type === "warn") icon = "fa-triangle-exclamation";
+
+    t.innerHTML = `<i class="fa-solid ${icon} icon"></i><span>${message}</span>`;
+    container.appendChild(t);
+
+    // play sound if exists and allowed
+    const audio = document.getElementById("notify-sound");
+    if (audio) {
+        try { audio.currentTime = 0; audio.play().catch(()=>{}); } catch(e){ }
+    }
+
+    // auto-remove
+    setTimeout(() => {
+        t.style.animation = "toast-out 0.35s forwards";
+        setTimeout(() => t.remove(), 350);
+    }, 3000);
+}
+
+/**
+ * Display a notification: tries system Notification, falls back to in-page toast
+ * @param {string} message
+ * @param {"success"|"warn"|"error"|"info"} [type]
+ * @param {Object} [opts] optional {silent: boolean, tag: string}
+ */
+async function notify(message, type = "info", opts = {}) {
+    const title = (type === "error") ? "Erreur" : (type === "warn") ? "Attention" : "Notification";
+    const silent = !!opts.silent;
+    const tag = opts.tag || undefined;
+
+    // Try System Notification API if available and allowed (works on https:// or localhost)
+    try {
+        if ("Notification" in window) {
+            if (Notification.permission === "granted") {
+                // show it
+                const n = new Notification(title, {
+                    body: message,
+                    tag: tag,
+                    renotify: true,
+                    icon: opts.icon || undefined // optional icon URL
+                });
+                // play sound (some browsers block autoplay if no user gesture)
+                if (!silent) {
+                    const audio = document.getElementById("notify-sound");
+                    if (audio) { try { audio.currentTime = 0; audio.play().catch(()=>{}); } catch(e){} }
+                }
+                return n;
+            } else if (Notification.permission !== "denied") {
+                // request permission once (user gesture recommended; browsers may block the prompt otherwise)
+                const perm = await Notification.requestPermission();
+                if (perm === "granted") {
+                    return notify(message, type, opts); // recall to show notification
+                } else {
+                    // fallback to toast
+                    _createToastFallback(message, type);
+                    return null;
+                }
+            } else {
+                // permission denied -> fallback
+                _createToastFallback(message, type);
+                return null;
+            }
+        } else {
+            // Notification API not supported -> fallback
+            _createToastFallback(message, type);
+            return null;
+        }
+    } catch (err) {
+        // any runtime error -> fallback
+        console.warn("notify(): Notification API failed, fallback to toast", err);
+        _createToastFallback(message, type);
+        return null;
+    }
+}
+
+// ----- Convenience wrappers -----
+function notifySuccess(msg, opts) { return notify(msg, "success", opts); }
+function notifyWarn(msg, opts)    { return notify(msg, "warn", opts); }
+function notifyError(msg, opts)   { return notify(msg, "error", opts); }
+function notifyInfo(msg, opts)    { return notify(msg, "info", opts); }
+
+/* Usage examples:
+notify("Avatar chargé !", "success");
+notifyWarn("Rotation désactivée", { tag: "rotation" });
+notifyError("Erreur chargement GLB");
+*/

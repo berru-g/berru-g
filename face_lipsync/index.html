@@ -5,12 +5,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Assistant 3D - Avatar Parlant</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <style>
     body {
       margin: 0;
       overflow: hidden;
-      background: linear-gradient(135deg, #111, #333);
-      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ab9ff2, #333);
+      font-family: 'Fira Code', monospace;
     }
 
     #ui {
@@ -65,22 +67,76 @@
       border-radius: 20px;
       font-size: 14px;
     }
+
+    /* --- TOASTS --- */
+    #toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 99999;
+    }
+
+    .toast {
+      min-width: 230px;
+      padding: 14px 18px;
+      background: rgba(20, 20, 20, 0.9);
+      color: white;
+      border-left: 4px solid #48c774;
+      border-radius: 6px;
+      font-family: sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      transform: translateX(50px);
+      animation: toast-in 0.35s forwards;
+    }
+
+    .toast.error {
+      border-left-color: #ff3860;
+    }
+
+    .toast.warn {
+      border-left-color: #ffdd57;
+    }
+
+    .toast .icon {
+      font-size: 18px;
+    }
+
+    @keyframes toast-in {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes toast-out {
+      to {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+    }
   </style>
 </head>
 
 <body>
   <canvas id="scene"></canvas>
   <div id="status">Chargement de l'avatar...</div>
+  <div id="toast-container"></div>
   <div id="ui">
     <input type="text" id="prompt" placeholder="Parle à l'avatar... ">
-    <button id="send">Envoyer</button>
+    <button id="send"><i class="fa-regular fa-paper-plane"></i></button>
   </div>
-
+  <audio id="notify-sound" src="https://3dscrollanimator.com/sounds/notification-success.mp3" preload="auto"></audio>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
-  <script src="script.js"></script>
+  <script src="main.js"></script>
 </body>
 
 </html>
