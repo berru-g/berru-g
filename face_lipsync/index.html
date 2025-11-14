@@ -1,23 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Avatar 3D - Chat</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assistant 3D - Avatar Parlant</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: linear-gradient(135deg, #111, #333);
+      font-family: Arial, sans-serif;
+    }
+
+    #ui {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      width: 80%;
+      max-width: 600px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 15px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    input {
+      flex: 1;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #444;
+      background: #222;
+      color: white;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 15px 25px;
+      border-radius: 10px;
+      border: none;
+      background: linear-gradient(135deg, #ab9ff2 0%, rgba(171, 159, 242, 0.334) 60%);
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: transparent;
+    }
+
+    #status {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+  </style>
 </head>
-<body style="margin:0; background:#111; overflow:hidden;">
 
+<body>
   <canvas id="scene"></canvas>
-
-  <div style="
-    position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
-    width:80%; max-width:600px; display:flex; gap:10px;
-  ">
-    <input id="prompt" placeholder="Pose une question à l’avatar..."
-      style="flex:1; padding:12px; border-radius:8px; border:1px solid #555; background:#222; color:white;">
-    <button id="send" style="padding:12px 20px; border-radius:8px;">Envoyer</button>
+  <div id="status">Chargement de l'avatar...</div>
+  <div id="ui">
+    <input type="text" id="prompt" placeholder="Parle à l'avatar... ">
+    <button id="send">Envoyer</button>
   </div>
 
-  <script type="module" src="main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+  <script src="script.js"></script>
 </body>
+
 </html>
