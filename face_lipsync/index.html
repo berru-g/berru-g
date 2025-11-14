@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avatar 3D - Chat</title>
+</head>
+<body style="margin:0; background:#111; overflow:hidden;">
+
+  <canvas id="scene"></canvas>
+
+  <div style="
+    position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+    width:80%; max-width:600px; display:flex; gap:10px;
+  ">
+    <input id="prompt" placeholder="Pose une question à l’avatar..."
+      style="flex:1; padding:12px; border-radius:8px; border:1px solid #555; background:#222; color:white;">
+    <button id="send" style="padding:12px 20px; border-radius:8px;">Envoyer</button>
+  </div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
