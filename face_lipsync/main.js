@@ -335,7 +335,7 @@ function animate(){
            // avatar.rotation.y += 0.003;
            updateEyeBlink();
            updateBodyMotion();
-           notifyInfo("L'avatar est prêt. Parlez-lui !");
+           //notifyInfo("L'avatar est prêt. Parlez-lui !");
         }
     }
 
