@@ -358,7 +358,8 @@ function loadModel() {
 
     // Utilisation d'un modèle 3D glb ou gltf plus léger
     //const modelUrl = 'https://raw.githubusercontent.com/berru-g/3d-scroll-animate/main/assets/scene.gltf';
-    const modelUrl = 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/fantasy_town.glb';
+    //const modelUrl = 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/fantasy_town.glb';
+    const modelUrl = '../img/stylized_mangrove_greenhouse.glb'; // modèle local
 
     loader.load(
         modelUrl,
@@ -367,9 +368,9 @@ function loadModel() {
             scene.add(model);
 
             // Ajuster l'échelle et la position si nécessaire
-            initialScale = 6; // Définir l'échelle initiale
+            initialScale = 3; // Définir l'échelle initiale
             model.scale.set(initialScale, initialScale, initialScale);
-            model.position.set(20, 10, 40); // Ajusté pour mieux centrer
+            model.position.set(60, -20, 60); // Ajusté pour mieux centrer
 
             // Configurer les animations s'il y en a
             if (gltf.animations && gltf.animations.length) {

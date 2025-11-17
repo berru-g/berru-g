@@ -127,9 +127,11 @@ const EYE_LOOK_SPEED = 0.1;
 // =============================================
 
 const loader = new THREE.GLTFLoader();
-const avatarURL = "https://models.readyplayer.me/691732d6fa1ea12f834e291b.glb"; // Otto
+const avatarURL = "https://models.readyplayer.me/691732d6fa1ea12f834e291b.glb"; // Wam
+const avatarURL1 = "https://models.readyplayer.me/6918df9a786317131c6318b4.glb"; // Otto foiré
 const avatarURL2 = "https://models.readyplayer.me/691779f5132e61458cc3366d.glb"; // femme
 const avatarURL3 = "https://models.readyplayer.me/69177cac28f4be8b0cc83e05.glb"; // futur
+const avatarURL4 = "../img/neo_futuriste_faceMorph_readyplayer.glb"; // test3D local  FONCTIONNEL = UPLOAD GRATOS D OBJET 3D + FACEMOPRH SUR READY PLAYER ( pour l'instant )
 
 loader.load(
     avatarURL3,
@@ -183,7 +185,7 @@ function findMorphTargets(root){
 // =============================================
 
 const VOICES = {
-    MASCULINE: { rate: 1.0, pitch: 0.7, name: "Masculine Grave" },
+    MASCULINE: { rate: 1.0, pitch: 0.4, name: "Masculine Grave" },
     MASCULINE_NORMAL: { rate: 1.0, pitch: 1.0, name: "Masculine Normale" },
     FEMININE_SOFT: { rate: 1.1, pitch: 1.3, name: "Féminine Douce" },
     ROBOT: { rate: 0.85, pitch: 0.5, name: "Robotique" },
