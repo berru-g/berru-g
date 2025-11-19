@@ -148,7 +148,7 @@
         .cookie-buttons {
             display: flex;
             gap: 10px;
-            justify-content: flex-end;
+            justify-content: center;
             flex-wrap: wrap;
         }
 
@@ -245,14 +245,14 @@
         </p>
 
         <div class="cookie-buttons">
-            <button class="cookie-btn reject-all" onclick="acceptCookies('none')">
+            <!--<button class="cookie-btn reject-all" onclick="acceptCookies('none')">
+                Non merci
+            </button>-->
+            <button class="cookie-btn accept-necessary" onclick="acceptCookies('necessary')">
                 Non merci
             </button>
-            <button class="cookie-btn accept-necessary" onclick="acceptCookies('necessary')">
-                Essentiels seulement
-            </button>
             <button class="cookie-btn accept-all" onclick="acceptCookies('all')">
-                Aider le créateur
+                Ok pour moi
             </button>
         </div>
 

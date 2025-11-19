@@ -780,8 +780,8 @@ function loadEnvironmentGLB() {
 
     // URLs d'environnements GLB 
     const environmentURLs = [
-       // 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/fantasy_town.glb',
-       '#',
+       '../img/sea_keep_lonely_watcher.glb',
+       
     ];
 
     function tryLoadEnvironment(urlIndex) {
@@ -794,7 +794,7 @@ function loadEnvironmentGLB() {
             environmentGLB = gltf.scene;
 
             // Ajuster l'échelle et la position
-            environmentGLB.scale.set(100, 100, 100);
+            environmentGLB.scale.set(0.4, 0.4, 0.4);
             environmentGLB.position.set(0, 0, 0);
 
             // Configurer les matériaux pour l'environnement

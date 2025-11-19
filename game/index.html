@@ -48,6 +48,17 @@
             border-radius: 5px;
             text-align: center;
         }
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 20px;
+            background: rgba(0,0,0,0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
@@ -62,9 +73,12 @@
         Clique sur l'écran pour activer les contrôles
     </div>
 
+    <div id="loading" class="loading">
+        Chargement des modèles 3D...
+    </div>
+
     <!-- Three.js et modules compatibles -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- Modules UMD compatibles -->
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/PointerLockControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     
