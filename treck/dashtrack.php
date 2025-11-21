@@ -32,7 +32,7 @@ $uniqueVisitors = array_unique(array_column($logs, 'visitor_id'));
     <h1>Tableau de bord Tracking</h1>
     
     <div class="stat">
-        <h3>📈 Statistiques globales</h3>
+        <h3>Statistiques globales</h3>
         <p>Pageviews: <?php echo count($pageviews); ?></p>
         <p>Clics: <?php echo count($clicks); ?></p>
         <p>Visiteurs uniques: <?php echo count($uniqueVisitors); ?></p>
@@ -80,6 +80,59 @@ $uniqueVisitors = array_unique(array_column($logs, 'visitor_id'));
         foreach (array_slice($clickStats, 0, 10) as $key => $count) {
             list($target, $text) = explode('|', $key);
             echo "<tr><td>$target</td><td>$text</td><td>$count</td></tr>";
+        }
+        ?>
+    </table>
+
+        <!-- Section Pixel Tracker - À AJOUTER -->
+    <div class="stat">
+        <h3>📊 Pixel Tracker - Statistiques</h3>
+        <?php
+        // Compter les pixels
+        $pixelTracks = array_filter($logs, fn($log) => ($log['type'] ?? '') === 'pixel_track');
+        $pixelSources = array_count_values(array_column($pixelTracks, 'pixel_source'));
+        $pixelCampaigns = array_count_values(array_column($pixelTracks, 'campaign'));
+        ?>
+        <p>Pixels chargés: <?php echo count($pixelTracks); ?></p>
+        <p>Sources différentes: <?php echo count($pixelSources); ?></p>
+        <p>Campagnes: <?php echo count($pixelCampaigns); ?></p>
+    </div>
+
+    <h3>🌍 Sources des Pixels</h3>
+    <table>
+        <tr><th>Source</th><th>Nombre de vues</th><th>Dernière vue</th></tr>
+        <?php
+        $sourceStats = [];
+        foreach ($pixelTracks as $log) {
+            $source = $log['pixel_source'] ?? 'unknown';
+            if (!isset($sourceStats[$source])) {
+                $sourceStats[$source] = ['count' => 0, 'last_seen' => ''];
+            }
+            $sourceStats[$source]['count']++;
+            if ($log['timestamp'] > $sourceStats[$source]['last_seen']) {
+                $sourceStats[$source]['last_seen'] = $log['timestamp'];
+            }
+        }
+        
+        arsort($sourceStats);
+        foreach ($sourceStats as $source => $data) {
+            echo "<tr><td>$source</td><td>{$data['count']}</td><td>{$data['last_seen']}</td></tr>";
+        }
+        ?>
+    </table>
+
+    <h3>Dernières activités SmartPixel</h3>
+    <table>
+        <tr><th>Heure</th><th>Source</th><th>Campagne</th><th>Pays</th><th>Referrer</th></tr>
+        <?php
+        $recentPixels = array_slice(array_reverse($pixelTracks), 0, 15);
+        foreach ($recentPixels as $log) {
+            $time = $log['timestamp'];
+            $source = $log['pixel_source'] ?? 'unknown';
+            $campaign = $log['campaign'] ?? 'none';
+            $country = $log['geo_data']['country'] ?? 'Inconnu';
+            $referrer = substr($log['referrer'] ?? 'direct', 0, 30);
+            echo "<tr><td>$time</td><td>$source</td><td>$campaign</td><td>$country</td><td>$referrer</td></tr>";
         }
         ?>
     </table>
