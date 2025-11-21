@@ -121,7 +121,7 @@ $uniqueVisitors = array_unique(array_column($logs, 'visitor_id'));
         ?>
     </table>
 
-    <h3>Dernières activités SmartPixel</h3>
+    <!--<h3>Dernières activités SmartPixel</h3>
     <table>
         <tr><th>Heure</th><th>Source</th><th>Campagne</th><th>Pays</th><th>Referrer</th></tr>
         <?php
@@ -135,7 +135,7 @@ $uniqueVisitors = array_unique(array_column($logs, 'visitor_id'));
             echo "<tr><td>$time</td><td>$source</td><td>$campaign</td><td>$country</td><td>$referrer</td></tr>";
         }
         ?>
-    </table>
+    </table>-->
 
     <h3>Dernières activités</h3>
     <table>
