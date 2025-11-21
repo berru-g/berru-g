@@ -1,0 +1,24 @@
+# .htaccess - Pour sécuriser et optimiser le tracking
+RewriteEngine On
+
+# Empêcher l'accès direct aux fichiers de log
+<Files "*.log">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "*.json">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Headers CORS pour le tracking
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Methods "GET, OPTIONS"
+Header always set Access-Control-Allow-Headers "Content-Type"
+
+# Cache l'image de tracking
+<Files "track.php">
+    ExpiresActive Off
+    Header always set Cache-Control "no-store, no-cache, must-revalidate"
+</Files>
