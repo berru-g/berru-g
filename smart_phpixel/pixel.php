@@ -1,6 +1,6 @@
 <?php
 // pixel.php - PIXEL INTELLIGENT
-require_once '../galerie/figueconfite.php'; // Chemin à adapter
+require_once 'config.php'; // Chemin à adapter
 
 header('Content-Type: image/gif');
 header('Access-Control-Allow-Origin: *');
