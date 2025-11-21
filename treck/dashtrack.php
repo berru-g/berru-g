@@ -21,6 +21,7 @@ $uniqueVisitors = array_unique(array_column($logs, 'visitor_id'));
 <html>
 <head>
     <title>Dashboard Tracking</title>
+    <link rel="stylesheet" href="../board/assets/css/styles.css">
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
         .stat { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; }
