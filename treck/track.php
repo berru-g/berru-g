@@ -1,5 +1,5 @@
 <?php
-// track.php - Récepteur des données de tracking
+// track.php - Récepteur des données de tracking CORRIGÉ
 header('Content-Type: image/gif');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET');
@@ -9,8 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-// Fichier de log
-$logFile = 'tracking_data.log';
+// Fichier de log - CHEMIN CORRECT
+$logFile = __DIR__ . '/tracking_data.log';
 
 // Collecte toutes les données
 $trackingData = [
@@ -26,7 +26,7 @@ $trackingData = [
     
     // Informations utilisateur
     'user_agent' => $_GET['user_agent'] ?? 'unknown',
-    'ip_address' => $this->getClientIP(),
+    'ip_address' => getClientIP(), // CORRIGÉ : sans $this->
     'language' => $_GET['language'] ?? 'unknown',
     
     // Informations techniques
@@ -37,25 +37,25 @@ $trackingData = [
     'pixel_ratio' => $_GET['pixel_ratio'] ?? 'unknown',
     
     // Données de géolocalisation
-    'geo_data' => $this->getGeoLocation($this->getClientIP()),
+    'geo_data' => getGeoLocation(getClientIP()), // CORRIGÉ : sans $this->
     
     // Données de clic
-    'click_data' => $this->getClickData(),
+    'click_data' => getClickData(), // CORRIGÉ : sans $this->
     
     // Données de performance
-    'performance_data' => $this->getPerformanceData()
+    'performance_data' => getPerformanceData() // CORRIGÉ : sans $this->
 ];
 
 // Enregistrement dans le fichier log
 file_put_contents($logFile, json_encode($trackingData, JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND | LOCK_EX);
 
 // Enregistrement séparé pour les analyses
-$this->saveToDatabase($trackingData);
+saveToDatabase($trackingData); // CORRIGÉ : sans $this->
 
 // Renvoie une image GIF 1x1 pixel transparente
 echo base64_decode('R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
 
-// Méthodes utilitaires
+// Méthodes utilitaires - CORRIGÉ : fonctions simples, pas de $this
 function getClientIP() {
     $ip_keys = ['HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR'];
     
@@ -129,7 +129,7 @@ function getPerformanceData() {
 function saveToDatabase($data) {
     // Ici tu peux adapter pour enregistrer dans une base de données MySQL
     // Exemple basique avec JSON
-    $dbFile = 'tracking_database.json';
+    $dbFile = __DIR__ . '/tracking_database.json'; // CORRIGÉ : chemin absolu
     $currentData = [];
     
     if (file_exists($dbFile)) {

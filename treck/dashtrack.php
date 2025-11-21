@@ -1,19 +1,19 @@
 <?php
-// dashboard.php - Tableau de bord simple
+// dashtrack.php - Tableau de bord simple CORRIGÉ
 header('Content-Type: text/html; charset=utf-8');
 
-// Lire les données
+// Lire les données - CHEMIN CORRECT
 $logs = [];
-if (file_exists('tracking_data.log')) {
-    $lines = file('tracking_data.log', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+if (file_exists(__DIR__ . '/tracking_data.log')) {
+    $lines = file(__DIR__ . '/tracking_data.log', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     foreach ($lines as $line) {
         $logs[] = json_decode($line, true);
     }
 }
 
 // Statistiques simples
-$pageviews = array_filter($logs, fn($log) => $log['type'] === 'pageview');
-$clicks = array_filter($logs, fn($log) => $log['type'] === 'click');
+$pageviews = array_filter($logs, fn($log) => ($log['type'] ?? '') === 'pageview');
+$clicks = array_filter($logs, fn($log) => ($log['type'] ?? '') === 'click');
 $uniqueVisitors = array_unique(array_column($logs, 'visitor_id'));
 ?>
 
