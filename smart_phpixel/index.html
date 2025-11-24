@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Générateur d'Images de Tracking nonfonctionnel</title>
+    <meta charset="UTF-8">
+        
+    <style>
+        .share-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .preview {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .preview img {
+            max-width: 100%;
+            border: 1px solid #ddd;
+        }
+        .share-links {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .url-box {
+            background: white;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 10px 0;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="share-container">
+        <h1>Générateur d'Image de Tracking</h1>
+        
+        <div class="form-group">
+            <label>Nom :</label>
+            <input type="text" id="shared_by" placeholder="Ex: Gael" value="Gael">
+        </div>
+        
+        <div class="form-group">
+            <label>Campagne :</label>
+            <select id="campaign">
+                <option value="partage-social">Partage Social</option>
+                <option value="influenceur">Campagne Influenceur</option>
+                <option value="newsletter">Newsletter</option>
+                <option value="promotion">Promotion</option>
+                <option value="evenement">Événement</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Source :</label>
+            <select id="source">
+                <option value="twitter">Twitter</option>
+                <option value="facebook">Facebook</option>
+                <option value="instagram">Instagram</option>
+                <option value="linkedin">LinkedIn</option>
+                <option value="email">Email</option>
+                <option value="website">Site Web</option>
+            </select>
+        </div>
+        
+        <button onclick="generateImage()">Générer l'Image</button>
+        
+        <div class="preview" id="preview">
+            <h3>Aperçu de votre image :</h3>
+            <img id="trackingImage" src="" alt="Image de tracking">
+        </div>
+        
+        <div class="share-links">
+            <h3>Liens de partage :</h3>
+            
+            <strong>URL de l'image :</strong>
+            <div class="url-box" id="imageUrl"></div>
+            
+            <strong>Code HTML :</strong>
+            <div class="url-box" id="htmlCode"></div>
+            
+            <strong>Code Markdown :</strong>
+            <div class="url-box" id="markdownCode"></div>
+            
+            <strong>Pour les réseaux sociaux :</strong>
+            <div class="url-box" id="socialText"></div>
+        </div>
+    </div>
+
+    <script>
+        function generateImage() {
+            const sharedBy = document.getElementById('shared_by').value;
+            const campaign = document.getElementById('campaign').value;
+            const source = document.getElementById('source').value;
+            
+            const baseUrl = 'https://gael-berru.com/smart_phpixel/image-tracker.php';
+            const params = new URLSearchParams({
+                source: source,
+                campaign: campaign,
+                shared_by: sharedBy,
+                image_type: 'social_share'
+            });
+            
+            const imageUrl = `${baseUrl}?${params}`;
+            
+            // Mise à jour de l'aperçu
+            document.getElementById('trackingImage').src = imageUrl;
+            document.getElementById('imageUrl').textContent = imageUrl;
+            
+            // Codes de partage
+            document.getElementById('htmlCode').textContent = 
+                `<img src="${imageUrl}" alt="Smart Pixel Analytics" width="800" height="600">`;
+            
+            document.getElementById('markdownCode').textContent = 
+                `![Smart Pixel Analytics](${imageUrl})`;
+            
+            document.getElementById('socialText').textContent = 
+                `Découvrez mes analytics avec Smart Pixel! 📊 ${imageUrl} #Analytics #Tracking`;
+        }
+        
+        // Génère une image au chargement
+        generateImage();
+    </script>
+</body>
+</html>
