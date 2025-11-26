@@ -1017,7 +1017,7 @@ if (count($countriesMap) > 0) {
                                         </td>
                                         <td><?= substr($visit['session_id'], 0, 8) ?>...</td>
                                     </tr>
-                                    <tr class="click-details" id="click-details-<?= $index ?>">
+                                    <!--<tr class="click-details" id="click-details-<?= $index ?>">
                                         <td colspan="7">
                                             <h4>Données de clics pour cette session</h4>
                                             <?php
@@ -1055,7 +1055,7 @@ if (count($countriesMap) > 0) {
                                                 <p>Aucun clic enregistré pour cette session.</p>
                                             <?php endif; ?>
                                         </td>
-                                    </tr>
+                                    </tr>-->
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
