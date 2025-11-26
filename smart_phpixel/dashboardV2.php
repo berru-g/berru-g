@@ -1191,7 +1191,8 @@ if (count($countriesMap) > 0) {
         document.addEventListener('DOMContentLoaded', function () {
             const detailRows = document.querySelectorAll('#detailsTable tbody tr:not(.click-details)');
             detailRows.forEach(row => {
-                row.addEventListener('click', function () {
+                row.addEventListener('click', function (event) {
+                    event.stopPropagation(); // ajout de event car conflit avec openTab
                     const index = this.getAttribute('data-index');
                     const detailsRow = document.getElementById(`click-details-${index}`);
 
