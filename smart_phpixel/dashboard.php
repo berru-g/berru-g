@@ -4,13 +4,13 @@ require_once 'config.php';
 
 $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8", DB_USER, DB_PASS);
 
-// Vérification de sécurité basique
+/* Vérification de sécurité basique
 if (!isset($_SESSION['admin_logged_in'])) {
     // Redirection vers une page de login si nécessaire
     // header('Location: login.php');
     // exit();
 }
-
+*/
 // Filtre de période (par défaut: 30 derniers jours)
 $period = isset($_GET['period']) ? $_GET['period'] : 30;
 $dateFilter = date('Y-m-d H:i:s', strtotime("-$period days"));
