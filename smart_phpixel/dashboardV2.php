@@ -241,7 +241,7 @@ if (count($countriesMap) > 0) {
                 document.head.appendChild(script1);
             });
         }
-        // Fonction pour changer d'onglet
+        
         // Fonction pour changer d'onglet
         function openTab(tabName) {
             // Masquer tous les contenus d'onglets

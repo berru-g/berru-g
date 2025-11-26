@@ -297,7 +297,7 @@ document.getElementById("show-tip").addEventListener("click", (e) => {
 // Variables globales
 let scene, camera, renderer, model, mixer;
 let controls, clock;
-let initialScale = 6; // Stocker l'échelle initiale
+let initialScale = 7; // Stocker l'échelle initiale
 
 // Initialisation de Three.js
 function init() {
@@ -358,8 +358,8 @@ function loadModel() {
 
     // Utilisation d'un modèle 3D glb ou gltf plus léger
     //const modelUrl = 'https://raw.githubusercontent.com/berru-g/3d-scroll-animate/main/assets/scene.gltf';
-    //const modelUrl = 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/fantasy_town.glb';
-    const modelUrl = '../img/stylized_mangrove_greenhouse.glb'; // modèle local
+    const modelUrl = 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/fantasy_town.glb';
+    //const modelUrl = '../img/stylized_mangrove_greenhouse.glb'; // modèle local
 
     loader.load(
         modelUrl,
@@ -368,7 +368,7 @@ function loadModel() {
             scene.add(model);
 
             // Ajuster l'échelle et la position si nécessaire
-            initialScale = 3; // Définir l'échelle initiale
+            initialScale = 30; // Définir l'échelle initiale
             model.scale.set(initialScale, initialScale, initialScale);
             model.position.set(60, -20, 60); // Ajusté pour mieux centrer
 

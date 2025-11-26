@@ -296,9 +296,9 @@ window.addEventListener("mousemove",e=>{
 
 let compteurReponses = 0;
 const reponsesOrdonnees = [
-  "Bonjour ! Je suis votre assistant virtuel en 3D. Bienvenue !",
-  "Pour toute information, contactez mon créateur sur gael-berru.com.",
-  "La synthèse vocale fonctionne correctement !"
+  "Bonjour ! Je suis votre assistant virtuel. Actuellement en phase de test, je ne pourrais pas répondre à vos questions aujourd'hui. ",
+  "Je serais bientot relié à une IA, pour toute information, contactez mon créateur sur gael-berru.com.",
+  "Je vous souhaite une belle journée !"
 ];
 
 async function sendToAI(message){
