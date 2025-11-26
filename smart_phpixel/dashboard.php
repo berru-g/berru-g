@@ -655,7 +655,7 @@ if (count($sessionData) > 0) {
     <header>
         <div class="container">
             <div class="header-content">
-                <h1>Smart Pixel Analytics</h1>
+                <h1>Smart Pixel Analytics <a href="dashboardV2">V2</a></h1>
                 <div class="period-filter">
                     <span>Période :</span>
                     <select id="periodSelect" onchange="changePeriod(this.value)">

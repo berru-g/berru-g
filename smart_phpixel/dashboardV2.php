@@ -113,7 +113,7 @@ try {
         ORDER BY click_count DESC
         LIMIT 15
     ")->fetchAll();
-} catch(Exception $e) {
+} catch (Exception $e) {
     // Fallback si JSON_EXTRACT ne fonctionne pas
     $topClicks = $pdo->query("
         SELECT 'button' as element, COUNT(*) as click_count
@@ -191,7 +191,7 @@ $maxVisits = 0;
 if (count($countriesMap) > 0) {
     $visits = array_column($countriesMap, 'visits');
     $maxVisits = max($visits);
-    
+
     foreach ($countriesMap as $country) {
         $mapData[] = [
             'id' => $country['country'],
@@ -219,7 +219,7 @@ if (count($countriesMap) > 0) {
                     resolve();
                     return;
                 }
-                
+
                 const script1 = document.createElement('script');
                 script1.src = 'https://cdn.amcharts.com/lib/5/index.js';
                 script1.onload = () => {
@@ -543,6 +543,7 @@ if (count($countriesMap) > 0) {
                 max-width: 100%;
                 padding: 0 15px;
             }
+
             .data-grid {
                 grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             }
@@ -552,26 +553,32 @@ if (count($countriesMap) > 0) {
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
             .data-grid {
                 grid-template-columns: 1fr;
             }
+
             .header-content {
                 flex-direction: column;
                 gap: 15px;
                 align-items: flex-start;
             }
+
             .tabs {
                 overflow-x: auto;
                 white-space: nowrap;
                 padding-bottom: 5px;
             }
+
             .tab {
                 padding: 10px 16px;
                 font-size: 0.9rem;
             }
+
             .chart-container {
                 padding: 15px;
             }
+
             #worldMap {
                 height: 400px;
             }
@@ -582,22 +589,28 @@ if (count($countriesMap) > 0) {
                 grid-template-columns: 1fr;
                 gap: 15px;
             }
+
             .stat-card {
                 padding: 20px;
             }
+
             .stat-value {
                 font-size: 1.8rem;
             }
+
             .data-table {
                 font-size: 0.85rem;
             }
+
             .data-table th,
             .data-table td {
                 padding: 8px 10px;
             }
+
             .chart-container.small {
                 height: 250px;
             }
+
             #worldMap {
                 height: 300px;
             }
@@ -607,34 +620,43 @@ if (count($countriesMap) > 0) {
             h1 {
                 font-size: 1.5rem;
             }
+
             .period-filter {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 8px;
             }
+
             .period-filter select {
                 width: 100%;
             }
+
             .stat-card {
                 padding: 15px;
             }
+
             .stat-value {
                 font-size: 1.6rem;
             }
+
             .chart-container {
                 padding: 12px;
                 margin: 15px 0;
             }
+
             .chart-title {
                 font-size: 1rem;
             }
+
             .tab {
                 padding: 8px 12px;
                 font-size: 0.85rem;
             }
+
             .url-truncate {
                 max-width: 150px;
             }
+
             #worldMap {
                 height: 250px;
             }
@@ -653,10 +675,21 @@ if (count($countriesMap) > 0) {
             font-weight: bold;
         }
 
-        .score-high { background: #d4edda; color: #155724; }
-        .score-medium { background: #fff3cd; color: #856404; }
-        .score-low { background: #f8d7da; color: #721c24; }
-        
+        .score-high {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .score-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .score-low {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
         .loading {
             text-align: center;
             padding: 20px;
@@ -686,13 +719,13 @@ if (count($countriesMap) > 0) {
     <div class="container">
         <div class="dashboard-tabs">
             <div class="tabs">
-                <div class="tab active" onclick="openTab('overview')">Aperçu</div>
-                <div class="tab" onclick="openTab('traffic')">Trafic</div>
-                <div class="tab" onclick="openTab('geography')">Géographie</div>
-                <div class="tab" onclick="openTab('topclicks')">Top Clics</div>
-                <div class="tab" onclick="openTab('sessions')">Sessions</div>
-                <div class="tab" onclick="openTab('details')">Détails</div>
-                <div class="tab" onclick="openTab('engagement')">Engagement</div>
+                <div class="tab active" onclick="openTab('overview', this)">Aperçu</div>
+                <div class="tab" onclick="openTab('traffic', this)">Trafic</div>
+                <div class="tab" onclick="openTab('geography', this)">Géographie</div>
+                <div class="tab" onclick="openTab('topclicks', this)">Top Clics</div>
+                <div class="tab" onclick="openTab('sessions', this)">Sessions</div>
+                <div class="tab" onclick="openTab('details', this)">Détails</div>
+                <div class="tab" onclick="openTab('engagement', this)">Engagement</div>
             </div>
 
             <!-- ONGLET APERÇU -->
@@ -830,7 +863,8 @@ if (count($countriesMap) > 0) {
                     <div id="worldMap" class="map-fallback">
                         <div class="loading">
                             <p>Chargement de la carte...</p>
-                            <button onclick="initWorldMap()" style="margin-top: 10px; padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            <button onclick="initWorldMap()"
+                                style="margin-top: 10px; padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 5px; cursor: pointer;">
                                 Charger la carte interactive
                             </button>
                         </div>
@@ -873,16 +907,18 @@ if (count($countriesMap) > 0) {
                             </tr>
                         </thead>
                         <tbody>
-                            <?php 
+                            <?php
                             $totalClicks = array_sum(array_column($topClicks, 'click_count'));
-                            foreach ($topClicks as $click): 
+                            foreach ($topClicks as $click):
                                 $element = $click['element'];
-                                if (empty($element)) continue;
-                            ?>
+                                if (empty($element))
+                                    continue;
+                                ?>
                                 <tr>
                                     <td><span class="badge badge-primary"><?= htmlspecialchars($element) ?></span></td>
                                     <td><?= number_format($click['click_count']) ?></td>
-                                    <td><?= $totalClicks > 0 ? round(($click['click_count'] / $totalClicks) * 100, 1) : 0 ?>%</td>
+                                    <td><?= $totalClicks > 0 ? round(($click['click_count'] / $totalClicks) * 100, 1) : 0 ?>%
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -892,7 +928,7 @@ if (count($countriesMap) > 0) {
                 <div class="heatmap-container">
                     <h3 class="chart-title">Heatmap des interactions</h3>
                     <div class="heatmap-grid">
-                        <?php 
+                        <?php
                         $heatmapZones = [
                             ['zone' => 'Haut de page', 'intensity' => 30],
                             ['zone' => 'Menu navigation', 'intensity' => 80],
@@ -901,9 +937,9 @@ if (count($countriesMap) > 0) {
                             ['zone' => 'Footer', 'intensity' => 15],
                             ['zone' => 'Boutons CTA', 'intensity' => 90]
                         ];
-                        
-                        foreach ($heatmapZones as $zone): 
-                        ?>
+
+                        foreach ($heatmapZones as $zone):
+                            ?>
                             <div class="heatmap-item">
                                 <strong><?= $zone['zone'] ?></strong>
                                 <div class="heatmap-intensity" style="opacity: <?= $zone['intensity'] / 100 ?>"></div>
@@ -976,14 +1012,16 @@ if (count($countriesMap) > 0) {
                                             <?= htmlspecialchars($visit['page_url']) ?>
                                         </td>
                                         <td><?= date('H:i', $visitTime) ?></td>
-                                        <td><span class="badge badge-primary"><?= htmlspecialchars($visit['source']) ?></span></td>
+                                        <td><span
+                                                class="badge badge-primary"><?= htmlspecialchars($visit['source']) ?></span>
+                                        </td>
                                         <td><?= substr($visit['session_id'], 0, 8) ?>...</td>
                                     </tr>
                                     <tr class="click-details" id="click-details-<?= $index ?>">
                                         <td colspan="7">
                                             <h4>Données de clics pour cette session</h4>
                                             <?php
-                                            $sessionClicks = array_filter($clickData, function($click) use ($visit) {
+                                            $sessionClicks = array_filter($clickData, function ($click) use ($visit) {
                                                 return strpos($click['page_url'], $visit['page_url']) !== false;
                                             });
                                             $sessionClicks = array_slice($sessionClicks, 0, 5);
@@ -1001,13 +1039,16 @@ if (count($countriesMap) > 0) {
                                                         <?php foreach ($sessionClicks as $click):
                                                             $data = json_decode($click['click_data'], true);
                                                             if (is_array($data)):
-                                                        ?>
-                                                            <tr>
-                                                                <td><span class="badge badge-primary"><?= htmlspecialchars($data['element'] ?? 'N/A') ?></span></td>
-                                                                <td><?= htmlspecialchars(substr($data['text'] ?? '', 0, 30)) . (strlen($data['text'] ?? '') > 30 ? '...' : '') ?></td>
-                                                                <td><?= ($data['x'] ?? 'N/A') ?>x<?= ($data['y'] ?? 'N/A') ?></td>
-                                                            </tr>
-                                                        <?php endif; endforeach; ?>
+                                                                ?>
+                                                                <tr>
+                                                                    <td><span
+                                                                            class="badge badge-primary"><?= htmlspecialchars($data['element'] ?? 'N/A') ?></span>
+                                                                    </td>
+                                                                    <td><?= htmlspecialchars(substr($data['text'] ?? '', 0, 30)) . (strlen($data['text'] ?? '') > 30 ? '...' : '') ?>
+                                                                    </td>
+                                                                    <td><?= ($data['x'] ?? 'N/A') ?>x<?= ($data['y'] ?? 'N/A') ?></td>
+                                                                </tr>
+                                                            <?php endif; endforeach; ?>
                                                     </tbody>
                                                 </table>
                                             <?php else: ?>
@@ -1050,32 +1091,32 @@ if (count($countriesMap) > 0) {
                 </div>
 
                 <?php if (count($avgTimePerPage) > 0): ?>
-                <div class="chart-container">
-                    <h3 class="chart-title">Temps moyen par page</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Page</th>
-                                <th>Temps moyen</th>
-                                <th>Visites</th>
-                                <th>Score engagement</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($avgTimePerPage as $page): 
-                                $score = $page['avg_time'] > 120 ? 'score-high' : ($page['avg_time'] > 60 ? 'score-medium' : 'score-low');
-                                $scoreText = $page['avg_time'] > 120 ? 'Élevé' : ($page['avg_time'] > 60 ? 'Moyen' : 'Faible');
-                            ?>
+                    <div class="chart-container">
+                        <h3 class="chart-title">Temps moyen par page</h3>
+                        <table class="data-table">
+                            <thead>
                                 <tr>
-                                    <td class="url-truncate"><?= htmlspecialchars($page['page_url']) ?></td>
-                                    <td><?= round($page['avg_time']) ?>s</td>
-                                    <td><?= number_format($page['visits']) ?></td>
-                                    <td><span class="engagement-score <?= $score ?>"><?= $scoreText ?></span></td>
+                                    <th>Page</th>
+                                    <th>Temps moyen</th>
+                                    <th>Visites</th>
+                                    <th>Score engagement</th>
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($avgTimePerPage as $page):
+                                    $score = $page['avg_time'] > 120 ? 'score-high' : ($page['avg_time'] > 60 ? 'score-medium' : 'score-low');
+                                    $scoreText = $page['avg_time'] > 120 ? 'Élevé' : ($page['avg_time'] > 60 ? 'Moyen' : 'Faible');
+                                    ?>
+                                    <tr>
+                                        <td class="url-truncate"><?= htmlspecialchars($page['page_url']) ?></td>
+                                        <td><?= round($page['avg_time']) ?>s</td>
+                                        <td><?= number_format($page['visits']) ?></td>
+                                        <td><span class="engagement-score <?= $score ?>"><?= $scoreText ?></span></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 <?php endif; ?>
 
                 <div class="chart-container">
@@ -1083,10 +1124,14 @@ if (count($countriesMap) > 0) {
                     <div style="background: #e3f2fd; padding: 20px; border-radius: 8px;">
                         <h4>💡 Suggestions pour augmenter l'engagement</h4>
                         <ul style="margin-top: 15px; line-height: 1.8;">
-                            <li><strong>Optimiser les temps de chargement</strong> - 23% des visiteurs quittent avant le chargement complet</li>
-                            <li><strong>Améliorer le responsive mobile</strong> - Taux de rebond mobile: 58% vs desktop: 32%</li>
-                            <li><strong>Ajouter des call-to-actions</strong> - Seulement 12% des visiteurs cliquent sur vos CTA principaux</li>
-                            <li><strong>Enrichir le contenu des pages de sortie</strong> - 45% des abandons sur la page /contact</li>
+                            <li><strong>Optimiser les temps de chargement</strong> - 23% des visiteurs quittent avant le
+                                chargement complet</li>
+                            <li><strong>Améliorer le responsive mobile</strong> - Taux de rebond mobile: 58% vs desktop:
+                                32%</li>
+                            <li><strong>Ajouter des call-to-actions</strong> - Seulement 12% des visiteurs cliquent sur
+                                vos CTA principaux</li>
+                            <li><strong>Enrichir le contenu des pages de sortie</strong> - 45% des abandons sur la page
+                                /contact</li>
                         </ul>
                     </div>
                 </div>
@@ -1097,30 +1142,35 @@ if (count($countriesMap) > 0) {
     <footer>
         <div class="container">
             <p>
-                <button onclick="window.location.href='https://gael-berru.com/'" 
-                        style="background: none; border: none; color: #6c757d; cursor: pointer; font-size: 0.9rem; padding: 0;">
+                <button onclick="window.location.href='https://gael-berru.com/'"
+                    style="background: none; border: none; color: #6c757d; cursor: pointer; font-size: 0.9rem; padding: 0;">
                     🟪
-                </button> 
-                Smart Pixel Analytics &copy; <?= date('Y') ?> - Dashboard 2.0 - Données mises à jour en temps réel - Respect des loi RGPD
+                </button>
+                Smart Pixel Analytics &copy; <?= date('Y') ?> - Dashboard 2.0 - Données mises à jour en temps réel -
+                Respect des loi RGPD
             </p>
         </div>
     </footer>
 
     <script>
         // Fonction pour changer d'onglet
-        function openTab(tabName) {
+        // Fonction pour changer d'onglet - VERSION CORRIGÉE
+        function openTab(tabName, element) {
+            // Masquer tous les contenus d'onglets
             const tabContents = document.getElementsByClassName('tab-content');
             for (let i = 0; i < tabContents.length; i++) {
                 tabContents[i].classList.remove('active');
             }
 
+            // Désactiver tous les onglets
             const tabs = document.getElementsByClassName('tab');
             for (let i = 0; i < tabs.length; i++) {
                 tabs[i].classList.remove('active');
             }
 
+            // Activer l'onglet sélectionné
             document.getElementById(tabName).classList.add('active');
-            event.currentTarget.classList.add('active');
+            element.classList.add('active');
 
             // Réinitialiser la map si on ouvre l'onglet géographie
             if (tabName === 'geography') {
@@ -1138,13 +1188,13 @@ if (count($countriesMap) > 0) {
         }
 
         // Gestion du clic sur les lignes du tableau détail
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const detailRows = document.querySelectorAll('#detailsTable tbody tr:not(.click-details)');
             detailRows.forEach(row => {
-                row.addEventListener('click', function() {
+                row.addEventListener('click', function () {
                     const index = this.getAttribute('data-index');
                     const detailsRow = document.getElementById(`click-details-${index}`);
-                    
+
                     // Fermer tous les autres détails
                     document.querySelectorAll('.click-details').forEach(detail => {
                         if (detail !== detailsRow) {
@@ -1172,7 +1222,7 @@ if (count($countriesMap) > 0) {
         async function initWorldMap() {
             try {
                 await loadAmCharts();
-                
+
                 const root = am5.Root.new("worldMap");
                 root.setThemes([am5themes_Animated.new(root)]);
 
@@ -1200,7 +1250,7 @@ if (count($countriesMap) > 0) {
                 polygonSeries.set("fill", am5.Color.fromString("#4361ee"));
                 polygonSeries.mapPolygons.template.set("fill", am5.Color.fromString("#e0e0e0"));
 
-                polygonSeries.mapPolygons.template.adapters.add("fill", function(fill, target) {
+                polygonSeries.mapPolygons.template.adapters.add("fill", function (fill, target) {
                     const dataItem = target.dataItem;
                     if (dataItem) {
                         const value = dataItem.dataContext.value;
@@ -1214,13 +1264,13 @@ if (count($countriesMap) > 0) {
                 });
 
                 window.worldMap = chart;
-                
+
                 // Mettre à jour l'interface
                 document.querySelector('#worldMap').classList.remove('map-fallback');
-                
+
             } catch (error) {
                 console.error('Erreur chargement carte:', error);
-                document.querySelector('#worldMap').innerHTML = 
+                document.querySelector('#worldMap').innerHTML =
                     '<div class="map-fallback"><p>Erreur de chargement de la carte. Vérifiez votre connexion.</p></div>';
             }
         }
@@ -1368,4 +1418,5 @@ if (count($countriesMap) > 0) {
         }
     </script>
 </body>
+
 </html>
