@@ -1090,7 +1090,7 @@ if (count($countriesMap) > 0) {
                     </div>
                 </div>
 
-                <?php if (count($avgTimePerPage) > 0): ?>
+                <!--<?php if (count($avgTimePerPage) > 0): ?>
                     <div class="chart-container">
                         <h3 class="chart-title">Temps moyen par page</h3>
                         <table class="data-table">
@@ -1117,7 +1117,7 @@ if (count($countriesMap) > 0) {
                             </tbody>
                         </table>
                     </div>
-                <?php endif; ?>
+                <?php endif; ?>-->
 
                 <div class="chart-container">
                     <h3 class="chart-title">Recommandations d'amélioration</h3>
