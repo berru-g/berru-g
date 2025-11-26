@@ -702,7 +702,7 @@ if (count($countriesMap) > 0) {
     <header>
         <div class="container">
             <div class="header-content">
-                <h1>Smart Pixel Analytics - Dashboard 2.0</h1>
+                <h1>Smart Pixel Analytics <span>open-source</span></h1>
                 <div class="period-filter">
                     <span>Période :</span>
                     <select id="periodSelect" onchange="changePeriod(this.value)">
@@ -1187,12 +1187,12 @@ if (count($countriesMap) > 0) {
             window.location.href = `?period=${period}`;
         }
 
-        // Gestion du clic sur les lignes du tableau détail
+        /* Gestion du clic sur les lignes du tableau détail
         document.addEventListener('DOMContentLoaded', function () {
             const detailRows = document.querySelectorAll('#detailsTable tbody tr:not(.click-details)');
             detailRows.forEach(row => {
                 row.addEventListener('click', function (event) {
-                    event.stopPropagation(); // ajout de event car conflit avec openTab
+                    event.stopPropagation(); // ajout de 'event' car conflit avec openTab, 'this
                     const index = this.getAttribute('data-index');
                     const detailsRow = document.getElementById(`click-details-${index}`);
 
@@ -1217,7 +1217,7 @@ if (count($countriesMap) > 0) {
                     }
                 });
             });
-        });
+        });*/
 
         // Initialisation de la carte mondiale
         async function initWorldMap() {
