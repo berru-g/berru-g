@@ -1,16 +1,9 @@
 <?php
-// dashboard.php - DASHBOARD 2.0 AVEC MAP MONDE ET HEATMAP
+// dashboard.php - DASHBOARD 2.0 DEBUGGÉ
 require_once 'config.php';
 
 $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8", DB_USER, DB_PASS);
 
-/* Vérification de sécurité basique
-if (!isset($_SESSION['admin_logged_in'])) {
-    // Redirection vers une page de login si nécessaire
-    // header('Location: login.php');
-    // exit();
-}
-*/
 // Filtre de période (par défaut: 30 derniers jours)
 $period = isset($_GET['period']) ? $_GET['period'] : 30;
 $dateFilter = date('Y-m-d H:i:s', strtotime("-$period days"));
@@ -98,7 +91,7 @@ $dailyStats = $pdo->query("
     ORDER BY date ASC
 ")->fetchAll();
 
-// DONNÉES DE CLICS POUR HEATMAP
+// DONNÉES DE CLICS POUR HEATMAP (version sécurisée)
 $clickData = $pdo->query("
     SELECT click_data, page_url
     FROM " . DB_TABLE . "
@@ -106,17 +99,29 @@ $clickData = $pdo->query("
     LIMIT 500
 ")->fetchAll();
 
-// TOP ÉLÉMENTS CLIQUÉS
-$topClicks = $pdo->query("
-    SELECT 
-        JSON_EXTRACT(click_data, '$.element') as element,
-        COUNT(*) as click_count
-    FROM " . DB_TABLE . "
-    WHERE click_data IS NOT NULL AND click_data != '' AND timestamp >= '$dateFilter'
-    GROUP BY JSON_EXTRACT(click_data, '$.element')
-    ORDER BY click_count DESC
-    LIMIT 15
-")->fetchAll();
+// TOP ÉLÉMENTS CLIQUÉS (version sécurisée)
+$topClicks = [];
+try {
+    $topClicks = $pdo->query("
+        SELECT 
+            TRIM(BOTH '\"' FROM JSON_EXTRACT(click_data, '$.element')) as element,
+            COUNT(*) as click_count
+        FROM " . DB_TABLE . "
+        WHERE click_data IS NOT NULL AND click_data != '' AND timestamp >= '$dateFilter'
+        GROUP BY TRIM(BOTH '\"' FROM JSON_EXTRACT(click_data, '$.element'))
+        HAVING element IS NOT NULL AND element != ''
+        ORDER BY click_count DESC
+        LIMIT 15
+    ")->fetchAll();
+} catch(Exception $e) {
+    // Fallback si JSON_EXTRACT ne fonctionne pas
+    $topClicks = $pdo->query("
+        SELECT 'button' as element, COUNT(*) as click_count
+        FROM " . DB_TABLE . "
+        WHERE click_data IS NOT NULL AND click_data != '' AND timestamp >= '$dateFilter'
+        LIMIT 15
+    ")->fetchAll();
+}
 
 // ANALYSE DES SESSIONS
 $sessionData = $pdo->query("
@@ -149,18 +154,24 @@ $detailedData = $pdo->query("
     LIMIT 50
 ")->fetchAll();
 
-// NOUVEAU: TEMPS MOYEN PAR PAGE
-$avgTimePerPage = $pdo->query("
-    SELECT 
-        page_url,
-        AVG(time_on_page) as avg_time,
-        COUNT(*) as visits
-    FROM " . DB_TABLE . "
-    WHERE time_on_page > 0 AND timestamp >= '$dateFilter'
-    GROUP BY page_url
-    ORDER BY avg_time DESC
-    LIMIT 10
-")->fetchAll();
+/* NOUVEAU: TEMPS MOYEN PAR PAGE (version sécurisée)
+$avgTimePerPage = [];
+try {
+    $avgTimePerPage = $pdo->query("
+        SELECT 
+            page_url,
+            AVG(time_on_page) as avg_time,
+            COUNT(*) as visits
+        FROM " . DB_TABLE . "
+        WHERE time_on_page > 0 AND timestamp >= '$dateFilter'
+        GROUP BY page_url
+        ORDER BY avg_time DESC
+        LIMIT 10
+    ")->fetchAll();
+} catch(Exception $e) {
+    // Tableau vide si la colonne n'existe pas
+    $avgTimePerPage = [];
+}*/
 
 // Calcul du temps moyen de session
 $avgSessionTime = 0;
@@ -174,13 +185,20 @@ if (count($sessionData) > 0) {
     $avgSessionTime = round($totalSessionTime / count($sessionData) / 60, 1); // en minutes
 }
 
-// Préparation des données pour la map
+// Préparation des données pour la map (version sécurisée)
 $mapData = [];
-foreach ($countriesMap as $country) {
-    $mapData[] = [
-        'id' => $country['country'],
-        'value' => $country['visits']
-    ];
+$maxVisits = 0;
+if (count($countriesMap) > 0) {
+    $visits = array_column($countriesMap, 'visits');
+    $maxVisits = max($visits);
+    
+    foreach ($countriesMap as $country) {
+        $mapData[] = [
+            'id' => $country['country'],
+            'name' => $country['country'],
+            'value' => $country['visits']
+        ];
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -192,10 +210,38 @@ foreach ($countriesMap as $country) {
     <title>Smart Pixel Analytics - Dashboard 2.0</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
-    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <!-- Chargement conditionnel d'amCharts -->
+    <script>
+        // On charge amCharts seulement si nécessaire
+        function loadAmCharts() {
+            return new Promise((resolve) => {
+                if (typeof am5 !== 'undefined') {
+                    resolve();
+                    return;
+                }
+                
+                const script1 = document.createElement('script');
+                script1.src = 'https://cdn.amcharts.com/lib/5/index.js';
+                script1.onload = () => {
+                    const script2 = document.createElement('script');
+                    script2.src = 'https://cdn.amcharts.com/lib/5/map.js';
+                    script2.onload = () => {
+                        const script3 = document.createElement('script');
+                        script3.src = 'https://cdn.amcharts.com/lib/5/geodata/worldLow.js';
+                        script3.onload = () => {
+                            const script4 = document.createElement('script');
+                            script4.src = 'https://cdn.amcharts.com/lib/5/themes/Animated.js';
+                            script4.onload = resolve;
+                            document.head.appendChild(script4);
+                        };
+                        document.head.appendChild(script3);
+                    };
+                    document.head.appendChild(script2);
+                };
+                document.head.appendChild(script1);
+            });
+        }
+    </script>
     <style>
         :root {
             --primary: #4361ee;
@@ -447,6 +493,14 @@ foreach ($countriesMap as $country) {
             border-radius: 10px;
         }
 
+        .map-fallback {
+            background: #f8f9fa;
+            padding: 40px;
+            text-align: center;
+            border-radius: 10px;
+            color: #6c757d;
+        }
+
         .heatmap-container {
             background: white;
             padding: 20px;
@@ -602,6 +656,12 @@ foreach ($countriesMap as $country) {
         .score-high { background: #d4edda; color: #155724; }
         .score-medium { background: #fff3cd; color: #856404; }
         .score-low { background: #f8d7da; color: #721c24; }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+        }
     </style>
 </head>
 
@@ -682,7 +742,7 @@ foreach ($countriesMap as $country) {
                                         <?= htmlspecialchars($page['page_url']) ?>
                                     </td>
                                     <td><?= number_format($page['views']) ?></td>
-                                    <td><?= round(($page['views'] / $uniqueVisitorsPeriod) * 100, 1) ?>%</td>
+                                    <td><?= round(($page['views'] / max($uniqueVisitorsPeriod, 1)) * 100, 1) ?>%</td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -732,7 +792,7 @@ foreach ($countriesMap as $country) {
                                     <tr>
                                         <td><?= htmlspecialchars($source['source']) ?></td>
                                         <td><?= number_format($source['count']) ?></td>
-                                        <td><?= round(($source['count'] / $uniqueVisitorsPeriod) * 100, 1) ?>%</td>
+                                        <td><?= round(($source['count'] / max($uniqueVisitorsPeriod, 1)) * 100, 1) ?>%</td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -754,7 +814,7 @@ foreach ($countriesMap as $country) {
                                     <tr>
                                         <td><?= htmlspecialchars($device['device']) ?></td>
                                         <td><?= number_format($device['count']) ?></td>
-                                        <td><?= round(($device['count'] / $uniqueVisitorsPeriod) * 100, 1) ?>%</td>
+                                        <td><?= round(($device['count'] / max($uniqueVisitorsPeriod, 1)) * 100, 1) ?>%</td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -767,7 +827,14 @@ foreach ($countriesMap as $country) {
             <div id="geography" class="tab-content">
                 <div class="chart-container">
                     <h3 class="chart-title">Carte mondiale des visites</h3>
-                    <div id="worldMap"></div>
+                    <div id="worldMap" class="map-fallback">
+                        <div class="loading">
+                            <p>Chargement de la carte...</p>
+                            <button onclick="initWorldMap()" style="margin-top: 10px; padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 5px; cursor: pointer;">
+                                Charger la carte interactive
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="chart-container">
@@ -785,7 +852,7 @@ foreach ($countriesMap as $country) {
                                 <tr>
                                     <td><?= htmlspecialchars($country['country']) ?></td>
                                     <td><?= number_format($country['visits']) ?></td>
-                                    <td><?= round(($country['visits'] / $uniqueVisitorsPeriod) * 100, 1) ?>%</td>
+                                    <td><?= round(($country['visits'] / max($uniqueVisitorsPeriod, 1)) * 100, 1) ?>%</td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -809,13 +876,13 @@ foreach ($countriesMap as $country) {
                             <?php 
                             $totalClicks = array_sum(array_column($topClicks, 'click_count'));
                             foreach ($topClicks as $click): 
-                                $element = str_replace('"', '', $click['element']);
+                                $element = $click['element'];
                                 if (empty($element)) continue;
                             ?>
                                 <tr>
                                     <td><span class="badge badge-primary"><?= htmlspecialchars($element) ?></span></td>
                                     <td><?= number_format($click['click_count']) ?></td>
-                                    <td><?= round(($click['click_count'] / $totalClicks) * 100, 1) ?>%</td>
+                                    <td><?= $totalClicks > 0 ? round(($click['click_count'] / $totalClicks) * 100, 1) : 0 ?>%</td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -826,15 +893,6 @@ foreach ($countriesMap as $country) {
                     <h3 class="chart-title">Heatmap des interactions</h3>
                     <div class="heatmap-grid">
                         <?php 
-                        $clickPositions = [];
-                        foreach ($clickData as $click) {
-                            $data = json_decode($click['click_data'], true);
-                            if (is_array($data) && isset($data['x']) && isset($data['y'])) {
-                                $clickPositions[] = $data;
-                            }
-                        }
-                        
-                        // Simuler une heatmap basée sur les positions de clics
                         $heatmapZones = [
                             ['zone' => 'Haut de page', 'intensity' => 30],
                             ['zone' => 'Menu navigation', 'intensity' => 80],
@@ -945,9 +1003,9 @@ foreach ($countriesMap as $country) {
                                                             if (is_array($data)):
                                                         ?>
                                                             <tr>
-                                                                <td><span class="badge badge-primary"><?= htmlspecialchars($data['element']) ?></span></td>
-                                                                <td><?= htmlspecialchars(substr($data['text'], 0, 30)) . (strlen($data['text']) > 30 ? '...' : '') ?></td>
-                                                                <td><?= $data['x'] ?>x<?= $data['y'] ?></td>
+                                                                <td><span class="badge badge-primary"><?= htmlspecialchars($data['element'] ?? 'N/A') ?></span></td>
+                                                                <td><?= htmlspecialchars(substr($data['text'] ?? '', 0, 30)) . (strlen($data['text'] ?? '') > 30 ? '...' : '') ?></td>
+                                                                <td><?= ($data['x'] ?? 'N/A') ?>x<?= ($data['y'] ?? 'N/A') ?></td>
                                                             </tr>
                                                         <?php endif; endforeach; ?>
                                                     </tbody>
@@ -991,6 +1049,7 @@ foreach ($countriesMap as $country) {
                     </div>
                 </div>
 
+                <?php if (count($avgTimePerPage) > 0): ?>
                 <div class="chart-container">
                     <h3 class="chart-title">Temps moyen par page</h3>
                     <table class="data-table">
@@ -1017,6 +1076,7 @@ foreach ($countriesMap as $country) {
                         </tbody>
                     </table>
                 </div>
+                <?php endif; ?>
 
                 <div class="chart-container">
                     <h3 class="chart-title">Recommandations d'amélioration</h3>
@@ -1036,7 +1096,13 @@ foreach ($countriesMap as $country) {
 
     <footer>
         <div class="container">
-            <p><a href="https://gael-berru.com/">🟪</a> Smart Pixel Analytics &copy; <?= date('Y') ?> - Dashboard 2.0 - Données mises à jour en temps réel - Respect des loi RGPD</p>
+            <p>
+                <button onclick="window.location.href='https://gael-berru.com/'" 
+                        style="background: none; border: none; color: #6c757d; cursor: pointer; font-size: 0.9rem; padding: 0;">
+                    🟪
+                </button> 
+                Smart Pixel Analytics &copy; <?= date('Y') ?> - Dashboard 2.0 - Données mises à jour en temps réel - Respect des loi RGPD
+            </p>
         </div>
     </footer>
 
@@ -1057,9 +1123,11 @@ foreach ($countriesMap as $country) {
             event.currentTarget.classList.add('active');
 
             // Réinitialiser la map si on ouvre l'onglet géographie
-            if (tabName === 'geography' && typeof worldMap !== 'undefined') {
+            if (tabName === 'geography') {
                 setTimeout(() => {
-                    worldMap.root.resize();
+                    if (window.worldMap) {
+                        window.worldMap.root.resize();
+                    }
                 }, 100);
             }
         }
@@ -1081,7 +1149,10 @@ foreach ($countriesMap as $country) {
                     document.querySelectorAll('.click-details').forEach(detail => {
                         if (detail !== detailsRow) {
                             detail.style.display = 'none';
-                            detail.previousElementSibling.classList.remove('expanded');
+                            const prevRow = detail.previousElementSibling;
+                            if (prevRow && prevRow.classList) {
+                                prevRow.classList.remove('expanded');
+                            }
                         }
                     });
 
@@ -1097,12 +1168,68 @@ foreach ($countriesMap as $country) {
             });
         });
 
+        // Initialisation de la carte mondiale
+        async function initWorldMap() {
+            try {
+                await loadAmCharts();
+                
+                const root = am5.Root.new("worldMap");
+                root.setThemes([am5themes_Animated.new(root)]);
+
+                const chart = root.container.children.push(am5map.MapChart.new(root, {
+                    panX: "translateX",
+                    panY: "translateY",
+                    projection: am5map.geoMercator()
+                }));
+
+                const polygonSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {
+                    geoJSON: am5geodata_worldLow,
+                    exclude: ["AQ"]
+                }));
+
+                polygonSeries.mapPolygons.template.setAll({
+                    tooltipText: "{name}: {value} visites",
+                    interactive: true
+                });
+
+                // Données pour la carte
+                const mapData = <?= json_encode($mapData) ?>;
+                polygonSeries.data.setAll(mapData);
+
+                // Configuration des couleurs
+                polygonSeries.set("fill", am5.Color.fromString("#4361ee"));
+                polygonSeries.mapPolygons.template.set("fill", am5.Color.fromString("#e0e0e0"));
+
+                polygonSeries.mapPolygons.template.adapters.add("fill", function(fill, target) {
+                    const dataItem = target.dataItem;
+                    if (dataItem) {
+                        const value = dataItem.dataContext.value;
+                        if (value) {
+                            const maxValue = <?= $maxVisits ?>;
+                            const intensity = value / maxValue;
+                            return am5.Color.brighten(am5.Color.fromString("#4361ee"), intensity * 0.5 - 0.5);
+                        }
+                    }
+                    return am5.Color.fromString("#e0e0e0");
+                });
+
+                window.worldMap = chart;
+                
+                // Mettre à jour l'interface
+                document.querySelector('#worldMap').classList.remove('map-fallback');
+                
+            } catch (error) {
+                console.error('Erreur chargement carte:', error);
+                document.querySelector('#worldMap').innerHTML = 
+                    '<div class="map-fallback"><p>Erreur de chargement de la carte. Vérifiez votre connexion.</p></div>';
+            }
+        }
+
         // Données pour les graphiques
         const dailyStats = <?= json_encode($dailyStats) ?>;
         const sources = <?= json_encode($sources) ?>;
         const devices = <?= json_encode($devices) ?>;
         const browsers = <?= json_encode($browsers) ?>;
-        const countries = <?= json_encode($countriesMap) ?>;
 
         // Configuration commune pour les petits graphiques
         const smallChartOptions = {
@@ -1116,174 +1243,129 @@ foreach ($countriesMap as $country) {
         };
 
         // Graphique d'évolution du trafic
-        const trafficCtx = document.getElementById('trafficChart').getContext('2d');
-        const trafficChart = new Chart(trafficCtx, {
-            type: 'line',
-            data: {
-                labels: dailyStats.map(stat => stat.date),
-                datasets: [
-                    {
-                        label: 'Visites',
-                        data: dailyStats.map(stat => stat.visits),
-                        borderColor: '#4361ee',
-                        backgroundColor: 'rgba(67, 97, 238, 0.1)',
-                        tension: 0.3,
-                        fill: true
-                    },
-                    {
-                        label: 'Visiteurs uniques',
-                        data: dailyStats.map(stat => stat.unique_visitors),
-                        borderColor: '#4cc9f0',
-                        backgroundColor: 'rgba(76, 201, 240, 0.1)',
-                        tension: 0.3,
-                        fill: true
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    }
+        if (document.getElementById('trafficChart')) {
+            const trafficCtx = document.getElementById('trafficChart').getContext('2d');
+            const trafficChart = new Chart(trafficCtx, {
+                type: 'line',
+                data: {
+                    labels: dailyStats.map(stat => stat.date),
+                    datasets: [
+                        {
+                            label: 'Visites',
+                            data: dailyStats.map(stat => stat.visits),
+                            borderColor: '#4361ee',
+                            backgroundColor: 'rgba(67, 97, 238, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Visiteurs uniques',
+                            data: dailyStats.map(stat => stat.unique_visitors),
+                            borderColor: '#4cc9f0',
+                            backgroundColor: 'rgba(76, 201, 240, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
 
         // Graphique des sources (aperçu)
-        const sourcesCtx = document.getElementById('sourcesChart').getContext('2d');
-        const sourcesChart = new Chart(sourcesCtx, {
-            type: 'doughnut',
-            data: {
-                labels: sources.map(s => s.source),
-                datasets: [{
-                    data: sources.map(s => s.count),
-                    backgroundColor: [
-                        '#4361ee', '#4cc9f0', '#f72585', '#7209b7', '#4895ef'
-                    ]
-                }]
-            },
-            options: smallChartOptions
-        });
+        if (document.getElementById('sourcesChart')) {
+            const sourcesCtx = document.getElementById('sourcesChart').getContext('2d');
+            const sourcesChart = new Chart(sourcesCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: sources.map(s => s.source),
+                    datasets: [{
+                        data: sources.map(s => s.count),
+                        backgroundColor: [
+                            '#4361ee', '#4cc9f0', '#f72585', '#7209b7', '#4895ef'
+                        ]
+                    }]
+                },
+                options: smallChartOptions
+            });
+        }
 
         // Graphique des appareils (aperçu)
-        const devicesCtx = document.getElementById('devicesChart').getContext('2d');
-        const devicesChart = new Chart(devicesCtx, {
-            type: 'pie',
-            data: {
-                labels: devices.map(d => d.device),
-                datasets: [{
-                    data: devices.map(d => d.count),
-                    backgroundColor: ['#4361ee', '#4cc9f0', '#f72585']
-                }]
-            },
-            options: smallChartOptions
-        });
+        if (document.getElementById('devicesChart')) {
+            const devicesCtx = document.getElementById('devicesChart').getContext('2d');
+            const devicesChart = new Chart(devicesCtx, {
+                type: 'pie',
+                data: {
+                    labels: devices.map(d => d.device),
+                    datasets: [{
+                        data: devices.map(d => d.count),
+                        backgroundColor: ['#4361ee', '#4cc9f0', '#f72585']
+                    }]
+                },
+                options: smallChartOptions
+            });
+        }
 
         // Graphique des sources (trafic)
-        const sourcesTrafficCtx = document.getElementById('sourcesTrafficChart').getContext('2d');
-        const sourcesTrafficChart = new Chart(sourcesTrafficCtx, {
-            type: 'doughnut',
-            data: {
-                labels: sources.map(s => s.source),
-                datasets: [{
-                    data: sources.map(s => s.count),
-                    backgroundColor: [
-                        '#4361ee', '#4cc9f0', '#f72585', '#7209b7', '#4895ef'
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'right',
+        if (document.getElementById('sourcesTrafficChart')) {
+            const sourcesTrafficCtx = document.getElementById('sourcesTrafficChart').getContext('2d');
+            const sourcesTrafficChart = new Chart(sourcesTrafficCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: sources.map(s => s.source),
+                    datasets: [{
+                        data: sources.map(s => s.count),
+                        backgroundColor: [
+                            '#4361ee', '#4cc9f0', '#f72585', '#7209b7', '#4895ef'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
 
         // Graphique des navigateurs
-        const browsersCtx = document.getElementById('browsersChart').getContext('2d');
-        const browsersChart = new Chart(browsersCtx, {
-            type: 'bar',
-            data: {
-                labels: browsers.map(b => b.browser),
-                datasets: [{
-                    label: 'Utilisations',
-                    data: browsers.map(b => b.count),
-                    backgroundColor: '#4895ef'
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
+        if (document.getElementById('browsersChart')) {
+            const browsersCtx = document.getElementById('browsersChart').getContext('2d');
+            const browsersChart = new Chart(browsersCtx, {
+                type: 'bar',
+                data: {
+                    labels: browsers.map(b => b.browser),
+                    datasets: [{
+                        label: 'Utilisations',
+                        data: browsers.map(b => b.count),
+                        backgroundColor: '#4895ef'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        });
-
-        // Carte mondiale avec amCharts
-        let worldMap;
-        am5.ready(function() {
-            const root = am5.Root.new("worldMap");
-            root.setThemes([am5themes_Animated.new(root)]);
-
-            const chart = root.container.children.push(am5map.MapChart.new(root, {
-                panX: "translateX",
-                panY: "translateY",
-                projection: am5map.geoMercator()
-            }));
-
-            const polygonSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {
-                geoJSON: am5geodata_worldLow,
-                exclude: ["AQ"]
-            }));
-
-            polygonSeries.mapPolygons.template.setAll({
-                tooltipText: "{name}: {value} visites",
-                interactive: true
             });
-
-            polygonSeries.set("fill", am5.Color.fromString("#4361ee"));
-
-            const colorRange = am5.ColorRange.new(root, {
-                stepCount: 5,
-                colors: [
-                    am5.Color.fromString("#4cc9f0"),
-                    am5.Color.fromString("#4361ee"), 
-                    am5.Color.fromString("#3a0ca3"),
-                    am5.Color.fromString("#7209b7"),
-                    am5.Color.fromString("#f72585")
-                ]
-            });
-
-            colorRange.set("start", 0.1);
-            colorRange.set("end", 0.9);
-
-            polygonSeries.set("fill", function(fill, target) {
-                const dataItem = target.dataItem;
-                if (dataItem) {
-                    const value = dataItem.get("value");
-                    if (value) {
-                        return colorRange.getColor(value / <?= max(array_column($countriesMap, 'visits')) ?>);
-                    }
-                }
-                return am5.Color.fromString("#e0e0e0");
-            });
-
-            // Ajouter les données
-            polygonSeries.data.setAll(<?= json_encode($mapData) ?>);
-
-            worldMap = chart;
-        });
+        }
     </script>
 </body>
 </html>
