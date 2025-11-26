@@ -702,7 +702,7 @@ if (count($countriesMap) > 0) {
     <header>
         <div class="container">
             <div class="header-content">
-                <h1>Smart Pixel Analytics <span>open-source</span></h1>
+                <h1>Smart Pixel Analytics <span style="font-size:8px; color: grey;">open-source</span></h1>
                 <div class="period-filter">
                     <span>Période :</span>
                     <select id="periodSelect" onchange="changePeriod(this.value)">
@@ -719,13 +719,13 @@ if (count($countriesMap) > 0) {
     <div class="container">
         <div class="dashboard-tabs">
             <div class="tabs">
-                <div class="tab active" onclick="openTab('overview', this)">Aperçu</div>
-                <div class="tab" onclick="openTab('traffic', this)">Trafic</div>
-                <div class="tab" onclick="openTab('geography', this)">Géographie</div>
-                <div class="tab" onclick="openTab('topclicks', this)">Top Clics</div>
-                <div class="tab" onclick="openTab('sessions', this)">Sessions</div>
-                <div class="tab" onclick="openTab('details', this)">Détails</div>
-                <div class="tab" onclick="openTab('engagement', this)">Engagement</div>
+                <div class="tab active" onclick="openTab('overview')">Aperçu</div>
+                <div class="tab" onclick="openTab('traffic')">Trafic</div>
+                <div class="tab" onclick="openTab('geography')">Géographie</div>
+                <div class="tab" onclick="openTab('topclicks')">Top Clics</div>
+                <div class="tab" onclick="openTab('sessions')">Sessions</div>
+                <div class="tab" onclick="openTab('details')">Détails</div>
+                <div class="tab" onclick="openTab('engagement')">Engagement</div>
             </div>
 
             <!-- ONGLET APERÇU -->
@@ -1154,7 +1154,6 @@ if (count($countriesMap) > 0) {
 
     <script>
         // Fonction pour changer d'onglet
-        // Fonction pour changer d'onglet - VERSION CORRIGÉE
         function openTab(tabName, element) {
             // Masquer tous les contenus d'onglets
             const tabContents = document.getElementsByClassName('tab-content');
@@ -1187,7 +1186,7 @@ if (count($countriesMap) > 0) {
             window.location.href = `?period=${period}`;
         }
 
-        /* Gestion du clic sur les lignes du tableau détail
+        // Gestion du clic sur les lignes du tableau détail
         document.addEventListener('DOMContentLoaded', function () {
             const detailRows = document.querySelectorAll('#detailsTable tbody tr:not(.click-details)');
             detailRows.forEach(row => {
@@ -1217,7 +1216,7 @@ if (count($countriesMap) > 0) {
                     }
                 });
             });
-        });*/
+        });
 
         // Initialisation de la carte mondiale
         async function initWorldMap() {
