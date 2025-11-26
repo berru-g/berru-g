@@ -1,16 +1,17 @@
 <?php
-// dashboard.php - DASHBOARD 2.0 AVEC MAP MONDE ET HEATMAP
+// dashboard.php - DASHBOARD AMÉLIORÉ AVEC ONGLET DÉTAIL
 require_once 'config.php';
+//require_once '../board/includes/header.php'; // a integrer dans mon /board/
 
 $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8", DB_USER, DB_PASS);
 
-/* Vérification de sécurité basique
+// Vérification de sécurité basique
 if (!isset($_SESSION['admin_logged_in'])) {
     // Redirection vers une page de login si nécessaire
     // header('Location: login.php');
     // exit();
 }
-*/
+
 // Filtre de période (par défaut: 30 derniers jours)
 $period = isset($_GET['period']) ? $_GET['period'] : 30;
 $dateFilter = date('Y-m-d H:i:s', strtotime("-$period days"));
@@ -45,13 +46,14 @@ $topPages = $pdo->query("
     LIMIT 10
 ")->fetchAll();
 
-// GÉOLOCALISATION POUR LA MAP
-$countriesMap = $pdo->query("
+// GÉOLOCALISATION
+$countries = $pdo->query("
     SELECT country, COUNT(*) as visits 
     FROM " . DB_TABLE . " 
-    WHERE timestamp >= '$dateFilter' AND country != 'Unknown'
+    WHERE timestamp >= '$dateFilter'
     GROUP BY country 
-    ORDER BY visits DESC
+    ORDER BY visits DESC 
+    LIMIT 10
 ")->fetchAll();
 
 // APPAREILS ET NAVIGATEURS
@@ -98,24 +100,12 @@ $dailyStats = $pdo->query("
     ORDER BY date ASC
 ")->fetchAll();
 
-// DONNÉES DE CLICS POUR HEATMAP
+// DONNÉES DE CLICS (si disponibles)
 $clickData = $pdo->query("
-    SELECT click_data, page_url
+    SELECT click_data
     FROM " . DB_TABLE . "
     WHERE click_data IS NOT NULL AND click_data != '' AND timestamp >= '$dateFilter'
-    LIMIT 500
-")->fetchAll();
-
-// TOP ÉLÉMENTS CLIQUÉS
-$topClicks = $pdo->query("
-    SELECT 
-        JSON_EXTRACT(click_data, '$.element') as element,
-        COUNT(*) as click_count
-    FROM " . DB_TABLE . "
-    WHERE click_data IS NOT NULL AND click_data != '' AND timestamp >= '$dateFilter'
-    GROUP BY JSON_EXTRACT(click_data, '$.element')
-    ORDER BY click_count DESC
-    LIMIT 15
+    LIMIT 100
 ")->fetchAll();
 
 // ANALYSE DES SESSIONS
@@ -149,19 +139,6 @@ $detailedData = $pdo->query("
     LIMIT 50
 ")->fetchAll();
 
-// NOUVEAU: TEMPS MOYEN PAR PAGE
-$avgTimePerPage = $pdo->query("
-    SELECT 
-        page_url,
-        AVG(time_on_page) as avg_time,
-        COUNT(*) as visits
-    FROM " . DB_TABLE . "
-    WHERE time_on_page > 0 AND timestamp >= '$dateFilter'
-    GROUP BY page_url
-    ORDER BY avg_time DESC
-    LIMIT 10
-")->fetchAll();
-
 // Calcul du temps moyen de session
 $avgSessionTime = 0;
 if (count($sessionData) > 0) {
@@ -173,15 +150,6 @@ if (count($sessionData) > 0) {
     }
     $avgSessionTime = round($totalSessionTime / count($sessionData) / 60, 1); // en minutes
 }
-
-// Préparation des données pour la map
-$mapData = [];
-foreach ($countriesMap as $country) {
-    $mapData[] = [
-        'id' => $country['country'],
-        'value' => $country['visits']
-    ];
-}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -189,13 +157,9 @@ foreach ($countriesMap as $country) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Pixel Analytics - Dashboard 2.0</title>
+    <title>Smart Pixel Analytics - Tableau de bord amélioré</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
-    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
     <style>
         :root {
             --primary: #4361ee;
@@ -395,19 +359,6 @@ foreach ($countriesMap as $country) {
 
         .data-table tr:hover {
             background-color: #f8f9fa;
-            cursor: pointer;
-        }
-
-        .data-table tr.expanded {
-            background-color: #e3f2fd;
-        }
-
-        .click-details {
-            background: #f8f9fa;
-            padding: 15px;
-            border-left: 4px solid var(--primary);
-            margin: 10px 0;
-            display: none;
         }
 
         .badge {
@@ -440,41 +391,6 @@ foreach ($countriesMap as $country) {
             white-space: nowrap;
         }
 
-        #worldMap {
-            width: 100%;
-            height: 500px;
-            background: white;
-            border-radius: 10px;
-        }
-
-        .heatmap-container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-
-        .heatmap-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .heatmap-item {
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 5px;
-            text-align: center;
-        }
-
-        .heatmap-intensity {
-            height: 20px;
-            background: linear-gradient(90deg, #4cc9f0, #4361ee, #7209b7, #f72585);
-            border-radius: 10px;
-            margin: 5px 0;
-        }
-
         footer {
             text-align: center;
             padding: 2rem 0;
@@ -483,12 +399,40 @@ foreach ($countriesMap as $country) {
             margin-top: 3rem;
         }
 
-        /* Responsive Design */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 1200px) {
             .container {
                 max-width: 100%;
                 padding: 0 15px;
             }
+
             .data-grid {
                 grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             }
@@ -498,28 +442,30 @@ foreach ($countriesMap as $country) {
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
             .data-grid {
                 grid-template-columns: 1fr;
             }
+
             .header-content {
                 flex-direction: column;
                 gap: 15px;
                 align-items: flex-start;
             }
+
             .tabs {
                 overflow-x: auto;
                 white-space: nowrap;
                 padding-bottom: 5px;
             }
+
             .tab {
                 padding: 10px 16px;
                 font-size: 0.9rem;
             }
+
             .chart-container {
                 padding: 15px;
-            }
-            #worldMap {
-                height: 400px;
             }
         }
 
@@ -528,24 +474,31 @@ foreach ($countriesMap as $country) {
                 grid-template-columns: 1fr;
                 gap: 15px;
             }
+
             .stat-card {
                 padding: 20px;
             }
+
             .stat-value {
                 font-size: 1.8rem;
             }
+
             .data-table {
                 font-size: 0.85rem;
             }
+
             .data-table th,
             .data-table td {
                 padding: 8px 10px;
             }
+
+            /* Amélioration de l'affichage des tableaux sur mobile */
+            .data-table-container {
+                overflow-x: auto;
+            }
+
             .chart-container.small {
                 height: 250px;
-            }
-            #worldMap {
-                height: 300px;
             }
         }
 
@@ -553,55 +506,148 @@ foreach ($countriesMap as $country) {
             h1 {
                 font-size: 1.5rem;
             }
+
             .period-filter {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 8px;
             }
+
             .period-filter select {
                 width: 100%;
             }
+
             .stat-card {
                 padding: 15px;
             }
+
             .stat-value {
                 font-size: 1.6rem;
             }
+
             .chart-container {
                 padding: 12px;
                 margin: 15px 0;
             }
+
             .chart-title {
                 font-size: 1rem;
             }
+
+            /* Optimisation pour les très petits écrans */
             .tab {
                 padding: 8px 12px;
                 font-size: 0.85rem;
             }
+
+            /* Cache certaines colonnes dans les tableaux sur mobile */
+            .data-table th:nth-child(4),
+            .data-table td:nth-child(4),
+            .data-table th:nth-child(6),
+            .data-table td:nth-child(6) {
+                display: none;
+            }
+
             .url-truncate {
                 max-width: 150px;
             }
-            #worldMap {
-                height: 250px;
-            }
         }
 
+        /* Amélioration du scroll horizontal pour les tableaux */
         .table-responsive {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
 
-        .engagement-score {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: bold;
+        /* Optimisation pour l'orientation paysage sur mobile */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .chart-container.small {
+                height: 200px;
+            }
         }
 
-        .score-high { background: #d4edda; color: #155724; }
-        .score-medium { background: #fff3cd; color: #856404; }
-        .score-low { background: #f8d7da; color: #721c24; }
+        /* Support des écrans haute résolution */
+        @media (min-resolution: 192dpi) {
+            .stat-card {
+                border: 0.5px solid #e9ecef;
+            }
+        }
+
+        /* Mode sombre automatique 
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #1a1a1a;
+                color: #e9ecef;
+            }
+
+            .stat-card,
+            .chart-container {
+                background-color: #2d3748;
+                color: #e9ecef;
+            }
+
+            .data-table th {
+                background-color: #4a5568;
+                color: #e9ecef;
+            }
+
+            .data-table tr:hover {
+                background-color: #4a5568;
+            }
+        }*/
+
+        /* Animation de chargement pour les graphiques */
+        .chart-loading {
+            position: relative;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chart-loading::after {
+            content: "Chargement...";
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        /* Amélioration de l'accessibilité */
+        @media (prefers-reduced-motion: reduce) {
+            .stat-card {
+                transition: none;
+            }
+        }
+
+        /* Focus visible pour la navigation au clavier */
+        .tab:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        /* Impression */
+        @media print {
+
+            .tabs,
+            .period-filter,
+            footer {
+                display: none;
+            }
+
+            .tab-content {
+                display: block !important;
+            }
+
+            .stat-card,
+            .chart-container {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
     </style>
 </head>
 
@@ -609,7 +655,7 @@ foreach ($countriesMap as $country) {
     <header>
         <div class="container">
             <div class="header-content">
-                <h1>Smart Pixel Analytics - Dashboard 2.0</h1>
+                <h1>Smart Pixel Analytics</h1>
                 <div class="period-filter">
                     <span>Période :</span>
                     <select id="periodSelect" onchange="changePeriod(this.value)">
@@ -629,10 +675,10 @@ foreach ($countriesMap as $country) {
                 <div class="tab active" onclick="openTab('overview')">Aperçu</div>
                 <div class="tab" onclick="openTab('traffic')">Trafic</div>
                 <div class="tab" onclick="openTab('geography')">Géographie</div>
-                <div class="tab" onclick="openTab('topclicks')">Top Clics</div>
+                <div class="tab" onclick="openTab('devices')">Appareils</div>
+                <div class="tab" onclick="openTab('content')">Contenu</div>
                 <div class="tab" onclick="openTab('sessions')">Sessions</div>
                 <div class="tab" onclick="openTab('details')">Détails</div>
-                <div class="tab" onclick="openTab('engagement')">Engagement</div>
             </div>
 
             <!-- ONGLET APERÇU -->
@@ -665,6 +711,154 @@ foreach ($countriesMap as $country) {
                     <canvas id="trafficChart" height="80"></canvas>
                 </div>
 
+                <div class="data-grid compact">
+                    <div class="chart-container small">
+                        <h3 class="chart-title">Sources de trafic</h3>
+                        <canvas id="sourcesChart"></canvas>
+                    </div>
+
+                    <div class="chart-container small">
+                        <h3 class="chart-title">Appareils utilisés</h3>
+                        <canvas id="devicesChart"></canvas>
+                    </div>
+
+                    <div class="chart-container small">
+                        <h3 class="chart-title">Top pays</h3>
+                        <canvas id="countriesOverviewChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ONGLET TRAFIC -->
+            <div id="traffic" class="tab-content">
+                <div class="data-grid">
+                    <div class="chart-container">
+                        <h3 class="chart-title">Sources de trafic</h3>
+                        <canvas id="sourcesTrafficChart" height="200"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3 class="chart-title">Navigateurs utilisés</h3>
+                        <canvas id="browsersChart" height="200"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Détail des sources</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Source</th>
+                                <th>Visites</th>
+                                <th>Pourcentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($sources as $source): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($source['source']) ?></td>
+                                    <td><?= number_format($source['count']) ?></td>
+                                    <td><?= round(($source['count'] / $uniqueVisitorsPeriod) * 100, 1) ?>%</td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ONGLET GÉOGRAPHIE -->
+            <div id="geography" class="tab-content">
+                <div class="chart-container">
+                    <h3 class="chart-title">Top pays par visites</h3>
+                    <canvas id="countriesChart" height="200"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Répartition géographique</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Pays</th>
+                                <th>Visites</th>
+                                <th>Part du trafic</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($countries as $country): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($country['country']) ?></td>
+                                    <td><?= number_format($country['visits']) ?></td>
+                                    <td><?= round(($country['visits'] / $uniqueVisitorsPeriod) * 100, 1) ?>%</td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ONGLET APPAREILS -->
+            <div id="devices" class="tab-content">
+                <div class="data-grid">
+                    <div class="chart-container">
+                        <h3 class="chart-title">Types d'appareils</h3>
+                        <canvas id="deviceTypesChart" height="200"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3 class="chart-title">Navigateurs</h3>
+                        <canvas id="browserTypesChart" height="200"></canvas>
+                    </div>
+                </div>
+
+                <div class="data-grid">
+                    <div class="chart-container">
+                        <h3 class="chart-title">Détail des appareils</h3>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Appareil</th>
+                                    <th>Visites</th>
+                                    <th>Pourcentage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($devices as $device): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($device['device']) ?></td>
+                                        <td><?= number_format($device['count']) ?></td>
+                                        <td><?= round(($device['count'] / $uniqueVisitorsPeriod) * 100, 1) ?>%</td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3 class="chart-title">Détail des navigateurs</h3>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Navigateur</th>
+                                    <th>Utilisations</th>
+                                    <th>Pourcentage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($browsers as $browser): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($browser['browser']) ?></td>
+                                        <td><?= number_format($browser['count']) ?></td>
+                                        <td><?= round(($browser['count'] / $uniqueVisitorsPeriod) * 100, 1) ?>%</td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ONGLET CONTENU -->
+            <div id="content" class="tab-content">
                 <div class="chart-container">
                     <h3 class="chart-title">Pages les plus populaires</h3>
                     <table class="data-table">
@@ -689,171 +883,42 @@ foreach ($countriesMap as $country) {
                     </table>
                 </div>
 
-                <div class="data-grid compact">
-                    <div class="chart-container small">
-                        <h3 class="chart-title">Sources de trafic</h3>
-                        <canvas id="sourcesChart"></canvas>
-                    </div>
-
-                    <div class="chart-container small">
-                        <h3 class="chart-title">Appareils utilisés</h3>
-                        <canvas id="devicesChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ONGLET TRAFIC -->
-            <div id="traffic" class="tab-content">
-                <div class="data-grid">
+                <?php if (count($clickData) > 0): ?>
                     <div class="chart-container">
-                        <h3 class="chart-title">Sources de trafic</h3>
-                        <canvas id="sourcesTrafficChart" height="200"></canvas>
-                    </div>
-
-                    <div class="chart-container">
-                        <h3 class="chart-title">Navigateurs utilisés</h3>
-                        <canvas id="browsersChart" height="200"></canvas>
-                    </div>
-                </div>
-
-                <div class="data-grid">
-                    <div class="chart-container">
-                        <h3 class="chart-title">Détail des sources</h3>
+                        <h3 class="chart-title">Données de clics récentes</h3>
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>Source</th>
-                                    <th>Visites</th>
-                                    <th>Pourcentage</th>
+                                    <th>Élément</th>
+                                    <th>Texte</th>
+                                    <th>Position</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($sources as $source): ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($source['source']) ?></td>
-                                        <td><?= number_format($source['count']) ?></td>
-                                        <td><?= round(($source['count'] / $uniqueVisitorsPeriod) * 100, 1) ?>%</td>
-                                    </tr>
-                                <?php endforeach; ?>
+                                <?php
+                                $clickCount = 0;
+                                foreach ($clickData as $click):
+                                    if ($clickCount >= 10)
+                                        break;
+                                    $data = json_decode($click['click_data'], true);
+                                    if (is_array($data)):
+                                        ?>
+                                        <tr>
+                                            <td><span class="badge badge-primary"><?= htmlspecialchars($data['element']) ?></span>
+                                            </td>
+                                            <td><?= htmlspecialchars(substr($data['text'], 0, 30)) . (strlen($data['text']) > 30 ? '...' : '') ?>
+                                            </td>
+                                            <td><?= $data['x'] ?>x<?= $data['y'] ?></td>
+                                        </tr>
+                                        <?php
+                                        $clickCount++;
+                                    endif;
+                                endforeach;
+                                ?>
                             </tbody>
                         </table>
                     </div>
-
-                    <div class="chart-container">
-                        <h3 class="chart-title">Détail des appareils</h3>
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Appareil</th>
-                                    <th>Visites</th>
-                                    <th>Pourcentage</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($devices as $device): ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($device['device']) ?></td>
-                                        <td><?= number_format($device['count']) ?></td>
-                                        <td><?= round(($device['count'] / $uniqueVisitorsPeriod) * 100, 1) ?>%</td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ONGLET GÉOGRAPHIE -->
-            <div id="geography" class="tab-content">
-                <div class="chart-container">
-                    <h3 class="chart-title">Carte mondiale des visites</h3>
-                    <div id="worldMap"></div>
-                </div>
-
-                <div class="chart-container">
-                    <h3 class="chart-title">Top pays par visites</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Pays</th>
-                                <th>Visites</th>
-                                <th>Part du trafic</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach (array_slice($countriesMap, 0, 10) as $country): ?>
-                                <tr>
-                                    <td><?= htmlspecialchars($country['country']) ?></td>
-                                    <td><?= number_format($country['visits']) ?></td>
-                                    <td><?= round(($country['visits'] / $uniqueVisitorsPeriod) * 100, 1) ?>%</td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- NOUVEL ONGLET TOP CLICS -->
-            <div id="topclicks" class="tab-content">
-                <div class="chart-container">
-                    <h3 class="chart-title">Éléments les plus cliqués</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Élément</th>
-                                <th>Nombre de clics</th>
-                                <th>Pourcentage</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php 
-                            $totalClicks = array_sum(array_column($topClicks, 'click_count'));
-                            foreach ($topClicks as $click): 
-                                $element = str_replace('"', '', $click['element']);
-                                if (empty($element)) continue;
-                            ?>
-                                <tr>
-                                    <td><span class="badge badge-primary"><?= htmlspecialchars($element) ?></span></td>
-                                    <td><?= number_format($click['click_count']) ?></td>
-                                    <td><?= round(($click['click_count'] / $totalClicks) * 100, 1) ?>%</td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="heatmap-container">
-                    <h3 class="chart-title">Heatmap des interactions</h3>
-                    <div class="heatmap-grid">
-                        <?php 
-                        $clickPositions = [];
-                        foreach ($clickData as $click) {
-                            $data = json_decode($click['click_data'], true);
-                            if (is_array($data) && isset($data['x']) && isset($data['y'])) {
-                                $clickPositions[] = $data;
-                            }
-                        }
-                        
-                        // Simuler une heatmap basée sur les positions de clics
-                        $heatmapZones = [
-                            ['zone' => 'Haut de page', 'intensity' => 30],
-                            ['zone' => 'Menu navigation', 'intensity' => 80],
-                            ['zone' => 'Contenu principal', 'intensity' => 65],
-                            ['zone' => 'Sidebar', 'intensity' => 25],
-                            ['zone' => 'Footer', 'intensity' => 15],
-                            ['zone' => 'Boutons CTA', 'intensity' => 90]
-                        ];
-                        
-                        foreach ($heatmapZones as $zone): 
-                        ?>
-                            <div class="heatmap-item">
-                                <strong><?= $zone['zone'] ?></strong>
-                                <div class="heatmap-intensity" style="opacity: <?= $zone['intensity'] / 100 ?>"></div>
-                                <small><?= $zone['intensity'] ?>% d'interactions</small>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
+                <?php endif; ?>
             </div>
 
             <!-- ONGLET SESSIONS -->
@@ -889,146 +954,47 @@ foreach ($countriesMap as $country) {
                 </div>
             </div>
 
-            <!-- ONGLET DÉTAILS -->
+            <!-- NOUVEL ONGLET DÉTAILS -->
+
             <div id="details" class="tab-content">
                 <div class="chart-container">
                     <h3 class="chart-title">Détails des visites récentes (50 dernières)</h3>
-                    <div class="table-responsive">
-                        <table class="data-table" id="detailsTable">
-                            <thead>
-                                <tr>
-                                    <th>IP</th>
-                                    <th>Pays</th>
-                                    <th>Ville</th>
-                                    <th>Page visitée</th>
-                                    <th>Heure</th>
-                                    <th>Source</th>
-                                    <th>Session</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($detailedData as $index => $visit):
-                                    $visitTime = strtotime($visit['timestamp']);
-                                    ?>
-                                    <tr data-index="<?= $index ?>">
-                                        <td class="ip-address"><?= htmlspecialchars($visit['ip_address']) ?></td>
-                                        <td><?= htmlspecialchars($visit['country']) ?></td>
-                                        <td><?= htmlspecialchars($visit['city']) ?></td>
-                                        <td class="url-truncate" title="<?= htmlspecialchars($visit['page_url']) ?>">
-                                            <?= htmlspecialchars($visit['page_url']) ?>
-                                        </td>
-                                        <td><?= date('H:i', $visitTime) ?></td>
-                                        <td><span class="badge badge-primary"><?= htmlspecialchars($visit['source']) ?></span></td>
-                                        <td><?= substr($visit['session_id'], 0, 8) ?>...</td>
-                                    </tr>
-                                    <tr class="click-details" id="click-details-<?= $index ?>">
-                                        <td colspan="7">
-                                            <h4>Données de clics pour cette session</h4>
-                                            <?php
-                                            $sessionClicks = array_filter($clickData, function($click) use ($visit) {
-                                                return strpos($click['page_url'], $visit['page_url']) !== false;
-                                            });
-                                            $sessionClicks = array_slice($sessionClicks, 0, 5);
-                                            ?>
-                                            <?php if (count($sessionClicks) > 0): ?>
-                                                <table class="data-table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Élément</th>
-                                                            <th>Texte</th>
-                                                            <th>Position</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <?php foreach ($sessionClicks as $click):
-                                                            $data = json_decode($click['click_data'], true);
-                                                            if (is_array($data)):
-                                                        ?>
-                                                            <tr>
-                                                                <td><span class="badge badge-primary"><?= htmlspecialchars($data['element']) ?></span></td>
-                                                                <td><?= htmlspecialchars(substr($data['text'], 0, 30)) . (strlen($data['text']) > 30 ? '...' : '') ?></td>
-                                                                <td><?= $data['x'] ?>x<?= $data['y'] ?></td>
-                                                            </tr>
-                                                        <?php endif; endforeach; ?>
-                                                    </tbody>
-                                                </table>
-                                            <?php else: ?>
-                                                <p>Aucun clic enregistré pour cette session.</p>
-                                            <?php endif; ?>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- NOUVEL ONGLET ENGAGEMENT -->
-            <div id="engagement" class="tab-content">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3>Taux de rebond</h3>
-                        <div class="stat-value">42%</div>
-                        <div class="stat-change negative">+3%</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Pages/session</h3>
-                        <div class="stat-value">3.2</div>
-                        <div class="stat-change positive">+0.4</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Durée moyenne</h3>
-                        <div class="stat-value">2m 15s</div>
-                        <div class="stat-change positive">+15s</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Score d'engagement</h3>
-                        <div class="stat-value">
-                            <span class="engagement-score score-high">Élevé</span>
-                        </div>
-                        <div class="stat-change positive">+8%</div>
-                    </div>
-                </div>
-
-                <div class="chart-container">
-                    <h3 class="chart-title">Temps moyen par page</h3>
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Page</th>
-                                <th>Temps moyen</th>
-                                <th>Visites</th>
-                                <th>Score engagement</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($avgTimePerPage as $page): 
-                                $score = $page['avg_time'] > 120 ? 'score-high' : ($page['avg_time'] > 60 ? 'score-medium' : 'score-low');
-                                $scoreText = $page['avg_time'] > 120 ? 'Élevé' : ($page['avg_time'] > 60 ? 'Moyen' : 'Faible');
-                            ?>
-                                <tr>
-                                    <td class="url-truncate"><?= htmlspecialchars($page['page_url']) ?></td>
-                                    <td><?= round($page['avg_time']) ?>s</td>
-                                    <td><?= number_format($page['visits']) ?></td>
-                                    <td><span class="engagement-score <?= $score ?>"><?= $scoreText ?></span></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>IP</th>
+                                        <th>Pays</th>
+                                        <th>Ville</th>
+                                        <th>Page visitée</th>
+                                        <th>Heure</th>
+                                        <th>Source</th>
+                                        <th>Session</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($detailedData as $visit):
+                                        $visitTime = strtotime($visit['timestamp']);
+                                        ?>
+                                        <tr>
+                                            <td class="ip-address"><?= htmlspecialchars($visit['ip_address']) ?></td>
+                                            <td><?= htmlspecialchars($visit['country']) ?></td>
+                                            <td><?= htmlspecialchars($visit['city']) ?></td>
+                                            <td class="url-truncate" title="<?= htmlspecialchars($visit['page_url']) ?>">
+                                                <?= htmlspecialchars($visit['page_url']) ?>
+                                            </td>
+                                            <td><?= date('H:i', $visitTime) ?></td>
+                                            <td><span
+                                                    class="badge badge-primary"><?= htmlspecialchars($visit['source']) ?></span>
+                                            </td>
+                                            <td><?= substr($visit['session_id'], 0, 8) ?>...</td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </table>
-                </div>
-
-                <div class="chart-container">
-                    <h3 class="chart-title">Recommandations d'amélioration</h3>
-                    <div style="background: #e3f2fd; padding: 20px; border-radius: 8px;">
-                        <h4>💡 Suggestions pour augmenter l'engagement</h4>
-                        <ul style="margin-top: 15px; line-height: 1.8;">
-                            <li><strong>Optimiser les temps de chargement</strong> - 23% des visiteurs quittent avant le chargement complet</li>
-                            <li><strong>Améliorer le responsive mobile</strong> - Taux de rebond mobile: 58% vs desktop: 32%</li>
-                            <li><strong>Ajouter des call-to-actions</strong> - Seulement 12% des visiteurs cliquent sur vos CTA principaux</li>
-                            <li><strong>Enrichir le contenu des pages de sortie</strong> - 45% des abandons sur la page /contact</li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1036,32 +1002,29 @@ foreach ($countriesMap as $country) {
 
     <footer>
         <div class="container">
-            <p><a href="https://gael-berru.com/">🟪</a> Smart Pixel Analytics &copy; <?= date('Y') ?> - Dashboard 2.0 - Données mises à jour en temps réel - Respect des loi RGPD</p>
+            <p><a href="https://gael-berru.com/">🟪</a> Smart Pixel Analytics &copy; <?= date('Y') ?> - Données mises à
+                jour en temps réel - Respect des loi RGPD</p>
         </div>
     </footer>
 
     <script>
         // Fonction pour changer d'onglet
         function openTab(tabName) {
+            // Masquer tous les contenus d'onglets
             const tabContents = document.getElementsByClassName('tab-content');
             for (let i = 0; i < tabContents.length; i++) {
                 tabContents[i].classList.remove('active');
             }
 
+            // Désactiver tous les onglets
             const tabs = document.getElementsByClassName('tab');
             for (let i = 0; i < tabs.length; i++) {
                 tabs[i].classList.remove('active');
             }
 
+            // Activer l'onglet sélectionné
             document.getElementById(tabName).classList.add('active');
             event.currentTarget.classList.add('active');
-
-            // Réinitialiser la map si on ouvre l'onglet géographie
-            if (tabName === 'geography' && typeof worldMap !== 'undefined') {
-                setTimeout(() => {
-                    worldMap.root.resize();
-                }, 100);
-            }
         }
 
         // Fonction pour changer la période
@@ -1069,40 +1032,12 @@ foreach ($countriesMap as $country) {
             window.location.href = `?period=${period}`;
         }
 
-        // Gestion du clic sur les lignes du tableau détail
-        document.addEventListener('DOMContentLoaded', function() {
-            const detailRows = document.querySelectorAll('#detailsTable tbody tr:not(.click-details)');
-            detailRows.forEach(row => {
-                row.addEventListener('click', function() {
-                    const index = this.getAttribute('data-index');
-                    const detailsRow = document.getElementById(`click-details-${index}`);
-                    
-                    // Fermer tous les autres détails
-                    document.querySelectorAll('.click-details').forEach(detail => {
-                        if (detail !== detailsRow) {
-                            detail.style.display = 'none';
-                            detail.previousElementSibling.classList.remove('expanded');
-                        }
-                    });
-
-                    // Basculer l'affichage des détails
-                    if (detailsRow.style.display === 'block') {
-                        detailsRow.style.display = 'none';
-                        this.classList.remove('expanded');
-                    } else {
-                        detailsRow.style.display = 'block';
-                        this.classList.add('expanded');
-                    }
-                });
-            });
-        });
-
         // Données pour les graphiques
         const dailyStats = <?= json_encode($dailyStats) ?>;
         const sources = <?= json_encode($sources) ?>;
         const devices = <?= json_encode($devices) ?>;
         const browsers = <?= json_encode($browsers) ?>;
-        const countries = <?= json_encode($countriesMap) ?>;
+        const countries = <?= json_encode($countries) ?>;
 
         // Configuration commune pour les petits graphiques
         const smallChartOptions = {
@@ -1185,6 +1120,35 @@ foreach ($countriesMap as $country) {
             options: smallChartOptions
         });
 
+        // Graphique des pays (aperçu)
+        const countriesOverviewCtx = document.getElementById('countriesOverviewChart').getContext('2d');
+        const countriesOverviewChart = new Chart(countriesOverviewCtx, {
+            type: 'bar',
+            data: {
+                labels: countries.map(c => c.country),
+                datasets: [{
+                    label: 'Visites',
+                    data: countries.map(c => c.visits),
+                    backgroundColor: '#4895ef'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
         // Graphique des sources (trafic)
         const sourcesTrafficCtx = document.getElementById('sourcesTrafficChart').getContext('2d');
         const sourcesTrafficChart = new Chart(sourcesTrafficCtx, {
@@ -1230,60 +1194,73 @@ foreach ($countriesMap as $country) {
             }
         });
 
-        // Carte mondiale avec amCharts
-        let worldMap;
-        am5.ready(function() {
-            const root = am5.Root.new("worldMap");
-            root.setThemes([am5themes_Animated.new(root)]);
-
-            const chart = root.container.children.push(am5map.MapChart.new(root, {
-                panX: "translateX",
-                panY: "translateY",
-                projection: am5map.geoMercator()
-            }));
-
-            const polygonSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {
-                geoJSON: am5geodata_worldLow,
-                exclude: ["AQ"]
-            }));
-
-            polygonSeries.mapPolygons.template.setAll({
-                tooltipText: "{name}: {value} visites",
-                interactive: true
-            });
-
-            polygonSeries.set("fill", am5.Color.fromString("#4361ee"));
-
-            const colorRange = am5.ColorRange.new(root, {
-                stepCount: 5,
-                colors: [
-                    am5.Color.fromString("#4cc9f0"),
-                    am5.Color.fromString("#4361ee"), 
-                    am5.Color.fromString("#3a0ca3"),
-                    am5.Color.fromString("#7209b7"),
-                    am5.Color.fromString("#f72585")
-                ]
-            });
-
-            colorRange.set("start", 0.1);
-            colorRange.set("end", 0.9);
-
-            polygonSeries.set("fill", function(fill, target) {
-                const dataItem = target.dataItem;
-                if (dataItem) {
-                    const value = dataItem.get("value");
-                    if (value) {
-                        return colorRange.getColor(value / <?= max(array_column($countriesMap, 'visits')) ?>);
+        // Graphique des pays
+        const countriesCtx = document.getElementById('countriesChart').getContext('2d');
+        const countriesChart = new Chart(countriesCtx, {
+            type: 'bar',
+            data: {
+                labels: countries.map(c => c.country),
+                datasets: [{
+                    label: 'Visites',
+                    data: countries.map(c => c.visits),
+                    backgroundColor: '#4361ee'
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                scales: {
+                    x: {
+                        beginAtZero: true
                     }
                 }
-                return am5.Color.fromString("#e0e0e0");
-            });
+            }
+        });
 
-            // Ajouter les données
-            polygonSeries.data.setAll(<?= json_encode($mapData) ?>);
+        // Graphique des types d'appareils
+        const deviceTypesCtx = document.getElementById('deviceTypesChart').getContext('2d');
+        const deviceTypesChart = new Chart(deviceTypesCtx, {
+            type: 'doughnut',
+            data: {
+                labels: devices.map(d => d.device),
+                datasets: [{
+                    data: devices.map(d => d.count),
+                    backgroundColor: ['#4361ee', '#4cc9f0', '#f72585']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    }
+                }
+            }
+        });
 
-            worldMap = chart;
+        // Graphique des types de navigateurs
+        const browserTypesCtx = document.getElementById('browserTypesChart').getContext('2d');
+        const browserTypesChart = new Chart(browserTypesCtx, {
+            type: 'pie',
+            data: {
+                labels: browsers.map(b => b.browser),
+                datasets: [{
+                    data: browsers.map(b => b.count),
+                    backgroundColor: [
+                        '#4361ee', '#4cc9f0', '#f72585', '#7209b7', '#4895ef'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    }
+                }
+            }
         });
     </script>
 </body>
+
 </html>
