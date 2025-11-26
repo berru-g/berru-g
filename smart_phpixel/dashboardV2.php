@@ -241,6 +241,46 @@ if (count($countriesMap) > 0) {
                 document.head.appendChild(script1);
             });
         }
+        // Fonction pour changer d'onglet
+        // Fonction pour changer d'onglet
+        function openTab(tabName) {
+            // Masquer tous les contenus d'onglets
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+
+            // Désactiver tous les onglets
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+
+            // Activer l'onglet sélectionné
+            document.getElementById(tabName).classList.add('active');
+
+            // Trouver et activer l'onglet correspondant dans le menu
+            const allTabs = document.querySelectorAll('.tab');
+            allTabs.forEach(tab => {
+                if (tab.getAttribute('onclick').includes(tabName)) {
+                    tab.classList.add('active');
+                }
+            });
+
+            // Réinitialiser la map si on ouvre l'onglet géographie
+            if (tabName === 'geography') {
+                setTimeout(() => {
+                    if (window.worldMap) {
+                        window.worldMap.root.resize();
+                    }
+                }, 100);
+            }
+        }
+
+        // Fonction pour changer la période
+        function changePeriod(period) {
+            window.location.href = `?period=${period}`;
+        }
     </script>
     <style>
         :root {
@@ -1017,7 +1057,7 @@ if (count($countriesMap) > 0) {
                                         </td>
                                         <td><?= substr($visit['session_id'], 0, 8) ?>...</td>
                                     </tr>
-                                    <!--<tr class="click-details" id="click-details-<?= $index ?>">
+                                    <tr class="click-details" id="click-details-<?= $index ?>">
                                         <td colspan="7">
                                             <h4>Données de clics pour cette session</h4>
                                             <?php
@@ -1055,7 +1095,7 @@ if (count($countriesMap) > 0) {
                                                 <p>Aucun clic enregistré pour cette session.</p>
                                             <?php endif; ?>
                                         </td>
-                                    </tr>-->
+                                    </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
@@ -1090,7 +1130,7 @@ if (count($countriesMap) > 0) {
                     </div>
                 </div>
 
-                <!--<?php if (count($avgTimePerPage) > 0): ?>
+                <?php if (count($avgTimePerPage) > 0): ?>
                     <div class="chart-container">
                         <h3 class="chart-title">Temps moyen par page</h3>
                         <table class="data-table">
@@ -1117,7 +1157,7 @@ if (count($countriesMap) > 0) {
                             </tbody>
                         </table>
                     </div>
-                <?php endif; ?>-->
+                <?php endif; ?>
 
                 <div class="chart-container">
                     <h3 class="chart-title">Recommandations d'amélioration</h3>
@@ -1153,39 +1193,6 @@ if (count($countriesMap) > 0) {
     </footer>
 
     <script>
-        // Fonction pour changer d'onglet
-        function openTab(tabName, element) {
-            // Masquer tous les contenus d'onglets
-            const tabContents = document.getElementsByClassName('tab-content');
-            for (let i = 0; i < tabContents.length; i++) {
-                tabContents[i].classList.remove('active');
-            }
-
-            // Désactiver tous les onglets
-            const tabs = document.getElementsByClassName('tab');
-            for (let i = 0; i < tabs.length; i++) {
-                tabs[i].classList.remove('active');
-            }
-
-            // Activer l'onglet sélectionné
-            document.getElementById(tabName).classList.add('active');
-            element.classList.add('active');
-
-            // Réinitialiser la map si on ouvre l'onglet géographie
-            if (tabName === 'geography') {
-                setTimeout(() => {
-                    if (window.worldMap) {
-                        window.worldMap.root.resize();
-                    }
-                }, 100);
-            }
-        }
-
-        // Fonction pour changer la période
-        function changePeriod(period) {
-            window.location.href = `?period=${period}`;
-        }
-
         // Gestion du clic sur les lignes du tableau détail
         document.addEventListener('DOMContentLoaded', function () {
             const detailRows = document.querySelectorAll('#detailsTable tbody tr:not(.click-details)');
