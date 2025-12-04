@@ -935,7 +935,8 @@ function loadAircraftGLB() {
 
     // URLs de modèles d'avion GLB gratuits
     const aircraftURLs = [
-        'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb',
+        //'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/drone.glb',
+        'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/cute_taxi_spaceship.glb',
     ];
 
     // Essayer chaque URL jusqu'à ce qu'un fonctionne
@@ -995,7 +996,7 @@ function tryLoadGLB(loader, urls, index) {
 
         // Configurer le nouvel avion GLB
         aircraftGLB = gltf.scene;
-        aircraftGLB.scale.set(2, 2, 2); // Ajuster l'échelle de l'avion
+        aircraftGLB.scale.set(8, 8, 8); // Ajuster l'échelle de l'avion drone=2, taxi = 8
         aircraftGLB.position.set(-100, 80, 0);
         aircraftGLB.rotation.set(0, Math.PI, 0);
 
