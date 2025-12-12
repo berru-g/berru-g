@@ -195,12 +195,12 @@ function handleDoorClick(day, isOpenable, isOpened, theme) {
 function getSurpriseLink(day) {
     // À remplacer par vos propres URLs
     const links = [
-        "https://github.com/berru-g/python-pdf-tool",
+        "https://gael-berru.com/3D/",
         "https://codepen.io/collection/3d-css",
         "https://github.com/berru-g/arduino-rgb-led",
         // ... ajoutez vos 24 liens
     ];
-    return links[day - 1] || "https://github.com/berru-g";
+    return links[day - 1] || "https://gael-berru.com/advent-calendar/";
 }
 
 // Enregistrer l'ouverture dans Supabase
