@@ -1,0 +1,11 @@
+# Force le téléchargement des fichiers exe
+AddType application/octet-stream .exe
+
+# Empêche l'affichage dans le navigateur
+<Files "prevention.exe">
+    ForceType application/octet-stream
+    Header set Content-Disposition "attachment"
+</Files>
+
+# Cache les dossiers
+Options -Indexes
