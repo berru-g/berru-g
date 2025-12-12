@@ -1,3 +1,0 @@
-ok ça fonctionne car j'avais oublié de remettre le delay "send_interval" ⇧. ⇧Merci ⇧. ok l'envoie de mail n'est pas encore confirmé⇧. ⇧J'attends le delay d'envoie⇧. ⇧Si jamais cela fonctionne j'aurais besoin que le script se lance discretement, pour cela je change dans le ⇧.bat (⌃⌃⌫⌫) pour (⌃)c'est ça ⇧?
-⌃⌃
-stoplog
