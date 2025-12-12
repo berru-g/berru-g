@@ -69,7 +69,7 @@ window.login = async () => {
     Swal.fire({
         icon: 'success',
         title: 'Lien envoyé !',
-        html: `Un lien de connexion magique a été envoyé à <strong>${email}</strong>.<br>Vérifiez votre boîte mail 📩`,
+        html: `Un lien de connexion Supabase Auth a été envoyé à <strong>${email}</strong>.<br>Vérifiez votre boîte mail 📩`,
         confirmButtonColor: 'var(--primary-color)'
     });
     
@@ -83,11 +83,11 @@ function generateCalendar() {
     
     // Thèmes des jours (exemples - à remplacer par vos propres surprises)
     const dayThemes = [
-        "Outil Python : Automatisation PDF", "Template CSS 3D", "Script Arduino LED RGB",
-        "Modèle 3D : Robot éducatif", "Extension VS Code : Palettes couleurs", "Projet PCB : Station météo",
-        "Bibliothèque JS : Animations canvas", "Template Figma : Dashboard IoT", "Script : Optimisation images",
-        "Projet Raspberry : Serveur média", "CSS : Effets néon interactifs", "Outil : Générateur de QR Code",
-        "Modèle Fusion 360 : Support téléphone", "Plugin Blender : Export optimisé", "API Node.js : Webhooks",
+        "Jeu 3D OPEN SOURCE", "Help desk terminal", "Créer un dossier en un clic vbs",
+        "Génerateur de QR code", "SQL editor to diagramm", "Créez une animation 3D au scroll",
+        "Créer votre prore éditeur de code", "Bitcoin forensics toolkit", "Crypto Free Tools",
+        "Heatmap crypto 3D", "Créer votre controlleur MIDI", "Télechargez des obj 3D gratuit",
+        "Créez votre réseau social en PHP/SQL", "Créez votre google analytics en PHP/JavaScript", "API Node.js : Webhooks",
         "Template React : Portfolio dev", "Projet ESP32 : Capteur CO2", "Shaders GLSL : Effets visuels",
         "Outil CLI : Gestion de projets", "Template Three.js : Galerie 3D", "Script : Backup automatique",
         "PCB : Contrôleur MIDI personnalisé", "Template : Site e-commerce", "Surprise spéciale Noël 🎄"
@@ -113,7 +113,7 @@ function generateCalendar() {
             <div class="day-number">${day}</div>
             <div class="day-title">${dayThemes[day - 1] || `Jour ${day}`}</div>
             ${!isOpened && !isOpenable ? 
-                '<i class="fas fa-lock lock-icon"></i>' : 
+                '🎁<i class="fas fa-lock lock-icon"></i>' : 
                 isOpened ? '<i class="fas fa-check-circle check-icon"></i>' : ''
             }
         `;
@@ -195,9 +195,20 @@ function handleDoorClick(day, isOpenable, isOpened, theme) {
 function getSurpriseLink(day) {
     // À remplacer par vos propres URLs
     const links = [
-        "https://gael-berru.com/3D/",
-        "https://codepen.io/collection/3d-css",
-        "https://github.com/berru-g/arduino-rgb-led",
+        "https://gael-berru.com/3D/", //1 Jeu 3D OPEN SOURCE
+        "https://berru-g.github.io/console-interactive/", //2 Help desk terminal
+        "https://github.com/berru-g/OTTO/blob/main/front-end-files-auto/Create-front-folders.vbs", //3 Créer dossier front-end via un simple double clic.
+        "https://berru-g.github.io/generate-qrcode/",//4 Génerateur de QR code
+        "https://agora-dataviz.com", //5 SQL editor to diagramm
+        "https://3dscrollanimator.com", //6 Créez une animation 3D au scroll 
+        "https://gael-berru.com/codepen/", //7 Créer votre prore éditeur de code 
+        "https://crypto-free-tools.netlify.app/scam-radar/", //8 Bitcoin forensics toolkit
+        "https://crypto-free-tools.netlify.app", //9 Crypto Free Tools
+        "https://crypto-free-tools.netlify.app/heatmap-forest/", //10 Heatmap crypto 3D
+        "https://github.com/berru-g/Microcontroller-USB-midi", //11 Créer votre controlleur MIDI
+        "https://sketchfab.com/", //12 Sketchfab 
+        "https://github.com/berru-g/projet-messagerie/blob/main/pages/home.php", //13 Créez votre réseau social en PHP/SQL
+        "https://github.com/berru-g/cookie-tracking/tree/main", //14 Créez votre google analytics
         // ... ajoutez vos 24 liens
     ];
     return links[day - 1] || "https://gael-berru.com/advent-calendar/";
