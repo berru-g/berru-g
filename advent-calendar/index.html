@@ -30,6 +30,7 @@
     <!-- SweetAlert -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
 </head>
 
 <body>
@@ -133,6 +134,8 @@
         </div>
     </section>
 
+    
+
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -163,6 +166,45 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script type="module" src="script.js"></script>
+    <script>
+// Crée les flocons de neige en CSS
+function createSnowCSS(count = 50) {
+    const container = document.createElement('div');
+    container.className = 'snowflakes';
+    
+    for (let i = 0; i < count; i++) {
+        const flake = document.createElement('div');
+        flake.className = 'snowflake';
+        
+        // Tailles aléatoires
+        const size = Math.random() * 5 + 2;
+        flake.style.width = `${size}px`;
+        flake.style.height = `${size}px`;
+        
+        // Position de départ
+        flake.style.left = `${Math.random() * 100}vw`;
+        
+        // Animation avec durée et délai aléatoires
+        const duration = Math.random() * 5 + 5;
+        const delay = Math.random() * 5;
+        flake.style.animationDuration = `${duration}s`;
+        flake.style.animationDelay = `${delay}s`;
+        
+        // Opacité aléatoire
+        flake.style.opacity = Math.random() * 0.5 + 0.3;
+        
+        container.appendChild(flake);
+    }
+    
+    document.body.appendChild(container);
+    return container;
+}
+
+// Démarrer la neige quand la page est chargée
+document.addEventListener('DOMContentLoaded', () => {
+    createSnowCSS(70); // 70 flocons
+});
+</script>
     <script>
         // Initialiser AOS
         AOS.init({

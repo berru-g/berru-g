@@ -81,16 +81,16 @@ function generateCalendar() {
     const grid = document.getElementById('calendar-grid');
     grid.innerHTML = '';
     
-    // Thèmes des jours (exemples - à remplacer par vos propres surprises)
+    // Thèmes des jours 
     const dayThemes = [
-        "Jeu 3D OPEN SOURCE", "Help desk terminal", "Créer un dossier en un clic vbs",
-        "Génerateur de QR code", "SQL editor to diagramm", "Créez une animation 3D au scroll",
-        "Créer votre prore éditeur de code", "Bitcoin forensics toolkit", "Crypto Free Tools",
-        "Heatmap crypto 3D", "Créer votre controlleur MIDI", "Télechargez des obj 3D gratuit",
-        "Créez votre réseau social en PHP/SQL", "Créez votre google analytics en PHP/JavaScript", "API Node.js : Webhooks",
-        "Template React : Portfolio dev", "Projet ESP32 : Capteur CO2", "Shaders GLSL : Effets visuels",
-        "Outil CLI : Gestion de projets", "Template Three.js : Galerie 3D", "Script : Backup automatique",
-        "PCB : Contrôleur MIDI personnalisé", "Template : Site e-commerce", "Surprise spéciale Noël 🎄"
+        "Jeu 3D OPEN SOURCE (.JS)", "Help desk terminal (.JS)", "Créer un dossier en un clic (.VBS)",
+        "Génerateur de QR code .JS", "SQL editor to diagramm .SQL", "Créez une animation 3D au scroll (.NO-CODE)",
+        "Créer votre prore éditeur de code (.JS)", "Bitcoin forensics toolkit .(API)", "Crypto Free Tools (.API)",
+        "Heatmap crypto 3D (.API)", "Créer votre controlleur MIDI .(ARDUINO)", "Télechargez des obj 3D gratuit (.GLB)",
+        "Créez votre réseau social (.PHP/SQL)", "Créez votre google analytics (.PHP/JS)", "Template (Three.js) : ANimation 3D",
+        "Face Morph: Animer votre personnage 3D (.JS)", "Scrapper Reddit : chercher des mots clefs (.PYTHON)", "Vends des pixels: code source gratuit (.SUPABASE)",
+        "Name color: le tool qui sert à rien (.JS)", "Phishing: Comment ça marche techniquement ? (.PHP/SQL)", "Automatise l'app WEWARD (.PYTHON)",
+        "Crée ton Contrôleur MIDI code + gerber (.C++)", "Template : SAAS (.PHP/SQL)", "Surprise spéciale Noël 🎄"
     ];
     
     for (let day = 1; day <= DAYS; day++) {
@@ -209,7 +209,17 @@ function getSurpriseLink(day) {
         "https://sketchfab.com/", //12 Sketchfab 
         "https://github.com/berru-g/projet-messagerie/blob/main/pages/home.php", //13 Créez votre réseau social en PHP/SQL
         "https://github.com/berru-g/cookie-tracking/tree/main", //14 Créez votre google analytics
-        // ... ajoutez vos 24 liens
+        "https://codepen.io/h-lautre/pen/LENyZKb", //15 Template Threejs
+        "https://codepen.io/h-lautre/pen/EaKKrpN", //16 Face Morph
+        "https://github.com/berru-g/OTTO/blob/main/scrap/PainScraper/scrap-mot-clef.py", //17 Scrapper Reddit
+        "https://github.com/berru-g/pixelearth", //18 Vendre des pixels
+        "https://berru-g.github.io/name-generate-color/", //19 Name color
+        "https://github.com/berru-g/prevention_phishing", //20 Apprends le phishing
+        "https://github.com/berru-g/weward-auto", //21 Automatise l'app WEWARD
+        "https://github.com/berru-g/MAKE_PLAY-1", //22 PCB make&play
+        "https://github.com/berru-g/3Dscrollanimator", //23 Template SAAS
+        "https://gael-berru.com/surprise-noel-2024/" //24 Surprise spéciale Noël
+        
     ];
     return links[day - 1] || "https://gael-berru.com/advent-calendar/";
 }
@@ -263,3 +273,5 @@ if (urlParams.has('access_token')) {
         });
     }, 1000);
 }
+
+// SNOW effect
