@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<!-- 
+  /*
+   * Calendrier de l'Avent Digital
+   * Pour makers, devs, artistes 3D et curieux
+   * Author: @berru-g — Adapté pour le projet advent
+   */
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advent Calendar — Découvrez une surprise par jour</title>
+    <link rel="shortcut icon" href="favicon.png" />
+    <meta name="description" content="Ouvrez une case par jour ! Outils dev, projets makers, ressources 3D et créations uniques pour les curieux techniques." />
+    <meta name="keywords" content="calendrier de l'avent, dev, maker, 3D, outils, projets, code, électronique, ressources gratuites" />
+    <meta name="author" content="Advent Calendar Team">
+    <meta property="og:title" content="Advent Calendar — 24 jours de surprises techniques" />
+    <meta property="og:description" content="Chaque jour, une nouvelle surprise : outils, scripts, projets complets pour makers et développeurs." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="preview.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <!-- Styles & Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+    
+    <!-- SweetAlert -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+    <!-- Header Hero -->
+    <header class="hero" data-aos="fade-down">
+        <div class="container">
+            <h1><i class="fas fa-calendar-star"></i> Advent Calendar 2025</h1>
+            <p class="subtitle">24 jours de surprises pour makers, devs & curieux techniques</p>
+            <div class="countdown" id="countdown">
+                <div class="countdown-item">
+                    <span id="days">0</span>
+                    <small>jours restants</small>
+                </div>
+                <div class="countdown-item">
+                    <span id="hours">0</span>
+                    <small>heures</small>
+                </div>
+            </div>
+        </div>
+        
+    </header>
+
+    <!-- Auth Section -->
+    <section class="auth-section" data-aos="fade-up">
+        <div class="container">
+            <div class="auth-card">
+                <h2><i class="fas fa-gem"></i> Accédez aux surprises</h2>
+                <p>Inscrivez-vous pour débloquer les cases chaque jour et recevoir les futures éditions.</p>
+                
+                <div class="auth-form">
+                    <input type="email" id="email" placeholder="votre@email.com" class="modern-input">
+                    <button onclick="login()" class="btn-primary">
+                        <i class="fas fa-paper-plane"></i> Recevoir le lien magique
+                    </button>
+                </div>
+                
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-lock"></i>
+                        <span>Pas de mot de passe</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-gift"></i>
+                        <span>Surprises gratuites</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Ouverture quotidienne</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" data-aos="fade-up">
+        <div class="container">
+            <h2><i class="fas fa-rocket"></i> Qu'y a-t-il dans les cases ?</h2>
+            <div class="categories">
+                <div class="category-card" data-aos="flip-left">
+                    <div class="category-icon dev">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Développement</h3>
+                    <p>Scripts Python, outils web, snippets CSS/JS, templates, extensions VS Code</p>
+                </div>
+                <div class="category-card" data-aos="flip-left" data-aos-delay="100">
+                    <div class="category-icon maker">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3>Maker & Électronique</h3>
+                    <p>Plans PCB, code Arduino, projets Raspberry Pi, modèles 3D imprimables</p>
+                </div>
+                <div class="category-card" data-aos="flip-left" data-aos-delay="200">
+                    <div class="category-icon design">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3>Design & 3D</h3>
+                    <p>Assets graphiques, textures, scènes Blender/Fusion 360, ressources créatives</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advent Grid -->
+    <section class="advent-section" id="advent-grid">
+        <div class="container">
+            <h2 data-aos="fade-up"><i class="fas fa-box-open"></i> Ouvrez vos surprises</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
+                Cliquez sur les cases pour découvrir la surprise du jour
+            </p>
+            
+            <div class="calendar-grid" id="calendar-grid">
+                <!-- Les cases seront générées par JavaScript -->
+            </div>
+            
+            <div class="today-hint" data-aos="fade-up">
+                <i class="fas fa-lightbulb"></i>
+                <p>Aujourd'hui : <span id="today-theme">Chargement...</span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3><i class="fas fa-calendar-alt"></i> Advent Calendar</h3>
+                    <p>Des surprises techniques quotidiennes pour la communauté créative.</p>
+                    <div class="social">
+                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Ressources</h4>
+                    <a href="#">Archive 2020 à 2025</a>
+                    <a href="#">Projets perso </a>
+                    <a href="#">Contributeurs</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 Advent Calendar — Fait avec <i class="fas fa-heart" style="color:var(--error-color)"></i> pour la communauté</p>
+                <p class="dev-credit"><a href="https://github.com/berru-g" target="_blank">dev by berru-g</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script type="module" src="script.js"></script>
+    <script>
+        // Initialiser AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+
+        // Compte à rebours jusqu'au 25 décembre
+        function updateCountdown() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const christmas = new Date(currentYear, 11, 25);
+            
+            // Si Noël est passé cette année, viser l'année prochaine
+            if (now > christmas) {
+                christmas.setFullYear(currentYear + 1);
+            }
+            
+            const diff = christmas - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+        }
+        
+        updateCountdown();
+        setInterval(updateCountdown, 3600000); // Mettre à jour toutes les heures
+    </script>
+</body>
+</html>

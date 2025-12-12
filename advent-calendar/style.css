@@ -1,0 +1,390 @@
+/* --- VARIABLES GLOBALES --- */
+:root {
+    --bg-dark: #0d0f14;
+    --bg-card: #151922;
+    --accent: #4bd3ff;
+    --accent-soft: rgba(75, 211, 255, 0.2);
+    --text: #e8eef7;
+    --text-soft: #99a1b3;
+    --radius: 18px;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    --gradient: linear-gradient(135deg, #4bd3ff, #3a76ff);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+/* --- HERO --- */
+.hero {
+    padding: 90px 0 120px;
+    text-align: center;
+    background: radial-gradient(circle at top, #1a2030, #0d0f14 80%);
+    position: relative;
+}
+
+.hero h1 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+.hero .subtitle {
+    margin-top: 10px;
+    color: var(--text-soft);
+    font-size: 1.1rem;
+}
+
+/* --- COUNTDOWN --- */
+.countdown {
+    margin-top: 30px;
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+}
+
+.countdown-item span {
+    font-size: 2.4rem;
+    font-weight: 700;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.countdown small {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.9rem;
+    color: var(--text-soft);
+}
+
+/* --- AUTH CARD --- */
+.auth-section {
+    margin-top: -60px;
+    padding-bottom: 60px;
+}
+
+.auth-card {
+    background: var(--bg-card);
+    padding: 40px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.auth-card h2 {
+    font-family: "Space Grotesk";
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+.auth-form {
+    margin-top: 25px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.modern-input {
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    border: 1px solid #2a2f3d;
+    background: #0f121a;
+    color: var(--text);
+    width: 260px;
+    font-size: 1rem;
+    transition: 0.2s;
+}
+
+.modern-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.btn-primary {
+    background: var(--gradient);
+    padding: 14px 22px;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: #fff;
+    font-size: 1rem;
+    transition: 0.25s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(75, 211, 255, 0.25);
+}
+
+.features {
+    margin-top: 30px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-soft);
+    font-size: 0.95rem;
+}
+
+.feature i {
+    color: var(--accent);
+}
+
+/* --- ABOUT / CATEGORIES --- */
+.about-section h2 {
+    text-align: center;
+    font-family: "Space Grotesk";
+    margin-bottom: 40px;
+}
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+.category-card {
+    background: var(--bg-card);
+    padding: 30px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: 0.25s;
+}
+
+.category-card:hover {
+    transform: translateY(-4px);
+}
+
+.category-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+}
+
+.category-icon.dev {
+    background: rgba(75, 211, 255, 0.15);
+    color: var(--accent);
+}
+
+.category-icon.maker {
+    background: rgba(255, 174, 0, 0.2);
+    color: #ffae00;
+}
+
+.category-icon.design {
+    background: rgba(255, 96, 195, 0.2);
+    color: #ff60c3;
+}
+
+/* --- ADVENT GRID --- */
+.advent-section {
+    margin-top: 60px;
+    text-align: center;
+}
+
+.calendar-grid {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 18px;
+}
+
+.calendar-grid .day {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 22px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+    border: 1px solid #1f232e;
+}
+
+.calendar-grid .day:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+}
+
+.advent-door {
+    aspect-ratio: 1;
+    background: var(--card-bg);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    border: 3px solid transparent;
+    box-shadow: 0 8px 25px var(--shadow-color);
+}
+
+.advent-door:hover:not(.locked):not(.opened) {
+    transform: translateY(-10px) scale(1.05);
+    border-color: var(--primary-color);
+    box-shadow: 0 15px 40px rgba(171, 159, 242, 0.25);
+}
+
+.advent-door.locked {
+    cursor: not-allowed;
+    opacity: 0.6;
+    filter: grayscale(0.3);
+}
+
+.advent-door.opened {
+    background: linear-gradient(135deg, var(--pastel-green), var(--pastel-blue));
+    color: white;
+}
+
+.advent-door .day-number {
+    font-size: 3rem;
+    font-weight: 700;
+    font-family: 'Space Grotesk', sans-serif;
+    margin-bottom: 10px;
+}
+
+.advent-door .day-title {
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 0 10px;
+    font-weight: 500;
+}
+
+.advent-door.locked .day-number {
+    color: var(--titre-color);
+}
+
+.advent-door.opened .day-number {
+    color: white;
+}
+
+.advent-door .lock-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: var(--titre-color);
+    font-size: 1.2rem;
+}
+
+.advent-door.opened .lock-icon {
+    display: none;
+}
+
+.advent-door.opened .check-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.today-hint {
+    margin-top: 35px;
+    color: var(--text-soft);
+    font-size: 1rem;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.today-hint i {
+    color: var(--accent);
+}
+
+/* --- FOOTER --- */
+footer {
+    margin-top: 80px;
+    padding: 50px 0;
+    background: #0b0d12;
+    font-size: 0.95rem;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: space-between;
+}
+
+.footer-brand h3 {
+    font-family: "Space Grotesk";
+}
+
+.social a {
+    margin-right: 12px;
+    font-size: 1.2rem;
+    color: var(--text-soft);
+    transition: 0.2s;
+}
+
+.social a:hover {
+    color: var(--accent);
+}
+
+.footer-bottom {
+    flex-direction: column;
+    display: flex;
+    gap: 10px;
+    margin-top: 40px;
+    text-align: center;
+    color: var(--text-soft);
+}
+
+.footer-bottom a {
+    color: var(--accent);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 700px) {
+    .auth-form {
+        flex-direction: column;
+    }
+
+    .countdown {
+        gap: 20px;
+    }
+
+    .hero h1 {
+        font-size: 2.4rem;
+    }
+}
