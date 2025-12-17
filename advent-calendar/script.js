@@ -53,7 +53,7 @@ window.login = async () => {
     const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-            emailRedirectTo: window.location.origin
+            emailRedirectTo: 'https://gael-berru.com/advent-calendar/' //window.location.origin
         }
     });
     
@@ -218,7 +218,7 @@ function getSurpriseLink(day) {
         "https://github.com/berru-g/weward-auto", //21 Automatise l'app WEWARD
         "https://github.com/berru-g/MAKE_PLAY-1", //22 PCB make&play
         "https://github.com/berru-g/3Dscrollanimator", //23 Template SAAS
-        "https://gael-berru.com/surprise-noel-2024/" //24 Surprise spéciale Noël
+        "https://github.com/berru-g/OTTO/chatSMB/" //24 Surprise spéciale Noël
         
     ];
     return links[day - 1] || "https://gael-berru.com/advent-calendar/";
