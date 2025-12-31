@@ -1,144 +1,1516 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
+
 <head>
-    <title>Générateur d'Images de Tracking nonfonctionnel</title>
     <meta charset="UTF-8">
-        
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Pixel - Analytics Souverains | Documentation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+
     <style>
-        .share-container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            font-family: Arial, sans-serif;
+        /* GitHub-like Theme */
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --border-color: #30363d;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --text-tertiary: #6e7681;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-purple: #bc8cff;
+            --accent-red: #f85149;
+            --accent-yellow: #e3b341;
         }
-        .form-group {
-            margin-bottom: 15px;
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
         }
-        input, select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+
+        /* Layout GitHub-like */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
-        .preview {
-            margin: 20px 0;
-            text-align: center;
+
+        /* Header Navigation */
+        .header {
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        .preview img {
-            max-width: 100%;
-            border: 1px solid #ddd;
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
         }
-        .share-links {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 5px;
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 18px;
         }
-        .url-box {
-            background: white;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin: 10px 0;
-            word-break: break-all;
-            font-family: monospace;
+
+        .nav-brand img {
+            width: 32px;
+            height: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-blue);
+        }
+
+        .nav-links a.active {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 48px;
+            padding: 48px 0;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            align-self: start;
+        }
+
+        .sidebar-section {
+            margin-bottom: 32px;
+        }
+
+        .sidebar-section h3 {
             font-size: 12px;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            margin-bottom: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-links {
+            list-style: none;
+        }
+
+        .sidebar-links li {
+            margin-bottom: 8px;
+        }
+
+        .sidebar-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            display: block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .sidebar-links a:hover {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .sidebar-links a.active {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            font-weight: 500;
+            border-left: 3px solid var(--accent-blue);
+        }
+
+        /* Content */
+        .content {
+            min-width: 0;
+        }
+
+        .hero {
+            margin-bottom: 64px;
+            padding: 40px;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, var(--accent-purple)20, transparent 50%);
+            opacity: 0.1;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            max-width: 600px;
+        }
+
+        .hero-badges {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge.primary {
+            background-color: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        .section {
+            margin-bottom: 64px;
+            scroll-margin-top: 100px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-header h2 {
+            font-size: 32px;
+            font-weight: 600;
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-tertiary);
+            border-radius: 8px;
+            font-size: 20px;
+        }
+
+        /* Cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 24px 0;
+        }
+
+        .feature-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-tertiary);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            font-size: 24px;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Code Blocks */
+        .code-container {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin: 24px 0;
+            overflow: hidden;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-title {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .code-copy {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .code-copy:hover {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .code-block {
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        pre[class*="language-"] {
+            margin: 0;
+            background: transparent !important;
+        }
+
+        .code-block code {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* Steps */
+        .steps {
+            counter-reset: step-counter;
+        }
+
+        .step {
+            display: flex;
+            margin-bottom: 32px;
+            padding-left: 60px;
+            position: relative;
+        }
+
+        .step::before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            background-color: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .step-content h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        /* Comparison Table */
+        .comparison {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison th,
+        .comparison td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .comparison th {
+            background-color: var(--bg-tertiary);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .comparison tr:last-child td {
+            border-bottom: none;
+        }
+
+        .check {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .cross {
+            color: var(--accent-red);
+            font-weight: 600;
+        }
+
+        /* Demo Section */
+        .demo-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 24px 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 16px;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .btn {
+            padding: 10px 24px;
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #4a93ff;
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--border-color);
+        }
+
+        /* Preview */
+        .preview-container {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 24px;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 48px 0;
+            margin-top: 64px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-blue);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .sidebar {
+                position: static;
+                order: 2;
+            }
+
+            .content {
+                order: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 24px;
+                text-align: center;
+            }
+        }
+    </style>
+
+    <!-- Bannière Cookie - Conserve ton style -->
+    <style>
+        :root {
+            --background-color: #f1f1f1;
+            --text-color: #000000;
+            --titre-color: grey;
+            --primary-color: #ab9ff2;
+            --border-color: #dcdcdc;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --input-background: #f9f9f9;
+            --secondary-color: #2575fc;
+            --success-color: #60d394;
+            --error-color: #ee6055;
+            --jaune-color: #ffd97d
+        }
+
+        #cookie-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 500px;
+            background: #fff;
+            color: var(--text-color);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            z-index: 10000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            animation: slideUp 0.5s ease-out
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0)
+            }
+        }
+
+        .cookie-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px
+        }
+
+        .cookie-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px
+        }
+
+        .cookie-title {
+            font-weight: 600;
+            color: var(--text-color);
+            margin: 0
+        }
+
+        .cookie-description {
+            color: var(--titre-color);
+            line-height: 1.5;
+            margin-bottom: 20px;
+            font-size: 14px
+        }
+
+        .cookie-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap
+        }
+
+        .cookie-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            min-width: 120px
+        }
+
+        .cookie-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--shadow-color)
+        }
+
+        .accept-necessary {
+            background: var(--input-background);
+            color: var(--text-color);
+            border: 1px solid var(--border-color)
+        }
+
+        .accept-necessary:hover {
+            background: var(--border-color)
+        }
+
+        .accept-all {
+            background: var(--primary-color);
+            color: #fff
+        }
+
+        .accept-all:hover {
+            background: #9a8de0;
+            box-shadow: 0 4px 12px rgb(171 159 242 / .3)
+        }
+
+        .reject-all {
+            background: var(--error-color);
+            color: #fff
+        }
+
+        .reject-all:hover {
+            background: #e0554a
+        }
+
+        .cookie-footer {
+            margin-top: 15px;
+            font-size: 12px;
+            color: var(--titre-color);
+            text-align: center
+        }
+
+        .cookie-footer a {
+            color: var(--primary-color);
+            text-decoration: none
+        }
+
+        .cookie-footer a:hover {
+            text-decoration: underline
+        }
+
+        @media (max-width:768px) {
+            #cookie-banner {
+                bottom: 10px;
+                width: 95%;
+                padding: 20px
+            }
+
+            .cookie-buttons {
+                flex-direction: column
+            }
+
+            .cookie-btn {
+                min-width: auto;
+                width: 100%
+            }
+        }
+
+        /* Animations pour la bannière */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
         }
     </style>
 </head>
+
 <body>
-    <div class="share-container">
-        <h1>Générateur d'Image de Tracking</h1>
-        <a href="dashboard.php">🟪</a>
-        <div class="form-group">
-            <label>Nom :</label>
-            <input type="text" id="shared_by" placeholder="Ex: Gael" value="Gael">
+    <!-- Header Navigation -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="#" class="nav-brand">
+                    <div
+                        style="background: linear-gradient(135deg, #667eea, #764ba2); width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">
+                        🟦</div>
+                    Smart Pixel
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#introduction" class="active">Introduction</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#usage">Utilisation</a></li>
+                    <li><a href="#demo">Démo</a></li>
+                    <li><a href="https://github.com/berru-g/cookie-tracking" target="_blank">GitHub</a></li>
+                </ul>
+            </nav>
         </div>
-        
-        <div class="form-group">
-            <label>Campagne :</label>
-            <select id="campaign">
-                <option value="partage-social">Partage Social</option>
-                <option value="influenceur">Campagne Influenceur</option>
-                <option value="newsletter">Newsletter</option>
-                <option value="promotion">Promotion</option>
-                <option value="evenement">Événement</option>
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label>Source :</label>
-            <select id="source">
-                <option value="twitter">Twitter</option>
-                <option value="facebook">Facebook</option>
-                <option value="instagram">Instagram</option>
-                <option value="linkedin">LinkedIn</option>
-                <option value="email">Email</option>
-                <option value="website">Site Web</option>
-            </select>
-        </div>
-        
-        <button onclick="generateImage()">Générer l'Image</button>
-        
-        <div class="preview" id="preview">
-            <h3>Aperçu de votre image :</h3>
-            <img id="trackingImage" src="" alt="Image de tracking">
-        </div>
-        
-        <div class="share-links">
-            <h3>Liens de partage :</h3>
-            
-            <strong>URL de l'image :</strong>
-            <div class="url-box" id="imageUrl"></div>
-            
-            <strong>Code HTML :</strong>
-            <div class="url-box" id="htmlCode"></div>
-            
-            <strong>Code Markdown :</strong>
-            <div class="url-box" id="markdownCode"></div>
-            
-            <strong>Pour les réseaux sociaux :</strong>
-            <div class="url-box" id="socialText"></div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3>Documentation</h3>
+                    <ul class="sidebar-links">
+                        <li><a href="#introduction" class="active">🎯 Introduction</a></li>
+                        <li><a href="#features">✨ Fonctionnalités</a></li>
+                        <li><a href="#philosophy">🛡️ Philosophie</a></li>
+                        <li><a href="#installation">🚀 Installation</a></li>
+                        <li><a href="#configuration">⚙️ Configuration</a></li>
+                        <li><a href="#usage">📖 Utilisation</a></li>
+                        <li><a href="#demo">🎮 Démo Live</a></li>
+                        <li><a href="#comparison">📊 Comparaison</a></li>
+                        <li><a href="#faq">❓ FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Ressources</h3>
+                    <ul class="sidebar-links">
+                        <li><a href="https://github.com/berru-g/cookie-tracking" target="_blank">📦 Code Source</a></li>
+                        <li><a href="https://github.com/berru-g/cookie-tracking/issues" target="_blank">🐛 Issues</a>
+                        </li>
+                        <li><a href="https://github.com/berru-g/cookie-tracking/wiki" target="_blank">📚 Wiki</a></li>
+                        <li><a href="#api">🔌 API Reference</a></li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- Content -->
+            <main class="content">
+                <!-- Hero Section -->
+                <section id="introduction" class="hero">
+                    <h1>Smart Pixel</h1>
+                    <p class="hero-subtitle">
+                        Une alternative souveraine à Google Analytics. Vos données restent sur vos serveurs,
+                        pas chez les GAFAM. Conforme RGPD, open source, et éthique.
+                    </p>
+                    <div class="hero-badges">
+                        <span class="badge primary">🔓 Open Source</span>
+                        <span class="badge">⚖️ RGPD Compliant</span>
+                        <span class="badge">🚀 Auto-hébergé</span>
+                        <span class="badge">🐦 Léger (181KO)</span>
+                    </div>
+                </section>
+
+                <!-- Features -->
+                <section id="features" class="section">
+                    <div class="section-header">
+                        <div class="section-icon">✨</div>
+                        <h2>Fonctionnalités</h2>
+                    </div>
+
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">🔒</div>
+                            <h3>Souveraineté des données</h3>
+                            <p>Vos données restent sur vos serveurs. Aucune transmission à des tiers ou aux GAFAM.</p>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-icon">⚖️</div>
+                            <h3>Conforme RGPD</h3>
+                            <p>Consentement explicite, anonymisation, droit à l'oubli intégrés dès la conception.</p>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-icon">🚀</div>
+                            <h3>Performance optimale</h3>
+                            <p>Script léger (181KO), tracking asynchrone, pas d'impact sur le temps de chargement.</p>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-icon">📊</div>
+                            <h3>Dashboard complet</h3>
+                            <p>Visualisation des données en temps réel, export CSV/JSON, API RESTful.</p>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-icon">🔄</div>
+                            <h3>Tracking intelligent</h3>
+                            <p>Visites, sessions, clics, scroll, sources de trafic, géolocalisation anonymisée.</p>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-icon">🔧</div>
+                            <h3>Facile à déployer</h3>
+                            <p>PHP + MySQL, installation en 5 minutes, documentation complète.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Philosophy -->
+                <section id="philosophy" class="section">
+                    <div class="section-header">
+                        <div class="section-icon">🛡️</div>
+                        <h2>Notre Philosophie</h2>
+                    </div>
+
+                    <p>Smart Pixel est né d'une conviction simple : <strong>vos données vous appartiennent</strong>.</p>
+
+                    <p>Dans un écosystème numérique dominé par les GAFAM (Google, Apple, Facebook, Amazon, Microsoft),
+                        chaque clic, chaque visite, chaque interaction est monétisée et revendue. Ces géants du web
+                        font de vos visiteurs <strong>leur produit</strong>.</p>
+
+                    <div class="code-container" style="margin: 24px 0;">
+                        <div class="code-header">
+                            <div class="code-title">Notre engagement</div>
+                        </div>
+                        <div class="code-block">
+                            <pre><code class="language-js">// Pas de tracking sans consentement
+if (!userConsent.given) {
+    return; // Nous n'avons pas le droit
+}
+
+// Pas de données personnelles
+const anonymizedData = {
+    sessionId: generateAnonymousId(),
+    country: getCountryFromIP(anonymizeIP(ip)),
+    actions: userActions,
+    // Jamais : email, nom, adresse, etc.
+};
+
+// Stockage local uniquement
+saveToDatabase(anonymizedData); // Vos serveurs → Votre contrôle</code></pre>
+                        </div>
+                    </div>
+
+                    <p>Avec Smart Pixel, vous reprenez le contrôle :</p>
+                    <ul style="margin: 16px 0 16px 24px; color: var(--text-secondary);">
+                        <li>Les données de vos visiteurs restent sur <strong>vos serveurs</strong></li>
+                        <li>Vous respectez réellement le <strong>RGPD</strong></li>
+                        <li>Vous offrez une alternative <strong>éthique</strong> à vos utilisateurs</li>
+                        <li>Vous évitez les amendes potentielles (jusqu'à 4% du CA)</li>
+                    </ul>
+                </section>
+
+                <!-- Installation -->
+                <section id="installation" class="section">
+                    <div class="section-header">
+                        <div class="section-icon">🚀</div>
+                        <h2>Installation</h2>
+                    </div>
+
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-content">
+                                <h3>1. Clonez le repository</h3>
+                                <p>Commencez par récupérer le code source en local :</p>
+                                <div class="code-container">
+                                    <div class="code-header">
+                                        <div class="code-title">Terminal</div>
+                                        <button class="code-copy" onclick="copyCode(this)">Copier</button>
+                                    </div>
+                                    <div class="code-block">
+                                        <pre><code class="language-bash">git clone https://github.com/berru-g/cookie-tracking.git
+cd smart_phpixel</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-content">
+                                <h3>2. Configurez la base de données</h3>
+                                <p>Créez une base MySQL et importez le schéma :</p>
+                                <div class="code-container">
+                                    <div class="code-header">
+                                        <div class="code-title">MySQL</div>
+                                        <button class="code-copy" onclick="copyCode(this)">Copier</button>
+                                    </div>
+                                    <div class="code-block">
+                                        <pre><code class="language-sql">CREATE DATABASE smart_pixel;
+USE smart_pixel;
+
+CREATE TABLE smart_pixel_tracking (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    timestamp DATETIME,
+    ip_address VARCHAR(45),
+    user_agent TEXT,
+    page_url TEXT,
+    source VARCHAR(100),
+    campaign VARCHAR(100),
+    country VARCHAR(100),
+    city VARCHAR(100),
+    click_data JSON,
+    viewport VARCHAR(50),
+    session_id VARCHAR(100),
+    INDEX idx_timestamp (timestamp),
+    INDEX idx_source (source),
+    INDEX idx_country (country)
+);</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-content">
+                                <h3>3. Configurez les fichiers PHP</h3>
+                                <p>Éditez le fichier <code>config.php</code> avec vos identifiants :</p>
+                                <div class="code-container">
+                                    <div class="code-header">
+                                        <div class="code-title">config.php</div>
+                                        <button class="code-copy" onclick="copyCode(this)">Copier</button>
+                                    </div>
+                                    <div class="code-block">
+                                        <pre><code class="language-php">< &alt php
+// Configuration de la base de données
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'smart_pixel');
+define('DB_USER', 'votre_utilisateur');
+define('DB_PASS', 'votre_mot_de_passe');
+define('DB_TABLE', 'tracking_data');
+
+// Configuration du site
+define('SITE_URL', 'https://votre-site.com');
+?></code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-content">
+                                <h3>4. Intégrez le script</h3>
+                                <p>Ajoutez Smart Pixel dans le <code>&lt;head&gt;</code> de votre site :</p>
+                                <div class="code-container">
+                                    <div class="code-header">
+                                        <div class="code-title">index.html</div>
+                                        <button class="code-copy" onclick="copyCode(this)">Copier</button>
+                                    </div>
+                                    <div class="code-block">
+                                        <pre><code class="language-html">&lt;!-- Smart Pixel Analytics --&gt;
+&lt;script src="./smart_phpixel/smart-pixel.js"&gt;&lt;/script&gt;</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Usage -->
+                <section id="usage" class="section">
+                    <div class="section-header">
+                        <div class="section-icon">📖</div>
+                        <h2>Utilisation Avancée</h2>
+                    </div>
+
+                    <h3 style="margin-bottom: 16px;">Configuration du Tracking</h3>
+                    <p>Smart Pixel peut être configuré pour différents types de tracking :</p>
+
+                    <div class="code-container">
+                        <div class="code-header">
+                            <div class="code-title">Configuration avancée</div>
+                            <button class="code-copy" onclick="copyCode(this)">Copier</button>
+                        </div>
+                        <div class="code-block">
+                            <pre><code class="language-js">// Configuration personnalisée
+const pixelConfig = {
+    endpoint: '/smart_phpixel/pixel.php',
+    trackPageviews: true,
+    trackClicks: true,
+    trackScroll: true,
+    trackForms: true,
+    anonymizeIP: true,
+    sessionTimeout: 30, // minutes
+    debug: false
+};
+
+// Initialisation manuelle
+const pixel = new SmartPixel(pixelConfig);
+
+// Tracking d'événements personnalisés
+pixel.trackEvent('conversion', {
+    value: 49.99,
+    currency: 'EUR',
+    product_id: 'prod_123'
+});</code></pre>
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 32px 0 16px 0;">Image de Tracking</h3>
+                    <p>Utilisez des images invisibles pour le tracking dans les emails et réseaux sociaux :</p>
+
+                    <div class="code-container">
+                        <div class="code-header">
+                            <div class="code-title">HTML pour emails</div>
+                            <button class="code-copy" onclick="copyCode(this)">Copier</button>
+                        </div>
+                        <div class="code-block">
+                            <pre><code class="language-html">&lt;img src="https://votre-site.com/tracking.php?campaign=newsletter-juin&amp;source=email&amp;user_id=123" 
+     width="1" height="1" style="display:none;" 
+     alt="Smart Pixel Tracking"&gt;</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Demo -->
+                <section id="demo" class="section">
+                    <div class="section-header">
+                        <div class="section-icon">🎮</div>
+                        <h2>Démonstration Live</h2>
+                    </div>
+
+                    <p>Générez une image de tracking personnalisée pour vos campagnes :</p>
+
+                    <div class="demo-card">
+                        <div class="form-group">
+                            <label>Nom de la campagne</label>
+                            <input type="text" id="campaignName" class="form-control" value="Lancement Produit"
+                                placeholder="Ex: Newsletter Juin">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Source du trafic</label>
+                            <select id="trafficSource" class="form-control">
+                                <option value="email">Email</option>
+                                <option value="twitter">Twitter</option>
+                                <option value="linkedin">LinkedIn</option>
+                                <option value="facebook">Facebook</option>
+                                <option value="newsletter">Newsletter</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nom du partenaire (optionnel)</label>
+                            <input type="text" id="partnerName" class="form-control" placeholder="Ex: berru"
+                                value="berru">
+                        </div>
+
+                        <button class="btn" onclick="generateTrackingImage()" style="margin-top: 16px;">
+                            Générer l'image de tracking
+                        </button>
+
+                        <div id="previewSection" style="display: none; margin-top: 32px;">
+                            <h3 style="margin-bottom: 16px;">Image générée</h3>
+                            <div class="preview-container">
+                                <img id="trackingPreview" class="preview-image" src="" alt="Preview">
+                            </div>
+
+                            <h3 style="margin: 24px 0 12px 0;">📋 Code d'intégration</h3>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <div class="code-title">HTML</div>
+                                    <button class="code-copy" onclick="copyCode(this)">Copier</button>
+                                </div>
+                                <div class="code-block">
+                                    <pre><code id="htmlCode" class="language-html"></code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Comparison -->
+                <section id="comparison" class="section">
+                    <div class="section-header">
+                        <div class="section-icon">📊</div>
+                        <h2>Comparaison avec Google Analytics</h2>
+                    </div>
+
+                    <table class="comparison">
+                        <thead>
+                            <tr>
+                                <th>Caractéristique</th>
+                                <th>Smart Pixel</th>
+                                <th>Google Analytics</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Propriété des données</strong></td>
+                                <td><span class="check">✅ Vos serveurs</span></td>
+                                <td><span class="cross">❌ Serveurs Google</span></td>
+                            </tr>
+                            <!--<tr>
+                                <td><strong>Conformité RGPD</strong></td>
+                                <td><span class="check">✅ Native & automatique</span></td>
+                                <td><span class="cross">❌ Complexe à configurer</span></td>
+                            </tr>-->
+                            <tr>
+                                <td><strong>Transparence</strong></td>
+                                <td><span class="check">✅ Code source ouvert</span></td>
+                                <td><span class="cross">❌ Boîte noire</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Impact performance</strong></td>
+                                <td><span class="check">✅ 181KO (léger)</span></td>
+                                <td><span class="cross">❌ ?KB + tierces parties</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Coût</strong></td>
+                                <td><span class="check">✅ Gratuit (open source)</span></td>
+                                <td><span class="cross">✅ Gratuit Limité</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Souveraineté</strong></td>
+                                <td><span class="check">✅ Hébergement chez vous ou votre hebergeur</span></td>
+                                <td><span class="cross">❌ Soumis au Cloud Act (USA)</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dépendance</strong></td>
+                                <td><span class="check">✅ Votre Hébergement</span></td>
+                                <td><span class="cross">❌ Dépendant de Google</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- FAQ -->
+                <section id="faq" class="section">
+                    <div class="section-header">
+                        <div class="section-icon">❓</div>
+                        <h2>Questions Fréquentes</h2>
+                    </div>
+
+                    <div style="margin-bottom: 32px;">
+                        <h3 style="margin-bottom: 12px;">🤔 Smart Pixel est-il vraiment conforme RGPD ?</h3>
+                        <p style="color: var(--text-secondary);">Oui, par conception : consentement explicite,
+                            anonymisation de l'IP et chiffrement possible, données stockées chez vous ou votre
+                            hébergeur.</p>
+                    </div>
+
+                    <div style="margin-bottom: 32px;">
+                        <h3 style="margin-bottom: 12px;">💾 Quelles sont les limites techniques ?</h3>
+                        <p style="color: var(--text-secondary);">Smart Pixel est conçu pour les sites jusqu'à 10K
+                            visites/mois. Pour plus de volume, une optimisation de la base de données est recommandée.
+                        </p>
+                    </div>
+
+                    <div style="margin-bottom: 32px;">
+                        <h3 style="margin-bottom: 12px;">🔧 Puis-je personnaliser le dashboard ?</h3>
+                        <p style="color: var(--text-secondary);">Absolument si vous codez un peut ou si vous demandez
+                            gentillement à une IA! Le code est entièrement modifiable. Vous pouvez ajouter des
+                            graphiques, des exports personnalisés, ou intégrer d'autres outils, faire un widget de ce
+                            tool etc.</p>
+                    </div>
+                </section>
+            </main>
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <p style="color: var(--text-secondary);">🟦 Smart Pixel - Analytics Souverains</p>
+                    <p style="color: var(--text-tertiary); font-size: 14px; margin-top: 8px;">© 2025 -
+                        github.com/berru-g</p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/berru-g/cookie-tracking" target="_blank">GitHub</a>
+                    <a href="#">Documentation</a>
+                    <a href="https://gael-berru.com">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bannière Cookie - Identique à ton original -->
+    <div id="cookie-banner" style="display: none;">
+        <div class="cookie-header">
+            <div class="cookie-icon">🛡️</div>
+            <h3 class="cookie-title">Transparence totale sur vos données</h3>
+        </div>
+
+        <p class="cookie-description">
+            <strong>Ici, aucun de vos clics n'est vendu à Google ou Facebook.</strong><br>
+            J'utilise <strong>Smart Pixel</strong>, un système d'analyse développé avec éthique, dans le respect des loi
+            RGPD.
+            <br><br>
+            En autorisant l'analyse, vous m'aidez à améliorer ce site <strong>sans enrichir les GAFAM de vos
+                données</strong>.
+        </p>
+
+        <div class="cookie-buttons">
+            <button class="cookie-btn reject-all" onclick="acceptCookies('none')">
+                Non merci
+            </button>
+            <!--<button class="cookie-btn accept-necessary" onclick="acceptCookies('necessary')">
+                Nécessaires uniquement
+            </button>-->
+            <button class="cookie-btn accept-all" onclick="acceptCookies('all')">
+                Ok pour moi
+            </button>
+        </div>
+
+        <div class="cookie-footer">
+            <a href="https://github.com/berru-g/berru-g/tree/main/smart_phpixel" target="_blank">Voir le code source de
+                Smart Pixel</a>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+
     <script>
-        function generateImage() {
-            const sharedBy = document.getElementById('shared_by').value;
-            const campaign = document.getElementById('campaign').value;
-            const source = document.getElementById('source').value;
-            
-            const baseUrl = 'https://gael-berru.com/smart_phpixel/image-tracker.php';
-            const params = new URLSearchParams({
-                source: source,
-                campaign: campaign,
-                shared_by: sharedBy,
-                image_type: 'social_share'
-            });
-            
-            const imageUrl = `${baseUrl}?${params}`;
-            
-            // Mise à jour de l'aperçu
-            document.getElementById('trackingImage').src = imageUrl;
-            document.getElementById('imageUrl').textContent = imageUrl;
-            
-            // Codes de partage
-            document.getElementById('htmlCode').textContent = 
-                `<img src="${imageUrl}" alt="Smart Pixel Analytics" width="800" height="600">`;
-            
-            document.getElementById('markdownCode').textContent = 
-                `![Smart Pixel Analytics](${imageUrl})`;
-            
-            document.getElementById('socialText').textContent = 
-                `Découvrez mes analytics avec Smart Pixel! 📊 ${imageUrl} #Analytics #Tracking`;
+        // Fonction pour copier le code
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-container').querySelector('code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeBlock.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            // Animation de confirmation
+            const originalText = button.textContent;
+            button.textContent = '✓ Copié!';
+            button.style.backgroundColor = 'var(--accent-green)';
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+            }, 2000);
         }
-        
-        // Génère une image au chargement
-        generateImage();
+
+        // Génération d'image de tracking démo
+        function generateTrackingImage() {
+            const campaign = document.getElementById('campaignName').value;
+            const source = document.getElementById('trafficSource').value;
+            const partner = document.getElementById('partnerName').value;
+
+            // Simulation d'URL de tracking (dans la réalité, c'est votre endpoint PHP)
+            const imageUrl = `https://ton-site.com/smart_phpixel/pixel.php?${encodeURIComponent(campaign)}%0ASource:+${encodeURIComponent(source)}%0APartenaire:+${encodeURIComponent(partner)}`;
+
+            // Mise à jour de l'aperçu
+            document.getElementById('trackingPreview').src = imageUrl;
+
+            // Génération du code HTML
+            const htmlCode = `<img src="${imageUrl}" width="1" height="1" style="display:none;" alt="Smart Pixel Tracking">`;
+            document.getElementById('htmlCode').textContent = htmlCode;
+
+            // Affichage de la section
+            document.getElementById('previewSection').style.display = 'block';
+
+            // Scroll vers la prévisualisation
+            document.getElementById('previewSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Navigation fluide
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const headerHeight = document.querySelector('.header').offsetHeight;
+                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+
+                    // Mise à jour du menu actif
+                    document.querySelectorAll('.sidebar-links a').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Gestionnaire de consentement RGPD (identique à ton code)
+        const CookieManager = {
+            init() {
+                if (!this.getConsent()) {
+                    this.showBanner();
+                } else {
+                    this.loadScripts();
+                }
+            },
+
+            showBanner() {
+                setTimeout(() => {
+                    const banner = document.getElementById('cookie-banner');
+                    banner.style.display = 'block';
+                    this.createOverlay();
+                }, 1500);
+            },
+
+            createOverlay() {
+                const overlay = document.createElement('div');
+                overlay.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.5);
+                    z-index: 9999;
+                    animation: fadeIn 0.3s ease;
+                `;
+                overlay.id = 'cookie-overlay';
+                document.body.appendChild(overlay);
+            },
+
+            removeOverlay() {
+                const overlay = document.getElementById('cookie-overlay');
+                if (overlay) {
+                    overlay.style.animation = 'fadeOut 0.3s ease';
+                    setTimeout(() => overlay.remove(), 300);
+                }
+            },
+
+            acceptCookies(level) {
+                const consent = {
+                    level: level,
+                    date: new Date().toISOString(),
+                    necessary: true,
+                    analytics: level === 'all',
+                    marketing: level === 'all'
+                };
+
+                localStorage.setItem('cookieConsent', JSON.stringify(consent));
+                this.animateClose();
+                this.loadScripts();
+            },
+
+            animateClose() {
+                const banner = document.getElementById('cookie-banner');
+                banner.style.animation = 'slideDown 0.3s ease';
+                setTimeout(() => {
+                    banner.style.display = 'none';
+                    this.removeOverlay();
+                }, 300);
+            },
+
+            getConsent() {
+                return JSON.parse(localStorage.getItem('cookieConsent'));
+            },
+
+            loadScripts() {
+                const consent = this.getConsent();
+                if (!consent) return;
+
+                if (consent.analytics) {
+                    this.showConfirmation(consent.level);
+                }
+            },
+
+            showConfirmation(level) {
+                const message = level === 'all' ? 'Préférences enregistrées ✅' :
+                    level === 'necessary' ? 'Navigation privée activée 😷' :
+                        'Préférences sauvegardées 🔒';
+
+                const notification = document.createElement('div');
+                notification.textContent = message;
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: var(--success-color);
+                    color: white;
+                    padding: 10px 16px;
+                    border-radius: 8px;
+                    font-size: 14px;
+                    z-index: 10001;
+                    animation: slideInRight 0.3s ease;
+                `;
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.style.animation = 'slideOutRight 0.3s ease';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+        };
+
+        // Exposition globale
+        window.acceptCookies = CookieManager.acceptCookies.bind(CookieManager);
+
+        // Initialisation au chargement
+        document.addEventListener('DOMContentLoaded', function () {
+            CookieManager.init();
+            // Génère une image par défaut
+            generateTrackingImage();
+        });
     </script>
 </body>
+
 </html>

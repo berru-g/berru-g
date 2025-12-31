@@ -19,9 +19,9 @@
     <link rel="shortcut icon" href="/img/logo.png" />
     <link rel="apple-touch-icon" href="/img/logo.png" />
     <meta name="description"
-        content="Développeur autodidacte et passionné par les solutions web et web3. Je conçois des projets concrets alliant technologie, durabilité et impact social.">
+        content="Développeur autodidacte, je crée des sites sur-mesure et des outils souverains. Aucun template, aucune dépendance aux GAFAM. Pour ceux qui en ont marre du web bullshit.">
     <meta name="keywords"
-        content="site web sur mesure vertou, dev web Vertou, Gael Leberruyer, Gael Berru, web3, crypto enthusiast, vente de pixel, codeur de site nantes, developpeur nantes,">
+        content="site web sur mesure vertou, developpeur web Vertou, Gael Leberruyer, Gael Berru, outils souverains, smart pixel, web3, crypto enthusiast, enquete blockchain, vente de pixel, developpeur Vertou,">
     <meta name="author" content="Gael Berru.">
     <meta name="robots" content="noai">
     <meta property="og:url" content="https://gael-berru.com">
@@ -68,7 +68,9 @@
 }
 </script>
 
-    <!--  CookieSnippet or Componet.js  -->
+    <!--  CookieComponet.js  de smart pixel 
+      à integrer <script src="./smart_phpixel/CookieComponent.js" data-site-id="berru-g"></script>
+    -->
     <style>
         :root {
             --background-color: #f1f1f1;
@@ -124,12 +126,10 @@
         .cookie-icon {
             width: 32px;
             height: 32px;
-            background: var(--primary-color);
-            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px
+            font-size: 18px
         }
 
         .cookie-title {
@@ -233,14 +233,17 @@
 
     <div id="cookie-banner" style="display: none;">
         <div class="cookie-header">
-            <div class="cookie-icon">🍪</div>
-            <h3 class="cookie-title">Vie privée et cookies</h3>
+            <div class="cookie-icon">🛡️</div>
+            <h3 class="cookie-title">Transparence totale sur vos données</h3>
         </div>
 
         <p class="cookie-description">
-            Nous utilisons des cookies essentiels et des outils d'analyse pour comprendre comment vous utilisez notre
-            site.
-            Cela nous aide à améliorer votre expérience de navigation.
+            <strong>Ici, aucun de vos clics n'est vendu à Google ou Facebook.</strong><br>
+            J'utilise <strong>Smart Pixel</strong>, mon propre système d'analyse développé avec éthique, dans le respect
+            des loi RGPD.
+            <br><br>
+            En autorisant l'analyse, vous m'aidez à améliorer ce site <strong>sans enrichir les GAFAM de vos
+                données</strong>.
         </p>
 
         <div class="cookie-buttons">
@@ -256,8 +259,8 @@
         </div>
 
         <div class="cookie-footer">
-            <a href="#" target="_blank">Politique de confidentialité</a> •
-            <a href="#" target="_blank">Gérer les cookies</a>
+            <a href="https://github.com/berru-g/berru-g/tree/main/smart_phpixel" target="_blank">Voir le code source de
+                Smart Pixel</a>
         </div>
     </div>
 
@@ -356,7 +359,7 @@
 
             showConfirmation(level) {
                 const message = level === 'all' ? 'Préférences enregistrées ✅' :
-                    level === 'necessary' ? 'Cookies essentiels activés ⚙️' :
+                    level === 'necessary' ? 'Naviguation privé activé 😷' :
                         'Préférences sauvegardées 🔒';
 
                 // Petite notification discrète
@@ -383,26 +386,15 @@
             },
 
             loadGA4() {
-                console.log('🚀 Chargement de Google Analytics...');
-                // Votre code GA4 ici
-                window.dataLayer = window.dataLayer || [];
-                function gtag() { dataLayer.push(arguments); }
-                gtag('js', new Date());
+                console.log('🚀 NON Chargement de Google Analytics...');
+                // GA déguage
 
-                gtag('config', 'G-X99G5JK3MV');
             },
 
             loadHotjar() {
-                console.log('📊 Chargement de Hotjar...');
-                // Votre code Hotjar ici
-                (function (h, o, t, j, a, r) {
-                    h.hj = h.hj || function () { (h.hj.q = h.hj.q || []).push(arguments) };
-                    h._hjSettings = { hjid: 6578508, hjsv: 6 };
-                    a = o.getElementsByTagName('head')[0];
-                    r = o.createElement('script'); r.async = 1;
-                    r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
-                    a.appendChild(r);
-                })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+                console.log('📊 Chargement de Smart_phpixel');
+                // Hotjar aussi
+                //smart_phpixel.js
             }
         };
 
@@ -462,28 +454,6 @@
             CookieManager.init();
         });
     </script>
-
-    <!-- Google tag (gtag.js) 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-X99G5JK3MV"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'G-X99G5JK3MV');
-    </script>-->
-
-    <!-- Hotjar Tracking Code for gael berru 
-    <script>
-        (function (h, o, t, j, a, r) {
-            h.hj = h.hj || function () { (h.hj.q = h.hj.q || []).push(arguments) };
-            h._hjSettings = { hjid: 6578508, hjsv: 6 };
-            a = o.getElementsByTagName('head')[0];
-            r = o.createElement('script'); r.async = 1;
-            r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
-            a.appendChild(r);
-        })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
-    </script>-->
 
 </head>
 
@@ -631,12 +601,12 @@
 
     <!-- Intro -->
     <div class="demo-container" data-aos="fade-up" data-aos-delay="200">
-        <section id="home" class="content-section">
-            <h1 class="section-title" data-aos="fade-down" data-aos-duration="1500">Votre site web clé en main, prêt en
-                10 jours <br>
+        <!--<section id="home" class="content-section">
+            <h1 class="section-title" data-aos="fade-down" data-aos-duration="1500">Tu veux un site qui te ressemble ?
+                Pas un template. <br>
                 <small style="font-size: 1.2rem;">
                     <a href="#contact" style="color: #ab9ff2; text-decoration: underline;">
-                        Appel découverte offert (30 min)
+                        Premier appel : 30min, sans blabla.
                     </a>
                 </small>
             </h1>
@@ -651,102 +621,137 @@
                 en ligne sans y passer des mois.</p>
         </section>
 
-        <!--Test de changement automatique de la section intro 
-    - une intro par semaine pour tester le seo
-    ⚠️ baise la largeur du container ? 
-    <div class="demo-container" data-aos="fade-up" data-aos-delay="200">
-        <section id="home" class="content-section">
-            <h1 class="section-title" id="dynamic-h1">Chargement...</h1>
-            <p class="section-subtitle" id="dynamic-p1">Chargement du contenu...</p>
-            <p class="section-subtitle" id="dynamic-p2">Merci de patienter...</p>
-        </section>
-    </div>
-
-    <script>
-        window.addEventListener("DOMContentLoaded", () => {
-            const intros = [
-                {
-                    h1: "Créez un site web qui travaille pour vous",
-                    p1: "Développeur web passionné, <strong>j’aide les indépendants et créatifs à concevoir un site à leur image, pensé pour convertir et faire grandir leur activité.</strong>",
-                    p2: "Objectif : un site unique, esthétique et performant, qui transforme les visiteurs en clients."
-                },
-                {
-                    h1: "Un site sur-mesure, à l’image de votre vision",
-                    p1: "Développeur autodidacte, <strong>je transforme vos idées en une présence en ligne impactante.</strong>",
-                    p2: "Un site fluide, beau, et pensé pour vos objectifs."
-                },
-                {
-                    h1: "Un site. Une vision. Des résultats.",
-                    p1: "Je conçois des sites web pour indépendants et créatifs. <strong>Pensés pour capter, séduire et convertir sans blabla inutile.</strong>",
-                    p2: "Un outil simple, esthétique et efficace."
-                },
-                {
-                    h1: "Développement web sur-mesure pour les pros exigeants",
-                    p1: "J’accompagne freelances et entrepreneurs à créer un site rapide et efficace. <strong>Design personnalisé, SEO, sécurité et conversion au cœur de chaque projet.</strong>",
-                    p2: "Votre présence en ligne devient un levier stratégique."
-                }
-            ];
-
-            const now = new Date();
-            const todayUTC = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
-            const dayNumber = Math.floor((todayUTC - new Date(Date.UTC(now.getFullYear(), 0, 1))) / (1000 * 60 * 60 * 24));
-            const periodLength = 2; // tous les 2 jours
-            const index = Math.floor(dayNumber / periodLength) % intros.length;
-
-
-
-            const selectedIntro = intros[index];
-
-            document.getElementById("dynamic-h1").innerText = selectedIntro.h1;
-            document.getElementById("dynamic-p1").innerHTML = selectedIntro.p1;
-            document.getElementById("dynamic-p2").innerText = selectedIntro.p2;
-        });
-    </script>-->
-
         <div class="contact-form" data-aos="fade-up" data-aos-delay="300">
             <div class="profile-container">
                 <img src="https://avatars.githubusercontent.com/u/61543927?v=4" alt="Photo de profil"
                     class="profile-img" data-aos="fade-up" data-aos-delay="400">
-                <img src="https://gael-berru.com/smart_phpixel/pixel.php?source=siteperso&campaign=test_premier&medium=email"
+                <img src="https://gael-berru.com/smart_phpixel/pixel.php?source=siteperso"
                     width="1" height="1" style="display:none;">
                 <p class="dev-name" data-aos="fade-up" data-aos-delay="500">Qui suis-je ?</p>
                 <p class="dev-description" data-aos="fade-up" data-aos-delay="600">Créatif passionné. J'explore et
                     m'exprime sur le web depuis plus de 15 ans, donnant naissance à de nombreux projets. Je mets ma
-                    créativité et mes compétences au service de votre vision.</p>
+                    créativité et mes compétences au service de votre vision.
+                    <br><br>
+                    Ma philosophie : si l'outil parfait n'existe pas, je le crée. Comme ce site, qui n'utilise
+                    <strong>aucun</strong> tracker Google ou Facebook.
+                </p>
             </div>
-        </div>
+        </div>-->
 
-        <!-- Benefits Section -->
+        <!-- Benefits Section --
         <section class="benefits">
             <div class="container">
-                <h2 class="section-title">Pourquoi me confier votre site ?</h2>
+                <h2 class="section-title">Pourquoi moi et pas une agence ?</h2>
                 <div class="benefits-grid">
                     <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
                         <div class="benefit-icon">💡</div>
-                        <h3 data-aos="fade-right">Sur-mesure & unique</h3>
-                        <p>Votre site est codé à la main et à l'aide de l'IA, sans template, selon votre image et vos
-                            besoins. Conçu pour convertir : +30% de contacts en moyenne</p>
+                        <h3 data-aos="fade-right">Sur-mesure = Pas de template</h3>
+                        <p>Je ne copie-colle pas. Je code. Ton site est unique, comme ton activité. Résultat : +30% de
+                            conversion en moyenne. Pas de magie, du travail propre.</p>
                     </div>
                     <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
                         <div class="benefit-icon">⚙️</div>
-                        <h3 data-aos="fade-right">Optimisé SEO</h3>
-                        <p>Visible sur Google en 1 mois avec des bases solides pour un bon référencement naturel.</p>
+                        <h3 data-aos="fade-right">SEO qui marche. Point.</h3>
+                        <p>Pas de promesses de première page. Je pose des bases solides. Tu seras visible sur Google en
+                            1 mois. C'est technique, pas magique.</p>
                     </div>
                     <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
                         <div class="benefit-icon">💳</div>
-                        <h3 data-aos="fade-right">E-commerce</h3>
-                        <p>Vente en ligne sécurisée dès 500€. Intégration d'un systéme de paiement et d'une base de
-                            donnée sécurisé à tout moments.</p>
+                        <h3 data-aos="fade-right">E-commerce sans prise de tête</h3>
+                        <p>Boutique en ligne sécurisée. Paiement Stripe, base de données propre. Dès 500€. Je déteste
+                            les usines à gaz, je fais l'essentiel.</p>
                     </div>
                     <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
                         <div class="benefit-icon">🚀</div>
-                        <h3 data-aos="fade-right">Cléf en main</h3>
-                        <p>Livré avec hébergement + 1 an de support. Possibilité d'intégration ou
-                            création d'API.</p>
+                        <h3 data-aos="fade-right">Clé en main & Souverain</h3>
+                        <p>Hébergement + 1 an de support. Ton site, tes données. Possibilité d'API ou d'intégration sur
+                            mesure. Je ne te vends pas de l'air.</p>
                     </div>
                 </div>
             </div>
-        </section>
+        </section>-->
+
+
+        <!-- Intro -->
+        <div class="demo-container" data-aos="fade-up" data-aos-delay="200">
+            <section id="home" class="content-section">
+                <h1 class="section-title" data-aos="fade-down" data-aos-duration="1500">Votre projet web sort de
+                    l'ordinaire ?
+                    <br>
+                    <small style="font-size: 1.2rem;">
+                        <a href="#contact" style="color: #ab9ff2; text-decoration: underline;">
+                            Parlons-en, sans engagement.
+                        </a>
+                    </small>
+                </h1>
+                <p class="section-subtitle">
+                    Vous avez besoin d'une <strong>intégration 3D interactive</strong> pour votre site,
+                    d'un <strong>dashboard sur mesure</strong> pour visualiser vos données,
+                    ou d'un <strong>outil éthique</strong> qui respecte vos valeurs ?
+                </p>
+                <br>
+                <p class="section-subtitle">
+                    Je développe des solutions web personnalisées pour les projets qui nécessitent
+                    une approche technique créative et spécifique.
+                </p>
+            </section>
+
+            <!--<div class="contact-form" data-aos="fade-up" data-aos-delay="300">
+                <div class="profile-container">
+                    <img src="https://avatars.githubusercontent.com/u/61543927?v=4" alt="Photo de profil"
+                        class="profile-img" data-aos="fade-up" data-aos-delay="400">
+                    <img src="https://gael-berru.com/smart_phpixel/pixel.php?source=siteperso" width="1" height="1"
+                        style="display:none;">
+                    <p class="dev-name" data-aos="fade-up" data-aos-delay="500">Mon approche</p>
+                    <p class="dev-description" data-aos="fade-up" data-aos-delay="600">
+                        Ancien entrepreneur reconverti en développeur, j'allie 15 ans d'expérience
+                        dans la gestion de projet à 6 ans de pratique autodidacte du code.
+                        <br><br>
+                        Cette double casquette me permet de comprendre à la fois
+                        <strong>vos besoins métier</strong> et les <strong>contraintes techniques</strong>,
+                        pour créer des solutions qui fonctionnent vraiment.
+                        <br><br>
+                        Je me spécialise dans les projets qui nécessitent une approche sur-mesure,
+                        hors des sentiers battus.
+                    </p>
+                </div>
+            </div>-->
+
+            <!-- Benefits Section -->
+            <section class="benefits">
+                <div class="container">
+                    <h2 class="section-title">Pour quels types de projets ?</h2>
+                    <div class="benefits-grid">
+                        <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="benefit-icon"><i class="fa-solid fa-qrcode"></i></div>
+                            <h3 data-aos="fade-right">Vulgarisation & Contenu</h3>
+                            <p>Pour les créateurs qui veulent expliquer des concepts complexes
+                                avec des visualisations interactives, animations 3D ou outils pédagogiques.</p>
+                        </div>
+                        <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="benefit-icon"><i class="fa-solid fa-gears"></i></div>
+                            <h3 data-aos="fade-right">Enquête & Data</h3>
+                            <p>Outils d'analyse blockchain, visualisation de datasets complexes,
+                                dashboards d'investigation pour journalistes ou chercheurs.</p>
+                        </div>
+                        <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="benefit-icon"><i class="fa-solid fa-terminal"></i></div>
+                            <h3 data-aos="fade-right">Prototypes Innovants</h3>
+                            <p>MVP pour des concepts uniques, intégrations API créatives,
+                                outils qui n'existent pas encore sur le marché.</p>
+                        </div>
+                        <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="benefit-icon"><i class="fa-solid fa-shield"></i></div>
+                            <h3 data-aos="fade-right">Solutions Éthiques</h3>
+                            <p>Alternatives aux outils mainstream, respect de la vie privée,
+                                approche RGPD-friendly pour les projets sensibles aux données.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
 
         <!-- Skills Section -->
         <section id="skill">
@@ -894,8 +899,7 @@
                         </div>
                     </div>
                     <span class="badge badge-tool">TOOL</span>
-                    <a href="https://github.com/berru-g/berru-g/tree/main/smart_phpixel" target="_blank"
-                        title="Voir le site">
+                    <a href="./smart_phpixel/index.html" target="_blank" title="Voir le site">
                         <div class="project-content">
                             <p>Analysez les mouvements des visiteurs sur votre site, indépendament de google analytics,
                                 via un pixel ( script snippet ) à integrer dans le html de votre site. Nb : Nécéssite
@@ -917,10 +921,13 @@
                         </div>
                     </div>
                     <span class="badge badge-tool">TOOL</span>
-                    <a href="https://berru-g.github.io/OTTO/SMBchat/SMBchatV2/" target="_blank" title="Local Network workspace">
+                    <a href="https://berru-g.github.io/OTTO/SMBchat/SMBchatV2/" target="_blank"
+                        title="Local Network workspace">
                         <div class="project-content">
-                            <p>Reprenez le control de vos données ! SMBchatV2.exe est un outil de communication en réseau local, basé sur le protocole SMB.
-                                L'interface propose un Chat en temps réel, <strong>messages chiffrés</strong>, données effacé automatiquement à chaque redémarrage de votre machine, transfert de fichiers.
+                            <p>Reprenez le control de vos données ! SMBchatV2.exe est un outil de communication en
+                                réseau local, basé sur le protocole SMB.
+                                L'interface propose un Chat en temps réel, <strong>messages chiffrés</strong>, données
+                                effacé automatiquement à chaque redémarrage de votre machine, transfert de fichiers.
                                 le tout directement sur votre réseau local — sans serveur externe ni configuration
                                 complexe. Security AES-128 + HMAC-SHA256</p>
                             <div class="project-links">

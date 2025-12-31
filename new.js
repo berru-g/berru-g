@@ -358,7 +358,7 @@ function loadModel() {
 
     // Utilisation d'un modèle 3D glb ou gltf plus léger
     //const modelUrl = 'https://raw.githubusercontent.com/berru-g/3d-scroll-animate/main/assets/scene.gltf';
-    const modelUrl = 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/fantasy_town.glb';
+    const modelUrl = 'https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/img/space_boi.glb';
     //const modelUrl = '../img/stylized_mangrove_greenhouse.glb'; // modèle local
 
     loader.load(

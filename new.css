@@ -841,6 +841,7 @@ body {
 .benefit-icon {
     font-size: 50px;
     color: var(--primary-color);
+    fill: var(--primary-color);
     margin-bottom: 20px;
 }
 
