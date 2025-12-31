@@ -2,18 +2,20 @@
   "meta": {
     "auteur": "berru-g",
     "date_creation": "2025-12-31",
-    "version": "1.2",
-    "description": "Livre de règles et référentiel technique de berru-g pour mon assistant IA."
+    "date_maj": "2024-01-15",
+    "version": "3.0",
+    "description": "Livre de règles et référentiel technique pour toi IA. "
   },
   "identite_philosophie": {
     "pseudo": "berru-g",
     "principes_fondateurs": [
       "Souveraineté numérique : créer des alternatives aux services GAFAM (ex: Smart Pixel).",
-      "Cypherpunk appliqué : utiliser la crypto et l'open source pour enquêter (scam-radar) et protéger (chiffrement).",
-      "Artisanat logiciel : priorité à l'utilité, au code sur-mesure et au contrôle total de la stack, pas de framework",
-      "Sécurité offensive : considérer la sécurité comme la base, pas un ajout, et documenter les vulnérabilités."
+      "Cypherpunk appliqué : utiliser la crypto et l'open source pour enquêter (scam-radar) et protéger.",
+      "Artisanat logiciel : priorité à l'utilité, au code sur-mesure et au contrôle total de la stack.",
+      "Sécurité offensive : considérer la sécurité comme la base, pas un ajout, et documenter les vulnérabilités.",
+      "Réseau local souverain : développer des outils P2P fonctionnant sans internet"
     ],
-    "manifeste": "Développeur autodidacte créant des sites et outils souverains. Expert en visualisation de données (3D/WebGL) et analyse blockchain forensique.",
+    "manifeste": "Développeur autodidacte créant des sites et outils souverains. Expert en visualisation de données (3D/WebGL) et analyse blockchain forensique. Exploration active des réseaux locaux et technologies P2P.",
     "references_publics": [
       "https://gael-berru.com",
       "https://github.com/berru-g"
@@ -36,7 +38,7 @@
       ]
     },
     "backend": {
-      "langages": ["PHP (Procédural, orienté fonction)"],
+      "langages": ["PHP (Procédural, orienté fonction)", "Python (Scripting, automation, P2P)"],
       "securite_offensive": {
         "architecture": {
           "principe": "Séparation stricte configuration / logique métier.",
@@ -54,7 +56,14 @@
       "patterns_architecturaux": [
         "Point d'entrée unique (index.php) avec un header/footer commun.",
         "Factorisation des fonctions utilitaires dans un `functions.php` dédié.",
-        "Gestion centralisée des connexions bases de données."
+        "Gestion centralisée des connexions bases de données.",
+        "Serveurs HTTP Python simples pour outils réseau (http.server, sockets)"
+      ],
+      "nouveaux_patterns_reseau": [
+        "Serveurs multi-threadés pour applications P2P",
+        "Handlers HTTP personnalisés avec logging avancé",
+        "Communication inter-processus via sockets TCP/UDP",
+        "Gestion des connexions concurrentes avec threading"
       ]
     },
     "donnees": {
@@ -65,17 +74,43 @@
       "analyse_forensique": [
         "Enquête sur des transactions et adresses suspectes (scam-radar).",
         "Clustering d'adresses et suivi de flux de fonds.",
-        "Utilisation d'explorateurs blockchain (Etherscan-like) et potentiellement de librairies RPC (web3.js, ethers.js)."
+        "Utilisation d'explorateurs blockchain via leur api - mempool, blockchain.com, blockstream, coingecko."
       ],
       "visualisation": ["Représentation 3D interactive de données de marché (heatmap-space)."],
-      "veille": ["Suivi des méthodes d'arnaque et des vulnérabilités de smart contracts."]
+      "veille": ["Suivi des méthodes d'arnaque et des vulnérabilités de smart contracts."],
+      "nouveaux_projets": [
+        "Mixer crypto local (CoinJoin-like) - EN STANDBY",
+        "Node P2P avec ECDSA signatures",
+        "Protocoles d'anonymisation réseau local"
+      ]
+    },
+    "reseau_local": {
+      "outils_developpes": [
+        "Serveur de partage fichiers avec logging (fonctionnel)",
+        "Honeypot basique avec détection de bots",
+        "Scanner réseau maison",
+        "Serveur web local pour redirections/pages",
+        "Système de détection appareils WiFi"
+      ],
+      "protocoles_explores": [
+        "HTTP/HTTPS via Python http.server",
+        "Sockets TCP/UDP bruts",
+        "Broadcast UDP pour découverte réseau",
+        "Communication inter-appareils LAN"
+      ],
+      "decouvertes_techniques": [
+        "Limitations notifications Android sans app",
+        "Portails captifs WiFi sur Raspberry Pi",
+        "Détection appareils via ARP scanning",
+        "Logging avancé des connexions HTTP"
+      ]
     },
     "outils_workflow": {
       "versioning": ["Git"],
       "hebergement_code": ["GitHub"],
       "prototypage_visuel": ["CodePen"],
       "analyse_performances": ["Outils développeurs navigateur, monitoring maison"],
-      "environnement de travail": ["venv pour python, mamp pour php et sql"]
+      "gestion_environnements": ["Virtualenv sur vm à venir pour séparer les dépendances"]
     }
   },
   "conventions_projets": {
@@ -83,26 +118,112 @@
       "racine": ["index.php", ".htaccess", ".gitignore"],
       "app": ["/config (ignoré par Git)", "/libs ou /includes", "header.php", "functions.php"],
       "assets": ["/css", "/js", "/img", "/models (3D)"],
-      "public": ["Dossier accessible si nécessaire, sinon tout en racine contrôlée"]
+      "public": ["Dossier accessible si nécessaire, sinon tout en racine contrôlée"],
+      "nouveaux_patterns": {
+        "projets_python": ["/src", "/logs", "/config", "requirements.txt", "main.py"],
+        "outils_reseau": ["/handlers", "/utils", "/services", "server.py"]
+      }
     },
     "style_code": {
-      "commentaires": "En français. Expliquer le *pourquoi* des choix complexes, noter les problèmes connus.",
-      "nommage": "camelCase pour les variables/fonctions JS, snake_case pour PHP ? (À confirmer)",
+      "commentaires": "En français. Expliquer le /*pourquoi*/ des choix complexes, noter les problèmes connus.",
+      "nommage": "camelCase pour les variables/fonctions JS, snake_case pour PHP et Python",
       "presentation": "Sections clairement séparées par des commentaires visuels.",
-      "gestion_config": "Toujours externaliser les paramètres modifiables (paths, credentials, options)."
+      "gestion_config": "Toujours externaliser les paramètres modifiables (paths, credentials, options).",
+      "nouveaux_standards": [
+        "Logging structuré JSON pour les outils réseau",
+        "Gestion des erreurs réseau avec retry logic",
+        "Timeout systématique sur les sockets"
+      ]
     },
     "securite_confidentialite": {
       "principes": [
         "Minimisation des données collectées.",
         "Transparence totale envers l'utilisateur (bannière cookie custom).",
         "Hébergement souverain lorsque c'est possible et pertinent.",
-        "Audit de sécurité manuel pour les projets critiques."
+        "Audit de sécurité manuel pour les projets critiques.",
+        "Anonymisation des logs réseau (IP -> hash)"
       ],
-      "outil_proprietaire_cle": "Smart Pixel - Système d'analytics éthique, léger et auto-hébergé."
+      "outil_proprietaire_cle": "Smart Pixel - Système d'analytics éthique, léger et auto-hébergé.",
+      "nouvelles_directives": [
+        "Séparation claire données personnelles / techniques dans les logs",
+        "Rotation automatique des logs volumineux",
+        "Chiffrement des données sensibles au repos"
+      ]
     },
     "gestion_erreurs": {
       "principe": "L'utilisateur voit un message générique, l'administrateur trouve un détail dans les logs.",
-      "implementation": "Utilisation de `error_log()` pour écrire dans un fichier sécurisé hors de `document_root`."
+      "implementation": "Utilisation de `error_log()` pour écrire dans un fichier sécurisé hors de `document_root`.",
+      "nouveaux_mecanismes": [
+        "Logging réseau avec timestamps et contexte",
+        "Alertes sur comportements anormaux (scanners, bruteforce)",
+        "Sauvegarde automatique des sessions avant arrêt"
+      ]
+    }
+  },
+  "projets_en_cours": {
+    "serveur_honeypot_reseau": {
+      "statut": "FONCTIONNEL - Version basique",
+      "description": "Serveur web local avec logging avancé des bots et scanners",
+      "technos": ["Python http.server", "JSON logging", "Threading"],
+      "fichiers_cles": ["bot_logger_server.py", "analyze_logs.py"],
+      "fonctionnalites": [
+        "Logging complet HTTP (headers, IP, user-agent)",
+        "Détection basique des scanners",
+        "Export JSON/CSV des logs",
+        "Sauvegarde automatique session"
+      ],
+      "prochaines_etapes": [
+        "Ajouter rate-limiting",
+        "Implémenter une whitelist IP",
+        "Dashboard web pour visualisation"
+      ]
+    },
+    "mixer_crypto_local": {
+      "statut": "EN STANDBY - Dépendances Python à gérer",
+      "description": "Node P2P implémentant CoinJoin-like mixing sur réseau local",
+      "technos": ["Python", "ECDSA (secp256k1)", "Sockets TCP", "JSON-RPC like"],
+      "concepts_cles": [
+        "Transactions avec inputs/outputs",
+        "Signatures multiples ECDSA",
+        "Réseau P2P décentralisé",
+        "Mixing par rounds (CoinJoin)",
+        "Anonymisation graphique"
+      ],
+      "futures_integrations": [
+        "Lightning Network pour revenus en sats",
+        "Interface web de monitoring",
+        "API REST pour clients externes",
+        "Support Tor optionnel"
+      ],
+      "dependances_critiques": ["ecdsa", "cryptography", "stem (pour Tor)"],
+      "note": "Projet à reprendre après setup d'environnements Python isolés"
+    },
+    "outils_reseau_utilitaires": {
+      "statut": "EXPLORÉ - Plusieurs prototypes fonctionnels",
+      "description": "Collection d'outils pour exploration et sécurisation réseau local",
+      "outils_developpes": [
+        {
+          "nom": "File Share Server",
+          "statut": "FONCTIONNEL",
+          "usage": "Partage fichiers local avec interface web"
+        },
+        {
+          "nom": "Network Scanner",
+          "statut": "BASIQUE",
+          "usage": "Détection appareils et ports ouverts"
+        },
+        {
+          "nom": "WiFi Promo Portal",
+          "statut": "CONCEPT",
+          "usage": "Portail captif pour notifications magasin (limitations Android complexe)"
+        }
+      ],
+      "lecons_apprises": [
+        "Android bloque notifications push sans app installée",
+        "WiFi captive portal est la seule approche réaliste",
+        "Importance du logging RGPD-compatible",
+        "Sécurité réseau local souvent négligée"
+      ]
     }
   },
   "references_projets_cle": [
@@ -118,7 +239,7 @@
       "nom": "Enquête Scam Radar",
       "lien_readme": "https://raw.githubusercontent.com/berru-g/crypto-tool/main/scam-radar/enquete/readme.md",
       "lien_js": "https://raw.githubusercontent.com/berru-g/crypto-tool/main/scam-radar/enquete/script/script.js",
-      "description": "Outil d'investigation forensique blockchain pour tracer des arnaques. Enquete en cours d'un mixer qui brasse 31 millions/mois.",
+      "description": "Outil d'investigation forensique blockchain pour tracer des arnaques.",
       "tags": ["Blockchain", "Forensique", "JavaScript", "Cypherpunk"],
       "principe_illustre": "Cypherpunk appliqué, sécurité offensive"
     },
@@ -135,6 +256,51 @@
       "description": "Visualisation temps réel des marchés crypto sur un globe interactif.",
       "tags": ["Three.js", "DataViz", "API", "WebGL"],
       "principe_illustre": "Artisanat, visualisation avancée"
+    },
+    {
+      "nom": "Réseau Local Toolkit",
+      "description": "Exploration des possibilités réseau local : partage fichiers, honeypot, scanning, P2P",
+      "tags": ["Python", "Réseau", "Sécurité", "P2P", "Cypherpunk"],
+      "principe_illustre": "Artisanat logiciel, sécurité offensive",
+      "concepts_novateurs": [
+        "Mixer crypto local (standby)",
+        "Honeypot avec logging avancé",
+        "Serveurs HTTP sur-mesure"
+      ]
     }
-  ]
+  ],
+  "roadmap_technique": {
+    "court_terme": [
+      "Mise en place d'environnements Python isolés (virtualenv)",
+      "Finalisation du serveur honeypot avec dashboard",
+      "Documentation des outils réseau développés"
+    ],
+    "moyen_terme": [
+      "Reprise du projet mixer crypto avec dépendances gérées",
+      "Intégration Bitcoin/Lightning testnet",
+      "Développement d'outils forensiques réseau avancés"
+    ],
+    "long_terme": [
+      "Node crypto complet avec revenus en sats",
+      "Suite d'outils cypherpunk auto-hébergée",
+      "Contributions à projets open-source privacy"
+    ]
+  },
+  "notes_techniques": {
+    "problemes_connus": [
+      "Conflits de dépendances Python entre projets",
+      "Notifications Android impossibles sans app installée",
+      "Sécurité réseau local souvent sous-estimée"
+    ],
+    "solutions_envisagees": [
+      "Utilisation systématique de virtualenv/venv",
+      "Focus sur les fonctionnalités réellement possibles (captive portal)",
+      "Audit sécurité des outils exposés sur le réseau"
+    ],
+    "decouvertes_importantes": [
+      "Le réseau local offre de nombreuses possibilités P2P",
+      "La crypto appliquée localement est un champ peu exploré",
+      "L'artisanat logiciel permet des solutions sur-mesure impossibles avec des frameworks"
+    ]
+  }
 }

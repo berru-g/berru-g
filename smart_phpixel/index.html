@@ -199,7 +199,7 @@ cd smart_phpixel</code></pre>
 
                         <div class="step">
                             <div class="step-content">
-                                <h3>2. Configurez la base de données</h3>
+                                <h3>2. Configurez les tables (smart pixel + Dashboard ) de la base de données</h3>
                                 <p>Créez une base MySQL et importez le schéma :</p>
                                 <div class="code-container">
                                     <div class="code-header">
@@ -235,7 +235,7 @@ CREATE TABLE smart_pixel_tracking (
                         <div class="step">
                             <div class="step-content">
                                 <h3>3. Configurez les fichiers PHP</h3>
-                                <p>Éditez le fichier <code>config.php</code> avec vos identifiants :</p>
+                                <p>Éditez les fichiers <code>config.php</code> ( smart pixel + Dashboard ) avec vos identifiants :</p>
                                 <div class="code-container">
                                     <div class="code-header">
                                         <div class="code-title">config.php</div>
@@ -260,20 +260,32 @@ define('SITE_URL', 'https://votre-site.com');
 
                         <div class="step">
                             <div class="step-content">
-                                <h3>4. Intégrez le script</h3>
-                                <p>Ajoutez Smart Pixel dans le <code>&lt;head&gt;</code> de votre site :</p>
+                                <h3>4. Intégrez les scripts</h3>
+                                <p>Ajoutez Smart Pixel dans votre index.html :</p>
                                 <div class="code-container">
                                     <div class="code-header">
                                         <div class="code-title">index.html</div>
                                         <button class="code-copy" onclick="copyCode(this)">Copier</button>
                                     </div>
                                     <div class="code-block">
-                                        <pre><code class="language-html">&lt;!-- Smart Pixel Analytics --&gt;
-&lt;script src="./smart_phpixel/smart-pixel.js"&gt;&lt;/script&gt;</code></pre>
+                                        <pre><code class="language-html">&lt;!-- js dans le head --&gt;
+&lt;script src="./smart_phpixel/smart-pixel.js"&gt;&lt;/script&gt;</code><br>
+<code class="language-html">&lt;!-- img dans le body --&gt;
+&lt;img src="https://votre-site.com/tracking.php?" 
+     width="1" height="1" style="display:none;"&gt;</code></pre>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="step">
+                            <div class="step-content">
+                                <h3>5. Hebergement</h3>
+                                <p>Vous voila responsable de la sécurité des données de vos visiteurs/prospects/clients et reprenez le pouvoir sur vos data.</p>
+                                <p>Welcome</p>
+                            </div>
+                        </div>
+
                     </div>
                 </section>
 
@@ -285,7 +297,7 @@ define('SITE_URL', 'https://votre-site.com');
                     </div>
 
                     <h3 style="margin-bottom: 16px;">Configuration du Tracking</h3>
-                    <p>Smart Pixel peut être configuré pour différents types de tracking :</p>
+                    <p>Ajoutez des campagnes et différents types de tracking :</p>
 
                     <div class="code-container">
                         <div class="code-header">
