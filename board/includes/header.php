@@ -65,7 +65,7 @@ try {
                         <a href="bdd-2.php"><i class="fas fa-table"></i> Bdd Agora</a>
                     </li>
                     <li class="<?= basename($_SERVER['PHP_SELF']) === 'bdd-3.php' ? 'active' : '' ?>">
-                        <a href="../../smart_phpixel/dashboard.php"><i class="fas fa-table"></i> Tracking Pixel</a>
+                        <a href="../../smart_phpixel/dashboard.php"><i class="fas fa-table"></i> Smart Pixel</a>
                     </li>
                     <li class="<?= basename($_SERVER['PHP_SELF']) === 'bdd-4.php' ? 'active' : '' ?>">
                         <a href="bdd-4.php"><i class="fas fa-table"></i> Bdd 4</a>

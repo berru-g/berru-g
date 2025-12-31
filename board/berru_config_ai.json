@@ -1,0 +1,140 @@
+{
+  "meta": {
+    "auteur": "berru-g",
+    "date_creation": "2025-12-31",
+    "version": "1.2",
+    "description": "Livre de règles et référentiel technique de berru-g pour mon assistant IA."
+  },
+  "identite_philosophie": {
+    "pseudo": "berru-g",
+    "principes_fondateurs": [
+      "Souveraineté numérique : créer des alternatives aux services GAFAM (ex: Smart Pixel).",
+      "Cypherpunk appliqué : utiliser la crypto et l'open source pour enquêter (scam-radar) et protéger (chiffrement).",
+      "Artisanat logiciel : priorité à l'utilité, au code sur-mesure et au contrôle total de la stack, pas de framework",
+      "Sécurité offensive : considérer la sécurité comme la base, pas un ajout, et documenter les vulnérabilités."
+    ],
+    "manifeste": "Développeur autodidacte créant des sites et outils souverains. Expert en visualisation de données (3D/WebGL) et analyse blockchain forensique.",
+    "references_publics": [
+      "https://gael-berru.com",
+      "https://github.com/berru-g"
+    ]
+  },
+  "competences_techniques": {
+    "frontend": {
+      "langages": ["HTML5", "CSS3", "JavaScript (ES6+)"],
+      "librairies_ui": ["SweetAlert2", "Toastify-js", "BasicLightbox", "AOS", "Font Awesome"],
+      "graphismes_3d_avances": {
+        "core": ["Three.js"],
+        "composants": ["GLTFLoader", "OrbitControls"],
+        "pratiques": ["Gestion asynchrone des assets", "Optimisation des ombres/rendu"]
+      },
+      "bonnes_pratiques": [
+        "Centralisation de la configuration dans un objet `CONFIG`",
+        "Gestion robuste des erreurs avec `try...catch` et fallbacks",
+        "Code auto-documenté avec des séparateurs explicites (// ====== SECTION ======)",
+        "Attention à la compatibilité navigateur (notes spécifiques pour Firefox)"
+      ]
+    },
+    "backend": {
+      "langages": ["PHP (Procédural, orienté fonction)"],
+      "securite_offensive": {
+        "architecture": {
+          "principe": "Séparation stricte configuration / logique métier.",
+          "implementation": "Variables sensibles (DB, logs, API keys) dans `/app/config/`, fichier exclu via `.gitignore`. Inclusion via `require_once`.",
+          "exemple": "Voir la structure de `header.php` dans 3Dscrollanimator."
+        },
+        "defenses_actives": [
+          "Validation et nettoyage centralisé de toutes les entrées utilisateur (`$_GET`, `$_POST`, `$_COOKIE`).",
+          "Protection contre les injections SQL via l'utilisation de requêtes préparées (mysqli/PDO).",
+          "Protection contre le XSS via l'échappement HTML systématique en sortie (`htmlspecialchars`).",
+          "Mesures anti-bruteforce (délais, compteurs de tentatives, CAPTCHA après N essais).",
+          "Journalisation des activités suspectes dans un fichier de log sécurisé."
+        ]
+      },
+      "patterns_architecturaux": [
+        "Point d'entrée unique (index.php) avec un header/footer commun.",
+        "Factorisation des fonctions utilitaires dans un `functions.php` dédié.",
+        "Gestion centralisée des connexions bases de données."
+      ]
+    },
+    "donnees": {
+      "bases": ["MySQL (via mysqli ou PDO)"],
+      "apis": ["Consommation d'API REST (ex: CoinGecko, explorateurs blockchain)"]
+    },
+    "blockchain_web3": {
+      "analyse_forensique": [
+        "Enquête sur des transactions et adresses suspectes (scam-radar).",
+        "Clustering d'adresses et suivi de flux de fonds.",
+        "Utilisation d'explorateurs blockchain (Etherscan-like) et potentiellement de librairies RPC (web3.js, ethers.js)."
+      ],
+      "visualisation": ["Représentation 3D interactive de données de marché (heatmap-space)."],
+      "veille": ["Suivi des méthodes d'arnaque et des vulnérabilités de smart contracts."]
+    },
+    "outils_workflow": {
+      "versioning": ["Git"],
+      "hebergement_code": ["GitHub"],
+      "prototypage_visuel": ["CodePen"],
+      "analyse_performances": ["Outils développeurs navigateur, monitoring maison"],
+      "environnement de travail": ["venv pour python, mamp pour php et sql"]
+    }
+  },
+  "conventions_projets": {
+    "structure_dossiers_type": {
+      "racine": ["index.php", ".htaccess", ".gitignore"],
+      "app": ["/config (ignoré par Git)", "/libs ou /includes", "header.php", "functions.php"],
+      "assets": ["/css", "/js", "/img", "/models (3D)"],
+      "public": ["Dossier accessible si nécessaire, sinon tout en racine contrôlée"]
+    },
+    "style_code": {
+      "commentaires": "En français. Expliquer le *pourquoi* des choix complexes, noter les problèmes connus.",
+      "nommage": "camelCase pour les variables/fonctions JS, snake_case pour PHP ? (À confirmer)",
+      "presentation": "Sections clairement séparées par des commentaires visuels.",
+      "gestion_config": "Toujours externaliser les paramètres modifiables (paths, credentials, options)."
+    },
+    "securite_confidentialite": {
+      "principes": [
+        "Minimisation des données collectées.",
+        "Transparence totale envers l'utilisateur (bannière cookie custom).",
+        "Hébergement souverain lorsque c'est possible et pertinent.",
+        "Audit de sécurité manuel pour les projets critiques."
+      ],
+      "outil_proprietaire_cle": "Smart Pixel - Système d'analytics éthique, léger et auto-hébergé."
+    },
+    "gestion_erreurs": {
+      "principe": "L'utilisateur voit un message générique, l'administrateur trouve un détail dans les logs.",
+      "implementation": "Utilisation de `error_log()` pour écrire dans un fichier sécurisé hors de `document_root`."
+    }
+  },
+  "references_projets_cle": [
+    {
+      "nom": "Smart Pixel",
+      "lien_code": "https://github.com/berru-g/berru-g/tree/main/smart_phpixel",
+      "lien_js": "https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/smart_phpixel/smart-pixel.js",
+      "description": "Système d'analytics éthique et souverain. Archétype de l'outil anti-GAFAM.",
+      "tags": ["JavaScript", "RGPD", "Souveraineté", "Open Source"],
+      "principe_illustre": "Souveraineté numérique"
+    },
+    {
+      "nom": "Enquête Scam Radar",
+      "lien_readme": "https://raw.githubusercontent.com/berru-g/crypto-tool/main/scam-radar/enquete/readme.md",
+      "lien_js": "https://raw.githubusercontent.com/berru-g/crypto-tool/main/scam-radar/enquete/script/script.js",
+      "description": "Outil d'investigation forensique blockchain pour tracer des arnaques. Enquete en cours d'un mixer qui brasse 31 millions/mois.",
+      "tags": ["Blockchain", "Forensique", "JavaScript", "Cypherpunk"],
+      "principe_illustre": "Cypherpunk appliqué, sécurité offensive"
+    },
+    {
+      "nom": "3D Scroll Animator / Header",
+      "lien_php": "https://raw.githubusercontent.com/berru-g/3Dscrollanimator/refs/heads/main/app/header.php",
+      "description": "Exemple de structure PHP sécurisée avec séparation config/logique et charte graphique centralisée.",
+      "tags": ["PHP", "Sécurité", "Architecture", "CSS"],
+      "principe_illustre": "Sécurité par conception, artisanat"
+    },
+    {
+      "nom": "Crypto Heatmap 3D",
+      "lien_js": "https://raw.githubusercontent.com/berru-g/crypto-tool/refs/heads/main/heatmap-space/app.js",
+      "description": "Visualisation temps réel des marchés crypto sur un globe interactif.",
+      "tags": ["Three.js", "DataViz", "API", "WebGL"],
+      "principe_illustre": "Artisanat, visualisation avancée"
+    }
+  ]
+}

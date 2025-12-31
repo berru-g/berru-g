@@ -1,3 +1,5 @@
 .env
 db_config.php
 db2_config.php
+berru_config.json
+
