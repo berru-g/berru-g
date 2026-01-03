@@ -3,6 +3,11 @@
 // FICHIER : dashboard-bots.php
 // DASHBOARD DE SURVEILLANCE ANTI-BOTS du form de nico
 // ====================================================
+session_start();
+if (!isset($_SESSION['admin_logged_in'])) {
+    header('Location: login.php');
+    exit();
+}
 
 $title = "Dashboard Anti-Bots";
 require_once __DIR__ . '/../includes/header.php';
