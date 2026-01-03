@@ -68,7 +68,7 @@ try {
                         <a href="../../smart_phpixel/dashboard.php"><i class="fas fa-table"></i> Smart Pixel</a>
                     </li>
                     <li class="<?= basename($_SERVER['PHP_SELF']) === 'bdd-4.php' ? 'active' : '' ?>">
-                        <a href="bdd-4.php"><i class="fas fa-table"></i> Bdd 4</a>
+                        <a href="monitor_bot.php"><i class="fas fa-shield-alt"></i> Monitor_bot</a>
                     </li>
                     <li>
                         <a href="stat.php"><i class="fas fa-chart-line"></i> Statistiques</a>
