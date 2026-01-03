@@ -55,10 +55,13 @@
                 <div class="sidebar-section">
                     <h3>Ressources</h3>
                     <ul class="sidebar-links">
-                        <li><a href="https://github.com/berru-g/berru-g/smart_phpixel/" target="_blank">📦 Code Source</a></li>
-                        <li><a href="https://github.com/berru-g/berru-g/smart_phpixel//issues" target="_blank">🐛 Issues</a>
+                        <li><a href="https://github.com/berru-g/berru-g/smart_phpixel/" target="_blank">📦 Code
+                                Source</a></li>
+                        <li><a href="https://github.com/berru-g/berru-g/smart_phpixel//issues" target="_blank">🐛
+                                Issues</a>
                         </li>
-                        <li><a href="https://github.com/berru-g/berru-g/smart_phpixel//wiki" target="_blank">📚 Wiki</a></li>
+                        <li><a href="https://github.com/berru-g/berru-g/smart_phpixel//wiki" target="_blank">📚 Wiki</a>
+                        </li>
                         <li><a href="#api">🔌 API Reference</a></li>
                     </ul>
                 </div>
@@ -182,7 +185,7 @@ saveToDatabase(anonymizedData); // Vos serveurs → Votre contrôle</code></pre>
                     <div class="steps">
                         <div class="step">
                             <div class="step-content">
-                                <h3>1. Clonez le repository</h3>
+                                <h3>Clonez le repository</h3>
                                 <p>Commencez par récupérer le code source en local :</p>
                                 <div class="code-container">
                                     <div class="code-header">
@@ -199,7 +202,7 @@ cd smart_phpixel</code></pre>
 
                         <div class="step">
                             <div class="step-content">
-                                <h3>2. Configurez les tables (smart pixel + Dashboard ) de la base de données</h3>
+                                <h3>Configurez les tables (smart pixel + Dashboard ) de la base de données</h3>
                                 <p>Créez une base MySQL et importez le schéma :</p>
                                 <div class="code-container">
                                     <div class="code-header">
@@ -234,8 +237,9 @@ CREATE TABLE smart_pixel_tracking (
 
                         <div class="step">
                             <div class="step-content">
-                                <h3>3. Configurez les fichiers PHP</h3>
-                                <p>Éditez les fichiers <code>config.php</code> ( smart pixel + Dashboard ) avec vos identifiants :</p>
+                                <h3>Configurez les fichiers PHP</h3>
+                                <p>Éditez les fichiers <code>config.php</code> ( smart pixel + Dashboard ) avec vos
+                                    identifiants :</p>
                                 <div class="code-container">
                                     <div class="code-header">
                                         <div class="code-title">config.php</div>
@@ -260,7 +264,7 @@ define('SITE_URL', 'https://votre-site.com');
 
                         <div class="step">
                             <div class="step-content">
-                                <h3>4. Intégrez les scripts</h3>
+                                <h3>Intégrez les scripts</h3>
                                 <p>Ajoutez Smart Pixel dans votre index.html :</p>
                                 <div class="code-container">
                                     <div class="code-header">
@@ -280,9 +284,19 @@ define('SITE_URL', 'https://votre-site.com');
 
                         <div class="step">
                             <div class="step-content">
-                                <h3>5. Hebergement</h3>
-                                <p>Vous voila responsable de la sécurité des données de vos visiteurs/prospects/clients et reprenez le pouvoir sur vos data.</p>
-                                <p>Welcome</p>
+                                <h3>Hebergement</h3>
+                                <p>Vous voila responsable de la sécurité des données de vos visiteurs/prospects/clients
+                                    et reprenez le pouvoir sur vos data.</p>
+                                <p>⚠️ Pensez aux bonnes pratiques pour créer une bdd SQL sécurisé. Config et log en .gitignore, stockez en dehors du dossier du site, chnagez les permissions et creez un login pour le dashboard si necessaire.</p>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-content">
+                                <h3>Dashboard</h3>
+                                <p>Vous pouvez desormais visualiser votre propre Dashboard Analytics.</p>
+                                <img src="../img/smart-pixel-dashboard.png"
+                                    style="width: 100%; height: auto; display: flex; margin: 0 auto; border-radius: 12px;">
                             </div>
                         </div>
 
