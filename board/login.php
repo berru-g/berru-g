@@ -50,10 +50,7 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<!--// à cacher via la lib PHP dotenv ou à la main dans O2switch... 
-// Configuration > Variables d'environnement > variable "ADMIN_PASSWORD=mdp"
-// $mdp_admin = getenv('ADMIN_PASSWORD');
-// + hash
+<!--
 // sleep(2); // Ralentit les attaques brute-force. Penser à limiter les tentatives avec session ou blocage IP après X essais-->
 <!DOCTYPE html>
 <html lang="fr">
