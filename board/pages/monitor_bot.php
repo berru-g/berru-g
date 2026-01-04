@@ -875,7 +875,7 @@ function initEventHandlers() {
     
     // Détails IP
     window.showIPDetails = function(ip) {
-        fetch(`/admin/ip-info.php?ip=${encodeURIComponent(ip)}`)
+        fetch(`ip-info.php?ip=${encodeURIComponent(ip)}`)
             .then(response => response.text())
             .then(html => {
                 document.getElementById('ipDetailsContent').innerHTML = html;
@@ -929,11 +929,8 @@ function initLiveMonitoring() {
         
         // Ajouter une activité simulée
         const activities = [
-            'Tentative de formulaire vide détectée',
-            'Honeypot déclenché sur IP suspecte',
-            'Requête curl bloquée',
-            'Rate limit activé pour une IP',
-            'Nouveau bot détecté et redirigé'
+            'Erreur de chargement',
+            'Vérifier les fichiers de log'
         ];
         
         const randomActivity = activities[Math.floor(Math.random() * activities.length)];
@@ -964,7 +961,7 @@ function initLiveMonitoring() {
 }
 
 function blockIP(ip) {
-    fetch('/admin/block-ip.php', {
+    fetch('block-ip.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -1069,7 +1066,7 @@ function updatePaginationButtons(tableId, currentPage, totalPages) {
 </script>
 
 <!-- ==================================================== -->
-<!-- STYLE CSS (à ajouter dans ton fichier style.css) -->
+<!-- STYLE CSS -->
 <!-- ==================================================== -->
 <style>
 .dashboard-header {
