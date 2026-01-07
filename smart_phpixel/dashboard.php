@@ -2,7 +2,7 @@
 // dashboard.php - DASHBOARD AMÉLIORÉ AVEC ONGLET DÉTAIL
 require_once 'config.php';
 //require_once '../board/includes/header.php'; // a integrer dans mon /board/
-
+include __DIR__ . '/includes/header.php';
 $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8", DB_USER, DB_PASS);
 
 // Vérification de sécurité basique
