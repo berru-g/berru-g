@@ -136,7 +136,7 @@ $detailedData = $pdo->query("
     FROM " . DB_TABLE . "
     WHERE timestamp >= '$dateFilter'
     ORDER BY timestamp DESC
-    LIMIT 50
+    LIMIT 250
 ")->fetchAll();
 
 // Calcul du temps moyen de session
@@ -958,7 +958,7 @@ if (count($sessionData) > 0) {
 
             <div id="details" class="tab-content">
                 <div class="chart-container">
-                    <h3 class="chart-title">Détails des visites récentes (50 dernières)</h3>
+                    <h3 class="chart-title">Détails des visites récentes (250 dernières)</h3>
                     <table class="data-table">
                         <div class="table-responsive">
                             <table class="data-table">
