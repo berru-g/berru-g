@@ -1,1200 +1,198 @@
 <!DOCTYPE html>
 <html lang="fr">
-<!-- 
-    ============================================
-       Developed by : https://github.com/berru-g/
-       Project : berru-g CV
-       Date : 02/07/2025
-       Version : 1.2.1
-       Copyright (c) 2025 Berru
-       nb: tu rouvé les easter egg ? 🔍
-       Tiens vos voici le Egg#6 ➡️ https://codepen.io/h-lautre/full/PwYyxgr
-    ============================================
--->
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web souverains et sur mesure</title>
-    <link rel="shortcut icon" href="/img/logo.png" />
-    <link rel="apple-touch-icon" href="/img/logo.png" />
-    <meta name="description" content="Créateur d'outils sur-mesure et souverains.">
-    <meta name="keywords"
-        content="site web sur mesure vertou, developpeur web Vertou, Gael Leberruyer, Gael Berru, outils souverains, smart pixel, web3, crypto enthusiast, enquete blockchain, vente de pixel, developpeur Vertou,">
-    <meta name="author" content="Gael Berru.">
-    <meta name="robots" content="noai">
-    <meta property="og:url" content="https://gael-berru.com">
-    <link rel="canonical" href="https://gael-berru.com" />
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.all.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="new.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
-    <script src="./smart_phpixel/smart-pixel.js"></script>
-    <script src="./smart_phpixel/CookieComponent.js" data-site-id="berru-g"></script>
-    <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Gaël Leberruyer (Berru-G)",
-  "url": "https://gael-berru.com",
-  "description": "Créateur en développement web personalisé. Autodidacte passionné par les projets concrets alliant utilité et créativité.",
-  "jobTitle": "Créateur de sites web sur mesure et efficace.",
-  "image": "https://berru-g.github.io/berru-g/img/logo.png",
-  "sameAs": [
-    "https://github.com/berru-g",
-    "https://codepen.io/h-lautre",
-    "https://medium.com/@gael-berru",
-    "https://www.instagram.com/berru_aka/"
-  ],
-  "skills": ["Développement web", "Dev site sur mesure", "buy a pixel"],
-  "hasOccupation": {
-    "@type": "Outils",
-    "name": "Développeur autodidacte fullstack",
-    "description": "Conception d'outils",
-    "skills": ["PHP", "SQL", "API", "JavaScript"]
-  },
-  "knowsAbout": [
-    "Site sur mesure",
-    "Tunnel de vente",
-    "Développement front-end"
-  ]
-}
-</script>
-
-    <style>
-        :root {
-            --background-color: #f1f1f1;
-            --text-color: #000000;
-            --titre-color: grey;
-            --primary-color: #ab9ff2;
-            --border-color: #dcdcdc;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --input-background: #f9f9f9;
-            --secondary-color: #2575fc;
-            --success-color: #60d394;
-            --error-color: #ee6055;
-            --jaune-color: #ffd97d
-        }
-
-        #cookie-banner {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 500px;
-            background: #fff;
-            color: var(--text-color);
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px var(--shadow-color);
-            border: 1px solid var(--border-color);
-            z-index: 10000;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            animation: slideUp 0.5s ease-out
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(20px)
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0)
-            }
-        }
-
-        .cookie-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 15px
-        }
-
-        .cookie-icon {
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px
-        }
-
-        .cookie-title {
-            font-weight: 600;
-            color: var(--text-color);
-            margin: 0
-        }
-
-        .cookie-description {
-            color: var(--titre-color);
-            line-height: 1.5;
-            margin-bottom: 20px;
-            font-size: 14px
-        }
-
-        .cookie-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap
-        }
-
-        .cookie-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            min-width: 120px
-        }
-
-        .cookie-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px var(--shadow-color)
-        }
-
-        .accept-necessary {
-            background: var(--input-background);
-            color: var(--text-color);
-            border: 1px solid var(--border-color)
-        }
-
-        .accept-necessary:hover {
-            background: var(--border-color)
-        }
-
-        .accept-all {
-            background: var(--primary-color);
-            color: #fff
-        }
-
-        .accept-all:hover {
-            background: #9a8de0;
-            box-shadow: 0 4px 12px rgb(171 159 242 / .3)
-        }
-
-        .reject-all {
-            background: var(--error-color);
-            color: #fff
-        }
-
-        .reject-all:hover {
-            background: #e0554a
-        }
-
-        .cookie-footer {
-            margin-top: 15px;
-            font-size: 12px;
-            color: var(--titre-color);
-            text-align: center
-        }
-
-        .cookie-footer a {
-            color: var(--primary-color);
-            text-decoration: none
-        }
-
-        .cookie-footer a:hover {
-            text-decoration: underline
-        }
-
-        @media (max-width:768px) {
-            #cookie-banner {
-                bottom: 10px;
-                width: 95%;
-                padding: 20px
-            }
-
-            .cookie-buttons {
-                flex-direction: column
-            }
-
-            .cookie-btn {
-                min-width: auto;
-                width: 100%
-            }
-        }
-    </style>
-
-    <div id="cookie-banner" style="display: none;">
-        <div class="cookie-header">
-            <div class="cookie-icon">🛡️</div>
-            <h3 class="cookie-title">Transparence totale sur vos données</h3>
-        </div>
-
-        <p class="cookie-description">
-            <strong>Ici, aucun de vos clics n'est vendu à Google ou Facebook.</strong><br>
-            J'utilise <strong>Smart Pixel</strong>, mon propre système d'analyse développé avec éthique, dans le respect
-            des loi RGPD.
-            <br><br>
-            En autorisant l'analyse, vous m'aidez à améliorer ce site <strong>sans enrichir les GAFAM de vos
-                données</strong>.
-        </p>
-
-        <div class="cookie-buttons">
-            <!--<button class="cookie-btn reject-all" onclick="acceptCookies('none')">
-                Non merci
-            </button>-->
-            <button class="cookie-btn accept-necessary" onclick="acceptCookies('necessary')">
-                Non merci
-            </button>
-            <button class="cookie-btn accept-all" onclick="acceptCookies('all')">
-                Ok pour moi
-            </button>
-        </div>
-
-        <div class="cookie-footer">
-            <a href="https://github.com/berru-g/smart_phpixel" target="_blank">Voir le code source de
-                Smart Pixel</a>
-        </div>
-    </div>
-
-    <script>
-        // Gestionnaire de consentement RGPD avec votre style
-        const CookieManager = {
-            init() {
-                // Vérifier si le consentement existe déjà
-                if (!this.getConsent()) {
-                    this.showBanner();
-                } else {
-                    this.loadScripts();
-                }
-            },
-
-            showBanner() {
-                // Afficher après un délai pour ne pas gêner immédiatement
-                setTimeout(() => {
-                    const banner = document.getElementById('cookie-banner');
-                    banner.style.display = 'block';
-
-                    // Ajouter une overlay pour plus d'attention
-                    this.createOverlay();
-                }, 1500);
-            },
-
-            createOverlay() {
-                const overlay = document.createElement('div');
-                overlay.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 9999;
-            animation: fadeIn 0.3s ease;
-        `;
-                overlay.id = 'cookie-overlay';
-                document.body.appendChild(overlay);
-
-                // Fermer en cliquant sur l'overlay
-                overlay.addEventListener('click', () => {
-                    // Empêcher la fermeture au clic sur l'overlay
-                    // Forcer l'utilisateur à faire un choix explicite
-                });
-            },
-
-            removeOverlay() {
-                const overlay = document.getElementById('cookie-overlay');
-                if (overlay) {
-                    overlay.style.animation = 'fadeOut 0.3s ease';
-                    setTimeout(() => overlay.remove(), 300);
-                }
-            },
-
-            acceptCookies(level) {
-                const consent = {
-                    level: level,
-                    date: new Date().toISOString(),
-                    necessary: true,
-                    analytics: level === 'all',
-                    marketing: level === 'all'
-                };
-
-                localStorage.setItem('cookieConsent', JSON.stringify(consent));
-                this.animateClose();
-                this.loadScripts();
-            },
-
-            animateClose() {
-                const banner = document.getElementById('cookie-banner');
-                banner.style.animation = 'slideDown 0.3s ease';
-                setTimeout(() => {
-                    banner.style.display = 'none';
-                    this.removeOverlay();
-                }, 300);
-            },
-
-            getConsent() {
-                return JSON.parse(localStorage.getItem('cookieConsent'));
-            },
-
-            loadScripts() {
-                const consent = this.getConsent();
-                if (!consent) return;
-
-                if (consent.analytics) {
-                    this.loadGA4();
-                    this.loadHotjar();
-                }
-
-                // Animation de confirmation discrète
-                this.showConfirmation(consent.level);
-            },
-
-            showConfirmation(level) {
-                const message = level === 'all' ? 'Préférences enregistrées ✅' :
-                    level === 'necessary' ? 'Naviguation privé activé 😷' :
-                        'Préférences sauvegardées 🔒';
-
-                // Petite notification discrète
-                const notification = document.createElement('div');
-                notification.textContent = message;
-                notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--success-color);
-            color: white;
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            z-index: 10001;
-            animation: slideInRight 0.3s ease;
-        `;
-                document.body.appendChild(notification);
-
-                setTimeout(() => {
-                    notification.style.animation = 'slideOutRight 0.3s ease';
-                    setTimeout(() => notification.remove(), 300);
-                }, 3000);
-            },
-
-            loadGA4() {
-                console.log('🚀 NON Chargement de Google Analytics...');
-                // GA déguage
-
-            },
-
-            loadHotjar() {
-                console.log('📊 Chargement de Smart_phpixel');
-                // Hotjar aussi
-                //smart_phpixel.js
-            }
-        };
-
-        // Ajouter les animations CSS supplémentaires
-        const style = document.createElement('style');
-        style.textContent = `
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-    
-    @keyframes fadeOut {
-        from { opacity: 1; }
-        to { opacity: 0; }
-    }
-    
-    @keyframes slideDown {
-        from { 
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-        to { 
-            opacity: 0;
-            transform: translateX(-50%) translateY(20px);
-        }
-    }
-    
-    @keyframes slideInRight {
-        from {
-            opacity: 0;
-            transform: translateX(100%);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-    
-    @keyframes slideOutRight {
-        from {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        to {
-            opacity: 0;
-            transform: translateX(100%);
-        }
-    }
-`;
-        document.head.appendChild(style);
-
-        // Exposer la fonction globalement
-        window.acceptCookies = CookieManager.acceptCookies.bind(CookieManager);
-
-        // Démarrer au chargement de la page
-        document.addEventListener('DOMContentLoaded', function () {
-            CookieManager.init();
-        });
-    </script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Berru-g</title>
+  <link rel="stylesheet" href="./menu/menu.css"> 
+  <link rel="stylesheet" href="./menu/dynamic-search.css"> 
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
-
 <body>
-
-    <div class="loader">
-        <div class="spinner"></div>
-    </div>
-
-    <div id="container3D"></div>
-
-    <!-- original by https://codepen.io/themrsami/pen/KwpGYNX?editors=1100 -->
-    <div class="floating-elements">
-        <div class="floating-circle"></div>
-        <div class="floating-circle"></div>
-        <div class="floating-circle"></div>
-    </div>
-
-    <!-- Advanced Navigation Bar -->
-    <nav class="navbar-container">
-        <div class="navbar">
-            <a href="#" class="navbar-brand"><!--code-brush-palette-->
-                <div class="logo-icon"><i class="fa-solid fa-palette"></i></div>
-                <span class="brand-text">Web artisan</span>
-            </a>
-
-            <!-- Navigation Links -->
-            <ul class="navbar-nav" id="navbarNav">
-                <li class="nav-item">
-                    <a href="#home" class="nav-link active">
-                        <svg class="nav-icon" viewBox="0 0 24 24">
-                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                            <polyline points="9,22 9,12 15,12 15,22"></polyline>
-                        </svg>
-                        <span>Home</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#skill" class="nav-link">
-                        <i class="fa-solid fa-palette"></i>
-                        <span>skill</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="./devis/" class="nav-link">
-                        <i class="fa-solid fa-list"></i>
-                        <span>Devis</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#avis" class="nav-link">
-                        <i class="fa-solid fa-comment"></i>
-                        <span>avis</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#contact" class="nav-link">
-                        <i class="fa-solid fa-envelope"></i>
-                        <span>Contact</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="./3D/index.html" class="nav-link">
-                        <i class="fa-solid fa-cubes"></i>
-                        <span>3D</span>
-                    </a>
-                    <div class="tooltip">Essayer l'expérience immersive</div>
-                </li>
-                <li class="nav-item"><!--fr.fiverr.com/berruaka/code-your-static-site-app-or-tools-->
-                    <a href="#contact" rel="noopener" target="_blank" class="cta-button">
-                        Je veux un site
-                    </a>
-                </li>
-            </ul>
-
-            <!-- Menu mobile -->
-            <button class="menu-mobile" id="mobileToggle">
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
+  <div class="app-container">
+    
+    <!-- SIDEBAR PROPRE -->
+    <aside class="sidebar-clean" id="sidebar">
+      
+      <!-- Header -->
+      <div class="sidebar-header">
+        <div class="sidebar-title">      Berru-g</div>
+        
+        <div class="search-box">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input type="text" class="search-input" id="searchInput" placeholder="Rechercher (/)..." autocomplete="off">
+          <kbd class="search-shortcut">/</kbd>
+        </div>
+      </div>
+      
+      <!-- Navigation -->
+      <nav class="nav-clean" id="navContainer">
+        
+        <!-- Section 1 -->
+        <div class="nav-section">
+          <div class="nav-section-title">Navigation Principale</div>
+          <a href="#" class="nav-item active" data-search="accueil home berru">
+            <span>Accueil</span>
+          </a>
+          <a href="portfolio.html"target="_blank" class="nav-item" data-search="projets galerie portfolio réalisations 3D saas">
+            <span>Site</span>
+          </a>
+          <a href="index.html#skill"target="_blank" class="nav-item" data-search="compétences skills techno code open-source expertise galerie photo img">
+            <span>Galerie</span>
+          </a>
+          <a href="index.html#contact" target="_blank" class="nav-item" data-search="contact message mail">
+            <span>Contact</span>
+          </a>
+        </div>
+        
+        <!-- Section 2 -->
+        <div class="nav-section">
+          <div class="nav-section-title">Créations</div>
+          
+          <!-- Développement Web 
+          <div class="nav-parent expanded">
+            <button class="nav-item" data-search="développement web dev frontend backend javascript react vue node">
+              <span>Développement Web</span>
+              <svg class="nav-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
             </button>
-        </div>
-    </nav>
-
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
-
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-header">
-            <a href="./paint/index.html" class="mobile-menu-brand" title="Egg#2">
-                <div class="logo-icon"><i class="fa-solid fa-brush"></i></div>
-                <span class="brand-text"></span>
-            </a>
-            <button class="mobile-menu-close" id="mobileMenuClose">
-                <span>×</span>
+            <div class="submenu">
+              <a href="https://codepen.io/h-lautre" class="nav-item" data-search="front-end responsive codepen animations">
+                <span>Codepen</span>
+              </a>
+              <a href="https://github.com/berru-g/" class="nav-item" data-search="github code source javascript python php sql">
+                <span>Github</span>
+              </a>
+            </div>
+          </div>-->
+          
+          <!-- Tools -->
+          <div class="nav-parent expanded">
+            <button class="nav-item" data-search="ui ux design interface utilisateur expérience prototype figma">
+              <span>Outils</span>
+              <svg class="nav-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
             </button>
+            <div class="submenu">
+              
+              <a href="https://crypto-free-tools.netlify.app/scam-radar/enquete/" target="_blank" class="nav-item" data-search="blockchain crypto bitcoin enquete forensic">
+                <span>Blockchain Explorer</span>
+              </a>
+              <a href="https://berru-g.github.io/smart_phpixel/" target="_blank" class="nav-item" data-search="alternative souverain Google Analytics free smart pixel">
+                <span>Alternative à Google Analytics</span>
+              </a>
+              <a href="https://agora-dataviz.com/" target="_blank" class="nav-item" data-search="composants ui components library design system">
+                <span>Editeur SQL + Diagramme</span>
+              </a>
+              <a href="https://3dscrollanimator.com/" target="_blank" class="nav-item" data-search="design systems système cohérence">
+                <span>3D Scroll Animation</span>
+              </a>
+            </div>
+          </div>
+
+           <!-- hardware -->
+          <div class="nav-parent expanded">
+            <button class="nav-item" data-search="hardware resources articles tutoriels contact outils blog">
+              <span>Hardware</span>
+              <svg class="nav-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+            </button>
+            <div class="submenu">
+               <a href="https://www.hackster.io/gleberruyer" target="_blank" class="nav-item" data-search="electronique arduino pcb music daw midi usbc shield arduino lego">
+                <span>Arduino</span>
+              </a>
+              <a href="https://www.tindie.com/stores/makeandplay/" target="_blank" class="nav-item" data-search="electronic pcb arduino controller électronique">
+                <span>Shop Controller</span>
+              </a>
+
+            </div>
+          </div>
+          
+          <!-- Ressources -->
+          <div class="nav-parent expanded">
+            <button class="nav-item" data-search="ressources enquete articles blockchain crypto btc">
+              <span>Ressources</span>
+              <svg class="nav-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+            </button>
+            <div class="submenu">
+              
+              <a href="https://medium.com/@gael-berru" target="_blank" class="nav-item" data-search="articles blog écrits publication blockchain crypto web3">
+                <span>Articles</span>
+              </a>
+              <a href="https://github.com/berru-g/crypto-tool/blob/main/scam-radar/enquete/readme.md" target="_blank" class="nav-item" data-search="enquete blockchain bitcoin crypto btc arnaque scam">
+                <span>Enquete Blockchain</span>
+              </a>
+              <a href="https://github.com/berru-g/" target="_blank" class="nav-item" data-search="github code source javascript python php sql">
+                <span>Github</span>
+              </a>
+               <a href="https://codepen.io/h-lautre"target="_blank"  class="nav-item" data-search="front-end responsive codepen animations">
+                <span>Codepen</span>
+              </a>
+
+            </div>
+          </div>
+          
         </div>
-
-        <ul class="mobile-menu-nav">
-            <li class="mobile-menu-item">
-                <a href="#home" class="mobile-menu-link active">
-                    <svg class="mobile-menu-icon" viewBox="0 0 24 24">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                        <polyline points="9,22 9,12 15,12 15,22"></polyline>
-                    </svg>
-                    <span>Home</span>
-                </a>
-            </li>
-            <li class="mobile-menu-item">
-                <a href="#skill" class="mobile-menu-link">
-                    <i class="fa-solid fa-palette"></i>
-                    <span>skill</span>
-                </a>
-            </li>
-            <li class="mobile-menu-item">
-                <a href="./devis/" class="mobile-menu-link">
-                    <i class="fa-solid fa-list"></i>
-                    <span>Devis</span>
-                </a>
-            </li>
-            <li class="mobile-menu-item">
-                <a href="#avis" class="mobile-menu-link">
-                    <i class="fa-solid fa-comment"></i>
-
-                    <span>avis</span>
-                </a>
-            </li>
-            <li class="mobile-menu-item">
-                <a href="#contact" class="mobile-menu-link">
-                    <i class="fa-solid fa-envelope"></i>
-                    <span>Contact</span>
-                </a>
-            </li>
-        </ul>
-
-        <div class="mobile-cta">
-            <a href="#contact" rel="noopener" target="_blank" class="mobile-cta-button">
-                Je veux un site
-            </a>
-        </div>
-    </div>
-
-    <!-- Intro -->
-    <div class="demo-container" data-aos="fade-up" data-aos-delay="200">
-        <img src="https://gael-berru.com/smart_phpixel/pixel.php?source=site-perso" width="1" height="1"
-            style="display:none;">
-        <!-- Intro -->
-        <div class="demo-container" data-aos="fade-up" data-aos-delay="200">
-            <section id="home" class="content-section">
-                <h1 class="section-title" data-aos="fade-down" data-aos-duration="1500">Votre projet web sort de
-                    l'ordinaire ?
-                    <br>
-                    <small style="font-size: 1.2rem;">
-                        <a href="#contact" style="color: #ab9ff2; text-decoration: underline;">
-                            Parlons-en.
-                        </a>
-                    </small>
-                </h1>
-                <p class="section-subtitle">
-                    Vous avez besoin d'une <strong>intégration 3D interactive</strong>,
-                    d'un <strong>dashboard sur mesure</strong>
-                    ou d'un <strong>outil éthique</strong> qui respecte vos valeurs ?
-                </p>
-                <br>
-                <p class="section-subtitle">
-                    Je développe des solutions web personnalisées pour les projets qui nécessitent
-                    une approche différente.
-                </p>
-            </section>
-
-
-            <!-- Benefits Section -->
-            <section class="benefits">
-                <div class="container">
-                    <h2 class="section-title">Pour quels types de projets ?</h2>
-                    <div class="benefits-grid">
-                        <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
-                            <div class="benefit-icon"><i class="fa-solid fa-qrcode"></i></div>
-                            <h3 data-aos="fade-right">Vulgarisation & Contenu</h3>
-                            <p>Pour les créateurs qui veulent expliquer des concepts complexes
-                                avec des visualisations interactives de data, animations 3D ou outils pédagogiques.</p>
-                        </div>
-                        <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
-                            <div class="benefit-icon"><i class="fa-solid fa-gears"></i></div>
-                            <h3 data-aos="fade-right">Enquête & Data</h3>
-                            <p>Outils d'analyse blockchain, visualisation de datasets complexes,
-                                dashboards d'investigation pour journalistes ou chercheurs.</p>
-                        </div>
-                        <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
-                            <div class="benefit-icon"><i class="fa-solid fa-terminal"></i></div>
-                            <h3 data-aos="fade-right">Prototypes Innovants</h3>
-                            <p>MVP pour des concepts uniques, intégrations API créatives,
-                                outils qui n'existent pas encore sur le marché.</p>
-                        </div>
-                        <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
-                            <div class="benefit-icon"><i class="fa-solid fa-shield"></i></div>
-                            <h3 data-aos="fade-right">Solutions Éthiques</h3>
-                            <p>Alternatives aux outils mainstream, respect de la vie privée,
-                                approche RGPD-friendly pour les projets sensibles aux données.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-
-
-        <!-- Skills Section -->
-        <section id="skill">
-            <h2 class="section-title">Mes Travaux 2025</h2>
-
-            <div class="projects-grid">
-
-                <!-- card -1 -->
-                <div class="project-card" data-aos="flip-left" data-aos-delay="300">
-                    <div class="project-image-container">
-                        <a href="./img/Interface-3Dscrollanimator.png" class="zoom-img" title="Agrandir">
-                            <img src="./img/Interface-3Dscrollanimator.png" alt="3Dscrollanimator Screenshot"
-                                class="project-img" /></a>
-                        <div class="project-title-overlay">
-                            <span>3D Scroll animator</span>
-                        </div>
-                    </div>
-                    <span class="badge badge-saas">SAAS</span>
-                    <a href="https://3dscrollanimator.com" target="_blank" title="Voir le site">
-                        <div class="project-content">
-                            <p>Créez des animations 3D, synchronisé au scroll de votre site en 2 min. Interface facile à
-                                prendre en main et génération du code automatique prêt à l'emploi pour vos projets web. Gamification des crédits, payement euro ou solana.
-                            </p>
-                            <div class="project-links">
-
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- card 2 -->
-                <div class="project-card" data-aos="flip-left" data-aos-delay="300">
-                    <div class="project-image-container">
-                        <a href="./img/sql-editor.png" class="zoom-img" title="Agrandir">
-                            <img src="./img/sql-editor.png" alt="3Dscrollanimator Screenshot" class="project-img" /></a>
-                        <div class="project-title-overlay">
-                            <span>SQL Editor to map</span>
-                        </div>
-                    </div>
-                    <span class="badge badge-saas">SAAS</span>
-                    <a href="https://agora-dataviz.com" target="_blank" title="Voir le site">
-                        <div class="project-content">
-                            <p>Plateforme de partage de fichiers avec reseau social, editeur SQL to map & Editeur JSON
-                                to map et autres outils de visualisation data.</p>
-                            <div class="project-links">
-
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- card 7 -->
-                <div class="project-card" data-aos="flip-left" data-aos-delay="800">
-                    <div class="project-image-container">
-                        <a href="./img/smart-pixel.png" class="zoom-img" title="Agrandir">
-                            <img src="./img/smart-pixel.png" alt="Smart Pixel Screenshot" class="project-img" /></a>
-                        <div class="project-title-overlay">
-                            <span>Smart Pixel ou Free Analytics</span>
-                        </div>
-                    </div>
-                    <span class="badge badge-tool">TOOL</span>
-                    <a href="https://berru-g.github.io/smart_phpixel/" target="_blank" title="Voir le site">
-                        <div class="project-content">
-                            <p>Une alternative souveraine à Google Analytics. Vos données restent sur vos serveurs, pas
-                                chez les GAFAM. Conforme RGPD, open source, dashboard integré, doc complète. Version
-                                1.2.</p>
-                            <div class="project-links">
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- card 8 -->
-                <div class="project-card" data-aos="flip-left" data-aos-delay="800">
-                    <div class="project-image-container">
-                        <a href="./img/smbchat.png" class="zoom-img" title="Agrandir">
-                            <img src="./img/smbchat.png" alt="SMB Chat Screenshot" class="project-img" /></a>
-                        <div class="project-title-overlay">
-                            <span>Local Network</span>
-                        </div>
-                    </div>
-                    <span class="badge badge-tool">TOOL</span>
-                    <a href="https://berru-g.github.io/OTTO/SMBchat/SMBchatV2/" target="_blank"
-                        title="Local Network workspace">
-                        <div class="project-content">
-                            <p>SMBchatV2.exe est un outil de communication en réseau local, basé sur le protocole SMB.
-                                L'interface propose un Chat en temps réel, <strong>messages chiffrés</strong>, données
-                                effacé automatiquement à chaque redémarrage de votre machine et transfert de fichiers.
-                                Uniquement sur votre réseau local — sans serveur externe ni configuration
-                                complexe. Security AES-128 + HMAC-SHA256</p>
-                            <div class="project-links">
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!--card 13-->
-                <div class="project-card" data-aos="flip-left" data-aos-delay="900">
-                    <div class="project-image-container">
-                        <a href="./img/V2.png" class="zoom-img" title="Agrandir">
-                            <img src="./img/V2.png" alt="Blockchain Explorer Screenshot" class="project-img" /></a>
-                        <div class="project-title-overlay">
-                            <span>Blockchain Explorer</span>
-                        </div>
-                    </div>
-                    <span class="badge badge-tool">TOOL</span>
-                    <a href="https://crypto-free-tools.netlify.app/scam-radar/" target="_blank" title="Scam radar">
-                        <div class="project-content">
-                            <p>Outil open source d'investigation blockchain. Pour suivre des transactions Bitcoin suite
-                                à une arnaque par exemple et
-                                identifier des exchanges/wallet KYC. Créez des diagrammes automatiquement avec la
-                                recherche étendue de transactions. ENQUETE EN COURS.</p>
-                            <div class="project-links">
-
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- card 6 -->
-                <div class="project-card" data-aos="flip-left" data-aos-delay="600">
-                    <div class="project-image-container">
-                        <a href="./img/devcryptotool.png" class="zoom-img" title="Agrandir">
-                            <img src="./img/devcryptotool.png" alt="PixelEarth Screenshot" class="project-img" /></a>
-                        <div class="project-title-overlay">
-                            <span>Crypto Free Tools</span>
-                        </div>
-                    </div>
-                    <span class="badge badge-tool">Tool's</span>
-                    <a href="https://crypto-free-tools.netlify.app/" target="_blank" title="Voir le site">
-                        <div class="project-content">
-                            <p>Suite d'outils pour traders avec utilisation des API de CoinGecko et Binance.</p>
-                            <div class="project-links">
-
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- card 3 -->
-                <div class="project-card" data-aos="flip-left" data-aos-delay="300">
-                    <div class="project-image-container">
-                        <a href="./img/devgoldendessert.png" class="zoom-img" title="Agrandir">
-                            <img src="./img/devgoldendessert.png" alt="golden dessert Screenshot"
-                                class="project-img" /></a>
-                        <div class="project-title-overlay">
-                            <span>Golden Dessert 'CMS'</span>
-                        </div>
-                    </div>
-                    <span class="badge badge-site">Site </span>
-                    <a href="https://goldendessert.fr" target="_blank" title="Voir le site">
-                        <div class="project-content">
-                            <p>Site vitrine pour le Chef Patissier Nicolas Fossé, avec formulaire et envoie de mail
-                                automatique. Galerie photo CMS, pour ne plus dépendre de votre dev pour changer vos
-                                images.
-                            </p>
-                            <div class="project-links">
-
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- card 4 -->
-                <div class="project-card" data-aos="flip-left" data-aos-delay="400">
-                    <div class="project-image-container">
-                        <a href="./img/admin2.png" class="zoom-img" title="Agrandir">
-                            <img src="./img/admin2.png" alt="admin Screenshot" class="project-img" /></a>
-                        <div class="project-title-overlay">
-                            <span>Interface Admin.</span>
-                        </div>
-                    </div>
-                    <span class="badge badge-tool">Tool's</span>
-                    <a href="./board/login.php" target="_blank" title="Voir le site">
-                        <div class="project-content">
-                            <p>Accédez à toute vos bases de données dans un dashboard. Fonctionnalités developpés sur
-                                demande selon vos besoins.</p>
-                            <div class="project-links">
-
-
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- card 5 -->
-                <div class="project-card" data-aos="flip-left" data-aos-delay="500">
-                    <div class="project-image-container">
-                        <a href="./img/devpixel.png" class="zoom-img" title="Agrandir">
-                            <img src="./img/devpixel.png" alt="PixelEarth Screenshot" class="project-img" /></a>
-                        <div class="project-title-overlay">
-                            <span>PixelEarth - Marketplace</span>
-                        </div>
-                    </div>
-                    <span class="badge">Proto</span>
-                    <a href="https://pixelearth.netlify.app/" target="_blank" title="Voir le site">
-                        <div class="project-content">
-                            <p>Plateforme de vente de pixel avec système de paiement ( Stripe ) et base de données.</p>
-                            <div class="project-links">
-
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-
-                <!-- card 9 -->
-                <div class="project-card" data-aos="flip-left" data-aos-delay="800">
-                    <div class="project-image-container">
-                        <a href="./img/agora.png" class="zoom-img" title="Agrandir">
-                            <img src="./img/agora.png" alt="PixelEarth Screenshot" class="project-img" /></a>
-                        <div class="project-title-overlay">
-                            <span>Réseau social & tool DataAnalyst 'saas'</span>
-                        </div>
-                    </div>
-                    <span class="badge badge-saas">SAAS</span>
-                    <a href="https://agora-dataviz.com/" target="_blank" title="Voir le site">
-                        <div class="project-content">
-                            <p>Agora Data Viz est un MVP (prototype) Contient un Réseau social minimaliste et une
-                                plateforme de partage et visualisation graphique de fichiers CSV, Excel et Json. Ce mvp
-                                contient également un SQL Editor to map et Json Editor, venez faire un tour.</p>
-                            <div class="project-links">
-
-
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- card 10 -->
-                <div class="project-card" data-aos="flip-left" data-aos-delay="900">
-                    <div class="project-image-container">
-                        <a href="./img/berru-site3D.png" class="zoom-img" title="Agrandir">
-                            <img src="./img/berru-site3D.png" alt="plane Screenshot" class="project-img" /></a>
-                        <div class="project-title-overlay">
-                            <span>Immersion 3D</span>
-                        </div>
-                    </div>
-                    <span class="badge badge-game">Game</span>
-                    <a href="./3D/index.html" target="_blank" title="Voir le site">
-                        <div class="project-content">
-                            <p>Visitez mon site en immersion. Plongez dans un univers avec des missions et système de
-                                gamification pour récupérez le
-                                trésor caché.</p>
-                            <div class="project-links">
-
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- card 11 -->
-                <div class="project-card" data-aos="flip-left" data-aos-delay="900">
-                    <div class="project-image-container">
-                        <a href="./img/faceMorph.png" class="zoom-img" title="Agrandir">
-                            <img src="./img/faceMorph.png" alt="archi Screenshot" class="project-img" /></a>
-                        <div class="project-title-overlay">
-                            <span>IA Assistant</span>
-                        </div>
-                    </div>
-                    <span class="badge">Proto</span>
-                    <a href="./face_lipsync/index.html" target="_blank" title="Voir le site">
-                        <div class="project-content">
-                            <p>Assistant relié à l'ia, spécifiquement éduquer à vos besoins. Prototype en cours de
-                                developpement.</p>
-                            <div class="project-links">
-
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- ================= NOUVELLE SECTION AVIS CLIENTS ================= -->
-        <section id="avis" style="margin-top: 50px;" data-aos="fade-up" data-aos-delay="200">
-            <h2 class="section-title" data-aos="zoom-in" data-aos-delay="100">Avis Clients</h2>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
-                <!-- Avis 1 -->
-                <div
-                    style="background: white; padding: 25px; border-radius: 12px; border: 1px solid black; box-shadow: -8px 8px 0px -1px hsla(0, 0%, 53%, 0.501); position: relative;">
-                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                        <div
-                            style="width: 40px; height: 40px; background: #ffd97d; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; color: white; font-weight: bold;">
-                            5★</div>
-                        <div>
-                            <h4 style="margin: 0; color: #444;">Nico Golden Dessert</h4>
-                            <p style="margin: 0; font-size: 0.9em; color: grey;"><a
-                                    href="https://golden-dessert.netlify.app" rel="noopener" target="_blank">Visiter le
-                                    site de Nicolas</a></p>
-                        </div>
-                    </div>
-                    <p style="font-style: italic;">"Gaël a livré un site parfaitement propre en 1 semaine seulement.
-                        Il nous à même fait cadeaux d'une interface admin. Je recommande !"</p>
-                </div>
-
-                <!-- Avis 2 -->
-                <div
-                    style="background: white; padding: 25px; border-radius: 12px; border: 1px solid grey; box-shadow: -8px 8px 0px -1px hsla(0, 0%, 53%, 0.501); position: relative;">
-                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                        <div
-                            style="width: 40px; height: 40px; background: #ffd97d; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; color: white; font-weight: bold;">
-                            5★</div>
-                        <div>
-                            <h4 style="margin: 0; color: #444;">Client Freelance</h4>
-                            <p style="margin: 0; font-size: 0.9em; color: grey;"><a
-                                    href="https://crypto-free-tools.netlify.app" rel="noopener" target="_blank">Visiter
-                                    le site de Eustis</a></p>
-                        </div>
-                    </div>
-                    <p style="font-style: italic;">"Développeur réactif et compétent. Il a su comprendre mes besoins
-                        complexes en matière d'intégration API."</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact" class="content-section" data-aos="zoom-in" data-aos-delay="100">
-            <h2 class="section-title" data-aos="zoom-in" data-aos-delay="100">Contact</h2>
-            <p class="section-subtitle" data-aos="zoom-in" data-aos-delay="100">
-                Prêt à créer votre présence en ligne ? <a href="https://berru-g.github.io/name-generate-color/"
-                    title="easter egg #1">Egg#1</a>
-            </p>
-
-            <div class="contact-form" data-aos="zoom-in" data-aos-delay="100">
-                <form action="https://formspree.io/f/xrbklnwy" method="POST">
-
-                    <div class="form-group">
-                        <!--<label for="email" class="form-label">Email Address</label>-->
-                        <input type="email" id="email" name="email" class="form-input" placeholder="Votre adresse mail"
-                            required>
-                    </div>
-
-                    <div class="form-group">
-                        <!--<label for="message" class="form-label">Message</label>-->
-                        <textarea id="message" name="message" class="form-textarea"
-                            placeholder="Pour commencer, décrivez moi vos besoins et vos envies. 😊"
-                            required></textarea>
-                    </div>
-
-                    <button type="submit" class="submit-btn" data-aos="zoom-in" data-aos-delay="100">
-                        <span>Envoyer </span>
-                        <i class="fa-solid fa-paper-plane"></i>
-                    </button>
-                </form>
-            </div>
-        </section>
-    </div>
-
-    <section id="faq">
-        <h2 class="section-title">F.A.Q</h2>
-
-        <div class="faq-container">
-            <div class="faq-item">
-                <button class="faq-question">
-                    <span>Pourquoi ne pas utiliser un site "tout fait" (Wix, Shopify, etc.)
-                        ?</span>
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                <div class="faq-answer">
-                    <p>Ces plateformes sont pratiques, mais limitées. Avec une configuration sur-mesure, vous avez un
-                        design
-                        unique,
-                        de meilleures performances, plus de liberté, et un référencement souvent bien meilleur.</p>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question">
-                    <span>Combien de temps faut-il pour créer un site sur-mesure ?</span>
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                <div class="faq-answer">
-                    <p>Tout dépend du projet, mais en général, il faut compter entre une et quatre semaines selon la
-                        complexité,
-                        les contenus, et les fonctionnalités souhaitées.</p>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-question">
-                    <span>Comment se déroule la collaboration ?</span>
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                <div class="faq-answer">
-                    <p>Un premier échange pour comprendre vos besoins, suivi d’une proposition sur-mesure. Une fois
-                        validée, nous passons à la création. Vous validez chaque étape.</p>
-                </div>
-            </div>
-
-    </section>
-
-
-    <footer class="footer">
-        <div class="footer-content">
-
-            <ul class="footer-links">
-                <li><a href="./advent-calendar/" class="footer-link"><i class="fa-solid fa-gifts"></i></a></li>
-                <li><a href="./devis/index.html" class="footer-link">Devis</a></li>
-                <li><a href="./codepen/index.html" class="footer-link">Code ton site</a></li>
-                <li><a href="#" id="launch-quiz" class="footer-link">Quiz</a></li>
-                <li><a href="#show-tip" id="show-tip" class="footer-link">Tips</a></li>
-            </ul>
-
-            <div class="footer-social">
-
-                <!-- CodePen -->
-                <a href="https://codepen.io/h-lautre" class="social-link" aria-label="CodePen">
-                    <svg class="social-icon" viewBox="0 0 24 24">
-                        <path
-                            d="M21.438 8.297 13.09 2.402a1.517 1.517 0 0 0-1.68 0l-8.35 5.895A1.515 1.515 0 0 0 2 9.548v4.902c0 .5.248.965.66 1.251l8.35 5.896a1.517 1.517 0 0 0 1.68 0l8.35-5.896c.412-.286.66-.75.66-1.251V9.548a1.517 1.517 0 0 0-.562-1.25ZM12 4.423l6.176 4.36L14.382 12l3.794 3.216L12 19.578l-6.176-4.362L9.618 12 5.824 8.782 12 4.423Z" />
-                    </svg>
-                </a>
-                <!-- GitHub -->
-                <a href="https://github.com/berru-g/" class="social-link" aria-label="GitHub">
-                    <svg class="social-icon" viewBox="0 0 24 24">
-                        <path
-                            d="M12 .5C5.373.5 0 5.873 0 12.5c0 5.292 3.438 9.779 8.205 11.366.6.111.82-.26.82-.577 0-.285-.011-1.04-.017-2.04-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.84 1.237 1.84 1.237 1.07 1.834 2.809 1.304 3.495.996.108-.776.418-1.304.76-1.604-2.665-.304-5.466-1.332-5.466-5.93 0-1.31.468-2.381 1.236-3.221-.124-.303-.536-1.524.117-3.176 0 0 1.008-.322 3.3 1.23a11.52 11.52 0 0 1 3.004-.404c1.02.005 2.047.138 3.003.404 2.29-1.552 3.296-1.23 3.296-1.23.655 1.652.243 2.873.12 3.176.77.84 1.236 1.911 1.236 3.221 0 4.61-2.804 5.625-5.475 5.921.43.37.814 1.102.814 2.222 0 1.604-.015 2.896-.015 3.286 0 .32.216.694.825.576C20.565 22.275 24 17.792 24 12.5 24 5.873 18.627.5 12 .5Z" />
-                    </svg>
-                </a>
-                <!--Hackster.io-->
-                <a href="https://www.hackster.io/gleberruyer" class="social-link" aria-label="hackster.io">
-                    <svg class="social-icon" viewBox="0 0 24 24">
-                        <path
-                            d="M11.9 12.9003C11.9 12.6003 12.1 12.4003 12.3 12.3003L15.1 11.5003C15.3 11.5003 15.5 11.5003 15.5 11.8003V12.8003C15.5 13.0003 15.3 13.2003 15.1 13.2003H12.3C12.1 13.2003 11.9 13.0003 11.9 12.8003V12.9003ZM23.4 15.4003H20.5999C20.3999 15.4003 20.2 15.2003 20.2 15.0003V10.6003C20.2 10.4003 20.3999 10.1003 20.5999 10.1003L23.4 9.30029C23.6 9.30029 23.7999 9.30029 23.7999 9.60029V15.0003C23.7999 15.2003 23.6 15.4003 23.4 15.4003ZM23.7999 23.0003C23.7999 23.3003 23.6 23.5003 23.4 23.6003L20.5999 24.4003C20.3999 24.4003 20.2 24.4003 20.2 24.1003V23.1003C20.2 22.9003 20.3999 22.7003 20.5999 22.7003H23.4C23.6 22.7003 23.7999 22.9003 23.7999 23.1003V23.0003ZM12.3 20.5003H15.1C15.3 20.5003 15.5 20.7003 15.5 20.9003V25.3003C15.5 25.5003 15.3 25.8003 15.1 25.8003L12.3 26.6003C12.1 26.6003 11.9 26.6003 11.9 26.3003V20.9003C11.9 20.7003 12.1 20.5003 12.3 20.5003ZM7.79993 16.1003C7.79993 16.1003 8.19993 16.0003 8.39993 15.9003L15.2 14.0003C15.4 14.0003 15.6 14.0003 15.6 14.3003V16.1003C15.6 16.3003 15.8 16.5003 16 16.5003H23.5C23.7 16.5003 23.9 16.7003 23.9 16.9003V18.9003C23.9 19.1003 24.0999 19.3003 24.2999 19.3003H27.9C28 19.3003 28.2 19.4003 28.2 19.6003C28.2 19.8003 28.2 19.7003 28.2 19.8003C28.2 19.8003 27.7999 19.9003 27.5999 20.0003C26.2999 20.4003 22.0999 21.5003 20.7999 21.9003C20.5999 21.9003 20.4 21.9003 20.4 21.6003V19.8003C20.4 19.6003 20.2 19.4003 20 19.4003H12.5C12.3 19.4003 12.1 19.2003 12.1 19.0003V16.9003C12.1 16.7003 11.9 16.5003 11.7 16.5003H8.09993C7.99993 16.5003 7.79993 16.4003 7.79993 16.2003C7.79993 16.0003 7.79993 16.1003 7.79993 16.0003V16.1003Z"
-                            fill="var(--staticWhite)"></path>
-                    </svg>
-                </a>
-                <!--Tiktok-->
-                <a href="https://www.tiktok.com/@berru_create" class="social-link" aria-label="Tiktok">
-                    <svg class="social-icon" viewBox="0 0 24 24">
-                        <path
-                            d="M22.519 9.704h-3.033V7.683h3.033V4.801h-3.033V0h-4.03c-2.219 0-4.012 1.796-4.012 4.017v.786H8.974V7.8h2.473v9.926c0 2.305 1.87 4.174 4.178 4.174h6.894v-3.092h-6.071c-.597 0-1.082-.484-1.082-1.082v-9.926h3.033v2.021h3.033V9.704Z" />
-                    </svg>
-                </a>
-                <!-- Instagram -->
-                <a href="#" class="social-link" aria-label="Instagram">
-                    <svg class="social-icon" viewBox="0 0 24 24">
-                        <path
-                            d="M12 2.2c3.2 0 3.584.012 4.85.07 1.17.056 1.97.248 2.426.414a4.9 4.9 0 0 1 1.783 1.016 4.9 4.9 0 0 1 1.016 1.783c.166.456.358 1.256.414 2.426.058 1.267.07 1.65.07 4.85s-.012 3.584-.07 4.85c-.056 1.17-.248 1.97-.414 2.426a4.9 4.9 0 0 1-1.016 1.783 4.9 4.9 0 0 1-1.783 1.016c-.456.166-1.256.358-2.426.414-1.267.058-1.65.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.056-1.97-.248-2.426-.414a4.9 4.9 0 0 1-1.783-1.016 4.9 4.9 0 0 1-1.016-1.783c-.166-.456-.358-1.256-.414-2.426C2.212 15.584 2.2 15.2 2.2 12s.012-3.584.07-4.85c.056-1.17.248-1.97.414-2.426a4.9 4.9 0 0 1 1.016-1.783 4.9 4.9 0 0 1 1.783-1.016c.456-.166 1.256-.358 2.426-.414C8.416 2.212 8.8 2.2 12 2.2Zm0 1.8c-3.146 0-3.51.012-4.747.07-.96.045-1.482.204-1.826.34a3.1 3.1 0 0 0-1.123.732 3.1 3.1 0 0 0-.732 1.123c-.136.344-.295.866-.34 1.826-.058 1.237-.07 1.601-.07 4.747s.012 3.51.07 4.747c.045.96.204 1.482.34 1.826a3.1 3.1 0 0 0 .732 1.123 3.1 3.1 0 0 0 1.123.732c.344.136.866.295 1.826.34 1.237.058 1.601.07 4.747.07s3.51-.012 4.747-.07c.96-.045 1.482-.204 1.826-.34a3.1 3.1 0 0 0 1.123-.732 3.1 3.1 0 0 0 .732-1.123c.136-.344.295-.866.34-1.826.058-1.237.07-1.601.07-4.747s-.012-3.51-.07-4.747c-.045-.96-.204-1.482-.34-1.826a3.1 3.1 0 0 0-.732-1.123 3.1 3.1 0 0 0-1.123-.732c-.344-.136-.866-.295-1.826-.34-1.237-.058-1.601-.07-4.747-.07Zm0 3.3a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13Zm0 2.2a4.3 4.3 0 1 0 0 8.6 4.3 4.3 0 0 0 0-8.6Zm6.7-2.6a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
-                    </svg>
-                </a>
-
-            </div>
-
-
-            <div class="footer-copy">
-                © 2025 berru-g | Ce site contient des easter egg <a
-                    href="https://berru-g.github.io/console-interactive/" title="easter egg #4">Egg#4</a>
-            </div>
-    </footer>
-    <script>
-        document.querySelectorAll('.zoom-img').forEach(link => {
-            link.addEventListener('click', function (e) {
-                e.preventDefault();
-                const imgSrc = this.getAttribute('href');
-                const instance = basicLightbox.create(`<img src="${imgSrc}" style="max-width:100%; max-height:100vh;">`);
-                instance.show();
-            });
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        // Initialisation de AOS
-        document.addEventListener('DOMContentLoaded', function () {
-            AOS.init({
-                duration: 1200,
-                once: true,
-                easing: 'ease-out-back'
-            });
-        });
-
-        // Création des éléments curseur
-        const cursorDot = document.createElement('div');
-        const cursorCircle = document.createElement('div');
-        cursorDot.className = 'cursor-dot';
-        cursorCircle.className = 'cursor-circle';
-
-        document.body.appendChild(cursorDot);
-        document.body.appendChild(cursorCircle);
-
-        // Variables pour la position
-        let mouseX = 0, mouseY = 0;
-        let circleX = 0, circleY = 0;
-
-        // Événement de mouvement de souris
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            cursorDot.style.left = mouseX - 4 + 'px';
-            cursorDot.style.top = mouseY - 4 + 'px';
-        });
-
-        // Animation fluide pour le cercle
-        function animateCursor() {
-            // Lag du cercle pour un effet smooth
-            circleX += (mouseX - circleX) * 0.2;
-            circleY += (mouseY - circleY) * 0.2;
-
-            cursorCircle.style.left = circleX - 15 + 'px';
-            cursorCircle.style.top = circleY - 15 + 'px';
-
-            requestAnimationFrame(animateCursor);
-        }
-        animateCursor();
-
-        // Effet au clic
-        document.addEventListener('mousedown', () => {
-            cursorDot.classList.add('click');
-            cursorCircle.classList.add('click');
-        });
-
-        document.addEventListener('mouseup', () => {
-            cursorDot.classList.remove('click');
-            cursorCircle.classList.remove('click');
-        });
-
-        // Réapparition du curseur si on quitte la fenêtre
-        document.addEventListener('mouseleave', () => {
-            cursorDot.style.opacity = '0';
-            cursorCircle.style.opacity = '0';
-        });
-
-        document.addEventListener('mouseenter', () => {
-            cursorDot.style.opacity = '1';
-            cursorCircle.style.opacity = '1';
-        });
-    </script>
-    <script src="./new.js"></script>
-    <script src="./game_console.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
+        
+      </nav>
+      
+      <!-- Footer -->
+      <div class="sidebar-footer">
+        <button class="footer-btn" id="settingsBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <span>Paramètres</span>
+        </button>
+        
+        <button class="footer-btn" id="feedbackBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>Feedback</span>
+        </button>
+      </div>
+      
+    </aside>
+    
+    <!-- Bouton toggle -->
+    <button class="toggle-clean" id="toggleBtn" aria-label="Ouvrir le menu">
+      
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="display" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+      <!--<img src="./img/wamcache.png">-->
+    </button>
+    
+    <!-- Main content -->
+    <main class="main-content">
+      
+      
+    
+    </main>
+    
+  </div>
+
+  <script src="./menu/menu.js"></script>
+  <script src="./menu/projects-database.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  // Initialiser AOS
+  AOS.init({
+    duration: 800,
+    once: true, // Animation une seule fois
+    offset: 100
+  });
+  
+  console.log('✅ AOS initialisé');
+</script>
 </body>
-
 </html>

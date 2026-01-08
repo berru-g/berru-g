@@ -15,3 +15,28 @@ CREATE TABLE smart_pixel_tracking (
     INDEX idx_source (source),
     INDEX idx_country (country)
 );
+
+-- Table utilisateurs
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table tentatives de connexion (protection brute force)
+CREATE TABLE login_attempts (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    ip_address VARCHAR(45),
+    email_attempted VARCHAR(255),
+    success BOOLEAN,
+    attempt_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Créer un admin (mot de passe: admin123)
+INSERT INTO users (username, email, password_hash) 
+VALUES ('admin', 'admin@dashboard.com', '$2y$12$Tzhz7XKyF4q8JcdLREftLuh.8pn0dsam0dFDR3.SduXQ/ZMDYRwYi');
+
+-- Génère avec: echo password_hash('mdp123', PASSWORD_BCRYPT, ['cost' => 12]);
