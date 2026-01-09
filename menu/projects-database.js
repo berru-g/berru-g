@@ -9,7 +9,7 @@ const projectsDatabase = [
         link: 'https://3dscrollanimator.com',
         category: 'saas',
         features: ['Interface drag & drop', 'Export code prêt', 'Gamification crédits', 'Paiement Euro/Solana'],
-        tags: ['SAAS', 'WebGL', 'Animation', '3d', '']
+        tags: ['SAAS', 'WebGL', 'Animation', '3d', 'threejs']
     },
     {
         id: 'smart-pixel',
@@ -64,12 +64,12 @@ const projectsDatabase = [
         title: 'Golden Dessert CMS',
         shortDesc: 'Site vitrine avec CMS pour chef pâtissier',
         longDesc: 'Site avec formulaire, galerie photo CMS, envoi automatique de mails.',
-        keywords: ['cms', 'website', 'portfolio', 'chef', 'restaurant', 'gallery'],
+        keywords: ['cms', 'website', 'portfolio', 'vitrine', 'restaurant', 'gallery'],
         image: './img/devgoldendessert.png',
         link: 'https://goldendessert.fr',
         category: 'website',
-        features: ['Galerie CMS', 'Formulaire automatique', 'Responsive design'],
-        tags: ['SITE', 'CMS', 'Portfolio']
+        features: ['Galerie CMS', 'Formulaire','Analytics', 'Responsive design'],
+        tags: ['SITE', 'CMS','Vitrine']
     },
     {
         id: 'crypto-tools',
@@ -101,11 +101,11 @@ const projectsDatabase = [
         shortDesc: 'Outil d\'investigation blockchain',
         longDesc: 'Outil open source d\'investigation blockchain pour tracer des transactions Bitcoin et identifier les plateformes KYC.',
         keywords: ['blockchain', 'bitcoin', 'enquete', 'investigation', 'api'],
-        image: './img/bitcoin-explorer.png',
+        image: './img/enquete.png',
         link: 'https://github.com/berru-g/crypto-tool/blob/main/scam-radar/enquete/readme.md/',
         category: 'tool',
-        features: ['API CoinGecko', 'API Blockstream', 'Diagramme', 'map'],
-        tags: ['tool', 'Forensic', 'investigation', 'Network']
+        features: ['API CoinGecko', 'API Blockstream', 'Diagramme', 'Investigation'],
+        tags: ['tool', 'Forensic', 'investigation', 'btc','bitcoin', 'crypto', 'enquete' ]
     },
     {
         id: 'Heatmap',
@@ -118,6 +118,30 @@ const projectsDatabase = [
         category: 'tool',
         features: ['API CoinGecko', '3D', 'Threejs', 'map', 'webgl'],
         tags: ['tool', '3D', 'crypto', 'heatmap']
+    },
+     {
+        id: 'Contact',
+        title: 'Contact',
+        shortDesc: 'Vous voulez discuter ',
+        longDesc: 'Suivez moi ',
+        keywords: ['contact', 'message'],
+        image: './img/wamcache.png',
+        link: 'portfolio.html#contact',
+        category: 'contact',
+        features: ['Contact'],
+        tags: ['contact']
+    },
+     {
+        id: 'jeu-3d',
+        title: 'Immersion 3D',
+        shortDesc: 'Vous voulez discuter ',
+        longDesc: 'Visitez mon site en immersion. Plongez dans un univers avec des missions et système de gamification pour récupérez le trésor caché.',
+        keywords: ['3d', 'jeu', 'immersion', 'proto', 'glb', 'threejs', 'webgl'],
+        image: './img/berru-site3D.png',
+        link: './3D/',
+        category: 'jeu dans navigateur',
+        features: ['Proto', 'jeu dans navigateur', '3D'],
+        tags: ['Proto', '3D', 'jeu', 'immersion', 'glb', 'threejs', 'webgl']
     }
 ];
 

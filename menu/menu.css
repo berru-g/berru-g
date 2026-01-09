@@ -64,6 +64,10 @@ body {
   padding: 1.5rem 1rem 1rem;
   border-bottom: 1px solid var(--border-color);
 }
+.sidebar-header img {
+  width: 35px;
+  border-radius: 25%;
+}
 
 .sidebar-title {
   font-size: 1rem;
@@ -312,8 +316,8 @@ body {
   padding: 2rem;
 }
 
-/* ===== RESPONSIVE triche pour avoir un menu caché permanent ===== */
-@media (max-width: 2000px) {
+/* ===== RESPONSIVE 768 triche pour avoir un menu caché permanent ===== */
+@media (max-width: 768px) {
   .sidebar-clean {
     transform: translateX(-100%);
     position: fixed;
