@@ -281,7 +281,6 @@ window.menuManager = {
   updateThemeIndicator
 };
 
-
 // ===== RECHERCHE ÉTENDUE AVEC AFFICHAGE DANS MAIN =====
 function performExtendedSearch(searchTerm) {
     if (!searchTerm || searchTerm.length < 2) {
@@ -335,7 +334,7 @@ function performExtendedSearch(searchTerm) {
     
     // Afficher le meilleur résultat
     if (matches.length > 0) {
-        showProjectPreview(matches[0]);
+        showProjectPreview(matches); // Envoie TOUT le tableau
     } else {
         hideProjectPreview();
     }
@@ -360,6 +359,9 @@ function calculateRelevance(project, term) {
 
 // ===== AFFICHAGE DANS MAIN =====
 function showProjectPreview(match) {
+    // MODIFICATION : Accepter un tableau OU un seul match
+    const matches = Array.isArray(match) ? match : [match];
+    
     const mainContent = document.querySelector('.main-content');
     if (!mainContent) return;
     
@@ -373,54 +375,68 @@ function showProjectPreview(match) {
         mainContent.prepend(preview);
     }
     
-    if (match.type === 'project') {
-        console.log('Match');
-        const project = match.data;
-        preview.innerHTML = `
-            <div class="preview-header" data-aos="fade-up" data-aos-delay="200">
-                <span class="preview-badge">Projet correspondant</span>
-                <button class="preview-close" onclick="hideProjectPreview()">×</button>
-            </div>
-            <div class="preview-content"data-aos="fade-up" data-aos-delay="250">
-                <div class="preview-image">
-                    <img src="${project.image}" alt="${project.title}" loading="lazy">
-                </div>
-                <div class="preview-details" data-aos="fade-up" data-aos-delay="300">
-                    <h3 class="preview-title">${project.title}</h3>
-                    <div class="preview-tags">
-                        ${project.tags.map(tag => `<span class="preview-tag"># ${tag}</span>`).join('')}
-                    </div>
-                    <p class="preview-desc">${project.longDesc}</p>
-                    <div class="preview-features">
-                        ${project.features.map(feature => `<span class="preview-feature">✓ ${feature}</span>`).join('')}
-                    </div>
-                    <a href="${project.link}" target="_blank" class="preview-link">
-                        Voir le projet →
-                    </a>
-                </div>
-            </div>
-        `;
-    } else {
-        const service = match.data;
-        preview.innerHTML = `
-            <div class="preview-header" data-aos="fade-up" data-aos-delay="200">
-                <span class="preview-badge">Service correspondant</span>
-                <button class="preview-close" onclick="hideProjectPreview()">×</button>
-            </div>
-            <div class="preview-content service-preview" data-aos="fade-up" data-aos-delay="200">
-                <div class="preview-icon">${service.icon}</div>
-                <div class="preview-details">
-                    <h3 class="preview-title">${service.title}</h3>
-                    <p class="preview-desc">${service.desc}</p>
-                    <div class="preview-keywords">
-                        ${service.keywords.map(kw => `<span class="preview-keyword">#${kw}</span>`).join('')}
-                    </div>
-                </div>
-            </div>
-        `;
-    }
+    // MODIFICATION : Construire le HTML pour tous les matches
+    let html = '';
     
-    // Animation d'entrée
+    // Header avec nombre de résultats si multiple
+    html += `
+        <div class="preview-header" data-aos="fade-up" data-aos-delay="200">
+            <span class="preview-badge">
+                ${matches.length === 1 ? 'Projet correspondant' : `${matches.length} résultats`}
+            </span>
+            <button class="preview-close" onclick="hideProjectPreview()">×</button>
+        </div>
+    `;
+    
+    // Pour chaque match, ajouter le HTML
+    matches.forEach((singleMatch, index) => {
+        if (singleMatch.type === 'project') {
+            const project = singleMatch.data;
+            
+            // MODIFICATION : Ajouter un séparateur entre les résultats (sauf pour le premier)
+            const separatorStyle = index > 0 ? 'style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color, #e0e0e0);"' : '';
+            
+            html += `
+                <div class="preview-content" data-aos="fade-up" data-aos-delay="${250 + (index * 50)}" ${separatorStyle}>
+                    <div class="preview-image">
+                        <img src="${project.image}" alt="${project.title}" loading="lazy">
+                    </div>
+                    <div class="preview-details" data-aos="fade-up" data-aos-delay="${300 + (index * 50)}">
+                        <h3 class="preview-title">${project.title}</h3>
+                        <div class="preview-tags">
+                            ${project.tags.map(tag => `<span class="preview-tag"># ${tag}</span>`).join('')}
+                        </div>
+                        <p class="preview-desc">${project.longDesc}</p>
+                        <div class="preview-features">
+                            ${project.features.map(feature => `<span class="preview-feature">✓ ${feature}</span>`).join('')}
+                        </div>
+                        <a href="${project.link}" target="_blank" class="preview-link">
+                            Voir le projet →
+                        </a>
+                    </div>
+                </div>
+            `;
+        } else {
+            const service = singleMatch.data;
+            html += `
+                <div class="preview-content service-preview" data-aos="fade-up" data-aos-delay="${200 + (index * 50)}">
+                    <div class="preview-icon">${service.icon}</div>
+                    <div class="preview-details">
+                        <h3 class="preview-title">${service.title}</h3>
+                        <p class="preview-desc">${service.desc}</p>
+                        <div class="preview-keywords">
+                            ${service.keywords.map(kw => `<span class="preview-keyword">#${kw}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    });
+    
+    // MODIFICATION : Mettre tout le HTML d'un coup
+    preview.innerHTML = html;
+    
+    // Animation d'entrée (inchangée)
     preview.style.opacity = '0';
     preview.style.transform = 'translateX(-20px)';
     
@@ -431,6 +447,9 @@ function showProjectPreview(match) {
     });
 }
 
+
+
+// hideProjectPreview reste exactement pareil
 function hideProjectPreview() {
     const preview = document.getElementById('dynamic-preview');
     if (preview) {

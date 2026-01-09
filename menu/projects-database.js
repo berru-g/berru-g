@@ -3,7 +3,7 @@ const projectsDatabase = [
         id: '3dscrollanimator',
         title: '3D Scroll Animator',
         shortDesc: 'SAAS - Création d\'animations 3D synchronisées au scroll',
-        longDesc: 'Créez des animations 3D, synchronisées au scroll de votre site en 2 minutes. Interface facile avec génération automatique de code.',
+        longDesc: 'Créez des animations 3D synchronisées au scroll de votre site en 2 minutes. Interface facile avec génération automatique des script à integrer.',
         keywords: ['3d', 'animation', 'scroll', 'saas', 'webgl', 'threejs', 'creative', 'design'],
         image: './img/Interface-3Dscrollanimator.png',
         link: 'https://3dscrollanimator.com',
@@ -15,13 +15,13 @@ const projectsDatabase = [
         id: 'smart-pixel',
         title: 'Smart Pixel Analytics',
         shortDesc: 'Alternative souveraine à Google Analytics',
-        longDesc: 'Vos données restent sur vos serveurs. Conforme RGPD, open source, dashboard intégré.',
+        longDesc: 'Integrez un pixel sur votre site et analysez vos données sans les donner au GAFAM, elles restent sur vos serveurs. Conforme RGPD, open source, dashboard. Doc compléte d\'integration.',
         keywords: ['analytics', 'tracking', 'privacy', 'gdpr', 'dashboard', 'data', 'open source'],
         image: './img/smart-pixel.png',
         link: 'https://berru-g.github.io/smart_phpixel/',
         category: 'tool',
         features: ['Auto-hébergé', 'RGPD friendly', 'Dashboard complet', 'Open source'],
-        tags: ['tool', 'Analytics', 'Privacy']
+        tags: ['tool', 'Analytics', 'Privacy', 'google', 'analytics', 'gafam']
     },
     {
         id: 'sql-editor',
@@ -33,7 +33,7 @@ const projectsDatabase = [
         link: 'https://agora-dataviz.com',
         category: 'saas',
         features: ['Éditeur SQL visuel', 'Import CSV/Excel/JSON', 'Cartographie automatique'],
-        tags: ['SAAS', 'DataViz', 'Database']
+        tags: ['SAAS', 'DataViz', 'Database', 'sql']
     },
     {
         id: 'blockchain-explorer',
@@ -117,7 +117,7 @@ const projectsDatabase = [
         link: 'https://crypto-free-tools.netlify.app/heatmap-forest/',
         category: 'tool',
         features: ['API CoinGecko', '3D', 'Threejs', 'map', 'webgl'],
-        tags: ['tool', '3D', 'crypto', 'heatmap']
+        tags: ['tool', '3D', 'crypto', 'heatmap', 'api', 'threejs']
     },
      {
         id: 'Contact',
@@ -128,7 +128,7 @@ const projectsDatabase = [
         image: './img/wamcache.png',
         link: 'portfolio.html#contact',
         category: 'contact',
-        features: ['Contact'],
+        features: ['Votre projet match avec mes compétences ?'],
         tags: ['contact']
     },
      {
@@ -142,6 +142,18 @@ const projectsDatabase = [
         category: 'jeu dans navigateur',
         features: ['Proto', 'jeu dans navigateur', '3D'],
         tags: ['Proto', '3D', 'jeu', 'immersion', 'glb', 'threejs', 'webgl']
+    },
+    {
+        id: 'help-desk',
+        title: 'Help Desk',
+        shortDesc: 'HelpDesk tool ',
+        longDesc: 'Terminal de surveillance système HELP DESK avec SCAN Réseau style NMAP',
+        keywords:  ['help', 'desk', 'nmap', 'python', 'console', 'cmd', 'scan', 'exe', 'tool'],
+        image: './img/helpdesk.png',
+        link: 'https://github.com/berru-g/OTTO/tree/main/secu',
+        category: 'helpdesk terminal',
+        features: ['helpdesk', 'python','terminal'],
+        tags: ['help', 'desk', 'nmap', 'python', 'console', 'cmd', 'scan', 'exe', 'tool']
     }
 ];
 
