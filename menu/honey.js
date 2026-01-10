@@ -3,15 +3,6 @@ function initXSSDetectorWithSound() {
     const searchInput = document.getElementById('searchInput');
     if (!searchInput) return;
     
-    // Précharger le son (optionnel mais recommandé)
-    let alertSound = null;
-    try {
-        alertSound = new Audio('./sounds/notification-error.mp3');
-        alertSound.preload = 'auto';
-    } catch (e) {
-        console.warn('Son d\'alerte non disponible');
-    }
-    
     searchInput.addEventListener('input', function(e) {
         const value = e.target.value.toLowerCase();
         
@@ -29,7 +20,7 @@ function initXSSDetectorWithSound() {
                        'color: #ef4444; font-weight: bold;');
             
             // 1. Jouer le son d'alerte
-            playAlertSound(alertSound);
+            sounds.error();
             
             // 2. Animation clignotante rouge sur TOUT le site
             triggerRedFlashAnimation();
@@ -168,7 +159,7 @@ function addAudioUnlockButton() {
 document.addEventListener('DOMContentLoaded', () => {
     // Ajouter le bouton de déblocage audio (optionnel)
     addAudioUnlockButton();
-    alertSound = new Audio('./sounds/notification-success.mp3');
+    
     // Démarrer la détection après 1 seconde
     setTimeout(initXSSDetectorWithSound, 1000);
 });

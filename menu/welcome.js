@@ -1,15 +1,4 @@
 // intro-tour.js - Tutoriel d'utilisation
-// Précharger le son (optionnel mais recommandé)
-let alertSound = null;
-try {
-  alertSound = new Audio('./sounds/notification-error.mp3');
-  alertSound = new Audio('./sounds/notification-success.mp3');
-  alertSound.preload = 'auto';
-  console.log('mp3 initié');
-} catch (e) {
-  console.log('Son d\'alerte non disponible');
-}
-
 (function() {
     'use strict';
     
@@ -86,7 +75,7 @@ try {
         tour.oncomplete(function() {
             localStorage.setItem('berrug_tutorial_seen', 'true');
             showCompletionMessage();
-            alertSound = new Audio('./sounds/notification-success.mp3');
+            sounds.success();
         });
         
         // Si l'utilisateur skip

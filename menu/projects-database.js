@@ -244,12 +244,16 @@ const projectsDatabase = [
         title: 'Tu fait quoi là ?',
         shortDesc: '___',
         longDesc:'Vas essayer ça ailleurs stp',
-        keywords: ['<script>'],
+        keywords: ['<script>', '</script>', 'javascript:', 
+            'onclick=', 'onload=', 'onerror=', 'alert(',
+            'eval(', 'document.cookie', 'localStorage'],
         image: './img/faceMorph.png',
         link: '#',
         category: 'Message pour le hacker',
         features: ['C\'est pas cool'],
-        tags: ['<script>']
+        tags: ['<script>', '</script>', 'javascript:', 
+            'onclick=', 'onload=', 'onerror=', 'alert(',
+            'eval(', 'document.cookie', 'localStorage']
     }
 
 ];

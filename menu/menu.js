@@ -91,15 +91,26 @@ function showEasterEggNotification() {
 }
 
 // Précharger le son (optionnel mais recommandé)
-let alertSound = null;
-try {
-  alertSound = new Audio('./sounds/notification-error.mp3');
-  alertSound = new Audio('./sounds/notification-success.mp3');
-  alertSound.preload = 'auto';
-  console.log('mp3 initié');
-} catch (e) {
-  console.log('Son d\'alerte non disponible');
-}
+// ===== FONCTION SON GLOBALE =====
+window.playSound = function(soundFile, volume = 0.6) {
+    try {
+        const audio = new Audio(`./sounds/${soundFile}`);
+        audio.volume = volume;
+        audio.play().catch(() => {});
+        return audio;
+    } catch (e) {
+        return null;
+    }
+};
+
+// Raccourcis pour les sons fréquents
+// utilisation - sounds.success();
+window.sounds = {
+    success: () => playSound('notification-success.mp3'),
+    error: () => playSound('notification-error.mp3'),
+    alert: () => playSound('alert.mp3', 0.4),
+    click: () => playSound('click.mp3', 0.3)
+};
 
 // ===== RECHERCHE FONCTIONNELLE =====
 function performSearch(searchTerm) {
@@ -527,7 +538,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // fin du trip console 
   /*
     document.getElementById('feedbackBtn').addEventListener('click', () => {
-      alert('Feedback - Envoyez vos retours à gael-berru.com');
+      alert('Rien ici pour le moment');
     });
   */
   // Script pour le formulaire inline
@@ -557,7 +568,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (response.ok) {
-        alertSound = new Audio('./sounds/notification-success.mp3');
+        sounds.success();
         messageDiv.textContent = '✅ Message envoyé !';
         messageDiv.style.color = 'var(--primary-color)';
         form.reset();
@@ -575,6 +586,7 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error();
       }
     } catch (error) {
+      sounds.error();
       messageDiv.textContent = '❌ Erreur, réessayez ou utilisez contact@gael-berru.com';
       messageDiv.style.color = '#ef4444';
       submitBtn.innerHTML = originalContent;
@@ -691,11 +703,10 @@ function showProjectPreview(match) {
 
   const mainContent = document.querySelector('.main-content');
   if (!mainContent) return;
-  alertSound = new Audio('./sounds/notification-success.mp3');
 
   // Créer ou mettre à jour le preview
   let preview = document.getElementById('dynamic-preview');
-
+  //sounds.success();
   if (!preview) {
     preview = document.createElement('div');
     preview.id = 'dynamic-preview';
