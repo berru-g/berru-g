@@ -43,15 +43,15 @@
                         </div>
                         <h3>Découvrez</h3>
                         <p>Les projets s'affichent ici</p>
- 
+                        <pp>'Commencer par écrire,'bienvenue', dans la barre de recherche</p>
                     `,
                     position: 'right'
                 }
             ],
-            nextLabel: 'Suivant →',
-            prevLabel: '← Précédent',
+            nextLabel: '▷',
+            prevLabel: '◁',
             skipLabel: '×',
-            doneLabel: 'Commencer !',
+            doneLabel: 'Commencer',
             showProgress: true,
             showBullets: true,
             showStepNumbers: false,
@@ -98,7 +98,7 @@
                     position: fixed;
                     bottom: 20px;
                     right: 20px;
-                    background: var(--card-bg);
+                    background: var(--bg-color);
                     border: 1px solid var(--border-color);
                     border-radius: 12px;
                     padding: 1rem 1.5rem;

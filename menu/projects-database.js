@@ -33,7 +33,7 @@ const projectsDatabase = [
         link: 'https://agora-dataviz.com',
         category: 'saas',
         features: ['Éditeur SQL visuel', 'Import CSV/Excel/JSON', 'Cartographie automatique'],
-        tags: ['SAAS', 'DataViz', 'Database', 'sql']
+        tags: ['SAAS', 'dataViz', 'data', 'sql']
     },
     {
         id: 'blockchain-explorer',
@@ -45,7 +45,7 @@ const projectsDatabase = [
         link: 'https://crypto-free-tools.netlify.app/scam-radar/',
         category: 'tool',
         features: ['Recherche transaction', 'Diagrammes automatiques', 'Identification KYC'],
-        tags: ['tool', 'Blockchain', 'Security']
+        tags: ['tool', 'Blockchain', 'btc']
     },
     {
         id: 'admin-dashboard',
@@ -81,7 +81,7 @@ const projectsDatabase = [
         link: 'https://crypto-free-tools.netlify.app/',
         category: 'tool',
         features: ['API CoinGecko', 'API Binance', 'Alertes personnalisées'],
-        tags: ['tool', 'Crypto', 'Trading' , 'api']
+        tags: ['tool', 'Crypto', 'Trading' , 'api', 'btc']
     },
     {
         id: 'smb-chat',
@@ -93,7 +93,7 @@ const projectsDatabase = [
         link: 'https://berru-g.github.io/OTTO/SMBchat/SMBchatV2/',
         category: 'tool',
         features: ['Chiffrement AES-128', 'Transfert de fichiers', 'Pas de serveur externe'],
-        tags: ['tool', 'Security', 'Network', 'smb', 'protocol']
+        tags: ['tool', 'Security', 'Network', 'smb', 'protocol', '445']
     },
     {
         id: 'Enquete',
@@ -112,7 +112,7 @@ const projectsDatabase = [
         title: 'Heat map 3D',
         shortDesc: 'Explorer les volumes comme jamais',
         longDesc: 'Observer la carte termiques des capitalisation crypto sous forme de foret 3D.',
-        keywords: ['blockchain', 'bitcoin', 'enquete', 'investigation', 'api'],
+        keywords: ['blockchain', 'bitcoin', '3d', 'threejs', 'api'],
         image: './img/heatmap-forest.png',
         link: 'https://crypto-free-tools.netlify.app/heatmap-forest/',
         category: 'tool',
@@ -176,8 +176,8 @@ const projectsDatabase = [
         image: './img/profilgit.png',
         link: 'https://github.com/berru-g/',
         category: 'github',
-        features: ['Mes travaux en programmation sont ici github.com/berru-g'],
-        tags: ['code', 'github', 'programmation']
+        features: ['Mes travaux sont ici github.com/berru-g'],
+        tags: ['code', 'github', 'programmation', "berru-g"]
     },
     {
         id: 'Qrcode',
@@ -195,7 +195,7 @@ const projectsDatabase = [
         id: 'npm or pip',
         title: 'Philosophie et algorithme',
         shortDesc: 'install ce que tu veux',
-        longDesc: 'nanani nanana',
+        longDesc: 'npm install resilience',
         keywords:  ['philosophie', 'npm', 'pip', 'install'],
         image: 'https://user-images.githubusercontent.com/61543927/230213178-fda2cb13-9329-49e6-9712-83f87fe51736.png',
         link: 'https://github.com/berru-g/phylorythme/tree/main',
@@ -226,6 +226,18 @@ const projectsDatabase = [
         category: 'Wikipedia',
         features: ['quoi d\'autre ?'],
         tags: ['wikipédia', 'wikipedia']
+    },
+    {
+        id: 'welcome',
+        title: 'Bienvenue',
+        shortDesc: '___',
+        longDesc: 'Plutôt que de vous présenter mes compétences, je vous propose de chercher des mots clef dans ma base de projets. Si mes projets apparaissent, c\'est que je sais faire et dans ce cas... parlons collaboration ! 🙌',
+        keywords: ['bienvenue'],
+        image: './img/wamcache.png',
+        link: '#',
+        category: 'Message de bienvenue',
+        features: ['Bonne recherche', 'Pour les geek, je vous laisse chercher via mon API, vous savez où aller !'],
+        tags: ['bienvenue']
     }
     
 ];
@@ -242,21 +254,21 @@ const servicesDatabase = [
     {
         id: 'dashboard-dev',
         title: 'Dashboards sur mesure',
-        desc: 'Tableaux de bord personnalisés avec Chart.js',
+        desc: 'Tableaux de bord personnalisés avec Chart, dataviz etc.',
         keywords: ['dashboard', 'analytics', 'charts', 'data', 'visualization'],
         icon: '📊'
     },
     {
         id: 'privacy-tools',
         title: 'Outils éthiques & RGPD',
-        desc: 'Solutions respectueuses de la vie privée',
+        desc: 'Solutions respectueuses de la vie privée Smart_Pixel',
         keywords: ['privacy', 'rgpd', 'ethical', 'open source', 'data protection'],
         icon: '🛡️'
     },
     {
         id: 'api-integration',
         title: 'Intégration API',
-        desc: 'Connexion à des APIs tierces (Binance, CoinGecko, etc.)',
+        desc: 'Connexion à des APIs tierces (Binance, CoinGecko, blockstream.) et API privé. Découvre la mienne dans la console.',
         keywords: ['api', 'integration', 'rest', 'websocket', 'third-party'],
         icon: '🔌'
     }
