@@ -68,8 +68,8 @@ const projectsDatabase = [
         image: './img/devgoldendessert.png',
         link: 'https://goldendessert.fr',
         category: 'website',
-        features: ['Galerie CMS', 'Formulaire','Analytics', 'Responsive design'],
-        tags: ['SITE', 'CMS','Vitrine']
+        features: ['Galerie CMS', 'Formulaire', 'Analytics', 'Responsive design'],
+        tags: ['SITE', 'CMS', 'Vitrine']
     },
     {
         id: 'crypto-tools',
@@ -81,7 +81,7 @@ const projectsDatabase = [
         link: 'https://crypto-free-tools.netlify.app/',
         category: 'tool',
         features: ['API CoinGecko', 'API Binance', 'Alertes personnalisées'],
-        tags: ['tool', 'Crypto', 'Trading' , 'api', 'btc']
+        tags: ['tool', 'Crypto', 'Trading', 'api', 'btc']
     },
     {
         id: 'smb-chat',
@@ -105,7 +105,7 @@ const projectsDatabase = [
         link: 'https://github.com/berru-g/crypto-tool/blob/main/scam-radar/enquete/readme.md/',
         category: 'tool',
         features: ['API', 'API Blockstream', 'Diagramme', 'Investigation'],
-        tags: ['tool', 'Forensic', 'investigation', 'btc','bitcoin', 'crypto', 'enquete', 'api' ]
+        tags: ['tool', 'Forensic', 'investigation', 'btc', 'bitcoin', 'crypto', 'enquete', 'api']
     },
     {
         id: 'Heatmap',
@@ -119,19 +119,19 @@ const projectsDatabase = [
         features: ['API CoinGecko', '3D', 'Threejs', 'map', 'webgl'],
         tags: ['tool', '3D', 'crypto', 'heatmap', 'api', 'threejs']
     },
-     {
+    {
         id: 'Contact',
         title: 'Contact',
         shortDesc: 'Vous voulez discuter ',
-        longDesc: 'Suivez moi ',
+        longDesc: 'Le formulaire ce situe dans le menu. Commencez par me parler de votre problématique actuel et en quoi je peut vous aider. ',
         keywords: ['contact', 'message'],
         image: './img/wamcache.png',
-        link: 'portfolio.html#contact',
+        link: '#contact',
         category: 'contact',
         features: ['Votre projet match avec mes compétences ?'],
         tags: ['contact']
     },
-     {
+    {
         id: 'jeu-3d',
         title: 'Immersion 3D',
         shortDesc: 'Vous voulez discuter ',
@@ -148,11 +148,11 @@ const projectsDatabase = [
         title: 'Help Desk',
         shortDesc: 'HelpDesk tool ',
         longDesc: 'Terminal de surveillance système HELP DESK avec SCAN Réseau style NMAP',
-        keywords:  ['help', 'desk', 'nmap', 'python', 'console', 'cmd', 'scan', 'exe', 'tool'],
+        keywords: ['help', 'desk', 'nmap', 'python', 'console', 'cmd', 'scan', 'exe', 'tool'],
         image: './img/helpdesk.png',
         link: 'https://github.com/berru-g/OTTO/tree/main/secu',
         category: 'helpdesk terminal',
-        features: ['helpdesk', 'python','terminal'],
+        features: ['helpdesk', 'python', 'terminal'],
         tags: ['help', 'desk', 'nmap', 'python', 'console', 'cmd', 'scan', 'exe', 'tool']
     },
     {
@@ -160,11 +160,11 @@ const projectsDatabase = [
         title: 'help desk basic js',
         shortDesc: 'Connaitre votre machine  2021',
         longDesc: 'Accédez aux information basique de votre machine via un pseudo terminal.',
-        keywords:  ['help', 'desk', 'tool'],
+        keywords: ['help', 'desk', 'tool'],
         image: '#',
         link: 'https://berru-g.github.io/console-interactive/',
         category: 'helpdesk online',
-        features: ['helpdesk', 'javascript','terminal'],
+        features: ['helpdesk', 'javascript', 'terminal'],
         tags: ['help', 'console', 'tool']
     },
     {
@@ -172,7 +172,7 @@ const projectsDatabase = [
         title: 'Visitez mon github',
         shortDesc: 'Explorer mes travaux ligne aprés ligne depuis 2020.',
         longDesc: 'Toute mes script visible ici',
-        keywords:  ['github', 'code', 'travaux', 'code source', 'skill'],
+        keywords: ['github', 'code', 'travaux', 'code source', 'skill'],
         image: './img/profilgit.png',
         link: 'https://github.com/berru-g/',
         category: 'github',
@@ -184,19 +184,19 @@ const projectsDatabase = [
         title: 'Qr-code generator',
         shortDesc: 'Créz votre QRcode 2021',
         longDesc: 'Créez votre QRcode sans pub et gratuitement',
-        keywords:  ['help', 'desk', 'nmap', 'python', 'console', 'cmd', 'scan', 'exe', 'tool'],
+        keywords: ['help', 'desk', 'nmap', 'python', 'console', 'cmd', 'scan', 'exe', 'tool'],
         image: './img/btcP.png',
         link: 'https://berru-g.github.io/generate-qrcode/',
         category: 'QRcode',
         features: ['génerateur de QRcode'],
         tags: ['qrcode', 'generat']
     },
-     {
+    {
         id: 'npm or pip',
         title: 'Philosophie et algorithme',
         shortDesc: 'install ce que tu veux',
         longDesc: 'npm install resilience',
-        keywords:  ['philosophie', 'npm', 'pip', 'install'],
+        keywords: ['philosophie', 'npm', 'pip', 'install'],
         image: 'https://user-images.githubusercontent.com/61543927/230213178-fda2cb13-9329-49e6-9712-83f87fe51736.png',
         link: 'https://github.com/berru-g/phylorythme/tree/main',
         category: 'Phylorythme',
@@ -208,7 +208,7 @@ const projectsDatabase = [
         title: 'Controller pseudo MIDI USB C with Arduino',
         shortDesc: 'Plug & play controller pour DAW',
         longDesc: 'Microcontrôleur usb midi lowcost. Plug &play sur tout logiciel DAW comme Ableton, Arena ou tout autre logiciel de création musicale ou vidéo.',
-        keywords:  ['arduino', 'electronic', "pcb", 'daw', 'music', 'hackster'],
+        keywords: ['arduino', 'electronic', "pcb", 'daw', 'music', 'hackster'],
         image: 'https://hackster.imgix.net/uploads/attachments/1545866/_HIa78WBXLO.blob?auto=compress%2Cformat&w=900&h=675&fit=min',
         link: 'https://www.hackster.io/gleberruyer',
         category: 'Arduino',
@@ -220,7 +220,7 @@ const projectsDatabase = [
         title: 'C\'est ça que tu cherche ?',
         shortDesc: '...',
         longDesc: '...',
-        keywords:  ['wikipédia', 'wikipedia'],
+        keywords: ['wikipédia', 'wikipedia'],
         image: 'https://upload.wikimedia.org/wikipedia/commons/a/aa/Wikipedia-logo-v2-o50.svg',
         link: 'https://fr.wikipedia.org/wiki/Algorithme',
         category: 'Wikipedia',
@@ -238,8 +238,20 @@ const projectsDatabase = [
         category: 'Message de bienvenue',
         features: ['Bonne recherche', 'Pour les geek, je vous laisse chercher via mon API, vous savez où aller !'],
         tags: ['bienvenue']
+    },
+    {
+        id: 'hack',
+        title: 'Tu fait quoi là ?',
+        shortDesc: '___',
+        longDesc:'Vas essayer ça ailleurs stp',
+        keywords: ['<script>'],
+        image: './img/faceMorph.png',
+        link: '#',
+        category: 'Message pour le hacker',
+        features: ['C\'est pas cool'],
+        tags: ['<script>']
     }
-    
+
 ];
 
 // Services/Expertise

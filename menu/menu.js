@@ -90,6 +90,17 @@ function showEasterEggNotification() {
   }, 3000);
 }
 
+// Précharger le son (optionnel mais recommandé)
+let alertSound = null;
+try {
+  alertSound = new Audio('./sounds/notification-error.mp3');
+  alertSound = new Audio('./sounds/notification-success.mp3');
+  alertSound.preload = 'auto';
+  console.log('mp3 initié');
+} catch (e) {
+  console.log('Son d\'alerte non disponible');
+}
+
 // ===== RECHERCHE FONCTIONNELLE =====
 function performSearch(searchTerm) {
   // Réinitialiser
@@ -247,14 +258,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Raccourcis clavier
   setupKeyboardShortcuts();
 
-  // ===== BACKDOOR ADMIN  trip api test =====
+  // ===== BACKDOOR ADMIN  egotrip api test =====
   document.getElementById('settingsBtn').addEventListener('click', () => {
     Swal.fire({
-      title: 'API b',
+      title: 'mode flex',
       html: `
             <div style="text-align: left; margin: 20px 0;">
                 <p style="color: var(--text-secondary); margin-bottom: 15px;">
-                    Accés API berru-g<br>
+                  L'Accés àà mon API est aussi dispo via la console<br>
                 </p>
                 <input 
                     type="password" 
@@ -265,17 +276,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 >
             </div>
         `,
-      icon: 'question',
+      icon: 'info',
       showCancelButton: true,
       confirmButtonText: 'Accéder',
       cancelButtonText: 'Annuler',
       focusConfirm: false,
       preConfirm: () => {
         const password = document.getElementById('adminPassword').value;
-        const validPasswords = ['admin2024', 'berru', 'souverainete', 'cypherpunk'];
+        const validPasswords = ['berru', 'flex'];
 
         if (!validPasswords.includes(password)) {
-          Swal.showValidationMessage('❌ Mot de passe incorrect');
+          Swal.showValidationMessage('❌ Tu ne fait pas d\'effort');
           return false;
         }
         return password;
@@ -513,10 +524,63 @@ document.addEventListener('DOMContentLoaded', () => {
       resultDiv.innerHTML = `<pre style="margin: 0;">${JSON.stringify(data, null, 2).substring(0, 1000)}...</pre>`;
     }, 500);
   };
-// fin du trip console 
+  // fin du trip console 
+  /*
+    document.getElementById('feedbackBtn').addEventListener('click', () => {
+      alert('Feedback - Envoyez vos retours à gael-berru.com');
+    });
+  */
+  // Script pour le formulaire inline
+  document.getElementById('inlineContactForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-  document.getElementById('feedbackBtn').addEventListener('click', () => {
-    alert('Feedback - Envoyez vos retours à gael-berru.com');
+    const form = e.target;
+    const formData = new FormData(form);
+    const messageDiv = document.getElementById('formMessage');
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    // Sauvegarde l'état original
+    const originalContent = submitBtn.innerHTML;
+    const originalBg = submitBtn.style.background;
+
+    // Animation
+    submitBtn.innerHTML = 'Envoi...';
+    submitBtn.style.background = 'var(--text-secondary)';
+    submitBtn.disabled = true;
+    messageDiv.textContent = '';
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.ok) {
+        alertSound = new Audio('./sounds/notification-success.mp3');
+        messageDiv.textContent = '✅ Message envoyé !';
+        messageDiv.style.color = 'var(--primary-color)';
+        form.reset();
+
+        // Feedback visuel temporaire
+        submitBtn.innerHTML = '✔️ Envoyé !';
+        submitBtn.style.background = '#10b981';
+        setTimeout(() => {
+          submitBtn.innerHTML = originalContent;
+          submitBtn.style.background = originalBg;
+          submitBtn.disabled = false;
+          messageDiv.textContent = '';
+        }, 3000);
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      messageDiv.textContent = '❌ Erreur, réessayez ou utilisez contact@gael-berru.com';
+      messageDiv.style.color = '#ef4444';
+      submitBtn.innerHTML = originalContent;
+      submitBtn.style.background = originalBg;
+      submitBtn.disabled = false;
+    }
   });
 
   // Fermer le sidebar en cliquant à l'extérieur (mobile)
@@ -627,6 +691,7 @@ function showProjectPreview(match) {
 
   const mainContent = document.querySelector('.main-content');
   if (!mainContent) return;
+  alertSound = new Audio('./sounds/notification-success.mp3');
 
   // Créer ou mettre à jour le preview
   let preview = document.getElementById('dynamic-preview');
@@ -655,6 +720,7 @@ function showProjectPreview(match) {
   matches.forEach((singleMatch, index) => {
     if (singleMatch.type === 'project') {
       const project = singleMatch.data;
+
 
       // MODIFICATION : Ajouter un séparateur entre les résultats (sauf pour le premier)
       const separatorStyle = index > 0 ? 'style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color, #e0e0e0);"' : '';
