@@ -75,7 +75,7 @@
         tour.oncomplete(function () {
             localStorage.setItem('berrug_tutorial_seen', 'true');
             showCompletionMessage();
-            sounds.point();
+            sounds.success();
         });
 
         // Si l'utilisateur skip
