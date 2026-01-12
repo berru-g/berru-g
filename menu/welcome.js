@@ -1,14 +1,14 @@
 // intro-tour.js - Tutoriel d'utilisation
-(function() {
+(function () {
     'use strict';
-    
+
     // Vérifier si l'utilisateur a déjà vu le tutoriel
     const hasSeenTutorial = localStorage.getItem('berrug_tutorial_seen');
-    
+
     // Attendre que tout soit chargé
-    window.addEventListener('DOMContentLoaded', function() {
+    window.addEventListener('DOMContentLoaded', function () {
         // Délai pour que l'utilisateur voie d'abord la page
-        setTimeout(function() {
+        setTimeout(function () {
             if (!hasSeenTutorial) {
                 startTutorial();
             } else {
@@ -17,10 +17,10 @@
             }
         }, 1500);
     });
-    
+
     function startTutorial() {
         const tour = introJs();
-        
+
         tour.setOptions({
             steps: [
                 {
@@ -30,8 +30,9 @@
                             <span style="font-size: 2em;">🔍</span>
                         </div>
                         <h3>Bienvenue</h3>
-                        <p>Rechercher par mots clef et découvrez mes travaux</p>
-                        <p><small>Essayez "3D", "dashboard", ou "analytics"</small></p>
+                        <p>Plutôt que de vous présenter mes compétences, je vous propose de chercher des mots clef dans ma base de projets.</p>
+                        <p><small>Essayez "3D", "dashboard", "analytics" etc.</small></p>
+                        
                     `,
                     position: 'bottom'
                 },
@@ -41,9 +42,8 @@
                         <div style="text-align: center; margin-bottom: 10px;">
                             <span style="font-size: 2em;">📂</span>
                         </div>
-                        <h3>Découvrez</h3>
-                        <p>Les projets s'affichent ici</p>
-                        <pp>'Commencer par écrire,'bienvenue', dans la barre de recherche</p>
+                        <h3>Vos recherches s'affichent ici</h3>
+                        <p>Commencer par écrire,'bienvenue', dans la barre de recherche</p>
                     `,
                     position: 'right'
                 }
@@ -62,33 +62,33 @@
             exitOnOverlayClick: true,
             exitOnEsc: true
         });
-        
+
         // Style personnalisé pour le tutoriel
-        tour.onbeforechange(function() {
+        tour.onbeforechange(function () {
             // S'assurer que le sidebar est ouvert sur mobile
             if (window.innerWidth <= 768) {
                 document.getElementById('sidebar')?.classList.add('open');
             }
         });
-        
+
         // Quand le tutoriel est terminé
-        tour.oncomplete(function() {
+        tour.oncomplete(function () {
             localStorage.setItem('berrug_tutorial_seen', 'true');
             showCompletionMessage();
-            sounds.success();
+            sounds.point();
         });
-        
+
         // Si l'utilisateur skip
-        tour.onexit(function() {
+        tour.onexit(function () {
             localStorage.setItem('berrug_tutorial_seen', 'true');
         });
-        
+
         // Démarrer
-        setTimeout(function() {
+        setTimeout(function () {
             tour.start();
         }, 500);
     }
-    
+
     function showWelcomeBack() {
         // Message discret de bienvenue
         const welcome = document.createElement('div');
@@ -99,11 +99,11 @@
                     position: fixed;
                     bottom: 20px;
                     right: 20px;
-                    background: var(--bg-color);
-                    border: 1px solid var(--border-color);
+                    background: #151515;
+                    border: 1px solid rgba(255, 255, 255, 0.15);
                     border-radius: 12px;
                     padding: 1rem 1.5rem;
-                    box-shadow: var(--shadow);
+                    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
                     z-index: 9999;
                     animation: slideInUp 0.5s ease;
                     max-width: 300px;
@@ -139,9 +139,9 @@
                 <button class="welcome-close" onclick="this.parentElement.parentElement.remove()">×</button>
             </div>
         `;
-        
+
         document.body.appendChild(welcome);
-        
+
         // Auto-remove après 5 secondes
         setTimeout(() => {
             if (welcome.parentNode) {
@@ -149,7 +149,7 @@
             }
         }, 5000);
     }
-    
+
     function showCompletionMessage() {
         const completion = document.createElement('div');
         completion.className = 'completion-notification';
@@ -174,14 +174,14 @@
                 }
             </style>
             <div style="text-align: center;">
-                <div style="font-size: 2em; margin-bottom: 10px;">/</div>
-                <h3 style="margin: 0 0 10px 0;">Prêt à explorer !</h3>
-                <p style="margin: 0; opacity: 0.9;">Découvrez vos projets avec la recherche intelligente.</p>
+                <div style="font-size: 2em; margin-bottom: 10px;"></div>
+                <h3 style="margin: 0 0 10px 0;">API active</h3>
+                <p style="margin: 0; opacity: 0.9;">b.skill()</p>
             </div>
         `;
-        
+
         document.body.appendChild(completion);
-        
+
         // Auto-remove après 4 secondes
         setTimeout(() => {
             if (completion.parentNode) {
@@ -191,13 +191,13 @@
             }
         }, 4000);
     }
-    
+
     // Exposer une fonction pour redémarrer le tutoriel (pour debug ou bouton "aide")
-    window.restartTutorial = function() {
+    window.restartTutorial = function () {
         localStorage.removeItem('berrug_tutorial_seen');
         startTutorial();
     };
-    
+
     // Ajouter un bouton d'aide dans le footer (optionnel)
     function addHelpButton() {
         const helpBtn = document.createElement('button');
@@ -208,11 +208,11 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
         `;
-        
-        helpBtn.addEventListener('click', function() {
+
+        helpBtn.addEventListener('click', function () {
             restartTutorial();
         });
-        
+
         const footer = document.querySelector('.sidebar-footer');
         if (footer) {
             // Insérer avant le bouton paramètres
@@ -224,7 +224,7 @@
             }
         }
     }
-    
+
     // Ajouter le bouton d'aide après chargement
     setTimeout(addHelpButton, 1000);
 })();

@@ -108,8 +108,8 @@ window.playSound = function(soundFile, volume = 0.6) {
 window.sounds = {
     success: () => playSound('notification-success.mp3'),
     error: () => playSound('notification-error.mp3'),
-    alert: () => playSound('alert.mp3', 0.4),
-    click: () => playSound('click.mp3', 0.3)
+    alert: () => playSound('gems.mp3', 0.4),
+    click: () => playSound('point.mp3', 0.3)
 };
 
 // ===== RECHERCHE FONCTIONNELLE =====
@@ -607,7 +607,7 @@ document.addEventListener('DOMContentLoaded', () => {
       sidebar.classList.remove('open');
     }
   });
-
+  
   console.log('✅ Menu Berru-g initialisé avec succès');
   console.log('🔍 Recherche fonctionnelle avec indexation');
   console.log('🌓 Mode sombre/clair auto-détecté');
@@ -720,7 +720,7 @@ function showProjectPreview(match) {
   // Header avec nombre de résultats si multiple
   html += `
         <div class="preview-header" data-aos="fade-up" data-aos-delay="200">
-            <span class="preview-badge">
+            <span class="preview-badge" data-aos="fade-up" data-aos-delay="250">
                 ${matches.length === 1 ? 'Projet correspondant' : `${matches.length} résultats`}
             </span>
             <button class="preview-close" onclick="hideProjectPreview()">×</button>
@@ -741,14 +741,14 @@ function showProjectPreview(match) {
                     <div class="preview-image">
                         <img src="${project.image}" alt="${project.title}" loading="lazy">
                     </div>
-                    <div class="preview-details" data-aos="fade-up" data-aos-delay="${300 + (index * 50)}">
+                    <div class="preview-details" data-aos="fade-up" data-aos-delay="${250 + (index * 50)}">
                         <h3 class="preview-title">${project.title}</h3>
                         <div class="preview-tags">
-                            ${project.tags.map(tag => `<span class="preview-tag"># ${tag}</span>`).join('')}
+                            ${project.tags.map(tag => `<span class="preview-tag" data-aos="fade-up" data-aos-delay="${200 + (index * 50)}"># ${tag}</span>`).join('')}
                         </div>
                         <p class="preview-desc">${project.longDesc}</p>
-                        <div class="preview-features">
-                            ${project.features.map(feature => `<span class="preview-feature">✓ ${feature}</span>`).join('')}
+                        <div class="preview-features" data-aos="fade-up" data-aos-delay="${250 + (index * 50)}">
+                            ${project.features.map(feature => `<span class="preview-feature" data-aos="fade-up" data-aos-delay="${300 + (index * 50)}">✓ ${feature}</span>`).join('')}
                         </div>
                         <a href="${project.link}" target="_blank" class="preview-link">
                             Voir le projet →
@@ -762,10 +762,10 @@ function showProjectPreview(match) {
                 <div class="preview-content service-preview" data-aos="fade-up" data-aos-delay="${200 + (index * 50)}">
                     <div class="preview-icon">${service.icon}</div>
                     <div class="preview-details">
-                        <h3 class="preview-title">${service.title}</h3>
-                        <p class="preview-desc">${service.desc}</p>
+                        <h3 class="preview-title" data-aos="fade-up" data-aos-delay="${250 + (index * 50)}">${service.title}</h3>
+                        <p class="preview-desc" data-aos="fade-up" data-aos-delay="${300 + (index * 50)}">${service.desc}</p>
                         <div class="preview-keywords">
-                            ${service.keywords.map(kw => `<span class="preview-keyword">#${kw}</span>`).join('')}
+                            ${service.keywords.map(kw => `<span class="preview-keyword" data-aos="fade-up" data-aos-delay="${350 + (index * 50)}">#${kw}</span>`).join('')}
                         </div>
                     </div>
                 </div>

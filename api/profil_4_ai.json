@@ -88,15 +88,16 @@
       "outils_developpes": [
         "Serveur de partage fichiers avec logging (fonctionnel)",
         "Honeypot basique avec détection de bots",
-        "Scanner réseau maison",
+        "Scanner réseau local",
         "Serveur web local pour redirections/pages",
-        "Système de détection appareils WiFi"
+        "Système de détection appareils WiFi",
+        "Messagerie chiffré via le protocole SMB 445"
       ],
       "protocoles_explores": [
         "HTTP/HTTPS via Python http.server",
         "Sockets TCP/UDP bruts",
         "Broadcast UDP pour découverte réseau",
-        "Communication inter-appareils LAN"
+        "Communication inter-appareils LAN / SMB"
       ],
       "decouvertes_techniques": [
         "Limitations notifications Android sans app",

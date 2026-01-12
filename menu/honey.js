@@ -87,7 +87,7 @@ function triggerRedFlashAnimation() {
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background-color: rgba(239, 68, 68, 0);
+                background-color: rgba(239, 68, 68, 0.28);
                 z-index: 9998;
                 pointer-events: none;
                 animation: redFlash 0.5s ease 6 forwards; /* 3 secondes */
@@ -121,9 +121,9 @@ function addAudioUnlockButton() {
         position: fixed;
         bottom: 70px;
         right: 20px;
-        background: var(--primary-color);
-        color: white;
-        border: none;
+        background: transparent;
+        color: var(--primary-color);
+        border: 1px solid var(--primary-color);
         border-radius: 20px;
         padding: 8px 16px;
         font-size: 12px;
@@ -146,13 +146,13 @@ function addAudioUnlockButton() {
     
     document.body.appendChild(audioUnlocker);
     
-    // Cacher après 10 secondes
+    // Cacher après 5 secondes
     setTimeout(() => {
         if (audioUnlocker.parentNode) {
             audioUnlocker.style.opacity = '0';
             setTimeout(() => audioUnlocker.remove(), 500);
         }
-    }, 10000);
+    }, 5000);
 }
 
 // Initialiser au chargement
