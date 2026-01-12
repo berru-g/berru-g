@@ -109,7 +109,7 @@ window.sounds = {
     success: () => playSound('notification-success.mp3'),
     error: () => playSound('notification-error.mp3'),
     alert: () => playSound('gems.mp3', 0.4),
-    click: () => playSound('point.mp3', 0.3)
+    click: () => playSound('point.mp3', 0.4)
 };
 
 // ===== RECHERCHE FONCTIONNELLE =====

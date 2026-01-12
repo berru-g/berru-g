@@ -116,7 +116,7 @@ function addAudioUnlockButton() {
     // Certains navigateurs bloquent l'audio sans interaction utilisateur
     const audioUnlocker = document.createElement('button');
     audioUnlocker.id = 'audio-unlocker';
-    audioUnlocker.innerHTML = '🔊 Activer les sons';
+    audioUnlocker.innerHTML = '🔊 Activer ?';
     audioUnlocker.style.cssText = `
         position: fixed;
         bottom: 70px;

@@ -26,6 +26,8 @@
   <link rel="canonical" href="https://gael-berru.com" />
   <link rel="stylesheet" href="./menu/menu.css">
   <link rel="stylesheet" href="./menu/dynamic-search.css">
+  <!--<link rel="stylesheet" href="./smart_phpixel/RGPD/cookie.css">-->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
@@ -79,7 +81,7 @@
             stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
-          <input type="text" class="search-input" id="searchInput" placeholder="Rechercher ..." autocomplete="off">
+          <input type="text" class="search-input" id="searchInput" placeholder="Rechercher ..." autocomplete="on">
           <kbd class="search-shortcut">/</kbd>
         </div>
       </div>
@@ -230,9 +232,10 @@
               <button type="submit"
                 style="width: 100%; padding: 0.625rem; background: var(--primary-color); color: white; border: none; border-radius: 6px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 0.5rem; cursor: pointer; transition: opacity 0.2s;">
                 <span>Envoyer</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <!--<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                </svg>
+                </svg>-->
+                <i class="fa-regular fa-paper-plane"></i>
               </button>
             </form>
             <div id="formMessage"
@@ -243,9 +246,9 @@
       </nav>
 
       <!-- Footer -->
-      
+
       <div class="sidebar-footer">
-       <!--direct dans welcomejs
+        <!--
         <button class="footer-btn" id="helpBtn">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -288,6 +291,44 @@
     </main>
 
   </div>
+
+ <div id="cookie-banner" style="display: none;">
+    <div class="cookie-container">
+        <div class="cookie-header">
+            <div class="cookie-icon">🛡️</div>
+            <div class="cookie-title-wrapper">
+                <h3 class="cookie-title">Transparence totale sur vos données</h3>
+                <p class="cookie-subtitle">Respect RGPD • Open source</p>
+            </div>
+        </div>
+
+        <div class="cookie-content">
+            <p class="cookie-description">
+                <strong>Ici, aucun de vos clics n'est vendu à Google ou Facebook.</strong><br>
+                J'utilise <strong>Smart Pixel</strong>, mon propre système d'analyse développé avec éthique, dans le respect des lois RGPD.
+            </p>
+            <p class="cookie-description">
+                En autorisant l'analyse, vous m'aidez à améliorer ce site <strong>sans enrichir les GAFAM de vos données</strong>.
+            </p>
+        </div>
+
+        <div class="cookie-buttons">
+            <button class="cookie-btn accept-necessary" onclick="acceptCookies('necessary')">
+                Non merci
+            </button>
+            <button class="cookie-btn accept-all" onclick="acceptCookies('all')">
+                Ok pour moi
+            </button>
+        </div>
+
+        <div class="cookie-footer">
+            <a href="https://github.com/berru-g/smart_phpixel" target="_blank" class="cookie-link">
+                Voir le code source de Smart Pixel
+            </a>
+        </div>
+    </div>
+</div>
+  <script src="./smart_phpixel/RGPD/cookie.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/intro.min.js"></script>
   <script src="./menu/menu.js"></script>
   <script src="./menu/projects-database.js"></script>

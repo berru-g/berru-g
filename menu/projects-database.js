@@ -54,7 +54,7 @@ const projectsDatabase = [
         longDesc: 'Accédez à toutes vos bases de données dans un dashboard unique avec fonctionnalités développées sur mesure.',
         keywords: ['admin', 'dashboard', 'database', 'management', 'interface', 'panel'],
         image: './img/admin2.png',
-        link: './board/login.php',
+        link: './board/login.php',  
         category: 'tool',
         features: ['Multi-bases de données', 'Interface personnalisable', 'Export des données'],
         tags: ['tool', 'Admin', 'Database']
@@ -204,16 +204,28 @@ const projectsDatabase = [
         tags: ['philosophie', 'npm', 'pip', 'install']
     },
     {
-        id: 'arduino',
-        title: 'Controller pseudo MIDI USB C with Arduino',
+        id: 'arduino-micro',
+        title: 'Controller pseudo MIDI - USB C with Arduino',
         shortDesc: 'Plug & play controller pour DAW',
         longDesc: 'Microcontrôleur usb midi lowcost. Plug &play sur tout logiciel DAW comme Ableton, Arena ou tout autre logiciel de création musicale ou vidéo.',
-        keywords: ['arduino', 'electronic', "pcb", 'daw', 'music', 'hackster'],
+        keywords: ['arduino', 'electronic', "pcb", 'daw', 'music', 'hackster', 'mapping', 'ableton', 'arena'],
         image: 'https://hackster.imgix.net/uploads/attachments/1545866/_HIa78WBXLO.blob?auto=compress%2Cformat&w=900&h=675&fit=min',
         link: 'https://www.hackster.io/gleberruyer',
         category: 'Arduino',
         features: ['arduino', 'electronic'],
         tags: ['arduino', 'electronic', "pcb", 'daw', 'music', 'hackster']
+    },
+    {
+        id: 'arduino',
+        title: 'Controller pseudo MIDI USB C with Arduino',
+        shortDesc: 'Plug & play controller pour DAW',
+        longDesc: 'Microcontrôleur tout logiciel DAW comme Ableton. (Code de 2020, des maj sont certainement nécessaire)',
+        keywords: ['arduino', 'electronic', "pcb", 'daw', 'music', 'hackster'],
+        image: 'https://hackster.imgix.net/uploads/attachments/1088337/copper_key_bf_2_6nuEKJKihM.jpg',
+        link: 'https://www.hackster.io/gleberruyer/midi-copper-key-144c42',
+        category: 'Arduino',
+        features: ['arduino', 'electronic'],
+        tags: ['arduino', 'electronic', "cooper", 'cuivre', 'daw', 'music', 'hackster']
     },
     {
         id: 'what',
@@ -283,24 +295,8 @@ const projectsDatabase = [
         category: 'Message de bienvenue',
         features: ['Développement souverain', 'Code vanilla', 'Solutions alternatives'],
         tags: [ 'bienvenue', 'présentation', 'philosophie']
-    },
-    {
-        id: 'hack',
-        title: '...',
-        shortDesc: '___',
-        longDesc: '',
-        keywords: ['<script>', '</script>', 'javascript:',
-            'onclick=', 'onload=', 'onerror=', 'alert(',
-            'eval(', 'document.cookie', 'localStorage'],
-        image: './img/faceMorph.png',
-        link: '#',
-        category: 'Message pour le hacker',
-        features: ['ecoute active'],
-        tags: ['<script>', '</script>', 'javascript:',
-            'onclick=', 'onload=', 'onerror=', 'alert(',
-            'eval(', 'document.cookie', 'localStorage']
     }
-
+   
 ];
 
 // Services/Expertise
