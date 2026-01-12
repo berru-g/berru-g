@@ -380,3 +380,37 @@
         transform: translateX(-20px);
     }
 }
+
+/* section bienvenue */
+#welcome-section {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    line-height: 1.7;
+}
+
+#welcome-section h3 {
+    color: var(--text-color);
+    margin: 2rem 0 1rem 0;
+    padding-bottom: 0.5rem;
+}
+
+#welcome-section ul, 
+#welcome-section ol {
+    padding-left: 1.5rem;
+    margin: 1rem 0;
+}
+
+#welcome-section li {
+    margin-bottom: 0.5rem;
+    padding-left: 0.5rem;
+}
+
+#welcome-section .disclaimer {
+    background: var(--bg-color);
+    padding: 1rem;
+    border-radius: 6px;
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: #64748b;
+}

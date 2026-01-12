@@ -229,15 +229,60 @@ const projectsDatabase = [
     },
     {
         id: 'welcome',
-        title: 'Bienvenue',
-        shortDesc: '___',
-        longDesc: 'Si des projets apparaissent nous avons matière à discuter. Si peu de résultats alors  explorons ensemble si mes compétences peuvent s\'adapter à vos besoins.',
-        keywords: ['bienvenue'],
+        title: 'Bienvenue dans mon univers',
+        shortDesc: 'Développeur full-stack autodidacte, artisan du code souverain',
+        longDesc: `Je crée des solutions web <strong>de A à Z, en autonomie complète</strong>.
+<div id="welcome-section">    
+<h3>Ma méthode : la souveraineté technique</h3>
+
+<p>Depuis 2020, j'ai choisi une voie singulière :</p>
+
+<ul>
+    <li>• <strong>Pas de frameworks</strong> → Un contrôle total sur chaque ligne de code</li>
+    <li>• <strong>Pas de dépendances superflues</strong> → Des performances optimales et des bugs maîtrisés</li>
+    <li>• <strong>Travail en solo</strong> → Une cohérence technique parfaite du front au back</li>
+</ul>
+
+<h3>Mon atelier</h3>
+
+<p>Je travaille avec les technologies fondamentales :</p>
+
+<ul>
+    <li>• <strong>Frontend</strong> : HTML, CSS, JavaScript vanilla</li>
+    <li>• <strong>Backend</strong> : PHP, Python</li>
+    <li>• <strong>Données</strong> : SQL, architectures sur mesure</li>
+</ul>
+
+<h3>Ce que ça change pour vous</h3>
+
+<p><strong>Si vous cherchez :</strong></p>
+
+<ul>
+    <li>• Une solution <strong>sur-mesure, sans dépendance aux risques inutile</strong></li>
+    <li>• Un projet <strong>optimisé, léger, maintenable</strong></li>
+    <li>• Une alternative <strong>souveraine aux solutions standards</strong></li>
+</ul>
+<p>→ Vous êtes au bon endroit.</p>
+
+<p><em>Exemple : Smart_pixel, mon alternative à Google Analytics</em></p>
+
+<h3>Comment ça marche ?</h3>
+
+<p>Cherchez vos besoins techniques. Selon les résultats :</p>
+
+<ol>
+    <li>1. <strong>Des projets similaires</strong> → Parlons réalisation</li>
+    <li>2. <strong>Peu de résultats</strong> → Explorons l'adaptation</li>
+    <li>3. <strong>Aucun projet correspondant</strong> → Créons quelque chose d'unique</li>
+</ol>
+
+<p class="disclaimer"><small>Pour les puristes : mon API est accessible, vous savez où chercher </small></p></div>`,
+        keywords: ['bienvenue', 'autodidacte', 'fullstack', 'vanilla', 'souveraineté', 'framework'],
         image: './img/wamcache.png',
         link: '#',
         category: 'Message de bienvenue',
-        features: ['Bonne recherche', 'Pour les geek, je vous laisse chercher via mon API, vous savez où aller !'],
-        tags: ['bienvenue']
+        features: ['Développement souverain', 'Code vanilla', 'Solutions alternatives'],
+        tags: [ 'bienvenue', 'présentation', 'philosophie']
     },
     {
         id: 'hack',
