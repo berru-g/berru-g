@@ -65,16 +65,16 @@ try {
                         <a href="bdd-2.php"><i class="fas fa-table"></i> Bdd Agora</a>
                     </li>
                     <li class="<?= basename($_SERVER['PHP_SELF']) === 'bdd-3.php' ? 'active' : '' ?>">
-                        <a href="../../smart_phpixel/dashboard.php"><i class="fas fa-table"></i> Smart Pixel</a>
+                        <a href="pixeldash.php"><i class="fas fa-table"></i> Smart Pixel</a>
                     </li>
                     <li class="<?= basename($_SERVER['PHP_SELF']) === 'bdd-4.php' ? 'active' : '' ?>">
                         <a href="monitor_bot.php"><i class="fas fa-shield-alt"></i> Monitor_bot</a>
                     </li>
                     <li>
-                        <a href="stat.php"><i class="fas fa-chart-line"></i> Statistiques</a>
+                        <a href="stat.php"><i class="fas fa-chart-line"></i> ###</a>
                     </li>
                     <li>
-                        <a href="./facture.html"><i class="fas fa-file-invoice"></i> Factures</a>
+                        <a href="./facture.html"><i class="fas fa-file-invoice"></i> ###</a>
                     </li>
                     <li>
                         <a href="./php-generate-hash.php"><i class="fa-solid fa-hashtag"></i> Hash</a>

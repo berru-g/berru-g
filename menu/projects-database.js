@@ -241,7 +241,7 @@ const projectsDatabase = [
     },
     {
         id: 'welcome',
-        title: 'Bienvenue dans mon univers',
+        title: 'Bienvenue',
         shortDesc: 'Développeur full-stack autodidacte, artisan du code souverain',
         longDesc: `Je crée des solutions web <strong>de A à Z, en autonomie complète</strong>.
 <div id="welcome-section">    
@@ -252,7 +252,8 @@ const projectsDatabase = [
 <ul>
     <li>• <strong>Pas de frameworks</strong> → Un contrôle total sur chaque ligne de code</li>
     <li>• <strong>Pas de dépendances superflues</strong> → Des performances optimales et des bugs maîtrisés</li>
-    <li>• <strong>Travail en solo</strong> → Une cohérence technique parfaite du front au back</li>
+    <li>• <strong>Travail en solo</strong> → Une cohérence technique parfaite du front au back avec l'aide de l'ia.</li>
+    <li>• <strong>Pas de Lovable</strong> → Pas de copier coller de code que je ne comprends pas. Je suis doté du bon sens paysans qui se perd!</li>
 </ul>
 
 <h3>Mon atelier</h3>
