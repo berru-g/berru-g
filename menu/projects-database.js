@@ -125,7 +125,7 @@ const projectsDatabase = [
         shortDesc: 'Vous voulez discuter ',
         longDesc: 'Le formulaire ce situe dans le menu. Commencez par me parler de votre problématique actuel et en quoi je peut vous aider. ',
         keywords: ['contact', 'message'],
-        image: './img/wamcache.png',
+        image: './img/wamcacheSF.png',
         link: '#contact',
         category: 'contact',
         features: ['Votre projet match avec mes compétences ?'],
@@ -209,7 +209,7 @@ const projectsDatabase = [
         shortDesc: 'Plug & play controller pour DAW',
         longDesc: 'Microcontrôleur usb midi lowcost. Plug &play sur tout logiciel DAW comme Ableton, Arena ou tout autre logiciel de création musicale ou vidéo.',
         keywords: ['arduino', 'electronic', "pcb", 'daw', 'music', 'hackster', 'mapping', 'ableton', 'arena'],
-        image: 'https://hackster.imgix.net/uploads/attachments/1545866/_HIa78WBXLO.blob?auto=compress%2Cformat&w=900&h=675&fit=min',
+        image: './img/make&play.jpg',
         link: 'https://www.hackster.io/gleberruyer',
         category: 'Arduino',
         features: ['arduino', 'electronic'],
@@ -217,11 +217,11 @@ const projectsDatabase = [
     },
     {
         id: 'arduino',
-        title: 'Controller pseudo MIDI USB C with Arduino',
-        shortDesc: 'Plug & play controller pour DAW',
+        title: 'Controller with Arduino',
+        shortDesc: 'Controller pour DAW',
         longDesc: 'Microcontrôleur tout logiciel DAW comme Ableton. (Code de 2020, des maj sont certainement nécessaire)',
-        keywords: ['arduino', 'electronic', "pcb", 'daw', 'music', 'hackster'],
-        image: 'https://hackster.imgix.net/uploads/attachments/1088337/copper_key_bf_2_6nuEKJKihM.jpg',
+        keywords: ['arduino', 'electronic', "pcb", 'daw', 'cuivre', 'music', 'hackster'],
+        image: './img/make&play_cooper.jpg',
         link: 'https://www.hackster.io/gleberruyer/midi-copper-key-144c42',
         category: 'Arduino',
         features: ['arduino', 'electronic'],
@@ -242,18 +242,17 @@ const projectsDatabase = [
     {
         id: 'welcome',
         title: 'Bienvenue',
-        shortDesc: 'Développeur full-stack autodidacte, artisan du code souverain',
-        longDesc: `Je crée des solutions web <strong>de A à Z, en autonomie complète</strong>.
+        shortDesc: 'bienvenue',
+        longDesc: `<strong>Qui suis-je ?</strong> Développeur full-stack autodidacte depuis 2020. Artisan du code souverain.
 <div id="welcome-section">    
 <h3>Ma méthode : la souveraineté technique</h3>
 
 <p>Depuis 2020, j'ai choisi une voie singulière :</p>
 
 <ul>
-    <li>• <strong>Pas de frameworks</strong> → Un contrôle total sur chaque ligne de code</li>
-    <li>• <strong>Pas de dépendances superflues</strong> → Des performances optimales et des bugs maîtrisés</li>
-    <li>• <strong>Travail en solo</strong> → Une cohérence technique parfaite du front au back avec l'aide de l'ia.</li>
-    <li>• <strong>Pas de Lovable</strong> → Pas de copier coller de code que je ne comprends pas. Je suis doté du bon sens paysans qui se perd!</li>
+    <li>• <strong>Ni frameworks ni template</strong> → Un contrôle total sur chaque section de votre site/outils.</li>
+    <li>• <strong>Pas de dépendances superflues</strong> → Le code source, vos données et celle de vos clients vous appartienent vraiment.</li>
+    <li>• <strong>Pas de Lovable</strong> → Pas de copier coller de code que je ne comprends pas = pas de boite noire.</li>
 </ul>
 
 <h3>Mon atelier</h3>
@@ -271,8 +270,8 @@ const projectsDatabase = [
 <p><strong>Si vous cherchez :</strong></p>
 
 <ul>
-    <li>• Une solution <strong>sur-mesure, sans dépendance aux risques inutile</strong></li>
-    <li>• Un projet <strong>optimisé, léger, maintenable</strong></li>
+    <li>• Une solution <strong>sur-mesure, car vous ne trouvez pas le template idéal.</strong></li>
+    <li>• Un projet <strong> dont le code source vous appartient à 100%</strong></li>
     <li>• Une alternative <strong>souveraine aux solutions standards</strong></li>
 </ul>
 <p>→ Vous êtes au bon endroit.</p>
@@ -281,7 +280,7 @@ const projectsDatabase = [
 
 <h3>Comment ça marche ?</h3>
 
-<p>Cherchez vos besoins techniques. Selon les résultats :</p>
+<p>Cherchez vos besoins dans la barre de recherche ou tapez "/". Selon les résultats :</p>
 
 <ol>
     <li>1. <strong>Des projets similaires</strong> → Parlons réalisation</li>
@@ -289,13 +288,13 @@ const projectsDatabase = [
     <li>3. <strong>Aucun projet correspondant</strong> → Créons quelque chose d'unique</li>
 </ol>
 
-<p class="disclaimer"><small>Pour les puristes : mon API est accessible, vous savez où chercher </small></p></div>`,
-        keywords: ['bienvenue', 'autodidacte', 'fullstack', 'vanilla', 'souveraineté', 'framework'],
-        image: './img/wamcache.png',
+<p class="disclaimer"><small>Pour les tech : ma pseudo API est accessible, vous savez où chercher </small></p></div>`,
+        keywords: ['bienvenue'],
+        image: './img/wamcacheSF.png',
         link: '#',
         category: 'Message de bienvenue',
-        features: ['Développement souverain', 'Code vanilla', 'Solutions alternatives'],
-        tags: [ 'bienvenue', 'présentation', 'philosophie']
+        features: ['Développement souverain'],
+        tags: [ 'bienvenue']
     }
    
 ];

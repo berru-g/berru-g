@@ -16,7 +16,7 @@ function updateThemeIndicator() {
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateThemeIndicator);
 
 // ===== EASTER EGG - MOT DE PASSE DANS LA RECHERCHE =====
-const EASTER_EGG_PASSWORD = "####"; // ee
+const EASTER_EGG_PASSWORD = "mond@sh"; // ee
 const EASTER_EGG_URL = "./smart_phpixel/dashboard.php"; // URL à ouvrir
 
 function checkEasterEgg(searchTerm) {
@@ -109,7 +109,7 @@ window.sounds = {
     success: () => playSound('notification-success.mp3'),
     error: () => playSound('notification-error.mp3'),
     alert: () => playSound('gems.mp3', 0.4),
-    click: () => playSound('point.mp3', 0.4)
+    click: () => playSound('point.mp3', 0.9)
 };
 
 // ===== RECHERCHE FONCTIONNELLE =====
@@ -272,11 +272,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // ===== BACKDOOR ADMIN  egotrip api test =====
   document.getElementById('settingsBtn').addEventListener('click', () => {
     Swal.fire({
-      title: 'mode flex',
+      title: 'Détails Tech',
       html: `
             <div style="text-align: left; margin: 20px 0;">
                 <p style="color: var(--text-secondary); margin-bottom: 15px;">
-                  L'Accés àà mon API est aussi dispo via la console<br>
+                  L'Accés àà ma pseudo API est limité<br>
                 </p>
                 <input 
                     type="password" 
@@ -294,10 +294,10 @@ document.addEventListener('DOMContentLoaded', () => {
       focusConfirm: false,
       preConfirm: () => {
         const password = document.getElementById('adminPassword').value;
-        const validPasswords = ['berru', 'flex'];
+        const validPasswords = ['acceapi'];
 
         if (!validPasswords.includes(password)) {
-          Swal.showValidationMessage('❌ Tu ne fait pas d\'effort');
+          Swal.showValidationMessage('❌ Accéssible aux curieux uniquement');
           return false;
         }
         return password;

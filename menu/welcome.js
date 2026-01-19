@@ -42,8 +42,8 @@
                         <div style="text-align: center; margin-bottom: 10px;">
                             <span style="font-size: 2em;">📂</span>
                         </div>
-                        <h3>Vos recherches s'affichent ici</h3>
-                        <p>Commencer par écrire,'bienvenue', dans la barre de recherche</p>
+                        <h3>Vos recherches s'affichent ici !</h3>
+                        <p>Commencez par écrire,<strong>'bienvenue'</strong>, dans la barre de recherche ou <a href="./skill/index.html" style="text-decoration: none; color: #9d86ff;" target="blank">aller directement au site</a>.</p>
                     `,
                     position: 'right'
                 }

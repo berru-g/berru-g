@@ -1,0 +1,68 @@
+# IDENTITÉ : berru-g
+Développeur autodidacte cypherpunk créant des outils souverains et sans framework.
+Site: https://gael-berru.com · GitHub: https://github.com/berru-g
+
+## 🎯 PHILOSOPHIE TECHNIQUE
+1. **Souveraineté numérique** : Alternatives aux GAFAM (ex: Smart Pixel)
+2. **Cypherpunk appliqué** : Crypto + open source pour enquêter/protéger
+3. **Artisanat logiciel** : Utilité > complexité, contrôle total de la stack
+4. **Sécurité offensive** : Sécurité dès la conception, documentation des vulnérabilités
+5. **Réseau local souverain** : Outils P2P fonctionnant sans internet
+
+## 💻 STACK TECHNIQUE
+### Frontend
+- **Langages** : HTML5, CSS3, JavaScript ES6+ (code pur, pas de framework)
+- **UI Libraries** : SweetAlert2, Toastify-js, BasicLightbox, AOS, Font Awesome
+- **3D/Three.js** : Référence script: https://raw.githubusercontent.com/berru-g/berru-g/main/3D/script2.js
+- **Bonnes pratiques** :
+  - CSS : mode dark/light avec détection automatique navigateur
+  - Code auto-documenté avec séparateurs `// ====== SECTION ======`
+  - Compatibilité Firefox vérifiée
+  - Référence HTML: https://raw.githubusercontent.com/berru-g/berru-g/main/index.html
+  - Référence CSS: https://raw.githubusercontent.com/berru-g/berru-g/main/menu/menu.css
+
+### Backend
+- **PHP** : Procédural/fonctionnel, sécurité offensive
+- **Python** : Scripting, automation, P2P, outils réseau
+- **Sécurité** :
+  - Configuration dans `/app/config/` (exclu Git)
+  - Validation centralisée entrées utilisateur
+  - Requêtes préparées, échappement HTML systématique
+  - Anti-bruteforce avec délais + CAPTCHA
+  - Logging activités suspectes
+- **Style PHP** : Bon sens et sécurité, références dans les projets clés
+
+
+## 📁 PROJETS DE RÉFÉRENCE (à consulter pour préserver le style et les habitudes de programmation)
+1. **Smart Pixel** - Analytics éthique auto-hébergé
+   - JS: https://raw.githubusercontent.com/berru-g/berru-g/main/smart_phpixel/smart-pixel.js
+   - PHP: https://raw.githubusercontent.com/berru-g/berru-g/main/smart_phpixel/pixel.php
+   - Principe: Souveraineté numérique
+
+2. **3D Scroll Animator** - Outil no-code d'animation 3D
+   - JS: https://raw.githubusercontent.com/berru-g/3Dscrollanimator/main/app/scriptV2.js
+   - PHP: https://raw.githubusercontent.com/berru-g/3Dscrollanimator/main/app/header.php
+   - Principe: Sécurité par conception et code reference pour les affichage d'objet 3D avec threejs
+
+3. **Scam Radar** - Investigation blockchain
+   - JS: https://raw.githubusercontent.com/berru-g/crypto-tool/main/scam-radar/enquete/script/script.js
+   - Principe: Cypherpunk appliqué
+
+4. **Crypto Heatmap 3D** - Visualisation marchés
+   - JS: https://raw.githubusercontent.com/berru-g/crypto-tool/main/heatmap-space/app.js
+
+## 🎨 CONVENTIONS DE CODE
+- **Commentaires** : En français, expliquer le POURQUOI
+- **Nommage** : camelCase (JS), snake_case (PHP/Python)
+- **Structure** : Sections claires avec commentaire pour expliquer brievement les function etc
+- **Sécurité** : Pour PHP, bonne pratique des log caché dans un config.php, anonymisation logs, si besoin d'un system de login alors mettre en place les protection contre les injections de toute sorte.
+
+## 📝 MODE D'EMPLOI POUR L'ASSISTANT
+Lorsque tu réponds à berru-g :
+1. ADOPTE son style technique (français, séparateurs, code auto-documenté)
+2. PRIORISE les solutions souveraines (auto-hébergement, alternatives open source)
+3. MENTIONNE les aspects sécurité dans chaque proposition
+4. CONSULTE les références de code quand pertinent
+5. PROPOSE des architectures simples, contrôlables, sans dépendances lourdes
+6. FAVORISE PHP/Python natif, JS vanilla, Three.js pour la 3D
+7. INCLUS la gestion dark/light mode automatique en CSS
