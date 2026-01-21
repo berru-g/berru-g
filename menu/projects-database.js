@@ -5,7 +5,7 @@ const projectsDatabase = [
         shortDesc: 'SAAS - Création d\'animations 3D synchronisées au scroll',
         longDesc: 'Créez des animations 3D synchronisées au scroll de votre site en 2 minutes. Interface facile avec génération automatique des script à integrer.',
         keywords: ['3d', 'animation', 'scroll', 'saas', 'webgl', 'threejs', 'creative', 'design'],
-        image: './img/Interface-3Dscrollanimator.png',
+        image: './img/tutoexpress.gif',
         link: 'https://3dscrollanimator.com',
         category: 'saas',
         features: ['Interface drag & drop', 'Export code prêt', 'Gamification crédits', 'Paiement Euro/Solana'],
@@ -36,6 +36,18 @@ const projectsDatabase = [
         tags: ['SAAS', 'dataViz', 'data', 'sql']
     },
     {
+        id: 'agora-dataviz',
+        title: 'Agora Dataviz',
+        shortDesc: 'SAAS - Social network et Visualisation de données SQL/JSON',
+        longDesc: 'Réseau social, plateforme de partage et visualisation graphique de fichiers CSV, Excel, JSON avec éditeur SQL to Map.',
+        keywords: ['messagerie', 'social-network', 'resau social', 'visualization', 'data', 'chart', 'map', 'json'],
+        image: './img/agora.png',
+        link: 'https://agora-dataviz.com',
+        category: 'saas',
+        features: ['Éditeur SQL visuel', 'Import CSV/Excel/JSON', 'Cartographie automatique'],
+        tags: ['messagerie', 'reseau-social', 'social-network', 'sql']
+    },
+    {
         id: 'blockchain-explorer',
         title: 'Blockchain Explorer',
         shortDesc: 'Outil d\'investigation blockchain',
@@ -54,7 +66,7 @@ const projectsDatabase = [
         longDesc: 'Accédez à toutes vos bases de données dans un dashboard unique avec fonctionnalités développées sur mesure.',
         keywords: ['admin', 'dashboard', 'database', 'management', 'interface', 'panel'],
         image: './img/admin2.png',
-        link: './board/login.php',  
+        link: './board/login.php',
         category: 'tool',
         features: ['Multi-bases de données', 'Interface personnalisable', 'Export des données'],
         tags: ['tool', 'Admin', 'Database']
@@ -75,13 +87,13 @@ const projectsDatabase = [
         id: 'crypto-tools',
         title: 'Crypto Free tools',
         shortDesc: 'Suite d\'outils pour traders crypto',
-        longDesc: 'Utilisation des API CoinGecko et Binance pour analyse de marché et trading.',
-        keywords: ['crypto', 'trading', 'tools', 'binance', 'coingecko', 'market'],
-        image: './img/devcryptotool.png',
+        longDesc: 'Suite d\'outils pour trader. Utilisation des API TradingView, CoinGecko et Binance pour analyse de marché et trading.',
+        keywords: ['fibonnacci', 'tradingview', 'tool', 'binance', 'coingecko', 'market'],
+        image: './img/crypto-tool.gif',
         link: 'https://crypto-free-tools.netlify.app/',
         category: 'tool',
-        features: ['API CoinGecko', 'API Binance', 'Alertes personnalisées'],
-        tags: ['tool', 'Crypto', 'Trading', 'api', 'btc']
+        features: ['API CoinGecko', 'API Binance', 'API TradingView'],
+        tags: ['tool', 'Crypto', 'Trading', 'api', 'btc', 'chart']
     },
     {
         id: 'smb-chat',
@@ -113,11 +125,35 @@ const projectsDatabase = [
         shortDesc: 'Explorer les volumes comme jamais',
         longDesc: 'Observer la carte termiques des capitalisation crypto sous forme de foret 3D.',
         keywords: ['blockchain', 'bitcoin', '3d', 'threejs', 'api'],
-        image: './img/heatmap-forest.png',
+        image: './img/heatmap-forest.gif',
         link: 'https://crypto-free-tools.netlify.app/heatmap-forest/',
         category: 'tool',
         features: ['API CoinGecko', '3D', 'Threejs', 'map', 'webgl'],
         tags: ['tool', '3D', 'crypto', 'heatmap', 'api', 'threejs']
+    },
+    /* {
+         id: 'guide-crypto',
+         title: 'Guide Crypto débutant',
+         shortDesc: 'Guide crypto débutant',
+         longDesc: 'Guide crypto débutant. Pas pour devenir riche mais pour apprendre à naviguer en sécurité.',
+         keywords: ['guide','crypto', 'solana'],
+         image: './img/guide.png',
+         link: 'https://crypto-free-tools.netlify.app/guide-pour-debutants/',
+         category: 'guide',
+         features: ['Guide de stacking Solana', 'Apprendre à faire des transactions sécurisé'],
+         tags: ['guide','crypto', 'solana']
+     },*/
+    {
+        id: 'guide-crypto',
+        title: 'Guide Crypto débutant',
+        shortDesc: 'Guide crypto débutant',
+        longDesc: 'Guide crypto débutant. Pas pour devenir riche mais pour apprendre à faire des transactions sécurisées, ouvrir un wallet décentralisé sans KYC, stacker sur le web3 et récupérer vos fonds.',
+        keywords: ['guide', 'crypto', 'solana'],
+        image: './img/guide.png',
+        link: 'https://crypto-free-tools.netlify.app/guide-pour-debutants/',
+        category: 'guide',
+        features: ['Guide de stacking Solana', 'Apprendre à faire des transactions sécurisé'],
+        tags: ['guide', 'crypto', 'solana']
     },
     {
         id: 'Contact',
@@ -125,7 +161,7 @@ const projectsDatabase = [
         shortDesc: 'Vous voulez discuter ',
         longDesc: 'Le formulaire ce situe dans le menu. Commencez par me parler de votre problématique actuel et en quoi je peut vous aider. ',
         keywords: ['contact', 'message'],
-        image: './img/wamcacheSF.png',
+        image: './img/faceMorph.gif',
         link: '#contact',
         category: 'contact',
         features: ['Votre projet match avec mes compétences ?'],
@@ -137,7 +173,7 @@ const projectsDatabase = [
         shortDesc: 'Vous voulez discuter ',
         longDesc: 'Visitez mon site en immersion. Plongez dans un univers avec des missions et système de gamification pour récupérez le trésor caché.',
         keywords: ['3d', 'jeu', 'immersion', 'proto', 'glb', 'threejs', 'webgl'],
-        image: './img/berru-site3D.png',
+        image: './img/berru3D.gif',
         link: './3D/',
         category: 'jeu dans navigateur',
         features: ['Proto', 'jeu dans navigateur', '3D'],
@@ -228,6 +264,18 @@ const projectsDatabase = [
         tags: ['arduino', 'electronic', "cooper", 'cuivre', 'daw', 'music', 'hackster']
     },
     {
+        id: 'advent-calendar',
+        title: 'Advent calendar',
+        shortDesc: 'Calendrier de l\'avent',
+        longDesc: 'Calendrier de l\'avent de mes projets open source',
+        keywords: ['surprise', 'calendrier', 'noël', 'advent'],
+        image: './img/advent-calendar.png',
+        link: './advent-calendar/index.html',
+        category: 'code',
+        features: ['Calendrier de l\'avent'],
+        tags: ['surprise', 'calendrier', 'noël', 'advent']
+    },
+    {
         id: 'what',
         title: 'C\'est ça que tu cherche ?',
         shortDesc: '...',
@@ -290,13 +338,13 @@ const projectsDatabase = [
 
 <p class="disclaimer"><small>Pour les tech : ma pseudo API est accessible, vous savez où chercher </small></p></div>`,
         keywords: ['bienvenue'],
-        image: './img/wamcacheSF.png',
+        image: './img/wam.gif',
         link: '#',
         category: 'Message de bienvenue',
         features: ['Développement souverain'],
-        tags: [ 'bienvenue']
+        tags: ['bienvenue']
     }
-   
+
 ];
 
 // Services/Expertise

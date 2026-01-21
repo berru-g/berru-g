@@ -35,7 +35,18 @@
   }
 }
 
-/* ===== STRUCTURE ===== */
+/* body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-image: url(../img/berru3D.gif);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh; 
+}
+ */
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--bg-color);
