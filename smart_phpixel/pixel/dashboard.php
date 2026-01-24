@@ -620,7 +620,7 @@ canvas {
     <header>
         <div class="container">
             <div class="header-content">
-                <h1>Smart Pixel Analytics <a href="./V2/dashboard.php">V2</a></h1>
+                <h1>Smart Pixel Analytics <a href="dashboardV2.php">V2</a></h1>
                 <div class="period-filter">
                     <span>Période :</span>
                     <select id="periodSelect" onchange="changePeriod(this.value)">

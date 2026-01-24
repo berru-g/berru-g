@@ -373,7 +373,7 @@ const servicesDatabase = [
     {
         id: 'api-integration',
         title: 'Intégration API',
-        desc: 'Connexion à des APIs tierces (Binance, CoinGecko, blockstream.) et API privé. Découvre la mienne dans la console.',
+        desc: 'Connexion à des APIs tierces (Binance, CoinGecko, blockstream.) et API privé.',
         keywords: ['api', 'integration', 'rest', 'websocket', 'third-party'],
         icon: '🔌'
     }
