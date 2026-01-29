@@ -1,0 +1,1230 @@
+<?php
+
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/auth.php';
+
+// Vérifie si connecté
+if (!Auth::isLoggedIn()) {
+    // Redirige UNIQUEMENT si pas connecté
+    header('Location: login.php');
+    exit;
+}
+
+$user_id = $_SESSION['user_id'];
+$pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8", DB_USER, DB_PASS);
+
+// 2. Récupérer les sites de l'utilisateur
+$stmt = $pdo->prepare("SELECT * FROM user_sites WHERE user_id = ? ORDER BY id DESC");
+$stmt->execute([$user_id]);
+$userSites = $stmt->fetchAll();
+
+// 3. Gérer la création de site (si pas de sites)
+// REMPLACE la section problématique (lignes 27-53) par :
+
+// 3. Gérer la création de site (TOUJOURS disponible, pas seulement si empty($userSites))
+// === CORRECTION DE LA LOGIQUE DE CRÉATION DE SITE ===
+
+// 1. TOUJOURS traiter la création de site (même si déjà des sites)
+if (isset($_POST['create_site'])) {
+    // AJOUTER LA VÉRIFICATION DE LIMITE ICI
+    $stmt = $pdo->prepare("SELECT plan, sites_limit FROM users WHERE id = ?");
+    $stmt->execute([$user_id]);
+    $userPlan = $stmt->fetch();
+
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM user_sites WHERE user_id = ?");
+    $stmt->execute([$user_id]);
+    $siteCount = $stmt->fetchColumn();
+
+    // Vérifier la limite
+    if ($siteCount >= ($userPlan['sites_limit'] ?? 1)) {
+        $_SESSION['limit_reached'] = true;
+        $_SESSION['error_message'] = "Limite atteinte pour le plan " . strtoupper($userPlan['plan'] ?? 'free');
+        header('Location: dashboard.php?create=site');
+        exit();
+    }
+
+    // Créer le site
+    $tracking_code = 'SP_' . bin2hex(random_bytes(4));
+    $public_key = bin2hex(random_bytes(32));
+
+    $stmt = $pdo->prepare("INSERT INTO user_sites (user_id, site_name, domain, tracking_code, public_key) VALUES (?, ?, ?, ?, ?)");
+    $stmt->execute([$user_id, $_POST['site_name'], $_POST['site_domain'], $tracking_code, $public_key]);
+
+    header('Location: dashboard.php?site_created=' . $tracking_code);
+    exit();
+}
+
+// 2. Si pas de sites, FORCER l'affichage du formulaire
+// 2. Si pas de sites ET qu'on n'est pas déjà sur la page de création
+// 2. Si pas de sites, afficher le formulaire de création
+if (empty($userSites)) {
+    // Afficher directement le formulaire, pas de redirection
+    $showCreateForm = true;
+}
+
+/* 3. Site sélectionné (depuis GET ou premier site)
+$selectedSiteId = $_GET['site_id'] ?? $userSites[0]['id'];
+    ?>
+        <h2>Créez votre premier site</h2>
+        <form method="POST">
+            <input type="text" name="site_name" placeholder="Nom du site" required>
+            <input type="text" name="site_domain" placeholder="mondomaine.com" required>
+            <button type="submit" name="create_site">Créer</button>
+        </form>
+    <?php
+    exit();
+}*/
+
+// 4. Site sélectionné (depuis GET ou premier site)
+$selectedSiteId = $_GET['site_id'] ?? $userSites[0]['id'];
+// RÉCUPÉRER LES DONNÉES UTILISATEUR POUR LA SIDEBAR
+$stmt = $pdo->prepare("SELECT plan, sites_limit FROM users WHERE id = ?");
+$stmt->execute([$user_id]);
+$userPlan = $stmt->fetch();
+
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM user_sites WHERE user_id = ?");
+$stmt->execute([$user_id]);
+$siteCount = $stmt->fetchColumn();
+// === SÉCURITÉ : Vérifier que l'utilisateur possède ce site ===
+$stmt = $pdo->prepare("SELECT id FROM user_sites WHERE id = ? AND user_id = ?");
+$stmt->execute([$selectedSiteId, $user_id]);
+if (!$stmt->fetch()) {
+    die("Accès interdit à ce site");
+}
+
+// === TON CODE EXISTANT (avec modifications mineures) ===
+$period = isset($_GET['period']) ? $_GET['period'] : 30;
+$dateFilter = date('Y-m-d H:i:s', strtotime("-$period days"));
+
+// MODIFICATION 1 : Ajout de WHERE site_id = ?
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM smart_pixel_tracking WHERE site_id = ?");
+$stmt->execute([$selectedSiteId]);
+$totalViews = $stmt->fetchColumn();
+
+// MODIFICATION 2 : Ajout de WHERE site_id = ?
+$stmt = $pdo->prepare("SELECT COUNT(DISTINCT ip_address) FROM smart_pixel_tracking WHERE site_id = ?");
+$stmt->execute([$selectedSiteId]);
+$uniqueVisitors = $stmt->fetchColumn();
+
+// MODIFICATION 3 : Ajout de WHERE site_id = ?
+$stmt = $pdo->prepare("
+    SELECT COUNT(DISTINCT ip_address) 
+    FROM smart_pixel_tracking 
+    WHERE site_id = ? AND timestamp >= ?
+");
+$stmt->execute([$selectedSiteId, $dateFilter]);
+$uniqueVisitorsPeriod = $stmt->fetchColumn();
+
+// MODIFICATION 4 : Ajout de WHERE site_id = ?
+$stmt = $pdo->prepare("
+    SELECT source, COUNT(*) as count 
+    FROM smart_pixel_tracking 
+    WHERE site_id = ? AND timestamp >= ?
+    GROUP BY source 
+    ORDER BY count DESC
+");
+$stmt->execute([$selectedSiteId, $dateFilter]);
+$sources = $stmt->fetchAll();
+
+// MODIFICATION 5 : Ajout de WHERE site_id = ?
+$stmt = $pdo->prepare("
+    SELECT page_url, COUNT(*) as views 
+    FROM smart_pixel_tracking 
+    WHERE site_id = ? AND page_url != 'direct' AND timestamp >= ?
+    GROUP BY page_url 
+    ORDER BY views DESC 
+    LIMIT 10
+");
+$stmt->execute([$selectedSiteId, $dateFilter]);
+$topPages = $stmt->fetchAll();
+
+// MODIFICATION 6 : Ajout de WHERE site_id = ?
+$stmt = $pdo->prepare("
+    SELECT country, COUNT(*) as visits 
+    FROM smart_pixel_tracking 
+    WHERE site_id = ? AND timestamp >= ?
+    GROUP BY country 
+    ORDER BY visits DESC 
+    LIMIT 10
+");
+$stmt->execute([$selectedSiteId, $dateFilter]);
+$countries = $stmt->fetchAll();
+
+// MODIFICATION 7 : Ajout de WHERE site_id = ?
+$stmt = $pdo->prepare("
+    SELECT 
+        CASE 
+            WHEN user_agent LIKE '%Mobile%' THEN 'Mobile'
+            WHEN user_agent LIKE '%Tablet%' THEN 'Tablet'
+            ELSE 'Desktop'
+        END as device,
+        COUNT(*) as count
+    FROM smart_pixel_tracking
+    WHERE site_id = ? AND timestamp >= ?
+    GROUP BY device
+    ORDER BY count DESC
+");
+$stmt->execute([$selectedSiteId, $dateFilter]);
+$devices = $stmt->fetchAll();
+
+// MODIFICATION 8 : Ajout de WHERE site_id = ?
+$stmt = $pdo->prepare("
+    SELECT 
+        CASE 
+            WHEN user_agent LIKE '%Chrome%' THEN 'Chrome'
+            WHEN user_agent LIKE '%Firefox%' THEN 'Firefox'
+            WHEN user_agent LIKE '%Safari%' THEN 'Safari'
+            WHEN user_agent LIKE '%Edge%' THEN 'Edge'
+            ELSE 'Other'
+        END as browser,
+        COUNT(*) as count
+    FROM smart_pixel_tracking
+    WHERE site_id = ? AND timestamp >= ?
+    GROUP BY browser
+    ORDER BY count DESC
+");
+$stmt->execute([$selectedSiteId, $dateFilter]);
+$browsers = $stmt->fetchAll();
+
+// MODIFICATION 9 : Ajout de WHERE site_id = ?
+$stmt = $pdo->prepare("
+    SELECT 
+        DATE(timestamp) as date,
+        COUNT(*) as visits,
+        COUNT(DISTINCT ip_address) as unique_visitors
+    FROM smart_pixel_tracking
+    WHERE site_id = ? AND timestamp >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+    GROUP BY DATE(timestamp)
+    ORDER BY date ASC
+");
+$stmt->execute([$selectedSiteId]);
+$dailyStats = $stmt->fetchAll();
+
+// MODIFICATION 10 : Ajout de WHERE site_id = ?
+$stmt = $pdo->prepare("
+    SELECT click_data
+    FROM smart_pixel_tracking
+    WHERE site_id = ? AND click_data IS NOT NULL AND click_data != '' AND timestamp >= ?
+    LIMIT 100
+");
+$stmt->execute([$selectedSiteId, $dateFilter]);
+$clickData = $stmt->fetchAll();
+
+// MODIFICATION 11 : Ajout de WHERE site_id = ?
+$stmt = $pdo->prepare("
+    SELECT 
+        session_id,
+        COUNT(*) as page_views,
+        MIN(timestamp) as first_visit,
+        MAX(timestamp) as last_visit
+    FROM smart_pixel_tracking
+    WHERE site_id = ? AND session_id != '' AND timestamp >= ?
+    GROUP BY session_id
+    ORDER BY page_views DESC
+    LIMIT 10
+");
+$stmt->execute([$selectedSiteId, $dateFilter]);
+$sessionData = $stmt->fetchAll();
+
+// MODIFICATION 12 : Ajout de WHERE site_id = ?
+$stmt = $pdo->prepare("
+    SELECT 
+        ip_address,
+        country,
+        city,
+        page_url,
+        timestamp,
+        user_agent,
+        source,
+        session_id
+    FROM smart_pixel_tracking
+    WHERE site_id = ? AND timestamp >= ?
+    ORDER BY timestamp DESC
+    LIMIT 250
+");
+$stmt->execute([$selectedSiteId, $dateFilter]);
+$detailedData = $stmt->fetchAll();
+
+// Calcul du temps moyen de session (identique)
+$avgSessionTime = 0;
+if (count($sessionData) > 0) {
+    $totalSessionTime = 0;
+    foreach ($sessionData as $session) {
+        $first = strtotime($session['first_visit']);
+        $last = strtotime($session['last_visit']);
+        $totalSessionTime += ($last - $first);
+    }
+    $avgSessionTime = round($totalSessionTime / count($sessionData) / 60, 1);
+}
+?>
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Pixel Analytics - Tableau de bord</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <link rel="stylesheet" href="../assets/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!--testpixel FONCTIONNEL ✅
+    <script data-sp-id="SP_940a81dd" src="http://localhost/smart_phpixel/smart_pixel_v2/public/tracker.js" async></script>-->
+</head>
+
+<body>
+
+    <!-- === Sidebar redessinée - Design moderne & rétractable === -->
+    <div class="sidebar-wrapper">
+        <div class="sidebar <?= isset($_COOKIE['sidebar_collapsed']) && $_COOKIE['sidebar_collapsed'] === 'true' ? 'collapsed' : '' ?>" id="sidebar">
+            <!-- En-tête de la sidebar -->
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <!--<div class="logo-icon">◰</div>-->
+                    <div class="logo-text">
+                        <h3>Smart Pixel</h3>
+                        <small class="user-email"><?= htmlspecialchars($_SESSION['user_email'] ?? 'Utilisateur') ?></small>
+                    </div>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle" title="Réduire/Étendre">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="2" y="2" width="20" height="20" rx="2" stroke-linejoin="round" />
+                        <path stroke-linecap="round" d="M6.8 2V22" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Carte d'abonnement -->
+            <div class="subscription-card">
+                <div class="subscription-header">
+                    <small class="subscription-label">Abonnement</small>
+                    <div class="subscription-plan">
+                        <span class="plan-badge"><?= strtoupper($userPlan['plan'] ?? 'free') ?></span>
+                        <?php if (($userPlan['plan'] ?? 'free') == 'free'): ?>
+                            <a href="upgrade.php" class="upgrade-link">Upgrade</a>
+                        <?php else: ?>
+                            <a href="upgrade.php?manage=1" class="manage-link">Gérer</a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="subscription-details">
+                    <div class="site-count">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                            <polyline points="9 22 9 12 15 12 15 22" />
+                        </svg>
+                        <span>Sites: <?= $siteCount ?? 0 ?>/<?= $userPlan['sites_limit'] ?? 1 ?></span>
+                    </div>
+                    <?php if (($userPlan['plan'] ?? 'free') != 'free'): ?>
+                        <div class="next-payment">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                            <span>Paiement: <?= date('d/m/Y', strtotime('+1 month')) ?></span>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <!-- Section des sites -->
+            <div class="sites-section">
+                <div class="section-header">
+                    <h4>Mes Sites</h4>
+                    <button class="add-site-btn" onclick="window.location.href='?create=site'">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                        <span>Ajouter</span>
+                    </button>
+                </div>
+
+                <div class="sites-list">
+                    <?php foreach ($userSites as $site): ?>
+                        <a href="?site_id=<?= $site['id'] ?>"
+                            class="site-item <?= $selectedSiteId == $site['id'] ? 'active' : '' ?>"
+                            title="<?= htmlspecialchars($site['domain']) ?>">
+                            <div class="site-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                </svg>
+                            </div>
+                            <div class="site-info">
+                                <strong><?= htmlspecialchars($site['site_name']) ?></strong>
+                                <small><?= htmlspecialchars($site['domain']) ?></small>
+                            </div>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <!-- Code snippet d'intégration -->
+            <?php
+            $currentSite = array_filter($userSites, fn($s) => $s['id'] == $selectedSiteId);
+            $currentSite = reset($currentSite);
+            if ($currentSite): ?>
+                <div class="integration-card">
+                    <div class="integration-header">
+                        <h4>Code d'intégration</h4>
+                        <button class="copy-btn" onclick="copyCode()" title="Copier le code">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                            </svg>
+                        </button>
+                    </div>
+                    <code class="integration-code">
+                        &lt;script data-sp-id="<?= $currentSite['tracking_code'] ?>" src="<?= APP_URL ?>tracker.js" async&gt;&lt;/script&gt;
+                    </code>
+                </div>
+            <?php endif; ?>
+
+            <!-- Bouton de déconnexion -->
+            <div class="logout-section">
+                <button class="logout-btn" onclick="confirmLogout()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
+                    <span>Déconnexion</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Overlay pour mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Bouton menu mobile -->
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="2" width="20" height="20" rx="2" stroke-linejoin="round" />
+                <path stroke-linecap="round" d="M6.8 2V22" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- === TON CONTENU EXISTANT (décalé à droite) === -->
+    <div class="main-content">
+        <?php if (isset($_GET['create']) || (isset($showCreateForm) && $showCreateForm)): ?>
+            <?php
+            // Récupérer les infos de limite si elles existent
+            $limitReached = $_SESSION['limit_reached'] ?? false;
+            $errorMessage = $_SESSION['error_message'] ?? '';
+
+            // Nettoyer la session après utilisation
+            unset($_SESSION['limit_reached'], $_SESSION['error_message']);
+            ?>
+
+            <?php if ($limitReached): ?>
+                <!-- Afficher les options d'upgrade (refaire css car ce fdp ia est teubé) -->
+                <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h3>Limite atteinte</h3>
+                    <p><?= $errorMessage ?></p>
+
+                    <div style="margin-top: 15px; padding: 15px; background: white; border-radius: 5px;">
+                        <h4>Passez à un plan supérieur</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
+                            <!-- Plan PRO -->
+                            <div style="border: 2px solid var(--primary-color); border-radius: 8px; padding: 15px;">
+                                <h3>PRO</h3>
+                                <p><strong>9€/mois</strong></p>
+                                <ul style="padding-left: 20px;">
+                                    <li>5 sites maximum</li>
+                                    <li>10 000 visites/mois</li>
+                                    <li>Stats avancées</li>
+                                    <li>Export PDF</li>
+                                </ul>
+                                <button onclick="showUpgradeForm('pro')" style="width: 100%; padding: 10px; background: var(--primary-color); color: var(--text-color); border: none; border-radius: 5px; cursor: pointer;">
+                                    Choisir PRO
+                                </button>
+                            </div>
+
+                            <!-- Plan BUSINESS -->
+                            <div style="border: 2px solid #4ecdc4; border-radius: 8px; padding: 15px;">
+                                <h3>BUSINESS</h3>
+                                <p><strong>29€/mois</strong></p>
+                                <ul style="padding-left: 20px;">
+                                    <li>20 sites maximum</li>
+                                    <li>1M de visites/mois</li>
+                                    <li>Support prioritaire</li>
+                                    <li>API complète</li>
+                                </ul>
+                                <button onclick="showUpgradeForm('business')" style="width: 100%; padding: 10px; background: #4ecdc4; color: var(--text-color); border: none; border-radius: 5px; cursor: pointer;">
+                                    Choisir BUSINESS
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulaire caché pour l'upgrade -->
+                <div id="upgradeForm" style="display: none; background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                    <h3>Mise à niveau du plan</h3>
+                    <form id="upgradeFormContent">
+                        <input type="hidden" name="new_plan" id="newPlanInput">
+                        <div style="margin: 15px 0;">
+                            <label>Email de facturation</label>
+                            <input type="email" name="billing_email" required style="width: 100%; padding: 10px;">
+                        </div>
+                        <button type="button" onclick="submitUpgrade()" style="padding: 10px 20px; background: var(--primary-color); color: var(--text-color); border: none; border-radius: 5px; cursor: pointer;">
+                            Confirmer la mise à niveau
+                        </button>
+                    </form>
+                </div>
+
+            <?php else: ?>
+                <!-- Formulaire de création normal -->
+                <div class="login-container">
+                    <h2><?= isset($_GET['first']) ? 'Créez votre premier site' : 'Ajouter un nouveau site' ?></h2>
+                    <form method="POST" class="login-form">
+                        <input type="text" name="site_name" placeholder="Nom du site" required>
+                        <input type="text" name="site_domain" placeholder="mondomaine.com" required>
+                        <button type="submit" name="create_site" class="login-button">Créer le site</button>
+                    </form>
+                </div>
+            <?php endif; ?>
+        <?php else: ?>
+            <!-- Header existant -->
+            <header>
+                <div class="container">
+                    <div class="header-content">
+                        <h1>Smart Pixel Analytics</h1>
+                        <p><i class="fa-regular fa-bell"></i></p>
+                        <div class="period-filter">
+                            <span>Période :</span>
+                            <select id="periodSelect" onchange="changePeriod(this.value)">
+                                <option value="7" <?= $period == 7 ? 'selected' : '' ?>>7 jours</option>
+                                <option value="30" <?= $period == 30 ? 'selected' : '' ?>>30 jours</option>
+                                <option value="90" <?= $period == 90 ? 'selected' : '' ?>>90 jours</option>
+                                <option value="365" <?= $period == 365 ? 'selected' : '' ?>>1 an</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="container">
+                <div class="dashboard-tabs">
+                    <div class="tabs">
+                        <div class="tab active" onclick="openTab('overview')">Aperçu</div>
+                        <div class="tab" onclick="openTab('traffic')">Trafic</div>
+                        <div class="tab" onclick="openTab('geography')">Géographie</div>
+                        <div class="tab" onclick="openTab('devices')">Appareils</div>
+                        <div class="tab" onclick="openTab('content')">Contenu</div>
+                        <div class="tab" onclick="openTab('sessions')">Sessions</div>
+                        <div class="tab" onclick="openTab('details')">Détails</div>
+                    </div>
+
+                    <!-- ONGLET APERÇU -->
+                    <div id="overview" class="tab-content active">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <h3>Vues totales</h3>
+                                <div class="stat-value"><?= number_format($totalViews) ?></div>
+                                <div class="stat-change positive">+12%</div>
+                            </div>
+                            <div class="stat-card">
+                                <h3>Visiteurs uniques</h3>
+                                <div class="stat-value"><?= number_format($uniqueVisitorsPeriod) ?></div>
+                                <div class="stat-change positive">+8%</div>
+                            </div>
+                            <div class="stat-card">
+                                <h3>Pages vues/session</h3>
+                                <div class="stat-value">2.4</div>
+                                <div class="stat-change negative">-3%</div>
+                            </div>
+                            <div class="stat-card">
+                                <h3>Temps moyen</h3>
+                                <div class="stat-value"><?= $avgSessionTime ?> min</div>
+                                <div class="stat-change positive">+5%</div>
+                            </div>
+                        </div>
+
+                        <div class="chart-container">
+                            <h3 class="chart-title">Évolution du trafic (7 derniers jours)</h3>
+                            <canvas id="trafficChart" height="80"></canvas>
+                        </div>
+
+                        <div class="data-grid compact">
+                            <div class="chart-container small">
+                                <h3 class="chart-title">Sources de trafic</h3>
+                                <canvas id="sourcesChart"></canvas>
+                            </div>
+
+                            <div class="chart-container small">
+                                <h3 class="chart-title">Appareils utilisés</h3>
+                                <canvas id="devicesChart"></canvas>
+                            </div>
+
+                            <div class="chart-container small">
+                                <h3 class="chart-title">Top pays</h3>
+                                <canvas id="countriesOverviewChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ONGLET TRAFIC -->
+                    <div id="traffic" class="tab-content">
+                        <div class="data-grid">
+                            <div class="chart-container">
+                                <h3 class="chart-title">Sources de trafic</h3>
+                                <canvas id="sourcesTrafficChart" height="200"></canvas>
+                            </div>
+
+                            <div class="chart-container">
+                                <h3 class="chart-title">Navigateurs utilisés</h3>
+                                <canvas id="browsersChart" height="200"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-container">
+                            <h3 class="chart-title">Détail des sources</h3>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Source</th>
+                                        <th>Visites</th>
+                                        <th>Pourcentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($sources as $source): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($source['source']) ?></td>
+                                            <td><?= number_format($source['count']) ?></td>
+                                            <td><?= round(($source['count'] / $uniqueVisitorsPeriod) * 100, 1) ?>%</td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- ONGLET GÉOGRAPHIE -->
+                    <div id="geography" class="tab-content">
+                        <div class="chart-container">
+                            <h3 class="chart-title">Top pays par visites</h3>
+                            <canvas id="countriesChart" height="200"></canvas>
+                        </div>
+
+                        <div class="chart-container">
+                            <h3 class="chart-title">Répartition géographique</h3>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Pays</th>
+                                        <th>Visites</th>
+                                        <th>Part du trafic</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($countries as $country): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($country['country']) ?></td>
+                                            <td><?= number_format($country['visits']) ?></td>
+                                            <td><?= round(($country['visits'] / $uniqueVisitorsPeriod) * 100, 1) ?>%</td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- ONGLET APPAREILS -->
+                    <div id="devices" class="tab-content">
+                        <div class="data-grid">
+                            <div class="chart-container">
+                                <h3 class="chart-title">Types d'appareils</h3>
+                                <canvas id="deviceTypesChart" height="200"></canvas>
+                            </div>
+
+                            <div class="chart-container">
+                                <h3 class="chart-title">Navigateurs</h3>
+                                <canvas id="browserTypesChart" height="200"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="data-grid">
+                            <div class="chart-container">
+                                <h3 class="chart-title">Détail des appareils</h3>
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Appareil</th>
+                                            <th>Visites</th>
+                                            <th>Pourcentage</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($devices as $device): ?>
+                                            <tr>
+                                                <td><?= htmlspecialchars($device['device']) ?></td>
+                                                <td><?= number_format($device['count']) ?></td>
+                                                <td><?= round(($device['count'] / $uniqueVisitorsPeriod) * 100, 1) ?>%</td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="chart-container">
+                                <h3 class="chart-title">Détail des navigateurs</h3>
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Navigateur</th>
+                                            <th>Utilisations</th>
+                                            <th>Pourcentage</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($browsers as $browser): ?>
+                                            <tr>
+                                                <td><?= htmlspecialchars($browser['browser']) ?></td>
+                                                <td><?= number_format($browser['count']) ?></td>
+                                                <td><?= round(($browser['count'] / $uniqueVisitorsPeriod) * 100, 1) ?>%</td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ONGLET CONTENU -->
+                    <div id="content" class="tab-content">
+                        <div class="chart-container">
+                            <h3 class="chart-title">Pages les plus populaires</h3>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Page</th>
+                                        <th>Vues</th>
+                                        <th>Pourcentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($topPages as $page): ?>
+                                        <tr>
+                                            <td class="url-truncate" title="<?= htmlspecialchars($page['page_url']) ?>">
+                                                <?= htmlspecialchars($page['page_url']) ?>
+                                            </td>
+                                            <td><?= number_format($page['views']) ?></td>
+                                            <td><?= round(($page['views'] / $uniqueVisitorsPeriod) * 100, 1) ?>%</td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <?php if (count($clickData) > 0): ?>
+                            <div class="chart-container">
+                                <h3 class="chart-title">Données de clics récentes</h3>
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Élément</th>
+                                            <th>Texte</th>
+                                            <th>Position</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $clickCount = 0;
+                                        foreach ($clickData as $click):
+                                            if ($clickCount >= 10)
+                                                break;
+                                            $data = json_decode($click['click_data'], true);
+                                            if (is_array($data)):
+                                        ?>
+                                                <tr>
+                                                    <td><span class="badge badge-primary"><?= htmlspecialchars($data['element']) ?></span>
+                                                    </td>
+                                                    <td><?= htmlspecialchars(substr($data['text'], 0, 30)) . (strlen($data['text']) > 30 ? '...' : '') ?>
+                                                    </td>
+                                                    <td><?= $data['x'] ?>x<?= $data['y'] ?></td>
+                                                </tr>
+                                        <?php
+                                                $clickCount++;
+                                            endif;
+                                        endforeach;
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- ONGLET SESSIONS -->
+                    <div id="sessions" class="tab-content">
+                        <div class="chart-container">
+                            <h3 class="chart-title">Sessions les plus actives</h3>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID Session</th>
+                                        <th>Pages vues</th>
+                                        <th>Première visite</th>
+                                        <th>Dernière visite</th>
+                                        <th>Durée</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($sessionData as $session):
+                                        $first = strtotime($session['first_visit']);
+                                        $last = strtotime($session['last_visit']);
+                                        $duration = round(($last - $first) / 60, 1); // en minutes
+                                    ?>
+                                        <tr>
+                                            <td><?= substr($session['session_id'], 0, 8) ?>...</td>
+                                            <td><?= $session['page_views'] ?></td>
+                                            <td><?= date('H:i', $first) ?></td>
+                                            <td><?= date('H:i', $last) ?></td>
+                                            <td><?= $duration ?> min</td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- NOUVEL ONGLET DÉTAILS -->
+
+                    <div id="details" class="tab-content">
+                        <div class="chart-container">
+                            <h3 class="chart-title">Détails des visites récentes (250 dernières)</h3>
+                            <table class="data-table">
+                                <div class="table-responsive">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>IP</th>
+                                                <th>Pays</th>
+                                                <th>Ville</th>
+                                                <th>Page visitée</th>
+                                                <th>Heure</th>
+                                                <th>Source</th>
+                                                <th>Session</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($detailedData as $visit):
+                                                $visitTime = strtotime($visit['timestamp']);
+                                            ?>
+                                                <tr>
+                                                    <td class="ip-address"><?= htmlspecialchars($visit['ip_address']) ?></td>
+                                                    <td><?= htmlspecialchars($visit['country']) ?></td>
+                                                    <td><?= htmlspecialchars($visit['city']) ?></td>
+                                                    <td class="url-truncate" title="<?= htmlspecialchars($visit['page_url']) ?>">
+                                                        <?= htmlspecialchars($visit['page_url']) ?>
+                                                    </td>
+                                                    <td><?= date('H:i', $visitTime) ?></td>
+                                                    <td><span
+                                                            class="badge badge-primary"><?= htmlspecialchars($visit['source']) ?></span>
+                                                    </td>
+                                                    <td><?= substr($visit['session_id'], 0, 8) ?>...</td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <?php endif; ?>
+    </div>
+
+
+    <script>
+        // Fonction pour changer d'onglet
+        function openTab(tabName) {
+            // Masquer tous les contenus d'onglets
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+
+            // Désactiver tous les onglets
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+
+            // Activer l'onglet sélectionné
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Fonction pour changer la période
+        function changePeriod(period) {
+            window.location.href = `?period=${period}`;
+        }
+
+        // Données pour les graphiques
+        const dailyStats = <?= json_encode($dailyStats) ?>;
+        const sources = <?= json_encode($sources) ?>;
+        const devices = <?= json_encode($devices) ?>;
+        const browsers = <?= json_encode($browsers) ?>;
+        const countries = <?= json_encode($countries) ?>;
+
+        // Configuration commune pour les petits graphiques
+        const smallChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                }
+            }
+        };
+
+        // Graphique d'évolution du trafic
+        const trafficCtx = document.getElementById('trafficChart').getContext('2d');
+        const trafficChart = new Chart(trafficCtx, {
+            type: 'line',
+            data: {
+                labels: dailyStats.map(stat => stat.date),
+                datasets: [{
+                        label: 'Visites',
+                        data: dailyStats.map(stat => stat.visits),
+                        borderColor: 'var(--primary-color)',
+                        backgroundColor: 'rgba(67, 97, 238, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'Visiteurs uniques',
+                        data: dailyStats.map(stat => stat.unique_visitors),
+                        borderColor: '#4ecdc4',
+                        backgroundColor: 'rgba(76, 201, 240, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Graphique des sources (aperçu)
+        const sourcesCtx = document.getElementById('sourcesChart').getContext('2d');
+        const sourcesChart = new Chart(sourcesCtx, {
+            type: 'doughnut',
+            data: {
+                labels: sources.map(s => s.source),
+                datasets: [{
+                    data: sources.map(s => s.count),
+                    backgroundColor: [
+                        'var(--primary-color)', '#4ecdc4', '#ff6b8b', '#ffe66d', '#9d86ff'
+                    ]
+                }]
+            },
+            options: smallChartOptions
+        });
+
+        // Graphique des appareils (aperçu)
+        const devicesCtx = document.getElementById('devicesChart').getContext('2d');
+        const devicesChart = new Chart(devicesCtx, {
+            type: 'pie',
+            data: {
+                labels: devices.map(d => d.device),
+                datasets: [{
+                    data: devices.map(d => d.count),
+                    backgroundColor: ['var(--primary-color)', '#4ecdc4', '#ff6b8b']
+                }]
+            },
+            options: smallChartOptions
+        });
+
+        // Graphique des pays (aperçu)
+        const countriesOverviewCtx = document.getElementById('countriesOverviewChart').getContext('2d');
+        const countriesOverviewChart = new Chart(countriesOverviewCtx, {
+            type: 'bar',
+            data: {
+                labels: countries.map(c => c.country),
+                datasets: [{
+                    label: 'Visites',
+                    data: countries.map(c => c.visits),
+                    backgroundColor: '#9d86ff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Graphique des sources (trafic)
+        const sourcesTrafficCtx = document.getElementById('sourcesTrafficChart').getContext('2d');
+        const sourcesTrafficChart = new Chart(sourcesTrafficCtx, {
+            type: 'doughnut',
+            data: {
+                labels: sources.map(s => s.source),
+                datasets: [{
+                    data: sources.map(s => s.count),
+                    backgroundColor: [
+                        'var(--primary-color)', '#4ecdc4', '#ff6b8b', '#ffe66d', '#9d86ff'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    }
+                }
+            }
+        });
+
+        // Graphique des navigateurs
+        const browsersCtx = document.getElementById('browsersChart').getContext('2d');
+        const browsersChart = new Chart(browsersCtx, {
+            type: 'bar',
+            data: {
+                labels: browsers.map(b => b.browser),
+                datasets: [{
+                    label: 'Utilisations',
+                    data: browsers.map(b => b.count),
+                    backgroundColor: '#9d86ff'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Graphique des pays
+        const countriesCtx = document.getElementById('countriesChart').getContext('2d');
+        const countriesChart = new Chart(countriesCtx, {
+            type: 'bar',
+            data: {
+                labels: countries.map(c => c.country),
+                datasets: [{
+                    label: 'Visites',
+                    data: countries.map(c => c.visits),
+                    backgroundColor: 'var(--primary-color)'
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Graphique des types d'appareils
+        const deviceTypesCtx = document.getElementById('deviceTypesChart').getContext('2d');
+        const deviceTypesChart = new Chart(deviceTypesCtx, {
+            type: 'doughnut',
+            data: {
+                labels: devices.map(d => d.device),
+                datasets: [{
+                    data: devices.map(d => d.count),
+                    backgroundColor: ['var(--primary-color)', '#4ecdc4', '#ff6b8b']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    }
+                }
+            }
+        });
+
+        // Graphique des types de navigateurs
+        const browserTypesCtx = document.getElementById('browserTypesChart').getContext('2d');
+        const browserTypesChart = new Chart(browserTypesCtx, {
+            type: 'pie',
+            data: {
+                labels: browsers.map(b => b.browser),
+                datasets: [{
+                    data: browsers.map(b => b.count),
+                    backgroundColor: [
+                        'var(--primary-color)', '#4ecdc4', '#ff6b8b', '#ffe66d', '#9d86ff'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    }
+                }
+            }
+        });
+
+        function confirmLogout() {
+            if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
+                window.location.href = 'logout.php';
+            }
+        }
+
+        function showUpgradeForm(plan) {
+            document.getElementById('newPlanInput').value = plan;
+            document.getElementById('upgradeForm').style.display = 'block';
+            window.scrollTo(0, document.getElementById('upgradeForm').offsetTop);
+        }
+
+        function submitUpgrade() {
+            const form = document.getElementById('upgradeFormContent');
+            const formData = new FormData(form);
+
+            fetch('upgrade.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Plan mis à jour avec succès ! Vous pouvez maintenant ajouter votre site.');
+                        window.location.reload();
+                    } else {
+                        alert('Erreur: ' + data.message);
+                    }
+                });
+        }
+
+        // Gestion du toggle de la sidebar
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('collapsed');
+
+            // Sauvegarder l'état dans un cookie (valide 30 jours)
+            const isCollapsed = sidebar.classList.contains('collapsed');
+            document.cookie = `sidebar_collapsed=${isCollapsed}; path=/; max-age=${60*60*24*30}`;
+
+            // Mettre à jour le contenu principal
+            const mainContent = document.querySelector('.main-content');
+            if (mainContent) {
+                mainContent.style.marginLeft = isCollapsed ? '70px' : '280px';
+            }
+        }
+
+        function toggleMobileMenu() {
+            sidebar.classList.toggle('mobile-open');
+        }
+
+        function closeMobileMenu() {
+            sidebar.classList.remove('mobile-open');
+        }
+
+        // Événements
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', toggleSidebar);
+        }
+
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        }
+
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', closeMobileMenu);
+        }
+
+        // Fermer le menu mobile en cliquant sur un lien
+        document.querySelectorAll('.sidebar a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 1024) {
+                    closeMobileMenu();
+                }
+            });
+        });
+
+        // Fonction de copie du code
+        function copyCode() {
+            const codeElement = document.querySelector('.integration-code');
+            if (!codeElement) return;
+
+            const textToCopy = codeElement.innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                // Feedback visuel
+                const copyBtn = document.querySelector('.copy-btn');
+                if (copyBtn) {
+                    const originalHTML = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+                    copyBtn.style.color = 'var(--positive)';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalHTML;
+                        copyBtn.style.color = '';
+                    }, 2000);
+                }
+            }).catch(err => {
+                console.error('Erreur lors de la copie : ', err);
+            });
+        }
+
+        // Fonction de déconnexion
+        function confirmLogout() {
+            Swal.fire({
+                title: 'Êtes-vous sûr ',
+                text: 'de vouloir vous déconnecter ?',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#f87171', // Rouge pour le bouton "Oui"
+                cancelButtonColor: '#3085d6', // Bleu pour "Annuler"
+                confirmButtonText: 'Oui',
+                cancelButtonText: 'Annuler'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Si l'utilisateur clique sur "Oui, déconnecter"
+                    window.location.href = 'logout.php';
+                }
+                // Sinon, rien ne se passe, le popup disparaît
+            });
+        }
+
+
+        // Fermer le menu mobile lors du redimensionnement
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1024) {
+                closeMobileMenu();
+            }
+        });
+    </script>
+</body>
+
+</html>

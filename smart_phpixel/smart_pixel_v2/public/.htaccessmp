@@ -1,0 +1,9 @@
+# includes/.htaccess - Accès interdit
+Order deny,allow
+Deny from all
+
+# Autoriser uniquement les fichiers PHP à s'inclure eux-mêmes
+<Files ~ "\.php$">
+    Order allow,deny
+    Deny from all
+</Files>

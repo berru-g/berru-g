@@ -18,7 +18,7 @@ const projectsDatabase = [
         longDesc: 'Integrez un pixel sur votre site et analysez vos données sans les donner au GAFAM, elles restent sur vos serveurs. Conforme RGPD, open source, dashboard. Doc compléte d\'integration.',
         keywords: ['analytics', 'tracking', 'privacy', 'gdpr', 'dashboard', 'data', 'open source'],
         image: './img/smart-pixel.png',
-        link: 'https://berru-g.github.io/smart_phpixel/',
+        link: 'https://gael-berru.com/smart_phpixel/',
         category: 'tool',
         features: ['Auto-hébergé', 'RGPD friendly', 'Dashboard complet', 'Open source'],
         tags: ['tool', 'Analytics', 'Privacy', 'google', 'analytics', 'gafam', 'philosophie', 'ethique', 'éthique', 'php']
