@@ -992,7 +992,7 @@
                         <i class="fas fa-tachometer-alt"></i>
                     </div>
                     <h3>Performance optimale</h3>
-                    <p>Script léger (5KB), chargement asynchrone, 0 impact sur votre Core Web Vitals. Votre site reste
+                    <p>Script léger, chargement asynchrone, 0 impact sur votre Core Web Vitals. Votre site reste
                         rapide.</p>
                 </div>
 
@@ -1001,7 +1001,7 @@
                         <i class="fas fa-server"></i>
                     </div>
                     <h3>Souveraineté des données</h3>
-                    <p>Hébergement 100% français, chiffrement de bout en bout, contrôle total sur vos données analytics.
+                    <p>Hébergement 100% français, 0 tiers. Vos données restent sous votre contrôle.
                     </p>
                 </div>
 

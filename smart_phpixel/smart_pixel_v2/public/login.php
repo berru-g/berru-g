@@ -33,8 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <!--test de session-->
     <?php if ($alreadyLoggedIn): ?>
-        <div style="background: yellow; padding: 10px; border: 2px solid orange; margin: 10px 0;">
-            <strong>ATTENTION :</strong> Session déja Active <strong><?php echo htmlspecialchars($_SESSION['user_email'] ?? ''); ?></strong><br>
+        <div style="background: #9d86ff; padding: 10px; margin: 10px 0;">
+            <strong>Session Active :</strong>  <strong><?php echo htmlspecialchars($_SESSION['user_email'] ?? ''); ?></strong><br>
             <a href="dashboard.php">→ Aller au Dashboard</a> |
             <a href="logout.php">→ Se déconnecter</a>
         </div>
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="login-logo-icon">◰</div>
                     <h1>Smart Pixel</h1>
                 </div>
-                <p class="login-subtitle">Analytics intelligentes pour votre succès</p>
+                <p class="login-subtitle">Analytics intelligentes et libre</p>
             </div>
 
             <?php if ($error): ?>
