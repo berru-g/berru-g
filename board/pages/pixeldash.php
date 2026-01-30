@@ -12,7 +12,7 @@ try {
     exit();
 }
 
-require_once '../../smart_phpixel/config.php';
+require_once '../../smart_phpixel/pixel/config.php';
 //require_once '../board/includes/header.php'; // a integrer dans mon /board/
 //include __DIR__ . '/includes/header.php';
 $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8", DB_USER, DB_PASS);

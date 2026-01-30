@@ -14,4 +14,4 @@
 </Files>
 
 # Désactiver l'affichage des erreurs PHP en prod
-php_flag display_errors off
+#php_flag display_errors off
