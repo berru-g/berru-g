@@ -959,7 +959,7 @@
                         <div class="stat-label">Plus rapide que la V1</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number"><?php echo $total; ?></div><!--<span class="counter"><?php echo $total; ?> sites créés</span>-->
+                        <div class="stat-number">57</div><!--<span class="counter"><?php echo $total; ?> sites créés</span>-->
                         <div class="stat-label">Dashboard crée</div>
                     </div>
                 </div>

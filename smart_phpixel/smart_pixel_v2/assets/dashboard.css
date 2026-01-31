@@ -1558,8 +1558,8 @@ canvas {
 }
 
 .ai-toggle-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--text-color) 0%, var(--primary-color) 100%);
+    color: var(--bg-color);
     border: none;
     padding: 12px 20px;
     border-radius: 18px;
@@ -1577,8 +1577,8 @@ canvas {
 }
 
 .ai-badge {
-    background: #ff6b8b;
-    color: white;
+    background: var(--p-rouge);
+    color: var(--bg-color);
     padding: 2px 8px;
     border-radius: 10px;
     font-size: 0.8em;
@@ -1610,8 +1610,8 @@ canvas {
 }
 
 .ai-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--text-color) 0%, var(--primary-color) 100%);
+    color: var(--bg-color);
     padding: 15px;
     display: flex;
     justify-content: space-between;

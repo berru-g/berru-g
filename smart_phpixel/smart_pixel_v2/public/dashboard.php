@@ -369,6 +369,8 @@ function getCountryCodeSimple($countryName)
 
             </div>
 
+
+
             <!-- Section des sites -->
             <div class="sites-section">
                 <div class="section-header">
@@ -929,196 +931,198 @@ function getCountryCodeSimple($countryName)
 
                     <!-- ===== ONGLET INSIGHTS AVANCÉS ===== -->
                     <div id="insights" class="tab-content">
-                        <!-- Section 1: Performance Marketing -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Performance Marketing & Recommendations</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-container">
-                                    <table class="data-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Page</th>
-                                                <th>Visites</th>
-                                                <th>% du trafic</th>
-                                                <th>Potentiel</th>
-                                                <th>Recommandation</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            // Récupérer les données nécessaires
+                        <div class="chart-container">
+                            <!-- Section 1: Performance Marketing -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Performance Marketing & Recommendations</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-container">
+                                        <table class="data-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Page</th>
+                                                    <th>Visites</th>
+                                                    <th>% du trafic</th>
+                                                    <th>Potentiel</th>
+                                                    <th>Recommandation</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                // Récupérer les données nécessaires
 
 
-                                            $totalVisits = 0;
-                                            foreach ($topPages as $page) {
-                                                $totalVisits += $page['views'];
-                                            }
-
-                                            $insights = [];
-                                            foreach ($topPages as $page) {
-                                                $pageUrl = $page['page_url'];
-                                                $views = $page['views'];
-
-                                                // Calcul du pourcentage
-                                                $percentage = $totalVisits > 0 ? ($views / $totalVisits) * 100 : 0;
-
-                                                // Évaluation du potentiel
-                                                $potential = '';
-                                                $tipClass = 'tip-info';
-
-                                                if ($percentage > 20) {
-                                                    $potential = '<span class="tip-success">Très haute</span>';
-                                                    $recommendation = "Page principale ! Optimisez la conversion avec des CTA clairs.";
-                                                } elseif ($percentage > 10) {
-                                                    $potential = '<span class="tip-success">Haute</span>';
-                                                    $recommendation = "Bon trafic. Testez des variantes de contenu pour améliorer l'engagement.";
-                                                } elseif ($percentage > 5) {
-                                                    $potential = '<span class="tip-info">Moyenne</span>';
-                                                    $recommendation = "Trafic modéré. Améliorez le SEO et les liens internes.";
-                                                } else {
-                                                    $potential = '<span class="tip-warning">Faible</span>';
-                                                    $recommendation = "Peu de trafic. Considérez une refonte ou une meilleure promotion.";
+                                                $totalVisits = 0;
+                                                foreach ($topPages as $page) {
+                                                    $totalVisits += $page['views'];
                                                 }
 
-                                                // Limiter la longueur de l'URL pour l'affichage
-                                                $displayUrl = strlen($pageUrl) > 40 ? substr($pageUrl, 0, 40) . '...' : $pageUrl;
+                                                $insights = [];
+                                                foreach ($topPages as $page) {
+                                                    $pageUrl = $page['page_url'];
+                                                    $views = $page['views'];
 
-                                                echo '<tr>';
-                                                echo '<td title="' . htmlspecialchars($pageUrl) . '">' . htmlspecialchars($displayUrl) . '</td>';
-                                                echo '<td>' . number_format($views) . '</td>';
-                                                echo '<td>' . round($percentage, 1) . '%</td>';
-                                                echo '<td>' . $potential . '</td>';
-                                                echo '<td><span class="' . $tipClass . '">' . htmlspecialchars($recommendation) . '</span></td>';
-                                                echo '</tr>';
-                                            }
+                                                    // Calcul du pourcentage
+                                                    $percentage = $totalVisits > 0 ? ($views / $totalVisits) * 100 : 0;
 
-                                            if (empty($topPages)) {
-                                                echo '<tr><td colspan="5" class="text-center">Aucune donnée disponible pour l\'analyse</td></tr>';
-                                            }
-                                            ?>
-                                        </tbody>
-                                    </table>
+                                                    // Évaluation du potentiel
+                                                    $potential = '';
+                                                    $tipClass = 'tip-info';
+
+                                                    if ($percentage > 20) {
+                                                        $potential = '<span class="tip-success">Très haute</span>';
+                                                        $recommendation = "Page principale ! Optimisez la conversion avec des CTA clairs.";
+                                                    } elseif ($percentage > 10) {
+                                                        $potential = '<span class="tip-success">Haute</span>';
+                                                        $recommendation = "Bon trafic. Testez des variantes de contenu pour améliorer l'engagement.";
+                                                    } elseif ($percentage > 5) {
+                                                        $potential = '<span class="tip-info">Moyenne</span>';
+                                                        $recommendation = "Trafic modéré. Améliorez le SEO et les liens internes.";
+                                                    } else {
+                                                        $potential = '<span class="tip-warning">Faible</span>';
+                                                        $recommendation = "Peu de trafic. Considérez une refonte ou une meilleure promotion.";
+                                                    }
+
+                                                    // Limiter la longueur de l'URL pour l'affichage
+                                                    $displayUrl = strlen($pageUrl) > 40 ? substr($pageUrl, 0, 40) . '...' : $pageUrl;
+
+                                                    echo '<tr>';
+                                                    echo '<td title="' . htmlspecialchars($pageUrl) . '">' . htmlspecialchars($displayUrl) . '</td>';
+                                                    echo '<td>' . number_format($views) . '</td>';
+                                                    echo '<td>' . round($percentage, 1) . '%</td>';
+                                                    echo '<td>' . $potential . '</td>';
+                                                    echo '<td><span class="' . $tipClass . '">' . htmlspecialchars($recommendation) . '</span></td>';
+                                                    echo '</tr>';
+                                                }
+
+                                                if (empty($topPages)) {
+                                                    echo '<tr><td colspan="5" class="text-center">Aucune donnée disponible pour l\'analyse</td></tr>';
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Section 2: Corrélation Trafic & Tendances -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Analyse des Tendances</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="chart-container">
-                                    <canvas id="trendsChart" height="250"></canvas>
+                            <!-- Section 2: Corrélation Trafic & Tendances -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Analyse des Tendances</h3>
                                 </div>
-                                <?php
-                                // Préparer les données pour les tendances
-                                $trendLabels = [];
-                                $trendVisits = [];
-                                $trendUnique = [];
-
-                                foreach ($dailyStats as $stat) {
-                                    $trendLabels[] = date('d/m', strtotime($stat['date']));
-                                    $trendVisits[] = $stat['visits'];
-                                    $trendUnique[] = $stat['unique_visitors'];
-                                }
-                                ?>
-                                <div class="insight-tip">
-                                    <strong>Insight :</strong>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="trendsChart" height="250"></canvas>
+                                    </div>
                                     <?php
-                                    if (count($dailyStats) >= 2) {
-                                        $firstDay = $dailyStats[0]['visits'];
-                                        $lastDay = end($dailyStats)['visits'];
-                                        $growth = $firstDay > 0 ? (($lastDay - $firstDay) / $firstDay) * 100 : 0;
+                                    // Préparer les données pour les tendances
+                                    $trendLabels = [];
+                                    $trendVisits = [];
+                                    $trendUnique = [];
 
-                                        if ($growth > 20) {
-                                            echo "Votre trafic a augmenté de <strong>" . round($growth) . "%</strong> cette semaine ! Excellente progression.";
-                                        } elseif ($growth > 0) {
-                                            echo "Votre trafic progresse doucement (+" . round($growth) . "%). Continuez vos efforts !";
-                                        } else {
-                                            echo "Votre trafic est stable. Pensez à lancer de nouvelles campagnes pour stimuler la croissance.";
-                                        }
-                                    } else {
-                                        echo "Collectez plus de données pour obtenir des insights détaillés sur vos tendances.";
+                                    foreach ($dailyStats as $stat) {
+                                        $trendLabels[] = date('d/m', strtotime($stat['date']));
+                                        $trendVisits[] = $stat['visits'];
+                                        $trendUnique[] = $stat['unique_visitors'];
                                     }
                                     ?>
+                                    <div class="insight-tip">
+                                        <strong>Insight :</strong>
+                                        <?php
+                                        if (count($dailyStats) >= 2) {
+                                            $firstDay = $dailyStats[0]['visits'];
+                                            $lastDay = end($dailyStats)['visits'];
+                                            $growth = $firstDay > 0 ? (($lastDay - $firstDay) / $firstDay) * 100 : 0;
+
+                                            if ($growth > 20) {
+                                                echo "Votre trafic a augmenté de <strong>" . round($growth) . "%</strong> cette semaine ! Excellente progression.";
+                                            } elseif ($growth > 0) {
+                                                echo "Votre trafic progresse doucement (+" . round($growth) . "%). Continuez vos efforts !";
+                                            } else {
+                                                echo "Votre trafic est stable. Pensez à lancer de nouvelles campagnes pour stimuler la croissance.";
+                                            }
+                                        } else {
+                                            echo "Collectez plus de données pour obtenir des insights détaillés sur vos tendances.";
+                                        }
+                                        ?>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Section 3: Analyse des Performances -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Points d'Amélioration</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-container">
-                                    <table class="data-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Métrique</th>
-                                                <th>Valeur actuelle</th>
-                                                <th>Cible idéale</th>
-                                                <th>Statut</th>
-                                                <th>Action recommandée</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            // Calculer les métriques
-                                            $avgPagesPerSession = $sessionData ? array_sum(array_column($sessionData, 'page_views')) / count($sessionData) : 0;
-                                            $avgSessionTime = $avgSessionTime; // Déjà calculé
-                                            $bounceRateEstimate = 100 - ($avgPagesPerSession > 1 ? 70 : 40); // Estimation simplifiée
+                            <!-- Section 3: Analyse des Performances -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Points d'Amélioration</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-container">
+                                        <table class="data-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Métrique</th>
+                                                    <th>Valeur actuelle</th>
+                                                    <th>Cible idéale</th>
+                                                    <th>Statut</th>
+                                                    <th>Action recommandée</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                // Calculer les métriques
+                                                $avgPagesPerSession = $sessionData ? array_sum(array_column($sessionData, 'page_views')) / count($sessionData) : 0;
+                                                $avgSessionTime = $avgSessionTime; // Déjà calculé
+                                                $bounceRateEstimate = 100 - ($avgPagesPerSession > 1 ? 70 : 40); // Estimation simplifiée
 
-                                            // Liste des métriques à analyser
-                                            $metrics = [
-                                                [
-                                                    'name' => 'Pages/Session',
-                                                    'current' => round($avgPagesPerSession, 1),
-                                                    'target' => '3.0+',
-                                                    'status' => $avgPagesPerSession >= 2.5 ? 'good' : ($avgPagesPerSession >= 1.5 ? 'average' : 'poor'),
-                                                    'action' => $avgPagesPerSession >= 2.5 ?
-                                                        'Excellent engagement !' :
-                                                        'Ajoutez des liens internes et du contenu intéressant.'
-                                                ],
-                                                [
-                                                    'name' => 'Temps moyen',
-                                                    'current' => $avgSessionTime . ' min',
-                                                    'target' => '3+ min',
-                                                    'status' => $avgSessionTime >= 3 ? 'good' : ($avgSessionTime >= 1.5 ? 'average' : 'poor'),
-                                                    'action' => $avgSessionTime >= 3 ?
-                                                        'Temps d\'engagement optimal.' :
-                                                        'Améliorez la qualité du contenu pour retenir les visiteurs.'
-                                                ],
-                                                [
-                                                    'name' => 'Taux de rebond (est.)',
-                                                    'current' => round($bounceRateEstimate) . '%',
-                                                    'target' => '< 40%',
-                                                    'status' => $bounceRateEstimate < 40 ? 'good' : ($bounceRateEstimate < 60 ? 'average' : 'poor'),
-                                                    'action' => $bounceRateEstimate < 40 ?
-                                                        'Très bon taux de rétention.' :
-                                                        'Optimisez les pages d\'atterrissage et le contenu.'
-                                                ]
-                                            ];
+                                                // Liste des métriques à analyser
+                                                $metrics = [
+                                                    [
+                                                        'name' => 'Pages/Session',
+                                                        'current' => round($avgPagesPerSession, 1),
+                                                        'target' => '3.0+',
+                                                        'status' => $avgPagesPerSession >= 2.5 ? 'good' : ($avgPagesPerSession >= 1.5 ? 'average' : 'poor'),
+                                                        'action' => $avgPagesPerSession >= 2.5 ?
+                                                            'Excellent engagement !' :
+                                                            'Ajoutez des liens internes et du contenu intéressant.'
+                                                    ],
+                                                    [
+                                                        'name' => 'Temps moyen',
+                                                        'current' => $avgSessionTime . ' min',
+                                                        'target' => '3+ min',
+                                                        'status' => $avgSessionTime >= 3 ? 'good' : ($avgSessionTime >= 1.5 ? 'average' : 'poor'),
+                                                        'action' => $avgSessionTime >= 3 ?
+                                                            'Temps d\'engagement optimal.' :
+                                                            'Améliorez la qualité du contenu pour retenir les visiteurs.'
+                                                    ],
+                                                    [
+                                                        'name' => 'Taux de rebond (est.)',
+                                                        'current' => round($bounceRateEstimate) . '%',
+                                                        'target' => '< 40%',
+                                                        'status' => $bounceRateEstimate < 40 ? 'good' : ($bounceRateEstimate < 60 ? 'average' : 'poor'),
+                                                        'action' => $bounceRateEstimate < 40 ?
+                                                            'Très bon taux de rétention.' :
+                                                            'Optimisez les pages d\'atterrissage et le contenu.'
+                                                    ]
+                                                ];
 
-                                            foreach ($metrics as $metric) {
-                                                $statusClass = $metric['status'] == 'good' ? 'tip-success' : ($metric['status'] == 'average' ? 'tip-info' : 'tip-warning');
+                                                foreach ($metrics as $metric) {
+                                                    $statusClass = $metric['status'] == 'good' ? 'tip-success' : ($metric['status'] == 'average' ? 'tip-info' : 'tip-warning');
 
-                                                echo '<tr>';
-                                                echo '<td>' . $metric['name'] . '</td>';
-                                                echo '<td><strong>' . $metric['current'] . '</strong></td>';
-                                                echo '<td>' . $metric['target'] . '</td>';
-                                                echo '<td><span class="' . $statusClass . '">' .
-                                                    ($metric['status'] == 'good' ? '✅ Bon' : ($metric['status'] == 'average' ? '⚠️ Moyen' : '❌ À améliorer')) .
-                                                    '</span></td>';
-                                                echo '<td>' . htmlspecialchars($metric['action']) . '</td>';
-                                                echo '</tr>';
-                                            }
-                                            ?>
-                                        </tbody>
-                                    </table>
+                                                    echo '<tr>';
+                                                    echo '<td>' . $metric['name'] . '</td>';
+                                                    echo '<td><strong>' . $metric['current'] . '</strong></td>';
+                                                    echo '<td>' . $metric['target'] . '</td>';
+                                                    echo '<td><span class="' . $statusClass . '">' .
+                                                        ($metric['status'] == 'good' ? '✅ Bon' : ($metric['status'] == 'average' ? '⚠️ Moyen' : '❌ À améliorer')) .
+                                                        '</span></td>';
+                                                    echo '<td>' . htmlspecialchars($metric['action']) . '</td>';
+                                                    echo '</tr>';
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1131,20 +1135,20 @@ function getCountryCodeSimple($countryName)
         <?php endif; ?>
     </div>
 
-    <!-- Dans dashboard.php, juste avant </body> -->
+    <!-- ASSISTANT PSEUDO IA EN COURS -->
     <div class="ai-assistant-container" id="aiAssistantContainer">
         <button class="ai-toggle-btn" onclick="toggleAIAssistant()">
             <span class="ai-icon"><i class="fa-regular fa-message"></i></span>
-            <span class="ai-text">bot</span>
+            <span class="ai-text"></span>
             <span class="ai-badge">NEW</span>
         </button>
 
         <div class="ai-panel" id="aiPanel">
             <div class="ai-header">
                 <div class="ai-title">
-                    <span class="ai-avatar">🫡</span>
+                    <!--<span class="ai-avatar">🫡</span>-->
                     <h3>Smart Assistant</h3>
-                    <small>Analyse vos données en temps réel</small>
+                    <small>- fonction en developpement -</small>
                 </div>
                 <button class="ai-close" onclick="toggleAIAssistant()">×</button>
             </div>
@@ -1321,8 +1325,8 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
                 "Le temps moyen de session est de {time} minutes. C'est {verdict} pour votre secteur !",
 
                 "Pour maximiser vos résultats, concentrez-vous sur l'amélioration de votre taux de conversion actuel.",
-                
-                "Cette fonction est en développement ... il se peut qu'elle ne réponde pas toujours de manière pertinente."
+
+                "Cette Assistant IA est en développement ... il se peut qu'il ne réponde pas toujours de manière pertinente. Pour toute question, contactez le developpeur https://gael-berru.com"
             ]
         };
 
@@ -2384,7 +2388,7 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
                         newInsight.className = 'insight-tip';
                         newInsight.style.marginTop = '15px';
                         newInsight.style.padding = '10px';
-                        newInsight.style.background = '#f8f9fa';
+                        newInsight.style.background = '#2436f95b';
                         newInsight.style.borderRadius = '5px';
                         newInsight.innerHTML = `<strong>Opportunité :</strong>${additionalInsight}`;
 
