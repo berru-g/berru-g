@@ -7,13 +7,13 @@ Vos données restent sur nos serveurs, pas chez les GAFAM. Conforme RGPD, open s
 
 ### Disponible
 
-    V.0.0.1 auto hebergé | statut - gratuit open source
-    V.0.1.0 software     | statut - gratuit pour 1 dashboard
-    V.1.0.1 en cours     | statut - gratuit pour 1 dashboard + abonnement
+    ✅ V.0.0.1 auto hebergé | statut - gratuit open source
+    ✅ V.0.1.0 software     | statut - gratuit pour 1 dashboard
+    ▶️ V.1.0.1 en cours     | statut - gratuit pour 1 dashboard + abonnement
 
 #### STEP :
 - system d'abonnement
-- améliorer les chart et croiser les data
+- améliorer les chart et croiser les data --insights
 - landing page
 - migrer bdd et site sur smartpixel.io
 - ads budget
