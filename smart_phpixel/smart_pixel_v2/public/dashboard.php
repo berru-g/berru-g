@@ -1,13 +1,5 @@
 <?php
-/* 
-    ============================================
-       Developed by : https://github.com/berru-g/
-       Project : Smart_pixel_Analytics
-       Date first Commits on Nov 21, 2025
-       Version : 1.0.2
-       Copyright (c) 2025 Berru
-    ============================================
-*/
+
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/auth.php';
 
@@ -297,7 +289,15 @@ function getCountryCodeSimple($countryName)
 ?>
 <!DOCTYPE html>
 <html lang="fr">
-
+<!--
+    ============================================
+       Developed by : https://github.com/berru-g/
+       Project : Smart_pixel_Analytics
+       Date first Commits on Nov 21, 2025
+       Version : 1.0.2
+       Copyright (c) 2025 Berru
+    ============================================
+-->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -329,9 +329,9 @@ function getCountryCodeSimple($countryName)
                     <!--<div class="logo-icon">◰</div>-->
                     <div class="logo-text">
                         <h3><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                    </svg></h3>
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" />
+                            </svg></h3>
                         <small class="user-email"><?= htmlspecialchars($_SESSION['user_email'] ?? 'Utilisateur') ?></small>
                     </div>
                 </div>
@@ -374,7 +374,7 @@ function getCountryCodeSimple($countryName)
                         </div>
                     <?php endif; ?>
                 </div>
-               
+
             </div>
 
             <!-- Section des sites -->
@@ -672,7 +672,7 @@ function getCountryCodeSimple($countryName)
                             <div class="chart-container">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                                     <h3 class="chart-title">Carte mondiale des visites</h3>
-                                   <!--<div class="map-controls">
+                                    <!--<div class="map-controls">
                                         <button onclick="zoomIn()" class="map-btn" title="Zoom avant">
                                             <i class="fas fa-search-plus"></i>
                                         </button>
@@ -934,6 +934,205 @@ function getCountryCodeSimple($countryName)
                             </table>
                         </div>
                     </div>
+
+                    <!-- ===== ONGLET INSIGHTS AVANCÉS ===== -->
+                    <div id="insights" class="tab-content">
+                        <!-- Section 1: Performance Marketing -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Performance Marketing & Recommendations</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-container">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Page</th>
+                                                <th>Visites</th>
+                                                <th>% du trafic</th>
+                                                <th>Potentiel</th>
+                                                <th>Recommandation</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            // Récupérer les données nécessaires
+                                            
+
+                                            $totalVisits = 0;
+                                            foreach ($topPages as $page) {
+                                                $totalVisits += $page['views'];
+                                            }
+
+                                            $insights = [];
+                                            foreach ($topPages as $page) {
+                                                $pageUrl = $page['page_url'];
+                                                $views = $page['views'];
+
+                                                // Calcul du pourcentage
+                                                $percentage = $totalVisits > 0 ? ($views / $totalVisits) * 100 : 0;
+
+                                                // Évaluation du potentiel
+                                                $potential = '';
+                                                $tipClass = 'tip-info';
+
+                                                if ($percentage > 20) {
+                                                    $potential = '<span class="tip-success">Très haute</span>';
+                                                    $recommendation = "Page principale ! Optimisez la conversion avec des CTA clairs.";
+                                                } elseif ($percentage > 10) {
+                                                    $potential = '<span class="tip-success">Haute</span>';
+                                                    $recommendation = "Bon trafic. Testez des variantes de contenu pour améliorer l'engagement.";
+                                                } elseif ($percentage > 5) {
+                                                    $potential = '<span class="tip-info">Moyenne</span>';
+                                                    $recommendation = "Trafic modéré. Améliorez le SEO et les liens internes.";
+                                                } else {
+                                                    $potential = '<span class="tip-warning">Faible</span>';
+                                                    $recommendation = "Peu de trafic. Considérez une refonte ou une meilleure promotion.";
+                                                }
+
+                                                // Limiter la longueur de l'URL pour l'affichage
+                                                $displayUrl = strlen($pageUrl) > 40 ? substr($pageUrl, 0, 40) . '...' : $pageUrl;
+
+                                                echo '<tr>';
+                                                echo '<td title="' . htmlspecialchars($pageUrl) . '">' . htmlspecialchars($displayUrl) . '</td>';
+                                                echo '<td>' . number_format($views) . '</td>';
+                                                echo '<td>' . round($percentage, 1) . '%</td>';
+                                                echo '<td>' . $potential . '</td>';
+                                                echo '<td><span class="' . $tipClass . '">' . htmlspecialchars($recommendation) . '</span></td>';
+                                                echo '</tr>';
+                                            }
+
+                                            if (empty($topPages)) {
+                                                echo '<tr><td colspan="5" class="text-center">Aucune donnée disponible pour l\'analyse</td></tr>';
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Corrélation Trafic & Tendances -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Analyse des Tendances</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="trendsChart" height="250"></canvas>
+                                </div>
+                                <?php
+                                // Préparer les données pour les tendances
+                                $trendLabels = [];
+                                $trendVisits = [];
+                                $trendUnique = [];
+
+                                foreach ($dailyStats as $stat) {
+                                    $trendLabels[] = date('d/m', strtotime($stat['date']));
+                                    $trendVisits[] = $stat['visits'];
+                                    $trendUnique[] = $stat['unique_visitors'];
+                                }
+                                ?>
+                                <div class="insight-tip">
+                                    <strong>Insight :</strong>
+                                    <?php
+                                    if (count($dailyStats) >= 2) {
+                                        $firstDay = $dailyStats[0]['visits'];
+                                        $lastDay = end($dailyStats)['visits'];
+                                        $growth = $firstDay > 0 ? (($lastDay - $firstDay) / $firstDay) * 100 : 0;
+
+                                        if ($growth > 20) {
+                                            echo "Votre trafic a augmenté de <strong>" . round($growth) . "%</strong> cette semaine ! Excellente progression.";
+                                        } elseif ($growth > 0) {
+                                            echo "Votre trafic progresse doucement (+" . round($growth) . "%). Continuez vos efforts !";
+                                        } else {
+                                            echo "Votre trafic est stable. Pensez à lancer de nouvelles campagnes pour stimuler la croissance.";
+                                        }
+                                    } else {
+                                        echo "Collectez plus de données pour obtenir des insights détaillés sur vos tendances.";
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Analyse des Performances -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Points d'Amélioration</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-container">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Métrique</th>
+                                                <th>Valeur actuelle</th>
+                                                <th>Cible idéale</th>
+                                                <th>Statut</th>
+                                                <th>Action recommandée</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            // Calculer les métriques
+                                            $avgPagesPerSession = $sessionData ? array_sum(array_column($sessionData, 'page_views')) / count($sessionData) : 0;
+                                            $avgSessionTime = $avgSessionTime; // Déjà calculé
+                                            $bounceRateEstimate = 100 - ($avgPagesPerSession > 1 ? 70 : 40); // Estimation simplifiée
+
+                                            // Liste des métriques à analyser
+                                            $metrics = [
+                                                [
+                                                    'name' => 'Pages/Session',
+                                                    'current' => round($avgPagesPerSession, 1),
+                                                    'target' => '3.0+',
+                                                    'status' => $avgPagesPerSession >= 2.5 ? 'good' : ($avgPagesPerSession >= 1.5 ? 'average' : 'poor'),
+                                                    'action' => $avgPagesPerSession >= 2.5 ?
+                                                        'Excellent engagement !' :
+                                                        'Ajoutez des liens internes et du contenu intéressant.'
+                                                ],
+                                                [
+                                                    'name' => 'Temps moyen',
+                                                    'current' => $avgSessionTime . ' min',
+                                                    'target' => '3+ min',
+                                                    'status' => $avgSessionTime >= 3 ? 'good' : ($avgSessionTime >= 1.5 ? 'average' : 'poor'),
+                                                    'action' => $avgSessionTime >= 3 ?
+                                                        'Temps d\'engagement optimal.' :
+                                                        'Améliorez la qualité du contenu pour retenir les visiteurs.'
+                                                ],
+                                                [
+                                                    'name' => 'Taux de rebond (est.)',
+                                                    'current' => round($bounceRateEstimate) . '%',
+                                                    'target' => '< 40%',
+                                                    'status' => $bounceRateEstimate < 40 ? 'good' : ($bounceRateEstimate < 60 ? 'average' : 'poor'),
+                                                    'action' => $bounceRateEstimate < 40 ?
+                                                        'Très bon taux de rétention.' :
+                                                        'Optimisez les pages d\'atterrissage et le contenu.'
+                                                ]
+                                            ];
+
+                                            foreach ($metrics as $metric) {
+                                                $statusClass = $metric['status'] == 'good' ? 'tip-success' : ($metric['status'] == 'average' ? 'tip-info' : 'tip-warning');
+
+                                                echo '<tr>';
+                                                echo '<td>' . $metric['name'] . '</td>';
+                                                echo '<td><strong>' . $metric['current'] . '</strong></td>';
+                                                echo '<td>' . $metric['target'] . '</td>';
+                                                echo '<td><span class="' . $statusClass . '">' .
+                                                    ($metric['status'] == 'good' ? '✅ Bon' : ($metric['status'] == 'average' ? '⚠️ Moyen' : '❌ À améliorer')) .
+                                                    '</span></td>';
+                                                echo '<td>' . htmlspecialchars($metric['action']) . '</td>';
+                                                echo '</tr>';
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
 
@@ -1373,6 +1572,159 @@ function getCountryCodeSimple($countryName)
             }
         }
 
+
+        // ===== ONGLET INS: Graphique Revenus vs Trafic =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Récupérer les données passées depuis PHP
+            const chartDates = <?php echo json_encode($chartDates); ?>;
+            const chartVisits = <?php echo json_encode($chartVisits); ?>;
+            const chartRevenue = <?php echo json_encode($chartRevenue); ?>;
+
+            if (chartDates.length > 0) {
+                const ctx = document.getElementById('revenueTrafficChart').getContext('2d');
+
+                // Formater les dates pour l'affichage
+                const formattedDates = chartDates.map(date => {
+                    const d = new Date(date);
+                    return d.toLocaleDateString('fr-FR', {
+                        day: '2-digit',
+                        month: '2-digit'
+                    });
+                });
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: formattedDates,
+                        datasets: [{
+                                label: 'Visites',
+                                data: chartVisits,
+                                borderColor: 'rgb(54, 162, 235)',
+                                backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                                tension: 0.3,
+                                yAxisID: 'y'
+                            },
+                            {
+                                label: 'Revenus (€)',
+                                data: chartRevenue,
+                                borderColor: 'rgb(75, 192, 192)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                                tension: 0.3,
+                                yAxisID: 'y1'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        plugins: {
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.datasetIndex === 0) {
+                                            label += context.parsed.y + ' visites';
+                                        } else {
+                                            label += context.parsed.y.toFixed(2) + '€';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    display: true
+                                }
+                            },
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: 'Visites'
+                                },
+                                grid: {
+                                    drawOnChartArea: true
+                                }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                title: {
+                                    display: true,
+                                    text: 'Revenus (€)'
+                                },
+                                grid: {
+                                    drawOnChartArea: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // ===== ONGLET : INSIGHTS =====
+
+            // Ajouter des tooltips aux recommandations
+            document.querySelectorAll('.tip-success, .tip-warning, .tip-info, .tip-neutral').forEach(tip => {
+                tip.style.cursor = 'pointer';
+                tip.title = 'Cliquez pour en savoir plus';
+
+                tip.addEventListener('click', function() {
+                    const message = this.textContent;
+                    alert('Recommandation détaillée:\n\n' + message + '\n\nCette analyse est basée sur vos données de trafic et transactions.');
+                });
+            });
+
+            // Calculer et afficher un résumé des insights
+            function calculateDailyInsights() {
+                const visitsToday = chartVisits[chartVisits.length - 1] || 0;
+                const revenueToday = chartRevenue[chartRevenue.length - 1] || 0;
+
+                const avgVisits = chartVisits.reduce((a, b) => a + b, 0) / chartVisits.length;
+                const avgRevenue = chartRevenue.reduce((a, b) => a + b, 0) / chartRevenue.length;
+
+                let insightText = '';
+
+                if (visitsToday > avgVisits * 1.5 && revenueToday > avgRevenue * 1.5) {
+                    insightText = '🔥 Excellente journée ! Trafic et revenus bien au-dessus de la moyenne.';
+                } else if (visitsToday > avgVisits * 1.2 && revenueToday < avgRevenue * 0.8) {
+                    insightText = '⚠️ Trafic élevé mais revenus bas. Vérifiez votre taux de conversion.';
+                } else if (visitsToday < avgVisits * 0.8 && revenueToday > avgRevenue * 1.2) {
+                    insightText = '💰 Peu de visites mais conversion excellente. Qualité > Quantité !';
+                } else {
+                    insightText = '📊 Journée dans la moyenne. Continuez vos efforts !';
+                }
+
+                // Créer un élément d'insight si nécessaire
+                let insightElement = document.querySelector('.daily-insight');
+                if (!insightElement) {
+                    insightElement = document.createElement('div');
+                    insightElement.className = 'daily-insight insight-tip';
+                    document.querySelector('#revenueTrafficChart').closest('.card-body').appendChild(insightElement);
+                }
+
+                insightElement.innerHTML = `<strong>📅 Aujourd'hui :</strong> ${visitsToday} visites, ${revenueToday.toFixed(2)}€ de revenus. ${insightText}`;
+            }
+
+            // Exécuter l'analyse quotidienne
+            if (chartVisits.length > 0) {
+                calculateDailyInsights();
+            }
+        });
+
         // Gestion des onglets - Version simplifiée sans MutationObserver
         function setupMapTabListener() {
             const tabs = document.querySelectorAll('.tab');
@@ -1624,6 +1976,116 @@ function getCountryCodeSimple($countryName)
                 closeMobileMenu();
             }
         });
+
+        // ===== GRAPHIQUE DES TENDANCES =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Attendre que l'onglet insights soit chargé
+            setTimeout(() => {
+                const trendsCtx = document.getElementById('trendsChart');
+                if (trendsCtx) {
+                    const trendChart = new Chart(trendsCtx.getContext('2d'), {
+                        type: 'line',
+                        data: {
+                            labels: <?= json_encode($trendLabels) ?>,
+                            datasets: [{
+                                    label: 'Visites totales',
+                                    data: <?= json_encode($trendVisits) ?>,
+                                    borderColor: '#9d86ff',
+                                    backgroundColor: 'rgba(157, 134, 255, 0.1)',
+                                    tension: 0.3,
+                                    fill: true
+                                },
+                                {
+                                    label: 'Visiteurs uniques',
+                                    data: <?= json_encode($trendUnique) ?>,
+                                    borderColor: '#4ecdc4',
+                                    backgroundColor: 'rgba(78, 205, 196, 0.1)',
+                                    tension: 0.3,
+                                    fill: true
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                tooltip: {
+                                    mode: 'index',
+                                    intersect: false
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Nombre de visites'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // Ajouter des tooltips aux recommandations
+                document.querySelectorAll('.tip-success, .tip-warning, .tip-info, .tip-neutral').forEach(tip => {
+                    tip.style.cursor = 'pointer';
+                    tip.title = 'Cliquez pour en savoir plus';
+
+                    tip.addEventListener('click', function() {
+                        const message = this.textContent;
+                        alert('Recommandation détaillée:\n\n' + message);
+                    });
+                });
+
+                // Calculer et afficher des insights automatiques
+                function generateAutoInsights() {
+                    const insightsContainer = document.querySelector('#insights .insight-tip');
+                    if (!insightsContainer) return;
+
+                    // Analyser les sources de trafic
+                    const directTraffic = sources.find(s => s.source.toLowerCase().includes('direct'));
+                    const socialTraffic = sources.find(s =>
+                        s.source.toLowerCase().includes('facebook') ||
+                        s.source.toLowerCase().includes('twitter') ||
+                        s.source.toLowerCase().includes('instagram')
+                    );
+
+                    let additionalInsight = '';
+
+                    if (directTraffic && directTraffic.count > (sources[0]?.count || 0) * 0.5) {
+                        additionalInsight += " Beaucoup de trafic direct - vos utilisateurs vous connaissent déjà !";
+                    }
+
+                    if (socialTraffic && socialTraffic.count < (sources[0]?.count || 0) * 0.1) {
+                        additionalInsight += " Peu de trafic social - développez votre présence sur les réseaux.";
+                    }
+
+                    if (additionalInsight) {
+                        const newInsight = document.createElement('div');
+                        newInsight.className = 'insight-tip';
+                        newInsight.style.marginTop = '15px';
+                        newInsight.style.padding = '10px';
+                        newInsight.style.background = '#f8f9fa';
+                        newInsight.style.borderRadius = '5px';
+                        newInsight.innerHTML = `<strong>Opportunité :</strong>${additionalInsight}`;
+
+                        insightsContainer.parentNode.insertBefore(newInsight, insightsContainer.nextSibling);
+                    }
+                }
+
+                // Exécuter l'analyse automatique
+                generateAutoInsights();
+
+            }, 100);
+        });
+
+        // Fonction pour basculer vers l'onglet insights (au cas où)
+        function openInsightsTab() {
+            openTab('insights');
+        }
     </script>
 </body>
 

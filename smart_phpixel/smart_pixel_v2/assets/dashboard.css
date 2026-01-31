@@ -16,11 +16,15 @@
   --hover-bg: rgba(0, 0, 0, 0.05);
   --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   --search-bg: #f8f8f8;
-  --positive: #10b981;
-  --negative: #ef4444;
+  --positive: #4ecdc4;
+  --negative: #ff6b8b;
   --warning: #f59e0b;
   --gradient-pro: linear-gradient(135deg, #9d86ff 0%, #7c6bd9 100%);
   --gradient-business: linear-gradient(135deg, #4ecdc4 0%, #3bb4ad 100%);
+  --p-rose: #ff86e9;
+  --p-bleu: #4ecdc4;
+  --p-jaune: #ffe66d;
+  --p-rouge: #ff6b8b;
 }
 
 /* Dark Mode Variables */
@@ -243,6 +247,61 @@ header {
   border-bottom: 1px solid var(--border-color);
 }
 
+/* Ajouter dans dashboard.css */
+.map-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.map-btn {
+    background: var(--primary-color, #6772e5);
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+}
+
+.map-btn:hover {
+    background: var(--primary-dark, #5a67d8);
+}
+
+.flag-icon {
+    font-size: 14px;
+    font-weight: bold;
+    background: #f1f1f1;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+}
+
+/* Style pour le conteneur de la map */
+#mapChart {
+    min-height: 400px;
+    border: 1px solid #e0e0e0;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    #mapChart {
+        height: 350px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    #mapChart {
+        height: 300px !important;
+    }
+    
+    .data-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
 /* ===== TABLES DE DONNÉES ===== */
 .data-table {
   width: 100%;
@@ -312,7 +371,6 @@ header {
   background: var(--primary-light);
   color: var(--primary-color);
 }
-
 
 /* ===== FOOTER ===== */
 footer {
@@ -751,7 +809,7 @@ canvas {
 
 .copy-btn {
   background: transparent;
-  border: 1px solid var(--border-color);
+  border: none;
   border-radius: 6px;
   width: 28px;
   height: 28px;
@@ -1216,6 +1274,55 @@ canvas {
 
 .plan-card.business .btn-select:hover {
   box-shadow: 0 6px 20px rgba(78, 205, 196, 0.3);
+}
+
+/* Styles pour les tips */
+.tip-success {
+    color: var(--chart-color-3);
+    background: rgba(16, 185, 129, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.tip-warning {
+    color: var(--chart-color-2);
+    background: rgba(245, 158, 11, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.tip-info {
+    color: var(--chart-color-1);
+    background: rgba(59, 130, 246, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.tip-neutral {
+    color: var(--p-bleu);
+    background: rgba(107, 114, 128, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+/* Style pour les insights */
+.insight-tip {
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    padding: 12px 15px;
+    margin: 15px 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.95em;
+}
+
+/* Responsive pour les tables dans les cards */
+.card .table-container {
+    overflow-x: auto;
+    max-width: 100%;
 }
 
 /* === FORMULAIRE DE CHECKOUT === */
