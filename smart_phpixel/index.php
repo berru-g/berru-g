@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="./assets/dashboard.css">
     <script data-sp-id="SP_79747769" src="https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/tracker.js"
         async></script>
+    <link rel="stylesheet" href="./RGPD/cookie.css">
 
     <style>
         /* ====== VARIABLES & RESET ====== */
@@ -958,7 +959,7 @@
                         <div class="stat-label">Plus rapide que la V1</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">7</div><!--<span class="counter"><?php echo $total; ?> sites créés</span>-->
+                        <div class="stat-number"><?php echo $total; ?></div><!--<span class="counter"><?php echo $total; ?> sites créés</span>-->
                         <div class="stat-label">Dashboard crée</div>
                     </div>
                 </div>
@@ -972,8 +973,7 @@
             <div class="section-title">
                 <h2>Pourquoi choisir Smart Pixel ?</h2>
                 <p class="section-subtitle">
-                    La solution analytics conçue pour les développeurs et entreprises soucieux
-                    de la protection des données
+                    Nous avons conçu notre propre API pour ne transmettre aucune data à des tiers. Les données recolté par vos pixels sont uniquement visible via votre dashboard.
                 </p>
             </div>
 
@@ -1001,7 +1001,7 @@
                         <i class="fas fa-server"></i>
                     </div>
                     <h3>Souveraineté des données</h3>
-                    <p>Hébergement 100% français, 0 tiers. Vos données restent sous votre contrôle.
+                    <p>Hébergement 100% français, 0 tiers, 0 GAFAM. Vos données sont vos données.
                     </p>
                 </div>
 
@@ -1010,8 +1010,8 @@
                         <i class="fas fa-code"></i>
                     </div>
                     <h3>Open Source</h3>
-                    <p>Code transparent, auditable et modifiable. Pas de boîte noire, vous savez exactement ce qui se
-                        passe.</p>
+                    <p>Code transparent, auditable. Pas de boîte noire, vous savez exactement ce qui se
+                        passe. Documentation pour les dev à /doc/</p>
                 </div>
             </div>
         </div>
@@ -1309,7 +1309,7 @@
                         <i class="fas fa-user-plus"></i>
                         Créer mon compte gratuit
                     </a>
-                   <!-- <a href="#demo" class="btn btn-outline" style="padding: 20px 40px; font-size: 1.1rem;">
+                    <!-- <a href="#demo" class="btn btn-outline" style="padding: 20px 40px; font-size: 1.1rem;">
                         <i class="fas fa-play-circle"></i>
                         Voir la démo complète
                     </a>-->
@@ -1341,7 +1341,7 @@
                     </p>
 
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="https://github.com/berru-g/smart_pixel_v2"><i class="fab fa-github"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
                         <a href="#"><i class="fab fa-linkedin"></i></a>
                         <a href="#"><i class="fab fa-product-hunt"></i></a>
@@ -1355,7 +1355,7 @@
                         <li><a href="#demo">Démo</a></li>
                         <li><a href="#pricing">Tarifs</a></li>
                         <li><a href="./doc/auto-heberge/index.html">Documentation</a></li>
-                        <li><a href="#">API</a></li>
+                        <li><a href="https://github.com/berru-g/smart_pixel_v2/blob/main/public/pixel.php">API</a></li>
                     </ul>
                 </div>
 
@@ -1365,7 +1365,7 @@
                         <li><a href="#">À propos</a></li>
                         <li><a href="#">Blog</a></li>
                         <li><a href="#">Carrières</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="https://gael-berru.com">Contact</a></li>
                         <li><a href="#">Presse</a></li>
                     </ul>
                 </div>
@@ -1395,6 +1395,46 @@
         </div>
     </footer>
 
+    <div id="cookie-banner" style="display: none;">
+        <div class="cookie-container">
+            <div class="cookie-header">
+                <div class="cookie-icon">🛡️</div>
+                <div class="cookie-title-wrapper">
+                    <h3 class="cookie-title">Transparence totale sur vos données</h3>
+                    <p class="cookie-subtitle">Respect RGPD • Open source</p>
+                </div>
+            </div>
+
+            <div class="cookie-content">
+                <p class="cookie-description">
+                    <strong>Ici, aucun de vos clics n'est vendu à Google ou Facebook.</strong><br>
+                    J'utilise <strong>Smart Pixel</strong>, mon propre système d'analyse développé avec éthique, dans le respect
+                    des lois RGPD.
+                </p>
+                <p class="cookie-description">
+                    En autorisant l'analyse, vous m'aidez à améliorer ce site <strong>sans enrichir les GAFAM de vos
+                        données</strong>.
+                </p>
+            </div>
+
+            <div class="cookie-buttons">
+                <button class="cookie-btn accept-necessary" onclick="acceptCookies('necessary')">
+                    Non merci
+                </button>
+                <button class="cookie-btn accept-all" onclick="acceptCookies('all')">
+                    Ok pour moi
+                </button>
+            </div>
+
+            <div class="cookie-footer">
+                <a href="https://github.com/berru-g/smart_phpixel" target="_blank" class="cookie-link">
+                    Voir le code source de Smart Pixel
+                </a>
+            </div>
+        </div>
+    </div>
+    <script src="./RGPD/cookie.js"></script>
+
     <script>
         // ====== MOBILE MENU ======
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -1402,9 +1442,9 @@
 
         mobileMenuBtn.addEventListener('click', () => {
             navLinks.classList.toggle('active');
-            mobileMenuBtn.innerHTML = navLinks.classList.contains('active')
-                ? '<i class="fas fa-times"></i>'
-                : '<i class="fas fa-bars"></i>';
+            mobileMenuBtn.innerHTML = navLinks.classList.contains('active') ?
+                '<i class="fas fa-times"></i>' :
+                '<i class="fas fa-bars"></i>';
         });
 
         // ====== COPY CODE FUNCTION ======
@@ -1412,27 +1452,27 @@
             const code = `<script data-sp-id="TON_ID_ICI" src="https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/tracker.js" async><\/script>
     `;
 
-    navigator.clipboard.writeText(code).then(() => {
-    const btn = document.querySelector('.copy-btn');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-check"></i> Copié !';
-    btn.style.background = 'rgba(6, 214, 160, 0.2)';
-    btn.style.color = 'var(--accent)';
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Copié !';
+                btn.style.background = 'rgba(6, 214, 160, 0.2)';
+                btn.style.color = 'var(--accent)';
 
-    setTimeout(() => {
-    btn.innerHTML = originalText;
-    btn.style.background = '';
-    btn.style.color = '';
-    }, 2000);
-    });
-    }
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '';
+                    btn.style.color = '';
+                }, 2000);
+            });
+        }
 
-    // ====== IFRAME FALLBACK ======
-    const dashboardIframe = document.getElementById('dashboardLivePreview');
+        // ====== IFRAME FALLBACK ======
+        const dashboardIframe = document.getElementById('dashboardLivePreview');
 
-    dashboardIframe.addEventListener('error', function () {
-    console.log('Fallback pour dashboard');
-    this.srcdoc = `
+        dashboardIframe.addEventListener('error', function() {
+            console.log('Fallback pour dashboard');
+            this.srcdoc = `
     <!DOCTYPE html>
     <html>
 
@@ -1543,65 +1583,65 @@
 
     </html>
     `;
-    });
+        });
 
-    // ====== SMOOTH SCROLL ======
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-    const targetId = this.getAttribute('href');
-    if (targetId === '#') return;
+        // ====== SMOOTH SCROLL ======
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
 
-    const targetElement = document.querySelector(targetId);
-    if (targetElement) {
-    e.preventDefault();
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    e.preventDefault();
 
-    // Close mobile menu if open
-    if (navLinks.classList.contains('active')) {
-    navLinks.classList.remove('active');
-    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-    }
+                    // Close mobile menu if open
+                    if (navLinks.classList.contains('active')) {
+                        navLinks.classList.remove('active');
+                        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                    }
 
-    window.scrollTo({
-    top: targetElement.offsetTop - 100,
-    behavior: 'smooth'
-    });
-    }
-    });
-    });
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
 
-    // ====== ANIMATE STATS ON SCROLL ======
-    const observerOptions = {
-    threshold: 0.5
-    };
+        // ====== ANIMATE STATS ON SCROLL ======
+        const observerOptions = {
+            threshold: 0.5
+        };
 
-    const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-    if (entry.isIntersecting) {
-    const statNumbers = entry.target.querySelectorAll('.stat-number');
-    statNumbers.forEach(stat => {
-    const finalValue = stat.textContent;
-    const duration = 2000;
-    const steps = 60;
-    const increment = parseInt(finalValue) / steps;
-    let current = 0;
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statNumbers = entry.target.querySelectorAll('.stat-number');
+                    statNumbers.forEach(stat => {
+                        const finalValue = stat.textContent;
+                        const duration = 2000;
+                        const steps = 60;
+                        const increment = parseInt(finalValue) / steps;
+                        let current = 0;
 
-    const timer = setInterval(() => {
-    current += increment;
-    if (current >= parseInt(finalValue)) {
-    stat.textContent = finalValue;
-    clearInterval(timer);
-    } else {
-    stat.textContent = Math.floor(current);
-    }
-    }, duration / steps);
-    });
-    observer.unobserve(entry.target);
-    }
-    });
-    }, observerOptions);
+                        const timer = setInterval(() => {
+                            current += increment;
+                            if (current >= parseInt(finalValue)) {
+                                stat.textContent = finalValue;
+                                clearInterval(timer);
+                            } else {
+                                stat.textContent = Math.floor(current);
+                            }
+                        }, duration / steps);
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
 
-    const statsSection = document.querySelector('.hero-stats');
-    if (statsSection) observer.observe(statsSection);
+        const statsSection = document.querySelector('.hero-stats');
+        if (statsSection) observer.observe(statsSection);
     </script>
 </body>
 

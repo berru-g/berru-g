@@ -1,5 +1,13 @@
 <?php
-
+/* 
+    ============================================
+       Developed by : https://github.com/berru-g/
+       Project : Smart_pixel_Analytics
+       Date first Commits on Nov 21, 2025
+       Version : 1.0.2
+       Copyright (c) 2025 Berru
+    ============================================
+*/
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/auth.php';
 
@@ -298,10 +306,10 @@ function getCountryCodeSimple($countryName)
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
     <link rel="stylesheet" href="../assets/dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- amCharts 5 (version complète sans modules séparés) -->
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
@@ -320,7 +328,10 @@ function getCountryCodeSimple($countryName)
                 <div class="logo-container">
                     <!--<div class="logo-icon">◰</div>-->
                     <div class="logo-text">
-                        <h3>Smart Pixel</h3>
+                        <h3><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg></h3>
                         <small class="user-email"><?= htmlspecialchars($_SESSION['user_email'] ?? 'Utilisateur') ?></small>
                     </div>
                 </div>
@@ -363,6 +374,7 @@ function getCountryCodeSimple($countryName)
                         </div>
                     <?php endif; ?>
                 </div>
+               
             </div>
 
             <!-- Section des sites -->
@@ -428,7 +440,7 @@ function getCountryCodeSimple($countryName)
                     </svg>
                     <span>Déconnexion</span>
                 </button>
-            </div> 
+            </div>
         </div>
 
         <!-- Overlay pour mobile -->
@@ -540,7 +552,7 @@ function getCountryCodeSimple($countryName)
                 <div class="container">
                     <div class="header-content">
                         <h1>Smart Pixel Analytics</h1>
-                        <p><i class="fa-regular fa-bell"></i></p>
+                        <div style="color:grey;"></div>
                         <div class="period-filter">
                             <span>Période :</span>
                             <select id="periodSelect" onchange="changePeriod(this.value)">
@@ -564,6 +576,7 @@ function getCountryCodeSimple($countryName)
                         <div class="tab" onclick="openTab('content')">Contenu</div>
                         <div class="tab" onclick="openTab('sessions')">Sessions</div>
                         <div class="tab" onclick="openTab('details')">Détails</div>
+                        <div class="tab" onclick="openTab('insights')">Insights</div>
                     </div>
 
                     <!-- ONGLET APERÇU -->
@@ -659,7 +672,7 @@ function getCountryCodeSimple($countryName)
                             <div class="chart-container">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                                     <h3 class="chart-title">Carte mondiale des visites</h3>
-                                    <div class="map-controls">
+                                   <!--<div class="map-controls">
                                         <button onclick="zoomIn()" class="map-btn" title="Zoom avant">
                                             <i class="fas fa-search-plus"></i>
                                         </button>
@@ -669,7 +682,7 @@ function getCountryCodeSimple($countryName)
                                         <button onclick="resetMap()" class="map-btn" title="Réinitialiser">
                                             <i class="fas fa-home"></i>
                                         </button>
-                                    </div>
+                                    </div>-->
                                 </div>
                                 <div id="mapChart" style="width: 100%; height: 400px; background: var(--bg-color); border-radius: 8px;"></div>
                                 <div id="mapLegend" style="margin-top: 10px; text-align: center; font-size: 12px; color: #666;">
@@ -1466,7 +1479,7 @@ function getCountryCodeSimple($countryName)
                 datasets: [{
                     data: browsers.map(b => b.count),
                     backgroundColor: [
-                        '#9d86ff', '#4ecdc4', '#ff6b8b', '#ffe66d', '#ff86e9'
+                        '#9d86ff', '#ff86e9', '#4ecdc4', '#ff6b8b', '#ffe66d'
                     ]
                 }]
             },
