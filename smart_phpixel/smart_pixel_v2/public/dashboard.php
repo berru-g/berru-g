@@ -424,8 +424,17 @@ function getCountryCodeSimple($countryName)
                 </div>
             <?php endif; ?>
 
-            <!-- Bouton de déconnexion -->
+            <!-- Bouton de déconnexion --> 
             <div class="logout-section">
+
+                <button class="logout-btn" onclick="confirmParametre()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                    </svg>
+                    <span>Parametre</span>
+                </button>
+                <br>
                 <button class="logout-btn" onclick="confirmLogout()">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
@@ -463,7 +472,7 @@ function getCountryCodeSimple($countryName)
 
             <?php if ($limitReached): ?>
                 <!-- Afficher les options d'upgrade (refaire css car ce fdp ia est teubé) -->
-                <div style="background: #fff3cd; border: 1px solid #ffeaa7; color: #333; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <div style="background: var(--bg-color); border: 1px solid #ffeaa7; color: var(--text-color); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                     <h3>Limite atteinte</h3>
                     <p><?= $errorMessage ?></p>
 
@@ -475,7 +484,7 @@ function getCountryCodeSimple($countryName)
                                 <h3>PRO</h3>
                                 <p><strong>9€/mois</strong></p>
                                 <ul style="padding-left: 20px;">
-                                    <li>5 sites maximum</li>
+                                    <li>12 sites maximum</li>
                                     <li>10 000 visites/mois</li>
                                     <li>Stats avancées</li>
                                     <li>Export PDF</li>
@@ -490,7 +499,7 @@ function getCountryCodeSimple($countryName)
                                 <h3>BUSINESS</h3>
                                 <p><strong>29€/mois</strong></p>
                                 <ul style="padding-left: 20px;">
-                                    <li>20 sites maximum</li>
+                                    <li>50 sites maximum</li>
                                     <li>1M de visites/mois</li>
                                     <li>Support prioritaire</li>
                                     <li>API complète</li>
@@ -522,6 +531,7 @@ function getCountryCodeSimple($countryName)
                 <!-- Formulaire de création normal -->
                 <div style="background-color: var(--bg-color); color: var(--text-color); text-align: center; padding: 2rem; max-width: 500px; margin: 0 auto; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                     <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 600;">
+                        <i class="fa-regular fa-square-plus"></i>
                         <?= isset($_GET['first']) ? 'Créez votre premier site' : 'Ajouter un nouveau site' ?>
                     </h2>
 
@@ -2168,6 +2178,12 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
         function confirmLogout() {
             if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
                 window.location.href = 'logout.php';
+            }
+        }
+
+        function confirmParametre() {
+            if (confirm('En cours de developpement. Merci de votre patience !')) {
+                window.location.href = '#';
             }
         }
 
