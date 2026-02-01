@@ -1,14 +1,22 @@
-# DYNAMIC RENDERING FOR BOTS - SEO 2.0
+# ============================================
+# SEO 2.0 - DYNAMIC RENDERING FOR BOTS CAUSE SPA CONTENT 
+# ============================================
 RewriteEngine On
 
-# 1. Pour les bots : redirige vers la version HTML
-RewriteCond %{HTTP_USER_AGENT} (googlebot|bingbot|yandex|baiduspider|twitterbot|facebookexternalhit|linkedinbot|whatsapp|pinterest|slackbot|telegrambot|discordbot|applebot|duckduckbot|facebot|ia_archiver) [NC]
-RewriteRule ^projet/([a-zA-Z0-9_-]+)$ /render-for-bots.php?slug=$1 [L,QSA]
+# 1. BLOQUE l'accès direct au fichier PHP
+RewriteRule ^render-for-bots\.php$ - [R=404,L]
 
-# 2. Sitemap pour les bots
-RewriteRule ^sitemap-projets\.xml$ /sitemap-projets.php [L]
-# FIN DYNAMIC RENDERING FOR BOTS - SEO 2.0
+# 2. REDIRECTION BOTS vers HTML statique
+RewriteCond %{HTTP_USER_AGENT} (googlebot|bingbot|yandex|baiduspider|twitterbot|facebookexternalhit|linkedinbot|whatsapp|pinterest|slackbot|telegrambot|discordbot|applebot|duckduckbot|facebot|ia_archiver|Mediapartners\-Google) [NC]
+RewriteRule ^projet/([a-zA-Z0-9_-]+)/?$ /render-for-bots.php?slug=$1 [L]
 
+# 3. REDIRECTION HUMAINS vers SPA (#anchor)
+RewriteCond %{HTTP_USER_AGENT} !(googlebot|bingbot|yandex|baiduspider|twitterbot|facebookexternalhit|linkedinbot|whatsapp|pinterest|slackbot|telegrambot|discordbot|applebot|duckduckbot|facebot|ia_archiver|Mediapartners\-Google) [NC]
+RewriteRule ^projet/([a-zA-Z0-9_-]+)/?$ /#project-$1 [R=302,L]
+
+# ============================================
+# CONFIGURATION EXISTANTE (conserve)
+# ============================================
 # Empêcher l'accès direct à config.php
 <Files "config.php">
     Order allow,deny
@@ -25,4 +33,4 @@ RewriteRule ^sitemap-projets\.xml$ /sitemap-projets.php [L]
 </Files>
 
 # Désactiver l'affichage des erreurs PHP en prod
-#php_flag display_errors off
+php_flag display_errors off
