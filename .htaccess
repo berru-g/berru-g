@@ -1,3 +1,14 @@
+# DYNAMIC RENDERING FOR BOTS - SEO 2.0
+RewriteEngine On
+
+# 1. Pour les bots : redirige vers la version HTML
+RewriteCond %{HTTP_USER_AGENT} (googlebot|bingbot|yandex|baiduspider|twitterbot|facebookexternalhit|linkedinbot|whatsapp|pinterest|slackbot|telegrambot|discordbot|applebot|duckduckbot|facebot|ia_archiver) [NC]
+RewriteRule ^projet/([a-zA-Z0-9_-]+)$ /render-for-bots.php?slug=$1 [L,QSA]
+
+# 2. Sitemap pour les bots
+RewriteRule ^sitemap-projets\.xml$ /sitemap-projets.php [L]
+# FIN DYNAMIC RENDERING FOR BOTS - SEO 2.0
+
 # Empêcher l'accès direct à config.php
 <Files "config.php">
     Order allow,deny
