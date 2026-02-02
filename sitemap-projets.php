@@ -34,7 +34,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
     <!-- Projets (URLs pour les bots) -->
     <?php foreach ($projects as $slug => $lastmod): ?>
     <url>
-        <loc>https://gael-berru.com/projet/<?= htmlspecialchars($slug) ?></loc>
+        <loc>https://gael-berru.com/advent-calendar/<?= htmlspecialchars($slug) ?></loc>
         <lastmod><?= $lastmod ?></lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>

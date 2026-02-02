@@ -10,7 +10,7 @@ $projectsData = [
         'description' => 'Solution analytics open source 100% française, hébergée en Europe, respectueuse RGPD.',
         'technologies' => ['PHP', 'JavaScript', 'MySQL', 'Redis'],
         'url' => 'https://gael-berru.com/smart_phpixel/',
-        'image' => 'https://gael-berru.com/img/smart-pixel.jpg',
+        'image' => 'https://gael-berru.com/img/smart-pixel.png',
         'date' => '2024-01-15'
     ],
     'blockchain-explorer' => [
@@ -18,7 +18,7 @@ $projectsData = [
         'description' => 'Outil forensic pour analyser les transactions blockchain Bitcoin, Ethereum.',
         'technologies' => ['JavaScript', 'API Blockchain', 'React'],
         'url' => 'https://crypto-free-tools.netlify.app/scam-radar/enquete/',
-        'image' => 'https://gael-berru.com/img/blockchain.jpg',
+        'image' => 'https://gael-berru.com/img/enquete.png',
         'date' => '2024-02-20'
     ],
     'sql-editor' => [
@@ -26,7 +26,7 @@ $projectsData = [
         'description' => 'Outil visuel pour construire, visualiser et optimiser des bases de données SQL.',
         'technologies' => ['SQL', 'JavaScript', 'D3.js'],
         'url' => 'https://agora-dataviz.com/',
-        'image' => 'https://gael-berru.com/img/sql-editor.jpg',
+        'image' => 'https://gael-berru.com/img/sql-editor.png',
         'date' => '2024-03-10'
     ],
     '3d-animator' => [
@@ -34,7 +34,7 @@ $projectsData = [
         'description' => 'Créateur d\'animations 3D interactives au défilement, sans code requis.',
         'technologies' => ['Three.js', 'JavaScript', 'WebGL'],
         'url' => 'https://3dscrollanimator.com/',
-        'image' => 'https://gael-berru.com/img/3d-animator.jpg',
+        'image' => 'https://gael-berru.com/img/3dscrollanimator.png',
         'date' => '2024-04-05'
     ],
     'advent-calendar-2025' => [
@@ -204,7 +204,7 @@ if ($isBot) {
         }
         .bot-image {
             max-width: 100%;
-            height: auto;
+            height: auto; 
             border-radius: 12px;
             margin: 2rem 0;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);

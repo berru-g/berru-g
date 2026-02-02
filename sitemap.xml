@@ -1,8 +1,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://gael-berru.com/</loc>
-    <lastmod>2026-01-24</lastmod>
+    <lastmod>2026-02-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1</priority>
+  </url>
+  <url>
+    <loc>https://gael-berru.com/skill/</loc>
+    <lastmod>2026-02-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://gael-berru.com/smart_phpixel/</loc>
+    <lastmod>2026-02-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
 </urlset>

@@ -13,7 +13,7 @@ if (!Auth::isLoggedIn()) {
 $user_id = $_SESSION['user_id'];
 $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8", DB_USER, DB_PASS);
 
-// 2. Récupérer les sites de l'utilisateur
+// 2. Récupérer les sites de l'utilisateur // dégager query pour prepare 
 $stmt = $pdo->prepare("SELECT * FROM user_sites WHERE user_id = ? ORDER BY id DESC");
 $stmt->execute([$user_id]);
 $userSites = $stmt->fetchAll();

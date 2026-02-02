@@ -1577,7 +1577,7 @@ canvas {
 }
 
 .ai-badge {
-    background: var(--p-rouge);
+    background: var(--p-bleu);
     color: var(--bg-color);
     padding: 2px 8px;
     border-radius: 10px;
