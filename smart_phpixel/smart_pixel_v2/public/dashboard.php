@@ -1336,7 +1336,7 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
 
                 "Pour maximiser vos résultats, concentrez-vous sur l'amélioration de votre taux de conversion actuel.",
 
-                "Cette Assistant IA est en développement ... il se peut qu'il ne réponde pas toujours de manière pertinente. Pour toute question, contactez le developpeur https://gael-berru.com"
+                "Cette Assistant IA est en développement ... il se peut qu'il ne réponde pas toujours de manière pertinente. Pour toute question, contactez le developpeur contact@gael-berru.com"
             ]
         };
 

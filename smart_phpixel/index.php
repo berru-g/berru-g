@@ -84,14 +84,14 @@
     <style>
         /* ====== VARIABLES PROFESSIONNELLES ====== */
         :root {
-            --primary: #2563eb;         /* Bleu professionnel */
-            --primary-dark: #1d4ed8;
-            --primary-light: #3b82f6;
-            --secondary: #64748b;       /* Gris texte */
-            --accent: #06d6a0;          /* Vert succès */
+            --primary: #9d86ff;         /* Bleu professionnel */
+            --primary-dark: #917ded;
+            --primary-light: #af9dfe;
+            --secondary: #988dc6;       /* Gris texte */
+            --accent: #4ecdc4;          /* Vert succès */
             --accent-dark: #059669;
             --warning: #f59e0b;
-            --danger: #ef4444;
+            --danger: #ff6b8b;
             --light: #f8fafc;
             --dark: #0f172a;
             --gray-light: #f1f5f9;
@@ -1218,7 +1218,7 @@
                         <li><i class="fas fa-check feature-check"></i> Intégrations custom</li>
                     </ul>
                     
-                    <a href="https://gael-berru.com" class="btn btn-secondary" style="margin-top: auto;">
+                    <a href="contact@gael-berru.com" class="btn btn-secondary" style="margin-top: auto;">
                         <i class="fas fa-phone-alt"></i>
                         Nous contacter
                     </a>

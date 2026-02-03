@@ -1674,7 +1674,7 @@ canvas {
 }
 
 .ai-message.user .message-content {
-    background: #667eea;
+    background: var(--primary-color);
     color: white;
     border-radius: 15px 15px 0 15px;
 }
@@ -1707,7 +1707,7 @@ canvas {
 .typing-indicator span {
     width: 8px;
     height: 8px;
-    background: #667eea;
+    background: var(--primary-color);
     border-radius: 50%;
     animation: typing 1.4s infinite;
 }
@@ -1744,9 +1744,9 @@ canvas {
 }
 
 .quick-question:hover {
-    background: #667eea;
+    background: var(--primary-color);
     color: white;
-    border-color: #667eea;
+    border-color: var(--primary-color);
 }
 
 .ai-input-wrapper {
@@ -1764,12 +1764,12 @@ canvas {
 }
 
 #aiInput:focus {
-    border-color: #667eea;
+    border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .ai-send-btn {
-    background: #667eea;
+    background: var(--primary-color);
     color: white;
     border: none;
     width: 45px;
@@ -1783,7 +1783,7 @@ canvas {
 }
 
 .ai-send-btn:hover {
-    background: #5a67d8;
+    background: var(--p-bleu);
 }
 
 /* Emojis stylisés */

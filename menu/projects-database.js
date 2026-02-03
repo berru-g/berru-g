@@ -159,7 +159,7 @@ const projectsDatabase = [
         id: 'Contact',
         title: 'Contact',
         shortDesc: 'Vous voulez discuter ',
-        longDesc: 'Le formulaire ce situe dans le menu. Commencez par me parler de votre problématique actuel et en quoi je peut vous aider. ',
+        longDesc: 'Le formulaire ce situe dans le menu ou via \'contact@gael-berru.com\'. Commencez par me parler de votre problématique actuel et en quoi je peut vous aider. ',
         keywords: ['contact', 'message'],
         image: './img/faceMorph.gif',
         link: '#contact',
