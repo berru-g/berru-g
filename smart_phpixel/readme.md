@@ -2,20 +2,22 @@
 
 Une alternative souveraine à Google Analytics.
 Vos données restent sur nos serveurs, pas chez les GAFAM. Conforme RGPD, open source, dashboard integré, doc complète.
+Avec Smart Pixel vos graphiques racontent une histoire et guident vers des insights actionnables.
 
 ## [Voir la doc](https://gael-berru.com/smart_phpixel/)
 
 ### Disponible
 
-    ✅ V.0.0.1 auto hebergé | statut - gratuit open source
-    ✅ V.0.1.0 software     | statut - gratuit pour 1 dashboard
-    ▶️ V.1.0.1 en cours     | statut - gratuit pour 1 dashboard + abonnement
+    ✅ V.0.0.1 pixel auto hebergé | 2024 | statut - gratuit open source
+    ✅ V.0.1.0 pixel multi tenant | 2025 | statut - gratuit pour 1 dashboard
+    ▶️ V.1.0.1 software friendly  | 2026 | statut - en cour de dev, MVP fonctionnel 
 
 #### STEP :
+- beta test
 - system d'abonnement
 - améliorer les chart et croiser les data --insights
 - landing page
-- migrer bdd et site sur smartpixel.io
+- migrer bdd et site sur nom de domaine 
 - ads budget
 - seo
 
