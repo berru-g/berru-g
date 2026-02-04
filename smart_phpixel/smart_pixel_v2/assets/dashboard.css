@@ -353,7 +353,7 @@ header {
 }
 
 .table-responsive {
-  overflow-x: auto;
+  overflow-x: scroll;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -395,13 +395,13 @@ footer a:hover {
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .container {
-    padding: 0 1rem;
+    padding: 0 0rem;
   }
 
   .header-content {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 0.4rem;
   }
 
   .period-filter {
@@ -1565,11 +1565,11 @@ canvas {
 }
 
 .ai-toggle-btn {
-    background: linear-gradient(135deg, var(--text-color) 0%, var(--primary-color) 100%);
+    background: var(--text-color);
     color: var(--bg-color);
-    border: none;
+    border: 1px solid var(--border-color);
     padding: 12px 20px;
-    border-radius: 18px;
+    border-radius: 12px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1584,10 +1584,10 @@ canvas {
 }
 
 .ai-badge {
-    background: var(--p-bleu);
+    background: var(--text-color);
     color: var(--bg-color);
     padding: 2px 8px;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 0.8em;
     animation: pulse 2s infinite;
 }
@@ -1599,7 +1599,7 @@ canvas {
     width: 400px;
     height: 500px;
     background: white;
-    border-radius: 15px;
+    border-radius: 8px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.15);
     display: none;
     flex-direction: column;
@@ -1617,7 +1617,7 @@ canvas {
 }
 
 .ai-header {
-    background: linear-gradient(135deg, var(--text-color) 0%, var(--primary-color) 100%);
+    background: var(--text-color);
     color: var(--bg-color);
     padding: 15px;
     display: flex;
@@ -1643,7 +1643,7 @@ canvas {
 .ai-close {
     background: none;
     border: none;
-    color: white;
+    color: var(--chart-color-2);
     font-size: 1.5em;
     cursor: pointer;
     width: 30px;
@@ -1662,7 +1662,7 @@ canvas {
     flex: 1;
     padding: 15px;
     overflow-y: auto;
-    background: #f8f9fa;
+    background: var(--bg-color);
 }
 
 .ai-message {
@@ -1682,15 +1682,15 @@ canvas {
 
 .ai-message.user .message-content {
     background: var(--primary-color);
-    color: white;
+    color: var(--bg-color);
     border-radius: 15px 15px 0 15px;
 }
 
 .ai-message.bot .message-content {
-    background: white;
-    color: #333;
-    border-radius: 15px 15px 15px 0;
-    border: 1px solid #e9ecef;
+    background: var(--bg-color);
+    color: var(--text-color);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
 }
 
 .message-content {
@@ -1715,7 +1715,7 @@ canvas {
     width: 8px;
     height: 8px;
     background: var(--primary-color);
-    border-radius: 50%;
+    border-radius: 12px;
     animation: typing 1.4s infinite;
 }
 
@@ -1728,9 +1728,9 @@ canvas {
 }
 
 .ai-input-area {
-    border-top: 1px solid #e9ecef;
+    border-top: 1px solid var(--border-color);
     padding: 15px;
-    background: white;
+    background: var(--bg-color);
 }
 
 .ai-quick-questions {
@@ -1741,9 +1741,9 @@ canvas {
 }
 
 .quick-question {
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 20px;
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
     padding: 8px 12px;
     font-size: 0.9em;
     cursor: pointer;
@@ -1752,7 +1752,7 @@ canvas {
 
 .quick-question:hover {
     background: var(--primary-color);
-    color: white;
+    color: var(--bg-color);
     border-color: var(--primary-color);
 }
 
@@ -1764,8 +1764,8 @@ canvas {
 #aiInput {
     flex: 1;
     padding: 12px 15px;
-    border: 1px solid #dee2e6;
-    border-radius: 25px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
     outline: none;
     font-size: 0.95em;
 }
@@ -1781,7 +1781,7 @@ canvas {
     border: none;
     width: 45px;
     height: 45px;
-    border-radius: 50%;
+    border-radius: 12px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1818,7 +1818,7 @@ canvas {
     
     .ai-panel {
         width: 380px;
-        height: 450px;
+        height: 750px;
     }
     
     .ai-toggle-btn {
@@ -1845,7 +1845,7 @@ canvas {
         width: 100%;
         justify-content: center;
         padding: 12px;
-        border-radius: 15px;
+        border-radius: 12px;
     }
     
     .ai-panel {
@@ -1856,11 +1856,11 @@ canvas {
         bottom: 70px;
         right: 10px;
         left: 10px;
-        border-radius: 20px;
+        border-radius: 12px;
     }
     
     .ai-header {
-        border-radius: 20px 20px 0 0;
+        border-radius: 12px 12px 0 0;
     }
     
     .ai-quick-questions {
@@ -1983,35 +1983,35 @@ canvas {
 /* Mode sombre système */
 @media (prefers-color-scheme: dark) {
     .ai-panel {
-        background: #1a1a2e;
-        border: 1px solid #2d3748;
+        background: var(--text-secondary);
+        border: 1px solid var(--border-color);
     }
     
     .ai-conversation {
-        background: #0f172a;
+        background: var(--bg-color);
     }
     
     .ai-message.bot .message-content {
-        background: #2d3748;
-        color: #e2e8f0;
-        border-color: #4a5568;
+        background: var(--text-color);
+        color: var(--bg-color);
+        border-color: var(--border-color);
     }
     
     .ai-input-area {
-        background: #1a1a2e;
-        border-color: #2d3748;
+        background: var(--text-color);
+        border-color: var(--border-color);
     }
     
     .quick-question {
-        background: #2d3748;
-        border-color: #4a5568;
-        color: #cbd5e0;
+        background: var(--text-color);
+        border-color: var(--border-color);
+        color: var(--bg-color);
     }
     
     #aiInput {
-        background: #2d3748;
-        border-color: #4a5568;
-        color: #e2e8f0;
+        background: var(--text-color);
+        border-color: var(--border-color);
+        color: var(--bg-color);
     }
     
     .ai-message.suggestion {

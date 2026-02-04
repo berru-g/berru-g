@@ -423,6 +423,7 @@ function getCountryCodeSimple($countryName)
                         </button>
                     </div>
                     <code class="integration-code">
+                        &lt;!-- à intégrer dans la balise &lt;head&gt; de votre site --&gt;
                         &lt;script data-sp-id="<?= $currentSite['tracking_code'] ?>" src="<?= APP_URL ?>tracker.js" async&gt;&lt;/script&gt;
                     </code>
                 </div>
