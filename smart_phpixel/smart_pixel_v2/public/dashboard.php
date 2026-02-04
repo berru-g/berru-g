@@ -1132,9 +1132,7 @@ function getCountryCodeSimple($countryName)
                                     <h3 class="card-title">Analyse des Tendances</h3>
                                 </div>
                                 <div class="card-body">
-                                    <div class="chart-container">
-                                        <canvas id="trendsChart" height="250"></canvas>
-                                    </div>
+                                    
                                     <?php
                                     // Préparer les données pour les tendances
                                     $trendLabels = [];
