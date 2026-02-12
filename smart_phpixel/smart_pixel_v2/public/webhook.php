@@ -3,8 +3,8 @@
 require_once '../includes/config.php';
 header('Content-Type: application/json');
 
-// Vérifier la signature du webhook (optionnel mais recommandé)
-$lemonSecret = 'LEMON_WEBHOOK_SECRET'; // À mettre dans config.php
+// Vérifier la signature du webhook 
+$lemonSecret = 'LEMON_WEBHOOK_SECRET'; 
 $payload = file_get_contents('php://input');
 // Vérifie que c'est bien Lemon qui appelle
 $signature = $_SERVER['HTTP_X_SIGNATURE'] ?? '';

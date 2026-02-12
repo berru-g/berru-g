@@ -6,7 +6,7 @@
 
     SmartPixel.load = function(trackingCode) {
         this.config = {
-            endpoint: 'https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/pixel.php', // À adapter si nécessaire
+            endpoint: 'https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/pixel.php', // ENDPOINT CENTRALISÉ
             trackingCode: trackingCode,
             sessionId: this.getOrCreateSessionId(),
             pageLoaded: false

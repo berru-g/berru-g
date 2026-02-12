@@ -89,21 +89,21 @@ if (!$stmt->fetch()) {
     die("Accès interdit à ce site");
 }
 
-// === TON CODE EXISTANT (avec modifications mineures) ===
-$period = isset($_GET['period']) ? $_GET['period'] : 30;
+// === PERIOD ===
+$period = isset($_GET['period']) ? $_GET['period'] : 365; // Par défaut 1 an
 $dateFilter = date('Y-m-d H:i:s', strtotime("-$period days"));
 
-// MODIFICATION 1 : Ajout de WHERE site_id = ?
+// REPERER LE DASHOARD : Ajout de WHERE site_id = ?
 $stmt = $pdo->prepare("SELECT COUNT(*) FROM smart_pixel_tracking WHERE site_id = ?");
 $stmt->execute([$selectedSiteId]);
 $totalViews = $stmt->fetchColumn();
 
-// MODIFICATION 2 : Ajout de WHERE site_id = ?
+// REPERER L'IP
 $stmt = $pdo->prepare("SELECT COUNT(DISTINCT ip_address) FROM smart_pixel_tracking WHERE site_id = ?");
 $stmt->execute([$selectedSiteId]);
 $uniqueVisitors = $stmt->fetchColumn();
 
-// MODIFICATION 3 : Ajout de WHERE site_id = ?
+// REPERER LES SOURCES
 $stmt = $pdo->prepare("
     SELECT COUNT(DISTINCT ip_address) 
     FROM smart_pixel_tracking 
@@ -112,7 +112,7 @@ $stmt = $pdo->prepare("
 $stmt->execute([$selectedSiteId, $dateFilter]);
 $uniqueVisitorsPeriod = $stmt->fetchColumn();
 
-// MODIFICATION 4 : Ajout de WHERE site_id = ?
+// REPERER LES SOURCES
 $stmt = $pdo->prepare("
     SELECT source, COUNT(*) as count 
     FROM smart_pixel_tracking 
@@ -123,7 +123,7 @@ $stmt = $pdo->prepare("
 $stmt->execute([$selectedSiteId, $dateFilter]);
 $sources = $stmt->fetchAll();
 
-// MODIFICATION 5 : Ajout de WHERE site_id = ?
+// REPERER LES PAGES
 $stmt = $pdo->prepare("
     SELECT page_url, COUNT(*) as views 
     FROM smart_pixel_tracking 
@@ -135,7 +135,7 @@ $stmt = $pdo->prepare("
 $stmt->execute([$selectedSiteId, $dateFilter]);
 $topPages = $stmt->fetchAll();
 
-// MODIFICATION 6 : Ajout de WHERE site_id = ?
+// REPERER LES PAYS
 $stmt = $pdo->prepare("
     SELECT country, COUNT(*) as visits 
     FROM smart_pixel_tracking 
@@ -147,7 +147,7 @@ $stmt = $pdo->prepare("
 $stmt->execute([$selectedSiteId, $dateFilter]);
 $countries = $stmt->fetchAll();
 
-// MODIFICATION 7 : Ajout de WHERE site_id = ?
+// REPERER LES APPAREILS
 $stmt = $pdo->prepare("
     SELECT 
         CASE 
@@ -164,7 +164,7 @@ $stmt = $pdo->prepare("
 $stmt->execute([$selectedSiteId, $dateFilter]);
 $devices = $stmt->fetchAll();
 
-// MODIFICATION 8 : Ajout de WHERE site_id = ?
+// REPERER LES NAVIGATEURS
 $stmt = $pdo->prepare("
     SELECT 
         CASE 
@@ -183,7 +183,7 @@ $stmt = $pdo->prepare("
 $stmt->execute([$selectedSiteId, $dateFilter]);
 $browsers = $stmt->fetchAll();
 
-// MODIFICATION 9 : Ajout de WHERE site_id = ?
+// REPERER LES STATISTIQUES JOURNALIÈRES
 $stmt = $pdo->prepare("
     SELECT 
         DATE(timestamp) as date,
@@ -197,7 +197,7 @@ $stmt = $pdo->prepare("
 $stmt->execute([$selectedSiteId]);
 $dailyStats = $stmt->fetchAll();
 
-// MODIFICATION 10 : Ajout de WHERE site_id = ?
+// REPERER LES CLICS AVEC DATA
 $stmt = $pdo->prepare("
     SELECT click_data
     FROM smart_pixel_tracking
@@ -207,7 +207,7 @@ $stmt = $pdo->prepare("
 $stmt->execute([$selectedSiteId, $dateFilter]);
 $clickData = $stmt->fetchAll();
 
-// MODIFICATION 11 : Ajout de WHERE site_id = ?
+// REPREER LES SESSIONS
 $stmt = $pdo->prepare("
     SELECT 
         session_id,
@@ -223,7 +223,7 @@ $stmt = $pdo->prepare("
 $stmt->execute([$selectedSiteId, $dateFilter]);
 $sessionData = $stmt->fetchAll();
 
-// MODIFICATION 12 : Ajout de WHERE site_id = ?
+// RECUP LES DONNÉES DÉTAILLÉES
 $stmt = $pdo->prepare("
     SELECT 
         ip_address,
@@ -254,7 +254,6 @@ if (count($sessionData) > 0) {
     $avgSessionTime = round($totalSessionTime / count($sessionData) / 60, 1);
 }
 // MAP
-// Ajoutez cette fonction quelque part dans votre PHP, avant l'affichage HTML
 function getCountryCodeSimple($countryName)
 {
     $countryMap = [
@@ -289,7 +288,16 @@ function getCountryCodeSimple($countryName)
 ?>
 <!DOCTYPE html>
 <html lang="fr">
-
+<!-- 
+    ╔══════════════════════════════════════════════════╗
+    ║                       ██                         ║
+    ╠══════════════════════════════════════════════════╣
+    ║  Project      : Analytics Souverains             ║
+    ║  First commit : February 27, 2025                ║ 
+    ║  Version      : 2.1.0                            ║
+    ║  Copyright    : 2025 https://github.com/berru-g/ ║
+    ╚══════════════════════════════════════════════════╝
+-->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
