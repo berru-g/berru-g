@@ -1,59 +1,11 @@
 <?php
-// public_stats.php - Accessible depuis la landing page
-require_once __DIR__ . '/smart_pixel_v2/includes/config.php';
+//require_once __DIR__ . '/smart_pixel_v2/includes/config.php';
 
-header('Content-Type: application/json');
-
-// ✅ Sécurité : uniquement des données agrégées et anonymes
-try {
-    // Derniers 30 jours pour éviter de surcharger
-    $dateLimit = date('Y-m-d H:i:s', strtotime('-30 days'));
-
-    // Top pays (agrégé, pas d'IP, pas de détails)
-    $stmt = $pdo->query("
-        SELECT 
-            country,
-            COUNT(*) as hit_count
-        FROM smart_pixel_tracking 
-        WHERE country IS NOT NULL 
-        AND country != ''
-        AND timestamp >= '{$dateLimit}'
-        GROUP BY country
-        ORDER BY hit_count DESC
-        LIMIT 30
-    ");
-
-    $countries = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // Stats globales
-    $stats = $pdo->query("
-        SELECT 
-            COUNT(DISTINCT site_id) as total_sites,
-            (SELECT COUNT(*) FROM smart_pixel_tracking WHERE timestamp >= '{$dateLimit}') as recent_hits
-        FROM user_sites
-        WHERE is_active = 1
-    ")->fetch();
-
-    echo json_encode([
-        'success' => true,
-        'countries' => $countries,
-        'total_sites' => $stats['total_sites'] ?? 57,
-        'recent_hits' => $stats['recent_hits'] ?? 15000
-    ]);
-} catch (Exception $e) {
-    // Silence is golden en prod
-    echo json_encode([
-        'success' => false,
-        'countries' => [
-            ['country' => 'France', 'hit_count' => 12500],
-            ['country' => 'USA', 'hit_count' => 8300],
-            ['country' => 'Canada', 'hit_count' => 4200]
-        ], // Fallback
-        'total_sites' => 57,
-        'recent_hits' => 28000
-    ]);
-}
+//$pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8", DB_USER, DB_PASS);
+//$total = $pdo->query("SELECT COUNT(*) FROM user_sites")->fetchColumn();
+//$remaining_spots = max(0, 100 - $total);
 ?>
+
 <!DOCTYPE html>
 <html lang="fr" prefix="og: https://ogp.me/ns#">
 <!-- 
@@ -1201,7 +1153,7 @@ try {
         </div>
     </section>
 
-    <!-- === CARTE MONDIALE (STATS PUBLIQUES) === -->
+    <!-- === CARTE MONDIALE === -->
     <section class="world-map-section">
         <div class="container">
             <div class="section-title">
@@ -1223,7 +1175,7 @@ try {
     <style>
         .world-map-section {
             padding: 60px 0;
-            background: linear-gradient(180deg, var(--bg-dark) 0%, #0a0a12 100%);
+            background: linear-gradient(180deg, #0f172a 0%, #0a0a12 100%);
         }
 
         .top-countries {
@@ -1236,15 +1188,15 @@ try {
 
         .country-badge {
             background: rgba(171, 159, 242, 0.1);
-            border: 1px solid var(--border);
+            border: 1px solid #313244;
             border-radius: 30px;
             padding: 8px 20px;
             font-size: 14px;
-            color: var(--text-light);
+            color: #cdd6f4;
         }
 
         .country-badge strong {
-            color: var(--primary);
+            color: #ab9ff2;
             margin-right: 5px;
         }
     </style>
@@ -1253,6 +1205,7 @@ try {
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
 
     <script>
         // === CARTE MONDIALE - CHARGEMENT DIRECT ===
@@ -1501,6 +1454,7 @@ try {
             document.getElementById('total-hits').textContent = (data.recent_hits / 1000).toFixed(1) + 'k';
         }
     </script>
+
     <!-- === INTEGRATION SECTION === -->
     <section id="integration" class="integration-section" role="region" aria-labelledby="integration-title">
         <div class="container">
