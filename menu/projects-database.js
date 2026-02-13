@@ -1,5 +1,29 @@
 const projectsDatabase = [
     {
+        id: 'berru-clothing',
+        title: 'Berru Clothing',
+        shortDesc: 'Création d\'une marque de fringue et site e-commerce de vêtements',
+        longDesc: 'Création d\'une marque de vêtements et site e-commerce de 2016 à 2018.',
+        keywords: ['e-commerce', 'vetement', 'fringue', 'marque'],
+        image: './img/berru-clothing-2017.png',
+        link: 'https://berru-clothing.com',
+        category: 'e-commerce',
+        features: ['Création de la marque', 'Développement du site e-commerce'],
+        tags: ['e-commerce', 'vetement', 'fringue', 'marque']
+    },
+    {
+        id: 'les-flaneries',
+        title: 'Les Flaneries',
+        shortDesc: 'Création d\'une guinguette open air.',
+        longDesc: 'Création d\'une guinguette open air au parc de la gaudiniére à Nantes. de 2018 à 2022.',
+        keywords: ['guinguette', 'organisation', 'asso', 'concert', 'open-air'],
+        image: './img/flanerie22.gif',
+        link: 'https://berru-g.github.io/assoberru/', 
+        category: 'guinguette',
+        features: ['guinguette', 'concert', 'open-air'],
+        tags: ['guinguette', 'concert', 'open-ai', 'dj set']
+    },
+    {
         id: '3dscrollanimator',
         title: '3D Scroll Animator',
         shortDesc: 'SAAS - Création d\'animations 3D synchronisées au scroll',

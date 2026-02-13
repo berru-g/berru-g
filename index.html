@@ -38,7 +38,8 @@
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
   <!--<script src="../smart_phpixel/pixel/smart-pixel.js"></script>
   <script src="../smart_phpixel/pixel/CookieComponent.js" data-site-id="berru-g"></script>-->
-  <script data-sp-id="SP_7f9505cc" src="https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/tracker.js" async></script>
+  <script data-sp-id="SP_7f9505cc" src="https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/tracker.js"
+    async></script>
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap-projets.xml">
   <script type="application/ld+json">
 {
@@ -294,7 +295,7 @@
     <!-- Main content -->
     <main class="main-content">
 
-
+      <canvas id="canvas-bg"></canvas>
 
     </main>
 
@@ -356,6 +357,95 @@
     });
 
     console.log('✅ AOS initialisé');
+
+    // Canvas background - points network (simple, performant)
+
+    const canvas = document.getElementById("canvas-bg");
+    const ctx = canvas.getContext("2d");
+    let width, height;
+    let points = [];
+
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * devicePixelRatio;
+      canvas.height = height * devicePixelRatio;
+      canvas.style.width = width + "px";
+      canvas.style.height = height + "px";
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+    }
+
+    class Point {
+      constructor(x, y, vx, vy) {
+        this.x = x;
+        this.y = y;
+        this.vx = vx;
+        this.vy = vy;
+        this.radius = 2;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > width) this.vx = -this.vx;
+        if (this.y < 0 || this.y > height) this.vy = -this.vy;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(156, 141, 234, 0.7)";
+        ctx.fill();
+      }
+    }
+
+    function connectPoints() {
+      let maxDist = 130;
+      for (let i = 0; i < points.length; i++) {
+        for (let j = i + 1; j < points.length; j++) {
+          let dx = points[i].x - points[j].x;
+          let dy = points[i].y - points[j].y;
+          let dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < maxDist) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(156, 141, 234, ${1 - dist / maxDist})`;
+            ctx.lineWidth = 1;
+            ctx.moveTo(points[i].x, points[i].y);
+            ctx.lineTo(points[j].x, points[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      points.forEach((p) => {
+        p.update();
+        p.draw();
+      });
+      connectPoints();
+      requestAnimationFrame(animate);
+    }
+
+    function init() {
+      points = [];
+      for (let i = 0; i < 140; i++) {
+        let x = Math.random() * width;
+        let y = Math.random() * height;
+        let vx = (Math.random() - 0.5) * 0.3;
+        let vy = (Math.random() - 0.5) * 0.3;
+        points.push(new Point(x, y, vx, vy));
+      }
+      animate();
+    }
+
+    window.addEventListener("resize", () => {
+      resize();
+      init();
+    });
+
+    resize();
+    init();
   </script>
 </body>
 
