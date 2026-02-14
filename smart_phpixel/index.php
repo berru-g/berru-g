@@ -132,6 +132,7 @@
     <meta property="og:type" content="website">
     <meta property="og:locale" content="fr_FR">
     <link rel="stylesheet" href="./RGPD/cookie.css" hreflang="fr">
+    <link rel="stylesheet" href="style.css">
     <script data-sp-id="SP_79747769" src="https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/tracker.js" async></script>
 
     <meta name="twitter:card" content="summary_large_image">
@@ -172,784 +173,9 @@
             ]
         }
     </script>
-
-    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-
-    <style>
-        /* ====== VARIABLES PROFESSIONNELLES ====== */
-        :root {
-            --primary: #9d86ff;
-            /* Bleu professionnel */
-            --primary-dark: #917ded;
-            --primary-light: #af9dfe;
-            --secondary: #988dc6;
-            /* Gris texte */
-            --accent: #4ecdc4;
-            /* Vert succès */
-            --accent-dark: #059669;
-            --warning: #f59e0b;
-            --danger: #ff6b8b;
-            --light: #f8fafc;
-            --dark: #0f172a;
-            --gray-light: #f1f5f9;
-            --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            --shadow-xl: 0 20px 40px -15px rgba(0, 0, 0, 0.15);
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --radius-xl: 24px;
-            --transition: all 0.3s ease;
-            --container: 1200px;
-        }
-
-        /* ====== RESET & BASE ====== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            scroll-padding-top: 80px;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: var(--dark);
-            background: white;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: var(--container);
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        /* ====== TYPOGRAPHIE ====== */
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            font-weight: 700;
-            line-height: 1.2;
-            color: var(--dark);
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            letter-spacing: -0.02em;
-        }
-
-        h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        p {
-            margin-bottom: 1.5rem;
-            color: var(--secondary);
-            font-size: 1.125rem;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-title h2 {
-            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: inline-block;
-        }
-
-        /* ====== BOUTONS ====== */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 16px 32px;
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            font-size: 1rem;
-            text-decoration: none;
-            transition: var(--transition);
-            cursor: pointer;
-            border: 2px solid transparent;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .btn-secondary {
-            background: white;
-            color: var(--primary);
-            border-color: var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
-        }
-
-        .btn-accent {
-            background: var(--accent);
-            color: white;
-        }
-
-        .btn-accent:hover {
-            background: var(--accent-dark);
-            transform: translateY(-2px);
-        }
-
-        /* ====== HEADER PROFESSIONNEL ====== */
-        .header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
-            z-index: 1000;
-            padding: 16px 0;
-        }
-
-        .nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--dark);
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--secondary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: var(--transition);
-        }
-
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--dark);
-        }
-
-        /* ====== HERO SECTION OPTIMISÉE ====== */
-        .hero {
-            padding: 160px 0 100px;
-            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(37, 99, 235, 0.1);
-            color: var(--primary);
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(37, 99, 235, 0.2);
-        }
-
-        .hero-title {
-            margin-bottom: 1.5rem;
-        }
-
-        .hero-subtitle {
-            font-size: 1.25rem;
-            max-width: 700px;
-            margin: 0 auto 3rem;
-        }
-
-        .hero-cta {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-bottom: 4rem;
-            flex-wrap: wrap;
-        }
-
-        .hero-stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            margin-top: 4rem;
-            padding-top: 3rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: var(--secondary);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        /* ====== SECTION CLIENTS ====== */
-        .clients-section {
-            padding: 80px 0;
-            background: white;
-        }
-
-        .clients-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 3rem;
-            margin-top: 3rem;
-        }
-
-        .client-card {
-            text-align: center;
-            padding: 2rem;
-            background: var(--light);
-            border-radius: var(--radius-lg);
-            transition: var(--transition);
-        }
-
-        .client-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .client-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.5rem;
-            margin: 0 auto 1.5rem;
-        }
-
-        /* ====== SECTION PROBLÈME/SOLUTION ====== */
-        .problem-section {
-            padding: 100px 0;
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-        }
-
-        .problem-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .problem-column,
-        .solution-column {
-            padding: 3rem;
-            background: white;
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .problem-item,
-        .solution-item {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .problem-item:last-child,
-        .solution-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .problem-icon {
-            color: var(--danger);
-            font-size: 1.5rem;
-        }
-
-        .solution-icon {
-            color: var(--accent);
-            font-size: 1.5rem;
-        }
-
-        /* ====== SECTION FONCTIONNALITÉS ====== */
-        .features-section {
-            padding: 100px 0;
-            background: white;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .feature-card {
-            padding: 2.5rem;
-            background: white;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-color);
-            transition: var(--transition);
-        }
-
-        .feature-card:hover {
-            border-color: var(--primary);
-            box-shadow: var(--shadow-lg);
-            transform: translateY(-5px);
-        }
-
-        .feature-icon {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            border-radius: var(--radius-lg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-        }
-
-        /* ====== SECTION INTÉGRATION ====== */
-        .integration-section {
-            padding: 100px 0;
-            background: var(--light);
-        }
-
-        .integration-steps {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .step {
-            text-align: center;
-            padding: 2.5rem 2rem;
-            background: white;
-            border-radius: var(--radius-lg);
-            position: relative;
-        }
-
-        .step-number {
-            width: 50px;
-            height: 50px;
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            margin: 0 auto 1.5rem;
-            font-size: 1.2rem;
-        }
-
-        .code-snippet {
-            background: var(--dark);
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            margin: 3rem 0;
-            color: white;
-            font-family: 'Courier New', monospace;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .code-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            color: var(--gray-light);
-        }
-
-        .copy-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .copy-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* ====== SECTION TARIFS ====== */
-        .pricing-section {
-            padding: 100px 0;
-            background: white;
-        }
-
-        .pricing-cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .pricing-card {
-            padding: 3rem;
-            background: white;
-            border-radius: var(--radius-xl);
-            border: 2px solid var(--border-color);
-            transition: var(--transition);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .pricing-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .pricing-card.featured {
-            border-color: var(--primary);
-            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
-        }
-
-        .featured-badge {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--primary);
-            color: white;
-            padding: 8px 24px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .price-tag {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--dark);
-            margin: 1.5rem 0;
-        }
-
-        .price-tag span {
-            font-size: 1rem;
-            color: var(--secondary);
-            font-weight: 500;
-        }
-
-        .pricing-features {
-            list-style: none;
-            margin: 2rem 0;
-            flex-grow: 1;
-        }
-
-        .pricing-features li {
-            padding: 0.75rem 0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--secondary);
-        }
-
-        .feature-check {
-            color: var(--accent);
-        }
-
-        .limited-offer {
-            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-            border: 1px solid #fbbf24;
-            border-radius: var(--radius-lg);
-            padding: 1.5rem;
-            margin-top: 2rem;
-            text-align: center;
-        }
-
-        /* ====== FOOTER ====== */
-        .footer {
-            background: var(--dark);
-            color: white;
-            padding: 4rem 0 2rem;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 3rem;
-            margin-bottom: 3rem;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: white;
-            text-decoration: none;
-            margin-bottom: 1.5rem;
-        }
-
-        .footer-description {
-            color: #94a3b8;
-            margin-bottom: 1.5rem;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .social-links a {
-            color: #94a3b8;
-            font-size: 1.2rem;
-            transition: var(--transition);
-        }
-
-        .social-links a:hover {
-            color: white;
-        }
-
-        .footer-links h4 {
-            color: white;
-            margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-        }
-
-        .footer-links ul {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 0.75rem;
-        }
-
-        .footer-links a {
-            color: #94a3b8;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .footer-links a:hover {
-            color: white;
-        }
-
-        .footer-bottom {
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #94a3b8;
-            font-size: 0.9rem;
-        }
-
-        /* ====== RESPONSIVE ====== */
-        @media (max-width: 1024px) {
-
-            .hero-stats,
-            .clients-grid,
-            .features-grid,
-            .integration-steps,
-            .pricing-cards,
-            .footer-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .problem-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            h1 {
-                font-size: 2.8rem;
-            }
-
-            h2 {
-                font-size: 2.2rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                position: fixed;
-                top: 80px;
-                left: 0;
-                width: 100%;
-                background: white;
-                padding: 2rem;
-                box-shadow: var(--shadow-lg);
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .hero-stats,
-            .clients-grid,
-            .features-grid,
-            .integration-steps,
-            .pricing-cards,
-            .footer-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-cta {
-                flex-direction: column;
-            }
-
-            .hero {
-                padding: 140px 0 80px;
-            }
-
-            h1 {
-                font-size: 2.4rem;
-            }
-
-            h2 {
-                font-size: 2rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 0 16px;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            h2 {
-                font-size: 1.8rem;
-            }
-
-            .feature-card,
-            .step,
-            .pricing-card {
-                padding: 2rem 1.5rem;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-        }
-
-        /* ====== ANIMATIONS ====== */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate {
-            animation: fadeIn 0.6s ease forwards;
-        }
-    </style>
 </head>
 
 <body itemscope itemtype="https://schema.org/WebPage">
@@ -1172,41 +398,222 @@
         </div>
     </section>
 
-    <style>
-        .world-map-section {
-            padding: 60px 0;
-            background: linear-gradient(180deg, #0f172a 0%, #0a0a12 100%);
-        }
+    <!-- === INTEGRATION SECTION === -->
+    <section id="integration" class="integration-section" role="region" aria-labelledby="integration-title">
+        <div class="container">
+            <div class="section-title">
+                <h2 id="integration-title">Intégration en 2 minutes</h2>
+                <p class="section-subtitle">Installer votre suivie Analytics en une seule ligne de code</p>
+            </div>
 
-        .top-countries {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
+            <div class="integration-steps">
+                <div class="step animate">
+                    <div class="step-number">1</div>
+                    <h3>Créez votre compte</h3>
+                    <p>Inscription gratuite en 5 secondes, aucun paiement requis</p>
+                </div>
 
-        .country-badge {
-            background: rgba(171, 159, 242, 0.1);
-            border: 1px solid #313244;
-            border-radius: 30px;
-            padding: 8px 20px;
-            font-size: 14px;
-            color: #cdd6f4;
-        }
+                <div class="step animate">
+                    <div class="step-number">2</div>
+                    <h3>Ajoutez votre site</h3>
+                    <p>Donnez un nom à votre site et récupérez votre ID de tracking</p>
+                </div>
 
-        .country-badge strong {
-            color: #ab9ff2;
-            margin-right: 5px;
-        }
-    </style>
+                <div class="step animate">
+                    <div class="step-number">3</div>
+                    <h3>Installez le script</h3>
+                    <p>Copiez-collez une ligne de code dans le &lt;head&gt; de votre site</p>
+                </div>
+            </div>
 
-    <!-- AmCharts -->
+            <div class="code-snippet animate">
+                <div class="code-header">
+                    <span>Code d'intégration Smart Pixel</span>
+                    <button class="copy-btn" onclick="copyCode()" aria-label="Copier le code">
+                        <i class="fas fa-copy"></i> Copier
+                    </button>
+                </div>
+                <pre><code style="color: #e2e8f0;">&lt;!-- Smart Pixel Analytics --&gt;
+&lt;script data-sp-id="VOTRE_ID_ICI" 
+        src="https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/tracker.js" 
+        async&gt;
+&lt;/script&gt;</code></pre>
+            </div>
+
+            <div style="text-align: center;">
+                <a href="./smart_pixel_v2/public/index.php" class="btn btn-primary" style="padding: 20px 50px; font-size: 1.1rem;">
+                    <i class="fas fa-rocket"></i>
+                    Créer des maintenant
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- === PRICING SECTION === -->
+    <section id="tarifs" class="pricing-section" role="region" aria-labelledby="pricing-title">
+        <div class="container">
+            <div class="section-title">
+                <h2 id="pricing-title">Tarifs transparents</h2>
+                <p class="section-subtitle">Payez pour l'hébergement et le support, pas pour vos données</p>
+            </div>
+
+            <div class="pricing-cards">
+                <!-- Plan Gratuit -->
+                <div class="pricing-card animate">
+                    <h3>Gratuit</h3>
+                    <div class="price-tag">0€<span>/mois</span></div>
+                    <p>Pour découvrir et tester</p>
+
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check feature-check"></i> 1 site web</li>
+                        <li><i class="fas fa-check feature-check"></i> 1000 vues/mois</li>
+                        <li><i class="fas fa-check feature-check"></i> Dashboard complet</li>
+                        <li><i class="fas fa-check feature-check"></i> 365 jours de rétention</li>
+                        <li><i class="fas fa-check feature-check"></i> Support communautaire</li>
+                    </ul>
+
+                    <a href="./smart_pixel_v2/public/index.php" class="btn btn-secondary" style="margin-top: auto;">
+                        Commencer gratuitement
+                    </a>
+                </div>
+
+                <!-- Plan Pro -->
+                <div class="pricing-card featured animate">
+                    <div class="featured-badge">Recommandé</div>
+                    <h3>Pro</h3>
+                    <div class="price-tag">9€<span>/mois</span></div>
+                    <p>Pour les sites professionnels</p>
+
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check feature-check"></i> <strong>10 sites web</strong></li>
+                        <li><i class="fas fa-check feature-check"></i> 100 000 vues/mois</li>
+                        <li><i class="fas fa-check feature-check"></i> Dashboard complet</li>
+                        <li><i class="fas fa-check feature-check"></i> 365 jours de rétention</li>
+                        <li><i class="fas fa-check feature-check"></i> Rapport automatique</li>
+                        <li><i class="fas fa-check feature-check"></i> API d'accès</li>
+                        <li><i class="fas fa-check feature-check"></i> Support prioritaire</li>
+                    </ul>
+
+                    <a href="./smart_pixel_v2/public/index.php?plan=pro" class="btn btn-primary" style="margin-top: auto;">
+                        <i class="fas fa-gem"></i>
+                        Devenir Pro
+                    </a>
+
+                    <!--<div class="limited-offer">
+                        <i class="fas fa-gift" style="color: var(--warning);"></i>
+                        <strong>Offre MVP :</strong> Prix garanti à vie
+                    </div>-->
+                </div>
+
+                <!-- Plan Business --
+                <div class="pricing-card animate">
+                    <h3>Business</h3>
+                    <div class="price-tag">29€<span>/mois</span></div>
+                    <p>Pour les entreprises et agences</p>
+                    
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check feature-check"></i> <strong>50 sites web</strong></li>
+                        <li><i class="fas fa-check feature-check"></i> Vues illimitées</li>
+                        <li><i class="fas fa-check feature-check"></i> Toutes features Pro</li>
+                        <li><i class="fas fa-check feature-check"></i> 2 ans de rétention</li>
+                        <li><i class="fas fa-check feature-check"></i> Accès multi-utilisateurs</li>
+                        <li><i class="fas fa-check feature-check"></i> Support téléphone</li>
+                        <li><i class="fas fa-check feature-check"></i> Intégrations custom</li>
+                    </ul>
+                    
+                    <a href="contact@gael-berru.com" class="btn btn-secondary" style="margin-top: auto;">
+                        <i class="fas fa-phone-alt"></i>
+                        Nous contacter
+                    </a>
+                </div>-->
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <p style="color: var(--secondary);">
+                    <i class="fas fa-sync-alt"></i> Satisfait ou remboursé
+                    <i class="fas fa-ban"></i> Pas de carte bancaire requise pour commencer
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- === FOOTER === -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a href="#" class="footer-logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        Smart Pixel
+                    </a>
+                    <p class="footer-description">
+                        Alternative open-source et souveraine à Google Analytics.<br>
+                        Code auditable, données protégées, analytics éthique, aucune données vendue à quiconque.
+                    </p>
+                    <div class="social-links">
+                        <a href="https://github.com/berru-g/smart_pixel_v2" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Produit</h4>
+                    <ul>
+                        <li><a href="#fonctionnalites">Fonctionnalités</a></li>
+                        <li><a href="#solution">Solution</a></li>
+                        <li><a href="#tarifs">Tarifs</a></li>
+                        <li><a href="./doc/">Documentation</a></li>
+                        <li><a href="https://github.com/berru-g/smart_pixel_v2/blob/main/public/pixel.php">API</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Entreprise</h4>
+                    <ul>
+                        <li><a href="https://gael-berru.com">À propos</a></li>
+                        <li><a href="https://gael-berru.com">Blog</a></li>
+                        <li><a href="https://gael-berru.com">Contact</a></li>
+                        <li><a href="https://gael-berru.com">Presse</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Légal</h4>
+                    <ul>
+                        <li><a href="#">Mentions légales</a></li>
+                        <li><a href="#">Confidentialité</a></li>
+                        <li><a href="#">RGPD</a></li>
+                        <li><a href="#">CGU</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>
+                    © 2025 Smart Pixel Analytics. Développé avec <i class="fas fa-heart" style="color: var(--danger);"></i>
+                    en France par <a href="https://gael-berru.com" style="color: #94a3b8;">Berru-g</a>.
+                </p>
+                <p>
+                    <i class="fas fa-map-marker-alt"></i> Hébergé en France ·
+                    <i class="fas fa-leaf"></i> Éco-responsable
+                </p>
+            </div>
+        </div>
+    </footer>
+    <script src="./RGPD/cookie.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
-
     <script>
         // === CARTE MONDIALE - CHARGEMENT DIRECT ===
         (function() {
@@ -1453,222 +860,7 @@
             document.getElementById('total-sites').textContent = data.total_sites;
             document.getElementById('total-hits').textContent = (data.recent_hits / 1000).toFixed(1) + 'k';
         }
-    </script>
 
-    <!-- === INTEGRATION SECTION === -->
-    <section id="integration" class="integration-section" role="region" aria-labelledby="integration-title">
-        <div class="container">
-            <div class="section-title">
-                <h2 id="integration-title">Intégration en 2 minutes</h2>
-                <p class="section-subtitle">Installer votre suivie Analytics en une seule ligne de code</p>
-            </div>
-
-            <div class="integration-steps">
-                <div class="step animate">
-                    <div class="step-number">1</div>
-                    <h3>Créez votre compte</h3>
-                    <p>Inscription gratuite en 5 secondes, aucun paiement requis</p>
-                </div>
-
-                <div class="step animate">
-                    <div class="step-number">2</div>
-                    <h3>Ajoutez votre site</h3>
-                    <p>Donnez un nom à votre site et récupérez votre ID de tracking</p>
-                </div>
-
-                <div class="step animate">
-                    <div class="step-number">3</div>
-                    <h3>Installez le script</h3>
-                    <p>Copiez-collez une ligne de code dans le &lt;head&gt; de votre site</p>
-                </div>
-            </div>
-
-            <div class="code-snippet animate">
-                <div class="code-header">
-                    <span>Code d'intégration Smart Pixel</span>
-                    <button class="copy-btn" onclick="copyCode()" aria-label="Copier le code">
-                        <i class="fas fa-copy"></i> Copier
-                    </button>
-                </div>
-                <pre><code style="color: #e2e8f0;">&lt;!-- Smart Pixel Analytics --&gt;
-&lt;script data-sp-id="VOTRE_ID_ICI" 
-        src="https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/tracker.js" 
-        async&gt;
-&lt;/script&gt;</code></pre>
-            </div>
-
-            <div style="text-align: center;">
-                <a href="./smart_pixel_v2/public/index.php" class="btn btn-primary" style="padding: 20px 50px; font-size: 1.1rem;">
-                    <i class="fas fa-rocket"></i>
-                    Créer des maintenant
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- === PRICING SECTION === -->
-    <section id="tarifs" class="pricing-section" role="region" aria-labelledby="pricing-title">
-        <div class="container">
-            <div class="section-title">
-                <h2 id="pricing-title">Tarifs transparents</h2>
-                <p class="section-subtitle">Payez pour l'hébergement et le support, pas pour vos données</p>
-            </div>
-
-            <div class="pricing-cards">
-                <!-- Plan Gratuit -->
-                <div class="pricing-card animate">
-                    <h3>Gratuit</h3>
-                    <div class="price-tag">0€<span>/mois</span></div>
-                    <p>Pour découvrir et tester</p>
-
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check feature-check"></i> 1 site web</li>
-                        <li><i class="fas fa-check feature-check"></i> 1000 vues/mois</li>
-                        <li><i class="fas fa-check feature-check"></i> Dashboard complet</li>
-                        <li><i class="fas fa-check feature-check"></i> 365 jours de rétention</li>
-                        <li><i class="fas fa-check feature-check"></i> Support communautaire</li>
-                    </ul>
-
-                    <a href="./smart_pixel_v2/public/index.php" class="btn btn-secondary" style="margin-top: auto;">
-                        Commencer gratuitement
-                    </a>
-                </div>
-
-                <!-- Plan Pro -->
-                <div class="pricing-card featured animate">
-                    <div class="featured-badge">Recommandé</div>
-                    <h3>Pro</h3>
-                    <div class="price-tag">9€<span>/mois</span></div>
-                    <p>Pour les sites professionnels</p>
-
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check feature-check"></i> <strong>10 sites web</strong></li>
-                        <li><i class="fas fa-check feature-check"></i> 100 000 vues/mois</li>
-                        <li><i class="fas fa-check feature-check"></i> Dashboard complet</li>
-                        <li><i class="fas fa-check feature-check"></i> 365 jours de rétention</li>
-                        <li><i class="fas fa-check feature-check"></i> Rapport automatique</li>
-                        <li><i class="fas fa-check feature-check"></i> API d'accès</li>
-                        <li><i class="fas fa-check feature-check"></i> Support prioritaire</li>
-                    </ul>
-
-                    <a href="./smart_pixel_v2/public/index.php?plan=pro" class="btn btn-primary" style="margin-top: auto;">
-                        <i class="fas fa-gem"></i>
-                        Devenir Pro
-                    </a>
-
-                    <!--<div class="limited-offer">
-                        <i class="fas fa-gift" style="color: var(--warning);"></i>
-                        <strong>Offre MVP :</strong> Prix garanti à vie
-                    </div>-->
-                </div>
-
-                <!-- Plan Business --
-                <div class="pricing-card animate">
-                    <h3>Business</h3>
-                    <div class="price-tag">29€<span>/mois</span></div>
-                    <p>Pour les entreprises et agences</p>
-                    
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check feature-check"></i> <strong>50 sites web</strong></li>
-                        <li><i class="fas fa-check feature-check"></i> Vues illimitées</li>
-                        <li><i class="fas fa-check feature-check"></i> Toutes features Pro</li>
-                        <li><i class="fas fa-check feature-check"></i> 2 ans de rétention</li>
-                        <li><i class="fas fa-check feature-check"></i> Accès multi-utilisateurs</li>
-                        <li><i class="fas fa-check feature-check"></i> Support téléphone</li>
-                        <li><i class="fas fa-check feature-check"></i> Intégrations custom</li>
-                    </ul>
-                    
-                    <a href="contact@gael-berru.com" class="btn btn-secondary" style="margin-top: auto;">
-                        <i class="fas fa-phone-alt"></i>
-                        Nous contacter
-                    </a>
-                </div>-->
-            </div>
-
-            <div style="text-align: center; margin-top: 3rem;">
-                <p style="color: var(--secondary);">
-                    <i class="fas fa-sync-alt"></i> Satisfait ou remboursé
-                    <i class="fas fa-ban"></i> Pas de carte bancaire requise pour commencer
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- === FOOTER === -->
-    <footer class="footer" role="contentinfo">
-        <div class="container">
-            <div class="footer-grid">
-                <div>
-                    <a href="#" class="footer-logo">
-                        <div class="logo-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        Smart Pixel
-                    </a>
-                    <p class="footer-description">
-                        Alternative open-source et souveraine à Google Analytics.<br>
-                        Code auditable, données protégées, analytics éthique, aucune données vendue à quiconque.
-                    </p>
-                    <div class="social-links">
-                        <a href="https://github.com/berru-g/smart_pixel_v2" aria-label="GitHub">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="#" aria-label="Twitter">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" aria-label="LinkedIn">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="footer-links">
-                    <h4>Produit</h4>
-                    <ul>
-                        <li><a href="#fonctionnalites">Fonctionnalités</a></li>
-                        <li><a href="#solution">Solution</a></li>
-                        <li><a href="#tarifs">Tarifs</a></li>
-                        <li><a href="./doc/">Documentation</a></li>
-                        <li><a href="https://github.com/berru-g/smart_pixel_v2/blob/main/public/pixel.php">API</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-links">
-                    <h4>Entreprise</h4>
-                    <ul>
-                        <li><a href="https://gael-berru.com">À propos</a></li>
-                        <li><a href="https://gael-berru.com">Blog</a></li>
-                        <li><a href="https://gael-berru.com">Contact</a></li>
-                        <li><a href="https://gael-berru.com">Presse</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-links">
-                    <h4>Légal</h4>
-                    <ul>
-                        <li><a href="#">Mentions légales</a></li>
-                        <li><a href="#">Confidentialité</a></li>
-                        <li><a href="#">RGPD</a></li>
-                        <li><a href="#">CGU</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <p>
-                    © 2025 Smart Pixel Analytics. Développé avec <i class="fas fa-heart" style="color: var(--danger);"></i>
-                    en France par <a href="https://gael-berru.com" style="color: #94a3b8;">Berru-g</a>.
-                </p>
-                <p>
-                    <i class="fas fa-map-marker-alt"></i> Hébergé en France ·
-                    <i class="fas fa-leaf"></i> Éco-responsable
-                </p>
-            </div>
-        </div>
-    </footer>
-    <script src="./RGPD/cookie.js"></script>
-    <!-- === SCRIPT === -->
-    <script>
         // Mobile Menu
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const navLinks = document.getElementById('navLinks');

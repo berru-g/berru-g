@@ -766,3 +766,30 @@ p {
 .animate {
     animation: fadeIn 0.6s ease forwards;
 }
+
+.world-map-section {
+    padding: 60px 0;
+    background: linear-gradient(180deg, #0f172a 0%, #0a0a12 100%);
+}
+
+.top-countries {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.country-badge {
+    background: rgba(171, 159, 242, 0.1);
+    border: 1px solid #313244;
+    border-radius: 30px;
+    padding: 8px 20px;
+    font-size: 14px;
+    color: #cdd6f4;
+}
+
+.country-badge strong {
+    color: #ab9ff2;
+    margin-right: 5px;
+}
