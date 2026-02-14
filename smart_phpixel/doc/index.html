@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Smart Pixel Analytics</title>
+    <meta name="description" content="Documentation complète de Smart Pixel : installation, configuration, API, dépannage. L'alternative française à Google Analytics.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #9d86ff;
+            --primary-dark: #7c6bd9;
+            --primary-light: rgba(157, 134, 255, 0.1);
+            --secondary: #6c757d;
+            --success: #4ecdc4;
+            --warning: #f59e0b;
+            --danger: #ff6b8b;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+            --bg: #ffffff;
+            --text: #0f172a;
+            --text-light: #64748b;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 40px -15px rgba(0, 0, 0, 0.15);
+            --radius: 12px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #151515;
+                --text: #f0f0f0;
+                --text-light: #b0b0b0;
+                --border: rgba(255, 255, 255, 0.15);
+                --light: #1d1d1e;
+                --dark: #f0f0f0;
+            }
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(var(--bg-rgb), 0.95);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Layout principal */
+        .docs-wrapper {
+            display: flex;
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+            background: var(--light);
+            border-right: 1px solid var(--border);
+            padding: 2rem 1.5rem;
+            position: fixed;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+            transition: transform 0.3s;
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-top: 4px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .search-result-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .search-result-item:hover {
+            background: var(--primary-light);
+        }
+
+        .search-result-item h4 {
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+            color: var(--text);
+        }
+
+        .search-result-item p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section h3 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .nav-section ul {
+            list-style: none;
+        }
+
+        .nav-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-section a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .nav-section a:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .nav-section a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-section i {
+            width: 20px;
+            font-size: 1rem;
+        }
+
+        /* Contenu principal */
+        .content {
+            flex: 1;
+            margin-left: 320px;
+            padding: 3rem 3rem 3rem 4rem;
+            max-width: 900px;
+        }
+
+        .doc-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 100px;
+        }
+
+        .doc-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .doc-section h2 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            color: var(--text);
+        }
+
+        .doc-section h3 {
+            font-size: 1.3rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--text);
+        }
+
+        .doc-section p {
+            color: var(--text-light);
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        .doc-section ul, .doc-section ol {
+            margin: 1rem 0 1.5rem 1.5rem;
+            color: var(--text-light);
+        }
+
+        .doc-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Cartes d'exemple */
+        .card {
+            background: var(--light);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title i {
+            color: var(--primary);
+        }
+
+        /* Blocs de code */
+        .code-block {
+            background: var(--dark);
+            color: #e2e8f0;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* Tableaux */
+        .table-container {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--light);
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border);
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-light);
+        }
+
+        tr:hover {
+            background: var(--primary-light);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .badge-success {
+            background: rgba(78, 205, 196, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+
+        .badge-info {
+            background: var(--primary-light);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        /* Tags */
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: var(--light);
+            color: var(--text-light);
+            font-size: 0.75rem;
+            margin-right: 4px;
+        }
+
+        /* Alertes */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius);
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: var(--primary-light);
+            border-left-color: var(--primary);
+        }
+
+        .alert-success {
+            background: rgba(78, 205, 196, 0.1);
+            border-left-color: var(--success);
+        }
+
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-left-color: var(--warning);
+        }
+
+        /* Grille de fonctionnalités */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-item {
+            background: var(--light);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--light);
+            border-top: 1px solid var(--border);
+            padding: 2rem 0;
+            text-align: center;
+            color: var(--text-light);
+            margin-left: 320px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                z-index: 900;
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .content {
+                margin-left: 0;
+                padding: 2rem;
+            }
+            .footer {
+                margin-left: 0;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        .version-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 8px;
+        }
+
+        .highlight {
+            background: var(--primary-light);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.php" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <span>Smart Pixel <span style="font-weight: 400; color: var(--text-light);">Docs</span></span>
+                </a>
+                
+                <div class="nav-links">
+                    <a href="../index.php">Accueil</a>
+                    <a href="../smart_pixel_v2/public/dashboard.php">Dashboard</a>
+                    <a href="https://github.com/berru-g/smart_pixel_v2" target="_blank">GitHub</a>
+                    <a href="../smart_pixel_v2/public/login.php" class="btn btn-primary">
+                        <i class="fas fa-user"></i> Connexion
+                    </a>
+                </div>
+                
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="docs-wrapper">
+        <!-- Sidebar avec recherche -->
+        <aside class="sidebar" id="sidebar">
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" placeholder="Rechercher dans la doc...">
+                <div class="search-results" id="searchResults"></div>
+            </div>
+
+            <div class="nav-section">
+                <h3>DÉMARRAGE</h3>
+                <ul>
+                    <li><a href="#introduction" class="nav-link" data-section="introduction"><i class="fas fa-rocket"></i> Introduction</a></li>
+                    <li><a href="#installation" class="nav-link" data-section="installation"><i class="fas fa-code"></i> Installation 2min</a></li>
+                    <li><a href="#premiers-pas" class="nav-link" data-section="premiers-pas"><i class="fas fa-shoe-prints"></i> Premiers pas</a></li>
+                    <li><a href="#plans" class="nav-link" data-section="plans"><i class="fas fa-tags"></i> Plans & Tarifs</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h3>FONCTIONNALITÉS</h3>
+                <ul>
+                    <li><a href="#dashboard" class="nav-link" data-section="dashboard"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+                    <li><a href="#evenements" class="nav-link" data-section="evenements"><i class="fas fa-mouse-pointer"></i> Événements & Clics</a></li>
+                    <li><a href="#geolocalisation" class="nav-link" data-section="geolocalisation"><i class="fas fa-map-marker-alt"></i> Géolocalisation</a></li>
+                    <li><a href="#sources" class="nav-link" data-section="sources"><i class="fas fa-link"></i> Sources trafic & UTM</a></li>
+                    <li><a href="#multi-sites" class="nav-link" data-section="multi-sites"><i class="fas fa-globe"></i> Multi-sites</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h3>INTÉGRATION</h3>
+                <ul>
+                    <li><a href="#script-js" class="nav-link" data-section="script-js"><i class="fab fa-js"></i> Tracker.js</a></li>
+                    <li><a href="#pixel-php" class="nav-link" data-section="pixel-php"><i class="fas fa-database"></i> Pixel PHP</a></li>
+                    <li><a href="#api" class="nav-link" data-section="api"><i class="fas fa-plug"></i> API REST</a></li>
+                    <li><a href="#webhooks" class="nav-link" data-section="webhooks"><i class="fas fa-webhook"></i> Webhooks</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h3>ADMINISTRATION</h3>
+                <ul>
+                    <li><a href="#compte" class="nav-link" data-section="compte"><i class="fas fa-user-cog"></i> Gestion compte</a></li>
+                    <li><a href="#paiement" class="nav-link" data-section="paiement"><i class="fas fa-credit-card"></i> Paiement LemonSqueezy</a></li>
+                    <li><a href="#rgpd" class="nav-link" data-section="rgpd"><i class="fas fa-shield-alt"></i> RGPD & Conformité</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h3>❓ DÉPANNAGE</h3>
+                <ul>
+                    <li><a href="#faq" class="nav-link" data-section="faq"><i class="fas fa-question-circle"></i> FAQ</a></li>
+                    <li><a href="#erreurs" class="nav-link" data-section="erreurs"><i class="fas fa-exclamation-triangle"></i> Codes erreur</a></li>
+                    <li><a href="#support" class="nav-link" data-section="support"><i class="fas fa-headset"></i> Support</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Contenu principal -->
+        <main class="content" id="mainContent">
+            <!-- INTRODUCTION -->
+            <section id="introduction" class="doc-section">
+                <h1>Bienvenue sur Smart Pixel <span class="version-badge">v2.0.1</span></h1>
+                
+                <div class="alert alert-info">
+                    <strong>Mise à jour du 15/01/2026 :</strong> Le pixel est maintenant multi-tenant, l'API REST est en bêta, et l'intégration LemonSqueezy est active.
+                </div>
+
+                <p><strong>Smart Pixel</strong> est une solution d'analytics web souveraine, open-source et respectueuse de la vie privée. Conçue comme une alternative française à Google Analytics, elle vous permet de reprendre le contrôle de vos données tout en bénéficiant d'un dashboard simple et intuitif.</p>
+
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-flag"></i></div>
+                        <h3>100% Français</h3>
+                        <p>Code et données hébergés en France. Aucune fuite vers les GAFAM.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h3>RGPD natif</h3>
+                        <p>Pas de cookie banner nécessaire. Anonymisation par défaut.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                        <h3>Script 4KB</h3>
+                        <p>Impact zéro sur les performances et le Core Web Vitals.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-code-branch"></i></div>
+                        <h3>Open source</h3>
+                        <p>Code auditable sur GitHub. Vous pouvez même auto-héberger.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- INSTALLATION 2MIN -->
+            <section id="installation" class="doc-section">
+                <h2>Installation en 2 minutes</h2>
+                
+                <div class="card">
+                    <div class="card-title">
+                        <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                        Étape 1 : Créer un compte
+                    </div>
+                    <p>Rendez-vous sur <a href="index.php">la page d'accueil</a> et cliquez sur "Créer mon premier dashboard". Remplissez le formulaire avec votre email, mot de passe et l'URL de votre site.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                        Étape 2 : Récupérer votre code de tracking
+                    </div>
+                    <p>Une fois connecté, vous arrivez sur le dashboard. En haut à droite, cliquez sur "Ajouter un site" si ce n'est pas déjà fait. Vous verrez votre <span class="highlight">tracking code</span> (ex: <code>SP_79747769</code>).</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                        Étape 3 : Installer le script
+                    </div>
+                    <p>Copiez-collez la ligne suivante juste avant la balise <code>&lt;/head&gt;</code> de votre site :</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> tracker.js</span>
+                            <button class="copy-btn" onclick="copyToClipboard('&lt;!-- Smart Pixel Analytics --&gt;\n&lt;script data-sp-id=\&quot;SP_79747769\&quot; src=\&quot;https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/tracker.js\&quot; async&gt;&lt;/script&gt;')">
+                                <i class="fas fa-copy"></i> Copier
+                            </button>
+                        </div>
+                        <pre><code>&lt;!-- Smart Pixel Analytics --&gt;
+&lt;script data-sp-id="SP_79747769" src="https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/tracker.js" async&gt;&lt;/script&gt;</code></pre>
+                    </div>
+                </div>
+
+                <div class="alert alert-success">
+                    <strong>✅ C'est fini !</strong> Les premières données apparaîtront dans votre dashboard sous 1 à 2 minutes. Le script collecte automatiquement : pages vues, clics, source, UTM, géolocalisation, appareil, navigateur...
+                </div>
+            </section>
+
+            <!-- PREMIERS PAS -->
+            <section id="premiers-pas" class="doc-section">
+                <h2>Premiers pas</h2>
+                
+                <h3>Comprendre les métriques</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Métrique</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Visites</strong></td><td>Nombre total de sessions (une session = 30 min d'inactivité max).</td></tr>
+                            <tr><td><strong>Visiteurs uniques</strong></td><td>Nombre d'utilisateurs distincts (basé sur session ID + empreinte).</td></tr>
+                            <tr><td><strong>Pages vues</strong></td><td>Nombre total de pages consultées.</td></tr>
+                            <tr><td><strong>Taux de rebond</strong></td><td>% de visites avec une seule page (pas encore implémenté dans la v1).</td></tr>
+                            <tr><td><strong>Source</strong></td><td>D'où viennent vos visiteurs (Google, direct, réseau social...).</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Filtres de période</h3>
+                <p>En haut du dashboard, vous pouvez sélectionner : Aujourd'hui, 7 derniers jours, 30 derniers jours, ou une plage personnalisée (à venir).</p>
+
+                <div class="alert alert-info">
+                    <i class="fas fa-lightbulb"></i> <strong>Astuce :</strong> Passez la souris sur les graphiques pour voir les valeurs précises. Les tableaux sous les graphiques sont triables par colonne.
+                </div>
+            </section>
+
+            <!-- PLANS ET TARIFS -->
+            <section id="plans" class="doc-section">
+                <h2>Plans et tarifs</h2>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fonctionnalité</th>
+                                <th>Gratuit</th>
+                                <th>Pro (9€/mois)</th>
+                                <th>Business (29€/mois)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Nombre de sites</td><td>1</td><td>10</td><td>50</td></tr>
+                            <tr><td>Visites / mois</td><td>1 000</td><td>100 000</td><td>Illimité</td></tr>
+                            <tr><td>Dashboard temps réel</td><td>✅</td><td>✅</td><td>✅</td></tr>
+                            <tr><td>Géolocalisation (pays/ville)</td><td>✅</td><td>✅</td><td>✅</td></tr>
+                            <tr><td>Tracking UTM</td><td>✅</td><td>✅</td><td>✅</td></tr>
+                            <tr><td>API REST</td><td>❌</td><td>✅</td><td>✅</td></tr>
+                            <tr><td>Webhooks</td><td>❌</td><td>❌</td><td>✅</td></tr>
+                            <tr><td>Support</td><td>Communauté</td><td>Email 24h</td><td>Téléphone prioritaire</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>Le paiement est géré par <strong>Lemon Squeezy</strong> (paiement européen, pas de commission USA). Nous ne stockons aucune information de carte bancaire.</p>
+                
+                <p>Pour passer en Pro/Business : <code>Dashboard → Mon compte → Mise à niveau</code>. Le changement est instantané.</p>
+            </section>
+
+            <!-- DASHBOARD -->
+            <section id="dashboard" class="doc-section">
+                <h2>Utilisation du dashboard</h2>
+                
+                <h3>Onglets disponibles</h3>
+                <ul>
+                    <li><strong>Aperçu :</strong> Vue d'ensemble avec les métriques clés, graphique d'évolution, top sources, top pages.</li>
+                    <li><strong>Trafic :</strong> Analyse détaillée des sources (référents, réseaux sociaux, campagnes).</li>
+                    <li><strong>Audience :</strong> Géolocalisation, appareils, navigateurs, résolution d'écran.</li>
+                    <li><strong>Comportement :</strong> Pages populaires, flux de navigation (à venir), clics enregistrés.</li>
+                    <li><strong>Événements :</strong> Liste de tous les événements personnalisés (clics, formulaires, etc).</li>
+                </ul>
+
+                <div class="card">
+                    <div class="card-title"><i class="fas fa-mouse-pointer"></i> Gestion des sites</div>
+                    <p>Dans la colonne de gauche, vous voyez la liste de vos sites. Cliquez sur un site pour changer de contexte. Le <span class="badge badge-info">code de suivi</span> affiché est unique pour chaque site.</p>
+                </div>
+            </section>
+
+            <!-- ÉVÉNEMENTS ET CLICS -->
+            <section id="evenements" class="doc-section">
+                <h2>Tracking des clics et événements</h2>
+                
+                <p>Smart Pixel tracke automatiquement tous les clics sur les liens et boutons (sauf <code>data-sp-ignore</code>). Vous pouvez également envoyer des événements personnalisés.</p>
+
+                <h3>Événements automatiques</h3>
+                <ul>
+                    <li><strong>Clics :</strong> tag, id, class, texte, href, position (x, y).</li>
+                    <li><strong>Page view :</strong> titre, URL, referrer.</li>
+                </ul>
+
+                <h3>Événements personnalisés (JS)</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>JavaScript</span>
+                        <button class="copy-btn" onclick="copyToClipboard('// Envoyer un événement personnalisé\nSmartPixel.trackEvent(\'inscription\', {\n  method: \'email\',\n  user_id: 123\n});')">
+                            <i class="fas fa-copy"></i> Copier
+                        </button>
+                    </div>
+                    <pre><code>// Envoyer un événement personnalisé
+SmartPixel.trackEvent('inscription', {
+  method: 'email',
+  user_id: 123
+});</code></pre>
+                </div>
+
+                <div class="alert alert-warning">
+                    <strong>Important :</strong> Les événements ne sont envoyés qu'après le chargement complet de la page (évite les doublons). L'objet eventData est limité à 500 caractères.
+                </div>
+            </section>
+
+            <!-- GÉOLOCALISATION -->
+            <section id="geolocalisation" class="doc-section">
+                <h2>Géolocalisation</h2>
+                
+                <p>La géolocalisation est effectuée côté serveur via l'API <code>ip-api.com</code> (limitation : 45 req/min en gratuit). Les données sont stockées en base (pays, ville).</p>
+
+                <h3>Comment ça marche ?</h3>
+                <ol>
+                    <li>Le pixel reçoit l'IP du visiteur.</li>
+                    <li>Une requête est faite à ip-api.com (timeout 1s pour ne pas bloquer).</li>
+                    <li>Le pays et la ville sont enregistrés dans la table <code>smart_pixel_tracking</code>.</li>
+                    <li>Si l'API échoue, la valeur par défaut est "Unknown".</li>
+                </ol>
+
+                <div class="alert alert-info">
+                    <strong>Vie privée :</strong> Nous ne stockons que le pays et la ville. L'IP n'est pas conservée dans les rapports (elle sert uniquement à la géoloc). Vous pouvez désactiver la géoloc dans <code>config.php</code>.
+                </div>
+            </section>
+
+            <!-- SOURCES UTM -->
+            <section id="sources" class="doc-section">
+                <h2>Sources de trafic et paramètres UTM</h2>
+                
+                <p>Smart Pixel capture automatiquement les paramètres UTM de l'URL et les sources.</p>
+
+                <h3>Paramètres reconnus</h3>
+                <ul>
+                    <li><code>utm_source</code> → source (Google, newsletter, etc.)</li>
+                    <li><code>utm_medium</code> → medium (cpc, email, social)</li>
+                    <li><code>utm_campaign</code> → nom de la campagne</li>
+                    <li><code>utm_term</code> → mots-clés</li>
+                    <li><code>utm_content</code> → contenu spécifique</li>
+                </ul>
+
+                <h3>Source automatique</h3>
+                <p>Si aucun UTM n'est présent, la source est extraite du <code>document.referrer</code> :</p>
+                <ul>
+                    <li>Réseaux sociaux : Facebook, Twitter, LinkedIn → "social"</li>
+                    <li>Moteurs de recherche : Google, Bing, DuckDuckGo → "organic"</li>
+                    <li>Direct : pas de referrer → "direct"</li>
+                </ul>
+            </section>
+
+            <!-- SCRIPT JS -->
+            <section id="script-js" class="doc-section">
+                <h2>Tracker.js - Documentation technique</h2>
+                
+                <p>Le fichier <code>tracker.js</code> est le cœur de la collecte côté client. Il est conçu pour être léger (4KB) et asynchrone.</p>
+
+                <h3>Fonctions disponibles</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>API JavaScript</span>
+                        <button class="copy-btn" onclick="copyToClipboard('SmartPixel.load(\'SP_XXXXXX\'); // Chargement manuel\nSmartPixel.trackEvent(\'eventName\', {data}); // Événement personnalisé\nSmartPixel.getOrCreateSessionId(); // Récupère l\'ID de session')">
+                            <i class="fas fa-copy"></i> Copier
+                        </button>
+                    </div>
+                    <pre><code>SmartPixel.load('SP_XXXXXX'); // Chargement manuel
+SmartPixel.trackEvent('eventName', {data}); // Événement personnalisé
+SmartPixel.getOrCreateSessionId(); // Récupère l'ID de session</code></pre>
+                </div>
+
+                <h3>Paramètres de l'URL du pixel</h3>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Paramètre</th><th>Description</th><th>Exemple</th></tr></thead>
+                        <tbody>
+                            <tr><td>t</td><td>Tracking code (obligatoire)</td><td>SP_79747769</td></tr>
+                            <tr><td>sid</td><td>Session ID</td><td>sess_abc123</td></tr>
+                            <tr><td>viewport</td><td>Résolution écran</td><td>1920x1080</td></tr>
+                            <tr><td>s</td><td>Source</td><td>google.com</td></tr>
+                            <tr><td>utm_campaign</td><td>Campagne</td><td>ete2025</td></tr>
+                            <tr><td>ref</td><td>Referrer complet</td><td>https://... </td></tr>
+                            <tr><td>click</td><td>Données de clic (JSON)</td><td>{"tag":"A"}</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- PIXEL PHP -->
+            <section id="pixel-php" class="doc-section">
+                <h2>Pixel.php - Point d'entrée serveur</h2>
+                
+                <p>Le fichier <code>pixel.php</code> reçoit les données, valide le tracking code, enrichit avec la géoloc, et insère en base. Il retourne toujours un GIF 1x1 transparent.</p>
+
+                <h3>Fonctionnement</h3>
+                <ol>
+                    <li>Vérification du paramètre <code>t</code> (tracking code).</li>
+                    <li>Requête en base pour trouver le <code>site_id</code> et <code>user_id</code>.</li>
+                    <li>Récupération de l'IP et appel à ip-api.com pour la géoloc (timeout 1s).</li>
+                    <li>Insertion en base avec toutes les données collectées.</li>
+                    <li>Envoi du GIF 1x1.</li>
+                </ol>
+
+                <h3>Optimisation</h3>
+                <ul>
+                    <li>Le script est optimisé pour < 100ms de réponse.</li>
+                    <li>Les erreurs sont loggées silencieusement (pas d'affichage).</li>
+                    <li>Le cache est désactivé (headers no-cache).</li>
+                </ul>
+            </section>
+
+            <!-- API REST -->
+            <section id="api" class="doc-section">
+                <h2>🔌 API REST (Pro & Business)</h2>
+                
+                <p>L'API REST vous permet d'accéder à vos données programmatiquement. Elle est en bêta depuis janvier 2026.</p>
+
+                <h3>Authentification</h3>
+                <p>Utilisez votre <code>api_key</code> (disponible dans Mon compte → API). À passer dans le header :</p>
+                <div class="code-block">
+                    <pre><code>Authorization: Bearer VOTRE_API_KEY</code></pre>
+                </div>
+
+                <h3>Endpoints</h3>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Endpoint</th><th>Méthode</th><th>Description</th></tr></thead>
+                        <tbody>
+                            <tr><td><code>/api/v1/stats</code></td><td>GET</td><td>Stats globales (visites, uniques)</td></tr>
+                            <tr><td><code>/api/v1/pages</code></td><td>GET</td><td>Top pages</td></tr>
+                            <tr><td><code>/api/v1/sources</code></td><td>GET</td><td>Top sources</td></tr>
+                            <tr><td><code>/api/v1/events</code></td><td>GET</td><td>Événements récents</td></tr>
+                            <tr><td><code>/api/v1/export</code></td><td>GET</td><td>Export JSON/CSV des données brutes</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Exemple cURL</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <button class="copy-btn" onclick="copyToClipboard('curl -H \"Authorization: Bearer VOTRE_API_KEY\" \\\n  https://gael-berru.com/smart_phpixel/smart_pixel_v2/api/v1/stats?period=30d')">
+                            <i class="fas fa-copy"></i> Copier
+                        </button>
+                    </div>
+                    <pre><code>curl -H "Authorization: Bearer VOTRE_API_KEY" \
+  https://gael-berru.com/smart_phpixel/smart_pixel_v2/api/v1/stats?period=30d</code></pre>
+                </div>
+            </section>
+
+            <!-- WEBHOOKS -->
+            <section id="webhooks" class="doc-section">
+                <h2>Webhooks (Business)</h2>
+                
+                <p>Recevez des notifications en temps réel sur vos événements analytics.</p>
+
+                <h3>Événements disponibles</h3>
+                <ul>
+                    <li><code>page_view</code> - Nouvelle page vue</li>
+                    <li><code>click</code> - Nouveau clic</li>
+                    <li><code>daily_report</code> - Rapport quotidien (8h du matin)</li>
+                </ul>
+
+                <h3>Configuration</h3>
+                <p>Dans Mon compte → Webhooks, ajoutez votre URL (ex: <code>https://mondomaine.com/webhook</code>). Nous enverrons un POST avec un payload JSON contenant les données.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Exemple de payload</span>
+                    </div>
+                    <pre><code>{
+  "event": "page_view",
+  "site_id": 42,
+  "data": {
+    "page_url": "/accueil",
+    "timestamp": "2026-01-15T10:30:00Z",
+    "visitor_id": "sess_abc123"
+  }
+}</code></pre>
+                </div>
+            </section>
+
+            <!-- GESTION COMPTE -->
+            <section id="compte" class="doc-section">
+                <h2>Gestion de votre compte</h2>
+                
+                <h3>Changer de mot de passe</h3>
+                <p>Allez dans <code>Dashboard → Mon compte → Sécurité</code>. Vous pouvez modifier votre mot de passe à tout moment.</p>
+
+                <h3>Ajouter/Supprimer un site</h3>
+                <p>Dans la colonne de gauche, cliquez sur <i class="fas fa-plus-circle"></i> "Ajouter un site". Remplissez le nom et l'URL. Le tracking code sera généré automatiquement. Pour supprimer, survolez le site dans la liste et cliquez sur la corbeille.</p>
+
+                <h3>Clé API ( en cours de dev, peut ne pas focntionner correctement )</h3>
+                <p>Disponible dans Mon compte → API. Régénérez-la si nécessaire (cela cassera les anciennes intégrations).</p>
+            </section>
+
+            <!-- PAIEMENT LEMONSQUEEZY -->
+            <section id="paiement" class="doc-section">
+                <h2>Paiement avec Lemon Squeezy</h2>
+                
+                <p>Nous utilisons <a href="https://lemonsqueezy.com" target="_blank">Lemon Squeezy</a>, une plateforme de paiement européenne (pas de frais cachés).</p>
+
+                <h3>Processus</h3>
+                <ol>
+                    <li>Vous cliquez sur "Mettre à niveau" dans le dashboard.</li>
+                    <li>Vous êtes redirigé vers une page de checkout hébergée par Lemon Squeezy.</li>
+                    <li>Vous payez par carte ou PayPal.</li>
+                    <li>Lemon Squeezy nous envoie un webhook pour confirmer le paiement.</li>
+                    <li>Votre compte est automatiquement mis à niveau.</li>
+                </ol>
+
+                <h3>Gestion des abonnements</h3>
+                <p>Vous pouvez annuler, modifier ou consulter votre abonnement directement sur le portail client Lemon Squeezy (lien dans l'email de confirmation).</p>
+            </section>
+
+            <!-- RGPD -->
+            <section id="rgpd" class="doc-section">
+                <h2>RGPD et conformité</h2>
+                
+                <div class="alert alert-success">
+                    <strong>Conforme par conception</strong> - Smart Pixel a été pensé pour respecter la vie privée dès la base.
+                </div>
+
+                <h3>Ce que nous collectons</h3>
+                <ul>
+                    <li>Pages vues (URL, titre, referrer)</li>
+                    <li>Informations techniques (navigateur, OS, écran)</li>
+                    <li>Géolocalisation (pays et ville uniquement, pas d'adresse précise)</li>
+                    <li>Clics (élément cliqué, pas de données personnelles)</li>
+                </ul>
+
+                <h3>Ce que nous ne collectons PAS</h3>
+                <ul>
+                    <li>Cookies tiers</li>
+                    <li>Empreinte numérique complète (fingerprinting)</li>
+                    <li>Données de formulaires (sauf si vous envoyez un événement custom)</li>
+                </ul>
+
+                <h3>Hébergement</h3>
+                <p>Toutes les données sont hébergées sur des serveurs en France. Aucune donnée ne transite par les USA.</p>
+            </section>
+
+            <!-- FAQ -->
+            <section id="faq" class="doc-section">
+                <h2>F.A.Q</h2>
+                
+                <div class="card">
+                    <h4>Smart Pixel est-il vraiment gratuit ?</h4>
+                    <p>Oui, le plan gratuit est illimité dans le temps pour 1 site et 1000 visites/mois. Pas de carte bleue demandée.</p>
+                </div>
+
+                <div class="card">
+                    <h4>Puis-je auto-héberger Smart Pixel ?</h4>
+                    <p>Absolument ! Le code est open source (MIT). Suivez les instructions sur <a href="https://github.com/berru-g/smart_pixel_v2" target="_blank">GitHub</a>.</p>
+                </div>
+
+                <div class="card">
+                    <h4>Comment désinstaller le tracker ?</h4>
+                    <p>Supprimez simplement la ligne de script de votre site. Les données historiques restent dans votre dashboard.</p>
+                </div>
+
+                <div class="card">
+                    <h4>Y a-t-il une application mobile ?</h4>
+                    <p>Pas encore, mais le dashboard est responsive et fonctionne parfaitement sur mobile. Une app Flutter est prévue pour 2027.</p>
+                </div>
+
+                <div class="card">
+                    <h4>Que faire si mes données n'apparaissent pas ?</h4>
+                    <p>Vérifiez : 1) que le tracking code est correct, 2) que le script est bien placé avant <code>&lt;/head&gt;</code>, 3) que votre site n'est pas bloqué par un adblocker. Consultez la console navigateur pour d'éventuelles erreurs.</p>
+                </div>
+            </section>
+
+            <!-- CODES ERREUR -->
+            <section id="erreurs" class="doc-section">
+                <h2>Codes erreur et dépannage</h2>
+                
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Code</th><th>Signification</th><th>Solution</th></tr></thead>
+                        <tbody>
+                            <tr><td><code>ERR_INVALID_TRACKING</code></td><td>Tracking code invalide</td><td>Vérifiez que le code SP_XXXXXX est correct.</td></tr>
+                            <tr><td><code>ERR_SITE_INACTIVE</code></td><td>Site désactivé</td><td>Activez le site dans le dashboard.</td></tr>
+                            <tr><td><code>ERR_GEOLOC_FAILED</code></td><td>Géolocalisation impossible</td><td>L'API ip-api est peut-être down, les données sont marquées "Unknown".</td></tr>
+                            <tr><td><code>ERR_DB_INSERT</code></td><td>Échec insertion base</td><td>Contactez le support si persistant.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- SUPPORT -->
+            <section id="support" class="doc-section">
+                <h2>Support</h2>
+                
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-envelope"></i></div>
+                        <h3>Email</h3>
+                        <p><a href="mailto:contact@gael-berru.com">contact@gael-berru.com</a><br>Réponse sous 24h</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fab fa-github"></i></div>
+                        <h3>GitHub Issues</h3>
+                        <p><a href="https://github.com/berru-g/smart_pixel_v2/issues" target="_blank">Ouvrez un ticket</a><br>Suivi public</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fas fa-comment"></i></div>
+                        <h3>Discord</h3>
+                        <p><a href="#">Serveur communautaire</a><br>Entraide entre utilisateurs</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 Smart Pixel Analytics - Documentation officielle - <a href="#">Mentions légales</a> - <a href="#">Confidentialité</a></p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem;">Dernière mise à jour : 15 janvier 2026 - v2.0.1</p>
+        </div>
+    </footer>
+
+    <script>
+        // Données de recherche (titre, section, contenu)
+        const searchData = [
+            { title: "Installation en 2 minutes", section: "installation", content: "Créer un compte, récupérer tracking code, coller script", tags: "installer configurer tracker" },
+            { title: "Plans et tarifs", section: "plans", content: "Gratuit 1 site, Pro 9€, Business 29€, limites visites", tags: "prix abonnement payer" },
+            { title: "Tracking des clics", section: "evenements", content: "Clics automatiques, événements personnalisés, API JavaScript", tags: "click event conversion" },
+            { title: "Géolocalisation", section: "geolocalisation", content: "Pays, ville via IP, ip-api.com, anonymisation", tags: "geo ip pays ville" },
+            { title: "Sources UTM", section: "sources", content: "utm_source, utm_medium, utm_campaign, referrer", tags: "campagne marketing tracking" },
+            { title: "Tracker.js", section: "script-js", content: "Fichier JS, fonctions, paramètres URL du pixel", tags: "javascript script api" },
+            { title: "Pixel.php", section: "pixel-php", content: "Point d'entrée serveur, GIF 1x1, insertion base", tags: "backend php gif" },
+            { title: "API REST", section: "api", content: "Endpoints, authentification, export JSON/CSV", tags: "api rest json csv developpeur" },
+            { title: "Webhooks", section: "webhooks", content: "Notifications temps réel, événements, configuration", tags: "webhook realtime alert" },
+            { title: "Multi-sites", section: "multi-sites", content: "Gérer plusieurs sites par compte, tracking code par site", tags: "plusieurs sites domains" },
+            { title: "RGPD", section: "rgpd", content: "Conformité, données en France, pas de cookies tiers", tags: "gdpr privacy cookies" },
+            { title: "Paiement LemonSqueezy", section: "paiement", content: "Processus checkout, webhook de confirmation", tags: "payment lemon squeezy carte" },
+            { title: "FAQ", section: "faq", content: "Questions fréquentes : gratuit, auto-hébergement, données", tags: "questions aide" },
+            { title: "Codes erreur", section: "erreurs", content: "ERR_INVALID_TRACKING, ERR_SITE_INACTIVE, dépannage", tags: "error bug problème" },
+            { title: "Support", section: "support", content: "Email, GitHub, Discord, délais de réponse", tags: "contact aide assistance" },
+            { title: "Dashboard", section: "dashboard", content: "Onglets, métriques, filtres période, gestion sites", tags: "interface graphique stats" },
+            { title: "Premiers pas", section: "premiers-pas", content: "Comprendre les métriques, utiliser les filtres", tags: "debutant guide" },
+            { title: "Gestion compte", section: "compte", content: "Mot de passe, ajout site, clé API", tags: "account profil settings" },
+        ];
+
+        // Recherche en temps réel
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.doc-section');
+
+        function performSearch(query) {
+            if (!query.trim()) {
+                searchResults.style.display = 'none';
+                return;
+            }
+
+            const results = searchData.filter(item => 
+                item.title.toLowerCase().includes(query.toLowerCase()) ||
+                item.content.toLowerCase().includes(query.toLowerCase()) ||
+                (item.tags && item.tags.toLowerCase().includes(query.toLowerCase()))
+            ).slice(0, 5);
+
+            if (results.length === 0) {
+                searchResults.innerHTML = '<div class="search-result-item">Aucun résultat</div>';
+                searchResults.style.display = 'block';
+                return;
+            }
+
+            searchResults.innerHTML = results.map(r => `
+                <div class="search-result-item" data-section="${r.section}">
+                    <h4>${r.title}</h4>
+                    <p>${r.content.substring(0, 80)}...</p>
+                </div>
+            `).join('');
+            searchResults.style.display = 'block';
+
+            // Ajouter événement clic sur les résultats
+            document.querySelectorAll('.search-result-item').forEach(el => {
+                el.addEventListener('click', function() {
+                    const sectionId = this.dataset.section;
+                    const targetSection = document.getElementById(sectionId);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({ behavior: 'smooth' });
+                        searchResults.style.display = 'none';
+                        searchInput.value = '';
+                        
+                        // Mettre à jour la classe active
+                        navLinks.forEach(l => l.classList.remove('active'));
+                        document.querySelector(`.nav-link[data-section="${sectionId}"]`).classList.add('active');
+                    }
+                });
+            });
+        }
+
+        searchInput.addEventListener('input', (e) => performSearch(e.target.value));
+        document.addEventListener('click', (e) => {
+            if (!searchResults.contains(e.target) && e.target !== searchInput) {
+                searchResults.style.display = 'none';
+            }
+        });
+
+        // Navigation active et scroll spy
+        function setActiveLink() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionBottom = sectionTop + section.offsetHeight;
+                if (window.scrollY >= sectionTop && window.scrollY < sectionBottom) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.section === current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', setActiveLink);
+        window.addEventListener('load', setActiveLink);
+
+        // Smooth scroll pour les liens de navigation
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.dataset.section;
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                    
+                    // Mise à jour active
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                }
+
+                // Fermer le menu mobile si ouvert
+                if (window.innerWidth <= 1024) {
+                    document.getElementById('sidebar').classList.remove('active');
+                }
+            });
+        });
+
+        // Copie de code
+        window.copyToClipboard = function(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Code copié !');
+            }).catch(() => {
+                alert('Erreur de copie, sélectionnez manuellement.');
+            });
+        };
+
+        // Menu mobile
+        const mobileBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.getElementById('sidebar');
+        
+        if (mobileBtn) {
+            mobileBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+        }
+
+        // Ajuster la largeur du contenu sur redimensionnement
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1024) {
+                sidebar.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
