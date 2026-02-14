@@ -2322,11 +2322,11 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
             if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
                 window.location.href = 'logout.php';
             }
-        }
+        } 
 
         function confirmParametre() {
-            if (confirm('En cours de developpement. Merci de votre patience !')) {
-                window.location.href = '#';
+            if (confirm('Trouver vos réponses dans la doc complète ?')) {
+                window.location.href = '../../doc/';
             }
         }
 
