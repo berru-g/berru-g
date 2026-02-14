@@ -16,8 +16,8 @@ function updateThemeIndicator() {
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateThemeIndicator);
 
 // ===== EASTER EGG - MOT DE PASSE DANS LA RECHERCHE =====
-const EASTER_EGG_PASSWORD = "mond@sh"; // ee
-const EASTER_EGG_URL = "./smart_phpixel/dashboard.php"; // URL à ouvrir
+const EASTER_EGG_PASSWORD = "honeypot26"; // ee
+const EASTER_EGG_URL = "./smart_phpixel/pixel/dashboard.php"; // URL à ouvrir
 
 function checkEasterEgg(searchTerm) {
   // Convertir en minuscules et supprimer les espaces
