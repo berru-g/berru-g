@@ -2058,4 +2058,39 @@ canvas {
     }
 }
 
+/* Style pour le conteneur Gantt */
+#ganttChart {
+    width: 100%;
+    height: 400px;
+    background: var(--bg-color);
+    border-radius: 8px;
+    margin: 15px 0;
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    min-height: 400px;
+}
 
+/* Amélioration du conteneur heatmap */
+#heatmapChart {
+    max-height: 250px;
+    width: 100%;
+}
+
+/* Style pour la liste des pages */
+#topPagesList {
+    padding: 15px;
+    background: var(--bg-color);
+    border-radius: 8px;
+    border: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.page-item {
+    padding: 10px;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-item:last-child {
+    border-bottom: none;
+}

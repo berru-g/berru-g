@@ -35,17 +35,29 @@ const projectsDatabase = [
         features: ['Interface drag & drop', 'Export code prêt', 'Gamification crédits', 'Paiement Euro/Solana'],
         tags: ['SAAS', 'WebGL', 'Animation', '3d', 'threejs', 'génerateur de code', 'php']
     },
+   /* {
+        id: 'animation',
+        title: 'animation stop motion',
+        shortDesc: 'Création d\'animations stop motion',
+        longDesc: 'Créez des animations stop motion avec une interface simple et intuitive.',
+        keywords: ['animation', 'stop motion', 'video', 'creative', 'design'],
+        image: './img/jeanjean2024.mp4',
+        link: 'https://youtube.com/shorts/XRlEr9VIdyc?si=SYAYvrhyyUXAokOh',
+        category: 'animation',
+        features: ['animation', 'stop motion', 'video', 'creative', 'design'],
+        tags: ['animation', 'stop motion', 'video', 'creative', 'design']
+    },*/
     {
         id: 'smart-pixel',
         title: 'Smart Pixel Analytics',
         shortDesc: 'Alternative souveraine à Google Analytics',
-        longDesc: 'Integrez un pixel sur votre site et analysez vos données sans les donner au GAFAM, elles restent sur vos serveurs. Conforme RGPD, open source, dashboard. Doc compléte d\'integration.',
+        longDesc: 'Analysez vos données et soyez réelement le seul à pouvoir les exploiter. Integration en 2 min, dashboard complet, conforme RGPD, open source, dashboard. Doc compléte d\'integration.',
         keywords: ['analytics', 'tracking', 'privacy', 'gdpr', 'dashboard', 'data', 'open source'],
         image: './img/smart-pixel.png',
         link: 'https://gael-berru.com/smart_phpixel/',
-        category: 'tool',
+        category: 'saas',
         features: ['Auto-hébergé', 'RGPD friendly', 'Dashboard complet', 'Open source'],
-        tags: ['tool', 'Analytics', 'Privacy', 'google', 'analytics', 'gafam', 'philosophie', 'ethique', 'éthique', 'php']
+        tags: ['SAAS', 'Analytics', 'Privacy', 'google', 'analytics', 'gafam', 'philosophie', 'ethique', 'éthique', 'php']
     },
     {
         id: 'sql-editor',
@@ -69,7 +81,7 @@ const projectsDatabase = [
         link: 'https://agora-dataviz.com',
         category: 'saas',
         features: ['Éditeur SQL visuel', 'Import CSV/Excel/JSON', 'Cartographie automatique'],
-        tags: ['messagerie', 'reseau-social', 'social-network', 'sql']
+        tags: ['SAAS','messagerie', 'reseau-social', 'social-network', 'sql', 'dataviz', 'data', 'json', 'editor-sql']
     },
     {
         id: 'blockchain-explorer',
@@ -211,7 +223,7 @@ const projectsDatabase = [
         keywords: ['help', 'desk', 'nmap', 'python', 'console', 'cmd', 'scan', 'exe', 'tool'],
         image: './img/helpdesk.png',
         link: 'https://github.com/berru-g/OTTO/tree/main/secu',
-        category: 'helpdesk terminal',
+        category: 'tool',
         features: ['helpdesk', 'python', 'terminal'],
         tags: ['help', 'desk', 'nmap', 'python', 'console', 'cmd', 'scan', 'exe', 'tool']
     },
@@ -223,7 +235,7 @@ const projectsDatabase = [
         keywords: ['help', 'desk', 'tool'],
         image: '#',
         link: 'https://berru-g.github.io/console-interactive/',
-        category: 'helpdesk online',
+        category: 'tool',
         features: ['helpdesk', 'javascript', 'terminal'],
         tags: ['help', 'console', 'tool']
     },
@@ -295,7 +307,7 @@ const projectsDatabase = [
         keywords: ['surprise', 'calendrier', 'noël', 'advent'],
         image: './img/advent-calendar.png',
         link: './advent-calendar/index.html',
-        category: 'code',
+        category: 'site',
         features: ['Calendrier de l\'avent'],
         tags: ['surprise', 'calendrier', 'noël', 'advent']
     },

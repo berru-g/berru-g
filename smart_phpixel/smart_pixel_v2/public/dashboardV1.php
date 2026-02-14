@@ -298,7 +298,6 @@ function getCountryCodeSimple($countryName)
     ║  Copyright    : 2025 https://github.com/berru-g/ ║
     ╚══════════════════════════════════════════════════╝
 -->
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -595,7 +594,7 @@ function getCountryCodeSimple($countryName)
                         <div class="tab" onclick="openTab('sessions')">Sessions</div>
                         <div class="tab" onclick="openTab('details')">Détails</div>
                         <div class="tab" onclick="openTab('insights')">Insights</div>
-                        <div class="tab" onclick="openTab('AgendaReco')">Agenda</div>
+                        <!--<div class="tab" onclick="openTab('InPlusTab')">In+</div>-->
                     </div>
 
                     <!-- ONGLET APERÇU -->
@@ -629,34 +628,34 @@ function getCountryCodeSimple($countryName)
                         </div>
 
                         <!-- Section 2: Corrélation Trafic & Tendances -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Analyse des Tendances</h3>
-                            </div>
-                            <div class="card-body">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Analyse des Tendances</h3>
+                                </div>
+                                <div class="card-body">
+                                    
+                                    <div class="insight-tip">
+                                        <strong>Insight :</strong>
+                                        <?php
+                                        if (count($dailyStats) >= 2) {
+                                            $firstDay = $dailyStats[0]['visits'];
+                                            $lastDay = end($dailyStats)['visits'];
+                                            $growth = $firstDay > 0 ? (($lastDay - $firstDay) / $firstDay) * 100 : 0;
 
-                                <div class="insight-tip">
-                                    <strong>Insight :</strong>
-                                    <?php
-                                    if (count($dailyStats) >= 2) {
-                                        $firstDay = $dailyStats[0]['visits'];
-                                        $lastDay = end($dailyStats)['visits'];
-                                        $growth = $firstDay > 0 ? (($lastDay - $firstDay) / $firstDay) * 100 : 0;
-
-                                        if ($growth > 20) {
-                                            echo "Votre trafic a augmenté de <strong>" . round($growth) . "%</strong> cette semaine ! Excellente progression.";
-                                        } elseif ($growth > 0) {
-                                            echo "Votre trafic progresse doucement (+" . round($growth) . "%). Continuez vos efforts !";
+                                            if ($growth > 20) {
+                                                echo "Votre trafic a augmenté de <strong>" . round($growth) . "%</strong> cette semaine ! Excellente progression.";
+                                            } elseif ($growth > 0) {
+                                                echo "Votre trafic progresse doucement (+" . round($growth) . "%). Continuez vos efforts !";
+                                            } else {
+                                                echo "Votre trafic est stable. Pensez à lancer de nouvelles campagnes pour stimuler la croissance.";
+                                            }
                                         } else {
-                                            echo "Votre trafic est stable. Pensez à lancer de nouvelles campagnes pour stimuler la croissance.";
+                                            echo "Collectez plus de données pour obtenir des insights détaillés sur vos tendances.";
                                         }
-                                    } else {
-                                        echo "Collectez plus de données pour obtenir des insights détaillés sur vos tendances.";
-                                    }
-                                    ?>
+                                        ?>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
                         <div class="card">
                             <div class="card-header">
@@ -1014,7 +1013,7 @@ function getCountryCodeSimple($countryName)
                         </div>
                     </div>
 
-                    <!-- ONGLET DÉTAILS -->
+                    <!-- NOUVEL ONGLET DÉTAILS -->
 
                     <div id="details" class="tab-content">
                         <div class="chart-container">
@@ -1058,7 +1057,7 @@ function getCountryCodeSimple($countryName)
                         </div>
                     </div>
 
-                    <!-- ONGLET INSIGHTS AVANCÉS ===== -->
+                    <!-- ===== ONGLET INSIGHTS AVANCÉS ===== -->
                     <div id="insights" class="tab-content">
                         <div class="chart-container">
                             <!-- Section 1: Performance Marketing -->
@@ -1142,7 +1141,7 @@ function getCountryCodeSimple($countryName)
                                     <h3 class="card-title">Analyse des Tendances</h3>
                                 </div>
                                 <div class="card-body">
-
+                                    
                                     <?php
                                     // Préparer les données pour les tendances
                                     $trendLabels = [];
@@ -1255,9 +1254,9 @@ function getCountryCodeSimple($countryName)
                         </div>
                     </div>
 
-                    <!-- ONGLET Agenda -->
-                    <div id="AgendaReco" class="tab-content">
-                        <h2>Calendrier de publication</h2>
+                    <!-- Section pour le nouvel onglet "In+" -->
+                    <div id="InPlusTab" class="tab-content">
+                        <h2>📅 Calendrier de publication</h2>
 
                         <!-- Heatmap avec vos données réelles -->
                         <div class="chart-container">
@@ -1268,7 +1267,7 @@ function getCountryCodeSimple($countryName)
                         <!-- Planning Gantt -->
                         <div class="chart-container">
                             <h3>Planning recommandé</h3>
-                            <div id="ganttChart"></div>
+                            <div id="ganttChart" style="width: 100%; height: 400px;"></div>
                         </div>
 
                         <!-- Top contenus - Utilise vos données existantes -->
@@ -1277,9 +1276,6 @@ function getCountryCodeSimple($countryName)
                             <div id="topPagesList"></div>
                         </div>
                     </div>
-
-                    <!-- ONGLET AGENDA ? -->
-
 
 
                 </div>
@@ -2598,185 +2594,59 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
             }
 
             // 3. GANTT CHART avec amCharts
-            // 3. GANTT CHART avec amCharts
-            document.addEventListener('DOMContentLoaded', function() {
+            function initGantt() {
+                am5.ready(function() {
+                    const root = am5.Root.new("ganttChart");
+                    root.setThemes([am5.themes.Animated.new(root)]);
 
-                // Variable pour éviter les initialisations multiples
-                window.ganttInitialized = false;
+                    const gantt = root.container.children.push(
+                        am5gantt.Gantt.new(root, {})
+                    );
 
-                // Fonction d'initialisation du Gantt
-                function initGantt() {
-                    if (window.ganttInitialized) return;
+                    // Données basées sur les heures de fréquentation
+                    const now = new Date();
+                    const peakHour = getPeakHour(visitsByHour || {});
 
-                    console.log('Initialisation du Gantt...');
-
-                    // Vérifier que amCharts est chargé
-                    if (typeof am5 === 'undefined') {
-                        console.error('amCharts non chargé !');
-                        document.getElementById('ganttChart').innerHTML =
-                            '<div style="text-align: center; padding: 20px;">⚠️ Chargement du planning...</div>';
-                        return;
-                    }
-
-                    try {
-                        am5.ready(function() {
-                            // Nettoyer le conteneur
-                            const container = document.getElementById("ganttChart");
-                            if (!container) return;
-                            container.innerHTML = '';
-
-                            // Créer la racine
-                            var root = am5.Root.new("ganttChart");
-
-                            // Appliquer le thème
-                            root.setThemes([
-                                am5themes_Animated.new(root)
-                            ]);
-
-                            // Créer le Gantt avec configuration simplifiée
-                            var gantt = root.container.children.push(
-                                am5gantt.Gantt.new(root, {
-                                    layout: root.verticalLayout,
-                                    headerHeight: 60
-                                })
-                            );
-
-                            // Données des catégories
-                            gantt.get("yAxis").data.setAll([{
-                                    name: "Idée",
-                                    id: "gantt_0"
-                                },
-                                {
-                                    name: "Lancement MVP",
-                                    id: "gantt_1"
-                                },
-                                {
-                                    name: "Planification",
-                                    id: "gantt_2"
-                                },
-                                {
-                                    name: "Développement",
-                                    id: "gantt_3"
-                                },
-                                {
-                                    name: "Tests",
-                                    id: "gantt_4"
-                                },
-                                {
-                                    name: "Finalisation",
-                                    id: "gantt_5"
-                                },
-                                {
-                                    name: "Publication",
-                                    id: "gantt_6"
-                                }
-                            ]);
-
-                            // Données des séries
-                            gantt.series.data.setAll([{
-                                    start: 1758142800000,
-                                    duration: 0,
-                                    progress: 1,
-                                    id: "gantt_0",
-                                    linkTo: ["gantt_1"]
-                                },
-                                {
-                                    start: 1758142800000,
-                                    duration: 2,
-                                    progress: 1,
-                                    id: "gantt_1",
-                                    linkTo: ["gantt_2"]
-                                },
-                                {
-                                    start: 1758488400000,
-                                    duration: 2,
-                                    progress: 0.2,
-                                    id: "gantt_2",
-                                    linkTo: ["gantt_3"]
-                                },
-                                {
-                                    start: 1758661200000,
-                                    duration: 1,
-                                    progress: 0.8,
-                                    id: "gantt_3",
-                                    linkTo: ["gantt_4"]
-                                },
-                                {
-                                    start: 1758747600000,
-                                    duration: 3,
-                                    progress: 0,
-                                    id: "gantt_4",
-                                    linkTo: ["gantt_5"]
-                                },
-                                {
-                                    start: 1759179600000,
-                                    duration: 0,
-                                    progress: 0,
-                                    id: "gantt_5",
-                                    linkTo: ["gantt_6"]
-                                },
-                                {
-                                    start: 1759179600000,
-                                    duration: 4,
-                                    progress: 0,
-                                    id: "gantt_6"
-                                }
-                            ]);
-
-                            gantt.appear(1000);
-
-                            window.ganttInitialized = true;
-                            console.log('✅ Gantt initialisé avec succès');
-                        });
-                    } catch (error) {
-                        console.error('❌ Erreur Gantt:', error);
-                        document.getElementById('ganttChart').innerHTML =
-                            '<div style="text-align: center; padding: 20px; color: #ff6b6b;">' +
-                            'Erreur de chargement du planning' +
-                            '</div>';
-                    }
-                }
-
-                // Initialiser si l'onglet AgendaReco est actif au chargement
-                const agendaReco = document.getElementById('AgendaReco');
-                if (agendaReco && agendaReco.classList.contains('active')) {
-                    setTimeout(initGantt, 500);
-                }
-
-                // Observer les clics sur les onglets
-                const tabs = document.querySelectorAll('.tab');
-                tabs.forEach(tab => {
-                    tab.addEventListener('click', function() {
-                        const tabText = this.textContent.trim();
-                        if (tabText === 'Agenda' || tabText === 'AgendaReco') {
-                            setTimeout(() => {
-                                if (!window.ganttInitialized) {
-                                    initGantt();
-                                }
-                            }, 300);
+                    gantt.yAxis.data.setAll([{
+                            name: "Publication Social",
+                            id: "social"
+                        },
+                        {
+                            name: "Article Blog",
+                            id: "blog"
                         }
-                    });
+                    ]);
+
+                    gantt.series.data.setAll([{
+                            start: setHour(now, peakHour).getTime(),
+                            duration: 0,
+                            id: "social",
+                            name: "Post optimal"
+                        },
+                        {
+                            start: setHour(addDays(now, 2), peakHour).getTime(),
+                            duration: 2,
+                            id: "blog",
+                            name: "Création contenu"
+                        }
+                    ]);
+
+                    gantt.appear(1000, 100);
                 });
+            }
 
-                // Observer les changements de classe de l'onglet
-                if (agendaReco) {
-                    const observer = new MutationObserver(function(mutations) {
-                        mutations.forEach(function(mutation) {
-                            if (mutation.attributeName === 'class' &&
-                                agendaReco.classList.contains('active') &&
-                                !window.ganttInitialized) {
-                                setTimeout(initGantt, 200);
-                            }
-                        });
-                    });
-
-                    observer.observe(agendaReco, {
-                        attributes: true
-                    });
+            // Initialiser le Gantt quand l'onglet est visible
+            const inPlusTab = document.getElementById('InPlusTab');
+            const observer = new MutationObserver(function() {
+                if (inPlusTab.style.display !== 'flex') {
+                    initGantt();
+                    observer.disconnect();
                 }
             });
-
-
+            observer.observe(inPlusTab, {
+                attributes: true,
+                attributeFilter: ['style']
+            });
         });
 
         // Fonctions utilitaires
@@ -2806,9 +2676,9 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
             newDate.setDate(newDate.getDate() + days);
             return newDate;
         }
-        // Fonction pour basculer vers l'onglet AgendaReco (au cas où)
-        function openAgendaReco() {
-            openTab('AgendaReco');
+        // Fonction pour basculer vers l'onglet insights (au cas où)
+        function openInsightsTab() {
+            openTab('insights');
         }
     </script>
 </body>
