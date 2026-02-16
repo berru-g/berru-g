@@ -380,8 +380,8 @@ function getCountryCodeSimple($countryName)
                     <?php endif; ?>
                 </div>
 
-            </div>
 
+            </div>
 
 
             <!-- Section des sites -->
@@ -1286,6 +1286,44 @@ function getCountryCodeSimple($countryName)
             </div>
 
         <?php endif; ?>
+
+        <!-- La modale (cachée par défaut) -->
+        <dialog id="modalParametres" class="settings-modal">
+            <div class="modal-content">
+                <h2>Besoin d'aide ?</h2>
+                <p>Trouvez toutes les réponses dans la documentation complète ou accédez aux autres sections utiles :</p>
+
+                <nav class="modal-nav">
+                    <a href="../../doc/" class="modal-link primary" id="linkToDoc">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 12px; vertical-align: middle;">
+                            <path d="M4 20V8a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" />
+                            <path d="M4 11h16" />
+                        </svg>
+                        <span class="subtitle"> Doc complète. Installation, configuration...</span>
+                    </a>
+
+                    <a href="#" class="modal-link"> <!-- adapte selon ton URL réelle -->
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg> 
+                        <span class="subtitle">Gérer mon compte, mot de passe, sites connectés</span>
+                    </a>
+
+                    <a href="./contact/" class="modal-link"> <!-- adapte selon ton URL réelle -->
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="4" width="20" height="16" rx="2" />
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                        </svg> 
+                        <span class="subtitle">Contact / Support, signaler un bug</span>
+                    </a>
+                </nav>
+
+                <div class="modal-actions">
+                    <button type="button" id="btnCancel" class="btn-cancel">Annuler</button>
+                </div>
+            </div>
+        </dialog>
     </div>
 
     <!-- ASSISTANT PSEUDO IA EN COURS -->
@@ -2322,13 +2360,53 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
             if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
                 window.location.href = 'logout.php';
             }
-        } 
+        }
 
         function confirmParametre() {
-            if (confirm('Trouver vos réponses dans la doc complète ?')) {
-                window.location.href = '../../doc/';
+            const modal = document.getElementById('modalParametres');
+            if (!modal) {
+                // Fallback si la modale n'existe pas (comportement original)
+                if (confirm('Trouver vos réponses dans la doc complète ?')) {
+                    window.location.href = '../../doc/';
+                }
+                return;
             }
+
+            // Ouvre la modale
+            modal.showModal();
+
+            // Gestion du clic sur "Documentation complète" → redirection
+            const linkDoc = document.getElementById('linkToDoc');
+            if (linkDoc) {
+                linkDoc.addEventListener('click', function(e) {
+                    e.preventDefault(); // empêche le lien direct
+                    modal.close(); // ferme la modale
+                    window.location.href = '../../doc/'; // redirige
+                }, {
+                    once: true
+                }); // écouteur jetable
+            }
+
+            // Bouton Annuler → ferme juste la modale
+            const btnCancel = document.getElementById('btnCancel');
+            if (btnCancel) {
+                btnCancel.addEventListener('click', function() {
+                    modal.close();
+                }, {
+                    once: true
+                });
+            }
+
+            // Optionnel : fermer en cliquant sur le backdrop
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.close();
+                }
+            }, {
+                once: true
+            });
         }
+
 
         function showUpgradeForm(plan) {
             document.getElementById('newPlanInput').value = plan;
