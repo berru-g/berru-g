@@ -99,7 +99,7 @@ https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/tracker.js?utm_source
 - `utm_medium` : le support (social, email, cpc)
 - `utm_campaign` : nom de votre campagne (promo_ete, lancement)
 
-👉 Ces données apparaîtront dans la colonne "Campagne" de votre tableau de bord.
+👉 Ces données apparaîtront dans la colonne "Contenu" de votre tableau de bord.
 
 ---
 

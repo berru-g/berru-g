@@ -81,7 +81,7 @@
             align-items: center;
             gap: 12px;
             font-weight: 700;
-            font-size: 1.5rem;
+            font-size: 1rem;
             color: var(--text);
             text-decoration: none;
         }
@@ -569,6 +569,10 @@
             border-radius: 4px;
             font-weight: 500;
         }
+        a {
+            color: var(--primary);
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -583,14 +587,14 @@
                 </a>
                 
                 <div class="nav-links">
-                    <a href="../index.php">Accueil</a>
-                    <a href="../smart_pixel_v2/public/dashboard.php">Dashboard</a>
+                    <a href="https://gael-berru.com/smart_phpixel/?utm_source=DOC" target="_blank">Accueil</a>
+                    <a href="../smart_pixel_v2/public/dashboard.php" target="_blank">Dashboard</a>
                     <a href="https://github.com/berru-g/smart_pixel_v2" target="_blank">GitHub</a>
                     <a href="../smart_pixel_v2/public/login.php" class="btn btn-primary">
                         <i class="fas fa-user"></i> Connexion
                     </a>
                 </div>
-                
+                 
                 <button class="mobile-menu-btn" id="mobileMenuBtn">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -664,10 +668,10 @@
                 <h1>Bienvenue sur Smart Pixel <span class="version-badge">v2.0.1</span></h1>
                 
                 <div class="alert alert-info">
-                    <strong>Mise à jour du 15/01/2026 :</strong> Le pixel est maintenant multi-tenant, l'API REST est en bêta, et l'intégration LemonSqueezy est active.
+                    <strong>Mise à jour du 15/01/2026 :</strong> Le pixel est maintenant multi-tenant, l'API REST est en bêta, et l'intégration LemonSqueezy sera active une fois la beta test terminée. Pour le moment l'outils reste gratuit.
                 </div>
 
-                <p><strong>Smart Pixel</strong> est une solution d'analytics web souveraine, open-source et respectueuse de la vie privée. Conçue comme une alternative française à Google Analytics, elle vous permet de reprendre le contrôle de vos données tout en bénéficiant d'un dashboard simple et intuitif.</p>
+                <p><strong>Smart Pixel</strong> est une solution d'analytics web souveraine, open-source et respectueuse de la vie privée. Conçue comme une alternative souveraine à Google Analytics, elle vous permet de reprendre le contrôle de vos données tout en bénéficiant d'un dashboard simple et intuitif.</p>
 
                 <div class="features-grid">
                     <div class="feature-item">
@@ -702,15 +706,15 @@
                         <i class="fas fa-check-circle" style="color: var(--success);"></i>
                         Étape 1 : Créer un compte
                     </div>
-                    <p>Rendez-vous sur <a href="index.php">la page d'accueil</a> et cliquez sur "Créer mon premier dashboard". Remplissez le formulaire avec votre email, mot de passe et l'URL de votre site.</p>
+                    <p>Rendez-vous sur <a href="../index.php">la page d'accueil</a> et cliquez sur "Créer mon premier dashboard". Remplissez le formulaire avec votre email, choisissez un mot de passe et indiquez l'URL de votre site.</p>
                 </div>
-
+ 
                 <div class="card">
                     <div class="card-title">
                         <i class="fas fa-check-circle" style="color: var(--success);"></i>
                         Étape 2 : Récupérer votre code de tracking
                     </div>
-                    <p>Une fois connecté, vous arrivez sur le dashboard. En haut à droite, cliquez sur "Ajouter un site" si ce n'est pas déjà fait. Vous verrez votre <span class="highlight">tracking code</span> (ex: <code>SP_79747769</code>).</p>
+                    <p>Une fois connecté, vous arrivez sur le dashboard. Vous verrez votre <span class="highlight">tracking code</span> (ex: <code>SP_79747769</code>), situé en bas à gauche de l'écran.</p>
                 </div>
 
                 <div class="card">
@@ -728,12 +732,12 @@
                             </button>
                         </div>
                         <pre><code>&lt;!-- Smart Pixel Analytics --&gt;
-&lt;script data-sp-id="SP_79747769" src="https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/tracker.js" async&gt;&lt;/script&gt;</code></pre>
+&lt;script data-sp-id="SP_24031987" src="https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/tracker.js" async&gt;&lt;/script&gt;</code></pre>
                     </div>
                 </div>
 
                 <div class="alert alert-success">
-                    <strong>✅ C'est fini !</strong> Les premières données apparaîtront dans votre dashboard sous 1 à 2 minutes. Le script collecte automatiquement : pages vues, clics, source, UTM, géolocalisation, appareil, navigateur...
+                    <strong>✅ C'est fini !</strong> Les premières données apparaîtront dans votre dashboard sous 1 à 2 minutes mais peuvent dans certain cas, prendre jusqu'à 24H. Le script collecte automatiquement : pages vues, clics, source, UTM, géolocalisation, appareil, navigateur...
                 </div>
             </section>
 
@@ -754,14 +758,15 @@
                             <tr><td><strong>Visites</strong></td><td>Nombre total de sessions (une session = 30 min d'inactivité max).</td></tr>
                             <tr><td><strong>Visiteurs uniques</strong></td><td>Nombre d'utilisateurs distincts (basé sur session ID + empreinte).</td></tr>
                             <tr><td><strong>Pages vues</strong></td><td>Nombre total de pages consultées.</td></tr>
-                            <tr><td><strong>Taux de rebond</strong></td><td>% de visites avec une seule page (pas encore implémenté dans la v1).</td></tr>
+                            <tr><td><strong>Taux de rebond</strong></td><td>% de visites avec une seule page.</td></tr>
+                            <tr><td><strong>Insight</strong></td><td>Actions à mettre en place selon vos data.</td></tr>
                             <tr><td><strong>Source</strong></td><td>D'où viennent vos visiteurs (Google, direct, réseau social...).</td></tr>
                         </tbody>
                     </table>
                 </div>
 
                 <h3>Filtres de période</h3>
-                <p>En haut du dashboard, vous pouvez sélectionner : Aujourd'hui, 7 derniers jours, 30 derniers jours, ou une plage personnalisée (à venir).</p>
+                <p>En haut du dashboard, vous pouvez sélectionner : Aujourd'hui, 7 derniers jours, 30 derniers jours, ou une plage d'un an.</p>
 
                 <div class="alert alert-info">
                     <i class="fas fa-lightbulb"></i> <strong>Astuce :</strong> Passez la souris sur les graphiques pour voir les valeurs précises. Les tableaux sous les graphiques sont triables par colonne.
@@ -778,8 +783,8 @@
                             <tr>
                                 <th>Fonctionnalité</th>
                                 <th>Gratuit</th>
-                                <th>Pro (9€/mois)</th>
-                                <th>Business (29€/mois)</th>
+                                <th>Pro (9€/mois) Version à venir !</th>
+                                <th>Business (29€/mois) Version à venir !</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -815,7 +820,7 @@
 
                 <div class="card">
                     <div class="card-title"><i class="fas fa-mouse-pointer"></i> Gestion des sites</div>
-                    <p>Dans la colonne de gauche, vous voyez la liste de vos sites. Cliquez sur un site pour changer de contexte. Le <span class="badge badge-info">code de suivi</span> affiché est unique pour chaque site.</p>
+                    <p>Dans la colonne de gauche, vous voyez la liste de vos sites. Cliquez sur un site pour visualiser ses données. Le <span class="badge badge-info">code de suivi</span> affiché est unique pour chaque site.</p>
                 </div>
             </section>
 
@@ -823,7 +828,7 @@
             <section id="evenements" class="doc-section">
                 <h2>Tracking des clics et événements</h2>
                 
-                <p>Smart Pixel tracke automatiquement tous les clics sur les liens et boutons (sauf <code>data-sp-ignore</code>). Vous pouvez également envoyer des événements personnalisés.</p>
+                <p>Smart Pixel tracke automatiquement tous les clics sur les liens et boutons, CTA (sauf si vous avez installé <code>data-sp-ignore</code>). Vous pouvez également envoyer des événements personnalisés.</p>
 
                 <h3>Événements automatiques</h3>
                 <ul>
@@ -866,7 +871,7 @@ SmartPixel.trackEvent('inscription', {
                 </ol>
 
                 <div class="alert alert-info">
-                    <strong>Vie privée :</strong> Nous ne stockons que le pays et la ville. L'IP n'est pas conservée dans les rapports (elle sert uniquement à la géoloc). Vous pouvez désactiver la géoloc dans <code>config.php</code>.
+                    <strong>Vie privée :</strong> Nous ne stockons que le pays et la ville. L'IP publique n'est pas conservée dans les rapports (elle sert uniquement à la géoloc), concernant l'IP privée elle n'est évidement pas accessible pour des raison de sécurité et de normes RGPD. Vous pouvez désactiver la géoloc dans votre<code>config.php</code>.
                 </div>
             </section>
 
@@ -886,7 +891,7 @@ SmartPixel.trackEvent('inscription', {
                 </ul>
 
                 <h3>Source automatique</h3>
-                <p>Si aucun UTM n'est présent, la source est extraite du <code>document.referrer</code> :</p>
+                <p>Cela vous permet de savoir laquelle de vos campagnes à le plus de trafic et d'où vient ce traffic. Si aucun UTM n'est présent, la source est extraite du <code>document.referrer</code> :</p>
                 <ul>
                     <li>Réseaux sociaux : Facebook, Twitter, LinkedIn → "social"</li>
                     <li>Moteurs de recherche : Google, Bing, DuckDuckGo → "organic"</li>
@@ -896,9 +901,9 @@ SmartPixel.trackEvent('inscription', {
 
             <!-- SCRIPT JS -->
             <section id="script-js" class="doc-section">
-                <h2>Tracker.js - Documentation technique</h2>
+                <h2>Tracker - Documentation technique</h2>
                 
-                <p>Le fichier <code>tracker.js</code> est le cœur de la collecte côté client. Il est conçu pour être léger (4KB) et asynchrone.</p>
+                <p>Notre code <code>JavaScript</code> est le cœur de la collecte côté client. Il est conçu pour être léger (4KB) et asynchrone.</p>
 
                 <h3>Fonctions disponibles</h3>
                 <div class="code-block">
@@ -934,7 +939,7 @@ SmartPixel.getOrCreateSessionId(); // Récupère l'ID de session</code></pre>
             <section id="pixel-php" class="doc-section">
                 <h2>Pixel.php - Point d'entrée serveur</h2>
                 
-                <p>Le fichier <code>pixel.php</code> reçoit les données, valide le tracking code, enrichit avec la géoloc, et insère en base. Il retourne toujours un GIF 1x1 transparent.</p>
+                <p>Notre code <code>PHP</code> reçoit les données, valide le tracking code, enrichit avec la géoloc, et insère en base. Il retourne toujours un Pixel transparent.</p>
 
                 <h3>Fonctionnement</h3>
                 <ol>
@@ -955,7 +960,7 @@ SmartPixel.getOrCreateSessionId(); // Récupère l'ID de session</code></pre>
 
             <!-- API REST -->
             <section id="api" class="doc-section">
-                <h2>🔌 API REST (Pro & Business)</h2>
+                <h2>🔌 API REST (Pro & Business) Fonctionnalitées non disponibles</h2>
                 
                 <p>L'API REST vous permet d'accéder à vos données programmatiquement. Elle est en bêta depuis janvier 2026.</p>
 

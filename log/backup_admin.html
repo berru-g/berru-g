@@ -8,7 +8,7 @@
     <meta name="robots" content="noindex, nofollow">
 
     <script data-sp-id="SP_7f9505cc"
-        src="https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/tracker.js/?utm_souce=honeypot" async></script>
+        src="https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/tracker.js" async></script>
 </head>
 
 <body>
@@ -461,7 +461,7 @@
             window.addEventListener('beforeunload', function () {
                 // Dernier recours : image synchrone (bloque mais fonctionne)
                 const img = new Image();
-                img.src = `https://gael-berru.com/smart_phpixel/public/pixel.php?t=${trackingCode}&event=honeypot_exit&time=${Date.now()}`;
+                img.src = `https://gael-berru.com/smart_phpixel/pixel/pixel.php?t=${trackingCode}&event=honeypot_exit&time=${Date.now()}`;
                 // Pas besoin de l'ajouter au DOM
             });
 

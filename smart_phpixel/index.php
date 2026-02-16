@@ -209,7 +209,7 @@
         <div class="container">
             <div class="hero-content">
                 <div class="hero-badge" role="note">
-                    <span>Pas besoin des GAFAM !</span>
+                    <span>version beta gratuite</span>
                 </div>
 
                 <h1 id="hero-title" class="hero-title">
@@ -479,10 +479,10 @@
 
                 <!-- Plan Pro -->
                 <div class="pricing-card featured animate">
-                    <div class="featured-badge">Recommandé</div>
+                    <div class="featured-badge">Version à venir</div>
                     <h3>Pro</h3>
                     <div class="price-tag">9€<span>/mois</span></div>
-                    <p>Pour les sites professionnels</p>
+                    <p>en cours de dev, merci.</p>
 
                     <ul class="pricing-features">
                         <li><i class="fas fa-check feature-check"></i> <strong>10 sites web</strong></li>
@@ -569,7 +569,7 @@
                     <h4>Produit</h4>
                     <ul>
                         <li><a href="#fonctionnalites">Fonctionnalités</a></li>
-                        <li><a href="#solution">Solution</a></li>
+                        <li><a href="./doc/">Solution</a></li>
                         <li><a href="#tarifs">Tarifs</a></li>
                         <li><a href="./doc/">Documentation</a></li>
                         <li><a href="https://github.com/berru-g/smart_pixel_v2/blob/main/public/pixel.php">API</a></li>
@@ -579,10 +579,10 @@
                 <div class="footer-links">
                     <h4>Entreprise</h4>
                     <ul>
-                        <li><a href="https://gael-berru.com">À propos</a></li>
-                        <li><a href="https://gael-berru.com">Blog</a></li>
-                        <li><a href="https://gael-berru.com">Contact</a></li>
-                        <li><a href="https://gael-berru.com">Presse</a></li>
+                        <li><a href="#">À propos</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="mailto:contact@gael-berru.com">Contact</a></li>
+                        <li><a href="#">Presse</a></li>
                     </ul>
                 </div>
 
@@ -600,7 +600,7 @@
             <div class="footer-bottom">
                 <p>
                     © 2025 Smart Pixel Analytics. Développé avec <i class="fas fa-heart" style="color: var(--danger);"></i>
-                    en France par <a href="https://gael-berru.com" style="color: #94a3b8;">Berru-g</a>.
+                    en France par <a href="https://gael-berru.com" style="color: var(--primary);">Berru-g</a>.
                 </p>
                 <p>
                     <i class="fas fa-map-marker-alt"></i> Hébergé en France ·

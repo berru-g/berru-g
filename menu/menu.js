@@ -272,11 +272,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // ===== BACKDOOR ADMIN  egotrip api test =====
   document.getElementById('settingsBtn').addEventListener('click', () => {
     Swal.fire({
-      title: 'Détails Tech',
+      title: 'Access for aisistant',
       html: `
             <div style="text-align: left; margin: 20px 0;">
                 <p style="color: var(--text-secondary); margin-bottom: 15px;">
-                  L'Accés àà ma pseudo API est limité<br>
+                  _/<br>
                 </p>
                 <input 
                     type="password" 

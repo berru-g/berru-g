@@ -54,7 +54,7 @@ const projectsDatabase = [
         longDesc: 'Analysez vos données et soyez réelement le seul à pouvoir les exploiter. Integration en 2 min, dashboard complet, conforme RGPD, open source, dashboard. Doc compléte d\'integration.',
         keywords: ['analytics', 'tracking', 'privacy', 'gdpr', 'dashboard', 'data', 'open source'],
         image: './img/smart-pixel.png',
-        link: 'https://gael-berru.com/smart_phpixel/',
+        link: 'https://gael-berru.com/smart_phpixel/?utm_source=monsite',
         category: 'saas',
         features: ['Auto-hébergé', 'RGPD friendly', 'Dashboard complet', 'Open source'],
         tags: ['SAAS', 'Analytics', 'Privacy', 'google', 'analytics', 'gafam', 'philosophie', 'ethique', 'éthique', 'php']
@@ -90,7 +90,7 @@ const projectsDatabase = [
         longDesc: 'Suivi de transactions Bitcoin, identification d\'exchanges, création de diagrammes automatiques.',
         keywords: ['blockchain', 'bitcoin', 'crypto', 'investigation', 'transactions', 'security'],
         image: './img/V2.png',
-        link: 'https://crypto-free-tools.netlify.app/scam-radar/',
+        link: 'https://crypto-free-tools.netlify.app/scam-radar?utm_source=monsite/',
         category: 'tool',
         features: ['Recherche transaction', 'Diagrammes automatiques', 'Identification KYC'],
         tags: ['tool', 'Blockchain', 'btc']
@@ -114,7 +114,7 @@ const projectsDatabase = [
         longDesc: 'Site avec formulaire, galerie photo CMS, envoi automatique de mails.',
         keywords: ['cms', 'website', 'portfolio', 'vitrine', 'restaurant', 'gallery'],
         image: './img/devgoldendessert.png',
-        link: 'https://goldendessert.fr',
+        link: 'https://goldendessert.fr?utm_source=monsite',
         category: 'website',
         features: ['Galerie CMS', 'Formulaire', 'Analytics', 'Responsive design'],
         tags: ['SITE', 'CMS', 'Vitrine']
@@ -126,7 +126,7 @@ const projectsDatabase = [
         longDesc: 'Suite d\'outils pour trader. Utilisation des API TradingView, CoinGecko et Binance pour analyse de marché et trading.',
         keywords: ['fibonnacci', 'tradingview', 'tool', 'binance', 'coingecko', 'market'],
         image: './img/crypto-tool.gif',
-        link: 'https://crypto-free-tools.netlify.app/',
+        link: 'https://crypto-free-tools.netlify.app/?utm_source=monsite',
         category: 'tool',
         features: ['API CoinGecko', 'API Binance', 'API TradingView'],
         tags: ['tool', 'Crypto', 'Trading', 'api', 'btc', 'chart']
@@ -135,7 +135,7 @@ const projectsDatabase = [
         id: 'smb-chat',
         title: 'Local Network Chat',
         shortDesc: 'Chat chiffré en réseau local',
-        longDesc: 'Communication en réseau local via le port SMB,  avec messages chiffrés AES-128 + HMAC-SHA256.',
+        longDesc: 'Communication en réseau local via le protocole SMB,  avec messages chiffrés AES-128 + HMAC-SHA256.',
         keywords: ['chat', 'local', 'network', 'encryption', 'security', 'smb', 'chiffrement'],
         image: './img/smbchat.png',
         link: 'https://berru-g.github.io/OTTO/SMBchat/SMBchatV2/',
