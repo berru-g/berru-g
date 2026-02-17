@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Détection bot : temps < 4 secondes
     $elapsed_time = time() - $submitted_load_time;
     if ($elapsed_time < 4) {
-        header('Location: ../404/');
+        header('Location: ../404/4bot.php');
         exit;
     }
 
@@ -67,21 +67,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact - Smart Pixel v2</title>
+    <link rel="stylesheet" href="../assets/dashboard.css">
+    <script data-sp-id="SP_79747769" src="https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/tracker.js" async></script>
     <style>
         body { font-family: Arial, sans-serif; background: #f4f4f4; color: #333; margin: 0; padding: 20px; }
         .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #007bff; }
         form { display: flex; flex-direction: column; }
         label { margin-top: 10px; font-weight: bold; }
         input, textarea, select { margin-top: 5px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
-        button { margin-top: 20px; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        button:hover { background: #0056b3; }
         .message { padding: 10px; margin-bottom: 20px; border-radius: 4px; }
         .success { background: #d4edda; color: #155724; }
         .error { background: #f8d7da; color: #721c24; }
         .honeypot, .load-time { display: none; }
         .links { margin-top: 20px; }
-        .links a { margin-right: 15px; color: #007bff; text-decoration: none; }
+        .links a { margin-right: 15px; color: #9d86ff; text-decoration: none; }
         .links a:hover { text-decoration: underline; }
         .captcha-img { margin-top: 10px; }
     </style>
@@ -129,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <!-- CAPTCHA maison -->
                 <label for="captcha">Vérification (recopiez le code) :</label>
-                <img src="captcha.php" alt="CAPTCHA" class="captcha-img">
+                <img src="../404/captcha.php" alt="CAPTCHA" class="captcha-img">
                 <input type="text" id="captcha" name="captcha" required>
 
                 <!-- Honeypot anti-spam -->

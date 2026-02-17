@@ -511,10 +511,10 @@
                     </div>-->
                 </div>
 
-                <!-- Plan Business --
+                <!-- Plan Annuel --
                 <div class="pricing-card animate">
                     <h3>Business</h3>
-                    <div class="price-tag">29€<span>/mois</span></div>
+                    <div class="price-tag">99€<span>/an</span></div>
                     <p>Pour les entreprises et agences</p>
                     
                     <ul class="pricing-features">
