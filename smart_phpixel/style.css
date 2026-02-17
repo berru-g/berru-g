@@ -287,6 +287,13 @@ p {
     font-size: 0.9rem;
     font-weight: 500;
 }
+/* GIF DÉMO DU DASHBOARD */
+.dashboard-preview {
+  display: flex; 
+  margin: 0 auto;
+  width: 100%;
+  border-radius: 12px;
+}
 
 /* ====== SECTION CLIENTS ====== */
 .clients-section {
@@ -793,3 +800,4 @@ p {
     color: #ab9ff2;
     margin-right: 5px;
 }
+

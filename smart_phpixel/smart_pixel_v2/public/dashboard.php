@@ -588,14 +588,14 @@ function getCountryCodeSimple($countryName)
                 <div class="dashboard-tabs">
                     <div class="tabs">
                         <div class="tab active" onclick="openTab('overview')">Aperçu</div>
-                        <div class="tab" onclick="openTab('traffic')">Trafic</div>
                         <div class="tab" onclick="openTab('geography')">Géographie</div>
+                        <div class="tab" onclick="openTab('traffic')">Trafic</div>
                         <div class="tab" onclick="openTab('devices')">Appareils</div>
                         <div class="tab" onclick="openTab('content')">Contenu</div>
                         <div class="tab" onclick="openTab('sessions')">Sessions</div>
                         <div class="tab" onclick="openTab('details')">Détails</div>
                         <div class="tab" onclick="openTab('insights')">Insights</div>
-                        <div class="tab" onclick="openTab('AgendaReco')">Agenda</div>
+                        <!--<div class="tab" onclick="openTab('AgendaReco')">Agenda</div>-->
                     </div>
 
                     <!-- ONGLET APERÇU -->

@@ -118,3 +118,14 @@ CREATE TABLE IF NOT EXISTS subscriptions (
 
 -- Mettre à jour les settings existants
 UPDATE users SET settings = JSON_OBJECT() WHERE settings IS NULL;
+
+-- Contact et formulaire
+CREATE TABLE IF NOT EXISTS `contacts` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
+    `subject` VARCHAR(255) NOT NULL,
+    `message` TEXT NOT NULL,
+    `type` ENUM('bug', 'feature', 'support', 'other') DEFAULT 'other',
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

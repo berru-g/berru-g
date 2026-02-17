@@ -229,11 +229,12 @@
                         <strong>CRÉER MON PREMIER DASHBOARD</strong><br>
                         <!--<small style="font-size: 0.8rem; opacity: 0.9;">Aucune CB requise</small>-->
                     </a>
-                    <a href="#solution" class="btn btn-secondary" style="padding: 20px 40px;">
+                    <a href="#demo" class="btn btn-secondary" style="padding: 20px 40px;">
                         <i class="fas fa-play-circle"></i>
                         Voir comment ça marche
                     </a>
                 </div>
+
 
                 <div class="hero-stats">
                     <div class="stat-item">
@@ -253,9 +254,14 @@
                         <div class="stat-label">À partir de</div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
+
+    <div class=container id="demo">
+        <img src="../img/demo_dashboard.gif" alt="Aperçu du dashboard Smart Pixel Analytics" class="dashboard-preview animate">
+    </div>
 
     <!-- === CLIENTS SECTION === -->
     <section class="clients-section" role="region" aria-labelledby="clients-title">
@@ -581,7 +587,7 @@
                     <ul>
                         <li><a href="#">À propos</a></li>
                         <li><a href="#">Blog</a></li>
-                        <li><a href="mailto:contact@gael-berru.com">Contact</a></li>
+                        <li><a href="./contact/">Contact</a></li>
                         <li><a href="#">Presse</a></li>
                     </ul>
                 </div>
