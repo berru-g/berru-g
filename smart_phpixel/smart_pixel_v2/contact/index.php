@@ -5,6 +5,16 @@ require_once __DIR__ . '/../includes/config.php';
 // Démarrer la session pour CAPTCHA et autres
 session_start();
 
+// Vérifie si connecté
+if (!Auth::isLoggedIn()) {
+    // Redirige UNIQUEMENT si pas connecté
+    header('Location: login.php');
+    exit;
+}
+
+$user_id = $_SESSION['user_id'];
+// (deja dans conf) $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8", DB_USER, DB_PASS);
+
 // Timestamp de chargement
 $load_time = time();
 
@@ -58,11 +68,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = "Erreur lors de l'envoi : " . htmlspecialchars($e->getMessage());
         }
     }
+    try {
+        $stmt = $pdo->prepare("INSERT INTO contacts (name, email, subject, message, type, user_id) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$name, $email, $subject, $message, $type, $user_id]);
+        $success = true;
+        unset($_SESSION['captcha_code']);
+    } catch (PDOException $e) {
+        $error = "Erreur lors de l'envoi : " . htmlspecialchars($e->getMessage());
+    }
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,7 +97,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-color);
+            color: var(--text-color);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -90,31 +110,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             max-width: 850px;
             width: 100%;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--bg-color);
             backdrop-filter: blur(10px);
             padding: 40px;
             border-radius: 24px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--border-color);
         }
 
         h1 {
             font-size: 2.2rem;
             font-weight: 700;
-            color: #1a1a2e;
+            color: var(--text-color);
             margin-bottom: 15px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+
         }
 
-        .container > p {
-            color: #4a5568;
+        .container>p {
+            color: var(--text-color);
             line-height: 1.6;
             margin-bottom: 30px;
             font-size: 1.1rem;
             padding-bottom: 20px;
-            border-bottom: 2px solid #e2e8f0;
+            border-bottom: 2px solid var(--text-color);
         }
 
         form {
@@ -130,26 +148,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         label {
             font-weight: 600;
-            color: #2d3748;
+            color: var(--text-color);
             margin-bottom: 8px;
             font-size: 0.95rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        input, textarea, select {
+        input,
+        textarea,
+        select {
             padding: 14px 16px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border-color);
             border-radius: 12px;
             font-size: 1rem;
             transition: all 0.3s ease;
-            background-color: white;
+            background-color: var(--search-bg);
+            color: var(--text-color);
             font-family: inherit;
         }
 
-        input:focus, textarea:focus, select:focus {
+        input:focus,
+        textarea:focus,
+        select:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
@@ -168,10 +191,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         button {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-dark));
+            color: var(--text-color);
             padding: 16px 32px;
-            border: none;
+            border: 1px solid var(--text-color);
             border-radius: 12px;
             font-size: 1.1rem;
             font-weight: 600;
@@ -196,33 +219,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: 16px;
             margin-bottom: 30px;
             font-weight: 500;
-            border: 2px solid transparent;
+            border: 2px solid var(--border-color);
         }
 
         .success {
             background: linear-gradient(135deg, #f0fff4 0%, #dcfce7 100%);
-            color: #166534;
+            color: var(--positive);
             border-color: #86efac;
         }
 
         .error {
             background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-            color: #991b1b;
+            color: var(--negative);
             border-color: #fca5a5;
         }
 
         .captcha-container {
-            background: #f8fafc;
+            background: var(--search-bg);
             padding: 20px;
             border-radius: 16px;
-            border: 2px dashed #cbd5e1;
+            border: 2px dashed var(--border-color);
         }
 
         .captcha-img {
             display: block;
             margin: 15px 0;
             border-radius: 8px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border-color);
             max-width: 100%;
             height: auto;
         }
@@ -239,7 +262,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .links p {
             font-size: 1.1rem;
-            color: #1e293b;
+            color: var(--text-color);
             margin-bottom: 15px;
             font-weight: 600;
         }
@@ -248,17 +271,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: inline-block;
             margin-right: 20px;
             margin-bottom: 10px;
-            color: #667eea;
+            color: var(--primary-color);
             text-decoration: none;
             font-weight: 500;
             padding: 8px 16px;
-            background: #f1f4f9;
+            background: var(--search-bg);
             border-radius: 30px;
             transition: all 0.3s ease;
         }
 
         .links a:hover {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-dark));
             color: white;
             transform: translateX(5px);
         }
@@ -295,6 +318,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -304,15 +328,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         /* Tooltip pour le RGPD */
         .rgpd-badge {
             display: inline-block;
-            background: #e2e8f0;
+            background: var(--text-color);
             padding: 4px 12px;
             border-radius: 30px;
             font-size: 0.85rem;
-            color: #475569;
+            color: var(--bg-color);
             margin-left: 10px;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Contactez-nous <span class="rgpd-badge">RGPD ✅</span></h1>
@@ -369,7 +394,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="captcha">Vérification de sécurité *</label>
                     <img src="../404/captcha.php" alt="CAPTCHA" class="captcha-img">
                     <input type="text" id="captcha" name="captcha" placeholder="Recopiez le code ci-dessus" required>
-                    <small style="color: #64748b; display: block; margin-top: 8px;">Cette vérification nous aide à lutter contre le spam</small>
+                    <small style="color: inherit; display: block; margin-top: 8px;">Cette vérification nous aide à lutter contre le spam</small>
                 </div>
 
                 <!-- Honeypot anti-spam (invisible) -->
@@ -386,4 +411,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
     </div>
 </body>
+
 </html>

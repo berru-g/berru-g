@@ -33,6 +33,13 @@ $seed  = bin2hex(random_bytes(4)); // pour varier les URLs
     <p>Cette page fait partie de la documentation étendue de Smart Pixel v2.</p>
     <p>Liens vers les sous-sections :</p>
 
+    <div class="hint">
+        <?php if ($depth > 4): ?>
+            <p style="color:#e74c3c;">Vous semblez explorer très profondément… êtes-vous sûr que c'est utile ?</p>
+        <?php endif; ?>
+        <small>Si vous n'êtes pas un robot d'indexation, <a href="../../index.php?utm_source=deep_link_4bot">retournez à l'accueil</a>.</small>
+    </div>
+
     <ul>
         <?php for ($i = 0; $i < 30; $i++): ?>   <!-- 30 liens = bots voraces adorent -->
             <li>
@@ -43,11 +50,6 @@ $seed  = bin2hex(random_bytes(4)); // pour varier les URLs
         <?php endfor; ?>
     </ul>
 
-    <div class="hint">
-        <?php if ($depth > 5): ?>
-            <p style="color:#e74c3c;">Vous semblez explorer très profondément… êtes-vous sûr que c'est utile ?</p>
-        <?php endif; ?>
-        <small>Si vous n'êtes pas un robot d'indexation, <a href="../../index.php/?utm_source=deep_link_4bot">retournez à l'accueil</a>.</small>
-    </div>
+    
 </body>
 </html>

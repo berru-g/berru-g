@@ -191,6 +191,12 @@ body {
   width: 100%;
 }
 
+.nav-item span {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .nav-item:hover {
   background: var(--hover-bg);
   color: var(--text-color);

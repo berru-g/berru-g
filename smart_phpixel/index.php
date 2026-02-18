@@ -110,7 +110,7 @@
                                                                                  -**+=-*+*#***+**#+*#%#*###*=*=**####**##:***+*++=+***++*++*+**=+*++++==+==+++==+++**+-+****++++++-+***+****++***.**+*++
 
                                                                                 ============================================
-                                                                                    Project : Analytics Souverain
+                                                                                    Project : Analytics Souverain no GAFAM
                                                                                     Developed by : https://github.com/berru-g/
                                                                                     First Commits on Nov 21, 2025
                                                                                     Version : 1.2.4
@@ -260,7 +260,7 @@
     </section>
 
     <div class=container id="demo">
-        <img src="../img/demo_dashboard.gif" alt="Aperçu du dashboard Smart Pixel Analytics" class="dashboard-preview animate">
+        <img src="../img/demo_dashboard.gif" alt="Aperçu du dashboard Smart Pixel Analytics" class="dashboard-preview">
     </div>
 
     <!-- === CLIENTS SECTION === -->
