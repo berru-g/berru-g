@@ -2188,3 +2188,141 @@ canvas {
   cursor: pointer;
   transition: background 0.2s;
 }
+
+
+/* ===== OPTIMISATION MOBILE ===== */
+/* 1. Sidebar : masquée par défaut, accessible via bouton menu */
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-100%);
+    position: fixed;
+    z-index: 1001;
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+    padding: 1rem;
+    padding-top: 3.5rem;
+  }
+
+  .sidebar-overlay {
+    display: block;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .sidebar.mobile-open ~ .sidebar-overlay {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* 2. Conteneur principal : plein écran, padding adapté */
+@media (max-width: 768px) {
+  .main-content {
+    width: 100%;
+    padding: 0.75rem;
+  }
+
+  .container {
+    width: 100%;
+    padding: 0;
+  }
+}
+
+/* 3. Tableaux : scroll horizontal si nécessaire */
+@media (max-width: 768px) {
+  .data-table {
+    width: 100%;
+    font-size: 0.85rem;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 0.5rem;
+    white-space: nowrap;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* 4. Cartes et graphiques : 100% de largeur, polices adaptées */
+@media (max-width: 768px) {
+  .stat-card,
+  .chart-container {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .chart-title {
+    font-size: 0.9rem;
+  }
+
+  #mapChart {
+    height: 250px !important;
+  }
+}
+
+/* 5. Grilles de données : une colonne en mobile */
+@media (max-width: 768px) {
+  .stats-grid,
+  .data-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+}
+
+/* 6. Boutons et éléments interactifs : plus grands et espacés */
+@media (max-width: 768px) {
+  .add-site-btn,
+  .tab,
+  .period-filter select {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .period-filter {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+/* 7. En-têtes et filtres : empilés verticalement */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .header-content h1 {
+    font-size: 1.25rem;
+  }
+}
+
+/* 8. Bouton menu mobile : visible et accessible */
+@media (max-width: 1024px) {
+  .mobile-menu-btn {
+    display: flex;
+    top: 1rem;
+    left: 1rem;
+  }
+}

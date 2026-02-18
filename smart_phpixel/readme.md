@@ -5,7 +5,7 @@
 [![Installation: 1 ligne](https://img.shields.io/badge/Installation-1_ligne-green.svg)](#installation)
 
 Avec Smart Pixel vos graphiques racontent une histoire et guident vers des insights actionnables.
-Un outil d'analytics web simple, léger et respectueux de la vie privée. Alternative à Google Analytics avec dashboard intégré.
+Analysez votre trafic sans compromettre la vie privée de vos visiteurs, avec un outil 100% européen et open source
 
 Disponible
 
@@ -24,6 +24,13 @@ Disponible
 - **Dashboard multi-sites** : Gérer plusieurs sites par compte
 - **Données techniques** : Viewport, user-agent, résolution
 - **Sessions** : Identification unique par visite
+
+- **Captcha** : Page contact avec captcha fait maison ( aucun appel vers google captcha)
+- **rgpd cookie** : barre des cookies
+- **Doc compléte** : doc pour l'installation analytics + auto hebergé.
+
+
+
 
 ### 🚀 **En développement (version Premium)**
 - **Inclure la barre des cookies dans le pixel id**

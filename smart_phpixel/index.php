@@ -220,7 +220,7 @@
                 <p class="hero-subtitle">
                     <strong>Pourquoi un service analytique souverain ?</strong><br>
                     Pour stocker ses données et <u>être réelement le seul à pouvoir les exploiter</u>.<br>
-                    <!--<em>Notre promesse : Vos données restent en France, pas chez Google et aucune donnée n'est vendue à un tiers.</em>-->
+                    <em>Notre promesse : Analysez votre trafic sans compromettre la vie privée de vos visiteurs, avec un outil 100% européen et open source.</em>
                 </p>
 
                 <div class="hero-cta">
@@ -587,7 +587,7 @@
                     <ul>
                         <li><a href="#">À propos</a></li>
                         <li><a href="#">Blog</a></li>
-                        <li><a href="./contact/">Contact</a></li>
+                        <li><a href="./smart_pixel_v2/contact/">Contact</a></li>
                         <li><a href="#">Presse</a></li>
                     </ul>
                 </div>
@@ -597,7 +597,7 @@
                     <ul>
                         <li><a href="#">Mentions légales</a></li>
                         <li><a href="#">Confidentialité</a></li>
-                        <li><a href="#">RGPD</a></li>
+                        <li><a href="./RGPD/index.html">RGPD</a></li>
                         <li><a href="#">CGU</a></li>
                     </ul>
                 </div>
