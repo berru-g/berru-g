@@ -9,12 +9,12 @@ header('Content-Type: application/json');
 $trackingCode = $_GET['site_id'] ?? null;
 $startDate = $_GET['start_date'] ?? date('Y-m-d', strtotime('-7 days'));
 $endDate = $_GET['end_date'] ?? date('Y-m-d');
-$apiKey = $_GET['api_token'] ?? null;
+$apiKey = $_GET['api_key'] ?? null;
 
 // 2. Vérifier les paramètres obligatoires
 if (!$trackingCode || !$apiKey) {
     http_response_code(400);
-    echo json_encode(['error' => 'Les paramètres site_id et api_token sont requis.']);
+    echo json_encode(['error' => 'Les paramètres site_id et api_key sont requis.']);
     exit;
 }
 
@@ -24,7 +24,7 @@ $stmt = $pdo->prepare("
     SELECT u.id as user_id, us.id as site_id
     FROM users u
     JOIN user_sites us ON u.id = us.user_id
-    WHERE u.api_token = ? AND us.site_id = ?
+    WHERE u.api_key = ? AND us.site_id = ?
 ");
 $stmt->execute([$apiKey, $trackingCode]);
 $access = $stmt->fetch();
