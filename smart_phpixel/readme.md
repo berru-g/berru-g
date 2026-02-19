@@ -11,7 +11,7 @@ Disponible
 
     ✅ V.0.0.1 pixel auto hebergé | 2024 | statut - gratuit open source
     ✅ V.0.1.0 pixel multi tenant | 2025 | statut - gratuit pour 1 dashboard
-    ▶️ V.1.0.1 software friendly  | 2026 | statut - en cour de dev, MVP fonctionnel 
+    ▶️ V.1.0.1 software friendly  | 2026 | statut - MVP fonctionnel + API
 
 
 ## Fonctionnalités
@@ -28,6 +28,8 @@ Disponible
 - **Captcha** : Page contact avec captcha fait maison ( aucun appel vers google captcha)
 - **rgpd cookie** : barre des cookies
 - **Doc compléte** : doc pour l'installation analytics + auto hebergé.
+
+- **API** : Accéder à vos données d'un simple appel API avec votre Key unique.
 
 
 
@@ -163,7 +165,7 @@ Le plan gratuit vous permet de suivre **1 site**. Pour ajouter un site :
 Chaque site a son propre **tracking code** (ex: `SP_79747769`). Installez le code correspondant sur chaque site.
 
 
-## **Tester l’API**
+## **Tester l’API** ( plan pro only )
 
 ### Ajoutez votre site id avant votre token et insérez vos requete entre les deux !
     URL d’exemple :
