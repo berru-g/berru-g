@@ -1,8 +1,8 @@
 <?php
-// public/api.php
+/*
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+error_reporting(E_ALL);*/
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/config.php';
 header('Content-Type: application/json');
@@ -19,6 +19,33 @@ if (!$siteId || !$apiKey) {
     echo json_encode(['error' => 'Les paramètres site_id et api_key sont requis.']);
     exit;
 }
+
+/* Limiter les requete à 100/h par ip ( A venir en prod: remplacer les clés API statiques par des tokens JWT )
+$ip = $_SERVER['REMOTE_ADDR'];
+$cacheKey = "api_limit_$ip";
+$limit = 100; // Nombre max de requêtes
+$window = 3600; // Fenêtre en secondes (1h)
+
+// Utilise un cache simple (ou Redis à améliorer een prod)
+if (!isset($_SESSION['api_calls'])) {
+    $_SESSION['api_calls'] = [];
+}
+if (!isset($_SESSION['api_calls'][$cacheKey])) {
+    $_SESSION['api_calls'][$cacheKey] = ['count' => 0, 'time' => time()];
+}
+
+if ($_SESSION['api_calls'][$cacheKey]['time'] + $window < time()) {
+    $_SESSION['api_calls'][$cacheKey] = ['count' => 0, 'time' => time()];
+}
+
+if ($_SESSION['api_calls'][$cacheKey]['count'] >= $limit) {
+    http_response_code(429);
+    echo json_encode(['error' => 'Trop de requêtes. Veuillez patienter avant de réessayer.']);
+    exit;
+}
+
+$_SESSION['api_calls'][$cacheKey]['count']++;
+*/
 
 // 3. Connexion à la base de données
 try {

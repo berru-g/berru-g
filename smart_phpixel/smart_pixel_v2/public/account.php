@@ -273,6 +273,82 @@ if (isset($_POST['regenerate_api_key'])) {
             transform: translateX(0);
         }
 
+        /* Styles pour le tutoriel */
+        .tutorial-section {
+            margin-top: 3rem;
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+        }
+
+        .tutorial-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tutorial-section h2 i {
+            color: var(--primary);
+        }
+
+        .tutorial-step {
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tutorial-step h3 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tutorial-step h3 i {
+            color: var(--primary);
+        }
+
+        .tutorial-step p {
+            margin-bottom: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .tutorial-step code {
+            display: block;
+            background: #f0f0f0;
+            padding: 0.8rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+            overflow-x: auto;
+        }
+
+        .tutorial-step ul {
+            margin: 0.8rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .tutorial-step li {
+            margin-bottom: 0.5rem;
+        }
+
+        .example-url {
+            background: #f0f0f0;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+            margin: 0.5rem 0;
+        }
+
         @media (max-width: 768px) {
             .user-section {
                 grid-template-columns: 1fr;
@@ -341,7 +417,7 @@ if (isset($_POST['regenerate_api_key'])) {
                 <div class="api-key-container">
                     <div class="api-key-display">
                         <code id="apiKey"><?= htmlspecialchars($user['api_key']) ?></code>
-                        <button class="copy-button" onclick="copyToClipboard()">
+                        <button class="copy-button" onclick="copyToClipboard('apiKey')">
                             <i class="fas fa-copy"></i>
                         </button>
                     </div>
@@ -354,28 +430,171 @@ if (isset($_POST['regenerate_api_key'])) {
                 </form>
             </div>
 
+            <!-- Exemple d'URL -->
             <div class="api-key-container">
-                    <div class="api-key-display">
-                        <h3>Exemple d'utilisation de l'API :</h3>
-                        <code id="apiKey">https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php?site_id=SP_12345&start_date=2026-01-01&end_date=2026-02-01&api_key=TON_TOKEN</code>
-                        <button class="copy-button" onclick="copyToClipboard()">
-                            <i class="fas fa-copy"></i>
-                        </button>
+                <h3>Exemple d'URL</h3>
+                <div class="api-key-display">
+                    <code id="apiUrlExample">
+                        https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php?
+                        site_id=<strong>SP_<?= htmlspecialchars(substr($user['api_key'], 0, 6)) ?></strong>&
+                        api_key=<strong>VOTRE_CLE_API</strong>&
+                        start_date=2026-01-01&
+                        end_date=2026-02-01
+                    </code>
+                    <button class="copy-button" onclick="copyToClipboard('apiUrlExample')">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section Tutoriel -->
+            <div class="tutorial-section">
+                <h2><i class="fas fa-graduation-cap"></i> Tutoriel : Utiliser l'API Smart Pixel</h2>
+
+                <!-- Étape 1 : Récupérer les identifiants -->
+                <div class="tutorial-step">
+                    <h3><i class="fas fa-key"></i> 1. Récupérer tes identifiants</h3>
+                    <p>Pour utiliser l'API, tu as besoin de :</p>
+                    <ul>
+                        <li><strong>Code de tracking</strong> : Identifiant de ton site (ex: <code>SP_7f9505cc</code>).</li>
+                        <li><strong>Clé API</strong> : Clé secrète pour authentifier tes requêtes (ci-dessus).</li>
+                    </ul>
+                    <p>Tu peux trouver ton <strong>code de tracking</strong> dans la section "Mes sites" du dashboard.</p>
+                </div>
+
+                <!-- Étape 2 : Construire l'URL -->
+                <div class="tutorial-step">
+                    <h3><i class="fas fa-link"></i> 2. Construire l'URL de l'API</h3>
+                    <p>L'URL de base est :</p>
+                    <code>https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php</code>
+                    <p>Ajoute les paramètres suivants :</p>
+                    <ul>
+                        <li><code>site_id</code> : Ton code de tracking (ex: <code>SP_7f9505cc</code>).</li>
+                        <li><code>api_key</code> : Ta clé API (copie-la ci-dessus).</li>
+                        <li><code>start_date</code> (optionnel) : Date de début (ex: <code>2026-01-01</code>).</li>
+                        <li><code>end_date</code> (optionnel) : Date de fin (ex: <code>2026-02-01</code>).</li>
+                    </ul>
+                    <p>Exemple d'URL complète :</p>
+                    <div class="example-url">
+                        https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php?
+                        site_id=<strong>SP_7f9505cc</strong>&
+                        api_key=<strong>sk_1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p</strong>&
+                        start_date=<strong>2026-01-01</strong>&
+                        end_date=<strong>2026-02-01</strong>
                     </div>
                 </div>
 
+                <!-- Étape 3 : Récupérer les données -->
+                <div class="tutorial-step">
+                    <h3><i class="fas fa-download"></i> 3. Récupérer les données</h3>
+                    <p>Tu peux récupérer les données de 3 manières :</p>
+                    <ul>
+                        <li><strong>Depuis un navigateur</strong> : Copie-colle l'URL dans la barre d'adresse.</li>
+                        <li><strong>Avec cURL</strong> (terminal) :
+                            <code>curl "https://gael-berru.com/.../api.php?site_id=SP_7f9505cc&api_key=sk_1a2b3c..."</code>
+                        </li>
+                        <li><strong>Avec JavaScript</strong> (fetch) :
+                            <code>
+fetch(`https://gael-berru.com/.../api.php?site_id=SP_7f9505cc&api_key=sk_1a2b3c...`)
+  .then(response => response.json())
+  .then(data => console.log(data));
+                            </code>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Étape 4 : Exemple de réponse -->
+                <div class="tutorial-step">
+                    <h3><i class="fas fa-file-code"></i> 4. Exemple de réponse JSON</h3>
+                    <p>Voici un exemple de réponse :</p>
+                    <code>
+{
+  "success": true,
+  "data": [
+    {
+      "date": "2026-01-01",
+      "visits": 42,
+      "unique_visitors": 30,
+      "sessions": 35
+    },
+    {
+      "date": "2026-01-02",
+      "visits": 50,
+      "unique_visitors": 38,
+      "sessions": 40
+    }
+  ],
+  "meta": {
+    "site_id": "SP_7f9505cc",
+    "start_date": "2026-01-01",
+    "end_date": "2026-02-01",
+    "total_visits": 92,
+    "total_unique_visitors": 68
+  }
+}
+                    </code>
+                    <p>Les champs disponibles :</p>
+                    <ul>
+                        <li><code>date</code> : Date des données.</li>
+                        <li><code>visits</code> : Nombre total de visites.</li>
+                        <li><code>unique_visitors</code> : Visiteurs uniques (par IP).</li>
+                        <li><code>sessions</code> : Nombre de sessions.</li>
+                    </ul>
+                </div>
+
+                <!-- Étape 5 : Intégration avec des outils -->
+                <div class="tutorial-step">
+                    <h3><i class="fas fa-tools"></i> 5. Intégrer avec des outils</h3>
+                    <p>Tu peux utiliser ces données avec :</p>
+                    <ul>
+                        <li><strong>Google Data Studio</strong> : Crée une source de données personnalisée.</li>
+                        <li><strong>Excel/Google Sheets</strong> : Utilise <code>=IMPORTDATA("https://...")</code>.</li>
+                        <li><strong>Tableau de bord custom</strong> : Utilise Chart.js (voir ci-dessous).</li>
+                    </ul>
+                    <p>Exemple de code pour un graphique avec Chart.js :</p>
+                    <code>
+&lt;canvas id="visitsChart" width="800" height="400"&gt;&lt;/canvas&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/chart.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  fetch(`https://gael-berru.com/.../api.php?site_id=SP_7f9505cc&api_key=sk_1a2b3c...`)
+    .then(response => response.json())
+    .then(data => {
+      const labels = data.data.map(item => item.date);
+      const visits = data.data.map(item => item.visits);
+      new Chart(document.getElementById('visitsChart'), {
+        type: 'line',
+        data: { labels, datasets: [{ label: 'Visites', data: visits }] }
+      });
+    });
+&lt;/script&gt;
+                    </code>
+                </div>
+
+                <!-- Étape 6 : Gérer les erreurs -->
+                <div class="tutorial-step">
+                    <h3><i class="fas fa-exclamation-triangle"></i> 6. Gérer les erreurs</h3>
+                    <p>Voici les erreurs possibles et leurs solutions :</p>
+                    <ul>
+                        <li><strong>400</strong> : Paramètres manquants. Vérifie l'URL.</li>
+                        <li><strong>403</strong> : Clé API ou code de tracking invalide. Vérifie tes identifiants.</li>
+                        <li><strong>404</strong> : Site non trouvé. Vérifie le <code>site_id</code>.</li>
+                        <li><strong>500</strong> : Erreur serveur. Contacte le support.</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Copier la clé API dans le presse-papiers
-        function copyToClipboard() {
-            const apiKey = document.getElementById('apiKey').textContent;
-            navigator.clipboard.writeText(apiKey)
+        // Copier dans le presse-papiers
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent || element.value;
+            navigator.clipboard.writeText(text)
                 .then(() => {
                     const toast = document.createElement('div');
                     toast.className = 'toast';
-                    toast.innerHTML = '<i class="fas fa-check-circle"></i> Clé API copiée !';
+                    toast.innerHTML = '<i class="fas fa-check-circle"></i> Copié dans le presse-papiers !';
                     document.body.appendChild(toast);
                     setTimeout(() => {
                         toast.classList.add('show');
