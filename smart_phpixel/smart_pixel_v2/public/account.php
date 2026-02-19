@@ -13,7 +13,7 @@ $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS)
 
 // Récupérer les infos utilisateur
 $stmt = $pdo->prepare("
-    SELECT email, api_key, created_at, plan,
+    SELECT email, api_token, created_at, plan,
            (SELECT COUNT(*) FROM user_sites WHERE user_id = users.id) as sites_count
     FROM users WHERE id = ?
 ");
@@ -21,11 +21,11 @@ $stmt->execute([$userId]);
 $user = $stmt->fetch();
 
 // Régénérer la clé API si demandé
-if (isset($_POST['regenerate_api_key'])) {
+if (isset($_POST['regenerate_api_token'])) {
     $newApiKey = 'sk_' . bin2hex(random_bytes(16));
-    $stmt = $pdo->prepare("UPDATE users SET api_key = ? WHERE id = ?");
+    $stmt = $pdo->prepare("UPDATE users SET api_token = ? WHERE id = ?");
     $stmt->execute([$newApiKey, $userId]);
-    $user['api_key'] = $newApiKey;
+    $user['api_token'] = $newApiKey;
     $success = "Votre clé API a été régénérée avec succès.";
 }
 ?>
@@ -340,7 +340,7 @@ if (isset($_POST['regenerate_api_key'])) {
 
                 <div class="api-key-container">
                     <div class="api-key-display">
-                        <code id="apiKey"><?= htmlspecialchars($user['api_key']) ?></code>
+                        <code id="apiKey"><?= htmlspecialchars($user['api_token']) ?></code>
                         <button class="copy-button" onclick="copyToClipboard()">
                             <i class="fas fa-copy"></i>
                         </button>
@@ -348,11 +348,22 @@ if (isset($_POST['regenerate_api_key'])) {
                 </div>
 
                 <form method="POST" style="display: inline;">
-                    <button type="submit" name="regenerate_api_key" class="regenerate-button">
+                    <button type="submit" name="regenerate_api_token" class="regenerate-button">
                         <i class="fas fa-sync-alt"></i> Régénérer la clé
                     </button>
                 </form>
             </div>
+
+            <div class="api-key-container">
+                    <div class="api-key-display">
+                        <h3>Exemple d'utilisation de l'API :</h3>
+                        <code id="apiKey">https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php?site_id=SP_12345&start_date=2026-01-01&end_date=2026-02-01&api_token=TON_TOKEN</code>
+                        <button class="copy-button" onclick="copyToClipboard()">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
         </div>
     </div>
 

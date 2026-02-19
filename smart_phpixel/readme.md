@@ -34,7 +34,7 @@ Disponible
 
 ### 🚀 **En développement (version Premium)**
 - **Inclure la barre des cookies dans le pixel id**
-- **API RESTful** : Accès programmatique à vos données
+- **API RESTful** : Accès programmatique à vos données ( acceder a votre profil pour obtenir votre api key )
 - **Export JSON/CSV** : Données brutes pour traitement externe
 - **Webhooks** : Notifications en temps réel
 - **Intégrations** : ... software Européen ...
@@ -161,6 +161,23 @@ Le plan gratuit vous permet de suivre **1 site**. Pour ajouter un site :
 4. Récupérez le nouveau code de tracking
 
 Chaque site a son propre **tracking code** (ex: `SP_79747769`). Installez le code correspondant sur chaque site.
+
+
+## **Tester l’API**
+
+### Ajoutez votre site id avant votre token et insérez vos requete entre les deux !
+    URL d’exemple :
+    https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php?site_id=SP_12345&start_date=2026-01-01&end_date=2026-02-01&api_token=TON_TOKEN
+
+
+### Intégrer avec ton dashboard ou outils externes. Depuis un script JS :
+
+```html
+    fetch(`https://ton-domaine.com/smart_pixel_v2/public/api.php?site_id=SP_12345&start_date=2026-01-01&end_date=2026-02-01&api_key=TON_TOKEN`)
+    .then(response => response.json())
+    .then(data => console.log(data));
+
+```
 
 ---
 
