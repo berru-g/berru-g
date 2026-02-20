@@ -3,17 +3,16 @@
 require_once '../includes/config.php';
 header('Content-Type: application/json');
 
-// Vérifier la signature du webhook 
-$lemonSecret = 'LEMON_WEBHOOK_SECRET'; 
+// Vérifier la signature du webhook
+$lemonSecret = 'LEMON_WEBHOOK_SECRET';
 $payload = file_get_contents('php://input');
-// Vérifie que c'est bien Lemon qui appelle
 $signature = $_SERVER['HTTP_X_SIGNATURE'] ?? '';
- 
+
 // Valider la signature
 if (!hash_equals(hash_hmac('sha256', $payload, $lemonSecret), $signature)) {
     http_response_code(401);
     exit('Signature invalide');
-} 
+}
 
 $data = json_decode($payload, true);
 $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8", DB_USER, DB_PASS);
@@ -23,21 +22,19 @@ file_put_contents('../storage/logs/webhook.log', date('Y-m-d H:i:s') . ' - ' . $
 
 // Traiter l'événement
 $eventName = $data['meta']['event_name'] ?? '';
-$customData = $data['data']['attributes']['user_email'] ?? $data['data']['attributes']['custom'] ?? [];
+$eventData = $data['data']['attributes'] ?? [];
+$customData = $eventData['custom'] ?? [];
 
-// Extraire les données custom (celles qu'on a passées dans le checkout)
-if (isset($customData['custom'])) {
-    $userId = $customData['custom']['user_id'] ?? null;
-    $plan = $customData['custom']['plan'] ?? null;
-} else {
-    // Fallback : essayer de récupérer depuis l'email
-    $userEmail = $data['data']['attributes']['user_email'] ?? '';
-    if ($userEmail) {
-        $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
-        $stmt->execute([$userEmail]);
-        $user = $stmt->fetch();
-        $userId = $user['id'] ?? null;
-    }
+// Extraire les données custom (user_id et billing_cycle)
+$userId = $customData['user_id'] ?? null;
+$billingCycle = $customData['billing_cycle'] ?? 'monthly'; // mensuel par défaut
+
+// Si user_id n'est pas dans les custom data, essayer de le récupérer via l'email
+if (!$userId && isset($eventData['user_email'])) {
+    $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+    $stmt->execute([$eventData['user_email']]);
+    $user = $stmt->fetch();
+    $userId = $user['id'] ?? null;
 }
 
 if (!$userId) {
@@ -45,73 +42,125 @@ if (!$userId) {
     exit('User ID non trouvé');
 }
 
+// Fonction pour mettre à jour l'utilisateur
+function updateUser($pdo, $userId, $plan, $billingCycle, $endsAt = null) {
+    $stmt = $pdo->prepare("
+        UPDATE users
+        SET
+            plan = ?,
+            billing_cycle = ?,
+            sites_limit = 99,  -- Illimité pour Premium
+            subscription_end = ?
+        WHERE id = ?
+    ");
+    $stmt->execute([
+        $plan,
+        $billingCycle,
+        $endsAt,
+        $userId
+    ]);
+}
+
+// Fonction pour ajouter un paiement à l'historique
+function addPayment($pdo, $userId, $plan, $amount, $status, $lemonId, $billingCycle) {
+    $stmt = $pdo->prepare("
+        INSERT INTO payments
+        (user_id, plan, amount, status, lemon_id, billing_cycle, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, NOW())
+    ");
+    $stmt->execute([
+        $userId,
+        $plan,
+        $amount,
+        $status,
+        $lemonId,
+        $billingCycle
+    ]);
+}
+
+// Fonction pour ajouter/modifier un abonnement
+function updateSubscription($pdo, $userId, $lemonSubscriptionId, $status, $currentPeriodEnd) {
+    $stmt = $pdo->prepare("
+        INSERT INTO subscriptions
+        (user_id, lemon_subscription_id, status, current_period_end, created_at, updated_at)
+        VALUES (?, ?, ?, ?, NOW(), NOW())
+        ON DUPLICATE KEY UPDATE
+            status = VALUES(status),
+            current_period_end = VALUES(current_period_end),
+            updated_at = NOW()
+    ");
+    $stmt->execute([
+        $userId,
+        $lemonSubscriptionId,
+        $status,
+        $currentPeriodEnd
+    ]);
+}
+
 switch ($eventName) {
     case 'subscription_created':
     case 'subscription_updated':
     case 'subscription_resumed':
-        $status = $data['data']['attributes']['status'] ?? '';
-        $variantId = $data['data']['attributes']['variant_id'] ?? '';
-        
-        // Déterminer le plan depuis le variant_id
-        $plan = ($variantId == 'YOUR_PRO_VARIANT_ID') ? 'pro' : 
-                ($variantId == 'YOUR_BUSINESS_VARIANT_ID' ? 'business' : 'free');
-        
-        // Définir la limite de sites selon le plan
-        $sitesLimit = $plan == 'pro' ? 5 : 20;
-        
+        $status = $eventData['status'] ?? '';
+        $lemonSubscriptionId = $eventData['id'] ?? '';
+        $variantId = $eventData['variant_id'] ?? '';
+        $currentPeriodEnd = $eventData['renews_at'] ?? $eventData['ends_at'] ?? null;
+
+        // Déterminer le plan (toujours "premium" pour le nouveau système)
+        $plan = 'premium';
+
         // Mettre à jour l'utilisateur
-        $stmt = $pdo->prepare("UPDATE users SET plan = ?, sites_limit = ?, last_payment = NOW() WHERE id = ?");
-        $stmt->execute([$plan, $sitesLimit, $userId]);
-        
+        updateUser($pdo, $userId, $plan, $billingCycle, $currentPeriodEnd);
+
         // Ajouter à l'historique des paiements
-        $stmt = $pdo->prepare("
-            INSERT INTO payments (user_id, plan, amount, status, lemon_id, created_at)
-            VALUES (?, ?, ?, ?, ?, NOW())
-        ");
-        $stmt->execute([
-            $userId,
-            $plan,
-            $data['data']['attributes']['renewal_price'] / 100, // Convertir centimes en euros
-            $status,
-            $data['data']['id'] ?? ''
-        ]);
-        
+        $amount = $eventData['renewal_price'] / 100; // Convertir centimes en euros
+        addPayment($pdo, $userId, $plan, $amount, $status, $lemonSubscriptionId, $billingCycle);
+
+        // Mettre à jour l'abonnement
+        updateSubscription($pdo, $userId, $lemonSubscriptionId, $status, $currentPeriodEnd);
+
         http_response_code(200);
-        echo 'OK';
+        echo json_encode(['success' => true, 'message' => 'Abonnement mis à jour']);
         break;
-        
+
     case 'subscription_cancelled':
     case 'subscription_expired':
-        // Rétrograder en free après la fin de la période payée
-        $stmt = $pdo->prepare("UPDATE users SET plan = 'free', sites_limit = 1 WHERE id = ?");
-        $stmt->execute([$userId]);
+        // Rétrograder en "free" après la fin de la période payée
+        updateUser($pdo, $userId, 'free', null, null);
+
+        // Mettre à jour le statut de l'abonnement
+        $lemonSubscriptionId = $eventData['id'] ?? '';
+        updateSubscription($pdo, $userId, $lemonSubscriptionId, 'cancelled', null);
+
         http_response_code(200);
-        echo 'OK';
+        echo json_encode(['success' => true, 'message' => 'Abonnement annulé']);
         break;
-        
+
+    case 'subscription_payment_success':
+        // Mettre à jour le statut du paiement
+        $lemonSubscriptionId = $eventData['subscription_id'] ?? '';
+        $amount = $eventData['total'] / 100; // Convertir centimes en euros
+
+        addPayment($pdo, $userId, 'premium', $amount, 'paid', $lemonSubscriptionId, $billingCycle);
+
+        http_response_code(200);
+        echo json_encode(['success' => true, 'message' => 'Paiement enregistré']);
+        break;
+
     case 'order_created':
         // Traiter une commande unique (pas un abonnement)
-        $status = $data['data']['attributes']['status'] ?? '';
+        $status = $eventData['status'] ?? '';
         if ($status === 'paid') {
-            // Mettre à jour le statut de paiement
-            $stmt = $pdo->prepare("
-                INSERT INTO payments (user_id, plan, amount, status, lemon_id, created_at)
-                VALUES (?, 'one_time', ?, ?, ?, NOW())
-            ");
-            $stmt->execute([
-                $userId,
-                $data['data']['attributes']['total'] / 100,
-                $status,
-                $data['data']['id'] ?? ''
-            ]);
+            $amount = $eventData['total'] / 100;
+            addPayment($pdo, $userId, 'one_time', $amount, $status, $eventData['id'] ?? '', $billingCycle);
         }
         http_response_code(200);
-        echo 'OK';
+        echo json_encode(['success' => true, 'message' => 'Commande traitée']);
         break;
-        
+
     default:
         http_response_code(200);
-        echo 'Événement non traité';
+        echo json_encode(['success' => true, 'message' => 'Événement non traité : ' . $eventName]);
         break;
 }
 ?>

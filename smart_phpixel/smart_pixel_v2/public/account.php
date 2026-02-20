@@ -368,7 +368,7 @@ if (isset($_POST['regenerate_api_key'])) {
     <div class="container">
         <div class="card">
             <div class="header">
-                <h1>Mon compte</h1>
+                <h1>Mon API</h1>
                 <a href="dashboard.php" class="back-button">
                     <i class="fas fa-arrow-left"></i> Retour au dashboard
                 </a>
@@ -412,7 +412,7 @@ if (isset($_POST['regenerate_api_key'])) {
 
             <div class="api-section">
                 <h2>Clé API</h2>
-                <p>Utilisez cette clé pour accéder à l'API de Smart Pixel. <strong>Ne la partagez jamais.</strong></p>
+                <p>Utilisez cette clé pour accéder à l'API de Smart Pixel. <strong>Ne la partagez jamais. En cas de partage public (push git, article, etc), régénérez immédiatement votre clé et changer votre mdp.</strong></p>
 
                 <div class="api-key-container">
                     <div class="api-key-display">
@@ -435,9 +435,9 @@ if (isset($_POST['regenerate_api_key'])) {
                 <h3>Exemple d'URL</h3>
                 <div class="api-key-display">
                     <code id="apiUrlExample">
-                        https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php?
-                        site_id=<strong>SP_<?= htmlspecialchars(substr($user['api_key'], 0, 6)) ?></strong>&
-                        api_key=<strong>VOTRE_CLE_API</strong>&
+                        https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php?&
+                        site_id=<strong>SP_<?= htmlspecialchars(substr($user['api_key'], 0, 6)) ?></strong>?&
+                        api_key=<strong>VOTRE_CLE_API</strong>?&
                         start_date=2026-01-01&
                         end_date=2026-02-01
                     </code>
@@ -456,7 +456,7 @@ if (isset($_POST['regenerate_api_key'])) {
                     <h3><i class="fas fa-key"></i> 1. Récupérer tes identifiants</h3>
                     <p>Pour utiliser l'API, tu as besoin de :</p>
                     <ul>
-                        <li><strong>Code de tracking</strong> : Identifiant de ton site (ex: <code>SP_7f9505cc</code>).</li>
+                        <li><strong>Code de tracking</strong> : Identifiant de ton site (ex: <code>SP_24m87bb</code>).</li>
                         <li><strong>Clé API</strong> : Clé secrète pour authentifier tes requêtes (ci-dessus).</li>
                     </ul>
                     <p>Tu peux trouver ton <strong>code de tracking</strong> dans la section "Mes sites" du dashboard.</p>
@@ -469,7 +469,7 @@ if (isset($_POST['regenerate_api_key'])) {
                     <code>https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php</code>
                     <p>Ajoute les paramètres suivants :</p>
                     <ul>
-                        <li><code>site_id</code> : Ton code de tracking (ex: <code>SP_7f9505cc</code>).</li>
+                        <li><code>site_id</code> : Ton code de tracking (ex: <code>SP_24m87bb</code>).</li>
                         <li><code>api_key</code> : Ta clé API (copie-la ci-dessus).</li>
                         <li><code>start_date</code> (optionnel) : Date de début (ex: <code>2026-01-01</code>).</li>
                         <li><code>end_date</code> (optionnel) : Date de fin (ex: <code>2026-02-01</code>).</li>
@@ -477,7 +477,7 @@ if (isset($_POST['regenerate_api_key'])) {
                     <p>Exemple d'URL complète :</p>
                     <div class="example-url">
                         https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php?
-                        site_id=<strong>SP_7f9505cc</strong>&
+                        site_id=<strong>SP_24m87bb</strong>&
                         api_key=<strong>sk_1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p</strong>&
                         start_date=<strong>2026-01-01</strong>&
                         end_date=<strong>2026-02-01</strong>
@@ -489,13 +489,14 @@ if (isset($_POST['regenerate_api_key'])) {
                     <h3><i class="fas fa-download"></i> 3. Récupérer les données</h3>
                     <p>Tu peux récupérer les données de 3 manières :</p>
                     <ul>
-                        <li><strong>Depuis un navigateur</strong> : Copie-colle l'URL dans la barre d'adresse.</li>
+                        <li><strong>Depuis un navigateur</strong> : Copie-colle l'URL dans la barre d'adresse, ou crée ton propre dashboard,</li>
+                        <li><strong><a href="https://codepen.io/h-lautre/pen/EayBqeE?editors=1000">Avec notre template</a></strong>.</li>
                         <li><strong>Avec cURL</strong> (terminal) :
-                            <code>curl "https://gael-berru.com/.../api.php?site_id=SP_7f9505cc&api_key=sk_1a2b3c..."</code>
+                            <code>curl "https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c..."</code>
                         </li>
                         <li><strong>Avec JavaScript</strong> (fetch) :
                             <code>
-fetch(`https://gael-berru.com/.../api.php?site_id=SP_7f9505cc&api_key=sk_1a2b3c...`)
+fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c...`)
   .then(response => response.json())
   .then(data => console.log(data));
                             </code>
@@ -525,7 +526,7 @@ fetch(`https://gael-berru.com/.../api.php?site_id=SP_7f9505cc&api_key=sk_1a2b3c.
     }
   ],
   "meta": {
-    "site_id": "SP_7f9505cc",
+    "site_id": "SP_24m87bb",
     "start_date": "2026-01-01",
     "end_date": "2026-02-01",
     "total_visits": 92,
@@ -556,7 +557,7 @@ fetch(`https://gael-berru.com/.../api.php?site_id=SP_7f9505cc&api_key=sk_1a2b3c.
 &lt;canvas id="visitsChart" width="800" height="400"&gt;&lt;/canvas&gt;
 &lt;script src="https://cdn.jsdelivr.net/npm/chart.js"&gt;&lt;/script&gt;
 &lt;script&gt;
-  fetch(`https://gael-berru.com/.../api.php?site_id=SP_7f9505cc&api_key=sk_1a2b3c...`)
+  fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c...`)
     .then(response => response.json())
     .then(data => {
       const labels = data.data.map(item => item.date);
@@ -581,6 +582,19 @@ fetch(`https://gael-berru.com/.../api.php?site_id=SP_7f9505cc&api_key=sk_1a2b3c.
                         <li><strong>500</strong> : Erreur serveur. Contacte le support.</li>
                     </ul>
                 </div>
+
+                 <!-- Étape 7 : Doc -->
+                <div class="tutorial-step">
+                    <h3><i class="fa-regular fa-folder-open"></i></i> 7. Documentation complète :</h3>
+                    <p>Pour plus de détails sur les paramètres, les data, et les limites de l'API, consulte notre documentation complète :</p>
+                <a href="dashboard.php" class="back-button">
+                    <i class="fas fa-arrow-left"></i> Retour au dashboard
+                </a>
+                <a href="../../doc/" class="back-button">
+                    La Documentation <i class="fas fa-arrow-right"></i>
+                </a>
+                </div>
+
             </div>
         </div>
     </div>

@@ -325,7 +325,7 @@ function getCountryCodeSimple($countryName)
 
 <body>
 
-    <!-- === Sidebar redessinée - Design moderne & rétractable === -->
+    <!-- === Sidebar redessinéefaçon site perso - Design moderne & rétractable === -->
     <div class="sidebar-wrapper">
         <div class="sidebar <?= isset($_COOKIE['sidebar_collapsed']) && $_COOKIE['sidebar_collapsed'] === 'true' ? 'collapsed' : '' ?>" id="sidebar">
             <!-- En-tête de la sidebar -->
@@ -1307,7 +1307,7 @@ function getCountryCodeSimple($countryName)
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                             <circle cx="12" cy="7" r="4" />
                         </svg> 
-                        <span class="subtitle">Gérer mon compte, mot de passe, sites connectés</span>
+                        <span class="subtitle">L'API et sa Documentation</span>
                     </a>
 
                     <a href="../contact/" class="modal-link"> <!-- adapte selon ton URL réelle -->

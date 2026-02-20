@@ -2096,6 +2096,9 @@ canvas {
 }
 /* MODAL PARAMETRE */
 .settings-modal {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
   border: 1px solid var(--border-color);
   border-radius: 12px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.25);
@@ -2133,7 +2136,6 @@ canvas {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-bottom: 1.8rem;
 }
 
 .modal-link {
@@ -2156,8 +2158,8 @@ canvas {
 }
 
 .modal-link.primary {
-  background: var(--primary-color);
-  color: white;
+  border:1px solid var(--primary-color);
+  color: var(--text-color);
 }
 
 .modal-link.primary:hover {
@@ -2180,8 +2182,8 @@ canvas {
 
 .btn-cancel {
   padding: 0.75rem 2.2rem;
-  background: #6b7280;
-  color: white;
+  background: var(--text-color);
+  color: var(--bg-color);
   border: none;
   border-radius: 10px;
   font-weight: 500;

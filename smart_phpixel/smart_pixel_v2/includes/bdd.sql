@@ -135,3 +135,37 @@ UPDATE users
 SET api_key = CONCAT('sk_', UPPER(SUBSTRING(MD5(RAND()), 1, 24)))
 WHERE api_key IS NULL OR api_key = '';
 
+-- Changement de la logique d'abonnement, un seul plan mensuel ou annuel.
+-- 1. Ajouter les champs manquants pour gérer les abonnements et cycles de facturation
+ALTER TABLE users
+ADD COLUMN IF NOT EXISTS billing_cycle ENUM('monthly', 'yearly') DEFAULT NULL AFTER plan,
+ADD COLUMN IF NOT EXISTS subscription_end DATE DEFAULT NULL AFTER billing_cycle;
+
+-- 2. Mettre à jour les plans existants pour le nouveau système (optionnel, si migration)
+-- Remplace 'pro' et 'business' par 'premium' pour les utilisateurs existants
+UPDATE users
+SET plan = 'premium'
+WHERE plan IN ('pro', 'business');
+
+-- 3. Ajouter un champ pour suivre le nombre de sites illimités pour Premium
+UPDATE users
+SET sites_limit = 99
+WHERE plan = 'premium';
+
+-- 4. Ajouter un champ pour le type de facturation aux paiements existants (si la table existe déjà)
+ALTER TABLE payments
+ADD COLUMN IF NOT EXISTS billing_cycle ENUM('monthly', 'yearly') DEFAULT NULL AFTER plan;
+
+-- 5. Ajouter un champ pour l'ID de l'abonnement Lemon Squeezy dans la table subscriptions (déjà créée)
+-- La table subscriptions existe déjà dans ton schéma, mais voici une vérification :
+ALTER TABLE subscriptions
+ADD COLUMN IF NOT EXISTS billing_cycle ENUM('monthly', 'yearly') DEFAULT NULL AFTER status;
+
+-- 6. Mettre à jour les abonnements existants (si migration depuis l'ancien système)
+-- Exemple : mettre à jour les abonnements "pro" en "premium" avec un cycle mensuel
+UPDATE subscriptions
+SET plan = 'premium', billing_cycle = 'monthly'
+WHERE plan IN ('pro', 'business');
+
+-- 7. Créer un index pour optimiser les requêtes sur les abonnements actifs
+
