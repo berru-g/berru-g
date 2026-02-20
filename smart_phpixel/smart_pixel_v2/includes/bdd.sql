@@ -135,7 +135,7 @@ UPDATE users
 SET api_key = CONCAT('sk_', UPPER(SUBSTRING(MD5(RAND()), 1, 24)))
 WHERE api_key IS NULL OR api_key = '';
 
--- Changement de la logique d'abonnement, un seul plan mensuel ou annuel.
+-- Changement de la logique d'abonnement, un seul plan mensuel ou annuel. Version non 
 -- 1. Ajouter les champs manquants pour gérer les abonnements et cycles de facturation
 ALTER TABLE users
 ADD COLUMN IF NOT EXISTS billing_cycle ENUM('monthly', 'yearly') DEFAULT NULL AFTER plan,
