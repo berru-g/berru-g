@@ -31,7 +31,8 @@ if (isset($_POST['regenerate_api_key'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="fr" data-theme="light">
+<html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,7 +42,7 @@ if (isset($_POST['regenerate_api_key'])) {
         :root {
             --primary: #9d86ff;
             --primary-dark: #9d86ff;
-            --secondary: #f8f9fa;
+            --bg: #f8f9fa;
             --text: #333;
             --text-light: #666;
             --border: #e9ecef;
@@ -55,15 +56,15 @@ if (isset($_POST['regenerate_api_key'])) {
 
         @media (prefers-color-scheme: dark) {
             :root {
-            --primary: #9d86ff;
-            --primary-dark: #9d86ff;
-            --secondary: #1e1e2d;
-            --text: #f8f9fa;
-            --text-light: #adb5bd;
-            --border: #343a40;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+                --primary: #9d86ff;
+                --primary-dark: #9d86ff;
+                --bg: #1e1e2d;
+                --text: #f8f9fa;
+                --text-light: #adb5bd;
+                --border: #343a40;
+                --shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            }
         }
-}
 
         * {
             margin: 0;
@@ -74,7 +75,7 @@ if (isset($_POST['regenerate_api_key'])) {
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--secondary);
+            background-color: var(--bg);
             color: var(--text);
             line-height: 1.6;
         }
@@ -86,7 +87,8 @@ if (isset($_POST['regenerate_api_key'])) {
         }
 
         .card {
-            background: white;
+            background: (--bg);
+            color: var(--text);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             padding: 2rem;
@@ -113,7 +115,7 @@ if (isset($_POST['regenerate_api_key'])) {
         .back-button {
             display: inline-flex;
             align-items: center;
-            background: var(--secondary);
+            background: var(--bg);
             color: var(--primary);
             text-decoration: none;
             padding: 0.5rem 1rem;
@@ -138,12 +140,12 @@ if (isset($_POST['regenerate_api_key'])) {
         .info-card {
             padding: 1.5rem;
             border-radius: var(--radius);
-            background: var(--secondary);
+            background: var(--bg);
             border: 1px solid var(--border);
         }
 
         .info-card h3 {
-            color: var(--text-light);
+            color: var(--text);
             font-size: 0.9rem;
             font-weight: 600;
             margin-bottom: 1rem;
@@ -203,7 +205,8 @@ if (isset($_POST['regenerate_api_key'])) {
         .api-key-display {
             display: flex;
             align-items: center;
-            background: var(--secondary);
+            background: var(--bg);
+            color: var(--text);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             padding: 1rem;
@@ -211,11 +214,12 @@ if (isset($_POST['regenerate_api_key'])) {
         }
 
         .api-key-display code {
+            
             font-family: 'Courier New', monospace;
             font-size: 0.9rem;
             flex-grow: 1;
         }
-
+ 
         .copy-button {
             background: none;
             border: none;
@@ -292,7 +296,7 @@ if (isset($_POST['regenerate_api_key'])) {
         }
 
         .tutorial-step {
-            background: var(--secondary);
+            background: var(--bg);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             padding: 1.5rem;
@@ -319,7 +323,8 @@ if (isset($_POST['regenerate_api_key'])) {
 
         .tutorial-step code {
             display: block;
-            background: #f0f0f0;
+            background-color: var(--text-light);
+            color: var(--text);
             padding: 0.8rem;
             border-radius: 4px;
             font-family: 'Courier New', monospace;
@@ -338,7 +343,8 @@ if (isset($_POST['regenerate_api_key'])) {
         }
 
         .example-url {
-            background: #f0f0f0;
+            background-color: var(--text-light);
+            color: var(--text);
             padding: 0.5rem;
             border-radius: 4px;
             font-family: monospace;
@@ -358,8 +364,13 @@ if (isset($_POST['regenerate_api_key'])) {
                 gap: 1rem;
             }
         }
+        a {
+            color: var(--primary);
+            text-decoration: none;
+        }
     </style>
 </head>
+
 <body>
     <?php include '../includes/header.php'; ?>
 
@@ -493,9 +504,9 @@ if (isset($_POST['regenerate_api_key'])) {
                         </li>
                         <li><strong>Avec JavaScript</strong> (fetch) :
                             <code>
-fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c...`)
-  .then(response => response.json())
-  .then(data => console.log(data));
+                                fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c...`)
+                                .then(response => response.json())
+                                .then(data => console.log(data));
                             </code>
                         </li>
                     </ul>
@@ -506,30 +517,30 @@ fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c..
                     <h3><i class="fas fa-file-code"></i> 4. Exemple de réponse JSON</h3>
                     <p>Voici un exemple de réponse :</p>
                     <code>
-{
-  "success": true,
-  "data": [
-    {
-      "date": "2026-01-01",
-      "visits": 42,
-      "unique_visitors": 30,
-      "sessions": 35
-    },
-    {
-      "date": "2026-01-02",
-      "visits": 50,
-      "unique_visitors": 38,
-      "sessions": 40
-    }
-  ],
-  "meta": {
-    "site_id": "SP_24m87bb",
-    "start_date": "2026-01-01",
-    "end_date": "2026-02-01",
-    "total_visits": 92,
-    "total_unique_visitors": 68
-  }
-}
+                        {
+                        "success": true,
+                        "data": [
+                        {
+                        "date": "2026-01-01",
+                        "visits": 42,
+                        "unique_visitors": 30,
+                        "sessions": 35
+                        },
+                        {
+                        "date": "2026-01-02",
+                        "visits": 50,
+                        "unique_visitors": 38,
+                        "sessions": 40
+                        }
+                        ],
+                        "meta": {
+                        "site_id": "SP_24m87bb",
+                        "start_date": "2026-01-01",
+                        "end_date": "2026-02-01",
+                        "total_visits": 92,
+                        "total_unique_visitors": 68
+                        }
+                        }
                     </code>
                     <p>Les champs disponibles :</p>
                     <ul>
@@ -551,20 +562,20 @@ fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c..
                     </ul>
                     <p>Exemple de code pour un graphique avec Chart.js :</p>
                     <code>
-&lt;canvas id="visitsChart" width="800" height="400"&gt;&lt;/canvas&gt;
-&lt;script src="https://cdn.jsdelivr.net/npm/chart.js"&gt;&lt;/script&gt;
-&lt;script&gt;
-  fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c...`)
-    .then(response => response.json())
-    .then(data => {
-      const labels = data.data.map(item => item.date);
-      const visits = data.data.map(item => item.visits);
-      new Chart(document.getElementById('visitsChart'), {
-        type: 'line',
-        data: { labels, datasets: [{ label: 'Visites', data: visits }] }
-      });
-    });
-&lt;/script&gt;
+                        &lt;canvas id="visitsChart" width="800" height="400"&gt;&lt;/canvas&gt;
+                        &lt;script src="https://cdn.jsdelivr.net/npm/chart.js"&gt;&lt;/script&gt;
+                        &lt;script&gt;
+                        fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c...`)
+                        .then(response => response.json())
+                        .then(data => {
+                        const labels = data.data.map(item => item.date);
+                        const visits = data.data.map(item => item.visits);
+                        new Chart(document.getElementById('visitsChart'), {
+                        type: 'line',
+                        data: { labels, datasets: [{ label: 'Visites', data: visits }] }
+                        });
+                        });
+                        &lt;/script&gt;
                     </code>
                 </div>
 
@@ -580,16 +591,16 @@ fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c..
                     </ul>
                 </div>
 
-                 <!-- Étape 7 : Doc -->
+                <!-- Étape 7 : Doc -->
                 <div class="tutorial-step">
                     <h3><i class="fa-regular fa-folder-open"></i></i> 7. Documentation complète :</h3>
                     <p>Pour plus de détails sur les paramètres, les data, et les limites de l'API, consulte notre documentation complète :</p>
-                <a href="dashboard.php" class="back-button">
-                    <i class="fas fa-arrow-left"></i> Retour au dashboard
-                </a>
-                <a href="../../doc/" class="back-button">
-                    La Documentation <i class="fas fa-arrow-right"></i>
-                </a>
+                    <a href="dashboard.php" class="back-button">
+                        <i class="fas fa-arrow-left"></i> Retour au dashboard
+                    </a>
+                    <a href="../../doc/" class="back-button">
+                        La Documentation <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
 
             </div>
@@ -630,4 +641,5 @@ fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c..
         }, 3000);
     </script>
 </body>
+
 </html>

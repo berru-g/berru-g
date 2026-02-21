@@ -8,9 +8,6 @@ if (!Auth::isLoggedIn()) {
     exit();
 }
 
-$userId = $_SESSION['user_id'];
-$pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
-
 // Récupérer les commits de l'utilisateur
 $stmt = $pdo->prepare("SELECT * FROM git_commits WHERE user_id = ? ORDER BY date DESC");
 $stmt->execute([$userId]);
@@ -43,6 +40,9 @@ function getCommitType($message)
     return "other";
 }
 
+$userId = $_SESSION['user_id'];
+$pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
+
 // Récupérer les infos utilisateur
 $stmt = $pdo->prepare("
     SELECT email, api_key, created_at, plan,
@@ -64,7 +64,7 @@ if (isset($_POST['regenerate_api_key'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="fr" data-theme="light">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
@@ -75,7 +75,7 @@ if (isset($_POST['regenerate_api_key'])) {
         :root {
             --primary: #9d86ff;
             --primary-dark: #9d86ff;
-            --secondary: #f8f9fa;
+            --bg: #f8f9fa;
             --text: #333;
             --text-light: #666;
             --border: #e9ecef;
@@ -91,7 +91,7 @@ if (isset($_POST['regenerate_api_key'])) {
             :root {
                 --primary: #9d86ff;
                 --primary-dark: #9d86ff;
-                --secondary: #1e1e2d;
+                --bg: #1e1e2d;
                 --text: #f8f9fa;
                 --text-light: #adb5bd;
                 --border: #343a40;
@@ -108,7 +108,7 @@ if (isset($_POST['regenerate_api_key'])) {
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--secondary);
+            background-color: var(--bg);
             color: var(--text);
             line-height: 1.6;
         }
@@ -120,7 +120,8 @@ if (isset($_POST['regenerate_api_key'])) {
         }
 
         .card {
-            background: white;
+            background: (--bg);
+            color: var(--text);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             padding: 2rem;
@@ -147,7 +148,7 @@ if (isset($_POST['regenerate_api_key'])) {
         .back-button {
             display: inline-flex;
             align-items: center;
-            background: var(--secondary);
+            background: var(--bg);
             color: var(--primary);
             text-decoration: none;
             padding: 0.5rem 1rem;
@@ -172,12 +173,12 @@ if (isset($_POST['regenerate_api_key'])) {
         .info-card {
             padding: 1.5rem;
             border-radius: var(--radius);
-            background: var(--secondary);
+            background: var(--bg);
             border: 1px solid var(--border);
         }
 
         .info-card h3 {
-            color: var(--text-light);
+            color: var(--text);
             font-size: 0.9rem;
             font-weight: 600;
             margin-bottom: 1rem;
@@ -237,7 +238,8 @@ if (isset($_POST['regenerate_api_key'])) {
         .api-key-display {
             display: flex;
             align-items: center;
-            background: var(--secondary);
+            background: var(--bg);
+            color: var(--text);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             padding: 1rem;
@@ -245,11 +247,12 @@ if (isset($_POST['regenerate_api_key'])) {
         }
 
         .api-key-display code {
+            
             font-family: 'Courier New', monospace;
             font-size: 0.9rem;
             flex-grow: 1;
         }
-
+ 
         .copy-button {
             background: none;
             border: none;
@@ -326,7 +329,7 @@ if (isset($_POST['regenerate_api_key'])) {
         }
 
         .tutorial-step {
-            background: var(--secondary);
+            background: var(--bg);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             padding: 1.5rem;
@@ -353,7 +356,8 @@ if (isset($_POST['regenerate_api_key'])) {
 
         .tutorial-step code {
             display: block;
-            background: #f0f0f0;
+            background-color: var(--text-light);
+            color: var(--text);
             padding: 0.8rem;
             border-radius: 4px;
             font-family: 'Courier New', monospace;
@@ -372,7 +376,8 @@ if (isset($_POST['regenerate_api_key'])) {
         }
 
         .example-url {
-            background: #f0f0f0;
+            background-color: var(--text-light);
+            color: var(--text);
             padding: 0.5rem;
             border-radius: 4px;
             font-family: monospace;
@@ -392,47 +397,9 @@ if (isset($_POST['regenerate_api_key'])) {
                 gap: 1rem;
             }
         }
-
-        /* Styles pour FullCalendar */
-        #calendar {
-            max-width: 100%;
-            margin: 0 auto;
-            background: var(--secondary);
-            border-radius: var(--radius);
-            padding: 1rem;
-            border: 1px solid var(--border);
-        }
-
-        /* Couleurs des événements (à adapter selon ton thème) */
-        .fc-event-version {
-            background-color: var(--danger);
-            border-color: var(--danger);
-        }
-
-        .fc-event-feature {
-            background-color: var(--success);
-            border-color: var(--success);
-        }
-
-        .fc-event-doc {
-            background-color: var(--warning);
-            border-color: var(--warning);
-        }
-
-        .fc-event-merge {
-            background-color: var(--primary);
-            border-color: var(--primary);
-        }
-
-        .fc-event-init {
-            background-color: var(--warning);
-            border-color: var(--warning);
-        }
-
-        .fc-event-other {
-            background-color: var(--text-light);
-            border-color: var(--text-light);
-            color: var(--text);
+        a {
+            color: var(--primary);
+            text-decoration: none;
         }
     </style>
 </head>
