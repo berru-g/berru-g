@@ -135,7 +135,11 @@ UPDATE users
 SET api_key = CONCAT('sk_', UPPER(SUBSTRING(MD5(RAND()), 1, 24)))
 WHERE api_key IS NULL OR api_key = '';
 
--- Changement de la logique d'abonnement, un seul plan mensuel ou annuel. Version non 
+-- Changement de la logique d'abonnement, un seul plan mensuel 9 ou annuel 90. 
+-- ⚠️ attention pas encore testé rtisue de conflit. 
+-- ⚠️ nb: penser à adapter ugrade, webhook et vérifier les nomination de $userPlan.
+-- ⚠️ Puis  adapter la table user et subscription, puis changer la logique lemon squeezie! 
+
 -- 1. Ajouter les champs manquants pour gérer les abonnements et cycles de facturation
 ALTER TABLE users
 ADD COLUMN IF NOT EXISTS billing_cycle ENUM('monthly', 'yearly') DEFAULT NULL AFTER plan,
@@ -167,5 +171,20 @@ UPDATE subscriptions
 SET plan = 'premium', billing_cycle = 'monthly'
 WHERE plan IN ('pro', 'business');
 
--- 7. Créer un index pour optimiser les requêtes sur les abonnements actifs
+-- FIN DU SYSTEM D'ABONNEMENT
+
+-- Test en cours via account2
+-- Table pour le calendrier de publication et recommandations
+CREATE TABLE `git_commits` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `date` datetime NOT NULL,
+  `message` text NOT NULL,
+  `author` varchar(255) NOT NULL,
+  `hash` varchar(255) NOT NULL,
+  `type` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `git_commits_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

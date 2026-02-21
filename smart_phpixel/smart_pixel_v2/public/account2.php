@@ -11,6 +11,38 @@ if (!Auth::isLoggedIn()) {
 $userId = $_SESSION['user_id'];
 $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
 
+// Récupérer les commits de l'utilisateur
+$stmt = $pdo->prepare("SELECT * FROM git_commits WHERE user_id = ? ORDER BY date DESC");
+$stmt->execute([$userId]);
+$gitCommits = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Ajouter un commit
+if (isset($_POST['add_commit'])) {
+    $date = $_POST['commit_date'];
+    $message = $_POST['commit_message'];
+    $author = $_POST['commit_author'];
+    $hash = $_POST['commit_hash'];
+    $type = getCommitType($message); // Fonction à définir (voir plus bas)
+
+    $stmt = $pdo->prepare("
+        INSERT INTO git_commits (user_id, date, message, author, hash, type)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ");
+    $stmt->execute([$userId, $date, $message, $author, $hash, $type]);
+
+    $success = "Commit ajouté avec succès !";
+}
+
+// Fonction pour catégoriser les commits
+function getCommitType($message)
+{
+    if (preg_match('/^V\./i', $message) || strpos($message, '_V.') !== false) return "version";
+    if (strpos($message, 'doc') !== false) return "doc";
+    if (preg_match('/landing|ui|pseudo-ai|insight/i', $message)) return "feature";
+    if (strpos($message, 'Merge') !== false) return "merge";
+    if (strpos($message, 'first commit') !== false) return "init";
+    return "other";
+}
+
 // Récupérer les infos utilisateur
 $stmt = $pdo->prepare("
     SELECT email, api_key, created_at, plan,
@@ -28,10 +60,12 @@ if (isset($_POST['regenerate_api_key'])) {
     $user['api_key'] = $newApiKey;
     $success = "Votre clé API a été régénérée avec succès.";
 }
+
 ?>
 
 <!DOCTYPE html>
 <html lang="fr" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,15 +89,15 @@ if (isset($_POST['regenerate_api_key'])) {
 
         @media (prefers-color-scheme: dark) {
             :root {
-            --primary: #9d86ff;
-            --primary-dark: #9d86ff;
-            --secondary: #1e1e2d;
-            --text: #f8f9fa;
-            --text-light: #adb5bd;
-            --border: #343a40;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+                --primary: #9d86ff;
+                --primary-dark: #9d86ff;
+                --secondary: #1e1e2d;
+                --text: #f8f9fa;
+                --text-light: #adb5bd;
+                --border: #343a40;
+                --shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            }
         }
-}
 
         * {
             margin: 0;
@@ -358,8 +392,51 @@ if (isset($_POST['regenerate_api_key'])) {
                 gap: 1rem;
             }
         }
+
+        /* Styles pour FullCalendar */
+        #calendar {
+            max-width: 100%;
+            margin: 0 auto;
+            background: var(--secondary);
+            border-radius: var(--radius);
+            padding: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        /* Couleurs des événements (à adapter selon ton thème) */
+        .fc-event-version {
+            background-color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        .fc-event-feature {
+            background-color: var(--success);
+            border-color: var(--success);
+        }
+
+        .fc-event-doc {
+            background-color: var(--warning);
+            border-color: var(--warning);
+        }
+
+        .fc-event-merge {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .fc-event-init {
+            background-color: var(--warning);
+            border-color: var(--warning);
+        }
+
+        .fc-event-other {
+            background-color: var(--text-light);
+            border-color: var(--text-light);
+            color: var(--text);
+        }
     </style>
 </head>
+
 <body>
     <?php include '../includes/header.php'; ?>
 
@@ -406,6 +483,26 @@ if (isset($_POST['regenerate_api_key'])) {
                         </span>
                     </p>
                 </div>
+
+                <div class="card mt-4">
+                    <div class="header">
+                        <h2>Calendrier Git</h2>
+                    </div>
+
+                    <!-- Boutons d'action -->
+                    <div class="d-flex justify-content-between mb-3">
+                        <button id="fetchGithub" class="btn btn-primary">
+                            <i class="fas fa-sync"></i> Charger depuis GitHub
+                        </button>
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCommitModal">
+                            <i class="fas fa-plus"></i> Ajouter un commit
+                        </button>
+                    </div>
+
+                    <!-- Calendrier FullCalendar -->
+                    <div id="calendar"></div>
+                </div>
+
             </div>
 
             <div class="api-section">
@@ -493,9 +590,9 @@ if (isset($_POST['regenerate_api_key'])) {
                         </li>
                         <li><strong>Avec JavaScript</strong> (fetch) :
                             <code>
-fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c...`)
-  .then(response => response.json())
-  .then(data => console.log(data));
+                                fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c...`)
+                                .then(response => response.json())
+                                .then(data => console.log(data));
                             </code>
                         </li>
                     </ul>
@@ -506,30 +603,30 @@ fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c..
                     <h3><i class="fas fa-file-code"></i> 4. Exemple de réponse JSON</h3>
                     <p>Voici un exemple de réponse :</p>
                     <code>
-{
-  "success": true,
-  "data": [
-    {
-      "date": "2026-01-01",
-      "visits": 42,
-      "unique_visitors": 30,
-      "sessions": 35
-    },
-    {
-      "date": "2026-01-02",
-      "visits": 50,
-      "unique_visitors": 38,
-      "sessions": 40
-    }
-  ],
-  "meta": {
-    "site_id": "SP_24m87bb",
-    "start_date": "2026-01-01",
-    "end_date": "2026-02-01",
-    "total_visits": 92,
-    "total_unique_visitors": 68
-  }
-}
+                        {
+                        "success": true,
+                        "data": [
+                        {
+                        "date": "2026-01-01",
+                        "visits": 42,
+                        "unique_visitors": 30,
+                        "sessions": 35
+                        },
+                        {
+                        "date": "2026-01-02",
+                        "visits": 50,
+                        "unique_visitors": 38,
+                        "sessions": 40
+                        }
+                        ],
+                        "meta": {
+                        "site_id": "SP_24m87bb",
+                        "start_date": "2026-01-01",
+                        "end_date": "2026-02-01",
+                        "total_visits": 92,
+                        "total_unique_visitors": 68
+                        }
+                        }
                     </code>
                     <p>Les champs disponibles :</p>
                     <ul>
@@ -551,20 +648,20 @@ fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c..
                     </ul>
                     <p>Exemple de code pour un graphique avec Chart.js :</p>
                     <code>
-&lt;canvas id="visitsChart" width="800" height="400"&gt;&lt;/canvas&gt;
-&lt;script src="https://cdn.jsdelivr.net/npm/chart.js"&gt;&lt;/script&gt;
-&lt;script&gt;
-  fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c...`)
-    .then(response => response.json())
-    .then(data => {
-      const labels = data.data.map(item => item.date);
-      const visits = data.data.map(item => item.visits);
-      new Chart(document.getElementById('visitsChart'), {
-        type: 'line',
-        data: { labels, datasets: [{ label: 'Visites', data: visits }] }
-      });
-    });
-&lt;/script&gt;
+                        &lt;canvas id="visitsChart" width="800" height="400"&gt;&lt;/canvas&gt;
+                        &lt;script src="https://cdn.jsdelivr.net/npm/chart.js"&gt;&lt;/script&gt;
+                        &lt;script&gt;
+                        fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c...`)
+                        .then(response => response.json())
+                        .then(data => {
+                        const labels = data.data.map(item => item.date);
+                        const visits = data.data.map(item => item.visits);
+                        new Chart(document.getElementById('visitsChart'), {
+                        type: 'line',
+                        data: { labels, datasets: [{ label: 'Visites', data: visits }] }
+                        });
+                        });
+                        &lt;/script&gt;
                     </code>
                 </div>
 
@@ -580,23 +677,120 @@ fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c..
                     </ul>
                 </div>
 
-                 <!-- Étape 7 : Doc -->
+                <!-- Étape 7 : Doc -->
                 <div class="tutorial-step">
                     <h3><i class="fa-regular fa-folder-open"></i></i> 7. Documentation complète :</h3>
                     <p>Pour plus de détails sur les paramètres, les data, et les limites de l'API, consulte notre documentation complète :</p>
-                <a href="dashboard.php" class="back-button">
-                    <i class="fas fa-arrow-left"></i> Retour au dashboard
-                </a>
-                <a href="../../doc/" class="back-button">
-                    La Documentation <i class="fas fa-arrow-right"></i>
-                </a>
+                    <a href="dashboard.php" class="back-button">
+                        <i class="fas fa-arrow-left"></i> Retour au dashboard
+                    </a>
+                    <a href="../../doc/" class="back-button">
+                        La Documentation <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
 
             </div>
         </div>
     </div>
 
+    <!-- Modal pour ajouter un commit dans calendar-->
+    <div class="modal fade" id="addCommitModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ajouter un commit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Message</label>
+                            <input type="text" class="form-control" name="commit_message" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Date</label>
+                            <input type="datetime-local" class="form-control" name="commit_date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Auteur</label>
+                            <input type="text" class="form-control" name="commit_author" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Hash</label>
+                            <input type="text" class="form-control" name="commit_hash" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <button type="submit" name="add_commit" class="btn btn-primary">Ajouter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
+        // Données PHP -> JS
+        const gitCommits = <?= json_encode($gitCommits) ?>;
+
+        // Initialisation du calendrier
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendarEl = document.getElementById('calendar');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: gitCommits.map(commit => ({
+                    title: commit.message,
+                    start: commit.date,
+                    classNames: [`fc-event-${commit.type}`],
+                    extendedProps: {
+                        author: commit.author,
+                        hash: commit.hash,
+                        type: commit.type
+                    }
+                })),
+                eventClick: function(info) {
+                    const props = info.event.extendedProps;
+                    const modalBody = `
+                    <p><strong>Message:</strong> ${info.event.title}</p>
+                    <p><strong>Date:</strong> ${info.event.start.toLocaleString()}</p>
+                    <p><strong>Type:</strong> <span class="badge bg-${props.type}">${props.type}</span></p>
+                    <p><strong>Auteur:</strong> ${props.author}</p>
+                    <p><strong>Hash:</strong> <code>${props.hash}</code></p>
+                `;
+                    // Afficher dans un toast ou une alerte (à adapter)
+                    alert(modalBody);
+                },
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                }
+            });
+            calendar.render();
+
+            // Charger depuis GitHub (optionnel)
+            document.getElementById('fetchGithub').addEventListener('click', async () => {
+                if (!confirm("Cette action écrasera les commits existants. Continuer ?")) return;
+                try {
+                    const response = await axios.get('https://api.github.com/repos/berru-g/smart_pixel_v2/commits');
+                    const commits = response.data.map(commit => ({
+                        date: commit.commit.author.date,
+                        message: commit.commit.message.split('\n')[0],
+                        author: commit.commit.author.name,
+                        hash: commit.sha,
+                        type: getCommitType(commit.commit.message)
+                    }));
+                    // Ici, tu devrais envoyer ces données au backend PHP pour les sauvegarder en BDD
+                    alert("Commits chargés depuis GitHub ! Actualise la page pour les voir.");
+                } catch (error) {
+                    alert("Erreur : " + error.message);
+                }
+            });
+        });
+
+
         // Copier dans le presse-papiers
         function copyToClipboard(elementId) {
             const element = document.getElementById(elementId);
@@ -630,4 +824,5 @@ fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c..
         }, 3000);
     </script>
 </body>
+
 </html>

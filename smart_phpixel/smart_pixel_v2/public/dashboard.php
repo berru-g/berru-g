@@ -2641,7 +2641,7 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
             }, 100);
         });
 
-        // 1. HEATMAP avec vos données existantes
+        /* 1. HEATMAP avec vos données existantes
         document.addEventListener('DOMContentLoaded', function() {
             if (typeof visitsByHour !== 'undefined') {
                 const ctx = document.getElementById('heatmapChart').getContext('2d');
@@ -2857,7 +2857,7 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
             });
 
 
-        });
+        });*/
 
         // Fonctions utilitaires
         function getPeakHour(hourData) {
@@ -2886,10 +2886,10 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
             newDate.setDate(newDate.getDate() + days);
             return newDate;
         }
-        // Fonction pour basculer vers l'onglet AgendaReco (au cas où)
+        /* Fonction pour basculer vers l'onglet AgendaReco (au cas où)
         function openAgendaReco() {
             openTab('AgendaReco');
-        }
+        }*/
     </script>
 </body>
 

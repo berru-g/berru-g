@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<!-- Si l'api GitHub est indisponible, génére un fichier JSON localement avec la cmd suivante dans ton terminal à la racine de ton projet Git :
+echo '[' > commits.json && \
+git log --pretty=format:'{"date":"%ad","message":"%s","author":"%an","hash":"%H"},' --date=iso >> commits.json && \
+sed -i '$ s/,$//' commits.json && \
+echo ']' >> commits.json
+
+-->
+<head>
+  <title>Calendrier Git - Smart Pixel v2</title>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Couleurs Light Mode */
+  --primary-color: #9d86ff;
+  --primary-light: rgba(138, 111, 248, 0.1);
+  --bg-color: #ffffff;
+  --sidebar-bg: #ffffff;
+  --text-color: #333333;
+  --text-secondary: #666666;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --hover-bg: rgba(0, 0, 0, 0.05);
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  --search-bg: #f8f8f8;
+  --positive: #4ecdc4;
+  --negative: #ff6b8b;
+  --warning: #f59e0b;
+  --gradient-pro: linear-gradient(135deg, #9d86ff 0%, #7c6bd9 100%);
+  --gradient-business: linear-gradient(135deg, #4ecdc4 0%, #3bb4ad 100%);
+  --p-rose: #ff86e9;
+  --p-bleu: #4ecdc4;
+  --p-jaune: #ffe66d;
+  --p-rouge: #ff6b8b;
+}
+
+/* Dark Mode Variables */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: #9d86ff;
+    --primary-light: rgba(157, 134, 255, 0.15);
+    --bg-color: #151515;
+    --sidebar-bg: #1d1d1e;
+    --text-color: #f0f0f0;
+    --text-secondary: #b0b0b0;
+    --border-color: rgba(255, 255, 255, 0.15);
+    --hover-bg: rgba(255, 255, 255, 0.08);
+    --shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    --search-bg: #1e1e1e;
+    --positive: #34d399;
+    --negative: #f87171;
+    --warning: #fbbf24;
+  }
+}
+    body { font-family: 'Inter', monospace, sans-serif; margin: 20px; background-color: var(--bg-color); color: var(--text-color); }
+    #calendar { max-width: 1200px; margin: 20px auto; background: transparent; color: var(--text-color); padding: 20px; border-radius: px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .fc-event-version { background-color: var(--p-rouge); border-color: var(--p-rouge); }
+    .fc-event-feature { background-color: var(--p-bleu); border-color: var(--p-bleu); }
+    .fc-event-doc { background-color: var(--p-jaune); border-color: var(--p-jaune); }
+    .fc-event-merge { background-color: var(--p-rose); border-color: var(--p-rose); }
+    .fc-event-init { background-color: var(--p-jaune); border-color: var(--p-jaune); }
+    .fc-event-other { background-color: var(--primary-color); border-color: var(--primary-color); }
+    .modal-content { border-radius: 8px; }
+    .commit-type-badge { font-size: 0.8em; margin-left: 5px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center my-4">Calendrier des Commits - Smart Pixel v2</h1>
+    <div class="d-flex justify-content-between mb-3">
+      <button id="fetchGithub" class="btn btn-primary">Charger depuis GitHub</button>
+      <button id="addCommit" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCommitModal">Ajouter un commit</button>
+    </div>
+    <div id="calendar"></div>
+  </div>
+
+  <!-- Modal pour afficher les détails du commit -->
+  <div class="modal fade" id="commitModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Détails du commit</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modalBody">
+          <!-- Contenu dynamique -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal pour ajouter un commit manuellement -->
+  <div class="modal fade" id="addCommitModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Ajouter un commit</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="addCommitForm">
+            <div class="mb-3">
+              <label class="form-label">Message</label>
+              <input type="text" class="form-control" id="commitMessage" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Date (ISO)</label>
+              <input type="text" class="form-control" id="commitDate" placeholder="YYYY-MM-DDTHH:MM:SS+01:00" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Auteur</label>
+              <input type="text" class="form-control" id="commitAuthor" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Hash</label>
+              <input type="text" class="form-control" id="commitHash" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Ajouter</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script>
+    // Données locales (fallback si API GitHub indisponible)
+    let gitCommits = [
+      {"date":"2026-02-20T19:21:25+01:00","message":"API_done_V.1.0.5","author":"berru-g","hash":"2c58ba0452d5c0815c9cc15b7fb04388729f15de"},
+      {"date":"2026-02-18T17:00:09+01:00","message":"dd","author":"berru-g","hash":"55a2b6f704727cc1053cde9c428bc5c0e5af1ffc"},
+      // ... (le reste de tes données)
+    ];
+
+    // Fonction pour catégoriser les commits
+    function getCommitType(message) {
+      if (message.startsWith("V.") || message.includes("_V.") || message.includes("V.")) return "version";
+      if (message.includes("doc")) return "doc";
+      if (message.includes("landing") || message.includes("ui") || message.includes("pseudo-ai") || message.includes("insight")) return "feature";
+      if (message.includes("Merge")) return "merge";
+      if (message.includes("first commit")) return "init";
+      return "other";
+    }
+
+    // Conversion des commits en événements FullCalendar
+    function updateCalendar() {
+      const events = gitCommits.map(commit => {
+        const type = getCommitType(commit.message);
+        const date = new Date(commit.date);
+        return {
+          title: commit.message,
+          start: date,
+          classNames: [`fc-event-${type}`],
+          extendedProps: {
+            author: commit.author,
+            hash: commit.hash,
+            type: type
+          }
+        };
+      });
+      calendar.removeAllEvents();
+      calendar.addEventSource(events);
+    }
+
+    // Initialisation du calendrier
+    const calendarEl = document.getElementById('calendar');
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      events: [],
+      eventClick: function(info) {
+        const props = info.event.extendedProps;
+        const modalBody = document.getElementById('modalBody');
+        modalBody.innerHTML = `
+          <p><strong>Message:</strong> ${info.event.title}</p>
+          <p><strong>Date:</strong> ${info.event.start.toLocaleString()}</p>
+          <p><strong>Type:</strong> <span class="badge bg-${props.type === 'version' ? 'danger' : props.type === 'feature' ? 'info' : 'secondary'}">${props.type}</span></p>
+          <p><strong>Auteur:</strong> ${props.author}</p>
+          <p><strong>Hash:</strong> <code>${props.hash}</code></p>
+        `;
+        const modal = new bootstrap.Modal(document.getElementById('commitModal'));
+        modal.show();
+      },
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+      },
+      eventTimeFormat: {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      }
+    });
+    calendar.render();
+
+    // Charger depuis GitHub
+    document.getElementById('fetchGithub').addEventListener('click', async () => {
+      try {
+        const response = await axios.get('https://api.github.com/repos/berru-g/berru-g/commits');
+        gitCommits = response.data.map(commit => ({
+          date: commit.commit.author.date,
+          message: commit.commit.message.split('\n')[0],
+          author: commit.commit.author.name,
+          hash: commit.sha
+        }));
+        updateCalendar();
+        alert("Commits chargés depuis GitHub !");
+      } catch (error) {
+        alert("Erreur lors de la récupération des commits depuis GitHub. Utilisation des données locales.");
+        console.error(error);
+      }
+    });
+
+    // Ajouter un commit manuellement
+    document.getElementById('addCommitForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const newCommit = {
+        date: document.getElementById('commitDate').value,
+        message: document.getElementById('commitMessage').value,
+        author: document.getElementById('commitAuthor').value,
+        hash: document.getElementById('commitHash').value
+      };
+      gitCommits.push(newCommit);
+      updateCalendar();
+      bootstrap.Modal.getInstance(document.getElementById('addCommitModal')).hide();
+      e.target.reset();
+    });
+
+    // Initialisation avec les données locales
+    updateCalendar();
+  </script>
+</body>
+</html>

@@ -578,7 +578,7 @@
                         <li><a href="./doc/">Solution</a></li>
                         <li><a href="#tarifs">Tarifs</a></li>
                         <li><a href="./doc/">Documentation</a></li>
-                        <li><a href="https://github.com/berru-g/smart_pixel_v2/blob/main/public/pixel.php">API</a></li>
+                        <li><a href="./doc/">API</a></li>
                     </ul>
                 </div>
 
@@ -605,8 +605,7 @@
 
             <div class="footer-bottom">
                 <p>
-                    © 2025 Smart Pixel Analytics. Développé avec <i class="fas fa-heart" style="color: var(--danger);"></i>
-                    en France par <a href="https://gael-berru.com" style="color: var(--primary);">Berru-g</a>.
+                    © 2026 Smart Pixel Analytics. Développé en France par <a href="https://gael-berru.com" style="color: var(--primary);">Berru-g</a> depuis 2024.
                 </p>
                 <p>
                     <i class="fas fa-map-marker-alt"></i> Hébergé en France ·
