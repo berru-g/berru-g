@@ -8,6 +8,38 @@ if (!Auth::isLoggedIn()) {
     exit();
 }
 
+/* Récupérer les commits de l'utilisateur
+$stmt = $pdo->prepare("SELECT * FROM git_commits WHERE user_id = ? ORDER BY date DESC");
+$stmt->execute([$userId]);
+$gitCommits = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Ajouter un commit
+if (isset($_POST['add_commit'])) {
+    $date = $_POST['commit_date'];
+    $message = $_POST['commit_message'];
+    $author = $_POST['commit_author'];
+    $hash = $_POST['commit_hash'];
+    $type = getCommitType($message); // Fonction à définir (voir plus bas)
+
+    $stmt = $pdo->prepare("
+        INSERT INTO git_commits (user_id, date, message, author, hash, type)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ");
+    $stmt->execute([$userId, $date, $message, $author, $hash, $type]);
+
+    $success = "Commit ajouté avec succès !";
+}
+
+// Fonction pour catégoriser les commits
+function getCommitType($message)
+{
+    if (preg_match('/^V\./i', $message) || strpos($message, '_V.') !== false) return "version";
+    if (strpos($message, 'doc') !== false) return "doc";
+    if (preg_match('/landing|ui|pseudo-ai|insight/i', $message)) return "feature";
+    if (strpos($message, 'Merge') !== false) return "merge";
+    if (strpos($message, 'first commit') !== false) return "init";
+    return "other";
+}
+*/
 $userId = $_SESSION['user_id'];
 $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
 
@@ -28,6 +60,7 @@ if (isset($_POST['regenerate_api_key'])) {
     $user['api_key'] = $newApiKey;
     $success = "Votre clé API a été régénérée avec succès.";
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +71,8 @@ if (isset($_POST['regenerate_api_key'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mon compte - Smart Pixel Analytics</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
             --primary: #9d86ff;
@@ -84,11 +119,11 @@ if (isset($_POST['regenerate_api_key'])) {
             max-width: 1000px;
             margin: 2rem auto;
             padding: 0 1rem;
-            
+
         }
 
         .card {
-            background-color: var(--text-light);
+            background-color: var(--border);
             color: var(--text);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
@@ -96,6 +131,7 @@ if (isset($_POST['regenerate_api_key'])) {
             margin-bottom: 2rem;
             border: 1px solid var(--border);
         }
+
 
         .header {
             display: flex;
@@ -214,12 +250,12 @@ if (isset($_POST['regenerate_api_key'])) {
         }
 
         .api-key-display code {
-            
+
             font-family: 'Courier New', monospace;
             font-size: 0.9rem;
             flex-grow: 1;
         }
- 
+
         .copy-button {
             background: none;
             border: none;
@@ -323,7 +359,7 @@ if (isset($_POST['regenerate_api_key'])) {
 
         .tutorial-step code {
             display: block;
-            background-color: var(--text-light);
+            background-color: var(--border);
             color: var(--text);
             padding: 0.8rem;
             border-radius: 4px;
@@ -343,7 +379,7 @@ if (isset($_POST['regenerate_api_key'])) {
         }
 
         .example-url {
-            background-color: var(--text-light);
+            background-color: var(--border);
             color: var(--text);
             padding: 0.5rem;
             border-radius: 4px;
@@ -364,9 +400,59 @@ if (isset($_POST['regenerate_api_key'])) {
                 gap: 1rem;
             }
         }
+
         a {
             color: var(--primary);
             text-decoration: none;
+        }
+
+        #calendar {
+            width: 100%;
+            margin: 20px auto;
+            background: transparent;
+            color: var(--text-color);
+            padding: 20px;
+            border-radius: px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .fc-event-version {
+            background-color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        .fc-event-feature {
+            background-color: var(--success);
+            border-color: var(--success);
+        }
+
+        .fc-event-doc {
+            background-color: var(--warning);
+            border-color: var(--warning);
+        }
+
+        .fc-event-merge {
+            background-color: var(--text);
+            border-color: var(--text);
+        }
+
+        .fc-event-init {
+            background-color: var(--text-light);
+            border-color: var(--text-light);
+        }
+
+        .fc-event-other {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .modal-content {
+            border-radius: 8px;
+        }
+
+        .commit-type-badge {
+            font-size: 0.8em;
+            margin-left: 5px;
         }
     </style>
 </head>
@@ -417,6 +503,7 @@ if (isset($_POST['regenerate_api_key'])) {
                         </span>
                     </p>
                 </div>
+
             </div>
 
             <div class="api-section">
@@ -593,6 +680,27 @@ if (isset($_POST['regenerate_api_key'])) {
 
                 <!-- Étape 7 : Doc -->
                 <div class="tutorial-step">
+
+
+                    <div class="card mt-4">
+                        <div class="header">
+                            <h2>Calendrier Git des mise à jour</h2>
+                        </div>
+
+                        <!-- Boutons d'action -->
+                        <div class="d-flex justify-content-between mb-3">
+                            <button id="fetchGithub" class="btn btn-primary">
+                                <i class="fas fa-sync"></i> Charger depuis GitHub
+                            </button>
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCommitModal">
+                                <i class="fas fa-plus"></i> Ajouter un commit
+                            </button>
+                        </div>
+
+                        <!-- Calendrier FullCalendar -->
+                        <div id="calendar"></div>
+                    </div>
+
                     <h3><i class="fa-regular fa-folder-open"></i></i> 7. Documentation complète :</h3>
                     <p>Pour plus de détails sur les paramètres, les data, et les limites de l'API, consulte notre documentation complète :</p>
                     <a href="dashboard.php" class="back-button">
@@ -607,7 +715,159 @@ if (isset($_POST['regenerate_api_key'])) {
         </div>
     </div>
 
+    <!-- Modal pour ajouter un commit dans calendar-->
+    <div class="modal fade" id="addCommitModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ajouter un commit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Message</label>
+                            <input type="text" class="form-control" name="commit_message" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Date</label>
+                            <input type="datetime-local" class="form-control" name="commit_date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Auteur</label>
+                            <input type="text" class="form-control" name="commit_author" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Hash</label>
+                            <input type="text" class="form-control" name="commit_hash" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <button type="submit" name="add_commit" class="btn btn-primary">Ajouter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <script>
+        // Données locales (fallback si API GitHub indisponible)
+        let gitCommits = [{
+                "date": "2026-02-20T19:21:25+01:00",
+                "message": "API_done_V.1.0.5",
+                "author": "berru-g",
+                "hash": "2c58ba0452d5c0815c9cc15b7fb04388729f15de"
+            },
+            {
+                "date": "2026-02-18T17:00:09+01:00",
+                "message": "dd",
+                "author": "berru-g",
+                "hash": "55a2b6f704727cc1053cde9c428bc5c0e5af1ffc"
+            },
+            // ... (le reste de tes données)
+        ];
+
+        // Fonction pour catégoriser les commits
+        function getCommitType(message) {
+            if (message.startsWith("V.") || message.includes("_V.") || message.includes("V.")) return "version";
+            if (message.includes("doc")) return "doc";
+            if (message.includes("landing") || message.includes("ui") || message.includes("pseudo-ai") || message.includes("insight")) return "feature";
+            if (message.includes("Merge")) return "merge";
+            if (message.includes("first commit")) return "init";
+            return "other";
+        }
+
+        // Conversion des commits en événements FullCalendar
+        function updateCalendar() {
+            const events = gitCommits.map(commit => {
+                const type = getCommitType(commit.message);
+                const date = new Date(commit.date);
+                return {
+                    title: commit.message,
+                    start: date,
+                    classNames: [`fc-event-${type}`],
+                    extendedProps: {
+                        author: commit.author,
+                        hash: commit.hash,
+                        type: type
+                    }
+                };
+            });
+            calendar.removeAllEvents();
+            calendar.addEventSource(events);
+        }
+
+        // Initialisation du calendrier
+        const calendarEl = document.getElementById('calendar');
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: [],
+            eventClick: function(info) {
+                const props = info.event.extendedProps;
+                const modalBody = document.getElementById('modalBody');
+                modalBody.innerHTML = `
+          <p><strong>Message:</strong> ${info.event.title}</p>
+          <p><strong>Date:</strong> ${info.event.start.toLocaleString()}</p>
+          <p><strong>Type:</strong> <span class="badge bg-${props.type === 'version' ? 'danger' : props.type === 'feature' ? 'info' : 'secondary'}">${props.type}</span></p>
+          <p><strong>Auteur:</strong> ${props.author}</p>
+          <p><strong>Hash:</strong> <code>${props.hash}</code></p>
+        `;
+                const modal = new bootstrap.Modal(document.getElementById('commitModal'));
+                modal.show();
+            },
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            eventTimeFormat: {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            }
+        });
+        calendar.render();
+
+        // Charger depuis GitHub
+        document.getElementById('fetchGithub').addEventListener('click', async () => {
+            try {
+                const response = await axios.get('https://api.github.com/repos/berru-g/smart_pixel_v2/commits');
+                gitCommits = response.data.map(commit => ({
+                    date: commit.commit.author.date,
+                    message: commit.commit.message.split('\n')[0],
+                    author: commit.commit.author.name,
+                    hash: commit.sha
+                }));
+                updateCalendar();
+                alert("Commits chargés depuis GitHub !");
+            } catch (error) {
+                alert("Erreur lors de la récupération des commits depuis GitHub. Utilisation des données locales.");
+                console.error(error);
+            }
+        });
+
+        // Ajouter un commit manuellement
+        document.getElementById('addCommitForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newCommit = {
+                date: document.getElementById('commitDate').value,
+                message: document.getElementById('commitMessage').value,
+                author: document.getElementById('commitAuthor').value,
+                hash: document.getElementById('commitHash').value
+            };
+            gitCommits.push(newCommit);
+            updateCalendar();
+            bootstrap.Modal.getInstance(document.getElementById('addCommitModal')).hide();
+            e.target.reset();
+        });
+
+        // Initialisation avec les données locales
+        updateCalendar();
+
         // Copier dans le presse-papiers
         function copyToClipboard(elementId) {
             const element = document.getElementById(elementId);

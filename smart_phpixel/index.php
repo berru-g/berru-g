@@ -578,7 +578,7 @@
                         <li><a href="./doc/">Solution</a></li>
                         <li><a href="#tarifs">Tarifs</a></li>
                         <li><a href="./doc/">Documentation</a></li>
-                        <li><a href="./doc/">API</a></li>
+                        <li><a href="public/account.php">API</a></li>
                     </ul>
                 </div>
 
