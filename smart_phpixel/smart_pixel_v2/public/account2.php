@@ -8,7 +8,7 @@ if (!Auth::isLoggedIn()) {
     exit();
 }
 
-// Récupérer les commits de l'utilisateur
+/* Récupérer les commits de l'utilisateur
 $stmt = $pdo->prepare("SELECT * FROM git_commits WHERE user_id = ? ORDER BY date DESC");
 $stmt->execute([$userId]);
 $gitCommits = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -39,7 +39,7 @@ function getCommitType($message)
     if (strpos($message, 'first commit') !== false) return "init";
     return "other";
 }
-
+*/
 $userId = $_SESSION['user_id'];
 $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
 
@@ -91,9 +91,9 @@ if (isset($_POST['regenerate_api_key'])) {
             :root {
                 --primary: #9d86ff;
                 --primary-dark: #9d86ff;
-                --bg: #1e1e2d;
+                --bg: #151515;
                 --text: #f8f9fa;
-                --text-light: #adb5bd;
+                --text-light: #1d1d1e;
                 --border: #343a40;
                 --shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
             }
@@ -117,10 +117,11 @@ if (isset($_POST['regenerate_api_key'])) {
             max-width: 1000px;
             margin: 2rem auto;
             padding: 0 1rem;
+            
         }
 
         .card {
-            background: (--bg);
+            background-color: var(--text-light);
             color: var(--text);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
@@ -451,25 +452,6 @@ if (isset($_POST['regenerate_api_key'])) {
                     </p>
                 </div>
 
-                <div class="card mt-4">
-                    <div class="header">
-                        <h2>Calendrier Git</h2>
-                    </div>
-
-                    <!-- Boutons d'action -->
-                    <div class="d-flex justify-content-between mb-3">
-                        <button id="fetchGithub" class="btn btn-primary">
-                            <i class="fas fa-sync"></i> Charger depuis GitHub
-                        </button>
-                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCommitModal">
-                            <i class="fas fa-plus"></i> Ajouter un commit
-                        </button>
-                    </div>
-
-                    <!-- Calendrier FullCalendar -->
-                    <div id="calendar"></div>
-                </div>
-
             </div>
 
             <div class="api-section">
@@ -654,6 +636,25 @@ if (isset($_POST['regenerate_api_key'])) {
                     <a href="../../doc/" class="back-button">
                         La Documentation <i class="fas fa-arrow-right"></i>
                     </a>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="header">
+                        <h2>Calendrier Git</h2>
+                    </div>
+
+                    <!-- Boutons d'action -->
+                    <div class="d-flex justify-content-between mb-3">
+                        <button id="fetchGithub" class="btn btn-primary">
+                            <i class="fas fa-sync"></i> Charger depuis GitHub
+                        </button>
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCommitModal">
+                            <i class="fas fa-plus"></i> Ajouter un commit
+                        </button>
+                    </div>
+
+                    <!-- Calendrier FullCalendar -->
+                    <div id="calendar"></div>
                 </div>
 
             </div>

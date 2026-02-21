@@ -58,9 +58,9 @@ if (isset($_POST['regenerate_api_key'])) {
             :root {
                 --primary: #9d86ff;
                 --primary-dark: #9d86ff;
-                --bg: #1e1e2d;
+                --bg: #151515;
                 --text: #f8f9fa;
-                --text-light: #adb5bd;
+                --text-light: #1d1d1e;
                 --border: #343a40;
                 --shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
             }
@@ -84,10 +84,11 @@ if (isset($_POST['regenerate_api_key'])) {
             max-width: 1000px;
             margin: 2rem auto;
             padding: 0 1rem;
+            
         }
 
         .card {
-            background: (--bg);
+            background-color: var(--text-light);
             color: var(--text);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
@@ -95,7 +96,6 @@ if (isset($_POST['regenerate_api_key'])) {
             margin-bottom: 2rem;
             border: 1px solid var(--border);
         }
-
 
         .header {
             display: flex;
