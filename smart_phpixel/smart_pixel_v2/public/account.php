@@ -683,9 +683,7 @@ if (isset($_POST['regenerate_api_key'])) {
 
 
                     <div class="card mt-4">
-                        <div class="header">
-                            <h2>Calendrier Git des mise à jour</h2>
-                        </div>
+                    <h3><i class="fa-regular fa-calendar"></i> MAJ. Calendrier des mise à jour</h3>
 
                         <!-- Boutons d'action -->
                         <div class="d-flex justify-content-between mb-3">
@@ -701,7 +699,7 @@ if (isset($_POST['regenerate_api_key'])) {
                         <div id="calendar"></div>
                     </div>
 
-                    <h3><i class="fa-regular fa-folder-open"></i></i> 7. Documentation complète :</h3>
+                    <h3><i class="fa-regular fa-folder-open"></i></i>Documentation complète :</h3>
                     <p>Pour plus de détails sur les paramètres, les data, et les limites de l'API, consulte notre documentation complète :</p>
                     <a href="dashboard.php" class="back-button">
                         <i class="fas fa-arrow-left"></i> Retour au dashboard

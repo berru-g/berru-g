@@ -333,7 +333,7 @@ function getCountryCodeSimple($countryName)
                 <div class="logo-container">
                     <!--<div class="logo-icon">◰</div>-->
                     <div class="logo-text">
-                        <a href="account.php"><h3><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <a href="beta.php"><h3><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                                 <circle cx="12" cy="7" r="4" />
                             </svg></h3></a>

@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="login-card">
             <div class="login-header">
                 <h2>Smart Pixel Analytics</h2>
-                <p class="login-subtitle">Alternative éthique à Google Analytics</p>
+                <p class="login-subtitle">Devenez propriétaire de vos données.</p>
             </div>
             <?php if ($error): ?>
                 <div class="error"><?= htmlspecialchars($error) ?></div>

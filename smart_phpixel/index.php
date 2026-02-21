@@ -574,11 +574,11 @@
                 <div class="footer-links">
                     <h4>Produit</h4>
                     <ul>
-                        <li><a href="#fonctionnalites">Fonctionnalités</a></li>
+                        <li><a href="./smart_pixel_v2/public/dashboard.php">Dashboard</a></li>
                         <li><a href="./doc/">Solution</a></li>
                         <li><a href="#tarifs">Tarifs</a></li>
                         <li><a href="./doc/">Documentation</a></li>
-                        <li><a href="public/account.php">API</a></li>
+                        <li><a href="./smart_pixel_v2/public/account.php">API</a></li>
                     </ul>
                 </div>
 
@@ -592,7 +592,7 @@
                     </ul>
                 </div>
 
-                <div class="footer-links">
+                <div class="footer-links"> 
                     <h4>Légal</h4>
                     <ul>
                         <li><a href="#">Mentions légales</a></li>
