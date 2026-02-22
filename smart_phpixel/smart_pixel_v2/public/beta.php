@@ -147,16 +147,10 @@ if (isset($_GET['export_emails'])) {
 </head>
 <body>
     <div class="main-content">
-        <header>
-            <div class="container">
-                <div class="header-content">
+
                 <a href="dashboard.php" class="back-button">
                     <i class="fas fa-arrow-left"></i> Retour au dashboard
                 </a>
-            </div>
-                </div>
-            </div>
-        </header>
 
         <div class="container">
             
@@ -169,7 +163,7 @@ if (isset($_GET['export_emails'])) {
                 </div>
                 <div class="stat-card">
                     <h3>Sites</h3>
-                    <div class="stat-value"><?= array_sum(array_column($topSites, 'total_visits')) ?></div>
+                    <div class="stat-value"><?= array_sum(array_column($topSites, 'total_site')) ?></div>
                 </div>
                 <div class="stat-card">
                     <h3>Visiteurs</h3>
@@ -325,7 +319,7 @@ if (isset($_GET['export_emails'])) {
 
             polygonSeries.mapPolygons.template.setAll({
                 tooltipText: "{name}: {value} visites",
-                fill: am5.color(0x09527c),
+                fill: am5.color(0x9d86ff),
                 stroke: am5.color(0xffffff),
                 strokeWidth: 0.5
             });
@@ -333,8 +327,8 @@ if (isset($_GET['export_emails'])) {
             polygonSeries.data.setAll(countryData);
             polygonSeries.set("heatRules", [{
                 target: polygonSeries.mapPolygons.template,
-                min: am5.color(0x09527c),
-                max: am5.color(0x3a92ff),
+                min: am5.color(0x4ecdc4),
+                max: am5.color(0xffffff),
                 dataField: "value"
             }]);
 

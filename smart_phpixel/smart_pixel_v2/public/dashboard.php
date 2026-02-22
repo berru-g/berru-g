@@ -320,7 +320,6 @@ function getCountryCodeSimple($countryName)
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/gantt.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
 </head>
 
 <body>
@@ -333,10 +332,12 @@ function getCountryCodeSimple($countryName)
                 <div class="logo-container">
                     <!--<div class="logo-icon">◰</div>-->
                     <div class="logo-text">
-                        <a href="beta.php"><h3><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                <circle cx="12" cy="7" r="4" />
-                            </svg></h3></a>
+                        <a href="beta.php">
+                            <h3><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg></h3>
+                        </a>
                         <small class="user-email"><?= htmlspecialchars($_SESSION['user_email'] ?? 'Utilisateur') ?></small>
                     </div>
                 </div>
@@ -498,22 +499,22 @@ function getCountryCodeSimple($countryName)
                                 <h3>PRO</h3>
                                 <p><strong>9€/mois</strong></p>
                                 <ul style="padding-left: 20px;">
-                                    <li>12 sites maximum</li>
+                                    <li>20 sites maximum</li>
                                     <li>10 000 visites/mois</li>
                                     <li>Stats avancées</li>
-                                    <li>Export PDF</li>
+                                    <li>API</li>
                                 </ul>
                                 <button onclick="showUpgradeForm('pro')" style="width: 100%; padding: 10px; background: var(--primary-color); color: var(--text-color); border: none; border-radius: 5px; cursor: pointer;">
                                     Choisir PRO
                                 </button>
                             </div>
 
-                            <!-- Plan BUSINESS -->
+                            <!-- Plan ANNUEL -->
                             <div style="border: 2px solid #4ecdc4; border-radius: 8px; padding: 15px;">
-                                <h3>BUSINESS</h3>
-                                <p><strong>29€/mois</strong></p>
+                                <h3>PRO ANNUEL</h3>
+                                <p><strong>90€/an</strong></p>
                                 <ul style="padding-left: 20px;">
-                                    <li>50 sites maximum</li>
+                                    <li>20 sites maximum</li>
                                     <li>1M de visites/mois</li>
                                     <li>Support prioritaire</li>
                                     <li>API complète</li>
@@ -569,8 +570,13 @@ function getCountryCodeSimple($countryName)
             <header>
                 <div class="container">
                     <div class="header-content">
-                        <h1>Smart Pixel Analytics</h1>
-                        <div style="color:grey;"></div>
+                        <h1>Smart Pixel Analytics : 
+                        <?php
+                        $currentSite = array_filter($userSites, fn($s) => $s['id'] == $selectedSiteId); 
+                        $currentSite = reset($currentSite);
+                        ?>
+                        <span style="color: var(--primary-color);"><?= htmlspecialchars($currentSite['site_name'] ?? 'Site non sélectionné') ?></span></h1>
+
                         <div class="period-filter">
                             <span>Période :</span>
                             <select id="periodSelect" onchange="changePeriod(this.value)">
@@ -1306,7 +1312,7 @@ function getCountryCodeSimple($countryName)
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                             <circle cx="12" cy="7" r="4" />
-                        </svg> 
+                        </svg>
                         <span class="subtitle">L'API et sa Documentation</span>
                     </a>
 
@@ -1314,7 +1320,7 @@ function getCountryCodeSimple($countryName)
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="4" width="20" height="16" rx="2" />
                             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                        </svg> 
+                        </svg>
                         <span class="subtitle">Contact / Support, signaler un bug</span>
                     </a>
 
@@ -1977,7 +1983,7 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
 
                 polygonSeries.mapPolygons.template.setAll({
                     tooltipText: "{name}: {value} visites",
-                    fill: am5.color(0xe0e0e0),
+                    fill: am5.color(0x9d86ff),
                     stroke: am5.color(0xffffff),
                     strokeWidth: 1
                 });
