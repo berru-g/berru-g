@@ -92,6 +92,7 @@ try {
         ORDER BY date ASC
     ");
     $recentActivity = $stmt->fetchAll();
+
 } catch (PDOException $e) {
     die("Erreur lors de la récupération des données : " . $e->getMessage());
 }
@@ -114,76 +115,10 @@ if (isset($_GET['export_emails'])) {
     fclose($out);
     exit;
 }
-
-/* --- Gestion des leads ---
-// Ajouter un lead (formulaire ou manuellement)
-if (isset($_POST['add_lead'])) {
-    try {
-        $stmt = $pdo->prepare("
-            INSERT INTO leads (company_name, email, sector, website, status, notes)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ");
-        $stmt->execute([
-            $_POST['company_name'],
-            $_POST['email'],
-            $_POST['sector'],
-            $_POST['website'],
-            $_POST['status'] ?? 'à faire',
-            $_POST['notes'] ?? ''
-        ]);
-        header("Location: " . $_SERVER['PHP_SELF'] . "?lead_added=1");
-        exit;
-    } catch (PDOException $e) {
-        $error = "Erreur lors de l'ajout du lead : " . $e->getMessage();
-    }
-}
-
-// Mettre à jour le statut d'un lead
-if (isset($_POST['update_status'])) {
-    try {
-        $stmt = $pdo->prepare("
-            UPDATE leads SET status = ?, notes = ? WHERE id = ?
-        ");
-        $stmt->execute([
-            $_POST['status'],
-            $_POST['notes'],
-            $_POST['lead_id']
-        ]);
-        header("Location: " . $_SERVER['PHP_SELF'] . "?status_updated=1");
-        exit;
-    } catch (PDOException $e) {
-        $error = "Erreur lors de la mise à jour : " . $e->getMessage();
-    }
-}
-
-// Supprimer un lead
-if (isset($_GET['delete_lead'])) {
-    try {
-        $stmt = $pdo->prepare("DELETE FROM leads WHERE id = ?");
-        $stmt->execute([$_GET['delete_lead']]);
-        header("Location: " . $_SERVER['PHP_SELF'] . "?lead_deleted=1");
-        exit;
-    } catch (PDOException $e) {
-        $error = "Erreur lors de la suppression : " . $e->getMessage();
-    }
-}
-
-// Récupérer tous les leads
-$stmt = $pdo->query("SELECT * FROM leads ORDER BY
-    CASE status
-        WHEN 'à faire' THEN 1
-        WHEN 'envoyé' THEN 2
-        WHEN 'répondu' THEN 3
-        WHEN 'relancé' THEN 4
-        WHEN 'client' THEN 5
-    END, updated_at DESC");
-$leads = $stmt->fetchAll();
-*/
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -197,134 +132,28 @@ $leads = $stmt->fetchAll();
     <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
     <style>
-        .admin-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: var(--bg-color);
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin: 0.5rem 0;
-        }
-
-        .export-btn {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        #worldMap {
-            width: 100%;
-            height: 400px;
-            margin: 1rem 0;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1rem 0;
-        }
-
-        .data-table th,
-        .data-table td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-        }
-
-        .badge-free {
-            background: #f0f0f0;
-            color: #333;
-        }
-
-        .badge-pro {
-            background: #4ecdc4;
-            color: white;
-        }
-
-        .badge-business {
-            background: #ff6b6b;
-            color: white;
-        }
-
-        /* Badges pour les statuts des leads */
-        .badge-warning {
-            background: #ffc107;
-            color: #212529;
-        }
-
-        .badge-info {
-            background: #17a2b8;
-            color: white;
-        }
-
-        .badge-success {
-            background: #28a745;
-            color: white;
-        }
-
-        .badge-secondary {
-            background: #6c757d;
-            color: white;
-        }
-
-        .badge-primary {
-            background: #007bff;
-            color: white;
-        }
-
-        .form-input {
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
+        .admin-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--bg-color); padding: 1rem; border-radius: 8px; text-align: center; }
+        .stat-value { font-size: 1.5rem; font-weight: bold; margin: 0.5rem 0; }
+        .export-btn { background: var(--primary-color); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; }
+        #worldMap { width: 100%; height: 400px; margin: 1rem 0; }
+        .data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .data-table th, .data-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #ddd; }
+        .badge { display: inline-block; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; }
+        .badge-free { background: #f0f0f0; color: #333; }
+        .badge-pro { background: #4ecdc4; color: white; }
+        .badge-business { background: #ff6b6b; color: white; }
     </style>
 </head>
-
 <body>
     <div class="main-content">
-        <!-- Ajoute ce bouton dans la section des leads 
-         auto via cron job pour lancer la requete auto le lundi matin : 
-         "0 9 * * 1 /usr/bin/php /chemin/vers/ton/dossier/agent_leads.php > /dev/null 2>&1
-"-->
-        <div style="margin-bottom: 1rem;">
-            <form action="agent_leads.php" method="POST" target="_blank">
-                <button type="submit" class="export-btn" style="background: #9d86ff;">
-                    🤖 Lancer l'agent de recherche de leads
-                </button>
-            </form>
-            <p style="font-size: 0.9rem; color: #6c757d; margin-top: 0.5rem;">
-                L'agent va rechercher des agences, devs et PME françaises utilisant GA et te les envoyer par email.
-                <a href="dashboard.php" class="back-button">
-            <i class="fas fa-arrow-left"></i> Retour au dashboard
-        </a>
-            </p>
-        </div>
 
+                <a href="dashboard.php" class="back-button">
+                    <i class="fas fa-arrow-left"></i> Retour au dashboard
+                </a>
 
         <div class="container">
-
+            
 
             <!-- Statistiques globales -->
             <div class="admin-stats">
@@ -356,13 +185,7 @@ $leads = $stmt->fetchAll();
             <div class="card">
                 <h3 class="card-title">Top 5 des sites</h3>
                 <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Site</th>
-                            <th>Visites</th>
-                            <th>ID</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th>Site</th><th>Visites</th><th>ID</th></tr></thead>
                     <tbody>
                         <?php foreach ($topSites as $site): ?>
                             <tr>
@@ -413,129 +236,6 @@ $leads = $stmt->fetchAll();
                 </table>
             </div>
         </div>
-
-        <!-- Tableau de suivi des leads -->
-        <div class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h3 class="card-title">Suivi des Leads (<?= count($leads) ?>)</h3>
-                <button class="export-btn" onclick="document.getElementById('addLeadForm').style.display='block'">+ Ajouter un lead</button>
-            </div>
-
-            <!-- Formulaire d'ajout de lead (caché par défaut) -->
-            <div id="addLeadForm" style="display: none; background: var(--bg-color); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-                <form method="POST">
-                    <input type="hidden" name="add_lead" value="1">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                        <div>
-                            <label>Nom de l'entreprise</label>
-                            <input type="text" name="company_name" required class="form-input" style="width: 100%;">
-                        </div>
-                        <div>
-                            <label>Email</label>
-                            <input type="email" name="email" required class="form-input" style="width: 100%;">
-                        </div>
-                        <div>
-                            <label>Secteur</label>
-                            <input type="text" name="sector" class="form-input" style="width: 100%;">
-                        </div>
-                        <div>
-                            <label>Site web</label>
-                            <input type="url" name="website" class="form-input" style="width: 100%;">
-                        </div>
-                    </div>
-                    <div style="margin-bottom: 1rem;">
-                        <label>Notes</label>
-                        <textarea name="notes" class="form-input" style="width: 100%; min-height: 60px;"></textarea>
-                    </div>
-                    <div style="display: flex; gap: 1rem;">
-                        <button type="submit" class="export-btn">Ajouter</button>
-                        <button type="button" class="export-btn" style="background: #6c757d;" onclick="document.getElementById('addLeadForm').style.display='none'">Annuler</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Tableau des leads -->
-            <div style="overflow-x: auto;">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Entreprise</th>
-                            <th>Email</th>
-                            <th>Secteur</th>
-                            <th>Site</th>
-                            <th>Statut</th>
-                            <th>Notes</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($leads as $lead): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($lead['company_name']) ?></td>
-                                <td><a href="mailto:<?= htmlspecialchars($lead['email']) ?>"><?= htmlspecialchars($lead['email']) ?></a></td>
-                                <td><?= htmlspecialchars($lead['sector'] ?? '') ?></td>
-                                <td><a href="<?= htmlspecialchars($lead['website']) ?>" target="_blank"><?= parse_url($lead['website'], PHP_URL_HOST) ?? '' ?></a></td>
-                                <td>
-                                    <span class="badge
-                            <?= $lead['status'] === 'à faire' ? 'badge-warning' : ($lead['status'] === 'envoyé' ? 'badge-info' : ($lead['status'] === 'répondu' ? 'badge-success' : ($lead['status'] === 'relancé' ? 'badge-secondary' : 'badge-primary'))) ?>">
-                                        <?= ucfirst($lead['status']) ?>
-                                    </span>
-                                </td>
-                                <td><?= htmlspecialchars(substr($lead['notes'], 0, 30)) ?></td>
-                                <td>
-                                    <button class="export-btn" style="background: #6c757d; font-size: 0.8rem; padding: 0.3rem 0.5rem;"
-                                        onclick="document.getElementById('editLead_<?= $lead['id'] ?>').style.display='block'">
-                                        Éditer
-                                    </button>
-                                    <a href="?delete_lead=<?= $lead['id'] ?>" class="export-btn" style="background: #dc3545; font-size: 0.8rem; padding: 0.3rem 0.5rem;"
-                                        onclick="return confirm('Supprimer ce lead ?')">
-                                        Supprimer
-                                    </a>
-                                </td>
-                            </tr>
-
-                            <!-- Formulaire d'édition (caché) -->
-                            <tr>
-                                <td colspan="7" style="padding: 0;">
-                                    <div id="editLead_<?= $lead['id'] ?>" style="display: none; background: var(--bg-color); padding: 1rem; border-radius: 8px; margin: 0.5rem 0;">
-                                        <form method="POST">
-                                            <input type="hidden" name="update_status" value="1">
-                                            <input type="hidden" name="lead_id" value="<?= $lead['id'] ?>">
-                                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                                                <div>
-                                                    <label>Statut</label>
-                                                    <select name="status" class="form-input" style="width: 100%;">
-                                                        <option value="à faire" <?= $lead['status'] === 'à faire' ? 'selected' : '' ?>>À faire</option>
-                                                        <option value="envoyé" <?= $lead['status'] === 'envoyé' ? 'selected' : '' ?>>Envoyé</option>
-                                                        <option value="répondu" <?= $lead['status'] === 'répondu' ? 'selected' : '' ?>>Répondu</option>
-                                                        <option value="relancé" <?= $lead['status'] === 'relancé' ? 'selected' : '' ?>>Relancé</option>
-                                                        <option value="client" <?= $lead['status'] === 'client' ? 'selected' : '' ?>>Client</option>
-                                                    </select>
-                                                </div>
-                                                <div>
-                                                    <label>Notes</label>
-                                                    <textarea name="notes" class="form-input" style="width: 100%; min-height: 60px;"><?= htmlspecialchars($lead['notes']) ?></textarea>
-                                                </div>
-                                            </div>
-                                            <div style="display: flex; gap: 1rem;">
-                                                <button type="submit" class="export-btn">Mettre à jour</button>
-                                                <button type="button" class="export-btn" style="background: #6c757d;"
-                                                    onclick="document.getElementById('editLead_<?= $lead['id'] ?>').style.display='none'">
-                                                    Annuler
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-
-
     </div>
 
     <script>
@@ -545,7 +245,8 @@ $leads = $stmt->fetchAll();
             type: 'line',
             data: {
                 labels: <?= json_encode(array_column($historicalData, 'date')) ?>,
-                datasets: [{
+                datasets: [
+                    {
                         label: 'Utilisateurs',
                         data: <?= json_encode(array_column($historicalData, 'cumulative_users')) ?>,
                         borderColor: 'rgb(255, 99, 132)',
@@ -582,27 +283,12 @@ $leads = $stmt->fetchAll();
             options: {
                 responsive: true,
                 plugins: {
-                    legend: {
-                        position: 'top'
-                    },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false
-                    }
+                    legend: { position: 'top' },
+                    tooltip: { mode: 'index', intersect: false }
                 },
                 scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Date'
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Nombre'
-                        }
-                    }
+                    x: { title: { display: true, text: 'Date' } },
+                    y: { title: { display: true, text: 'Nombre' } }
                 }
             }
         });
@@ -648,33 +334,16 @@ $leads = $stmt->fetchAll();
 
             function getCountryCode(countryName) {
                 const countryMap = {
-                    'france': 'FR',
-                    'united states': 'US',
-                    'germany': 'DE',
-                    'united kingdom': 'GB',
-                    'canada': 'CA',
-                    'australia': 'AU',
-                    'japan': 'JP',
-                    'china': 'CN',
-                    'brazil': 'BR',
-                    'india': 'IN',
-                    'italy': 'IT',
-                    'spain': 'ES',
-                    'netherlands': 'NL',
-                    'belgium': 'BE',
-                    'switzerland': 'CH',
-                    'portugal': 'PT',
-                    'russia': 'RU',
-                    'mexico': 'MX',
-                    'south korea': 'KR',
-                    'singapore': 'SG',
-                    'usa': 'US',
-                    'uk': 'GB'
+                    'france': 'FR', 'united states': 'US', 'germany': 'DE', 'united kingdom': 'GB',
+                    'canada': 'CA', 'australia': 'AU', 'japan': 'JP', 'china': 'CN',
+                    'brazil': 'BR', 'india': 'IN', 'italy': 'IT', 'spain': 'ES',
+                    'netherlands': 'NL', 'belgium': 'BE', 'switzerland': 'CH',
+                    'portugal': 'PT', 'russia': 'RU', 'mexico': 'MX',
+                    'south korea': 'KR', 'singapore': 'SG', 'usa': 'US', 'uk': 'GB'
                 };
                 return countryMap[countryName.toLowerCase().trim()] || null;
             }
         });
     </script>
 </body>
-
 </html>

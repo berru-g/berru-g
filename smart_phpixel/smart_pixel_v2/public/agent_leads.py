@@ -1,56 +1,74 @@
-#!/usr/bin/env python3
-# admin/agent_leads.py
-import os
-import sys
+# Mistral est comme les autres IA, complétement teubé, faut tout repeter sans cesse donc on recode !
+# Scrape des sites français utilisant Google Analytics via DuckDuckGo.
+# Inspiré de : https://github.com/berru-g/OTTO/blob/main/scrap/PainScraper/scrap-sub-reddit-search-problem.py
+
 import requests
 from bs4 import BeautifulSoup
 import re
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-import pymysql
 import time
-from datetime import datetime
+import random
+from urllib.parse import urlparse, parse_qs
 
-# Charger la configuration depuis config.php
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from includes.config import * #pas de paquet path pas de paquet path
+# --- User Agents aléatoires ---
+USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+]
 
-# --- Fonctions ---
-def search_google(query):
-    """Recherche gratuite via des requêtes HTTP basiques (sans API payante)."""
-    # Utilise des moteurs de recherche alternatifs gratuits ou des requêtes directes
-    # Ici, on simule avec des résultats statiques pour éviter les blocages
-    mock_results = {
-        'site:.fr intext:"Google Analytics" intext:"RGPD"': [
-            {"url": "https://agence-web-nantes.fr", "title": "Agence Web Créative - Nantes"},
-            {"url": "https://boutique-bio-loire.fr", "title": "Boutique Bio Loire-Atlantique"}
-        ],
-        'site:.fr intext:"UA-" intext:"protection des données"': [
-            {"url": "https://dev-freelance-nantes.fr", "title": "Développeur Freelance Nantes"}
-        ]
+# --- Requêtes de recherche (ciblage France/Loire-Atlantique) ---
+QUERIES = [
+    "agence web france site:.fr intext:\"Google Analytics\"",
+    "développeur freelance france site:.fr intext:\"UA-\"",
+    "PME Loire-Atlantique site:.fr intext:\"gtag.js\"",
+    "boutique en ligne france site:.fr intext:\"Google Analytics\" intext:\"RGPD\"",
+    "entreprise nantes site:.fr intext:\"Google Analytics\" intext:\"confidentialité\""
+]
+
+# --- Fonction pour scraper DuckDuckGo ---
+def scrape_duckduckgo(query):
+    """Scrape les résultats de recherche DuckDuckGo."""
+    url = f"https://html.duckduckgo.com/html/"
+    params = {
+        "q": query,
+        "kl": "fr-fr"  # Résultats en français
     }
-    return mock_results.get(query, [])
+    headers = {"User-Agent": random.choice(USER_AGENTS)}
 
-def check_ga_and_rgpd(url):
+    try:
+        response = requests.post(url, data=params, headers=headers, timeout=10)
+        soup = BeautifulSoup(response.text, "html.parser")
+        results = []
+
+        for result in soup.select(".result"):
+            link = result.select_one(".result__url")["href"]
+            title = result.select_one(".result__title a").get_text()
+            results.append({"title": title, "url": link})
+
+        return results
+    except Exception as e:
+        print(f"⚠️ Erreur DuckDuckGo pour '{query}': {str(e)[:50]}...")
+        return []
+
+# --- Fonction pour vérifier GA + RGPD sur un site ---
+def check_site(url):
     """Vérifie si un site utilise GA et mentionne le RGPD."""
     try:
-        headers = {"User-Agent": "Mozilla/5.0"}
+        headers = {"User-Agent": random.choice(USER_AGENTS)}
         response = requests.get(url, headers=headers, timeout=10)
         html = response.text
 
-        # Vérifie la présence de Google Analytics
+        # Vérifie GA (gtag.js, UA-, G-)
         has_ga = bool(re.search(r'gtag\.js|google-analytics\.com|UA-\d+-\d+|G-[A-Z0-9]+', html))
 
-        # Vérifie la mention du RGPD
+        # Vérifie RGPD
         has_rgpd = bool(re.search(r'RGPD|règlement général sur la protection des données|politique de confidentialité|cookies', html, re.IGNORECASE))
 
         # Extraire l'email
         email = None
-        email_pattern = r'[\w\.-]+@[\w\.-]+\.\w+'
-        emails = re.findall(email_pattern, html)
+        emails = re.findall(r'[\w\.-]+@[\w\.-]+\.\w+', html)
         if emails:
-            domain = url.replace("https://", "").replace("http://", "").replace("www.", "").split("/")[0]
+            domain = urlparse(url).netloc
             for e in emails:
                 if domain in e.lower():
                     email = e
@@ -64,98 +82,46 @@ def check_ga_and_rgpd(url):
             "title": BeautifulSoup(html, "html.parser").title.string if BeautifulSoup(html, "html.parser").title else url
         }
     except Exception as e:
-        print(f"Erreur pour {url}: {e}")
+        print(f"⚠️ Erreur sur {url}: {str(e)[:50]}...")
         return None
 
-def save_to_db(leads):
-    """Sauvegarde les leads dans MySQL."""
-    try:
-        conn = pymysql.connect(
-            host=DB_HOST,
-            user=DB_USER,
-            password=DB_PASS,
-            database=DB_NAME,
-            charset='utf8mb4',
-            cursorclass=pymysql.cursors.DictCursor
-        )
-        with conn.cursor() as cursor:
-            for lead in leads:
-                cursor.execute("""
-                    INSERT INTO leads (company_name, email, sector, website, status, notes)
-                    VALUES (%s, %s, %s, %s, 'à faire', 'Trouvé par l\'agent automatique')
-                    ON DUPLICATE KEY UPDATE status=VALUES(status)
-                """, (lead['title'], lead['email'], lead['sector'], lead['url']))
-        conn.commit()
-    except Exception as e:
-        print(f"Erreur base de données: {e}")
-    finally:
-        conn.close()
-
-def send_email(leads):
-    """Envoie les leads par email."""
-    subject = f"[Smart Pixel] {len(leads)} nouveaux leads qualifiés"
-    body = f"""
-    <h2>Nouveaux leads qualifiés pour Smart Pixel</h2>
-    <p>{len(leads)} sites utilisant Google Analytics et mentionnant le RGPD :</p>
-    <table border="1" cellpadding="5" style="border-collapse: collapse; width: 100%;">
-        <thead><tr><th>Nom</th><th>Site Web</th><th>Secteur</th><th>Email</th></tr></thead>
-        <tbody>
-    """
-
-    for lead in leads:
-        body += f"""
-        <tr>
-            <td>{lead['title']}</td>
-            <td><a href="{lead['url']}">{lead['url']}</a></td>
-            <td>{lead['sector']}</td>
-            <td>{lead['email'] or 'Non trouvé'}</td>
-        </tr>
-        """
-
-    body += "</tbody></table>"
-
-    msg = MIMEMultipart('alternative')
-    msg['Subject'] = subject
-    msg['From'] = SMTP_USER
-    msg['To'] = TO_EMAIL
-    msg.attach(MIMEText(body, 'html'))
-
-    try:
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-            server.starttls()
-            server.login(SMTP_USER, SMTP_PASS)
-            server.sendmail(SMTP_USER, TO_EMAIL, msg.as_string())
-        print("✅ Email envoyé avec succès.")
-    except Exception as e:
-        print(f"❌ Erreur email: {e}")
-
+# --- Fonction principale ---
 def main():
-    leads = []
-    for query in SEARCH_QUERIES:
-        print(f"🔍 Recherche: {query}")
-        results = search_google(query)
+    all_results = []
+    for query in QUERIES:
+        print(f"\n🔍 Recherche: {query}")
+        results = scrape_duckduckgo(query)
         for result in results:
-            url = result['url']
-            print(f"  - Vérification de {url}")
-            lead_data = check_ga_and_rgpd(url)
-            if lead_data and lead_data['has_ga'] and lead_data['has_rgpd']:
-                # Détermine le secteur en fonction de l'URL ou du titre
-                sector = "Agence Web" if "agence" in lead_data['title'].lower() else \
-                        "Développeur Indépendant" if "freelance" in lead_data['title'].lower() or "dev" in url else \
-                        "PME E-commerce"
-                lead_data['sector'] = sector
-                leads.append(lead_data)
-            time.sleep(1)  # Évite les blocages
+            url = result["url"]
+            print(f"  - Analyse de {url}...")
+            data = check_site(url)
+            if data and data["has_ga"] and data["has_rgpd"]:
+                data["sector"] = (
+                    "Agence Web" if "agence" in query.lower() else
+                    "Développeur Freelance" if "freelance" in query.lower() else
+                    "PME E-commerce"
+                )
+                all_results.append(data)
+            time.sleep(random.uniform(1, 3))  # Évite les blocages
 
-    if leads:
-        print(f"🎉 {len(leads)} leads qualifiés trouvés:")
-        for lead in leads:
-            print(f"  - {lead['title']} ({lead['url']})")
+    # --- Affichage des résultats ---
+    if all_results:
+        print(f"\n🎉 {len(all_results)} sites qualifiés trouvés :")
+        with open("ga_users.txt", "w", encoding="utf-8") as f:
+            f.write("=== SITES UTILISANT GA + RGPD (France/Loire-Atlantique) ===\n\n")
+            for i, result in enumerate(all_results, 1):
+                print(f"{i}. {result['title']}")
+                print(f"   🌐 {result['url']}")
+                print(f"   📧 {result['email'] or 'Non trouvé'}")
+                print(f"   🏷️ {result['sector']}\n")
 
-        save_to_db(leads)
-        send_email(leads)
+                f.write(f"{i}. {result['title']}\n")
+                f.write(f"   Site: {result['url']}\n")
+                f.write(f"   Email: {result['email'] or 'Non trouvé'}\n")
+                f.write(f"   Secteur: {result['sector']}\n\n")
+        print(f"\n📄 Résultats sauvegardés dans 'ga_users.txt'.")
     else:
-        print("⚠️ Aucun lead qualifié trouvé.")
+        print("\n⚠️ Aucun site qualifié trouvé.")
 
 if __name__ == "__main__":
     main()
