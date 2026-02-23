@@ -115,7 +115,7 @@ if (isset($_GET['export_emails'])) {
     exit;
 }
 
-// --- Gestion des leads ---
+/* --- Gestion des leads ---
 // Ajouter un lead (formulaire ou manuellement)
 if (isset($_POST['add_lead'])) {
     try {
@@ -178,7 +178,7 @@ $stmt = $pdo->query("SELECT * FROM leads ORDER BY
         WHEN 'client' THEN 5
     END, updated_at DESC");
 $leads = $stmt->fetchAll();
-
+*/
 ?>
 
 <!DOCTYPE html>

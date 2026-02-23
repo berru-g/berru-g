@@ -1983,7 +1983,7 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
 
                 polygonSeries.mapPolygons.template.setAll({
                     tooltipText: "{name}: {value} visites",
-                    fill: am5.color(0x9d86ff),
+                    fill: am5.color(0xffffff),
                     stroke: am5.color(0xffffff),
                     strokeWidth: 1
                 });
