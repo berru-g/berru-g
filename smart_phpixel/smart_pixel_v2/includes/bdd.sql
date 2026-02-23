@@ -173,7 +173,7 @@ WHERE plan IN ('pro', 'business');
 
 -- FIN DU SYSTEM D'ABONNEMENT
 
--- Test en cours via account2
+-- Test local en cours via account2
 -- Table pour le calendrier de publication et recommandations
 CREATE TABLE `git_commits` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -186,5 +186,18 @@ CREATE TABLE `git_commits` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `git_commits_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+ -- ou Table sous forme excel
+ CREATE TABLE `leads` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `sector` varchar(100) DEFAULT NULL,
+  `website` varchar(255) DEFAULT NULL,
+  `status` enum('à faire','envoyé','répondu','relancé','client') DEFAULT 'à faire',
+  `notes` text,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
