@@ -302,7 +302,7 @@ function getCountryCodeSimple($countryName)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LibreAnalytics Analytics - Tableau de bord</title>
+    <title>LibreAnalytics - Tableau de bord</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
     <link rel="stylesheet" href="../assets/dashboard.css">
@@ -570,7 +570,7 @@ function getCountryCodeSimple($countryName)
             <header>
                 <div class="container">
                     <div class="header-content">
-                        <h1>LibreAnalytics Analytics : 
+                        <h1>LibreAnalytics : 
                         <?php
                         $currentSite = array_filter($userSites, fn($s) => $s['id'] == $selectedSiteId); 
                         $currentSite = reset($currentSite);

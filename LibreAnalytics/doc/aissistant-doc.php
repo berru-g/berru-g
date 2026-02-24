@@ -710,11 +710,11 @@ const searchData = [
                     <div class="code-block">
                         <div class="code-header">
                             <span><i class="fas fa-code"></i> tracker.js</span>
-                            <button class="copy-btn" onclick="copyToClipboard('<!-- LibreAnalytics Analytics -->\\n<script data-sp-id=\\"SP_79747769\\" src=\\"https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js\\" async><\\/script>')">
+                            <button class="copy-btn" onclick="copyToClipboard('<!-- LibreAnalytics -->\\n<script data-sp-id=\\"SP_79747769\\" src=\\"https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js\\" async><\\/script>')">
                                 <i class="fas fa-copy"></i> Copier
                             </button>
                         </div>
-                        <pre><code>&lt;!-- LibreAnalytics Analytics --&gt;
+                        <pre><code>&lt;!-- LibreAnalytics --&gt;
 &lt;script data-sp-id="SP_24031987" src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js" async&gt;&lt;/script&gt;</code></pre>
                     </div>
                 </div>

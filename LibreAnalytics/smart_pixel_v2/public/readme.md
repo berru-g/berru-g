@@ -1,18 +1,18 @@
-# **Tutoriel : Utiliser l’API Libre Analytics Analytics**
+# **Tutoriel : Utiliser l’API Libre Analytics**
 *Alternative open-source à Google Analytics*
 
 ---
 
 ## **🔑 Prérequis**
 - Un **compte Libre Analytics** (gratuit pour 1 site).
-- Une **clé API** (disponible dans ton [tableau de bord](https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/account.php)).
+- Une **clé API** (disponible dans ton [tableau de bord](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/account.php)).
 - Le **code de tracking** de ton site (ex: `SP_7f9505cc`).
 
 ---
 
 ## **📌 1. Récupérer ta clé API et ton code de tracking**
 ### **Étape 1 : Accède à ton compte**
-1. Connecte-toi à ton [tableau de bord Libre Analytics](https://gael-berru.com/smart_phpixel/smart_pixel_v2/dashboard.php).
+1. Connecte-toi à ton [tableau de bord Libre Analytics](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/dashboard.php).
 2. Clique sur **"Mon compte"** dans le menu.
 
    ![Exemple de menu](https://via.placeholder.com/600x200/4a6bff/ffffff?text=Menu+Smart+Pixel)
@@ -34,7 +34,7 @@
 ## **🔗 2. Construire l’URL de l’API**
 L’URL de base pour accéder à tes données est :
 ```
-https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php
+https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php
 ```
 
 ### **Paramètres obligatoires**
@@ -51,7 +51,7 @@ https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php
 
 ### **Exemple d’URL complète**
 ```
-https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php?
+https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?
 site_id=SP_7f9505cc&
 api_key=sk_1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p&
 start_date=2026-01-01&
@@ -69,7 +69,7 @@ end_date=2026-02-01
 
 ### **Méthode 2 : Avec cURL (terminal)**
 ```bash
-curl "https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php?
+curl "https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?
 site_id=SP_7f9505cc&
 api_key=sk_1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p&
 start_date=2026-01-01&
@@ -83,7 +83,7 @@ const apiKey = 'sk_1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p';
 const startDate = '2026-01-01';
 const endDate = '2026-02-01';
 
-fetch(`https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php?
+fetch(`https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?
   site_id=${siteId}&
   api_key=${apiKey}&
   start_date=${startDate}&
@@ -155,7 +155,7 @@ Voici à quoi ressemble une réponse typique :
 2. **Dans Google Sheets** :
    - Utilise la formule `=IMPORTDATA()` :
      ```excel
-     =IMPORTDATA("https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php?site_id=SP_7f9505cc&api_key=sk_1a2b3c...")
+     =IMPORTDATA("https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?site_id=SP_7f9505cc&api_key=sk_1a2b3c...")
      ```
 
 ### **C. Tableau de bord custom (HTML/JS)**
@@ -176,7 +176,7 @@ Voici à quoi ressemble une réponse typique :
     const startDate = '2026-01-01';
     const endDate = '2026-02-01';
 
-    fetch(`https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php?
+    fetch(`https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?
       site_id=${siteId}&
       api_key=${apiKey}&
       start_date=${startDate}&
@@ -255,7 +255,7 @@ group_by=country
 
 ---
 ## **📢 9. Support et contact**
-- **Problème technique** ? Ouvre un ticket via [le formulaire de contact](https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/contact.php).
+- **Problème technique** ? Ouvre un ticket via [le formulaire de contact](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/contact.php).
 - **Idée d’amélioration** ? Propose-la sur [GitHub](https://github.com/berru-g/smart_pixel_v2).
 
 ---

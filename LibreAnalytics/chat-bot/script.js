@@ -4,7 +4,7 @@ const SmartPixelChat = {
         // Créer l'icône flottante
         this.icon = document.createElement('div');
         this.icon.id = 'sp-chat-icon';
-        this.icon.innerHTML = '💬';
+        this.icon.innerHTML = '?';
         this.icon.style.position = 'fixed';
         this.icon.style.bottom = '20px';
         this.icon.style.right = '20px';

@@ -54,7 +54,7 @@ Disponible
 
 
 
-# Guide Utilisateur - Libre Analytics Analytics
+# Guide Utilisateur - Libre Analytics
 
 Bienvenue sur Libre Analytics, l'alternative française simple et respectueuse à Google Analytics. Ce guide vous aidera à installer, configurer et utiliser votre tableau de bord analytics.
 
@@ -187,7 +187,7 @@ Chaque site a son propre **tracking code** (ex: `SP_79747769`). Installez le cod
 
 ```
 
-# **Tutoriel : Utiliser l’API Libre Analytics Analytics**
+# **Tutoriel : Utiliser l’API Libre Analytics**
 *Alternative open-source à Google Analytics*
 
 ---

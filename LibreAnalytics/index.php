@@ -136,16 +136,16 @@
     <script data-sp-id="SP_79747769" src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js" async></script>
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Libre Analytics Analytics - Alternative Google Analytics">
+    <meta name="twitter:title" content="Libre Analytics - Alternative Google Analytics">
     <meta name="twitter:description" content="Solution analytics française, simple et conforme RGPD">
 
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            "name": "Libre Analytics Analytics",
+            "name": "Libre Analytics",
             "url": "https://gael-berru.com/LibreAnalytics/",
-            "description": "Libre Analytics Analytics est une plateforme européenne d'analyse web respectueuse de la vie privée et alternative à Google Analytics, avec tracking temps réel, géolocalisation, sources de trafic, UTM, tableau de bord intuitif et API.",
+            "description": "Libre Analytics est une plateforme européenne d'analyse web respectueuse de la vie privée et alternative à Google Analytics, avec tracking temps réel, géolocalisation, sources de trafic, UTM, tableau de bord intuitif et API.",
             "applicationCategory": "BusinessApplication",
             "operatingSystem": "Web",
             "softwareVersion": "1.0.1",
@@ -216,13 +216,13 @@
             </div>
 
             <h1 id="hero-title" class="hero-title">
-                Libre Analytics : <span style="color: var(--danger);">Alternative souveraine à</span> <br>
-                <span style="color: var(--primary);">Google Analytics</span>
+                Libre Analytics : <span style="color: var(--primary);">Alternative souveraine à</span> <br>
+                <span style="color: var(--danger);">Google Analytics</span>
             </h1>
 
             <section class="hero-subtitle">
                 <h2>Pourquoi remplacer Google Analytics ?</h2>
-                <p>Google Analytics 4 est peu transparent et pose des problèmes de conformité RGPD en Europe. De nombreuses entreprises françaises recherchent une alternative simple, souveraine et respectueuse des données.</p>
+                <p>Google Analytics est peu transparent et pose des problèmes de conformité RGPD en Europe. De nombreuses entreprises françaises recherchent une alternative simple, souveraine et respectueuse des données.</p>
 
                 <h2>Libre Analytics : une alternative européenne et open source</h2>
                 <p>Libre Analytics est une solution analytics développée en France permettant de suivre les visiteurs, les pages vues, les sources de trafic et les performances d’un site web sans transférer les données aux États-Unis.</p>
@@ -271,7 +271,7 @@
 </section>
 
 <div class=container id="demo">
-    <img src="../img/demo_dashboard.gif" alt="Aperçu du dashboard Libre Analytics Analytics" class="dashboard-preview">
+    <img src="../img/demo_dashboard.gif" alt="Aperçu du dashboard Libre Analytics" class="dashboard-preview">
 </div>
 
 <!-- === CLIENTS SECTION === -->
@@ -450,7 +450,7 @@
                     <i class="fas fa-copy"></i> Copier
                 </button>
             </div>
-            <pre><code style="color: #e2e8f0;">&lt;!-- Libre Analytics Analytics --&gt;
+            <pre><code style="color: #e2e8f0;">&lt;!-- Libre Analytics --&gt;
 &lt;script data-sp-id="VOTRE_ID_ICI" 
         src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js" 
         async&gt;
@@ -616,7 +616,7 @@
 
         <div class="footer-bottom">
             <p>
-                © 2026 Libre Analytics Analytics. Développé en France par <a href="https://gael-berru.com" style="color: var(--primary);text-decoration:none;">Berru-g</a> depuis 2024.
+                © 2026 Libre Analytics. Développé en France par <a href="https://gael-berru.com" style="color: var(--primary);text-decoration:none;">Berru-g</a> depuis 2024.
             </p>
             <p>
                 <i class="fas fa-map-marker-alt"></i> Hébergé en France ·
