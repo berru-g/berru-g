@@ -210,7 +210,7 @@ Chaque site a son propre **tracking code** (ex: `SP_79747769`). Installez le cod
 - Dans la section **"Clé API"**, clique sur l’icône **🖉** pour copier ta clé.
 - **Ne partage jamais cette clé** (elle donne accès à tes données).
 
-   ![Exemple de clé API](https://via.placeholder.com/600x300/4a6bff/ffffff?text=Cl%C3%A9+API%3A+sk_1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p)
+   ![Exemple de clé API](https://via.placeholder.com/600x300/4a6bff/ffffff?text=Cl%C3%A9+API%3A+1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p)
 
 ### **Étape 3 : Récupère ton code de tracking**
 1. Va dans **"Mes sites"** dans le menu.
@@ -230,7 +230,7 @@ https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php
 | Paramètre     | Description                          | Exemple                     |
 |---------------|--------------------------------------|-----------------------------|
 | `site_id`     | Code de tracking de ton site.        | `SP_7f9505cc`               |
-| `api_key`     | Ta clé API (copiée plus tôt).        | `sk_1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p` |
+| `api_key`     | Ta clé API (copiée plus tôt).        | `1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p` |
 
 ### **Paramètres optionnels**
 | Paramètre     | Description                          | Exemple       | Défaut          |
@@ -242,7 +242,7 @@ https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php
 ```
 https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?
 site_id=SP_7f9505cc&
-api_key=sk_1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p&
+api_key=1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p&
 start_date=2026-01-01&
 end_date=2026-02-01
 ```
@@ -260,7 +260,7 @@ end_date=2026-02-01
 ```bash
 curl "https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?
 site_id=SP_7f9505cc&
-api_key=sk_1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p&
+api_key=1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p&
 start_date=2026-01-01&
 end_date=2026-02-01"
 ```
@@ -268,7 +268,7 @@ end_date=2026-02-01"
 ### **Méthode 3 : Avec JavaScript (fetch)**
 ```javascript
 const siteId = 'SP_7f9505cc';
-const apiKey = 'sk_1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p';
+const apiKey = '1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p';
 const startDate = '2026-01-01';
 const endDate = '2026-02-01';
 
@@ -344,7 +344,7 @@ Voici à quoi ressemble une réponse typique :
 2. **Dans Google Sheets** :
    - Utilise la formule `=IMPORTDATA()` :
      ```excel
-     =IMPORTDATA("https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?site_id=SP_7f9505cc&api_key=sk_1a2b3c...")
+     =IMPORTDATA("https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?site_id=SP_7f9505cc&api_key=1a2b3c...")
      ```
 
 ### **C. Tableau de bord custom (HTML/JS)**
@@ -361,7 +361,7 @@ Voici à quoi ressemble une réponse typique :
 
   <script>
     const siteId = 'SP_7f9505cc';
-    const apiKey = 'sk_1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p';
+    const apiKey = '1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p';
     const startDate = '2026-01-01';
     const endDate = '2026-02-01';
 
@@ -427,7 +427,7 @@ const formattedStartDate = startDate.toISOString().split('T')[0];
 
 fetch(`https://gael-berru.com/.../api.php?
   site_id=SP_7f9505cc&
-  api_key=sk_1a2b3c...&
+  api_key=1a2b3c...&
   start_date=${formattedStartDate}&
   end_date=${today}`)
 ```
@@ -437,7 +437,7 @@ Modifie l’URL pour inclure des données géographiques :
 ```
 https://gael-berru.com/.../api.php?
 site_id=SP_7f9505cc&
-api_key=sk_1a2b3c...&
+api_key=1a2b3c...&
 group_by=country
 ```
 *(À implémenter côté serveur si besoin.)*

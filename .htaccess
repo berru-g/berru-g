@@ -22,6 +22,10 @@ RewriteRule ^projet/([a-zA-Z0-9_-]+)/?$ /#project-$1 [R=302,L]
     Order allow,deny
     Deny from all
 </Files>
+<Files "auth.php">
+    Order allow,deny
+    Deny from all
+</Files>
 
 # Forcer POST pour submit.php
 <Files "submit.php">
