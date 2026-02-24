@@ -69,7 +69,7 @@ if (isset($_POST['regenerate_api_key'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon compte - Smart Pixel Analytics</title>
+    <title>Mon compte - LibreAnalytics Analytics</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -509,7 +509,7 @@ if (isset($_POST['regenerate_api_key'])) {
 
             <div class="api-section">
                 <h2>Clé API</h2>
-                <p>Utilisez cette clé pour accéder à l'API de Smart Pixel. <strong>Ne la partagez jamais. En cas de partage public (push git, article, etc), régénérez immédiatement votre clé et changer votre mdp.</strong></p>
+                <p>Utilisez cette clé pour accéder à l'API de LibreAnalytics. <strong>Ne la partagez jamais. En cas de partage public (push git, article, etc), régénérez immédiatement votre clé et changer votre mdp.</strong></p>
 
                 <div class="api-key-container">
                     <div class="api-key-display">
@@ -532,7 +532,7 @@ if (isset($_POST['regenerate_api_key'])) {
                 <h3>Exemple d'URL</h3>
                 <div class="api-key-display">
                     <code id="apiUrlExample">
-                        https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php?&
+                        https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?&
                         site_id=<strong>SP_<?= htmlspecialchars(substr($user['api_key'], 0, 6)) ?></strong>?&
                         api_key=<strong>VOTRE_CLE_API</strong>?&
                         start_date=2026-01-01&
@@ -546,7 +546,7 @@ if (isset($_POST['regenerate_api_key'])) {
 
             <!-- Section Tutoriel -->
             <div class="tutorial-section">
-                <h2><i class="fas fa-graduation-cap"></i> Tutoriel : Utiliser l'API Smart Pixel</h2>
+                <h2><i class="fas fa-graduation-cap"></i> Tutoriel : Utiliser l'API LibreAnalytics</h2>
 
                 <!-- Étape 1 : Récupérer les identifiants -->
                 <div class="tutorial-step">
@@ -563,7 +563,7 @@ if (isset($_POST['regenerate_api_key'])) {
                 <div class="tutorial-step">
                     <h3><i class="fas fa-link"></i> 2. Construire l'URL de l'API</h3>
                     <p>L'URL de base est :</p>
-                    <code>https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php</code>
+                    <code>https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php</code>
                     <p>Ajoute les paramètres suivants :</p>
                     <ul>
                         <li><code>site_id</code> : Ton code de tracking (ex: <code>SP_24m87bb</code>).</li>
@@ -573,7 +573,7 @@ if (isset($_POST['regenerate_api_key'])) {
                     </ul>
                     <p>Exemple d'URL complète :</p>
                     <div class="example-url">
-                        https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php?
+                        https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?
                         site_id=<strong>SP_24m87bb</strong>&
                         api_key=<strong>sk_1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p</strong>&
                         start_date=<strong>2026-01-01</strong>&

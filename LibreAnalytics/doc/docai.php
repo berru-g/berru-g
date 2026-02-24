@@ -291,7 +291,7 @@ function getCountryCodeSimple($countryName)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Pixel - Assistant IA</title>
+    <title>LibreAnalytics - Assistant IA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* Styles précédents conservés */
@@ -1049,7 +1049,7 @@ function getCountryCodeSimple($countryName)
                     <div class="logo-icon">
                         <i class="fa-regular fa-folder-open"></i>
                     </div>
-                    <span>Smart Pixel <span style="font-weight: 400;">Assistant</span></span>
+                    <span>LibreAnalytics <span style="font-weight: 400;">Assistant</span></span>
                 </a>
             </div>
 
@@ -1124,7 +1124,7 @@ function getCountryCodeSimple($countryName)
                         <i class="fas fa-bars"></i>
                     </button>
                     <div>
-                        <h2>Assistant Smart Pixel</h2>
+                        <h2>Assistant LibreAnalytics</h2>
                         <div class="online-status">
                             <span class="status-dot"></span>
                             <span>En ligne</span>
@@ -1135,7 +1135,7 @@ function getCountryCodeSimple($countryName)
                     <button class="btn-icon" onclick="clearChat()" title="Nouvelle conversation">
                         <i class="fas fa-plus"></i>
                     </button>
-                    <button class="btn-icon" onclick="window.open('https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/dashboard.php', '_blank')" title="Dashboard">
+                    <button class="btn-icon" onclick="window.open('https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/dashboard.php', '_blank')" title="Dashboard">
                         <i class="fas fa-chart-pie"></i>
                     </button>
                 </div>
@@ -1143,7 +1143,7 @@ function getCountryCodeSimple($countryName)
 
             <!-- Quick Actions -->
             <div class="quick-actions">
-                <span class="quick-action" onclick="askQuestion('Comment installer Smart Pixel ?')">Installation</span>
+                <span class="quick-action" onclick="askQuestion('Comment installer LibreAnalytics ?')">Installation</span>
                 <span class="quick-action" onclick="askQuestion('Quels sont les tarifs ?')">Tarifs</span>
                 <span class="quick-action" onclick="askQuestion('Comment utiliser l\'API ?')">API</span>
                 <span class="quick-action" onclick="askQuestion('Problème de tracking')">Support</span>
@@ -1159,11 +1159,11 @@ function getCountryCodeSimple($countryName)
                     </div>
                     <div class="message-content">
                         <div class="message-header">
-                            <span class="message-author">Assistant Smart Pixel</span>
+                            <span class="message-author">Assistant LibreAnalytics</span>
                             <span class="message-time">À l'instant</span>
                         </div>
                         <div class="message-text">
-                            <p>👋 Bonjour ! Je suis l'assistant virtuel de Smart Pixel.</p>
+                            <p>👋 Bonjour ! Je suis l'assistant virtuel de LibreAnalytics.</p>
                             <p>Je peux vous aider avec :</p>
                             <ul style="margin: 0.5rem 0 0 1.5rem;">
                                 <li>L'installation et la configuration</li>
@@ -1228,7 +1228,7 @@ function getCountryCodeSimple($countryName)
         // Contenu complet des sections (basé sur la doc originale)
         const sectionContent = {
             introduction: `
-                <h1>Bienvenue sur Smart Pixel <span class="version-badge">v2.0.1</span></h1>
+                <h1>Bienvenue sur LibreAnalytics <span class="version-badge">v2.0.1</span></h1>
 
                 <div class="alert alert-info">
                     <strong>Mise à jour du 15/01/2026 :</strong> Le pixel est maintenant multi-tenant, l'API REST est en
@@ -1236,7 +1236,7 @@ function getCountryCodeSimple($countryName)
                     l'outils reste gratuit.
                 </div>
 
-                <p><strong>Smart Pixel</strong> est une solution d'analytics web souveraine, open-source et respectueuse
+                <p><strong>LibreAnalytics</strong> est une solution d'analytics web souveraine, open-source et respectueuse
                     de la vie privée. Conçue comme une alternative souveraine à Google Analytics, elle vous permet de
                     reprendre le contrôle de vos données tout en bénéficiant d'un dashboard simple et intuitif.</p>
 
@@ -1298,12 +1298,12 @@ function getCountryCodeSimple($countryName)
                     <div class="code-block">
                         <div class="code-header">
                             <span><i class="fas fa-code"></i> tracker.js</span>
-                            <button class="copy-btn" onclick="copyToClipboard('<!-- Smart Pixel Analytics -->\\n<script data-sp-id=\\"SP_79747769\\" src=\\"https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/tracker.js\\" async><\\/script>')">
+                            <button class="copy-btn" onclick="copyToClipboard('<!-- LibreAnalytics Analytics -->\\n<script data-sp-id=\\"SP_79747769\\" src=\\"https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js\\" async><\\/script>')">
                                 <i class="fas fa-copy"></i> Copier
                             </button>
                         </div>
-                        <pre><code>&lt;!-- Smart Pixel Analytics --&gt;
-&lt;script data-sp-id="SP_24031987" src="https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/tracker.js" async&gt;&lt;/script&gt;</code></pre>
+                        <pre><code>&lt;!-- LibreAnalytics Analytics --&gt;
+&lt;script data-sp-id="SP_24031987" src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js" async&gt;&lt;/script&gt;</code></pre>
                     </div>
                 </div>
 
@@ -1465,7 +1465,7 @@ function getCountryCodeSimple($countryName)
             evenements: `
                 <h2>Tracking des clics et événements</h2>
 
-                <p>Smart Pixel tracke automatiquement tous les clics sur les liens et boutons, CTA (sauf si vous avez
+                <p>LibreAnalytics tracke automatiquement tous les clics sur les liens et boutons, CTA (sauf si vous avez
                     installé <code>data-sp-ignore</code>). Vous pouvez également envoyer des événements personnalisés.
                 </p>
 
@@ -1522,7 +1522,7 @@ SmartPixel.trackEvent('inscription', {
             sources: `
                 <h2>Sources de trafic et paramètres UTM</h2>
 
-                <p>Smart Pixel capture automatiquement les paramètres UTM de l'URL et les sources.</p>
+                <p>LibreAnalytics capture automatiquement les paramètres UTM de l'URL et les sources.</p>
 
                 <h3>Paramètres reconnus</h3>
                 <ul>
@@ -1652,7 +1652,7 @@ SmartPixel.getOrCreateSessionId(); // Récupère l'ID de session</code></pre>
 
                 <!-- Section Tutoriel -->
                 <div class="tutorial-section">
-                    <h2><i class="fas fa-graduation-cap"></i> Tutoriel : Utiliser l'API Smart Pixel</h2>
+                    <h2><i class="fas fa-graduation-cap"></i> Tutoriel : Utiliser l'API LibreAnalytics</h2>
 
                     <!-- Étape 1 : Récupérer les identifiants -->
                     <div class="tutorial-step">
@@ -1672,7 +1672,7 @@ SmartPixel.getOrCreateSessionId(); // Récupère l'ID de session</code></pre>
                     <div class="tutorial-step">
                         <h3><i class="fas fa-link"></i> 2. Construire l'URL de l'API</h3>
                         <p>L'URL de base est :</p>
-                        <code>https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php</code>
+                        <code>https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php</code>
                         <p>Ajoute les paramètres suivants :</p>
                         <ul>
                             <li><code>site_id</code> : Ton code de tracking (ex: <code>SP_24m87bb</code>).</li>
@@ -1684,11 +1684,11 @@ SmartPixel.getOrCreateSessionId(); // Récupère l'ID de session</code></pre>
                             <div class="code-header">
                                 <span>Exemple d'URL complète :</span>
                                 <button class="copy-btn"
-                                    onclick="copyToClipboard('https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p&start_date=2026-01-01&end_date=2026-02-01')">
+                                    onclick="copyToClipboard('https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p&start_date=2026-01-01&end_date=2026-02-01')">
                                     <i class="fas fa-copy"></i> Copier
                                 </button>
                             </div>
-                            <pre><code>https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/api.php?site_id=<strong>SP_24m87bb</strong>&api_key=<strong>sk_1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p</strong>&start_date=<strong>2026-01-01</strong>&end_date=<strong>2026-02-01</strong></code></pre>
+                            <pre><code>https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?site_id=<strong>SP_24m87bb</strong>&api_key=<strong>sk_1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p</strong>&start_date=<strong>2026-01-01</strong>&end_date=<strong>2026-02-01</strong></code></pre>
                         </div>
 
                         <!-- Étape 3 : Récupérer les données -->
@@ -1873,7 +1873,7 @@ fetch(\`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c.
                 <h2>RGPD et conformité</h2>
 
                 <div class="alert alert-success">
-                    <strong>Conforme par conception</strong> - Smart Pixel a été pensé pour respecter la vie privée dès
+                    <strong>Conforme par conception</strong> - LibreAnalytics a été pensé pour respecter la vie privée dès
                     la base.
                 </div>
 
@@ -1901,13 +1901,13 @@ fetch(\`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c.
                 <h2>F.A.Q</h2>
 
                 <div class="card">
-                    <h4>Smart Pixel est-il vraiment gratuit ?</h4>
+                    <h4>LibreAnalytics est-il vraiment gratuit ?</h4>
                     <p>Oui, le plan gratuit est illimité dans le temps pour 1 site et 1000 visites/mois. Pas de carte
                         bleue demandée.</p>
                 </div>
 
                 <div class="card">
-                    <h4>Puis-je auto-héberger Smart Pixel ?</h4>
+                    <h4>Puis-je auto-héberger LibreAnalytics ?</h4>
                     <p>Absolument ! Le code est open source (MIT). Suivez les instructions sur <a
                             href="https://github.com/berru-g/smart_pixel_v2" target="_blank">GitHub</a>.</p>
                 </div>
@@ -1997,7 +1997,7 @@ fetch(\`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c.
             multiSites: `
                 <h2>Gestion multi-sites</h2>
                 
-                <p>Smart Pixel vous permet de gérer plusieurs sites web depuis un seul compte. Chaque site possède son propre code de tracking et ses statistiques indépendantes.</p>
+                <p>LibreAnalytics vous permet de gérer plusieurs sites web depuis un seul compte. Chaque site possède son propre code de tracking et ses statistiques indépendantes.</p>
                 
                 <h3>Ajouter un site</h3>
                 <p>Dans la colonne de gauche du dashboard, cliquez sur le bouton <i class="fas fa-plus-circle"></i> "Ajouter un site". Remplissez les informations suivantes :</p>
@@ -2267,11 +2267,11 @@ fetch(\`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c.
                     </div>
                     <div class="message-content">
                         <div class="message-header">
-                            <span class="message-author">Assistant Smart Pixel</span>
+                            <span class="message-author">Assistant LibreAnalytics</span>
                             <span class="message-time">À l'instant</span>
                         </div>
                         <div class="message-text">
-                            <p>👋 Bonjour ! Je suis l'assistant virtuel de Smart Pixel.</p>
+                            <p>👋 Bonjour ! Je suis l'assistant virtuel de LibreAnalytics.</p>
                             <p>Je peux vous aider avec :</p>
                             <ul style="margin: 0.5rem 0 0 1.5rem;">
                                 <li>L'installation et la configuration</li>

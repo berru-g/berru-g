@@ -30,7 +30,7 @@ $seed  = bin2hex(random_bytes(4)); // pour varier les URLs
 </head>
 <body>
     <h1>Section avancée – Niveau <?= $depth + 1 ?></h1>
-    <p>Cette page fait partie de la documentation étendue de Smart Pixel v2.</p>
+    <p>Cette page fait partie de la documentation étendue de LibreAnalytics v2.</p>
     <p>Liens vers les sous-sections :</p>
 
     <div class="hint">

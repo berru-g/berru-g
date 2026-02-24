@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Pixel Analytics - Inscription</title>
+    <title>LibreAnalytics - Inscription</title>
     <link rel="stylesheet" href="../assets/login.css">
 </head>
 
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="login-container">
         <div class="login-card">
             <div class="login-header">
-                <h2>Smart Pixel Analytics</h2>
+                <h2>LibreAnalytics</h2>
                 <p class="login-subtitle">Devenez propriétaire de vos données.</p>
             </div>
             <?php if ($error): ?>

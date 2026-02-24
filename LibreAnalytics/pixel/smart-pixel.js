@@ -1,7 +1,7 @@
 // smart-pixel.js - À INTÉGRER DANS LE SITE
 class SmartPixel {
     constructor() {
-        this.endpoint = 'https://gael-berru.com/smart_phpixel/pixel/pixel.php';
+        this.endpoint = 'https://gael-berru.com/LibreAnalytics/pixel/pixel.php';
         this.sessionId = this.getSessionId();
         this.trackPageView();
         this.trackClicks();

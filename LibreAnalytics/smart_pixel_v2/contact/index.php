@@ -85,9 +85,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact - Smart Pixel v2</title>
+    <title>Contact - LibreAnalytics v2</title>
     <link rel="stylesheet" href="../assets/dashboard.css">
-    <script data-sp-id="SP_79747769" src="https://gael-berru.com/smart_phpixel/smart_pixel_v2/public/tracker.js" async></script>
+    <script data-sp-id="SP_79747769" src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js" async></script>
     <style>
         * {
             margin: 0;
@@ -341,7 +341,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="container">
         <h1>Contactez-nous <span class="rgpd-badge">RGPD ✅</span></h1>
-        <p>Pour toute question sur Smart Pixel, un bug, une suggestion ou du support, remplissez ce formulaire. Vos données restent privées et conformes RGPD.</p>
+        <p>Pour toute question sur LibreAnalytics, un bug, une suggestion ou du support, remplissez ce formulaire. Vos données restent privées et conformes RGPD.</p>
 
         <?php if (isset($error)): ?>
             <div class="message error">⚠️ <?= htmlspecialchars($error) ?></div>

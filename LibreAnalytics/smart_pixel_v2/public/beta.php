@@ -122,7 +122,7 @@ if (isset($_GET['export_emails'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Pixel - Beta Admin</title>
+    <title>LibreAnalytics - Beta Admin</title>
     <link rel="stylesheet" href="../assets/dashboard.css">
     <!-- CDN optimisés -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>

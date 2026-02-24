@@ -2,7 +2,7 @@
 
         Reorga : analytics-souverain.fr/app
         - tout les dossier dans /smart_pixel_v2/ doivent descendre et on efface ce dossier vide.
-        On renome /smart_phpixel/ par /analytics-souverain/ u le ndd chosi (.io, .fr ?)
+        On renome /LibreAnalytics/ par /analytics-souverain/ u le ndd chosi (.io, .fr ?)
         On renome /public/ par /app/.
         - Penser à renomer tout les lien, les url endpoint et tracker et les appel à config "/../../config.php" à descendre également.
 
@@ -41,8 +41,8 @@ En parcourant [laboiteasel.fr](https://www.laboiteasel.fr), j’ai remarqué que
 ✅ **Support local** : Je suis basé en Loire-Atlantique et peux vous accompagner en direct.
 
 **Essayez gratuitement** :
-👉 [Créer un compte gratuit](https://gael-berru.com/smart_phpixel/)
-👉 [Voir la démo](https://gael-berru.com/smart_phpixel/doc/)
+👉 [Créer un compte gratuit](https://gael-berru.com/LibreAnalytics/)
+👉 [Voir la démo](https://gael-berru.com/LibreAnalytics/doc/)
 👉 [Réserver un appel avec moi](lien-calendly.com/tonlien) (15 min pour répondre à vos questions).
 
 Je reste disponible pour échanger par retour de mail ou par téléphone.
@@ -51,7 +51,7 @@ Bien cordialement,
 **Gaël Berru**
 Fondateur de Smart Pixel (Nantes)
 📧 contact@gael-berru.com
-🌐 [https://gael-berru.com/smart_phpixel/](https://gael-berru.com/smart_phpixel/)
+🌐 [https://gael-berru.com/LibreAnalytics/](https://gael-berru.com/LibreAnalytics/)
 
 **PS** : Comme vous, des épiceries locales ont migré vers Smart Pixel pour éviter les risques RGPD. Je peux vous partager leur retour si ça vous intéresse !
 

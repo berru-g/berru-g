@@ -19,8 +19,8 @@
     <meta name="keywords" content="web souverains, smart pixel, alternative google analytics, analytique libre, reprendre le control, no gafam, analytics alternative">
     <meta name="author" content="Gael Berru.">
     <meta name="robots" content="noai">
-    <meta property="og:url" content="https://berru-g.github.io/smart_phpixel/">
-    <link rel="canonical" href="https://berru-g.github.io/smart_phpixel/" />
+    <meta property="og:url" content="https://berru-g.github.io/LibreAnalytics/">
+    <link rel="canonical" href="https://berru-g.github.io/LibreAnalytics/" />
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -40,7 +40,7 @@
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "Smart Pixel",
-      "url": "https://raw.githubusercontent.com/berru-g/smart_phpixel/refs/heads/main/index.html",
+      "url": "https://raw.githubusercontent.com/berru-g/LibreAnalytics/refs/heads/main/index.html",
       "description": "Smart Pixel est une alternative souveraine à Google Analytics : open source, conforme RGPD et auto-hébergé pour reprendre le contrôle des données de vos visiteurs.",
       "applicationCategory": "AnalyticsApplication",
       "operatingSystem": "Web",
@@ -48,12 +48,12 @@
       "author": {
         "@type": "Person",
         "name": "Gaël Berru",
-        "url": "https://berru-g.github.io/smart_phpixel/"
+        "url": "https://berru-g.github.io/LibreAnalytics/"
       },
       "provider": {
         "@type": "Organization",
         "name": "Smart Pixel",
-        "url": "https://berru-g.github.io/smart_phpixel//smart_phpixel"
+        "url": "https://berru-g.github.io/LibreAnalytics//LibreAnalytics"
       },
       "featureList": [
         "Souveraineté des données",
@@ -63,7 +63,7 @@
         "Installation simple (PHP + MySQL)"
       ],
       "sameAs": [
-        "https://berru-g.github.io/smart_phpixel/",
+        "https://berru-g.github.io/LibreAnalytics/",
         "https://github.com/berru-g"
       ]
     }
@@ -71,7 +71,7 @@
 </head>
 <body>
     <!-- Pixel tracking -->
-   <img src="https://gael-berru.com/smart_phpixel/pixel.php?source=smartsite" width="1"
+   <img src="https://gael-berru.com/LibreAnalytics/pixel.php?source=smartsite" width="1"
                             height="1" style="display:none;">
     <!-- Header -->
     <header class="main-header">
@@ -88,7 +88,7 @@
                     <li><a href="#introduction"><i class="fas fa-home"></i> <span>Introduction</span></a></li>
                     <li><a href="#installation"><i class="fas fa-download"></i> <span>Installation</span></a></li>
                     <li><a href="#usage"><i class="fas fa-code"></i> <span>Utilisation</span></a></li>
-                    <li><a href="https://github.com/berru-g/smart_phpixel/" target="_blank"><i class="fab fa-github"></i> <span>GitHub</span></a></li>
+                    <li><a href="https://github.com/berru-g/LibreAnalytics/" target="_blank"><i class="fab fa-github"></i> <span>GitHub</span></a></li>
                 </ul>
                 
                 <button class="mobile-toggle" aria-label="Menu">
@@ -118,9 +118,9 @@
             <div class="sidebar-section">
                 <h3><i class="fas fa-tools"></i> Ressources</h3>
                 <ul class="sidebar-links">
-                    <li><a href="https://github.com/berru-g/smart_phpixel/" target="_blank"><i class="fab fa-github"></i> Code Source</a></li>
-                    <li><a href="https://github.com/berru-g/smart_phpixel//issues" target="_blank"><i class="fas fa-bug"></i> Issues</a></li>
-                    <li><a href="https://github.com/berru-g/smart_phpixel//wiki" target="_blank"><i class="fas fa-book"></i> Wiki</a></li>
+                    <li><a href="https://github.com/berru-g/LibreAnalytics/" target="_blank"><i class="fab fa-github"></i> Code Source</a></li>
+                    <li><a href="https://github.com/berru-g/LibreAnalytics//issues" target="_blank"><i class="fas fa-bug"></i> Issues</a></li>
+                    <li><a href="https://github.com/berru-g/LibreAnalytics//wiki" target="_blank"><i class="fas fa-book"></i> Wiki</a></li>
                     <li><a href="#api"><i class="fas fa-code"></i> API Reference</a></li>
                 </ul>
             </div>
@@ -272,8 +272,8 @@ saveToDatabase(anonymizedData); // Vos serveurs → Votre contrôle</code></pre>
                                     <button class="code-copy" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
                                 </div>
                                 <div class="code-block">
-                                    <pre><code class="language-bash">git clone https://github.com/berru-g/smart_phpixel.git
-cd smart_phpixel</code></pre>
+                                    <pre><code class="language-bash">git clone https://github.com/berru-g/LibreAnalytics.git
+cd LibreAnalytics</code></pre>
                                 </div>
                             </div>
                         </div>
@@ -354,10 +354,10 @@ define('SITE_URL', 'https://ton-site.com');
                                 </div>
                                 <div class="code-block">
                                     <pre><code class="language-html">&lt;!-- Dans le head --&gt;
-&lt;script src="./smart_phpixel/smart-pixel.js"&gt;&lt;/script&gt;
+&lt;script src="./LibreAnalytics/smart-pixel.js"&gt;&lt;/script&gt;
 
 &lt;!-- Dans le body --&gt;
-&lt;img src="https://ton-site.com/smart_phpixel/pixel.php" 
+&lt;img src="https://ton-site.com/LibreAnalytics/pixel.php" 
      width="1" height="1" style="display:none;"&gt;</code></pre>
                                 </div>
                             </div>
@@ -410,7 +410,7 @@ define('SITE_URL', 'https://ton-site.com');
                         <div class="code-block">
                             <pre><code class="language-js">// Configuration personnalisée
 const pixelConfig = {
-    endpoint: '/smart_phpixel/pixel.php',
+    endpoint: '/LibreAnalytics/pixel.php',
     trackPageviews: true,
     trackClicks: true,
     trackScroll: true,
@@ -441,7 +441,7 @@ pixel.trackEvent('conversion', {
                             <button class="code-copy" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
                         </div>
                         <div class="code-block">
-                            <pre><code class="language-html">&lt;img src="https://ton-site.com/smart_phpixel/pixel.phpcampaign=newsletter-juin&amp;source=email&amp;user_id=123" 
+                            <pre><code class="language-html">&lt;img src="https://ton-site.com/LibreAnalytics/pixel.phpcampaign=newsletter-juin&amp;source=email&amp;user_id=123" 
      width="1" height="1" style="display:none;" 
      alt="Smart Pixel Tracking"&gt;</code></pre>
                         </div>
@@ -543,7 +543,7 @@ pixel.trackEvent('conversion', {
                 </div>
                 
                 <div class="footer-links">
-                    <a href="https://github.com/berru-g/smart_phpixel/" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                    <a href="https://github.com/berru-g/LibreAnalytics/" target="_blank"><i class="fab fa-github"></i> GitHub</a>
                     <a href="https://berru-g.github.io/berru-g/donation.html"><i class="fas fa-hand-holding-heart"></i> Donation</a>
                     <a href="https://gael-berru.com"><i class="fas fa-envelope"></i> Contact</a>
                 </div>

@@ -7,7 +7,7 @@ http_response_code(404);  // Vrai 404 pour les humains + SEO + bons bots
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Petit incident · Smart Pixel v2</title>
+    <title>Petit incident · LibreAnalytics v2</title>
     
     <!-- Lien vers ton CSS existant -->
     <link rel="stylesheet" href="../assets/dashboard.css">
