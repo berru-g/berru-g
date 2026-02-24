@@ -252,6 +252,7 @@ if (isset($_POST['regenerate_api_key'])) {
         .api-key-display code {
 
             font-family: 'Courier New', monospace;
+            color: var(--text);
             font-size: 0.9rem;
             flex-grow: 1;
         }

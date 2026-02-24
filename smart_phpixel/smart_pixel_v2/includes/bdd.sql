@@ -11,7 +11,7 @@ CREATE TABLE smart_pixel_tracking (
     campaign VARCHAR(100),
     country VARCHAR(100),
     city VARCHAR(100),
-    click_data JSON,
+    click_data JSON, 
     viewport VARCHAR(50),
     session_id VARCHAR(100),
     INDEX idx_timestamp (timestamp),
@@ -135,6 +135,7 @@ UPDATE users
 SET api_key = CONCAT('sk_', UPPER(SUBSTRING(MD5(RAND()), 1, 24)))
 WHERE api_key IS NULL OR api_key = '';
 
+-- ⚠️ PAS PUSH EN PROD
 -- Changement de la logique d'abonnement, un seul plan mensuel 9 ou annuel 90. 
 -- ⚠️ attention pas encore testé rtisue de conflit. 
 -- ⚠️ nb: penser à adapter ugrade, webhook et vérifier les nomination de $userPlan.
@@ -173,6 +174,7 @@ WHERE plan IN ('pro', 'business');
 
 -- FIN DU SYSTEM D'ABONNEMENT
 
+-- ⚠️ PAS PUSH EN PROD
 -- Test local en cours via account2
 -- Table pour le calendrier de publication et recommandations
 CREATE TABLE `git_commits` (
