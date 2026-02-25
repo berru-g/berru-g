@@ -1570,7 +1570,7 @@ function showSection(section) {
             <div class="doc-content">
                 ${content}
                 <div style="margin-top: 10px; display: flex; gap: 5px;">
-                    <span class="quick-action" onclick="copySection('${section}')">📋 Copier</span>
+                    <span class="quick-action" onclick="copySection('${section}')">Copier</span>
                     <span class="quick-action" onclick="askQuestion('En savoir plus sur ${sectionData.title}')">❓ Question</span>
                 </div>
             </div>
@@ -1591,7 +1591,7 @@ function copySection(section) {
 // Copier dans le presse-papier
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text).then(() => {
-        addMessage('📋 Texte copié !', 'bot');
+        addMessage('✅ Texte copié !', 'bot');
     });
 }
 
@@ -1658,7 +1658,7 @@ function sendMessage() {
                 <p>${result.content}</p>
                 <div style="margin-top: 8px;">
                     <span class="quick-action" onclick="showSection('${result.section}')">
-                        📖 Voir documentation complète
+                        Voir documentation complète
                     </span>
                 </div>
             `;

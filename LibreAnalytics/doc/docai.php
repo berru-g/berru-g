@@ -1,23 +1,24 @@
 <?php
+// public/account.php
+require_once '../includes/auth.php';
+require_once '../includes/config.php';
 
-require_once __DIR__ . '/../includes/config.php';
-require_once __DIR__ . '/../includes/auth.php';
-
-// Vérifie si connecté
 if (!Auth::isLoggedIn()) {
-    // Redirige UNIQUEMENT si pas connecté
     header('Location: login.php');
-    exit;
+    exit();
 }
 
-$user_id = $_SESSION['user_id'];
-$pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8", DB_USER, DB_PASS);
+$userId = $_SESSION['user_id'];
+$pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
 
-// 2. Récupérer les sites de l'utilisateur // dégager query pour prepare 
-$stmt = $pdo->prepare("SELECT * FROM user_sites WHERE user_id = ? ORDER BY id DESC");
-$stmt->execute([$user_id]);
-$userSites = $stmt->fetchAll();
-
+// Récupérer les infos utilisateur
+$stmt = $pdo->prepare("
+    SELECT email, api_key, created_at, plan,
+           (SELECT COUNT(*) FROM user_sites WHERE user_id = users.id) as sites_count
+    FROM users WHERE id = ?
+");
+$stmt->execute([$userId]);
+$user = $stmt->fetch();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -27,7 +28,7 @@ $userSites = $stmt->fetchAll();
     <title>LibreAnalytics - Assistant IA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Styles précédents conservés */
+        /* Styles chat ia */
         * {
             margin: 0;
             padding: 0;
@@ -37,19 +38,19 @@ $userSites = $stmt->fetchAll();
         :root {
             --bg-primary: #ffffff;
             --bg-secondary: #f9fafb;
-            --bg-sidebar: #f9fafb;
-            --text-primary: #111827;
+            --bg-sidebar: #f5f5f5;
+            --text-primary: #333333;
             --text-secondary: #6b7280;
             --text-light: #9ca3af;
             --border-color: #e5e7eb;
-            --accent-color: #2563eb;
-            --accent-hover: #1d4ed8;
-            --success: #10b981;
+            --accent-color: #9d86ff;
+            --accent-hover: #4ecdc4;
+            --success: #4ecdc4;
             --warning: #f59e0b;
-            --error: #ef4444;
+            --error: #ff6b8b;
             --chat-user: #e5e7eb;
-            --chat-bot: #2563eb;
-            --chat-user-text: #111827;
+            --chat-bot: #9d86ff;
+            --chat-user-text: #333333;
             --chat-bot-text: #ffffff;
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
@@ -368,7 +369,7 @@ $userSites = $stmt->fetchAll();
 
         .message.user .message-content {
             background: var(--chat-bot);
-            color: var(--chat-bot-text);
+            color: var(--chat-user-text);
         }
 
         .message.bot .message-content {

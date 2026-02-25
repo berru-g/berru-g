@@ -1,5 +1,5 @@
 <?php
-header('Content-Type: text/html; charset=utf-8');
+/*header('Content-Type: text/html; charset=utf-8');
 
 $slug = $_GET['slug'] ?? '';
 
@@ -9,7 +9,7 @@ $projectsData = [
         'title' => 'Smart Pixel - Alternative Souveraine à Google Analytics',
         'description' => 'Solution analytics open source 100% française, hébergée en Europe, respectueuse RGPD.',
         'technologies' => ['PHP', 'JavaScript', 'MySQL', 'Redis'],
-        'url' => 'https://gael-berru.com/smart_phpixel/',
+        'url' => 'https://gael-berru.com/LibreAnalytics/',
         'image' => 'https://gael-berru.com/img/smart-pixel.png',
         'date' => '2024-01-15'
     ],
@@ -70,7 +70,7 @@ if ($isBot) {
     header('X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
 } else {
     header('X-Robots-Tag: noindex, follow');
-}
+}*/
 ?>
 <!DOCTYPE html>
 <html lang="fr" dir="ltr" <?php if (!$isBot): ?>class="human-version" style="opacity:0;"<?php endif; ?>>
@@ -103,7 +103,7 @@ if ($isBot) {
     <meta name="twitter:description" content="<?= htmlspecialchars($project['description']) ?>">
     
     <!-- JSON-LD Structuré -->
-    <script type="application/ld+json">
+    <!--<script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@graph": [
@@ -160,7 +160,7 @@ if ($isBot) {
             }
         ]
     }
-    </script>
+    </script>-->
     
     <style>
         /* ===== RÉINITIALISATION ===== */
