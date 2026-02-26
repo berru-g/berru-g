@@ -590,6 +590,8 @@
                     <li><a href="#tarifs">Tarifs</a></li>
                     <li><a href="./doc/">Documentation</a></li>
                     <li><a href="./smart_pixel_v2/public/account.php">API</a></li>
+                    <li><a href="./pour_les_dev/">Developper</a></li>
+
                 </ul>
             </div>
 

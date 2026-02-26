@@ -1,5 +1,5 @@
 <?php
-// public/account.php
+/*
 require_once '../includes/auth.php';
 require_once '../includes/config.php';
 
@@ -18,7 +18,7 @@ $stmt = $pdo->prepare("
     FROM users WHERE id = ?
 ");
 $stmt->execute([$userId]);
-$user = $stmt->fetch();
+$user = $stmt->fetch();*/
 ?>
 <!DOCTYPE html>
 <html lang="fr">
