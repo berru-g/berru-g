@@ -1,6 +1,6 @@
 <?php
 // Includes communs
-require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '../includes/config.php';
 
 // Démarrer la session pour CAPTCHA et autres
 session_start();

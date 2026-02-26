@@ -1,11 +1,20 @@
 # Libre Analytics v2 - Analytics Platform
 
-[![PHP Version](https://img.shields.io/badge/PHP-7.4%2B-blue.svg)](https://php.net)
+[![PHP Version](https://img.shields.io/badge/PHP-8.2%2B-777BB4?logo=php)](https://www.php.net/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Installation: 1 ligne](https://img.shields.io/badge/Installation-1_ligne-green.svg)](#installation)
+[![Installation](https://img.shields.io/badge/Installation-1_ligne-brightgreen)](https://gael-berru.com/LibreAnalytics/#installation)
+[![Made in France](https://img.shields.io/badge/Made%20in-France-0055A4?logo=fr)](https://gael-berru.com)
+[![Open Source](https://img.shields.io/badge/Open%20Source-100%25-important?logo=github)](https://github.com/berru-g/LibreAnalytics)
+[![No Cookies](https://img.shields.io/badge/No%20Cookies-RGPD%20Friendly-blueviolet)](https://gael-berru.com/LibreAnalytics/)
+[![Lightweight](https://img.shields.io/badge/Lightweight-4KB-success?logo=lightning)](https://gael-berru.com/LibreAnalytics/)
+[![Sovereign](https://img.shields.io/badge/Sovereign-No%20GAFAM-007EC6?logo=europeanunion)](https://gael-berru.com/LibreAnalytics/)
+[![Status](https://img.shields.io/badge/Status-Actively%20Developed-brightgreen)](https://github.com/berru-g/LibreAnalytics/commits/main)
+
+**Alternative 100% française et open source à Google Analytics**
 
 Avec Libre Analytics vos graphiques racontent une histoire et guident vers des insights actionnables.
 Analysez votre trafic sans compromettre la vie privée de vos visiteurs, avec un outil 100% européen et open source
+
 
 Disponible
 
@@ -14,7 +23,30 @@ Disponible
     ▶️ V.1.0.1 software friendly  | 2026 | statut - MVP fonctionnel + API
 
 
-## Fonctionnalités
+
+## 📋 Sommaire
+1. [Fonctionnalités](#fonctionnalités)
+2. [Versions et statut](#-actuellement-disponibles)
+3. **Guide Utilisateur**
+   - [Créer un compte](#1-créer-votre-compte-gratuit)
+   - [Installer le code de tracking](#2-récupérer-votre-code-de-tracking)
+   - [Tableau de bord](#découvrir-votre-tableau-de-bord)
+   - [Gérer plusieurs sites](#-gérer-plusieurs-sites)
+   - [Paramètres UTM](#-Utiliser-les-paramètres-UTM)
+4. **Tutoriel API** 
+   - [Récupérer ta clé API](#-prérequis)
+   - [Construire l’URL de l’API](#-2-construire-lurl-de-lapi)
+   - [Exemples de requêtes](#-3-récupérer-les-données)
+   - [Intégrations](#-5-intégrer-les-données-avec-des-outils)
+   - [Gestion des erreurs](#-6-gérer-les-erreurs)
+5. [Mise à niveau](#-mettre-à-niveau-votre-compte)
+6. [FAQ & Support](#-faq)
+7. [Glossaire](#glossaire)
+
+
+
+## Fonctionnalité
+
 
 ### ✅ **Actuellement disponibles**
 
@@ -187,7 +219,8 @@ Chaque site a son propre **tracking code** (ex: `SP_79747769`). Installez le cod
 
 ```
 
-# **Tutoriel : Utiliser l’API Libre Analytics**
+
+# Tutoriel : Utiliser l’API Libre Analytics
 *Alternative open-source à Google Analytics*
 
 ---
@@ -195,7 +228,7 @@ Chaque site a son propre **tracking code** (ex: `SP_79747769`). Installez le cod
 ## **🔑 Prérequis**
 - Un **compte Libre Analytics** (gratuit pour 1 site).
 - Une **clé API** (disponible dans ton [tableau de bord](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/account.php)).
-- Le **code de tracking** de ton site (ex: `SP_7f9505cc`).
+- Le **code de tracking** de ton site (ex: `SP_2m4789lg`).
 
 ---
 
@@ -214,9 +247,9 @@ Chaque site a son propre **tracking code** (ex: `SP_79747769`). Installez le cod
 
 ### **Étape 3 : Récupère ton code de tracking**
 1. Va dans **"Mes sites"** dans le menu.
-2. Copie le **code de tracking** (ex: `SP_7f9505cc`).
+2. Copie le **code de tracking** (ex: `SP_2m4789lg`).
 
-   ![Exemple de code de tracking](https://via.placeholder.com/600x200/4a6bff/ffffff?text=Code+de+tracking%3A+SP_7f9505cc)
+   ![Exemple de code de tracking](https://via.placeholder.com/600x200/4a6bff/ffffff?text=Code+de+tracking%3A+SP_2m4789lg)
 
 ---
 
@@ -229,7 +262,7 @@ https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php
 ### **Paramètres obligatoires**
 | Paramètre     | Description                          | Exemple                     |
 |---------------|--------------------------------------|-----------------------------|
-| `site_id`     | Code de tracking de ton site.        | `SP_7f9505cc`               |
+| `site_id`     | Code de tracking de ton site.        | `SP_2m4789lg`               |
 | `api_key`     | Ta clé API (copiée plus tôt).        | `1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p` |
 
 ### **Paramètres optionnels**
@@ -241,7 +274,7 @@ https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php
 ### **Exemple d’URL complète**
 ```
 https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?
-site_id=SP_7f9505cc&
+site_id=SP_2m4789lg&
 api_key=1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p&
 start_date=2026-01-01&
 end_date=2026-02-01
@@ -259,7 +292,7 @@ end_date=2026-02-01
 ### **Méthode 2 : Avec cURL (terminal)**
 ```bash
 curl "https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?
-site_id=SP_7f9505cc&
+site_id=SP_2m4789lg&
 api_key=1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p&
 start_date=2026-01-01&
 end_date=2026-02-01"
@@ -267,7 +300,7 @@ end_date=2026-02-01"
 
 ### **Méthode 3 : Avec JavaScript (fetch)**
 ```javascript
-const siteId = 'SP_7f9505cc';
+const siteId = 'SP_2m4789lg';
 const apiKey = '1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p';
 const startDate = '2026-01-01';
 const endDate = '2026-02-01';
@@ -304,7 +337,7 @@ Voici à quoi ressemble une réponse typique :
     }
   ],
   "meta": {
-    "site_id": "SP_7f9505cc",
+    "site_id": "SP_2m4789lg",
     "start_date": "2026-01-01",
     "end_date": "2026-02-01",
     "total_visits": 92,
@@ -344,7 +377,7 @@ Voici à quoi ressemble une réponse typique :
 2. **Dans Google Sheets** :
    - Utilise la formule `=IMPORTDATA()` :
      ```excel
-     =IMPORTDATA("https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?site_id=SP_7f9505cc&api_key=1a2b3c...")
+     =IMPORTDATA("https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?site_id=SP_2m4789lg&api_key=1a2b3c...")
      ```
 
 ### **C. Tableau de bord custom (HTML/JS)**
@@ -360,7 +393,7 @@ Voici à quoi ressemble une réponse typique :
   <canvas id="visitsChart" width="800" height="400"></canvas>
 
   <script>
-    const siteId = 'SP_7f9505cc';
+    const siteId = 'SP_2m4789lg';
     const apiKey = '1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p';
     const startDate = '2026-01-01';
     const endDate = '2026-02-01';
@@ -426,7 +459,7 @@ startDate.setDate(startDate.getDate() - 30);
 const formattedStartDate = startDate.toISOString().split('T')[0];
 
 fetch(`https://gael-berru.com/.../api.php?
-  site_id=SP_7f9505cc&
+  site_id=SP_2m4789lg&
   api_key=1a2b3c...&
   start_date=${formattedStartDate}&
   end_date=${today}`)
@@ -436,7 +469,7 @@ fetch(`https://gael-berru.com/.../api.php?
 Modifie l’URL pour inclure des données géographiques :
 ```
 https://gael-berru.com/.../api.php?
-site_id=SP_7f9505cc&
+site_id=SP_2m4789lg&
 api_key=1a2b3c...&
 group_by=country
 ```
