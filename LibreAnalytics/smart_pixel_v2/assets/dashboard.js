@@ -338,3 +338,4 @@ window.addEventListener('resize', () => {
         closeMobileMenu();
     }
 });
+

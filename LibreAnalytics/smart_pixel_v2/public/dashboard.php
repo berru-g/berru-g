@@ -333,7 +333,7 @@ function getCountryCodeSimple($countryName)
                 <div class="logo-container">
                     <!--<div class="logo-icon">◰</div>-->
                     <div class="logo-text">
-                        <a href="../../doc/docai.php">
+                        <a href="account.php">
                             <h3><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                                     <circle cx="12" cy="7" r="4" />
@@ -439,6 +439,27 @@ function getCountryCodeSimple($countryName)
                     </code>
                 </div>
             <?php endif; ?>
+
+            <!-- Code SP_ aka Smart Pixel pour api -->
+            <!-- Carte dédiée au code SP_ (simplifié) -->
+            <div class="integration-card" style="">
+                <div class="integration-header">
+                    <h4>Votre SmartPixel</h4>
+                    <button class="copy-btn" onclick="copyTrackingCode('<?= htmlspecialchars($currentSite['tracking_code']) ?>')" title="Copier le code SP_">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="integration-code">
+                    <?= htmlspecialchars($currentSite['tracking_code']) ?>
+                </div>
+            </div>
+
+
+
+
 
             <!-- Bouton de déconnexion -->
             <div class="logout-section">
@@ -571,12 +592,13 @@ function getCountryCodeSimple($countryName)
             <header>
                 <div class="container">
                     <div class="header-content">
-                        <h1>Smart Pixel Analytics : 
-                        <?php
-                        $currentSite = array_filter($userSites, fn($s) => $s['id'] == $selectedSiteId); 
-                        $currentSite = reset($currentSite);
-                        ?>
-                        <span style="color: var(--primary-color);"><?= htmlspecialchars($currentSite['site_name'] ?? 'Site non sélectionné') ?></span></h1>
+                        <h1>Smart Pixel Analytics :
+                            <?php
+                            $currentSite = array_filter($userSites, fn($s) => $s['id'] == $selectedSiteId);
+                            $currentSite = reset($currentSite);
+                            ?>
+                            <span style="color: var(--primary-color);"><?= htmlspecialchars($currentSite['site_name'] ?? 'Site non sélectionné') ?></span>
+                        </h1>
 
                         <div class="period-filter">
                             <span>Période :</span>
@@ -1338,7 +1360,6 @@ function getCountryCodeSimple($countryName)
     <?php include "aissistant.php" ?>
 
     <script>
-
         // Fonction pour changer d'onglet
         function openTab(tabName) {
             // Masquer tous les contenus d'onglets
@@ -2192,6 +2213,29 @@ function getCountryCodeSimple($countryName)
                 console.error('Erreur lors de la copie : ', err);
             });
         }
+
+
+        // Fonction pour copier le code SP_
+        // séparé du script pour eviter les conflits normalement !
+        function copyTrackingCode(code) {
+            navigator.clipboard.writeText(code)
+                .then(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Copié !',
+                        text: 'Le code SmartPixel a été copié.',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 1100
+                    });
+                })
+                .catch(err => {
+                    console.error('Erreur lors de la copie :', err);
+                    alert('Impossible de copier le code. Veuillez le sélectionner manuellement.');
+                });
+        }
+
 
         // Fonction de déconnexion
         function confirmLogout() {

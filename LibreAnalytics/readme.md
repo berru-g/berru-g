@@ -26,6 +26,47 @@ Analysez votre trafic sans compromettre la vie privée de vos visiteurs, avec un
   - *Pas de frameworks lourds* : Développé en PHP natif, sans dépendances inutiles, pour une maintenance simple et des performances maximales.
   - *Hébergement souverain* : 
 
+## **Points clés à mettre en avant (d’après le dashboard et la doc)**
+
+### **1. Architecture et Sécurité**
+- **Base de données MySQL** : Stockage structuré et sécurisé des données (tables `user_sites`, `smart_pixel_tracking`).
+- **Authentification robuste** : Gestion des sessions PHP, vérification des droits d’accès, protection contre les accès non autorisés.
+- **Génération de clés uniques** : `tracking_code` et `public_key` aléatoires pour chaque site, garantissant l’isolation des données.
+- **Limitation des sites par plan** : Logique de quota (ex: 1 site en gratuit, 10 en Pro), avec messages d’erreur clairs.
+
+### **2. Fonctionnalités avancées du dashboard**
+- **Multi-sites** : Gestion de plusieurs sites depuis un seul compte, avec bascule facile entre les tableaux de bord.
+- **Filtrage par période** : 7 jours, 30 jours, 90 jours, 1 an.
+- **Statistiques en temps réel** :
+  - Vues totales, visiteurs uniques, pages/session, temps moyen.
+  - Sources de trafic (Google, réseaux sociaux, direct, etc.).
+  - Géolocalisation (pays, villes).
+  - Appareils (mobile, desktop, tablette).
+  - Navigateurs (Chrome, Firefox, Safari, etc.).
+- **Visualisation des données** :
+  - Graphiques interactifs (Chart.js, amCharts).
+  - Cartes géographiques des visiteurs.
+  - Tableaux de données détaillées (IP, pages visitées, horodatage).
+- **Insights automatisés** :
+  - Analyse des tendances (ex: "+20% de trafic cette semaine").
+  - Recommandations d’amélioration (ex: "Votre taux de rebond est élevé, optimisez vos landing pages").
+
+### **3. API et Intégrations**
+- **Accès programmatique** : Récupération des données via API (JSON/CSV), idéal pour les devs et les intégrations externes.
+- **Exemples d’utilisation** :
+  - Intégration avec Google Data Studio, Excel, ou des dashboards custom (HTML/JS).
+  - Webhooks et notifications en temps réel (en développement).
+
+### **4. Expérience utilisateur**
+- **Design moderne et responsive** : Sidebar rétractable, interface intuitive, dark mode.
+- **Code d’intégration simplifié** : Un seul script à copier-coller dans le `<head>`.
+- **Gestion des limites** : Messages clairs quand l’utilisateur atteint sa limite de sites/visites.
+
+### **5. Souveraineté et Conformité**
+- **Hébergement 100% français** : Pas de dépendance aux GAFAM, conformité RGPD native.
+- **Anonymisation des IP** : Respect de la vie privée.
+- **Pas de cookies intrusifs** : Solution "no cookies" ou barre de consentement intégrée.
+
 
 
 Disponible
@@ -247,20 +288,17 @@ Chaque site a son propre **tracking code** (ex: `SP_79747769`). Installez le cod
 ## **📌 1. Récupérer ta clé API et ton code de tracking**
 ### **Étape 1 : Accède à ton compte**
 1. Connecte-toi à ton [tableau de bord Libre Analytics](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/dashboard.php).
-2. Clique sur **"Parametre"** dans le menu.
+2. Clique sur **"Parametre"** dans le menu puis sur **L'API et sa Documentation**
 
 
 ### **Étape 2 : Copie ta clé API**
-- Dans la section **"Clé API"**, clique sur l’icône **🖉** pour copier ta clé.
+- Dans la section **"Clé API"**, clique sur l’icône pour copier ta clé.
 - **Ne partage jamais cette clé** (elle donne accès à tes données).
 
-   ![Exemple de clé API](https://via.placeholder.com/600x300/4a6bff/ffffff?text=Cl%C3%A9+API%3A+1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p)
 
 ### **Étape 3 : Récupère ton code de tracking**
-1. Va dans **"Mes sites"** dans le menu.
+1. Retour au menu dans la section **Code d'intégration**
 2. Copie le **code de tracking** (ex: `SP_2m4789lg`).
-
-   ![Exemple de code de tracking](https://via.placeholder.com/600x200/4a6bff/ffffff?text=Code+de+tracking%3A+SP_2m4789lg)
 
 ---
 
@@ -365,6 +403,38 @@ Voici à quoi ressemble une réponse typique :
 | `sessions`          | Nombre de sessions.                         |
 | `total_visits`     | Somme des visites sur la période.           |
 
+
+#### **Ajouts techniques**
+- **Exemple de requête SQL** (pour les devs qui veulent self-hoster) :
+  ```sql
+  -- Exemple de requête pour récupérer les stats par jour
+  SELECT
+      DATE(timestamp) as date,
+      COUNT(*) as visits,
+      COUNT(DISTINCT ip_address) as unique_visitors
+  FROM smart_pixel_tracking
+  WHERE site_id = 'SP_12345'
+  GROUP BY DATE(timestamp)
+  ORDER BY date ASC;
+  ```
+- **Intégration de l’API en Python** :
+  ```python
+  import requests
+  response = requests.get(
+      "https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php",
+      params={
+          "site_id": "SP_12345",
+          "api_key": "VOTRE_CLE_API",
+          "start_date": "2026-01-01",
+          "end_date": "2026-02-01"
+      }
+  )
+  data = response.json()
+  print(data["data"])
+  ```
+- **Cas d’usage avancé** :
+  - Comment utiliser vos données LibreAnalytics via l'api pour alimenter un bot Discord ou un script d’alertes (ex: "Si trafic > 1000 visites/jour, envoyer une alerte").
+  
 ---
 
 ## **📈 5. Intégrer les données avec des outils**
@@ -605,3 +675,13 @@ Tu peux maintenant :
 *Document généré le 14 février 2026 - Version 1.0.1*
 
 **Vous avez une question ?** N'hésitez pas à demander, cette documentation est faite pour vous !
+
+
+
+Merci pour le partage du code de ton dashboard. Voici une analyse détaillée des fonctionnalités et points forts de **Libre Analytics v2**, ainsi que des éléments à mettre en avant dans tes articles pour chaque plateforme. Je vais aussi t’aider à enrichir tes contenus avec des détails techniques et des cas d’usage concrets tirés de ton code.
+
+
+
+
+
+

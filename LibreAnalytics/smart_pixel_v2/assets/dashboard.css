@@ -788,8 +788,8 @@ canvas {
 .integration-card {
   background: var(--bg-color);
   border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
+  padding: 0.7rem;
+  margin-bottom: 1.4rem;
   border: 1px solid var(--border-color);
 }
 
@@ -797,11 +797,11 @@ canvas {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.55rem;
 }
 
 .integration-header h4 {
-  font-size: 0.875rem;
+  font-size: 0.86rem;
   font-weight: 600;
   color: var(--text-color);
   margin: 0;
