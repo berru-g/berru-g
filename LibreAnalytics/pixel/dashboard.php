@@ -5,15 +5,15 @@ require_once 'config.php';
 //include __DIR__ . '/includes/header.php';
 $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8", DB_USER, DB_PASS);
 
-// Vérification de sécurité basique
+/* Vérification de sécurité basique
 if (!isset($_SESSION['admin_logged_in'])) {
     // Redirection vers une page de login si nécessaire
     // header('Location: login.php');
     // exit();
-}
+}*/
 
-// Filtre de période (par défaut: 30 derniers jours)
-$period = isset($_GET['period']) ? $_GET['period'] : 30;
+// Filtre de période (par défaut: 1 an)
+$period = isset($_GET['period']) ? $_GET['period'] : 365;
 $dateFilter = date('Y-m-d H:i:s', strtotime("-$period days"));
 
 // STATS GÉNÉRALES
@@ -620,7 +620,7 @@ canvas {
     <header>
         <div class="container">
             <div class="header-content">
-                <h1>Smart Pixel Analytics <a href="./V2/dashboard.php">V2</a></h1>
+                <h1>Le Smart Pixel de LibreAnalytics <a href="./auto-heberge/" style="text-decoration:none;">doc</a></h1>
                 <div class="period-filter">
                     <span>Période :</span>
                     <select id="periodSelect" onchange="changePeriod(this.value)">
@@ -967,7 +967,7 @@ canvas {
 
     <footer>
         <div class="container">
-            <p><a href="https://gael-berru.com/">🟪</a> Smart Pixel Analytics &copy; <?= date('Y') ?> - Données mises à
+            <p><a href="https://gael-berru.com/">Dev by berru-g 2024</a>/ Smart Pixel Analytics &copy; <?= date('Y') ?> - Données mises à
                 jour en temps réel - Respect des loi RGPD</p>
         </div>
     </footer>

@@ -12,21 +12,49 @@
 
 **Alternative 100% française et open source à Google Analytics**
 
-Avec Libre Analytics vos graphiques racontent une histoire et guident vers des insights actionnables.
 Analysez votre trafic sans compromettre la vie privée de vos visiteurs, avec un outil 100% européen et open source
 
    ![LibreAnalytics-Dashboard](https://gael-berru.com/img/demo_dashboard.gif)
 
+Disponible
+
+    ✅ V.0.0.1 pixel auto hebergé | 2024 | statut - gratuit open source
+    ✅ V.0.1.0 pixel multi tenant | 2025 | statut - gratuit pour 1 dashboard
+    ✅ V.1.0.1 software friendly  | 2026 | statut - MVP fonctionnel + API
+    ▶️ V.1.0.5 software fullindé  | 2026 | statut - en cours de dev ...
+
+
+
+## Sommaire
+1. [Fonctionnalités](#fonctionnalités)
+2. [Versions et statut](#-actuellement-disponibles)
+3. **Guide Utilisateur**
+   - [Créer un compte](#1-créer-votre-compte-gratuit)
+   - [Installer le code de tracking](#2-récupérer-votre-code-de-tracking)
+   - [Tableau de bord](#découvrir-votre-tableau-de-bord)
+   - [Gérer plusieurs sites](#-gérer-plusieurs-sites)
+   - [Paramètres UTM](#-Utiliser-les-paramètres-UTM)
+4. **Tutoriel API** 
+   - [Récupérer ta clé API](#-prérequis)
+   - [Construire l’URL de l’API](#-2-construire-lurl-de-lapi)
+   - [Exemples de requêtes](#-3-récupérer-les-données)
+   - [Intégrations](#-5-intégrer-les-données-avec-des-outils)
+   - [Gestion des erreurs](#-6-gérer-les-erreurs)
+5. [Mise à niveau](#-mettre-à-niveau-votre-compte)
+6. [FAQ & Support](#-faq)
+7. [Glossaire](#glossaire)
+
+
 
 ## Pourquoi choisir LibreAnalytics ? :
 
-**Architecture optimisée pour les PME**
+**Architecture optimisée pour les PME, agence et indé.**
 
   - *Base de données légère* : LibreAnalytics utilise une base de données MySQL pour stocker les données de manière efficace, sans dépendre de solutions externes.
   - *Pas de frameworks lourds* : Développé en PHP natif, sans dépendances inutiles, pour une maintenance simple et des performances maximales.
   - *Hébergement souverain* : 
 
-## **Points clés à mettre en avant (d’après le dashboard et la doc)**
+## Points clés
 
 ### **1. Architecture et Sécurité**
 - **Base de données MySQL** : Stockage structuré et sécurisé des données (tables `user_sites`, `smart_pixel_tracking`).
@@ -66,35 +94,6 @@ Analysez votre trafic sans compromettre la vie privée de vos visiteurs, avec un
 - **Hébergement 100% français** : Pas de dépendance aux GAFAM, conformité RGPD native.
 - **Anonymisation des IP** : Respect de la vie privée.
 - **Pas de cookies intrusifs** : Solution "no cookies" ou barre de consentement intégrée.
-
-
-
-Disponible
-
-    ✅ V.0.0.1 pixel auto hebergé | 2024 | statut - gratuit open source
-    ✅ V.0.1.0 pixel multi tenant | 2025 | statut - gratuit pour 1 dashboard
-    ▶️ V.1.0.1 software friendly  | 2026 | statut - MVP fonctionnel + API
-
-
-
-## 📋 Sommaire
-1. [Fonctionnalités](#fonctionnalités)
-2. [Versions et statut](#-actuellement-disponibles)
-3. **Guide Utilisateur**
-   - [Créer un compte](#1-créer-votre-compte-gratuit)
-   - [Installer le code de tracking](#2-récupérer-votre-code-de-tracking)
-   - [Tableau de bord](#découvrir-votre-tableau-de-bord)
-   - [Gérer plusieurs sites](#-gérer-plusieurs-sites)
-   - [Paramètres UTM](#-Utiliser-les-paramètres-UTM)
-4. **Tutoriel API** 
-   - [Récupérer ta clé API](#-prérequis)
-   - [Construire l’URL de l’API](#-2-construire-lurl-de-lapi)
-   - [Exemples de requêtes](#-3-récupérer-les-données)
-   - [Intégrations](#-5-intégrer-les-données-avec-des-outils)
-   - [Gestion des erreurs](#-6-gérer-les-erreurs)
-5. [Mise à niveau](#-mettre-à-niveau-votre-compte)
-6. [FAQ & Support](#-faq)
-7. [Glossaire](#glossaire)
 
 
 
