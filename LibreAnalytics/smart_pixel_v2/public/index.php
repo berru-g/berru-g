@@ -35,6 +35,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$userId, $site_name, $site_url, $tracking_code, $public_key]);
         }
 
+        // Envoi de l'email de bienvenue (immédiat)
+        // ajout de cron "0 9 * * * /usr/bin/php /chemin/vers/ton/projet/cron/send_sequential_emails.php" et l'execution auto everyday at 9pm
+        $to = $email;
+        $subject = "Bienvenue sur LibreAnalytics !";
+        $message = "
+        Bonjour,\n\n
+        Merci d’avoir rejoint LibreAnalytics ! 🎉\n
+        Te voila responsable et propriétaire de tes données, personne ne les exploite à part toi.\n
+        Ton code de tracking est prêt :\n
+        <script data-sp-id=\"$tracking_code\" src=\"https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js\" async></script>\n\n
+        👉 [Voir ton dashboard](https://gael-berru.com/LibreAnalytics/dashboard.php)\n
+        PS : Besoin d’aide ? Réponds à cet email !";
+        $headers = "From: contact@gael-berru.com\r\n";
+        mail($to, $subject, $message, $headers);
+
+        // Initialisation des champs de tracking pas encore entré en bdd!
+        //$pdo->exec("UPDATE users SET email_sent_7d = FALSE, email_sent_14d = FALSE WHERE id = $userId");
+
         // echo "DEBUG: Redirection vers dashboard.php<br>";
         header('Location: dashboard.php');
         exit();

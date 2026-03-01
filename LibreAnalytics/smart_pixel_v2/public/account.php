@@ -54,7 +54,7 @@ $user = $stmt->fetch();
 
 // Régénérer la clé API si demandé
 if (isset($_POST['regenerate_api_key'])) {
-    $newApiKey = 'sk_' . bin2hex(random_bytes(16));
+    $newApiKey = bin2hex(random_bytes(16));
     $stmt = $pdo->prepare("UPDATE users SET api_key = ? WHERE id = ?");
     $stmt->execute([$newApiKey, $userId]);
     $user['api_key'] = $newApiKey;
@@ -575,7 +575,7 @@ if (isset($_POST['regenerate_api_key'])) {
                     <div class="example-url">
                         https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?
                         site_id=<strong>SP_24m87bb</strong>&
-                        api_key=<strong>sk_1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p</strong>&
+                        api_key=<strong>1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p</strong>&
                         start_date=<strong>2026-01-01</strong>&
                         end_date=<strong>2026-02-01</strong>
                     </div>
@@ -588,11 +588,11 @@ if (isset($_POST['regenerate_api_key'])) {
                     <ul>
                         <li><strong>Depuis un navigateur</strong> : Copie-colle l'URL dans la barre d'adresse, ou crée ton propre dashboard,</li><strong><a href="https://codepen.io/h-lautre/pen/EayBqeE?editors=1000" target="_blank">A partir de ton template</a></strong>.</li>
                         <li><strong>Avec cURL</strong> (terminal) :
-                            <code>curl "https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c..."</code>
+                            <code>curl "https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=1a2b3c..."</code>
                         </li>
                         <li><strong>Avec JavaScript</strong> (fetch) :
                             <code>
-                                fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c...`)
+                                fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=1a2b3c...`)
                                 .then(response => response.json())
                                 .then(data => console.log(data));
                             </code>
@@ -653,7 +653,7 @@ if (isset($_POST['regenerate_api_key'])) {
                         &lt;canvas id="visitsChart" width="800" height="400"&gt;&lt;/canvas&gt;
                         &lt;script src="https://cdn.jsdelivr.net/npm/chart.js"&gt;&lt;/script&gt;
                         &lt;script&gt;
-                        fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c...`)
+                        fetch(`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=1a2b3c...`)
                         .then(response => response.json())
                         .then(data => {
                         const labels = data.data.map(item => item.date);
