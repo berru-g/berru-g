@@ -203,3 +203,7 @@ CREATE TABLE `git_commits` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- sequence email relance
+ALTER TABLE users
+ADD COLUMN email_sent_7d BOOLEAN DEFAULT FALSE,
+ADD COLUMN email_sent_14d BOOLEAN DEFAULT FALSE;
