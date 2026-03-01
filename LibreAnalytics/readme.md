@@ -99,7 +99,6 @@ Disponible
 
 ## Fonctionnalité
 
-
 ### ✅ **Actuellement disponibles**
 
 #### Plan Gratuit
@@ -675,9 +674,10 @@ Tu peux maintenant :
 
 **Vous avez une question ?** N'hésitez pas à demander, cette documentation est faite pour vous !
 
+**NB :** Pour tendre vers la souveraineté total de nos données, je suis confronter à remplacer des outils gafam qu'il m'as fallu développer au fur et à mesure. Des tool tel que :
 
-
-Merci pour le partage du code de ton dashboard. Voici une analyse détaillée des fonctionnalités et points forts de **Libre Analytics v2**, ainsi que des éléments à mettre en avant dans tes articles pour chaque plateforme. Je vais aussi t’aider à enrichir tes contenus avec des détails techniques et des cas d’usage concrets tirés de ton code.
+  - System de Captcha
+  - Séquence email automatique
 
 
 

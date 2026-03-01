@@ -125,11 +125,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <div class="content">
-            <p>Bonjour <strong><?php echo htmlspecialchars($pseudoPrenom); ?></strong></p>
+            <p>Bonjour <strong>$pseudoPrenom</strong></p>
 
             <p>Merci d’avoir rejoint <span class="highlight">LibreAnalytics</span> ! 🎉</p>
 
-            <p>Tu es désormais <strong>responsable et propriétaire des données</strong> de ton site. Personne ne les exploite à part toi.</p>
+            <p>Tu es désormais <strong>responsable et propriétaire des données</strong> de ton site. Soit fière de ce premier pas vers l'indépendance numérique.</p>
 
             <p>Voici ton <strong>code de tracking</strong> à installer sur ton site :</p>
 
@@ -137,14 +137,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 &lt;script data-sp-id=&quot;$tracking_code&quot; src=&quot;https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js&quot; async&gt;&lt;/script&gt;
             </div>
 
-            <p>Une fois installé, tu pourras suivre ton trafic en temps réel depuis ton tableau de bord.</p>
+            <p>Une fois installé, dans la balise < head > de ton index.html, tu pourras suivre ton trafic en temps réel depuis ton tableau de bord.</p>
 
             <p style="text-align: center;">
                 <a href="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/dashboard.php" class="button">Accéder à mon dashboard</a>
             </p>
 
             <p>Besoin d’aide pour l’installation ou des questions ? <strong>Réponds simplement à cet email</strong>, je suis là pour t’aider !</p>
-            <p>Gael créateur de LibreAnalytics et de son Smart Pixel.</p>
+            <p>Gael créateur de LibreAnalytics.</p>
         </div>
 
         <div class="footer">
