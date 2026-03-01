@@ -1,8 +1,14 @@
 <?php
 require_once '../includes/config.php';
-// requete à cron pour automatiser l'envoie du rapport tout les vendredi à 17h :
-// 0 17 * * 5 /usr/bin/php /chemin/absolu/vers/cron/send_sequential_email_V2.php
-
+// requete à cron pour automatiser l'envoie du rapport tout les vendredi à 17h sans dépendre des gafam :
+// 0 17 * * 5 /public_html/LibreAnalytics/smart_pixel_v2/cron/send_sequential_email.php
+// * * * * *  FORMAT CRON 😂  **for sure** :
+// │ │ │ │ └── Jour de la semaine (0-6, 0=dimanche, 1=lundi, ..., 5=vendredi, 6=samedi)
+// │ │ │ └──── Mois (1-12)
+// │ │ └────── Jour du mois (1-31)
+// │ └──────── Heure (0-23)
+// └────────── Minute (0-59)
+//if you need test create a token with : ouai c'est del'anglais je fais ce que je veux : echo bin2hex(random_bytes(16));
 $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 

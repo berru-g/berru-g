@@ -1,3 +1,14 @@
+<?php
+$to = 'g.leberruyer@gmail.com';  
+$subject = 'Accés aux Honey Pot';
+$message = 'Un acces à /log/ non autorisé';
+$headers = 'From: contact@gael-berru.com' . "\r\n";
+if (mail($to, $subject, $message, $headers)) {
+    echo "Email envoyé avec succès !";
+} else {
+    echo "Échec de l'envoi.";
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 

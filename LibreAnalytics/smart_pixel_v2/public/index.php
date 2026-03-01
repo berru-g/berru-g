@@ -1,5 +1,5 @@
 <?php
-// public/index.php
+// page register et TEMPLATE CRON email auto apres inscription :)
 require_once  '../includes/auth.php';
 error_reporting(E_ALL);
 
