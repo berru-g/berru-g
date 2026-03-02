@@ -148,8 +148,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <div class="footer">
-            <p>© 2026 LibreAnalytics – Une alternative <strong>100% française</strong>, <strong>open source</strong> et <strong>RGPD-friendly</strong> à Google Analytics.</p>
-            <p><a href="https://gael-berru.com">Visite notre site</a> | <a href="https://gael-berru.com/LibreAnalytics/doc/">Documentation</a></p>
+            <p>© 2026 LibreAnalytics MVP V.1.0.7 – Une alternative <strong>100% française</strong>, <strong>open source</strong> et <strong>RGPD-friendly</strong> à Google Analytics.</p>
+            <p><a href="https://gael-berru.com/LibreAnalytics">Visite notre site</a> | <a href="https://gael-berru.com/LibreAnalytics/doc/">Documentation</a></p>
         </div>
     </div>
 </body>

@@ -458,9 +458,6 @@ function getCountryCodeSimple($countryName)
             </div>
 
 
-
-
-
             <!-- Bouton de déconnexion -->
             <div class="logout-section">
 
@@ -592,7 +589,7 @@ function getCountryCodeSimple($countryName)
             <header>
                 <div class="container">
                     <div class="header-content">
-                        <h1>Smart Pixel Analytics :
+                        <h1>LibreAnalytics :
                             <?php
                             $currentSite = array_filter($userSites, fn($s) => $s['id'] == $selectedSiteId);
                             $currentSite = reset($currentSite);
@@ -1336,7 +1333,7 @@ function getCountryCodeSimple($countryName)
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                             <circle cx="12" cy="7" r="4" />
                         </svg>
-                        <span class="subtitle">L'API et sa Documentation</span>
+                        <span class="subtitle">L'API et sa Doc</span>
                     </a>
 
                     <a href="../contact/" class="modal-link"> <!-- adapte selon ton URL réelle -->
@@ -1355,6 +1352,9 @@ function getCountryCodeSimple($countryName)
                 </div>
             </div>
         </dialog>
+
+        <p style="text-align:center;color:grey;">LibreAnalytics <?= APP_VERSION ?> by <a href="https://gael-berru.com" target="_blank" style="text-decoration:none;color:#9d86ff">berru-g</a> 24</p>
+
     </div>
 
     <?php include "aissistant.php" ?>

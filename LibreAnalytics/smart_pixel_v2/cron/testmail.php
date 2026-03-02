@@ -1,11 +1,11 @@
 <?php
-$to = 'g.leberruyer@gmail.com';  // Un email que tu contrôles
-$subject = 'Test envoi email';
-$message = 'Ceci est un test sendmail. Si ne fonctionne pas, install phpmailer!';
+$to = 'g.leberruyer@gmail.com'; 
+$subject = '🟦 ENDPOINT';
+$message = 'Accees aux curieux. Visite ton dashboard !';
 $headers = 'From: contact@gael-berru.com' . "\r\n";
 if (mail($to, $subject, $message, $headers)) {
-    echo "Email envoyé avec succès !";
+    echo "✅";
 } else {
-    echo "Échec de l'envoi.";
+    echo "🫡";
 }
 ?>

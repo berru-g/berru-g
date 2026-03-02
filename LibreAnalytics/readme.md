@@ -676,9 +676,9 @@ Tu peux maintenant :
 **Note pour toi utilisateur** 
 Pour tendre vers la souveraineté total de nos données, je suis confronter à remplacer des outils gafam qu'il m'as fallu développer au fur et à mesure. Des tool tel que :
 
-  - L'API
-  - System de Captcha
-  - Séquence email automatique (via cron)
+  - L'API / en pur PHP et JavaScript
+  - System de Captcha / idem
+  - Séquence email automatique / via cron et email() mais pour des raisons de limitaion journaliére je passerais sur SymfonyMailer ou PHPmailer qui sont des solution php native et souveraines.
 
 Si vous avez un besoin spécifique [n'hésitez pas à me contacter](mailto:contact@gael-berru.com)
 
