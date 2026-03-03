@@ -52,7 +52,7 @@ const projectsDatabase = [
         title: 'Libre Analytics',
         shortDesc: 'Alternative souveraine à Google Analytics',
         longDesc: 'Analysez vos données et soyez réelement le seul à pouvoir les exploiter. Integration en 2 min, dashboard complet, conforme RGPD et open source. Doc compléte d\'integration. Analysez votre trafic sans compromettre la vie privée de vos visiteurs, avec un outil 100% Souverains et open source.',
-        keywords: ['analytics', 'tracking', 'privacy', 'gdpr', 'dashboard', 'data', 'open source'],
+        keywords: ['analytics', 'tracking', 'privacy', 'api', 'dashboard', 'data', 'open source'],
         image: './img/demo_dashboard.gif',
         link: 'https://gael-berru.com/LibreAnalytics/?utm_source=monsite',
         category: 'saas',

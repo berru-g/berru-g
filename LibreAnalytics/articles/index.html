@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="LibreAnalytics : Alternative française open source à Google Analytics. Analysez votre trafic web en respectant la vie privée et la souveraineté des données. Solution légère, sans cookies, conforme RGPD, idéale pour les PME et indépendants.">
+    <meta name="keywords"
+        content="analytics souverain, alternative google analytics, analytics open source, analytics français, analytics sans cookies, analytics RGPD, tracking web souverain, solution analytics PME, analytics léger, analytics respect vie privée, analytics hébergé en France">
+    <meta name="author" content="Berru">
+    <meta property="og:title" content="LibreAnalytics : L’Alternative Française et Open Source à Google Analytics">
+    <meta property="og:description"
+        content="Découvrez LibreAnalytics, la solution analytics 100% française, open source et respectueuse de la vie privée. Idéale pour les PME et indépendants.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gael-berru.com/LibreAnalytics/">
+    <meta property="og:image" content="https://gael-berru.com/img/demo_dashboard.gif">
+    <title>LibreAnalytics : L’Alternative Française et Open Source à Google Analytics</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #2c3e50;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            border-bottom: 2px solid #9d86ff;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin-top: 30px;
+        }
+
+        h3 {
+            font-size: 1.4em;
+            margin-top: 25px;
+        }
+
+        a {
+            color: #9d86ff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        ul,
+        ol {
+            margin-left: 20px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #9d86ff;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .cta-button:hover {
+            background: #2980b9;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .feature-list li:before {
+            content: "✅ ";
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #f2f2f2;
+        }
+
+        .highlight {
+            background: #fffde7;
+            padding: 15px;
+            border-left: 4px solid #ffd600;
+            margin: 20px 0;
+        }
+
+        .code-block {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: monospace;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding: 20px;
+            background: #f9f9f9;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>LibreAnalytics : L’Alternative Française et Open Source à Google Analytics</h1>
+        <p>
+            <strong>Analysez votre trafic web sans compromettre la vie privée de vos visiteurs.</strong>
+            LibreAnalytics est une solution <strong>100% française, open source et souveraine</strong>, conçue pour les
+            PME, indépendants et agences qui recherchent une alternative légère, respectueuse du RGPD et facile à
+            installer.
+        </p>
+        <a href="https://gael-berru.com/LibreAnalytics?utm_source=Article" class="cta-button">Créer mon dashboard
+            gratuitement</a>
+    </header>
+
+    <section>
+        <h2>Pourquoi choisir LibreAnalytics ?</h2>
+        <p>
+            Dans un monde où la protection des données et la souveraineté numérique deviennent des enjeux majeurs,
+            LibreAnalytics se positionne comme <strong>la solution analytics idéale pour les professionnels
+                exigeants</strong>. Voici pourquoi :
+        </p>
+        <ul class="feature-list">
+            <li><strong>100% souverains et open source</strong> : Hébergé en France et en Europe, sans dépendance aux
+                GAFAM, avec un code transparent et auditable.</li>
+            <li><strong>Conforme RGPD</strong> : Pas de cookies intrusifs, anonymisation des IP, et gestion native du
+                consentement.</li>
+            <li><strong>Léger et performant</strong> : Script de seulement 4KB, chargé en asynchrone pour ne pas
+                ralentir votre site.</li>
+            <li><strong>Multi-tenant</strong> : Gérez plusieurs sites depuis un seul compte, avec des tableaux de bord
+                dédiés.</li>
+            <li><strong>API puissante</strong> : Accédez à vos données via une API RESTful pour des intégrations
+                personnalisées.</li>
+            <li><strong>Insights actionnables</strong> : Recevez des conseils SEO et des analyses automatisées pour
+                améliorer votre trafic.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Fonctionnalités clés de LibreAnalytics</h2>
+        <h3>1. Tableau de bord intuitif et complet</h3>
+        <p>
+            Visualisez en temps réel les performances de votre site avec des graphiques interactifs, des cartes
+            géographiques et des tableaux détaillés :
+        </p>
+        <ul>
+            <li><strong>Visites et visiteurs uniques</strong> : Suivi précis du trafic.</li>
+            <li><strong>Sources de trafic</strong> : Google, réseaux sociaux, liens directs, etc.</li>
+            <li><strong>Géolocalisation</strong> : Pays et villes de vos visiteurs.</li>
+            <li><strong>Appareils et navigateurs</strong> : Compatibilité et expérience utilisateur.</li>
+            <li><strong>Comportement</strong> : Pages vues, temps passé, taux de rebond.</li>
+        </ul>
+        <div class="highlight">
+            <p>
+                <strong>Exemple d’insight automatisé</strong> :<br>
+                "Votre taux de rebond est de 65% sur la page d’accueil. Pensez à optimiser votre contenu ou votre
+                call-to-action pour améliorer l’engagement."
+            </p>
+        </div>
+
+        <h3>2. Tracking avancé et paramétrable</h3>
+        <p>
+            LibreAnalytics va au-delà du simple comptage de visites :
+        </p>
+        <ul>
+            <li><strong>Paramètres UTM</strong> : Tracez l’efficacité de vos campagnes marketing.</li>
+            <li><strong>Événements personnalisés</strong> : Suivez les clics, les téléchargements, ou toute interaction
+                clé.</li>
+            <li><strong>Sessions uniques</strong> : Identification précise des visiteurs (sans cookies).</li>
+        </ul>
+
+        <h3>3. API et intégrations</h3>
+        <p>
+            Accédez à vos données depuis n’importe quel outil grâce à mon API RESTful. Exemples d’utilisation :
+        </p>
+        <ul>
+            <li>Intégration avec Google Data Studio, Excel, ou des dashboards custom.</li>
+            <li>Automatisation de rapports via des scripts Python ou JavaScript.</li>
+            <li>Alertes personnalisées (ex: "Si trafic > 1000 visites/jour, envoyer une notification").</li>
+        </ul>
+        <div class="code-block">
+            Exemple de requête API (JavaScript) :
+            <pre>
+fetch(`https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?
+  site_id=SP_2m4789lg&
+  api_key=1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p&
+  start_date=2026-01-01&
+  end_date=2026-02-01`)
+  .then(response => response.json())
+  .then(data => console.log(data));
+            </pre>
+        </div>
+
+        <h3>4. Souveraineté et sécurité</h3>
+        <p>
+            Avec LibreAnalytics, vos données restent sous votre contrôle :
+        </p>
+        <ul class="feature-list">
+            <li>Hébergement 100% français, sans transfert vers des serveurs étrangers.</li>
+            <li>Pas de revente de données à des tiers.</li>
+            <li>Chiffrement des données et authentification robuste.</li>
+            <li>Conformité native avec le RGPD et les réglementations européennes.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Comment installer LibreAnalytics ?</h2>
+        <p>
+            En seulement 3 étapes, commencez à tracker votre trafic :
+        </p>
+        <ol>
+            <li>
+                <strong>Créez votre compte gratuit</strong> :
+                Rendez-vous sur <a href="https://gael-berru.com/LibreAnalytics/">LibreAnalytics</a> et inscrivez-vous
+                avec votre email et le mot de passe de votre choix.
+            </li>
+            <li>
+                <strong>Récupérez votre code de tracking</strong> :
+                Après connexion, copiez le script généré automatiquement pour votre site.
+                <div class="code-block">
+                    Exemple de code :
+                    <pre>
+&lt;script data-sp-id="SP_79747769"
+        src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js"
+        async&gt;
+&lt;/script&gt;
+                    </pre>
+                </div>
+            </li>
+            <li>
+                <strong>Installez le script</strong> :
+                Collez ce code <strong>juste avant la balise `</head>`</strong> de votre site. Le tracking commence
+                immédiatement !
+            </li>
+        </ol>
+        <div class="highlight">
+            <p>
+                <strong>Astuce</strong> : Pour tester l’installation, visitez votre site et vérifiez que la visite
+                apparaît dans votre tableau de bord en temps réel.
+            </p>
+        </div>
+    </section>
+
+    <section>
+        <h2>Plans et tarifs</h2>
+        <p>
+            LibreAnalytics est pour le moment entiérement gratuit pour votre premier dashboard. Les options payantes
+            sont en cours de developpement, merci.
+            <thead>
+                <tr>
+                    <th>Fonctionnalité</th>
+                    <th>Gratuit</th>
+                    <th>Pro (9€/mois)</th>
+                    <th>Business (29€/mois)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Nombre de sites</td>
+                    <td>1</td>
+                    <td>10</td>
+                    <td>50</td>
+                </tr>
+                <tr>
+                    <td>Vues/mois</td>
+                    <td>1 000</td>
+                    <td>100 000</td>
+                    <td>Illimité</td>
+                </tr>
+                <tr>
+                    <td>Historique</td>
+                    <td>365 jours</td>
+                    <td>365 jours</td>
+                    <td>2 ans</td>
+                </tr>
+                <tr>
+                    <td>Accès API</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td>Support</td>
+                    <td>Communauté</td>
+                    <td>Prioritaire</td>
+                    <td>Téléphone</td>
+                </tr>
+                <tr>
+                    <td>Export données</td>
+                    <td>❌</td>
+                    <td>✅</td>
+                    <td>✅</td>
+                </tr>
+            </tbody>
+            </table>
+        <p>
+            <a href="https://gael-berru.com/LibreAnalytics?utm_source=Article" class="cta-button">Passer à la version
+                Pro</a>
+        </p>
+    </section>
+
+    <section>
+        <h2>FAQ : Questions fréquentes</h2>
+        <h3>Mes données sont-elles vraiment privées ?</h3>
+        <p>
+            <strong>Oui.</strong> LibreAnalytics est hébergé en France et ne vend aucune donnée à des tiers. Le code est
+            open source et peut être audité par quiconque.
+        </p>
+
+        <h3>Est-ce que le pixel ralentit mon site ?</h3>
+        <p>
+            <strong>Non.</strong> Le script pèse seulement 4KB et se charge de manière asynchrone, sans bloquer
+            l’affichage de votre site.
+        </p>
+
+        <h3>Combien de temps les données sont-elles conservées ?</h3>
+        <p>
+            Les données sont conservées <strong>365 jours</strong> pour les plans Gratuit et Pro, et <strong>2
+                ans</strong> pour le plan Business.
+        </p>
+
+        <h3>Puis-je exporter mes données ?</h3>
+        <p>
+            <strong>Oui</strong> (plans payants). Vous pouvez exporter vos données en format CSV ou JSON depuis l’onglet
+            "Export".
+        </p>
+
+        <h3>Le RGPD est-il géré ?</h3>
+        <p>
+            <strong>Absolument.</strong> LibreAnalytics inclut une gestion native des cookies et permet l’anonymisation
+            des IP pour une conformité totale.
+        </p>
+    </section>
+
+    <section>
+        <h2>Témoignages et cas d’usage</h2>
+        <p>
+            LibreAnalytics est déjà utilisé par des centaines de PME, indépendants et agences en France. Voici quelques
+            retours :
+        </p>
+        <blockquote>
+            <p>
+                "Depuis que j’utilise LibreAnalytics, je peux enfin analyser le trafic de mon site sans me soucier du
+                RGPD. L’outil est simple, efficace, et le support est réactif !"
+            <footer>— Marie, gérante d’une boutique en ligne</footer>
+            </p>
+        </blockquote>
+        <blockquote>
+            <p>
+                "L’API de LibreAnalytics nous a permis d’intégrer nos données analytics directement dans notre CRM. Une
+                vraie valeur ajoutée pour notre équipe marketing."
+            <footer>— Thomas, responsable digital d’une agence web</footer>
+            </p>
+        </blockquote>
+    </section>
+
+    <section>
+        <h2>Conclusion : Pourquoi passer à LibreAnalytics ?</h2>
+        <p>
+            Si vous cherchez une solution analytics <strong>respectueuse de la vie privée, souveraine, et facile à
+                utiliser</strong>, LibreAnalytics est fait pour vous. Avec son installation en 3 clics, son tableau de
+            bord intuitif et ses fonctionnalités avancées, c’est l’outil idéal pour :
+        </p>
+        <ul class="feature-list">
+            <li>Les <strong>PME</strong> qui veulent une alternative simple et conforme à Google Analytics.</li>
+            <li>Les <strong>indépendants</strong> qui ont besoin d’un outil léger et sans complexité.</li>
+            <li>Les <strong>agences</strong> qui recherchent une solution multi-sites et souveraine pour leurs clients.
+            </li>
+            <li>Les <strong>développeurs</strong> qui veulent une API ouverte et des données accessibles.</li>
+        </ul>
+        <p>
+            <a href="https://gael-berru.com/LibreAnalytics?utm_source=Article" class="cta-button">Essayez LibreAnalytics
+                gratuitement dès maintenant</a>
+        </p>
+    </section>
+
+    <section>
+        <h2>Ok, mais t’es qui, toi ?</h2>
+        <p>
+            Développeur autodidacte depuis <strong>2020</strong>, j’ai appris à coder pendant le confinement pour créer
+            des outils <strong>indépendants et souverains</strong> — bien avant que cela ne devienne une mode.
+        </p>
+        <p>
+            Avec une mentalité <strong>cypher punk</strong>, je conçois des solutions qui <strong>respectent la vie
+                privée</strong> et <strong>évitent les GAFAM</strong>. LibreAnalytics est né de ce besoin : offrir une
+            alternative <strong>française, open source et légère</strong> à Google Analytics, pour les PME et les
+            indépendants qui veulent reprendre le contrôle de leurs données.
+        </p>
+        <p>
+            <a href="https://gael-berru.com/LibreAnalytics?utm_source=Article" class="cta-button">Créez votre premier
+                dashboard gratuitement</a>
+        </p>
+    </section>
+
+
+    <footer>
+        <p>
+            &copy; 2026 LibreAnalytics – Une solution <strong>made in France</strong> par <a
+                href="https://gael-berru.com">Gaël Berru</a>.<br>
+            Besoin d’aide ou d’informations complémentaires ? <a href="mailto:contact@gael-berru.com">Contactez moi</a>
+            ou consultez mon <a href="https://github.com/berru-g/LibreAnalytics/">code source sur GitHub</a>.
+        </p>
+    </footer>
+</body>
+
+</html>

@@ -158,7 +158,7 @@ HTML;
 
         // En-têtes pour l'email HTML
         //$headers = "From: L'équipe LibreAnalytics <contact@gael-berru.com>\r\n";
-        $headers = "From: contact@gael-berru.com\r\n";
+        $headers = "From: LibreAnalytics <contact@gael-berru.com>\r\n";
         $headers .= "Reply-To: contact@gael-berru.com\r\n";
         $headers .= "MIME-Version: 1.0\r\n";
         $headers .= "Content-Type: text/html; charset=UTF-8\r\n";

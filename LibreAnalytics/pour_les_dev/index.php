@@ -27,6 +27,8 @@ $user = $stmt->fetch();*/
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LibreAnalytics - Assistant IA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="author" content="Gael Berru.">
+    <meta name="robots" content="index, follow">
     <style>
         /* Styles chat ia */
         * {
