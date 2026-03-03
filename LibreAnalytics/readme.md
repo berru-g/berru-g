@@ -21,7 +21,7 @@ Disponible
     ✅ V.0.0.1 pixel auto hebergé | 2024 | statut - gratuit open source
     ✅ V.0.1.0 pixel multi tenant | 2025 | statut - gratuit pour 1 dashboard
     ✅ V.1.0.1 software friendly  | 2026 | statut - MVP fonctionnel + API
-    ▶️ V.1.0.5 software fullindé  | 2026 | statut - en cours de dev ...
+    ▶️ V.1.0.7 software fullindé  | 2026 | statut - en cours de dev ...
 
 
 
@@ -43,6 +43,8 @@ Disponible
 5. [Mise à niveau](#-mettre-à-niveau-votre-compte)
 6. [FAQ & Support](#-faq)
 7. [Glossaire](#glossaire)
+8. [Note de l'auteur](#Note-à-l'utilisateur)
+9. [Roadmap](#roadmap-)
 
 
 
@@ -673,12 +675,31 @@ Tu peux maintenant :
 *Document généré le 14 février 2026 - Version 1.0.1*
 
 
-**Note pour toi utilisateur** 
+## Note à l'utilisateur
 Pour tendre vers la souveraineté total de nos données, je suis confronter à remplacer des outils gafam qu'il m'as fallu développer au fur et à mesure. Des tool tel que :
 
   - L'API / en pur PHP et JavaScript
   - System de Captcha / idem
   - Séquence email automatique / via cron et email() mais pour des raisons de limitaion journaliére je passerais sur SymfonyMailer ou PHPmailer qui sont des solution php native et souveraines.
+
+## Roadmap :
+  - Hebergement propre dissocier de mon site
+  - Reorga de la structure interne à simplifier ( LibreAnalytics puis chaque dossier, pas de v2)
+  - Nom de domaine 
+  - Mise en route du plan premium à 9€/mois ou 90€ à l'année.
+  - Config de lemonsqueezie comme moyen de paiement
+  - Developper l'api en ajoutant des appel à chaque table de la bdd
+  - Developper pixel pour récuperer plus de données, dans les limites RGPD.
+  - Recherche de partner...
+
+
+## Plan du site :
+[Dashboard](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/dashboard.php)
+[Api](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/account.php)
+[Doc](https://gael-berru.com/LibreAnalytics/doc/)
+[Chat](https://gael-berru.com/LibreAnalytics/chat/)
+[Articles](https://gael-berru.com/LibreAnalytics/articles/)
+
 
 Si vous avez un besoin spécifique [n'hésitez pas à me contacter](mailto:contact@gael-berru.com)
 

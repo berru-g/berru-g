@@ -1,25 +1,3 @@
-<?php
-/*
-require_once '../includes/auth.php';
-require_once '../includes/config.php';
-
-if (!Auth::isLoggedIn()) {
-    header('Location: login.php');
-    exit();
-}
-
-$userId = $_SESSION['user_id'];
-$pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
-
-// Récupérer les infos utilisateur
-$stmt = $pdo->prepare("
-    SELECT email, api_key, created_at, plan,
-           (SELECT COUNT(*) FROM user_sites WHERE user_id = users.id) as sites_count
-    FROM users WHERE id = ?
-");
-$stmt->execute([$userId]);
-$user = $stmt->fetch();*/
-?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -781,7 +759,7 @@ $user = $stmt->fetch();*/
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <a href="../index.php" class="logo">
+                <a href="../index.html" class="logo">
                     <div class="logo-icon">
                         <i class="fa-regular fa-folder-open"></i>
                     </div>
@@ -841,12 +819,13 @@ $user = $stmt->fetch();*/
             </nav>
 
             <div class="sidebar-footer">
+               <a href="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/account.php" target="_blank">
                 <div class="user-avatar">
                     <i class="fas fa-user"></i>
-                </div>
+                </div></a>
                 <div class="user-info">
                     <div class="user-name">Utilisateur</div>
-                    <div class="user-email"><?php echo isset($_SESSION['user_email']) ? $_SESSION['user_email'] : 'non connecté'; ?></div>
+                    <div class="user-email">Anonyme</div>
                 </div>
             </div>
         </aside>
@@ -2072,11 +2051,9 @@ fetch(\`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c.
         // Initialisation
         window.addEventListener('load', () => {
             // Simuler un message de bienvenue personnalisé si utilisateur connecté
-            <?php if(isset($_SESSION['user_email'])): ?>
             setTimeout(() => {
-                addMessage('Bienvenue <?php echo addslashes($_SESSION['user_email']); ?> ! Comment puis-je vous aider aujourd\'hui ?', 'bot');
+                addMessage('Bienvenue  ! Comment puis-je vous aider aujourd\'hui ?', 'bot');
             }, 500);
-            <?php endif; ?>
         });
 
         // Redimensionnement pour mobile

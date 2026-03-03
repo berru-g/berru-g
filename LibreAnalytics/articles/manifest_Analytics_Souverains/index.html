@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manifeste de LibreAnalytics : Découvrez pourquoi cet outil d'analytics souverain, open source et 100% européen a été créé pour remplacer Google Analytics, illégal en France selon la CNIL. Une alternative cypherpunk, artisanale et respectueuse de la vie privée.">
+    <meta name="keywords" content="LibreAnalytics, manifeste, cypherpunk, souveraineté numérique, alternative Google Analytics, RGPD, CNIL, analytics open source, hébergement européen, protection des données, artisanat logiciel, sécurité offensive">
+    <meta name="author" content="Gaël Berru (berru-g)">
+    <meta property="og:title" content="Manifeste de LibreAnalytics : Pour une souveraineté numérique et un web sans GAFAM">
+    <meta property="og:description" content="LibreAnalytics est né du besoin d'une alternative simple, éthique et souveraine à Google Analytics, illégal en Europe. Découvrez notre manifeste cypherpunk, notre philosophie d'artisanat logiciel et notre engagement pour un web respectueux de la vie privée.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gael-berru.com/LibreAnalytics/manifeste">
+    <meta property="og:image" content="https://gael-berru.com/img/demo_dashboard.gif">
+    <title>Manifeste de LibreAnalytics : Pour une souveraineté numérique et un web sans GAFAM</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            font-size: 2.2em;
+            border-bottom: 2px solid #9d86ff;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {
+            font-size: 1.8em;
+            margin-top: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        h3 {
+            font-size: 1.4em;
+            margin-top: 25px;
+        }
+        a {
+            color: #9d86ff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        ul, ol {
+            margin-left: 20px;
+        }
+        .cta-button {
+            display: inline-block;
+            background: #9d86ff;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 15px 0;
+            text-align: center;
+        }
+        .cta-button:hover {
+            background: #8976e1;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #f2f2f2;
+        }
+        blockquote {
+            border-left: 4px solid #9d86ff;
+            padding-left: 20px;
+            margin: 20px 0;
+            color: #555;
+            font-style: italic;
+            background: #fefefe;
+            padding: 15px;
+        }
+        .highlight {
+            background: #fffde7;
+            padding: 15px;
+            border-left: 4px solid #ffc686;
+            margin: 20px 0;
+        }
+        .warning {
+            background: #fdecea;
+            padding: 15px;
+            border-left: 4px solid #9d86ff;
+            margin: 20px 0;
+        }
+        footer {
+            margin-top: 50px;
+            padding: 20px;
+            background: #f9f9f9;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+        .author {
+            text-align: center;
+            margin: 30px 0;
+            font-style: italic;
+        }
+        .source-code {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Manifeste de LibreAnalytics</h1>
+        <p class="author"><strong>Par Gaël Berru (berru-g) – Développeur autodidacte, cypherpunk et artisan du logiciel souverain</strong></p>
+    </header>
+
+    <section>
+        <h2>Pourquoi LibreAnalytics existe ?</h2>
+        <h3>1. Un constat : L’illégalité de Google Analytics et la dépendance aux GAFAM</h3>
+        <p>
+            En 2022, la <strong>CNIL</strong> a officiellement déclaré <strong>Google Analytics illégal en Europe</strong> en raison de ses <strong>transferts de données vers les États-Unis</strong>, en violation du RGPD. Malgré les promesses de Google avec GA4, <strong>rien n’a changé</strong> : les données des Européens restent exposées au <strong>Cloud Act</strong> et aux surveillances massives. Pire, en 2026, la CNIL annonce des <strong>sanctions systématiques</strong> (jusqu’à 300 000€) pour les sites qui continuent à l’utiliser sans précautions juridiques extrêmes.
+        </p>
+
+        <div class="warning">
+            <p>
+                <strong>Problème</strong> :
+            </p>
+            <ul>
+                <li>Les alternatives existantes (Matomo, Plausible) sont souvent <strong>coûteuses, complexes ou foreign-hosted</strong>.</li>
+                <li>Les PME et indépendants n’ont pas les moyens de <strong>payer un juriste, un proxy ou un audit RGPD</strong> pour se mettre en conformité.</li>
+                <li><strong>Aucune solution n’est à la fois souveraine, open source, légère et 100% européenne</strong>.</li>
+            </ul>
+        </div>
+
+        <p>
+            <strong>LibreAnalytics est né de ce besoin</strong> : offrir une alternative <strong>simple, éthique et autonome</strong>, conçue par un développeur <strong>pour des développeurs et des entrepreneurs</strong>, sans compromis sur la souveraineté ou la vie privée.
+        </p>
+    </section>
+
+    <section>
+        <h2>Ma philosophie : Cypherpunk, Artisanat Logiciel et Souveraineté Numérique</h2>
+        <p>
+            Mon profil de dev résume ma vision :
+        </p>
+        <blockquote>
+            "Développeur autodidacte créant des sites et outils souverains, avec une approche cypherpunk : utiliser l’open source pour protéger et libérer les utilisateurs des GAFAM."
+        </blockquote>
+
+        <h3>2.1. Les 5 piliers de LibreAnalytics</h3>
+        <p>
+            Inspirés de mes <strong>principes fondateurs</strong> :
+        </p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Pilier</th>
+                    <th>Application dans LibreAnalytics</th>
+                    <th>Exemple concret</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Souveraineté numérique</strong></td>
+                    <td><strong>100% hébergé en Europe</strong>, sans dépendance aux GAFAM.</td>
+                    <td>Serveurs chez OVH/Gandi, code open source auditable.</td>
+                </tr>
+                <tr>
+                    <td><strong>Cypherpunk appliqué</strong></td>
+                    <td><strong>Protection active des données</strong> : anonymisation IP, pas de cookies intrusifs, chiffrement.</td>
+                    <td>Script de 4KB (vs 50KB pour GA), pas de fuite vers les USA.</td>
+                </tr>
+                <tr>
+                    <td><strong>Artisanat logiciel</strong></td>
+                    <td><strong>Code sur-mesure, léger et auto-hébergeable</strong> : pas de frameworks lourds, pas de dépendances inutiles.</td>
+                    <td>PHP natif, JS vanilla, MySQL – tout est contrôlable et modifiable.</td>
+                </tr>
+                <tr>
+                    <td><strong>Sécurité offensive</strong></td>
+                    <td><strong>Architecture sécurisée par conception</strong> : validation des entrées, requêtes SQL préparées, logs sécurisés.</td>
+                    <td>Fichiers de config externes, protection XSS/SQLi intégrée.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>2.2. Ce que je rejette (et pourquoi LibreAnalytics est différent)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Pratique des GAFAM/Big Tech</th>
+                    <th>Ma réponse avec LibreAnalytics</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Surveillance de masse</strong></td>
+                    <td><strong>Pas de tracking caché</strong> : données minimales, anonymisées, stockées localement.</td>
+                </tr>
+                <tr>
+                    <td><strong>Boîtes noires</strong></td>
+                    <td><strong>Code open source</strong> : tout est visible, modifiable, et auditable.</td>
+                </tr>
+                <tr>
+                    <td><strong>Dépendance aux USA</strong></td>
+                    <td><strong>Hébergement 100% européen</strong> : pas de Cloud Act, pas de FISA 702.</td>
+                </tr>
+                <tr>
+                    <td><strong>Complexité inutile</strong></td>
+                    <td><strong>Installation en 1 minute</strong> : un script à copier-coller, pas de configuration obscure.</td>
+                </tr>
+                <tr>
+                    <td><strong>Modèle économique intrusif</strong></td>
+                    <td><strong>Pas de revente de données</strong>, pas de pubs, pas de "freemium" trompeur. Un dashboard gratuit avec accés limité à l'api ou premimum full acces pour 9€/mois.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Pour qui est conçu LibreAnalytics ?</h2>
+        <p>
+            LibreAnalytics s’adresse à ceux qui <strong>refusent les compromis</strong> :
+        </p>
+        <ul>
+            <li><strong>Les PME et indépendants</strong> qui veulent un outil <strong>simple, conforme et sans stress juridique</strong>.</li>
+            <li><strong>Les agences web</strong> qui cherchent une solution <strong>multi-sites, souveraine et facile à vendre à leurs clients</strong>.</li>
+            <li><strong>Les développeurs</strong> qui veulent <strong>contrôler leur stack</strong>, sans dépendre de Google ou de solutions proprietary.</li>
+            <li><strong>Les cypherpunks et militants de la vie privée</strong> qui veulent <strong>un analytics éthique, sans surveillance</strong>.</li>
+        </ul>
+
+        <div class="highlight">
+            <p>
+                <strong>Exemple d’utilisateur type</strong> :
+            </p>
+            <blockquote>
+                "Je suis gérant d’une boutique en ligne. Je veux tracker mon trafic sans risquer 300 000€ d’amende, sans ralentir mon site, et sans dépendre d’un géant américain. Je veux aussi pouvoir exporter mes données si je change d’outil."
+            </blockquote>
+        </div>
+    </section>
+
+    <section>
+        <h2>Comment LibreAnalytics incarne mes valeurs ?</h2>
+        <h3>4.1. Un outil "anti-GAFAM" par conception</h3>
+        <ul>
+            <li><strong>Pas de transfert de données hors UE</strong> : Contrairement à GA, qui envoie tout aux USA (même avec GA4), LibreAnalytics <strong>stocke tout en Europe</strong>.</li>
+            <li><strong>Pas de cookies intrusifs</strong> : Solution "no cookies" ou avec une barre de consentement <strong>minimale et RGPD-friendly</strong>.</li>
+            <li><strong>Pas de "data hunger"</strong> : On ne collecte que l’essentiel (IP anonymisée, pages vues, référents), pas des centaines de points de données inutiles.</li>
+        </ul>
+
+        <h3>4.2. Une architecture "artisanale" et sécurisée</h3>
+        <ul>
+            <li><strong>Backend en PHP natif</strong> : Pas de frameworks lourds (Laravel, Symfony), pas de dépendances externes.</li>
+            <li><strong>Frontend en JS vanilla</strong> : Pas de React, Vue ou Angular – juste du code <strong>léger, rapide et maintenable</strong>.</li>
+            <li><strong>Base de données MySQL</strong> : Simple, efficace, et <strong>100% contrôlable</strong> par l’utilisateur via l'API.</li>
+            <li><strong>Sécurité intégrée</strong> :
+                <ul>
+                    <li>Validation systématique des entrées utilisateur.</li>
+                    <li>Requêtes SQL préparées (pas d’injections).</li>
+                    <li>Logs sécurisés et <strong>pas de stockage de données sensibles</strong>.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>4.3. Un modèle économique transparent</h3>
+        <ul>
+            <li><strong>Gratuit pour les petits sites</strong> : Parce que tout le monde devrait avoir accès à un analytics éthique.</li>
+            <li><strong>Plans Pro abordables</strong> (à partir de 9€/mois) : Pour les besoins avancés (API, multi-sites).</li>
+            <li><strong>Pas de "vendor lock-in"</strong> : Vos données vous appartiennent. Exportez-les en CSV/JSON à tout moment.</li>
+        </ul>
+    </section>
+
+   <!--<section>
+        <h2>Roadmap : Vers où va LibreAnalytics ?</h2>
+        <p>
+            Inspirée de ma <a href="https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/api/profil_4_ai.json">roadmap technique</a>, voici les prochaines étapes :
+        </p>
+
+        <h3>5.1. Court terme (2026)</h3>
+        <ul>
+            <li><strong>Finaliser le SaaS</strong> : Interface utilisateur améliorée, documentation complète.</li>
+            <li><strong>Intégrer un système de captcha souverain</strong> (remplacer reCAPTCHA par une solution maison).</li>
+            <li><strong>Automatiser les insights SEO</strong> : Conseils actionnables basés sur les données.</li>
+        </ul>
+
+        <h3>5.2. Moyen terme (2027)</h3>
+        <ul>
+            <li><strong>Ajouter des fonctionnalités "cypherpunk"</strong> :
+                <ul>
+                    <li>Chiffrement des données côté client.</li>
+                    <li>Option d’auto-hébergement total (pour les paranos comme moi).</li>
+                </ul>
+            </li>
+            <li><strong>Développer des intégrations locales</strong> :
+                <ul>
+                    <li>Compatibilité avec des outils P2P (ex: partage de données entre nodes).</li>
+                    <li>Module de logging avancé pour la sécurité offensive.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>5.3. Long terme (2028+)</h3>
+        <ul>
+            <li><strong>Créer une suite d’outils souverains</strong> :
+                <ul>
+                    <li>Un "Google Analytics + Google Tag Manager + Hotjar" <strong>100% français et open source</strong>.</li>
+                    <li>Intégration avec des blockchains locales pour une <strong>traçabilité inviolable</strong>.</li>
+                </ul>
+            </li>
+            <li><strong>Rendre LibreAnalytics compatible avec des réseaux décentralisés</strong> :
+                <ul>
+                    <li>Fonctionnement hors-cloud, en local ou sur des nodes auto-hébergés.</li>
+                </ul>
+            </li>
+        </ul>
+    </section>-->
+
+    <section>
+        <h2>Rejoignez la révolution souveraine</h2>
+        <p>
+            LibreAnalytics n’est pas juste un outil. C’est une <strong>déclaration d’indépendance numérique</strong> :
+        </p>
+        <ul>
+            <li><strong>Contre la surveillance de masse</strong>.</li>
+            <li><strong>Contre la dépendance aux GAFAM</strong>.</li>
+            <li><strong>Pour un web où les données appartiennent à ceux qui les génèrent</strong>.</li>
+        </ul>
+
+        <p>
+            <strong>Vous en avez marre de :</strong>
+        </p>
+        <ul>
+            <li>Payer des amendes à la CNIL ?</li>
+            <li>Perdre le contrôle de vos données ?</li>
+            <li>Financer indirectement la surveillance américaine ?</li>
+        </ul>
+
+        <p>
+            <strong>Alors LibreAnalytics est fait pour vous.</strong>
+        </p>
+
+        <a href="https://gael-berru.com/LibreAnalytics?utm_source=ArticleMANIFEST" class="cta-button">Créez votre compte gratuit</a>
+    </section>
+
+    <section>
+        <h2>Licence et contribution</h2>
+        <p>
+            LibreAnalytics est <strong>open source (MIT)</strong>. Vous pouvez :
+        </p>
+        <ul>
+            <li><strong>L’utiliser librement</strong> (même pour un usage commercial).</li>
+            <li><strong>Contribuer au code</strong> sur <a href="https://github.com/berru-g/LibreAnalytics">GitHub</a>.</li>
+            <li><strong>Proposer des améliorations</strong> via les issues.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Contact</h2>
+        <ul>
+            <li><strong>Email</strong> : <a href="mailto:contact@gael-berru.com">contact@gael-berru.com</a></li>
+            <li><strong>GitHub</strong> : <a href="https://github.com/berru-g">@berru-g</a></li>
+            <li><strong>Site</strong> : <a href="https://gael-berru.com/LibreAnalytics?utm_source=ArticleMANIFEST">https://gael-berru.com/LibreAnalytics/</a></li>
+        </ul>
+    </section>
+
+    <footer>
+        <p class="author">
+            <strong>Gaël Berru (berru-g)</strong><br>
+            "Développeur autodidacte, artisan du logiciel souverain. Je code des outils pour reprendre le contrôle du web, un script à la fois... depuis 2020."
+        </p>
+        <p>
+            <strong>Manifeste rédigé le 3 mars 2026</strong><br>
+            "La souveraineté numérique ne se demande pas, elle se code."
+        </p>
+        <p>
+            <strong>Pourquoi ce manifeste ?</strong>
+        </p>
+        <ul>
+            <li><strong>Transparence</strong> : Vous savez exactement <strong>qui</strong> a créé LibreAnalytics et <strong>pourquoi</strong>.</li>
+            <li><strong>Confiance</strong> : Mon profil de dev prouve que je ne suis pas un "marketeur" mais un <strong>créateur engagé</strong>.</li>
+            <li><strong>Alignement</strong> : Si vous partagez ces valeurs, vous savez que LibreAnalytics est fait pour vous.</li>
+        </ul>
+        <p>
+            <strong>Besoin d’aide pour migrer ou contribuer ?</strong> <a href="mailto:contact@gael-berru.com">Contactez-moi</a> – je réponds toujours. 😊
+        </p>
+    </footer>
+</body>
+</html>
