@@ -1,10 +1,10 @@
 <?php
 // rapport: envoie manuel en attendant phpmailer et la sequence auto!
 $user = [
-    'id' => 5, // id
-    'email' => 'contact@gael-berru.com', // Remplace par l'email du destinataire 
-    'api_key' => 'da4ca75b23f50634547bcd158927eb18add7d35fd2ad4ab7005e225443af1550',       // Remplace par la clé API réelle
-    'site_id' => 'SP_7f9505cc'       // Remplace par le site_id réel
+    'id' => 4, // id
+    'email' => 'goldendessert44840@gmail.com', // Remplace par l'email du destinataire 
+    'api_key' => 'ed7c75f7a9b8f37edf4826a9827800466d36148c417331b46bd5de7dc692edeb',       // Remplace par la clé API réelle
+    'site_id' => 'SP_ad54c8ab'       // Remplace par le site_id réel
 ];
 
 // 2. Extraire le nom avant @ dans l'email

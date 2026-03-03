@@ -1603,8 +1603,8 @@ canvas {
   box-shadow: 0 10px 20px rgba(0,0,0,0.25);
   background: var(--bg-color);
   backdrop-filter: blur(10px);
-  max-width: 460px;
-  width: 90%;
+  max-width: 350px;
+  width: 100%;
   padding: 0;
 }
 
@@ -1641,6 +1641,7 @@ canvas {
   display: block;
   padding: 1.1rem 1.3rem;
   background: var(--bg-secondary);
+  border:1px solid var(--border-color);
   border-radius: 8px;
   text-decoration: none;
   color: var(--text-color);
