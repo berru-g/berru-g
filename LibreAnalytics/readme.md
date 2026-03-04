@@ -700,9 +700,11 @@ Pour tendre vers la souveraineté total de nos données, je suis confronter à r
 [Chat](https://gael-berru.com/LibreAnalytics/chat/)
 [Articles](https://gael-berru.com/LibreAnalytics/articles/)
 
+## plan de l'architecture :
 
-Si vous avez un besoin spécifique [n'hésitez pas à me contacter](mailto:contact@gael-berru.com)
 
+
+Mars 26 gl
 
 
 

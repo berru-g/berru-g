@@ -1597,6 +1597,7 @@ canvas {
 .settings-modal {
   display: flex;
   align-items: center;
+  text-align: center;
   margin: 100px auto;
   border: 1px solid var(--border-color);
   border-radius: 12px;
