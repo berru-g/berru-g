@@ -412,6 +412,9 @@ if (isset($_GET['export_emails'])) {
             <a href="../cron/rapport_golden.php" class="btn btn-secondary">
                 <i class="fas fa-file-alt"></i> Rapport id4
             </a>
+            <a href="../cron/prospect.php" class="btn btn-secondary">
+                <i class="fas fa-file-alt"></i> Script prospection
+            </a>
         </div>
 
         <div class="container">
