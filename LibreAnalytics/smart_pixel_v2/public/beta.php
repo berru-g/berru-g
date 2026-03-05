@@ -404,7 +404,7 @@ if (isset($_GET['export_emails'])) {
         <!-- Navigation améliorée avec icônes -->
         <div class="nav-buttons">
             <a href="dashboard.php" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Dashboard principal
+                <i class="fas fa-arrow-left"></i> Dashboard
             </a>
             <a href="../cron/rapport.php" class="btn btn-secondary">
                 <i class="fas fa-file-alt"></i> Rapport id5
@@ -412,8 +412,8 @@ if (isset($_GET['export_emails'])) {
             <a href="../cron/rapport_golden.php" class="btn btn-secondary">
                 <i class="fas fa-file-alt"></i> Rapport id4
             </a>
-            <a href="../cron/prospect.php" class="btn btn-secondary">
-                <i class="fas fa-file-alt"></i> Script prospection
+            <a href="../cron/prospect_template.php" class="btn btn-secondary">
+                <i class="fa-regular fa-file-code"></i> Script prospection
             </a>
         </div>
 
@@ -539,10 +539,10 @@ if (isset($_GET['export_emails'])) {
             data: {
                 labels: <?= json_encode(array_column($historicalData, 'date')) ?>,
                 datasets: [
-                    { label: 'Utilisateurs', data: <?= json_encode(array_column($historicalData, 'cumulative_users')) ?>, borderColor: '#f43f5e', backgroundColor: 'rgba(244, 63, 94, 0.05)', tension: 0.2, fill: true, pointRadius: 2 },
-                    { label: 'Sites', data: <?= json_encode(array_column($historicalData, 'cumulative_sites')) ?>, borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.05)', tension: 0.2, fill: true, pointRadius: 2 },
-                    { label: 'Visites', data: <?= json_encode(array_column($historicalData, 'cumulative_visits')) ?>, borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.05)', tension: 0.2, fill: true, pointRadius: 2 },
-                    { label: 'Visiteurs uniques', data: <?= json_encode(array_column($historicalData, 'cumulative_unique_visitors')) ?>, borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.05)', tension: 0.2, fill: true, pointRadius: 2 }
+                    { label: 'Utilisateurs', data: <?= json_encode(array_column($historicalData, 'cumulative_users')) ?>, borderColor: '#9d86ff', backgroundColor: 'rgba(244, 63, 94, 0.05)', tension: 0.2, fill: true, pointRadius: 2 },
+                    { label: 'Sites', data: <?= json_encode(array_column($historicalData, 'cumulative_sites')) ?>, borderColor: '#86baff', backgroundColor: 'rgba(59, 130, 246, 0.05)', tension: 0.2, fill: true, pointRadius: 2 },
+                    { label: 'Visites', data: <?= json_encode(array_column($historicalData, 'cumulative_visits')) ?>, borderColor: '#86ff94', backgroundColor: 'rgba(16, 185, 129, 0.05)', tension: 0.2, fill: true, pointRadius: 2 },
+                    { label: 'Visiteurs uniques', data: <?= json_encode(array_column($historicalData, 'cumulative_unique_visitors')) ?>, borderColor: '#ff9686', backgroundColor: 'rgba(245, 158, 11, 0.05)', tension: 0.2, fill: true, pointRadius: 2 }
                 ]
             },
             options: {

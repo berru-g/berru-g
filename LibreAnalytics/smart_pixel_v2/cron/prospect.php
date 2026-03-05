@@ -1,31 +1,13 @@
 <?php
 // script de prospection. 
-// Envoie automatique de mail 
+// Envoie automatique de mail en format text
 $recipients = [
     ['name' => 'Berru perso', 'email' => 'g.leberruyer@gmail.com'], //pour test!
-    ['name' => 'Studio Koukaki', 'email' => 'contact@koukaki.com'],
-    ['name' => 'Thomas Deschamps', 'email' => 'thomas@thomas-deschamps.fr'],
-    ['name' => 'La Boutique Bio de Nantes', 'email' => 'contact@laboutiquebio-nantes.fr'],
-    ['name' => 'Menuiserie Le Goff', 'email' => 'contact@menuisier-legoff.fr'],
-    ['name' => 'Le Blog du Hacker', 'email' => 'redac@leblogduhacker.fr'],
-    ['name' => 'Aurélie Vache', 'email' => 'aurelie@vache-seo.fr'],
-    ['name' => 'Pixel & Co', 'email' => 'contact@pixel-et-co.fr'],
-    ['name' => 'Julien Chaumond', 'email' => 'julien@julienchaumond.com'],
-    ['name' => 'La Petite Épicerie', 'email' => 'contact@lapetiteepicerie.fr'],
-    ['name' => 'Marie Dubois', 'email' => 'marie@mariedubois.dev'],
-    ['name' => 'RGPD Facile', 'email' => 'contact@rgpd-facile.fr'],
-    ['name' => 'Web & Cie', 'email' => 'contact@web-et-cie.fr'],
-    ['name' => 'Paul Martin', 'email' => 'paul@paulmartin.dev'],
-    ['name' => 'Électricien Dubois', 'email' => 'contact@electricien-dubois.fr'],
-    ['name' => 'Geek & Tech', 'email' => 'redac@geek-and-tech.fr'],
-    ['name' => 'Sophie Lambert', 'email' => 'sophie@sophielambert-seo.fr'],
-    ['name' => 'Créalys', 'email' => 'contact@crealys.fr'],
-    ['name' => 'Nicolas F.', 'email' => 'nicolas@nicolasf.dev'],
-    ['name' => 'Le Comptoir Végétal', 'email' => 'contact@lecomptoirvegetal.fr'],
-    ['name' => 'Clara D.', 'email' => 'clara@clarad.dev']
+    ['name' => 'Studio Koukaki', 'email' => 'contact@koukaki.com']
+ 
 ];
 
-// Sujet et corps de l'email (utilise le template ci-dessus)
+// Sujet et corps du mail
 $subject = "Si on sortait vos données des mains de Google ?";
 $body = "Bonjour [Prénom],
 

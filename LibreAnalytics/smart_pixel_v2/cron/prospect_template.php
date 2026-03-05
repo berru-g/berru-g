@@ -1,35 +1,66 @@
 <?php
-// script de prospection avec template html/css !
-// Envoie automatique de mail 
+// script de prospection avec template 
+// Envoie automatique de mail en format html
 // TROUVER DES PROSPECT QUI UTILISE GA =
 // site:.fr inurl:nantes OR "loire-atlantique" intext:"Google Analytics" OR "GA4"
 // site:.fr inurl:nantes OR "44" intext:"UA-" OR "G-"
 
 $recipients = [
-    ['name' => 'Berru perso', 'email' => 'g.leberruyer@gmail.com'], //pour test!
-    ['name' => 'Studio Koukaki', 'email' => 'contact@koukaki.com'],
-    ['name' => 'Thomas Deschamps', 'email' => 'thomas@thomas-deschamps.fr'],
-    ['name' => 'La Boutique Bio de Nantes', 'email' => 'contact@laboutiquebio-nantes.fr'],
-    ['name' => 'Menuiserie Le Goff', 'email' => 'contact@menuisier-legoff.fr'],
-    ['name' => 'Le Blog du Hacker', 'email' => 'redac@leblogduhacker.fr'],
-    ['name' => 'Aurélie Vache', 'email' => 'aurelie@vache-seo.fr'],
-    ['name' => 'Pixel & Co', 'email' => 'contact@pixel-et-co.fr'],
-    ['name' => 'Julien Chaumond', 'email' => 'julien@julienchaumond.com'],
-    ['name' => 'La Petite Épicerie', 'email' => 'contact@lapetiteepicerie.fr'],
-    ['name' => 'Marie Dubois', 'email' => 'marie@mariedubois.dev'],
-    ['name' => 'RGPD Facile', 'email' => 'contact@rgpd-facile.fr'],
-    ['name' => 'Web & Cie', 'email' => 'contact@web-et-cie.fr'],
-    ['name' => 'Paul Martin', 'email' => 'paul@paulmartin.dev'],
-    ['name' => 'Électricien Dubois', 'email' => 'contact@electricien-dubois.fr'],
-    ['name' => 'Geek & Tech', 'email' => 'redac@geek-and-tech.fr'],
-    ['name' => 'Sophie Lambert', 'email' => 'sophie@sophielambert-seo.fr'],
-    ['name' => 'Créalys', 'email' => 'contact@crealys.fr'],
-    ['name' => 'Nicolas F.', 'email' => 'nicolas@nicolasf.dev'],
-    ['name' => 'Le Comptoir Végétal', 'email' => 'contact@lecomptoirvegetal.fr'],
-    ['name' => 'Clara D.', 'email' => 'clara@clarad.dev']
+    ['name' => 'Gael l', 'email' => 'g.leberruyer@gmail.com'], //pour test!
+    // Agences Web (Loire-Atlantique)
+    ['name' => 'Vyséo Communication', 'email' => 'contact@vyseo.com'],
+    ['name' => 'Dahive', 'email' => 'contact@dahive.fr'],
+    ['name' => 'Cyberscope', 'email' => 'contact@cyberscope.fr'],
+    ['name' => 'La Fabrique du Net', 'email' => 'contact@lafabriquedunet.fr'],
+    ['name' => '33 Degrés', 'email' => 'contact@33degres.fr'],
+    ['name' => 'IMAGES CREATIONS', 'email' => 'contact@images-creations.fr'],
+    ['name' => 'Klyde', 'email' => 'contact@klyde.fr'],
+    ['name' => 'Generation Net', 'email' => 'contact@generation-net.org'],
+    ['name' => 'Eurowebinfo', 'email' => 'contact@eurowebinfo.org'],
+    ['name' => 'France Agence Web', 'email' => 'contact@france-agence.fr'],
+    ['name' => 'Célia Denouette (Sortlist)', 'email' => 'celia.denouette@sortlist.fr'],
+
+    // PME (Loire-Atlantique)
+    ['name' => 'TBR Transports', 'email' => 'contact@tbr-transports.fr'],
+    ['name' => 'ConverSens', 'email' => 'contact@conversens.com'],
+    ['name' => 'GROUPE BHD', 'email' => 'contact@groupebhd.fr'],
+    ['name' => 'Visitez Nos Entreprises', 'email' => 'contact@visiteznosentreprises.com'],
+    ['name' => 'NRJ Global Régions', 'email' => 'contact@nrjglobalregions.fr'],
+    ['name' => 'CEP-SOCOTIC', 'email' => 'contact@cep-socotic.fr'],
+    ['name' => 'Suzuki Nantes', 'email' => 'contact@suzuki-nantes.fr'],
+    ['name' => 'Aprium Pharmacie', 'email' => 'contact@aprium-pharmacie.fr'],
+    ['name' => 'BTP Consultants', 'email' => 'contact@btp-consultants.fr'],
+    ['name' => 'Le Phare (SEO Freelance)', 'email' => 'contact@lephare-seo.fr'],
+
+    // Freelances Devs (Loire-Atlantique)
+    ['name' => 'Jouin Nicolas (SEO)', 'email' => 'nicolas@nicolas-jouin.fr'],
+
+    // Autres agences et PME (supplémentaires)
+    ['name' => 'Agence Web Loireauxence', 'email' => 'contact@agence-loireauxence.fr'],
+    ['name' => 'Agence Web Vertou', 'email' => 'contact@agence-vertou.fr'],
+    ['name' => 'Agence Web Vigneux-de-Bretagne', 'email' => 'contact@agence-vigneux.fr'],
+    ['name' => 'PME Industrie Loire-Atlantique', 'email' => 'contact@pme-industrie-loireatl.fr'],
+    ['name' => 'PME Commerce Saint-Nazaire', 'email' => 'contact@pme-saintnazaire.fr'],
+    ['name' => 'PME Artisanat Cholet', 'email' => 'contact@pme-cholet.fr'],
+    ['name' => 'PME Tourisme La Baule', 'email' => 'contact@pme-labaule.fr'],
+    ['name' => 'PME Agroalimentaire Ancenis', 'email' => 'contact@pme-ancenis.fr'],
+    ['name' => 'PME Logistique Nort-sur-Erdre', 'email' => 'contact@pme-nort.fr'],
+    ['name' => 'PME Santé Rezé', 'email' => 'contact@pme-reze.fr'],
+
+    // Freelances supplémentaires 
+    ['name' => 'Dev Fullstack Nantes', 'email' => 'contact@dev-fullstack-nantes.fr'],
+    ['name' => 'Dev WordPress Loire-Atlantique', 'email' => 'contact@dev-wp-loireatl.fr'],
+    ['name' => 'Dev Symfony Saint-Nazaire', 'email' => 'contact@dev-symfony-saintnazaire.fr'],
+    ['name' => 'Dev React Nantes', 'email' => 'contact@dev-react-nantes.fr'],
+    ['name' => 'Dev Python Loire-Atlantique', 'email' => 'contact@dev-python-loireatl.fr'],
+    ['name' => 'Dev Shopify Nantes', 'email' => 'contact@dev-shopify-nantes.fr'],
+    ['name' => 'Dev UX/UI Loire-Atlantique', 'email' => 'contact@dev-uxui-loireatl.fr'],
+    ['name' => 'Dev Mobile Nantes', 'email' => 'contact@dev-mobile-nantes.fr'],
+    ['name' => 'Dev Data Nantes', 'email' => 'contact@dev-data-nantes.fr'],
+    ['name' => 'Dev Cloud Loire-Atlantique', 'email' => 'contact@dev-cloud-loireatl.fr']
 ];
 
-// Sujet et corps de l'email (utilise le template ci-dessus)
+// Sujet et corps du mail + template
 $subject = "Si on sortait vos données des mains de Google ?";
 $body = <<<HTML
 <!DOCTYPE html>
@@ -134,7 +165,7 @@ $body = <<<HTML
 
             <p>C’est exactement pour ça que j’ai construit LibreAnalytics.</p>
 
-            <p><strong>L’idée est simple</strong> : un analytics souverain, simple et transparent. Vos données restent en France, hébergées chez un hébergeur de confiance. Open source, RGPD natif, et sans la complexité inutile de GA4.</p>
+            <p><strong>L’idée est simple</strong> : un analytics souverain, simple et transparent. Vos données restent en Europe et ne sont pas revendu ou exploiter de notre coté.Le projet est Open source, RGPD natif, et sans la complexité inutile de GA4.</p>
 
             <p><strong>Je ne vous demande pas de me croire, je vous propose de tester.</strong></p>
 
@@ -142,30 +173,30 @@ $body = <<<HTML
 
             <ul>
                 <li><strong>Installation en 2 minutes</strong> (une seule ligne de code à placer).</li>
-                <li><strong>Votre premier dashboard gratuit</strong>, complet, avec API accessible.</li>
-                <li><strong>Zéro engagement, zéro CB</strong>. Juste un outil qui marche.</li>
+                <li><strong>Votre premier dashboard gratuit</strong> et accées à la V1 de l'api.</li>
+                <li><strong>Zéro engagement, zéro CB</strong>. Juste un outil qui fonctionne.</li>
             </ul>
 
             <p style="text-align: center;">
-                <a href="https://gael-berru.com/LibreAnalytics?utm_source=mailprospection4" class="cta-button">Essayer LibreAnalytics gratuitement</a>
+                <a href="https://gael-berru.com/LibreAnalytics?utm_source=mailprospection2" class="cta-button">Essayer LibreAnalytics gratuitement</a>
             </p>
 
             <p>Si vous avez besoin de plus de sites par la suite, ce sera 9€/mois. Mais pour l’instant, je veux juste que vous l’essayiez et que vous me disiez ce que vous en pensez.</p>
 
             <p><strong>Pas de discours marketing, pas de pression.</strong> Si ça vous plaît, tant mieux. Si ça ne vous plaît pas, dites-le-moi aussi, ça m’aide à améliorer l’outil.</p>
 
-            <p>À vous de jouer,</p>
+            <p>À vous de jouer [Prénom],</p>
 
             <p>
                 Gaël<br>
-                Créateur de <a href="https://gael-berru.com/LibreAnalytics?utm_source=mailprospection4" style="color: #9d86ff; text-decoration: none;">LibreAnalytics</a><br>
+                Créateur de <a href="https://gael-berru.com/LibreAnalytics?utm_source=mailprospection2" style="color: #9d86ff; text-decoration: none;">LibreAnalytics</a><br>
                 <span style="color: #777; font-size: 14px;">PS : Si vous testez le dashboard cette semaine, j’aimerais beaucoup avoir votre avis en direct. Une simple réponse à cet email suffit.</span>
             </p>
         </div>
 
         <div class="footer">
-            <p>© 2026 LibreAnalytics – Une alternative <strong>100% française</strong>, <strong>open source</strong> et <strong>RGPD-friendly</strong>.</p>
-            <p><a href="https://gael-berru.com/LibreAnalytics?utm_source=mailprospection4" style="color: #9d86ff; text-decoration: none;">Visitez notre site</a> | <a href="mailto:contact@gael-berru.com" style="color: #9d86ff; text-decoration: none;">Contactez-nous</a></p>
+            <p>© 2026 LibreAnalytics – Une alternative <strong>souveraine</strong>, <strong>open source</strong> et <strong>RGPD-friendly</strong>.</p>
+            <p><a href="https://gael-berru.com/LibreAnalytics?utm_source=mailprospection2" style="color: #9d86ff; text-decoration: none;">Visitez notre site</a> | <a href="mailto:contact@gael-berru.com" style="color: #9d86ff; text-decoration: none;">Contactez-nous</a></p>
         </div>
     </div>
 </body>
@@ -178,7 +209,7 @@ $headers .= "Reply-To: contact@gael-berru.com\r\n";
 $headers .= "MIME-Version: 1.0\r\n";
 $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 
-// Boucle pour envoyer les emails
+// Boucle pour envoyer les email 
 foreach ($recipients as $recipient) {
     $personalizedBody = str_replace('[Prénom]', $recipient['name'], $body);
     $sent = mail($recipient['email'], $subject, $personalizedBody, $headers);
