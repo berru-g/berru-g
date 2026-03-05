@@ -1,5 +1,4 @@
 # Prospection du 04/03/26 :
-
 ['name' => 'Studio Koukaki', 'email' => 'contact@koukaki.com'],
     ['name' => 'Thomas Deschamps', 'email' => 'thomas@thomas-deschamps.fr'],
     ['name' => 'La Boutique Bio de Nantes', 'email' => 'contact@laboutiquebio-nantes.fr'],
@@ -20,10 +19,7 @@
     ['name' => 'Nicolas F.', 'email' => 'nicolas@nicolasf.dev'],
     ['name' => 'Le Comptoir Végétal', 'email' => 'contact@lecomptoirvegetal.fr'],
     ['name' => 'Clara D.', 'email' => 'clara@clarad.dev']
-
-
 # Prospection du 05/03/26 :
-
     // Agences Web (Loire-Atlantique)
     ['name' => 'Vyséo Communication', 'email' => 'contact@vyseo.com'],
     ['name' => 'Dahive', 'email' => 'contact@dahive.fr'],
@@ -35,8 +31,7 @@
     ['name' => 'Generation Net', 'email' => 'contact@generation-net.org'],
     ['name' => 'Eurowebinfo', 'email' => 'contact@eurowebinfo.org'],
     ['name' => 'France Agence Web', 'email' => 'contact@france-agence.fr'],
-    ['name' => 'Célia Denouette (Sortlist)', 'email' => 'celia.denouette@sortlist.fr'],
-
+    ['name' => 'Célia Denouette (Sortlist)', 'email' => 'celia.denouette@sortlist.fr'], // ❌ echec
     // PME (Loire-Atlantique)
     ['name' => 'TBR Transports', 'email' => 'contact@tbr-transports.fr'],
     ['name' => 'ConverSens', 'email' => 'contact@conversens.com'],
@@ -48,10 +43,8 @@
     ['name' => 'Aprium Pharmacie', 'email' => 'contact@aprium-pharmacie.fr'],
     ['name' => 'BTP Consultants', 'email' => 'contact@btp-consultants.fr'],
     ['name' => 'Le Phare (SEO Freelance)', 'email' => 'contact@lephare-seo.fr'],
-
     // Freelances Devs (Loire-Atlantique)
     ['name' => 'Jouin Nicolas (SEO)', 'email' => 'nicolas@nicolas-jouin.fr'],
-
     // Autres agences et PME (supplémentaires)
     ['name' => 'Agence Web Loireauxence', 'email' => 'contact@agence-loireauxence.fr'],
     ['name' => 'Agence Web Vertou', 'email' => 'contact@agence-vertou.fr'],
@@ -63,7 +56,6 @@
     ['name' => 'PME Agroalimentaire Ancenis', 'email' => 'contact@pme-ancenis.fr'],
     ['name' => 'PME Logistique Nort-sur-Erdre', 'email' => 'contact@pme-nort.fr'],
     ['name' => 'PME Santé Rezé', 'email' => 'contact@pme-reze.fr'],
-
     // Freelances supplémentaires (à compléter avec Hunter.io)
     ['name' => 'Dev Fullstack Nantes', 'email' => 'contact@dev-fullstack-nantes.fr'],
     ['name' => 'Dev WordPress Loire-Atlantique', 'email' => 'contact@dev-wp-loireatl.fr'],
@@ -75,3 +67,4 @@
     ['name' => 'Dev Mobile Nantes', 'email' => 'contact@dev-mobile-nantes.fr'],
     ['name' => 'Dev Data Nantes', 'email' => 'contact@dev-data-nantes.fr'],
     ['name' => 'Dev Cloud Loire-Atlantique', 'email' => 'contact@dev-cloud-loireatl.fr']
+# Pospection du 
