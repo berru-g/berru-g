@@ -14,6 +14,8 @@
 
 Analysez votre trafic sans compromettre la vie privée de vos visiteurs, avec un outil 100% européen et open source
 
+  [Dashboard](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/dashboard.php) - [Api](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/account.php) - [Doc](https://gael-berru.com/LibreAnalytics/doc/) - [Chat](https://gael-berru.com/LibreAnalytics/chat/) - [Articles](https://gael-berru.com/LibreAnalytics/articles/)
+
    ![LibreAnalytics-Dashboard](https://gael-berru.com/img/demo_dashboard.gif)
 
 Disponible
@@ -54,7 +56,7 @@ Disponible
 
   - *Base de données légère* : LibreAnalytics utilise une base de données MySQL pour stocker les données de manière efficace, sans dépendre de solutions externes.
   - *Pas de frameworks lourds* : Développé en PHP natif, sans dépendances inutiles, pour une maintenance simple et des performances maximales.
-  - *Hébergement souverain* : 
+  - *Hébergement souverain* : Less data center de nos partenaires sont tous situé en Européene. Nous migrerons otute nos données en France, à la fin de notre phaze beta test.
 
 ## Points clés
 
@@ -115,33 +117,37 @@ Disponible
 - **rgpd cookie** : barre des cookies
 - **Doc compléte** : doc pour l'installation analytics + auto hebergé.
 - **Smart Assistant** : recevez des insight actionnable et conseil SEO adapté à vos résultat.
+- **API** : Accéder à vos données d'un simple appel API avec votre Key unique. ( 30 requetes / mois )
 
-#### Plan Pro
+#### Plan Pro 12€/mois ( en developpement )
 
 - **Toutes les fonctionnalité précedemment cité plus :**
 - **Dashboard multi-sites** : Gérer plusieurs sites par compte
-- **API** : Accéder à vos données d'un simple appel API avec votre Key unique. 
+- **API** : Accéder à vos données d'un simple appel API avec votre Key unique. ( 30 requetes / min )
 
-
-
+#### Tarif  
+- **Gratuit** pour un dashboard
+- **Pro** 10 Dashboard ( 100 pages ) 9€/mois ou 90€/an
+- **License** Droit d'exploitation et d'adaptation du logiciel à vos besoins 299€/an
 
 ### 🚀 **En développement (version Premium)**
 - **Inclure la barre des cookies dans le pixel id**
-- **API RESTful** : Accès programmatique à vos données ( acceder a votre profil pour obtenir votre api key )
+- **Rapport hebdomadaire** : Les rapport fonctionne manuellement pour le moment, l'automatisation est en cours de dev.
 - **Export JSON/CSV** : Données brutes pour traitement externe
 - **Webhooks** : Notifications en temps réel
-- **Intégrations** : ... software Européen ...
+- **Intégrations** : ... wordpress / shopify ...
 - **Limites personnalisées** : Plans selon le volume de données
 
 
 
-[Crée ton premier dashboard gratuitement](https://gael-berru.com/LibreAnalytics/)
+[Crée ton premier dashboard gratuitement](https://gael-berru.com/LibreAnalytics?utm_source=la_doc)
 
 
 
-# Guide Utilisateur - Libre Analytics
+# Guide Utilisateur
 
-Bienvenue sur Libre Analytics, l'alternative française simple et respectueuse à Google Analytics. Ce guide vous aidera à installer, configurer et utiliser votre tableau de bord analytics.
+Bienvenue sur Libre Analytics, l'alternative française simple et respectueuse à Google Analytics. 
+Ce guide vous aidera à installer, configurer et utiliser votre tableau de bord analytics dans son plein potentiel.
 
 ---
 
@@ -152,8 +158,8 @@ Rendez-vous sur [https://gael-berru.com/LibreAnalytics/](https://gael-berru.com/
 
 Vous aurez besoin de :
 - Votre email
-- Un mot de passe
-- L'URL de votre site web
+- Crée un mot de passe
+- L'URL de votre site
 
 ✅ Le premier dashboard est gratuit.
 
@@ -161,7 +167,7 @@ Vous aurez besoin de :
 Une fois connecté, votre tableau de bord affiche votre **code d'intégration** : 
 
 ```html
-<script data-sp-id="SP_79747769" 
+<script data-sp-id="SP_24031987" 
         src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js" 
         async>
 </script>
@@ -185,23 +191,37 @@ Une fois connecté, votre tableau de bord se compose de plusieurs onglets :
 - **Visites totales** : nombre de pages vues
 - **Visiteurs uniques** : comptés par adresse IP
 - **Sources de trafic** : d'où viennent vos visiteurs
-- **Évolution** : graphique des 7 derniers jours
+- **Évolution** : graphique sur un an
 
 ### **Géolocalisation**
 - Carte interactive des pays visiteurs
 - Top 10 des pays
 - Villes principales
 
+### **Device**
+- Types d'appareils
+- Naviguateur utilisé
+
+## **Contenue**
+- Pages consultées
+- Sous domaine consultées ( parametre utm )
+- Données de clics récentes
+
 ### **Détails**
 - Liste complète des dernières visites
-- Pages consultées
 - Adresses IP (anonymisées)
+- Pages visitées
 - Horodatage
+- Ville
+- Pays
 
-### **Technique**
-- Répartition par appareil (mobile/desktop/tablette)
-- Navigateurs utilisés
-- Résolutions d'écran
+### **Insight**
+- Analyse des Tendances
+- Points d'améliorations
+
+
+![dashboard_LibreAnalytics](https://gael-berru.com/img/LibreAnalytics-dashboard.png)
+
 
 ---
 
@@ -229,10 +249,10 @@ Une fois connecté, votre tableau de bord se compose de plusieurs onglets :
 Les paramètres UTM vous permettent de **tracer précisément vos campagnes marketing**.
 
 ### Comment ça marche ?
-Ajoutez ces paramètres à vos URLs :
+Ajoutez ces paramètres à vos URLs lors de partage ou backlink:
 
 ```
-https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js?utm_source=facebook&utm_medium=social&utm_campaign=ete2026
+https://votre-site.fr?utm_source=facebook&utm_medium=social&utm_campaign=ete2026
 ```
 
 ### Paramètres disponibles
@@ -240,7 +260,7 @@ https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js?utm_sourc
 - `utm_medium` : le support (social, email, cpc)
 - `utm_campaign` : nom de votre campagne (promo_ete, lancement)
 
-👉 Ces données apparaîtront dans la colonne "Campagne" de votre tableau de bord.
+👉 Ces données apparaîtront dans la colonne "Contenue" de votre tableau de bord.
 
 ---
 
@@ -252,11 +272,12 @@ Le plan gratuit vous permet de suivre **1 site**. Pour ajouter un site :
 2. Donnez un nom à votre site
 3. Entrez l'URL
 4. Récupérez le nouveau code de tracking
+5. Votre Api Key
 
-Chaque site a son propre **tracking code** (ex: `SP_79747769`). Installez le code correspondant sur chaque site.
+Chaque site a son propre **tracking code** (ex: `SP_24031987`). Installez le code correspondant sur chaque site. Votre clef api est valable pour tout vos Tracking code.
 
 
-## **Tester l’API** ( plan pro only )
+## **Tester l’API** 
 
 ### Ajoutez votre site id avant votre token et insérez vos requete entre les deux !
     URL d’exemple :
@@ -664,7 +685,7 @@ Tu peux maintenant :
 | Terme | Définition |
 |-------|------------|
 | **Pixel** | Image 1x1 transparente qui enregistre une visite |
-| **Tracking code** | Identifiant unique de votre site (ex: SP_79747769) |
+| **Tracking code ou Smart Pixel** | Identifiant unique de votre site (ex: SP_24031987) |
 | **Session** | Ensemble des actions d'un visiteur pendant une visite |
 | **Source** | Origine du trafic (moteur, site, direct) |
 | **UTM** | Paramètres d'URL pour tracer les campagnes |
@@ -693,18 +714,11 @@ Pour tendre vers la souveraineté total de nos données, je suis confronter à r
   - Recherche de partner...
 
 
-## Plan du site :
-[Dashboard](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/dashboard.php)
-[Api](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/account.php)
-[Doc](https://gael-berru.com/LibreAnalytics/doc/)
-[Chat](https://gael-berru.com/LibreAnalytics/chat/)
-[Articles](https://gael-berru.com/LibreAnalytics/articles/)
 
-## plan de l'architecture :
+*berru-g 06/03/26*
 
 
 
-Mars 26 gl
 
 
 
