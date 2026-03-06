@@ -858,12 +858,13 @@
 
             <!-- Quick Actions -->
             <div class="quick-actions">
-                <span class="quick-action" onclick="askQuestion('Comment installer LibreAnalytics ?')">Installation</span>
-                <span class="quick-action" onclick="askQuestion('Quels sont les tarifs ?')">Tarifs</span>
-                <span class="quick-action" onclick="askQuestion('Comment utiliser l\'API ?')">API</span>
-                <span class="quick-action" onclick="askQuestion('Problème de tracking')">Support</span>
-                <span class="quick-action" onclick="askQuestion('RGPD et conformité')">RGPD</span>
-            </div>
+    <span class="quick-action" onclick="displaySectionInChat('Fonctionnalités')">Fonctionnalités</span>
+    <span class="quick-action" onclick="displaySectionInChat('Guide Utilisateur')">Guide</span>
+    <span class="quick-action" onclick="displaySectionInChat('Tutoriel API')">API</span>
+    <span class="quick-action" onclick="displaySectionInChat('FAQ & Support')">FAQ</span>
+    <span class="quick-action" onclick="displaySectionInChat('Roadmap')">Roadmap</span>
+</div>
+
 
             <!-- Chat Messages -->
             <div class="chat-messages" id="chatMessages">
@@ -1944,19 +1945,7 @@ fetch(\`https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=sk_1a2b3c.
         }
 
         // Envoyer un message
-        function sendMessage() {
-            const input = document.getElementById('messageInput');
-            const message = input.value.trim();
-            
-            if (!message) return;
-            
-            addMessage(message, 'user');
-            input.value = '';
-            autoResize(input);
-            searchResults.style.display = 'none';
-            
-            addBotResponse(message, '');
-        }
+        
 
         // Fonction pour poser une question rapide
         window.askQuestion = function(question) {

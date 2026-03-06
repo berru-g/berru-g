@@ -92,7 +92,6 @@ try {
         ORDER BY date ASC
     ");
     $recentActivity = $stmt->fetchAll();
-
 } catch (PDOException $e) {
     die("Erreur lors de la récupération des données : " . $e->getMessage());
 }
@@ -118,6 +117,7 @@ if (isset($_GET['export_emails'])) {
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -187,14 +187,14 @@ if (isset($_GET['export_emails'])) {
             background: white;
             color: #475569;
             border-color: #e2e8f0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
         }
 
         .btn-secondary:hover {
             background: #f8fafc;
             border-color: #cbd5e1;
             transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
         }
 
         /* ===== GRILLE STATISTIQUES ===== */
@@ -210,14 +210,14 @@ if (isset($_GET['export_emails'])) {
             padding: 1.5rem 1.2rem;
             border-radius: 20px;
             text-align: left;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            border: 1px solid rgba(0,0,0,0.03);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.03);
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .stat-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
         }
 
         .stat-card h3 {
@@ -249,7 +249,7 @@ if (isset($_GET['export_emails'])) {
             border-radius: 24px;
             padding: 1.8rem;
             margin-bottom: 2.5rem;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02);
             border: 1px solid #f1f5f9;
         }
 
@@ -340,14 +340,17 @@ if (isset($_GET['export_emails'])) {
             background: #f1f5f9;
             color: #475569;
         }
+
         .badge-pro {
             background: #e0f2fe;
             color: #0369a1;
         }
+
         .badge-business {
             background: #fef3c7;
             color: #92400e;
         }
+
         /* fallback pour d'autres plans */
         .badge-premium {
             background: #f1f0ff;
@@ -368,7 +371,7 @@ if (isset($_GET['export_emails'])) {
             gap: 0.5rem;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
         }
 
         .export-btn:hover {
@@ -398,26 +401,25 @@ if (isset($_GET['export_emails'])) {
         }
     </style>
 </head>
+
 <body>
     <div class="main-content">
-
-        <!-- Navigation améliorée avec icônes -->
-        <div class="nav-buttons">
-            <a href="dashboard.php" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Dashboard
-            </a>
-            <a href="../cron/rapport.php" class="btn btn-secondary">
-                <i class="fas fa-file-alt"></i> Rapport id5
-            </a>
-            <a href="../cron/rapport_golden.php" class="btn btn-secondary">
-                <i class="fas fa-file-alt"></i> Rapport id4
-            </a>
-            <a href="../cron/prospect_template.php" class="btn btn-secondary">
-                <i class="fa-regular fa-file-code"></i> Script prospection
-            </a>
-        </div>
-
         <div class="container">
+            <div class="nav-buttons">
+                <a href="dashboard.php" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Dashboard
+                </a>
+                <a href="../campain/rapport.php" class="btn btn-secondary">
+                    <i class="fas fa-file-alt"></i> Rapport id5
+                </a>
+                <a href="../campain/rapport_golden.php" class="btn btn-secondary">
+                    <i class="fas fa-file-alt"></i> Rapport id4
+                </a>
+                <a href="../campain/prospect_template.php" class="btn btn-secondary">
+                    <i class="fa-regular fa-file-code"></i> Script prospection
+                </a>
+            </div>
+
             <!-- Statistiques globales : design plus aéré -->
             <div class="admin-stats">
                 <div class="stat-card">
@@ -456,7 +458,13 @@ if (isset($_GET['export_emails'])) {
                     </div>
                     <div class="table-responsive">
                         <table class="data-table">
-                            <thead><tr><th>Nom</th><th>Visites</th><th>ID</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Visites</th>
+                                    <th>ID</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 <?php if (!empty($topSites)): ?>
                                     <?php foreach ($topSites as $site): ?>
@@ -467,7 +475,9 @@ if (isset($_GET['export_emails'])) {
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
-                                    <tr><td colspan="3" class="empty-state">Aucune donnée</td></tr>
+                                    <tr>
+                                        <td colspan="3" class="empty-state">Aucune donnée</td>
+                                    </tr>
                                 <?php endif; ?>
                             </tbody>
                         </table>
@@ -504,7 +514,7 @@ if (isset($_GET['export_emails'])) {
                         </thead>
                         <tbody>
                             <?php if (!empty($usersList)): ?>
-                                <?php foreach ($usersList as $user): 
+                                <?php foreach ($usersList as $user):
                                     // Gestion de la classe du badge selon le plan
                                     $planClass = 'free'; // default
                                     if (isset($user['plan'])) {
@@ -521,7 +531,9 @@ if (isset($_GET['export_emails'])) {
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <tr><td colspan="6" class="empty-state">Aucun utilisateur enregistré</td></tr>
+                                <tr>
+                                    <td colspan="6" class="empty-state">Aucun utilisateur enregistré</td>
+                                </tr>
                             <?php endif; ?>
                         </tbody>
                     </table>
@@ -538,23 +550,80 @@ if (isset($_GET['export_emails'])) {
             type: 'line',
             data: {
                 labels: <?= json_encode(array_column($historicalData, 'date')) ?>,
-                datasets: [
-                    { label: 'Utilisateurs', data: <?= json_encode(array_column($historicalData, 'cumulative_users')) ?>, borderColor: '#9d86ff', backgroundColor: 'rgba(244, 63, 94, 0.05)', tension: 0.2, fill: true, pointRadius: 2 },
-                    { label: 'Sites', data: <?= json_encode(array_column($historicalData, 'cumulative_sites')) ?>, borderColor: '#86baff', backgroundColor: 'rgba(59, 130, 246, 0.05)', tension: 0.2, fill: true, pointRadius: 2 },
-                    { label: 'Visites', data: <?= json_encode(array_column($historicalData, 'cumulative_visits')) ?>, borderColor: '#86ff94', backgroundColor: 'rgba(16, 185, 129, 0.05)', tension: 0.2, fill: true, pointRadius: 2 },
-                    { label: 'Visiteurs uniques', data: <?= json_encode(array_column($historicalData, 'cumulative_unique_visitors')) ?>, borderColor: '#ff9686', backgroundColor: 'rgba(245, 158, 11, 0.05)', tension: 0.2, fill: true, pointRadius: 2 }
+                datasets: [{
+                        label: 'Utilisateurs',
+                        data: <?= json_encode(array_column($historicalData, 'cumulative_users')) ?>,
+                        borderColor: '#9d86ff',
+                        backgroundColor: 'rgba(244, 63, 94, 0.05)',
+                        tension: 0.2,
+                        fill: true,
+                        pointRadius: 2
+                    },
+                    {
+                        label: 'Sites',
+                        data: <?= json_encode(array_column($historicalData, 'cumulative_sites')) ?>,
+                        borderColor: '#86baff',
+                        backgroundColor: 'rgba(59, 130, 246, 0.05)',
+                        tension: 0.2,
+                        fill: true,
+                        pointRadius: 2
+                    },
+                    {
+                        label: 'Visites',
+                        data: <?= json_encode(array_column($historicalData, 'cumulative_visits')) ?>,
+                        borderColor: '#86ff94',
+                        backgroundColor: 'rgba(16, 185, 129, 0.05)',
+                        tension: 0.2,
+                        fill: true,
+                        pointRadius: 2
+                    },
+                    {
+                        label: 'Visiteurs uniques',
+                        data: <?= json_encode(array_column($historicalData, 'cumulative_unique_visitors')) ?>,
+                        borderColor: '#ff9686',
+                        backgroundColor: 'rgba(245, 158, 11, 0.05)',
+                        tension: 0.2,
+                        fill: true,
+                        pointRadius: 2
+                    }
                 ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } },
-                    tooltip: { mode: 'index', intersect: false }
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            boxWidth: 8
+                        }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
                 },
                 scales: {
-                    x: { grid: { display: false }, title: { display: true, text: 'Date' } },
-                    y: { beginAtZero: true, grid: { color: '#f1f5f9' }, title: { display: true, text: 'Nombre' } }
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#f1f5f9'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Nombre'
+                        }
+                    }
                 }
             }
         });
@@ -569,10 +638,28 @@ if (isset($_GET['export_emails'])) {
 
             const getCountryCode = (countryName) => {
                 const map = {
-                    'france': 'FR', 'united states': 'US', 'usa': 'US', 'germany': 'DE', 'united kingdom': 'GB', 'uk': 'GB',
-                    'canada': 'CA', 'australia': 'AU', 'japan': 'JP', 'china': 'CN', 'brazil': 'BR', 'india': 'IN',
-                    'italy': 'IT', 'spain': 'ES', 'netherlands': 'NL', 'belgium': 'BE', 'switzerland': 'CH',
-                    'portugal': 'PT', 'russia': 'RU', 'mexico': 'MX', 'south korea': 'KR', 'singapore': 'SG'
+                    'france': 'FR',
+                    'united states': 'US',
+                    'usa': 'US',
+                    'germany': 'DE',
+                    'united kingdom': 'GB',
+                    'uk': 'GB',
+                    'canada': 'CA',
+                    'australia': 'AU',
+                    'japan': 'JP',
+                    'china': 'CN',
+                    'brazil': 'BR',
+                    'india': 'IN',
+                    'italy': 'IT',
+                    'spain': 'ES',
+                    'netherlands': 'NL',
+                    'belgium': 'BE',
+                    'switzerland': 'CH',
+                    'portugal': 'PT',
+                    'russia': 'RU',
+                    'mexico': 'MX',
+                    'south korea': 'KR',
+                    'singapore': 'SG'
                 };
                 return map[countryName.toLowerCase().trim()] || null;
             };
@@ -629,4 +716,5 @@ if (isset($_GET['export_emails'])) {
         });
     </script>
 </body>
+
 </html>

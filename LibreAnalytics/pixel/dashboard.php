@@ -620,7 +620,7 @@ canvas {
     <header>
         <div class="container">
             <div class="header-content">
-                <h1>Le Smart Pixel de LibreAnalytics <a href="./auto-heberge/" style="text-decoration:none;">doc</a></h1>
+                <h1>Le Smart Pixel de LibreAnalytics <a href="./auto-heberge/" style="text-decoration:none;">V.0.1.0</a> 2024</h1>
                 <div class="period-filter">
                     <span>Période :</span>
                     <select id="periodSelect" onchange="changePeriod(this.value)">

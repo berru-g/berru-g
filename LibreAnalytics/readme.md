@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Installation](https://img.shields.io/badge/Installation-1_ligne-brightgreen)](https://gael-berru.com/LibreAnalytics/#installation)
 [![Made in France](https://img.shields.io/badge/Made%20in-France-0055A4?logo=fr)](https://gael-berru.com)
-[![Open Source](https://img.shields.io/badge/Open%20Source-100%25-important?logo=github)](https://github.com/berru-g/LibreAnalytics)
+[![Open Source](https://img.shields.io/badge/Open%20Source-95%25-important?logo=github)](https://github.com/berru-g/LibreAnalytics)
 [![No Cookies](https://img.shields.io/badge/No%20Cookies-RGPD%20Friendly-blueviolet)](https://gael-berru.com/LibreAnalytics/)
 [![Lightweight](https://img.shields.io/badge/Lightweight-4KB-success?logo=lightning)](https://gael-berru.com/LibreAnalytics/)
 [![Sovereign](https://img.shields.io/badge/Sovereign-No%20GAFAM-007EC6?logo=europeanunion)](https://gael-berru.com/LibreAnalytics/)
@@ -679,14 +679,14 @@ Tu peux maintenant :
 Pour tendre vers la souveraineté total de nos données, je suis confronter à remplacer des outils gafam qu'il m'as fallu développer au fur et à mesure. Des tool tel que :
 
   - L'API / en pur PHP et JavaScript
-  - System de Captcha / idem
+  - System de Captcha / idem ( debug ec )
   - Séquence email automatique / via cron et email() mais pour des raisons de limitaion journaliére je passerais sur SymfonyMailer ou PHPmailer qui sont des solution php native et souveraines.
 
 ## Roadmap :
-  - Hebergement propre dissocier de mon site
+  - Hebergement propre dissocier de mon site ( apres la phaze beta test )
   - Reorga de la structure interne à simplifier ( LibreAnalytics puis chaque dossier, pas de v2)
   - Nom de domaine 
-  - Mise en route du plan premium à 9€/mois ou 90€ à l'année.
+  - Mise en route du plan premium à 12€/mois, la license à 399€ à vie + ~50€ / maj
   - Config de lemonsqueezie comme moyen de paiement
   - Developper l'api en ajoutant des appel à chaque table de la bdd
   - Developper pixel pour récuperer plus de données, dans les limites RGPD.
