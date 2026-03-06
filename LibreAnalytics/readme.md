@@ -1,4 +1,4 @@
-# Libre Analytics v2 - Analytics Platform
+# LibreAnalytics V.1.0.8
 
 [![PHP Version](https://img.shields.io/badge/PHP-8.2%2B-777BB4?logo=php)](https://www.php.net/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -10,9 +10,9 @@
 [![Sovereign](https://img.shields.io/badge/Sovereign-No%20GAFAM-007EC6?logo=europeanunion)](https://gael-berru.com/LibreAnalytics/)
 [![Status](https://img.shields.io/badge/Status-Actively%20Developed-brightgreen)](https://github.com/berru-g/LibreAnalytics/commits/main)
 
-**Alternative 100% française et open source à Google Analytics**
+**Alternative française et open source à Google Analytics**
 
-Analysez votre trafic sans compromettre la vie privée de vos visiteurs, avec un outil 100% européen et open source
+Analysez votre trafic sans compromettre la vie privée de vos visiteurs, avec un outil 100% européen
 
   [Dashboard](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/dashboard.php) - [Api](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/account.php) - [Doc](https://gael-berru.com/LibreAnalytics/doc/) - [Chat](https://gael-berru.com/LibreAnalytics/chat/) - [Articles](https://gael-berru.com/LibreAnalytics/articles/)
 
@@ -220,8 +220,7 @@ Une fois connecté, votre tableau de bord se compose de plusieurs onglets :
 - Points d'améliorations
 
 
-![dashboard_LibreAnalytics](https://gael-berru.com/img/LibreAnalytics-dashboard.png)
-
+<img src="https://gael-berru.com/img/LibreAnalytics-dashboard.png" style="width:90%; display:flex;margin:20px auto; border-radius: 12px;">
 
 ---
 
