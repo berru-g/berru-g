@@ -39,7 +39,7 @@ $period = $period ?? 30;
         :root {
             --primary-color: #86acff;
             --just-primary: rgba(156, 134, 255, 0.53);
-            --bg-color: #f5f5f5;
+             --back-color: #f5f5f5;
             --text-color: #333;
             --border-color: #e0e0e0;
             --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -49,7 +49,7 @@ $period = $period ?? 30;
             :root {
                 --primary-color: #8688ff;
                 --just-primary: rgba(140, 134, 255, 0.5);
-                --bg-color: rgba(3, 3, 3, 0.69);
+                 --back-color: #2b2a2a;
                 --text-color: #ffffff;
                 --border-color: #444;
             }
@@ -115,7 +115,7 @@ $period = $period ?? 30;
             transition: transform 0.3s ease-out;
             transform: translateY(20px);
             opacity: 0;
-            background-color: var(--bg-color);
+            background-color: var( --back-color);
             color: var(--text-color);
         }
 
@@ -154,7 +154,7 @@ $period = $period ?? 30;
             flex: 1;
             padding: 15px;
             overflow-y: auto;
-            background-color: var(--bg-color);
+            background-color: var( --back-color);
         }
 
         .ai-message {
@@ -194,7 +194,7 @@ $period = $period ?? 30;
         .ai-input-area {
             padding: 15px;
             border-top: 1px solid var(--border-color);
-            background-color: var(--bg-color);
+            background-color: var( --back-color);
         }
 
         .ai-quick-questions {
@@ -234,7 +234,7 @@ $period = $period ?? 30;
             border-radius: 20px;
             outline: none;
             font-size: 0.95rem;
-            background-color: var(--bg-color);
+            background-color: var( --back-color);
             color: var(--text-color);
         }
 
@@ -471,7 +471,7 @@ $period = $period ?? 30;
                 elements.panel.classList.toggle('active', isPanelOpen);
                 if (isPanelOpen && !document.querySelector('.ai-message')) {
                     setTimeout(() => {
-                        addMessage('bot', "Bonjour {$user['email']} ! Comment puis-je vous aider ?");
+                        addMessage('bot', "Bonjour ! Comment puis-je vous aider ?");
                     }, 300);
                 }
             }
