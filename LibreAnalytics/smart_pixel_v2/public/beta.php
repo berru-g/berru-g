@@ -704,7 +704,7 @@ if (isset($_GET['export_emails'])) {
             polygonSeries.data.setAll(countryData);
             polygonSeries.set("heatRules", [{
                 target: polygonSeries.mapPolygons.template,
-                min: am5.color(0xc7b9ff),
+                min: am5.color(0x3333aa),
                 max: am5.color(0x5f3dc4),
                 dataField: "value"
             }]);

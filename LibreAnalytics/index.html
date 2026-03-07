@@ -251,7 +251,7 @@
                     <div class="stat-label">Installation</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">57</div>
+                    <div class="stat-number">14</div>
                     <div class="stat-label">Sites Français</div>
                 </div>
                 <div class="stat-item">
@@ -390,24 +390,22 @@
     </div>
 </section>
 
-<!-- === CARTE MONDIALE === -->
+<!-- === CARTE MONDIALE === --
 <section class="world-map-section">
     <div class="container">
         <div class="section-title">
             <h2>Déjà utilisé dans le monde entier</h2>
             <p class="section-subtitle">
-                <span id="total-sites">57</span> sites nous font confiance ·
-                <span id="total-hits">28k</span> analyses ce mois
+                <span id="total-sites">14</span> sites nous font confiance ·
+                <span id="total-hits">1.8k</span> analyses ce mois
             </p>
         </div>
 
-        <!-- Carte -->
         <div id="public-map" style="width: 100%; height: 400px; margin: 30px 0;"></div>
 
-        <!-- Top pays -->
         <div class="top-countries" id="top-countries"></div>
     </div>
-</section>
+</section>-->
 
 <!-- === INTEGRATION SECTION === -->
 <section id="integration" class="integration-section" role="region" aria-labelledby="integration-title">
@@ -464,8 +462,8 @@
 <section id="tarifs" class="pricing-section" role="region" aria-labelledby="pricing-title">
     <div class="container">
         <div class="section-title">
-            <h2 id="pricing-title">Tarifs transparents</h2>
-            <p class="section-subtitle">Payez pour l'hébergement et le support, pas pour vos données</p>
+            <h2 id="pricing-title">Tarifs</h2>
+            <p class="section-subtitle">Durant la période bêta de ce Logiciel, son utilisation est limité au plan gratuit. Merci.</p>
         </div>
 
         <div class="pricing-cards">
@@ -505,7 +503,7 @@
                     <li><i class="fas fa-check feature-check"></i> Support prioritaire</li>
                 </ul>
 
-                <a href="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/index.php?plan=pro" target=_blank class="btn btn-primary" style="margin-top: auto;">
+                <a href="#" class="btn btn-primary" style="margin-top: auto; text-decoration: line-through;">
                     <i class="fas fa-gem"></i>
                     Devenir Pro
                 </a>
@@ -518,21 +516,21 @@
 
             <!-- Plan Annuel -->
                 <div class="pricing-card animate">
-                    <h3>Business</h3>
-                    <div class="price-tag">90€<span>/an</span></div>
-                    <p>Pour les entreprises et agences</p>
+                    <h3>License</h3>
+                    <div class="price-tag">399€<span></span></div>
+                    <p>Pour les besoins sur mesure et auto hebergé</p>
                     
                     <ul class="pricing-features">
-                        <li><i class="fas fa-check feature-check"></i> <strong>10 sites web</strong></li>
-                        <li><i class="fas fa-check feature-check"></i> 100 000 vues/mois</li>
-                        <li><i class="fas fa-check feature-check"></i> Toutes features Pro</li>
-                        <li><i class="fas fa-check feature-check"></i> 2 ans de rétention</li>
+                        <li><i class="fas fa-check feature-check"></i> <strong>Pas de limite de sites web</strong></li>
+                        <li><i class="fas fa-check feature-check"></i> Droit d'utilisation et de modification</li>
+                        <li><i class="fas fa-check feature-check"></i> Gérez votre base de données</li>
+                        <li><i class="fas fa-check feature-check"></i> Gérez votre rétention</li>
                         <li><i class="fas fa-check feature-check"></i> Accès multi-utilisateurs</li>
                         <li><i class="fas fa-check feature-check"></i> Support téléphone</li>
                         <li><i class="fas fa-check feature-check"></i> Intégrations custom</li>
                     </ul>
                     
-                    <a href="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/index.php?plan=pro" target=_blank class="btn btn-primary" style="margin-top: auto;">
+                    <a href="#" class="btn btn-primary" style="margin-top: auto; text-decoration: line-through;">
                     <i class="fas fa-gem"></i>
                     Devenir Pro
                 </a>
@@ -639,52 +637,52 @@
         function initMap() {
             console.log("Initialisation de la carte");
 
-            // Données de démo qui MARCHENT À COUP SÛR
+            // Données maj manuel du 07/03/26
             const demoData = [{
                     country: 'France',
-                    hit_count: 12500
+                    hit_count: 1300
                 },
                 {
                     country: 'USA',
-                    hit_count: 8300
+                    hit_count: 50
                 },
                 {
                     country: 'Canada',
-                    hit_count: 4200
+                    hit_count: 20
                 },
                 {
                     country: 'UK',
-                    hit_count: 3800
+                    hit_count: 30
                 },
                 {
-                    country: 'Allemagne',
-                    hit_count: 3100
+                    country: 'Asie',
+                    hit_count: 30
                 },
                 {
                     country: 'Italie',
-                    hit_count: 2900
+                    hit_count: 10
                 },
                 {
                     country: 'Espagne',
-                    hit_count: 2700
+                    hit_count: 20
                 },
                 {
                     country: 'Belgique',
-                    hit_count: 2100
+                    hit_count: 10
                 },
                 {
                     country: 'Suisse',
-                    hit_count: 1800
+                    hit_count: 18
                 },
                 {
                     country: 'Pays-Bas',
-                    hit_count: 1600
+                    hit_count: 10
                 }
             ];
 
             // Afficher les stats
-            document.getElementById('total-sites').textContent = '57';
-            document.getElementById('total-hits').textContent = '28k';
+            document.getElementById('total-sites').textContent = '14';
+            document.getElementById('total-hits').textContent = '1.8k';
 
             renderMap(demoData);
 

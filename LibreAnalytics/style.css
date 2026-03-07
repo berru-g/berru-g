@@ -801,3 +801,21 @@ p {
     color: #ab9ff2;
     margin-right: 5px;
 }
+
+.chart-container {
+    width: 800px;
+    height: 400px;
+    margin: 20px auto;
+}
+
+.error {
+    color: #ff5e99;
+    padding: 10px;
+    border: 1px solid #ff5e99;
+    margin: 10px 0;
+}
+
+.loading {
+    color: #4a6bff;
+    font-style: italic;
+}
