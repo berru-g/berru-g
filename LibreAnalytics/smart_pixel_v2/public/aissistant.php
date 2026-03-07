@@ -9,6 +9,11 @@ if (!Auth::isLoggedIn()) {
     header('Location: login.php');
     exit;
 }
+
+// 2. Extraire le nom avant @ dans l'email
+$emailParts = explode('@', $user['email']);
+$name = $emailParts[0]; // Prénom = partie avant le "@"
+
 // Récupération des données avec vérifications
 $topPages = $topPages ?? [];
 $countries = $countries ?? [];
@@ -32,7 +37,7 @@ $period = $period ?? 30;
     <style>
         /* CSS complet ci-dessous */
         :root {
-            --primary-color: #9d86ff;
+            --primary-color: #86acff;
             --just-primary: rgba(156, 134, 255, 0.53);
             --bg-color: #f5f5f5;
             --text-color: #333;
@@ -42,9 +47,9 @@ $period = $period ?? 30;
 
         @media (prefers-color-scheme: dark) {
             :root {
-                --primary-color: #9d86ff;
+                --primary-color: #8688ff;
                 --just-primary: rgba(140, 134, 255, 0.5);
-                --bg-color: #1d1d1e;
+                --bg-color: rgba(3, 3, 3, 0.69);
                 --text-color: #ffffff;
                 --border-color: #444;
             }
@@ -328,6 +333,11 @@ $period = $period ?? 30;
                 padding-bottom: max(10px, env(safe-area-inset-bottom));
             }
         }
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
     </style>
 </head>
 
@@ -336,7 +346,7 @@ $period = $period ?? 30;
 
     <div class="ai-assistant-container">
         <button class="ai-toggle-btn" id="aiToggle">
-            <i class="fas fa-comment-dots"></i>
+            <i class="fa-regular fa-message"></i>
             <span class="ai-badge">API</span>
         </button>
 
@@ -461,7 +471,7 @@ $period = $period ?? 30;
                 elements.panel.classList.toggle('active', isPanelOpen);
                 if (isPanelOpen && !document.querySelector('.ai-message')) {
                     setTimeout(() => {
-                        addMessage('bot', "Bonjour ! Comment puis-je vous aider ?");
+                        addMessage('bot', "Bonjour {$user['email']} ! Comment puis-je vous aider ?");
                     }, 300);
                 }
             }
@@ -500,12 +510,12 @@ $period = $period ?? 30;
                             const docLink = docSections['optimisation'] ?
                                 `\n\n📖 <a href="${DOC_URL}#optimisation" target="_blank">Voir la section "Optimisation"</a>` : '';
                             return `
-                            **📊 Page la plus performante :**
-                            🔗 <a href="${topPage.page_url}" target="_blank">${topPage.page_url}</a>
-                            👁️ **${topPage.views} vues** (${percentage}% du trafic)
-                            **Recommandations :**
-                            ✅ Optimisez les CTA
-                            ${docLink}
+                           <p>📊 Page la plus performante : 
+                            🔗 <a href="${topPage.page_url}" target="_blank">${topPage.page_url}</a></p><br>
+                            👁️<p>${topPage.views} vues  (${percentage}% du trafic)</p><br>
+                           <p>Recommandations : </p><br>
+                          <p>✅ Optimisez les CTA
+                            ${docLink}</p><br>
                         `;
                         },
                         fallback: "Aucune donnée de page disponible."
@@ -519,14 +529,14 @@ $period = $period ?? 30;
                                 `\n\n📖 [Améliorer votre taux de conversion](${DOC_URL}#conversion)` : '';
 
                             return `
-                        **🎯 Taux de conversion estimé :** ${estimatedRate}
-                        **Potentiel :** Jusqu’à **${Math.round(data.totalVisits * 0.05)}** conversions/mois
+                       <p>🎯 Taux de conversion estimé : ${estimatedRate}</p><br>
+                       <p>Potentiel : Jusqu’à<p>${Math.round(data.totalVisits * 0.05)} conversions/mois</p><br>
 
-                        **Actions recommandées :**
-                        1. Simplifiez vos formulaires
-                        2. Ajoutez des garanties (ex: "Satisfait ou remboursé")
-                        3. Testez différents boutons (couleur, texte)
-                        ${docLink}
+                       <p>Actions recommandées : </p><br>
+                       <p> 1. Simplifiez vos formulaires</p><br>
+                       <p> 2. Ajoutez des garanties (ex: "Satisfait ou remboursé")</p><br>
+                       <p> 3. Testez différents boutons (couleur, texte)
+                        ${docLink}</p><br>
                     `;
                         },
                         fallback: "Données de trafic manquantes pour calculer le taux de conversion."
@@ -535,10 +545,10 @@ $period = $period ?? 30;
                         keywords: ['pays', 'géographie', 'visiteur', 'localisation', 'pays visiteurs'],
                         check: () => data.countries && data.countries.length > 0,
                         response: () => {
-                            let response = "**🌍 Répartition géographique :**\n\n";
+                            let response = "🌍 Répartition géographique :\n\n";
                             data.countries.slice(0, 3).forEach((country, index) => {
                                 const percentage = Math.round((country.visits / data.totalVisits) * 100);
-                                response += `${index + 1}. **${country.country}** : ${country.visits} visites (${percentage}%)\n`;
+                                response += `${index + 1}. ${country.country}  : ${country.visits} visites (${percentage}%)\n`;
                             });
                             return response;
                         },
@@ -553,17 +563,17 @@ $period = $period ?? 30;
                                 `\n\n📖 [Stratégies publicitaires](${DOC_URL}#publicité)` : '';
 
                             return `
-                        **💰 Recommandations publicitaires :**
+                       <p>💰 Recommandations publicitaires :</p>
 
-                        1. **Source actuelle la plus performante :**
-                           📊 *${bestSource.source}* (${bestSource.count} visites)
+                        1.<p>Source actuelle la plus performante :</p>
+                          <p> 📊 ${bestSource.source} (${bestSource.count} visites)</p><br>
 
-                        2. **Meilleur appareil cible :**
-                           📱 *${data.devices[0]?.device || 'Desktop'}*
+                        2.<p>Meilleur appareil cible :</p>
+                          <p> 📱 ${data.devices[0]?.device || 'Desktop'}</p><br>
 
-                        **Stratégie recommandée :**
-                        🎯 Doublez votre budget sur **${bestSource.source}**
-                        🎯 Ciblez **${data.countries[0]?.country || 'France'}**
+                       <p>Stratégie recommandée :</p>
+                        <p>🎯 Doublez votre budget sur ${bestSource.source}</p>
+                        <p>🎯 Ciblez ${data.countries[0]?.country || 'France'}</p>
                         ${docLink}
                     `;
                         },
@@ -580,16 +590,16 @@ $period = $period ?? 30;
                                 `\n\n📖 [Analyse des tendances](${DOC_URL}#analytique)` : '';
 
                             return `
-                        **📈 Tendances (${data.period} jours) :**
+                       <p>📈 Tendances (${data.period} jours) :</p>
 
-                        📊 **Évolution trafic :** ${growth}%
-                        👥 **Visiteurs uniques :** ${data.totalVisits}
-                        ⏱️ **Engagement :** ${data.avgSessionTime} min/session
+                        <p>Évolution trafic : ${growth}%</p><br>
+                        <p>Visiteurs uniques : ${data.totalVisits}</p><br>
+                        <p>Engagement : ${data.avgSessionTime} min/session</p><br>
 
-                        **Prévision semaine prochaine :**
+                       <p>Prévision semaine prochaine : 
                         ~${Math.round(data.totalVisits / data.period * 7 * 1.1)} visites
                         ${growth > 0 ? '✅ Bonne croissance !' : '⚠️ À améliorer'}
-                        ${docLink}
+                        ${docLink}</p>
                     `;
                         },
                         fallback: "Collectez plus de données pour analyser les tendances."
@@ -601,13 +611,13 @@ $period = $period ?? 30;
                                 `\n\n📖 [Stratégies recommandées](${DOC_URL}#stratégie)` : '';
 
                             return `
-                        **🎯 Recommandations personnalisées :**
+                       <p>🎯 Recommandations personnalisées : </p><br>
 
-                        1. Ciblez **${data.countries[0]?.country || 'de nouveaux marchés'}**
-                        2. Optimisez pour **${data.devices[0]?.device || 'mobile'}**
-                        3. Améliorez le SEO de vos pages les plus visitées
-                        4. Créez des campagnes sur **${data.sources[0]?.source || 'vos meilleures sources'}**
-                        ${docLink}
+                       <p> 1. Ciblez ${data.countries[0]?.country || 'de nouveaux marchés'}</p><br> 
+                       <p> 2. Optimisez pour ${data.devices[0]?.device || 'mobile'}</p><br> 
+                       <p> 3. Améliorez le SEO de vos pages les plus visitées</p><br>
+                       <p> 4. Créez des campagnes sur ${data.sources[0]?.source || 'vos meilleures sources'} 
+                        ${docLink}</p><br>
                     `;
                         }
                     }
@@ -631,8 +641,8 @@ $period = $period ?? 30;
                 for (const [title, section] of Object.entries(docSections)) {
                     if (q.includes(title)) {
                         return `
-                        **📚 ${section.title}**
-                        ${section.content}
+                       <p>📚 ${section.title} </p><br>
+                       <p> ${section.content}</p><br>
                         <p>[<a href="https://gael-berru.com/LibreAnalytics/doc/#${encodeURIComponent(title)}" target="_blank">Lire la suite</a>]</p>
                     `;
                     }
