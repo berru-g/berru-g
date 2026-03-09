@@ -37,7 +37,7 @@ $period = $period ?? 30;
     <style>
         /* CSS complet ci-dessous */
         :root {
-            --primary-color: #86acff;
+            --first-color: #86acff;
             --just-primary: rgba(156, 134, 255, 0.53);
              --back-color: #f5f5f5;
             --text-color: #333;
@@ -47,7 +47,7 @@ $period = $period ?? 30;
 
         @media (prefers-color-scheme: dark) {
             :root {
-                --primary-color: #8688ff;
+                --first-color: #8688ff;
                 --just-primary: rgba(140, 134, 255, 0.5);
                  --back-color: #2b2a2a;
                 --text-color: #ffffff;
@@ -64,7 +64,7 @@ $period = $period ?? 30;
         }
 
         .ai-toggle-btn {
-            background: var(--primary-color);
+            background: var(--first-color);
             color: white;
             border: none;
             width: 50px;
@@ -126,7 +126,7 @@ $period = $period ?? 30;
         }
 
         .ai-header {
-            background: var(--primary-color);
+            background: var(--first-color);
             color: white;
             padding: 8px;
             display: flex;
@@ -180,7 +180,7 @@ $period = $period ?? 30;
 
         .ai-message.user {
             margin-left: auto;
-            background: var(--primary-color);
+            background: var(--first-color);
             color: white;
             border-bottom-right-radius: 4px;
         }
@@ -211,14 +211,14 @@ $period = $period ?? 30;
             border: 1px solid grey;
             border-radius: 20px;
             background: transparent;
-            color: var(--primary-color);
+            color: var(--first-color);
             cursor: pointer;
             font-size: 0.9rem;
             transition: all 0.2s;
         }
 
         .quick-question:hover {
-            background: var(--primary-color);
+            background: var(--first-color);
             color: white;
         }
 
@@ -239,11 +239,11 @@ $period = $period ?? 30;
         }
 
         #aiInput:focus {
-            border-color: var(--primary-color);
+            border-color: var(--first-color);
         }
 
         #aiSend {
-            background: var(--primary-color);
+            background: var(--first-color);
             color: white;
             border: none;
             width: 45px;
@@ -264,7 +264,7 @@ $period = $period ?? 30;
         .typing-indicator span {
             width: 8px;
             height: 8px;
-            background: var(--primary-color);
+            background: var(--first-color);
             border-radius: 50%;
             animation: typing 1.4s infinite;
         }
@@ -335,7 +335,7 @@ $period = $period ?? 30;
         }
         a {
             text-decoration: none;
-            color: var(--primary-color);
+            color: var(--first-color);
             font-weight: 700;
         }
     </style>
@@ -402,7 +402,8 @@ $period = $period ?? 30;
         const DOC_URL = 'https://raw.githubusercontent.com/berru-g/LibreAnalytics/refs/heads/main/readme.md';
         const DOC_API_URL = 'https://api.github.com/repos/berru-g/LibreAnalytics/readme';
         let docSections = {};
-
+        //const userName = userEmail.split('@')[0] || 'Utilisateur';
+        
         // Fonction pour récupérer et parser la documentation (version API GitHub)
         async function fetchDoc() {
             try {
@@ -471,7 +472,7 @@ $period = $period ?? 30;
                 elements.panel.classList.toggle('active', isPanelOpen);
                 if (isPanelOpen && !document.querySelector('.ai-message')) {
                     setTimeout(() => {
-                        addMessage('bot', "Bonjour ! Comment puis-je vous aider ?");
+                        addMessage('bot', "Bonjour <?= htmlspecialchars($_SESSION['user_email'] ?? 'UserLibre') ?>! Comment puis-je vous aider ?");
                     }, 300);
                 }
             }
@@ -696,9 +697,6 @@ $period = $period ?? 30;
             AIAssistant.askAI(question);
         }
     </script>
-
-
-
 
 </body>
 

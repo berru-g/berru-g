@@ -131,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <p>Tu es désormais <strong>responsable et propriétaire des données</strong> de ton site. Soit fière de ce premier pas vers l'indépendance numérique.</p>
 
-            <p>Voici ton <strong>code de tracking</strong> à installer sur ton site :</p>
+            <p>Voici ton <strong>code de tracking</strong> à installer sur ton site avant &lt;/head&gt;:</p>
 
             <div class="code-block">
                 &lt;script data-sp-id=&quot;$tracking_code&quot; src=&quot;https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js&quot; async&gt;&lt;/script&gt;

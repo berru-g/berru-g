@@ -249,59 +249,60 @@ header {
 
 /* Ajouter dans dashboard.css */
 .map-controls {
-    display: flex;
-    gap: 8px;
+  display: flex;
+  gap: 8px;
 }
 
 .map-btn {
-    background: var(--primary-color, #6772e5);
-    color: white;
-    border: none;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.3s;
+  background: var(--primary-color, #6772e5);
+  color: white;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
 }
 
 .map-btn:hover {
-    background: var(--primary-dark, #5a67d8);
+  background: var(--primary-dark, #5a67d8);
 }
 
 .flag-icon {
-    font-size: 14px;
-    font-weight: bold;
-    background: #f1f1f1;
-    padding: 2px 6px;
-    border-radius: 3px;
-    border: 1px solid #ddd;
+  font-size: 14px;
+  font-weight: bold;
+  background: #f1f1f1;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid #ddd;
 }
 
 /* Style pour le conteneur de la map */
 #mapChart {
-    min-height: 400px;
-    border: 1px solid #e0e0e0;
+  min-height: 400px;
+  border: 1px solid #e0e0e0;
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
-    #mapChart {
-        height: 350px !important;
-    }
+  #mapChart {
+    height: 350px !important;
+  }
 }
 
 @media (max-width: 768px) {
-    #mapChart {
-        height: 300px !important;
-    }
-    
-    .data-grid {
-        grid-template-columns: 1fr !important;
-    }
+  #mapChart {
+    height: 300px !important;
+  }
+
+  .data-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
+
 /* ===== TABLES DE DONNÉES ===== */
 .data-table {
   width: 100%;
@@ -1149,6 +1150,7 @@ canvas {
   border-width: 3px;
   border-color: var(--primary-color);
 }
+
 /*
 .plan-badge {
   position: absolute;
@@ -1278,45 +1280,45 @@ canvas {
 
 /* Styles pour les tips */
 .tip-success {
-    color: var(--chart-color-3);
-    background: rgba(16, 185, 129, 0.1);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.9em;
+  color: var(--chart-color-3);
+  background: rgba(16, 185, 129, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
 }
 
 .tip-warning {
-    color: var(--chart-color-2);
-    background: rgba(245, 158, 11, 0.1);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.9em;
+  color: var(--chart-color-2);
+  background: rgba(245, 158, 11, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
 }
 
 .tip-info {
-    color: var(--chart-color-1);
-    background: rgba(59, 130, 246, 0.1);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.9em;
+  color: var(--chart-color-1);
+  background: rgba(59, 130, 246, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
 }
 
 .tip-neutral {
-    color: var(--p-bleu);
-    background: rgba(107, 114, 128, 0.1);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.9em;
+  color: var(--p-bleu);
+  background: rgba(107, 114, 128, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
 }
 
 /* Style pour les insights */
 .insight-tip {
-    background: var(--bg-color);
-    border: 1px solid var(--negative);
-    padding: 12px 15px;
-    margin: 15px 0;
-    border-radius: 8px;
-    font-size: 0.95em;
+  background: var(--bg-color);
+  border: 1px solid var(--negative);
+  padding: 12px 15px;
+  margin: 15px 0;
+  border-radius: 8px;
+  font-size: 0.95em;
 }
 
 .card {
@@ -1326,10 +1328,11 @@ canvas {
   border-radius: 8px;
   margin-top: 20px;
 }
+
 /* Responsive pour les tables dans les cards */
 .card .table-container {
-    overflow-x: auto;
-    max-width: 100%;
+  overflow-x: auto;
+  max-width: 100%;
 }
 
 /* === FORMULAIRE DE CHECKOUT === */
@@ -1559,40 +1562,41 @@ canvas {
 
 /* Style pour le conteneur Gantt */
 #ganttChart {
-    width: 100%;
-    height: 400px;
-    background: var(--bg-color);
-    border-radius: 8px;
-    margin: 15px 0;
-    border: 1px solid rgba(128, 128, 128, 0.2);
-    min-height: 400px;
+  width: 100%;
+  height: 400px;
+  background: var(--bg-color);
+  border-radius: 8px;
+  margin: 15px 0;
+  border: 1px solid rgba(128, 128, 128, 0.2);
+  min-height: 400px;
 }
 
 /* Amélioration du conteneur heatmap */
 #heatmapChart {
-    max-height: 250px;
-    width: 100%;
+  max-height: 250px;
+  width: 100%;
 }
 
 /* Style pour la liste des pages */
 #topPagesList {
-    padding: 15px;
-    background: var(--bg-color);
-    border-radius: 8px;
-    border: 1px solid rgba(128, 128, 128, 0.2);
+  padding: 15px;
+  background: var(--bg-color);
+  border-radius: 8px;
+  border: 1px solid rgba(128, 128, 128, 0.2);
 }
 
 .page-item {
-    padding: 10px;
-    border-bottom: 1px solid rgba(128, 128, 128, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .page-item:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
+
 /* MODAL PARAMETRE */
 .settings-modal {
   display: flex;
@@ -1601,7 +1605,7 @@ canvas {
   margin: 100px auto;
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
   background: var(--bg-color);
   backdrop-filter: blur(10px);
   max-width: 350px;
@@ -1609,8 +1613,9 @@ canvas {
   padding: 0;
 }
 
+
 .settings-modal::backdrop {
-  background: rgba(0,0,0,0.55);
+  background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(3px);
 }
 
@@ -1642,7 +1647,7 @@ canvas {
   display: block;
   padding: 1.1rem 1.3rem;
   background: var(--bg-secondary);
-  border:1px solid var(--border-color);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   text-decoration: none;
   color: var(--text-color);
@@ -1655,11 +1660,11 @@ canvas {
 .modal-link:focus {
   background: var(--bg-color);
   transform: translateY(-1px);
-  box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
 }
 
 .modal-link.primary {
-  border:1px solid var(--primary-color);
+  border: 1px solid var(--primary-color);
   color: var(--text-color);
 }
 
@@ -1723,7 +1728,7 @@ canvas {
     transition: opacity 0.3s ease, visibility 0.3s ease;
   }
 
-  .sidebar.mobile-open ~ .sidebar-overlay {
+  .sidebar.mobile-open~.sidebar-overlay {
     opacity: 1;
     visibility: visible;
   }
@@ -1763,6 +1768,7 @@ canvas {
 
 /* 4. Cartes et graphiques : 100% de largeur, polices adaptées */
 @media (max-width: 768px) {
+
   .stat-card,
   .chart-container {
     width: 100%;
@@ -1785,6 +1791,7 @@ canvas {
 
 /* 5. Grilles de données : une colonne en mobile */
 @media (max-width: 768px) {
+
   .stats-grid,
   .data-grid {
     grid-template-columns: 1fr !important;
@@ -1794,6 +1801,7 @@ canvas {
 
 /* 6. Boutons et éléments interactifs : plus grands et espacés */
 @media (max-width: 768px) {
+
   .add-site-btn,
   .tab,
   .period-filter select {

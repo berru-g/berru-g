@@ -16,7 +16,9 @@ Analysez votre trafic sans compromettre la vie privée de vos visiteurs, avec un
 
   [Dashboard](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/dashboard.php) - [Api](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/account.php) - [Doc](https://gael-berru.com/LibreAnalytics/doc/) - [Chat](https://gael-berru.com/LibreAnalytics/chat/) - [Articles](https://gael-berru.com/LibreAnalytics/articles/)
 
-   ![LibreAnalytics-Dashboard](https://gael-berru.com/img/demo_dashboard.gif)
+
+<img src="https://gael-berru.com/img/demo_dashboard.gif" style="width:90%; display:flex;margin:20px auto; border-radius: 12px;">
+
 
 Disponible
 
@@ -164,7 +166,7 @@ Vous aurez besoin de :
 ✅ Le premier dashboard est gratuit.
 
 ### 2. Récupérer votre code de tracking
-Une fois connecté, votre tableau de bord affiche votre **code d'intégration** : 
+Une fois connecté, votre tableau de bord affiche votre **code d'intégration** Ewemple : 
 
 ```html
 <script data-sp-id="SP_24031987" 
@@ -186,6 +188,8 @@ Copiez-collez cette ligne **juste avant la balise `</head>`** de votre site web.
 ## Découvrir votre tableau de bord
 
 Une fois connecté, votre tableau de bord se compose de plusieurs onglets :
+
+<img src="https://gael-berru.com/img/LibreAnalytics-dashboard.png" style="width:90%; display:flex;margin:20px auto; border-radius: 12px;">
 
 ### **Vue d'ensemble**
 - **Visites totales** : nombre de pages vues
@@ -218,9 +222,6 @@ Une fois connecté, votre tableau de bord se compose de plusieurs onglets :
 ### **Insight**
 - Analyse des Tendances
 - Points d'améliorations
-
-
-<img src="https://gael-berru.com/img/LibreAnalytics-dashboard.png" style="width:90%; display:flex;margin:20px auto; border-radius: 12px;">
 
 ---
 
@@ -280,13 +281,13 @@ Chaque site a son propre **tracking code** (ex: `SP_24031987`). Installez le cod
 
 ### Ajoutez votre site id avant votre token et insérez vos requete entre les deux !
     URL d’exemple :
-    https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?site_id=SP_12345&start_date=2026-01-01&end_date=2026-02-01&api_token=TON_TOKEN
+    https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?site_id=SP_24031987&start_date=2026-01-01&end_date=2026-02-01&api_key=TON_TOKEN
 
 
 ### Intégrer avec ton dashboard ou outils externes. Depuis un script JS :
 
 ```html
-    fetch(`https://ton-domaine.com/smart_pixel_v2/public/api.php?site_id=SP_12345&start_date=2026-01-01&end_date=2026-02-01&api_key=TON_TOKEN`)
+    fetch(`https://ton-domaine.com/smart_pixel_v2/public/api.php?site_id=SP_24031987&start_date=2026-01-01&end_date=2026-02-01&api_key=TON_TOKEN`)
     .then(response => response.json())
     .then(data => console.log(data));
 
@@ -301,7 +302,7 @@ Chaque site a son propre **tracking code** (ex: `SP_24031987`). Installez le cod
 ## **🔑 Prérequis**
 - Un **compte Libre Analytics** (gratuit pour 1 site).
 - Une **clé API** (disponible dans ton [tableau de bord](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/account.php)).
-- Le **code de tracking** de ton site (ex: `SP_2m4789lg`).
+- Le **code de tracking** de ton site (ex: `SP_24031987`).
 
 ---
 
@@ -318,7 +319,7 @@ Chaque site a son propre **tracking code** (ex: `SP_24031987`). Installez le cod
 
 ### **Étape 3 : Récupère ton code de tracking**
 1. Retour au menu dans la section **Code d'intégration**
-2. Copie le **code de tracking** (ex: `SP_2m4789lg`).
+2. Copie le **code de tracking** (ex: `SP_24031987`).
 
 ---
 
@@ -331,7 +332,7 @@ https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php
 ### **Paramètres obligatoires**
 | Paramètre     | Description                          | Exemple                     |
 |---------------|--------------------------------------|-----------------------------|
-| `site_id`     | Code de tracking de ton site.        | `SP_2m4789lg`               |
+| `site_id`     | Code de tracking de ton site.        | `SP_24031987`               |
 | `api_key`     | Ta clé API (copiée plus tôt).        | `1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p` |
 
 ### **Paramètres optionnels**
@@ -343,7 +344,7 @@ https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php
 ### **Exemple d’URL complète**
 ```
 https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?
-site_id=SP_2m4789lg&
+site_id=SP_24031987&
 api_key=1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p&
 start_date=2026-01-01&
 end_date=2026-02-01
@@ -361,7 +362,7 @@ end_date=2026-02-01
 ### **Méthode 2 : Avec cURL (terminal)**
 ```bash
 curl "https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?
-site_id=SP_2m4789lg&
+site_id=SP_24031987&
 api_key=1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p&
 start_date=2026-01-01&
 end_date=2026-02-01"
@@ -369,7 +370,7 @@ end_date=2026-02-01"
 
 ### **Méthode 3 : Avec JavaScript (fetch)**
 ```javascript
-const siteId = 'SP_2m4789lg';
+const siteId = 'SP_24031987';
 const apiKey = '1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p';
 const startDate = '2026-01-01';
 const endDate = '2026-02-01';
@@ -406,7 +407,7 @@ Voici à quoi ressemble une réponse typique :
     }
   ],
   "meta": {
-    "site_id": "SP_2m4789lg",
+    "site_id": "SP_24031987",
     "start_date": "2026-01-01",
     "end_date": "2026-02-01",
     "total_visits": 92,
@@ -433,7 +434,7 @@ Voici à quoi ressemble une réponse typique :
       COUNT(*) as visits,
       COUNT(DISTINCT ip_address) as unique_visitors
   FROM smart_pixel_tracking
-  WHERE site_id = 'SP_12345'
+  WHERE site_id = 'SP_24031987'
   GROUP BY DATE(timestamp)
   ORDER BY date ASC;
   ```
@@ -443,7 +444,7 @@ Voici à quoi ressemble une réponse typique :
   response = requests.get(
       "https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php",
       params={
-          "site_id": "SP_12345",
+          "site_id": "SP_24031987",
           "api_key": "VOTRE_CLE_API",
           "start_date": "2026-01-01",
           "end_date": "2026-02-01"
@@ -478,7 +479,7 @@ Voici à quoi ressemble une réponse typique :
 2. **Dans Google Sheets** :
    - Utilise la formule `=IMPORTDATA()` :
      ```excel
-     =IMPORTDATA("https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?site_id=SP_2m4789lg&api_key=1a2b3c...")
+     =IMPORTDATA("https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?site_id=SP_24031987&api_key=1a2b3c...")
      ```
 
 ### **C. Tableau de bord custom (HTML/JS)**
@@ -589,7 +590,7 @@ startDate.setDate(startDate.getDate() - 30);
 const formattedStartDate = startDate.toISOString().split('T')[0];
 
 fetch(`https://gael-berru.com/.../api.php?
-  site_id=SP_2m4789lg&
+  site_id=SP_24031987&
   api_key=1a2b3c...&
   start_date=${formattedStartDate}&
   end_date=${today}`)
@@ -599,7 +600,7 @@ fetch(`https://gael-berru.com/.../api.php?
 Modifie l’URL pour inclure des données géographiques :
 ```
 https://gael-berru.com/.../api.php?
-site_id=SP_2m4789lg&
+site_id=SP_24031987&
 api_key=1a2b3c...&
 group_by=country
 ```
