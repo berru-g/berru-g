@@ -3,7 +3,11 @@
 // Envoie automatique de mail en format text
 $recipients = [
     ['name' => 'Berru perso', 'email' => 'g.leberruyer@gmail.com'], //pour test!
-    ['name' => 'Studio Koukaki', 'email' => 'contact@koukaki.com']
+    ['name' => 'l\équipe LPC', 'email' => 'contact@lpcinformatique.com'],
+    ['name' => 'Séverine', 'email' => 'atelierdbdb@gmail.com'],
+    ['name' => 'Benoit', 'email' => 'contact@agenciz.com'], //pour test!
+    ['name' => 'l\équipe Almeria', 'email' => 'contact@almeria.fr'],
+    ['name' => 'Otiwa', 'email' => 'contact@otiwia.com']
  
 ];
 

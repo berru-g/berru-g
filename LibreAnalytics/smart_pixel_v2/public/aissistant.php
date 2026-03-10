@@ -1,15 +1,5 @@
 <?php
 
-require_once __DIR__ . '/../includes/config.php';
-require_once __DIR__ . '/../includes/auth.php';
-
-// Vérifie si connecté
-if (!Auth::isLoggedIn()) {
-    // Redirige UNIQUEMENT si pas connecté
-    header('Location: login.php');
-    exit;
-}
-
 // 2. Extraire le nom avant @ dans l'email
 $emailParts = explode('@', $user['email']);
 $name = $emailParts[0]; // Prénom = partie avant le "@"
@@ -32,7 +22,6 @@ $period = $period ?? 30;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LibreAnalytics Assistant</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* CSS complet ci-dessous */
@@ -87,7 +76,7 @@ $period = $period ?? 30;
             position: absolute;
             top: -5px;
             right: -5px;
-            background: #ffe66d;
+            background: #ff6d6d;
             color: white;
             border-radius: 50%;
             width: 20px;
@@ -352,7 +341,7 @@ $period = $period ?? 30;
 
         <div class="ai-panel" id="aiPanel">
             <div class="ai-header">
-                <h3>LibreAnalytics Assistant</h3>
+                <h3>LibreAssistant</h3>
                 <button class="ai-close" id="aiClose">×</button>
             </div>
 
@@ -377,7 +366,7 @@ $period = $period ?? 30;
                     <input
                         type="text"
                         id="aiInput"
-                        placeholder="Posez votre question (ex: 'Quelles sont mes meilleures sources de trafic ?')..."
+                        placeholder="Mots clefs : api, utm, code sp ..."
                         autocomplete="off">
                     <button id="aiSend"><i class="fas fa-paper-plane"></i></button>
                 </div>
@@ -399,6 +388,7 @@ $period = $period ?? 30;
         };
 
         // URL de la documentation
+        const DOC_SITE = 'https://gael-berru.com/LibreAnalytics/doc/';
         const DOC_URL = 'https://raw.githubusercontent.com/berru-g/LibreAnalytics/refs/heads/main/readme.md';
         const DOC_API_URL = 'https://api.github.com/repos/berru-g/LibreAnalytics/readme';
         let docSections = {};
@@ -439,7 +429,7 @@ $period = $period ?? 30;
                 docSections = Object.keys(sections).length > 0 ? sections : {
                     'documentation': {
                         title: 'Documentation',
-                        content: `<p><a href="https://gael-berru.com/LibreAnalytics/doc/" target="_blank">Consultez la documentation complète</a>.</p>`,
+                        content: `<p><a href="${DOC_SITE}" target="_blank">Consultez la documentation complète</a>.</p>`,
                         level: 2
                     }
                 };
@@ -448,7 +438,7 @@ $period = $period ?? 30;
                 docSections = {
                     'documentation': {
                         title: 'Documentation',
-                        content: `<p>Documentation indisponible. <a href="https://gael-berru.com/LibreAnalytics/doc/" target="_blank">Voir sur GitHub</a>.</p>`,
+                        content: `<p>Documentation indisponible. <a href="${DOC_SITE}" target="_blank">Voir sur GitHub</a>.</p>`,
                         level: 2
                     }
                 };
@@ -466,7 +456,7 @@ $period = $period ?? 30;
                 sendBtn: document.getElementById('aiSend'),
             };
             let isPanelOpen = false;
-
+ 
             function togglePanel() {
                 isPanelOpen = !isPanelOpen;
                 elements.panel.classList.toggle('active', isPanelOpen);
@@ -644,12 +634,12 @@ $period = $period ?? 30;
                         return `
                        <p>📚 ${section.title} </p><br>
                        <p> ${section.content}</p><br>
-                        <p>[<a href="https://gael-berru.com/LibreAnalytics/doc/#${encodeURIComponent(title)}" target="_blank">Lire la suite</a>]</p>
+                        <p>[<a href="${DOC_SITE}#${encodeURIComponent(title)}" target="_blank">Lire la suite</a>]</p>
                     `;
                     }
                 }
 
-                return `Je ne peux pas répondre. Consultez la <a href="https://gael-berru.com/LibreAnalytics/doc/" target="_blank">documentation</a>.`;
+                return `Je ne peux pas répondre. Consultez la <a href="${DOC_SITE}" target="_blank">documentation</a>.`;
             }
 
             async function askAI(question) {

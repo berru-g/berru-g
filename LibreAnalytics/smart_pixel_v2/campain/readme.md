@@ -75,4 +75,9 @@
     ['name' => 'Lara', 'email' => 'contact@laraweb.fr'],
     ['name' => 'Jérémie', 'email' => 'contact@jeremieberton.fr'],
     ['name' => 'Nicolas', 'email' => 'hello@nicoblandel.fr'],
-# Prospection du 
+# Prospection du 10/03/26 :
+['name' => 'l\équipe LPC', 'email' => 'contact@lpcinformatique.com'],
+    ['name' => 'Séverine', 'email' => 'atelierdbdb@gmail.com'],
+    ['name' => 'Benoit', 'email' => 'contact@agenciz.com'], //pour test!
+    ['name' => 'l\équipe Almeria', 'email' => 'contact@almeria.fr'],
+    ['name' => 'Otiwa', 'email' => 'contact@otiwia.com']

@@ -468,6 +468,9 @@ if (isset($_POST['regenerate_api_key'])) {
                 <a href="dashboard.php" class="back-button">
                     <i class="fas fa-arrow-left"></i> Retour au dashboard
                 </a>
+                <a href="change_password.php" class="back-button">
+                    <i class="fa-solid fa-fingerprint"></i> Changer son MDP
+                </a>
             </div>
 
             <?php if (isset($success)): ?>

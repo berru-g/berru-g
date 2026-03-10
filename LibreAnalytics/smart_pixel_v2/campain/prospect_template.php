@@ -7,8 +7,11 @@
 
 $recipients = [
     ['name' => 'Gael l', 'email' => 'g.leberruyer@gmail.com'], //via gmail important;!
-    // Agences Web (Loire-Atlantique)
-    ['name' => 'name exemple ', 'email' => 'contact@exemple.com']
+    ['name' => 'l\équipe LPC', 'email' => 'contact@lpcinformatique.com'],
+    ['name' => 'Séverine', 'email' => 'atelierdbdb@gmail.com'],
+    ['name' => 'Benoit', 'email' => 'contact@agenciz.com'], //pour test!
+    ['name' => 'l\équipe Almeria', 'email' => 'contact@almeria.fr'],
+    ['name' => 'Otiwa', 'email' => 'contact@otiwia.com']
 ];
 
 // Sujet et corps du mail + template
@@ -109,7 +112,7 @@ $body = <<<HTML
 
             <img src="https://gael-berru.com/img/demo_dashboard.gif">
 
-            <p><strong>L’idée est simple</strong> : un analytics souverain, simple et transparent. Vos données restent en Europe et ne sont pas revendu ou exploiter de notre coté.Le projet est Open source, RGPD natif, et sans la complexité inutile de GA4.</p>
+            <p><strong>L’idée est simple</strong> : un analytics souverain, simple et transparent. Vos données restent en Europe et ne sont pas revendu ou exploiter de mon coté.Le projet est Open source, RGPD natif, et sans la complexité inutile de GA4.</p>
 
             <p><strong>Je ne vous demande pas de me croire, je vous propose de tester.</strong></p>
 
@@ -140,7 +143,7 @@ $body = <<<HTML
 
         <div class="footer">
             <p>© 2026 LibreAnalytics – Une alternative <strong>souveraine</strong>, <strong>open source</strong> et <strong>RGPD-friendly</strong>.</p>
-            <p><a href="https://gael-berru.com/LibreAnalytics?utm_source=mailprospection2" style="color: #9d86ff; text-decoration: none;">Visitez notre site</a> | <a href="mailto:contact@gael-berru.com" style="color: #9d86ff; text-decoration: none;">Contactez-nous</a></p>
+            <p><a href="https://gael-berru.com/LibreAnalytics?utm_source=mailprospection2" style="color: #9d86ff; text-decoration: none;">Visitez mon site</a> | <a href="mailto:contact@gael-berru.com" style="color: #9d86ff; text-decoration: none;">Contactez-moi</a></p>
         </div>
     </div>
 </body>
@@ -158,9 +161,9 @@ foreach ($recipients as $recipient) {
     $personalizedBody = str_replace('[Prénom]', $recipient['name'], $body);
     $sent = mail($recipient['email'], $subject, $personalizedBody, $headers);
     if ($sent) {
-        echo "Email envoyé à {$recipient['email']}<br>";
+        echo "✅ {$recipient['email']}<br>";
     } else {
-        echo "Échec pour {$recipient['email']}<br>";
+        echo "❌ {$recipient['email']}<br>";
     }
     sleep(5); // Évite d’être blacklisté en espaçant les envois
 }
