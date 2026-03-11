@@ -6,12 +6,8 @@
 // site:.fr inurl:nantes OR "44" intext:"UA-" OR "G-"
 
 $recipients = [
-    ['name' => 'Gael l', 'email' => 'g.leberruyer@gmail.com'], //via gmail important;!
-    ['name' => 'l\équipe LPC', 'email' => 'contact@lpcinformatique.com'],
-    ['name' => 'Séverine', 'email' => 'atelierdbdb@gmail.com'],
-    ['name' => 'Benoit', 'email' => 'contact@agenciz.com'], //pour test!
-    ['name' => 'l\équipe Almeria', 'email' => 'contact@almeria.fr'],
-    ['name' => 'Otiwa', 'email' => 'contact@otiwia.com']
+    ['name' => 'prospect 1', 'email' => 'exemple_1@gmail.com'], //via gmail important;!
+    ['name' => 'prospect 2', 'email' => 'contact@deux.ex']
 ];
 
 // Sujet et corps du mail + template

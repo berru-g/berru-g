@@ -119,18 +119,18 @@ Disponible
 - **rgpd cookie** : barre des cookies
 - **Doc compléte** : doc pour l'installation analytics + auto hebergé.
 - **Smart Assistant** : recevez des insight actionnable et conseil SEO adapté à vos résultat.
-- **API** : Accéder à vos données d'un simple appel API avec votre Key unique. ( 30 requetes / mois )
 
-#### Plan Pro 12€/mois ( en developpement )
+
+#### Plan Pro 9€/mois ( accessible en beta test gratuitement )
 
 - **Toutes les fonctionnalité précedemment cité plus :**
 - **Dashboard multi-sites** : Gérer plusieurs sites par compte
-- **API** : Accéder à vos données d'un simple appel API avec votre Key unique. ( 30 requetes / min )
+- **API** : Accéder à vos données d'un simple appel API avec votre Key unique. ( 30 requetes / jour )
 
 #### Tarif  
 - **Gratuit** pour un dashboard
-- **Pro** 10 Dashboard ( 100 pages ) 9€/mois ou 90€/an
-- **License** Droit d'exploitation et d'adaptation du logiciel à vos besoins 299€/an
+- **Pro** 10 Dashboard (~ 100 pages ) 9€/mois ou 90€/an
+- **License** Droit d'exploitation et d'adaptation du logiciel à vos besoins ...€/an
 
 ### 🚀 **En développement (version Premium)**
 - **Inclure la barre des cookies dans le pixel id**
@@ -707,7 +707,7 @@ Pour tendre vers la souveraineté total de nos données, je suis confronter à r
   - Hebergement propre dissocier de mon site ( apres la phaze beta test )
   - Reorga de la structure interne à simplifier ( LibreAnalytics puis chaque dossier, pas de v2)
   - Nom de domaine 
-  - Mise en route du plan premium à 12€/mois, la license à 399€ à vie + ~50€ / maj
+  - Mise en route du plan premium à 9€/mois, la license à ...€ 
   - Config de lemonsqueezie comme moyen de paiement
   - Developper l'api en ajoutant des appel à chaque table de la bdd
   - Developper pixel pour récuperer plus de données, dans les limites RGPD.

@@ -514,20 +514,33 @@ if (isset($_POST['regenerate_api_key'])) {
                 <h2>Clé API</h2>
                 <p>Utilisez cette clé pour accéder à l'API de LibreAnalytics. <strong>Ne la partagez jamais. En cas de partage public (push git, article, etc), régénérez immédiatement votre clé et changer votre mdp.</strong></p>
 
-                <div class="api-key-container">
+                <!--<div class="api-key-container">
                     <div class="api-key-display">
                         <code id="apiKey"><?= htmlspecialchars($user['api_key']) ?></code>
                         <button class="copy-button" onclick="copyToClipboard('apiKey')">
                             <i class="fas fa-copy"></i>
                         </button>
                     </div>
+                </div>-->
+                <div class="api-key-container">
+                    <div class="api-key-display">
+                        <?php if ($user['plan'] !== 'free'): ?>
+                            <code id="apiKey"><?= htmlspecialchars($user['api_key']) ?></code>
+                            <button class="copy-button" onclick="copyToClipboard('apiKey')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <form method="POST" style="display: inline;">
+                                <button type="submit" name="regenerate_api_key" class="regenerate-button">
+                                    <i class="fas fa-sync-alt"></i> Régénérer la clé
+                                </button>
+                            </form>
+                        <?php else: ?>
+                            <code id="apiKey">🔒 <a href="upgrade.php">API Key réservée aux plans payants</a></code>
+                        <?php endif; ?>
+                    </div>
                 </div>
 
-                <form method="POST" style="display: inline;">
-                    <button type="submit" name="regenerate_api_key" class="regenerate-button">
-                        <i class="fas fa-sync-alt"></i> Régénérer la clé
-                    </button>
-                </form>
+
             </div>
 
             <!-- Exemple d'URL -->
@@ -687,7 +700,7 @@ if (isset($_POST['regenerate_api_key'])) {
 
 
                     <div class="card mt-4">
-                    <h3><i class="fa-regular fa-calendar"></i> MAJ. Calendrier des mise à jour</h3>
+                        <h3><i class="fa-regular fa-calendar"></i> MAJ. Calendrier des mise à jour</h3>
 
                         <!-- Boutons d'action -->
                         <div class="d-flex justify-content-between mb-3">

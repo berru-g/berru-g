@@ -80,11 +80,19 @@ try {
     $stmt->execute([$siteId, $apiKey]);
     $site = $stmt->fetch();
 
+    // limite d'accees test
+    if ($user['plan'] === 'free') {
+        http_response_code(403);
+        echo json_encode(['error' => 'API Key non disponible pour les comptes gratuits']);
+        exit;
+    }
+    // 403
     if (!$site) {
         http_response_code(403);
         echo json_encode(['error' => 'Site non trouvé ou clé API invalide.']);
         exit;
     }
+    // 500
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode([
@@ -132,4 +140,3 @@ try {
         'details' => $e->getMessage()
     ]);
 }
-?>

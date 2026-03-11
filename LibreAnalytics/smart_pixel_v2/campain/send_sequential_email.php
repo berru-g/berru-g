@@ -1,6 +1,6 @@
 <?php
 require_once '../includes/config.php';
-// requete à cron pour automatiser l'envoie du rapport tout les vendredi à 17h sans dépendre des gafam :
+// requete à cron pour automatiser l'envoie du rapport tout les vendredi à 17h :
 // Avec email() pour le moment, passer à phpmailer par la suite !
 // 0 17 * * 5 /public_html/LibreAnalytics/smart_pixel_v2/cron/send_sequential_email.php
 // | |  | | | - FORMAT CRON 😂  **for sure** :
@@ -11,13 +11,13 @@ require_once '../includes/config.php';
 // └─────────── Minute (0-59)
 
 
-// 1. Créer les dossiers (avec chemins absolus pour Hostinger)
+// 1. Créer les dossiers (avec chemins absolus pour Hebergeur)
 $graphDir = __DIR__ . "/../tmp/graphs/";
 $logDir = __DIR__ . "/../logs/";
 if (!file_exists($graphDir)) mkdir($graphDir, 0755, true);
 if (!file_exists($logDir)) mkdir($logDir, 0755, true);
 
-// 2. Fonction de log améliorée
+// 2. Fonction de log 
 function logMessage($message, $isError = false) {
     global $logDir;
     $logFile = $logDir . "/cron_debug_" . date('Y-m-d') . ".log";

@@ -1325,7 +1325,7 @@ function getCountryCodeSimple($countryName)
                             <path d="M4 20V8a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" />
                             <path d="M4 11h16" />
                         </svg>
-                        <span class="subtitle">Doc complète. Installation, config...</span>
+                        <span class="subtitle">Doc complète. Nouvelle mise à jour √</span>
                     </a>
 
                     <a href="account.php" class="modal-link">
