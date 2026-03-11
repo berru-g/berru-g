@@ -321,6 +321,11 @@ function getCountryCodeSimple($countryName)
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/gantt.js"></script>
+    <!-- PWA: Manifest -->
+    <link rel="manifest" href="/smart_pixel_v2/public/manifest.json">
+    <!-- PWA: Theme color pour la barre de statut mobile -->
+    <meta name="theme-color" content="#9d86ff">
+
 </head>
 
 <body>
@@ -1343,6 +1348,8 @@ function getCountryCodeSimple($countryName)
                         <span class="subtitle">Le chat réponds à vos questions.</span>
                     </a>
 
+
+
                 </nav>
 
                 <!--<div class="modal-actions">
@@ -1352,10 +1359,17 @@ function getCountryCodeSimple($countryName)
         </dialog>
     </div>
 
+    <button id="installPWA" class="install-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </svg>
+        Installer l'app
+    </button>
+
     <p style="text-align:center;color:grey;">LibreAnalytics <?= APP_VERSION ?> by <a href="https://gael-berru.com" target="_blank" style="text-decoration:none;color:#9d86ff">berru-g</a> 24</p>
 
 
-
+                                                
     <?php include "aissistant.php" ?>
 
     <script>
@@ -2613,11 +2627,67 @@ function getCountryCodeSimple($countryName)
             newDate.setDate(newDate.getDate() + days);
             return newDate;
         }
-        /* Fonction pour basculer vers l'onglet AgendaReco (au cas où)
-        function openAgendaReco() {
-            openTab('AgendaReco');
-        }*/
+        /*!-- PWA: Enregistrement du Service Worker --*/
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/smart_pixel_v2/public/sw.js')
+                    .then((registration) => {
+                        console.log('ServiceWorker enregistré avec succès:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('Échec de l\'enregistrement du ServiceWorker:', error);
+                    });
+            });
+        }
+        // PWA: Détection de l'événement "beforeinstallprompt"
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installPWA').style.display = 'block';
+        });
+
+        // PWA: Gestion du clic sur le bouton d'installation
+        document.getElementById('installPWA').addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const {
+                    outcome
+                } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('Utilisateur a accepté l\'installation');
+                } else {
+                    console.log('Utilisateur a refusé l\'installation');
+                }
+                deferredPrompt = null;
+                document.getElementById('installPWA').style.display = 'none';
+            }
+        });
+        // Demande la permission pour les notifications
+        function requestNotificationPermission() {
+            if (!('Notification' in window)) {
+                console.log('Les notifications ne sont pas supportées.');
+                return;
+            }
+
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    console.log('Permission accordée pour les notifications.');
+                    // Ici, tu peux envoyer une notification de test :
+                    new Notification('LibreAnalytics', {
+                        body: 'Votre app est prête !',
+                        icon: '../assets/img/icon-192x192.png'
+                    });
+                }
+            });
+        }
+
+        // Appelle cette fonction après l'installation, par exemple
+        document.getElementById('installPWA').addEventListener('click', () => {
+            setTimeout(requestNotificationPermission, 2000); // Demande après l'installation
+        });
     </script>
+
 </body>
 
 </html>

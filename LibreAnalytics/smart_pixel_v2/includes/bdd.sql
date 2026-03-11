@@ -25,7 +25,17 @@ CREATE TABLE users (
   password_hash VARCHAR(255) NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
-
+-- Ajout des colonnes une par une
+ALTER TABLE users ADD COLUMN api_key VARCHAR(64) UNIQUE;
+ALTER TABLE users ADD COLUMN plan ENUM('free', 'pro', 'business') DEFAULT 'free';
+ALTER TABLE users ADD COLUMN sites_limit INT DEFAULT 1;
+ALTER TABLE users ADD COLUMN last_login TIMESTAMP NULL;
+ALTER TABLE users ADD COLUMN settings JSON;
+UPDATE users SET settings = JSON_OBJECT() WHERE settings IS NULL;
+-- Géneerations d'API Keys 
+UPDATE users
+SET api_key = CONCAT('sk_', UPPER(SUBSTRING(MD5(RAND()), 1, 24)))
+WHERE api_key IS NULL OR api_key = '';
 -- chaque hit = lié à un site
 -- chaque site = lié à un user
 CREATE TABLE sites (
@@ -41,12 +51,6 @@ ALTER TABLE smart_pixel_tracking
 ADD site_id INT NOT NULL AFTER id,
 ADD INDEX idx_site_id (site_id);
 
--- CORRECTION : Ajouter les colonnes une par une
-ALTER TABLE users ADD COLUMN api_key VARCHAR(64) UNIQUE;
-ALTER TABLE users ADD COLUMN plan ENUM('free', 'pro', 'business') DEFAULT 'free';
-ALTER TABLE users ADD COLUMN sites_limit INT DEFAULT 1;
-ALTER TABLE users ADD COLUMN last_login TIMESTAMP NULL;
-ALTER TABLE users ADD COLUMN settings JSON;
 
 -- CORRECTION : user_sites existe déjà (c'est la table "sites")
 -- Donc on renomme ou on adapte, voici l'option la plus simple :
@@ -116,8 +120,6 @@ CREATE TABLE IF NOT EXISTS subscriptions (
     INDEX idx_user_status (user_id, status)
 );
 
--- Mettre à jour les settings existants
-UPDATE users SET settings = JSON_OBJECT() WHERE settings IS NULL;
 
 -- Contact et formulaire
 CREATE TABLE IF NOT EXISTS `contacts` (
@@ -130,10 +132,6 @@ CREATE TABLE IF NOT EXISTS `contacts` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Géneerations d'API Keys 
-UPDATE users
-SET api_key = CONCAT('sk_', UPPER(SUBSTRING(MD5(RAND()), 1, 24)))
-WHERE api_key IS NULL OR api_key = '';
 
 -- ⚠️ PAS PUSH EN PROD
 -- Changement de la logique d'abonnement, un seul plan mensuel 9 ou annuel 90. 
@@ -203,7 +201,4 @@ CREATE TABLE `git_commits` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- sequence email relance
-ALTER TABLE users
-ADD COLUMN email_sent_7d BOOLEAN DEFAULT FALSE,
-ADD COLUMN email_sent_14d BOOLEAN DEFAULT FALSE;
+
