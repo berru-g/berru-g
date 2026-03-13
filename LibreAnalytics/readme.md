@@ -12,12 +12,19 @@
 
 **Alternative française et open source à Google Analytics**
 
-Analysez votre trafic sans compromettre la vie privée de vos visiteurs, avec un outil 100% européen
+Analysez votre trafic sans compromettre la vie privée de vos visiteurs, avec un outil 100% européen.
 
   [Dashboard](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/dashboard.php) - [Api](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/account.php) - [Doc](https://gael-berru.com/LibreAnalytics/doc/) - [Chat](https://gael-berru.com/LibreAnalytics/chat/) - [Articles](https://gael-berru.com/LibreAnalytics/articles/)
 
 
 <img src="https://gael-berru.com/img/demo_dashboard.gif" style="width:90%; display:flex;margin:20px auto; border-radius: 12px;">
+
+
+### Soutenir le projet
+Vous pouvez sponsoriser LibreAnalytics via :
+- GitHub Sponsors - SOON
+- **Solana** : `D6khWoqvc2zX46HVtSZcNrPumnPLPM72SnSuDhBrZeTC`
+- [Dont en BTC, SOL, USDC...](https://gael-berru.com/donation.html)
 
 
 Disponible

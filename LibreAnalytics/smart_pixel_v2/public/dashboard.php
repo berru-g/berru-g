@@ -1348,28 +1348,24 @@ function getCountryCodeSimple($countryName)
                         <span class="subtitle">Le chat réponds à vos questions.</span>
                     </a>
 
-
+                    <button id="installPWA" class="install-btn" style="display: none">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                        Installer l'app
+                    </button>
 
                 </nav>
 
-                <!--<div class="modal-actions">
-                    <button type="button" id="btnCancel" class="btn-cancel">Annuler</button>
-                </div>-->
+
             </div>
         </dialog>
     </div>
 
-    <button id="installPWA" class="install-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-        </svg>
-        Installer l'app
-    </button>
-
     <p style="text-align:center;color:grey;">LibreAnalytics <?= APP_VERSION ?> by <a href="https://gael-berru.com" target="_blank" style="text-decoration:none;color:#9d86ff">berru-g</a> 24</p>
 
 
-                                                
+
     <?php include "aissistant.php" ?>
 
     <script>
@@ -2629,63 +2625,76 @@ function getCountryCodeSimple($countryName)
         }
         /*!-- PWA: Enregistrement du Service Worker --*/
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/smart_pixel_v2/public/sw.js')
-                    .then((registration) => {
-                        console.log('ServiceWorker enregistré avec succès:', registration.scope);
-                    })
-                    .catch((error) => {
-                        console.log('Échec de l\'enregistrement du ServiceWorker:', error);
-                    });
-            });
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('sw.js')
+            .then(registration => console.log('SW enregistré avec succès !'))
+            .catch(err => console.error('Échec de l\'enregistrement du SW :', err));
+        });
+      }
+
+      // Gestion de l'installation PWA
+      let deferredPrompt;
+      const installPWA = document.getElementById('installPWA');
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+
+        // Affiche le bouton uniquement si l'app n'est pas déjà installée
+        if (!isPWAInstalled()) {
+          installPWA.style.display = 'block';
         }
-        // PWA: Détection de l'événement "beforeinstallprompt"
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('installPWA').style.display = 'block';
-        });
+      });
 
-        // PWA: Gestion du clic sur le bouton d'installation
-        document.getElementById('installPWA').addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const {
-                    outcome
-                } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    console.log('Utilisateur a accepté l\'installation');
-                } else {
-                    console.log('Utilisateur a refusé l\'installation');
-                }
-                deferredPrompt = null;
-                document.getElementById('installPWA').style.display = 'none';
-            }
-        });
-        // Demande la permission pour les notifications
-        function requestNotificationPermission() {
-            if (!('Notification' in window)) {
-                console.log('Les notifications ne sont pas supportées.');
-                return;
-            }
+      // Gestion du clic sur le bouton d'installation
+      if (installPWA) {
+        installPWA.addEventListener('click', (e) => {
+          e.preventDefault();
 
-            Notification.requestPermission().then((permission) => {
-                if (permission === 'granted') {
-                    console.log('Permission accordée pour les notifications.');
-                    // Ici, tu peux envoyer une notification de test :
-                    new Notification('LibreAnalytics', {
-                        body: 'Votre app est prête !',
-                        icon: '../assets/img/icon-192x192.png'
-                    });
-                }
+          if (deferredPrompt) {
+            deferredPrompt.prompt();
+
+            deferredPrompt.userChoice.then((choiceResult) => {
+              if (choiceResult.outcome === 'accepted') {
+                console.log('L\'utilisateur a accepté l\'installation');
+                installPWA.style.display = 'none';
+              }
+              deferredPrompt = null;
             });
-        }
-
-        // Appelle cette fonction après l'installation, par exemple
-        document.getElementById('installPWA').addEventListener('click', () => {
-            setTimeout(requestNotificationPermission, 2000); // Demande après l'installation
+          } else {
+            console.log('Le prompt d\'installation n\'est pas disponible');
+            // Fallback pour les navigateurs qui ne supportent pas l'API
+            showManualInstallInstructions();
+          }
         });
+      }
+
+      // Vérifie si l'app est déjà installée
+      function isPWAInstalled() {
+        return window.matchMedia('(display-mode: standalone)').matches ||
+          navigator.standalone ||
+          document.referrer.includes('android-app://');
+      }
+
+      // Cache le bouton si l'app est déjà installée
+      window.addEventListener('appinstalled', () => {
+        console.log('PWA déjà installée');
+        if (installPWA) installPWA.style.display = 'none';
+      });
+
+      // Vérification au chargement
+      document.addEventListener('DOMContentLoaded', () => {
+        if (isPWAInstalled() && installPWA) {
+          installPWA.style.display = 'none';
+        }
+      });
+
+      // Fallback pour les navigateurs moins supportés
+      function showManualInstallInstructions() {
+        // Tu peux ajouter une modal ou un tooltip ici
+        console.log('Instructions manuelles pour installer la PWA');
+        alert("Pour installer l'application :\n\n- Sur Chrome/Edge : cliquez sur l'icône 'Installer' dans la barre d'adresse\n- Sur iOS : utilisez l'option 'Partager' puis 'Ajouter à l'écran d'accueil'");
+      }
     </script>
 
 </body>

@@ -1,4 +1,4 @@
-<h3>Développeur autodidacte, artisan du logiciel souverain. Je crée des outils pour reprendre le contrôle de nos données, un script à la fois... depuis 2020.</h3>
+<h3>Développeur autodidacte, artisan du code souverain. Depuis 2020.</h3>
 
 <p>Logiciel en cours : <a href="https://gael-berru.com/LibreAnalytics?utm_source=github">LibreAnalytics</a></p>
 <img src="https://gael-berru.com/LibreAnalytics/pixel/pixel.php?source=github" width="1" height="1" style="display:none;">

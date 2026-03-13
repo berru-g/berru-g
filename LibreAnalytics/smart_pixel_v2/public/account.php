@@ -529,17 +529,16 @@ if (isset($_POST['regenerate_api_key'])) {
                             <button class="copy-button" onclick="copyToClipboard('apiKey')">
                                 <i class="fas fa-copy"></i>
                             </button>
-                            <form method="POST" style="display: inline;">
-                                <button type="submit" name="regenerate_api_key" class="regenerate-button">
-                                    <i class="fas fa-sync-alt"></i> Régénérer la clé
-                                </button>
-                            </form>
                         <?php else: ?>
                             <code id="apiKey">🔒 <a href="upgrade.php">API Key réservée aux plans payants</a></code>
                         <?php endif; ?>
                     </div>
+                    <form method="POST" style="display: inline;">
+                        <button type="submit" name="regenerate_api_key" class="regenerate-button">
+                            <i class="fas fa-sync-alt"></i> Régénérer la clé
+                        </button>
+                    </form>
                 </div>
-
 
             </div>
 
