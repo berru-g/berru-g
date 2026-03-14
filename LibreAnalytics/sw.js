@@ -1,10 +1,10 @@
 const CACHE_NAME = 'SP_LibreAnalytics';
 const urlsToCache = [
-  'login.php',
-  'dashboard.php',
-  '../assets/dashboard.css',
-  '../assets/icons/icon-192x192.png',
-  '../assets/icons/icon-512x512.png',
+  '/smart_pixel_v2/public/login.php',
+  '/smart_pixel_v2/public/dashboard.php',
+  '/smart_pixel_v2/assets/dashboard.css',
+  '/smart_pixel_v2/assets/icons/icon-192x192.png',
+  '/smart_pixel_v2/assets/icons/icon-512x512.png',
   'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js',
   'https://cdn.jsdelivr.net/npm/sweetalert2@11'
 ];

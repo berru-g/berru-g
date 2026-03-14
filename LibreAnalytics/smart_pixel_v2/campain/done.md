@@ -81,3 +81,24 @@
     ['name' => 'Benoit', 'email' => 'contact@agenciz.com'], //pour test!
     ['name' => 'l\équipe Almeria', 'email' => 'contact@almeria.fr'],
     ['name' => 'Otiwa', 'email' => 'contact@otiwia.com']
+# Prospection du 12/03/26 :
+['name' => 'AERIAL GROUP', 'email' => 'contact@aerialgroup.fr'],
+    ['name' => 'Linkeo Bretagne', 'email' => 'contact@linkeo-bretagne.fr'],
+    ['name' => 'COM2WIN', 'email' => 'contact@com2win.fr'],
+    ['name' => 'CLC 33', 'email' => 'contact@clc33.com'],
+    ['name' => 'Notone-Lab', 'email' => 'contact@notone-lab.fr'],
+    ['name' => 'Digitwist', 'email' => 'contact@digitwist.fr'],
+    ['name' => 'Agence Web Armor', 'email' => 'contact@web-armor.fr'],
+    ['name' => 'ID Interactive', 'email' => 'contact@id-interactive.fr'],
+    ['name' => 'Web Armor Quimper', 'email' => 'contact@webarmor-quimper.fr'],
+    ['name' => 'Pixel Agence Web', 'email' => 'contact@pixel-agence-web.fr'],
+    ['name' => 'IODEFX', 'email' => 'contact@iodefx.fr'],
+    ['name' => 'HLP Audit', 'email' => 'contact@hlp-audit.fr'],
+    ['name' => 'NV Equipment', 'email' => 'contact@nv-equipment.fr'],
+    ['name' => 'Suez Recyclage & Valorisation', 'email' => 'contact@suez.fr'],
+    ['name' => 'Courant Constructeur', 'email' => 'contact@courant-constructeur.fr'],
+    ['name' => 'Graphineo', 'email' => 'contact@graphineo.fr'],
+    ['name' => 'AE2', 'email' => 'contact@ae2-nantes.fr'],
+    ['name' => 'LATELIER', 'email' => 'contact@latelier-nantes.fr'],
+    ['name' => 'Colibri Bordeaux', 'email' => 'contact@colibri-bordeaux.fr'],
+    ['name' => 'Tribu and Co', 'email' => 'contact@tribuandco.fr']

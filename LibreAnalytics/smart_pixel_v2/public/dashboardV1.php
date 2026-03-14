@@ -257,29 +257,30 @@ if (count($sessionData) > 0) {
 function getCountryCodeSimple($countryName)
 {
     $countryMap = [
-        'france' => 'FR',
-        'united states' => 'US',
-        'germany' => 'DE',
-        'united kingdom' => 'GB',
-        'canada' => 'CA',
-        'australia' => 'AU',
-        'japan' => 'JP',
-        'china' => 'CN',
-        'brazil' => 'BR',
-        'india' => 'IN',
-        'italy' => 'IT',
-        'spain' => 'ES',
-        'netherlands' => 'NL',
-        'belgium' => 'BE',
-        'switzerland' => 'CH',
-        'portugal' => 'PT',
-        'russia' => 'RU',
-        'mexico' => 'MX',
-        'south korea' => 'KR',
-        'singapore' => 'SG',
-        'usa' => 'US',
-        'uk' => 'GB',
+        'france' => '🇫🇷',      // FR
+        'united states' => '🇺🇸', // US
+        'germany' => '🇩🇪',      // DE
+        'united kingdom' => '🇬🇧', // GB
+        'canada' => '🇨🇦',       // CA
+        'australia' => '🇦🇺',    // AU
+        'japan' => '🇯🇵',        // JP
+        'china' => '🇨🇳',        // CN
+        'brazil' => '🇧🇷',       // BR
+        'india' => '🇮🇳',        // IN
+        'italy' => '🇮🇹',        // IT
+        'spain' => '🇪🇸',        // ES
+        'netherlands' => '🇳🇱',  // NL
+        'belgium' => '🇧🇪',      // BE
+        'switzerland' => '🇨🇭',  // CH
+        'portugal' => '🇵🇹',     // PT
+        'russia' => '🇷🇺',       // RU
+        'mexico' => '🇲🇽',       // MX
+        'south korea' => '🇰🇷', // KR
+        'singapore' => '🇸🇬',    // SG
+        'usa' => '🇺🇸',          // US
+        'uk' => '🇬🇧',           // GB
     ];
+
 
     $normalized = strtolower(trim($countryName));
     return $countryMap[$normalized] ?? null;
@@ -298,11 +299,13 @@ function getCountryCodeSimple($countryName)
     ║  Copyright    : 2025 https://github.com/berru-g/ ║
     ╚══════════════════════════════════════════════════╝
 -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Pixel Analytics - Tableau de bord</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
     <link rel="stylesheet" href="../assets/dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -319,12 +322,16 @@ function getCountryCodeSimple($countryName)
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/gantt.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <!-- PWA: Manifest -->
+    <link rel="manifest" href="/smart_pixel_v2/public/manifest.json">
+    <!-- PWA: Theme color pour la barre de statut mobile -->
+    <meta name="theme-color" content="#9d86ff">
+
 </head>
 
 <body>
 
-    <!-- === Sidebar redessinée - Design moderne & rétractable === -->
+    <!-- === Sidebar redessinéefaçon site perso - Design moderne & rétractable === -->
     <div class="sidebar-wrapper">
         <div class="sidebar <?= isset($_COOKIE['sidebar_collapsed']) && $_COOKIE['sidebar_collapsed'] === 'true' ? 'collapsed' : '' ?>" id="sidebar">
             <!-- En-tête de la sidebar -->
@@ -332,10 +339,12 @@ function getCountryCodeSimple($countryName)
                 <div class="logo-container">
                     <!--<div class="logo-icon">◰</div>-->
                     <div class="logo-text">
-                        <h3><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                <circle cx="12" cy="7" r="4" />
-                            </svg></h3>
+                        <a href="account.php">
+                            <h3><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg></h3>
+                        </a>
                         <small class="user-email"><?= htmlspecialchars($_SESSION['user_email'] ?? 'Utilisateur') ?></small>
                     </div>
                 </div>
@@ -379,8 +388,8 @@ function getCountryCodeSimple($countryName)
                     <?php endif; ?>
                 </div>
 
-            </div>
 
+            </div>
 
 
             <!-- Section des sites -->
@@ -436,6 +445,24 @@ function getCountryCodeSimple($countryName)
                     </code>
                 </div>
             <?php endif; ?>
+
+            <!-- Code SP_ aka Smart Pixel pour api -->
+            <!-- Carte dédiée au code SP_ (simplifié) -->
+            <div class="integration-card" style="">
+                <div class="integration-header">
+                    <h4>Votre SmartPixel</h4>
+                    <button class="copy-btn" onclick="copyTrackingCode('<?= htmlspecialchars($currentSite['tracking_code']) ?>')" title="Copier le code SP_">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="integration-code">
+                    <?= htmlspecialchars($currentSite['tracking_code']) ?>
+                </div>
+            </div>
+
 
             <!-- Bouton de déconnexion -->
             <div class="logout-section">
@@ -497,22 +524,22 @@ function getCountryCodeSimple($countryName)
                                 <h3>PRO</h3>
                                 <p><strong>9€/mois</strong></p>
                                 <ul style="padding-left: 20px;">
-                                    <li>12 sites maximum</li>
+                                    <li>20 sites maximum</li>
                                     <li>10 000 visites/mois</li>
                                     <li>Stats avancées</li>
-                                    <li>Export PDF</li>
+                                    <li>API</li>
                                 </ul>
                                 <button onclick="showUpgradeForm('pro')" style="width: 100%; padding: 10px; background: var(--primary-color); color: var(--text-color); border: none; border-radius: 5px; cursor: pointer;">
                                     Choisir PRO
                                 </button>
                             </div>
 
-                            <!-- Plan BUSINESS -->
+                            <!-- Plan ANNUEL -->
                             <div style="border: 2px solid #4ecdc4; border-radius: 8px; padding: 15px;">
-                                <h3>BUSINESS</h3>
-                                <p><strong>29€/mois</strong></p>
+                                <h3>PRO ANNUEL</h3>
+                                <p><strong>90€/an</strong></p>
                                 <ul style="padding-left: 20px;">
-                                    <li>50 sites maximum</li>
+                                    <li>20 sites maximum</li>
                                     <li>1M de visites/mois</li>
                                     <li>Support prioritaire</li>
                                     <li>API complète</li>
@@ -568,8 +595,14 @@ function getCountryCodeSimple($countryName)
             <header>
                 <div class="container">
                     <div class="header-content">
-                        <h1>Smart Pixel Analytics</h1>
-                        <div style="color:grey;"></div>
+                        <h1>LibreAnalytics :
+                            <?php
+                            $currentSite = array_filter($userSites, fn($s) => $s['id'] == $selectedSiteId);
+                            $currentSite = reset($currentSite);
+                            ?>
+                            <span style="color: var(--primary-color);"><?= htmlspecialchars($currentSite['site_name'] ?? 'Site non sélectionné') ?></span>
+                        </h1>
+
                         <div class="period-filter">
                             <span>Période :</span>
                             <select id="periodSelect" onchange="changePeriod(this.value)">
@@ -587,14 +620,14 @@ function getCountryCodeSimple($countryName)
                 <div class="dashboard-tabs">
                     <div class="tabs">
                         <div class="tab active" onclick="openTab('overview')">Aperçu</div>
-                        <div class="tab" onclick="openTab('traffic')">Trafic</div>
                         <div class="tab" onclick="openTab('geography')">Géographie</div>
+                        <!--<div class="tab" onclick="openTab('traffic')">Trafic</div>-->
                         <div class="tab" onclick="openTab('devices')">Appareils</div>
                         <div class="tab" onclick="openTab('content')">Contenu</div>
                         <div class="tab" onclick="openTab('sessions')">Sessions</div>
                         <div class="tab" onclick="openTab('details')">Détails</div>
                         <div class="tab" onclick="openTab('insights')">Insights</div>
-                        <!--<div class="tab" onclick="openTab('InPlusTab')">In+</div>-->
+                        <!--<div class="tab" onclick="openTab('AgendaReco')">Agenda</div>-->
                     </div>
 
                     <!-- ONGLET APERÇU -->
@@ -628,34 +661,34 @@ function getCountryCodeSimple($countryName)
                         </div>
 
                         <!-- Section 2: Corrélation Trafic & Tendances -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">Analyse des Tendances</h3>
-                                </div>
-                                <div class="card-body">
-                                    
-                                    <div class="insight-tip">
-                                        <strong>Insight :</strong>
-                                        <?php
-                                        if (count($dailyStats) >= 2) {
-                                            $firstDay = $dailyStats[0]['visits'];
-                                            $lastDay = end($dailyStats)['visits'];
-                                            $growth = $firstDay > 0 ? (($lastDay - $firstDay) / $firstDay) * 100 : 0;
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Analyse des Tendances</h3>
+                            </div>
+                            <div class="card-body">
 
-                                            if ($growth > 20) {
-                                                echo "Votre trafic a augmenté de <strong>" . round($growth) . "%</strong> cette semaine ! Excellente progression.";
-                                            } elseif ($growth > 0) {
-                                                echo "Votre trafic progresse doucement (+" . round($growth) . "%). Continuez vos efforts !";
-                                            } else {
-                                                echo "Votre trafic est stable. Pensez à lancer de nouvelles campagnes pour stimuler la croissance.";
-                                            }
+                                <div class="insight-tip">
+                                    <strong>Insight :</strong>
+                                    <?php
+                                    if (count($dailyStats) >= 2) {
+                                        $firstDay = $dailyStats[0]['visits'];
+                                        $lastDay = end($dailyStats)['visits'];
+                                        $growth = $firstDay > 0 ? (($lastDay - $firstDay) / $firstDay) * 100 : 0;
+
+                                        if ($growth > 20) {
+                                            echo "Votre trafic a augmenté de <strong>" . round($growth) . "%</strong> cette semaine ! Excellente progression.";
+                                        } elseif ($growth > 0) {
+                                            echo "Votre trafic progresse doucement (+" . round($growth) . "%). Continuez vos efforts !";
                                         } else {
-                                            echo "Collectez plus de données pour obtenir des insights détaillés sur vos tendances.";
+                                            echo "Votre trafic est stable. Pensez à lancer de nouvelles campagnes pour stimuler la croissance.";
                                         }
-                                        ?>
-                                    </div>
+                                    } else {
+                                        echo "Collectez plus de données pour obtenir des insights détaillés sur vos tendances.";
+                                    }
+                                    ?>
                                 </div>
                             </div>
+                        </div>
 
                         <div class="card">
                             <div class="card-header">
@@ -1013,7 +1046,7 @@ function getCountryCodeSimple($countryName)
                         </div>
                     </div>
 
-                    <!-- NOUVEL ONGLET DÉTAILS -->
+                    <!-- ONGLET DÉTAILS -->
 
                     <div id="details" class="tab-content">
                         <div class="chart-container">
@@ -1057,7 +1090,7 @@ function getCountryCodeSimple($countryName)
                         </div>
                     </div>
 
-                    <!-- ===== ONGLET INSIGHTS AVANCÉS ===== -->
+                    <!-- ONGLET INSIGHTS AVANCÉS ===== -->
                     <div id="insights" class="tab-content">
                         <div class="chart-container">
                             <!-- Section 1: Performance Marketing -->
@@ -1141,7 +1174,7 @@ function getCountryCodeSimple($countryName)
                                     <h3 class="card-title">Analyse des Tendances</h3>
                                 </div>
                                 <div class="card-body">
-                                    
+
                                     <?php
                                     // Préparer les données pour les tendances
                                     $trendLabels = [];
@@ -1254,9 +1287,9 @@ function getCountryCodeSimple($countryName)
                         </div>
                     </div>
 
-                    <!-- Section pour le nouvel onglet "In+" -->
-                    <div id="InPlusTab" class="tab-content">
-                        <h2>📅 Calendrier de publication</h2>
+                    <!-- ONGLET Agenda -->
+                    <div id="AgendaReco" class="tab-content">
+                        <h2>Calendrier de publication</h2>
 
                         <!-- Heatmap avec vos données réelles -->
                         <div class="chart-container">
@@ -1267,7 +1300,7 @@ function getCountryCodeSimple($countryName)
                         <!-- Planning Gantt -->
                         <div class="chart-container">
                             <h3>Planning recommandé</h3>
-                            <div id="ganttChart" style="width: 100%; height: 400px;"></div>
+                            <div id="ganttChart"></div>
                         </div>
 
                         <!-- Top contenus - Utilise vos données existantes -->
@@ -1277,339 +1310,66 @@ function getCountryCodeSimple($countryName)
                         </div>
                     </div>
 
+                    <!-- ONGLET AGENDA ? -->
+
+
 
                 </div>
             </div>
 
         <?php endif; ?>
+
+        <!-- La modale (cachée par défaut) -->
+        <dialog id="modalParametres" class="settings-modal">
+            <div class="modal-content">
+                <h2>Besoin d'aide ?</h2>
+                <p>Doc, Api, guide d'utilisation, toute les infos sont ici :</p>
+
+                <nav class="modal-nav">
+                    <a href="../../doc/" class="modal-link primary" id="linkToDoc">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 12px; vertical-align: middle;">
+                            <path d="M4 20V8a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" />
+                            <path d="M4 11h16" />
+                        </svg>
+                        <span class="subtitle">Doc complète. Nouvelle mise à jour √</span>
+                    </a>
+
+                    <a href="account.php" class="modal-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cloud" viewBox="0 0 16 16">
+                            <path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z" />
+                        </svg>
+                        <span class="subtitle">Compte, API et son guide d'utilisation.</span>
+                    </a>
+
+                    <a href="../../chat/" class="modal-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-square-text" viewBox="0 0 16 16">
+                            <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                            <path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
+                        </svg>
+                        <span class="subtitle">Le chat réponds à vos questions.</span>
+                    </a>
+
+                    <button id="installPWA" class="install-btn" style="display: none">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                        Installer l'app
+                    </button>
+
+                </nav>
+
+
+            </div>
+        </dialog>
     </div>
 
-    <!-- ASSISTANT PSEUDO IA EN COURS -->
-    <div class="ai-assistant-container" id="aiAssistantContainer">
-        <button class="ai-toggle-btn" onclick="toggleAIAssistant()">
-            <span class="ai-icon"><i class="fa-regular fa-message"></i></span>
-            <span class="ai-text"></span>
-            <span class="ai-badge">NEW</span>
-        </button>
+    <p style="text-align:center;color:grey;">LibreAnalytics <?= APP_VERSION ?> by <a href="https://gael-berru.com" target="_blank" style="text-decoration:none;color:#9d86ff">berru-g</a> 24</p>
 
-        <div class="ai-panel" id="aiPanel">
-            <div class="ai-header">
-                <div class="ai-title">
-                    <!--<span class="ai-avatar">🫡</span>-->
-                    <h3>Smart Assistant</h3>
-                    <small>- fonction en developpement -</small>
-                </div>
-                <button class="ai-close" onclick="toggleAIAssistant()">×</button>
-            </div>
 
-            <div class="ai-conversation" id="aiConversation">
-                <!-- Messages seront ajoutés ici -->
-            </div>
 
-            <div class="ai-input-area">
-                <div class="ai-quick-questions">
-                    <button class="quick-question" onclick="askAI('Quelle est ma page la plus performante ?')">
-                        📈 Top pages
-                    </button>
-                    <button class="quick-question" onclick="askAI('Comment améliorer mon taux de conversion ?')">
-                        💰 Optimisation
-                    </button>
-                    <button class="quick-question" onclick="askAI('Quelles sont les tendances cette semaine ?')">
-                        📊 Tendances
-                    </button>
-                    <button class="quick-question" onclick="askAI('Donne-moi des recommandations marketing')">
-                        🎯 Recommandations
-                    </button>
-                </div>
-
-                <div class="ai-input-wrapper">
-                    <input type="text"
-                        id="aiInput"
-                        placeholder="Posez votre question (ex: 'Où dois-je investir en pub ?')..."
-                        onkeypress="if(event.key === 'Enter') sendAIQuestion()">
-                    <button class="ai-send-btn" onclick="sendAIQuestion()">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?php include "aissistant.php" ?>
 
     <script>
-        // Configuration des données réelles accessibles à l'assistant PSEUDO IA
-        const aiData = {
-            topPages: <?= json_encode($topPages) ?>,
-            countries: <?= json_encode($countries) ?>,
-            devices: <?= json_encode($devices) ?>,
-            browsers: <?= json_encode($browsers) ?>,
-            sources: <?= json_encode($sources) ?>,
-            dailyStats: <?= json_encode($dailyStats) ?>,
-            sessionData: <?= json_encode($sessionData) ?>,
-            totalVisits: <?= $uniqueVisitorsPeriod ?>,
-            avgSessionTime: <?= $avgSessionTime ?>,
-            period: <?= $period ?>
-        };
-
-        // Dictionnaire de réponses intelligentes
-        const aiKnowledgeBase = {
-            // Mots-clés et réponses associées
-            keywords: {
-                'page performante|meilleur page|top page': function() {
-                    if (aiData.topPages.length > 0) {
-                        const page = aiData.topPages[0];
-                        return `**Votre page la plus performante est :**  
-🔗 *${page.page_url}*  
-👁️ **${page.views} vues** (${Math.round((page.views / aiData.totalVisits) * 100)}% du trafic)  
-
-**Recommandation :**  
-✅ Optimisez cette page avec des Call-To-Actions clairs  
-✅ Ajoutez des témoignages clients  
-✅ Testez différentes versions (A/B testing)`;
-                    }
-                    return "Je n'ai pas encore assez de données sur vos pages.";
-                },
-
-                'investir|pub|publicité|ads|campagne': function() {
-                    if (aiData.sources.length > 0) {
-                        const bestSource = aiData.sources[0];
-                        return `**💰 Recommandations d'investissement :**  
-
-1. **Source actuelle la plus performante :**  
-   📊 *${bestSource.source}* (${bestSource.count} visites)  
-
-2. **Meilleur appareil cible :**  
-   📱 *${aiData.devices[0]?.device || 'Desktop'}* (${aiData.devices[0]?.count || 0} utilisations)  
-
-3. **Heures d'engagement :**  
-   ⏰ *14h-18h* (pic d'activité détecté)  
-
-**Stratégie recommandée :**  
-🎯 Doublez votre budget sur **${bestSource.source}**  
-🎯 Ciblez **${aiData.countries[0]?.country || 'France'}**  
-🎯 Créez des annonces optimisées pour **${aiData.devices[0]?.device || 'Desktop'}**`;
-                    }
-                    return "Analysez d'abord vos sources de trafic pour mieux ciblervos investissements.";
-                },
-
-                'conversion|convertir|taux': function() {
-                    const estimatedRate = (aiData.totalVisits > 100) ? '2-5%' : '1-3%';
-                    return `**📊 Analyse de conversion :**  
-
-**Taux estimé :** ${estimatedRate}  
-**Potentiel d'amélioration :** ${(aiData.totalVisits * 0.05).toFixed(0)} conversions/mois  
-
-**🎯 Actions rapides :**  
-1. **Simplifiez votre formulaire** (moins de champs)  
-2. **Ajoutez des garanties visibles**  
-3. **Testez différents boutons** (couleur, texte)  
-4. **Implémentez le retargeting**  
-
-**📈 Objectif SMART :**  
-Augmenter le taux de conversion de 1% dans les 30 jours`;
-                },
-
-                'tendance|évolution|croissance': function() {
-                    if (aiData.dailyStats.length >= 2) {
-                        const firstDay = aiData.dailyStats[0].visits;
-                        const lastDay = aiData.dailyStats[aiData.dailyStats.length - 1].visits;
-                        const growth = ((lastDay - firstDay) / firstDay * 100).toFixed(1);
-
-                        return `**📈 Tendances ${aiData.period} jours :**  
-
-📊 **Évolution trafic :** ${growth}%  
-👥 **Visiteurs uniques :** ${aiData.totalVisits}  
-⏱️ **Engagement :** ${aiData.avgSessionTime} min/session  
-
-**📅 Prévision semaine prochaine :**  
-${Math.round(aiData.totalVisits / aiData.period * 7 * 1.1)} visites estimées  
-(+10% si vous maintenez la tendance)  
-
-**🔥 Insight :**  
-Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20 ? 'Excellente performance !' : 'Pensez à relancer vos canaux.'}`;
-                    }
-                    return "Collectez plus de données pour analyser les tendances.";
-                },
-
-                'recommandation|conseil|astuce': function() {
-                    const tips = [
-                        `**🎯 Conseil #1 :** Ciblez **${aiData.countries[1]?.country || 'votre 2ème pays'}** avec du contenu localisé. Potentiel inexploité !`,
-
-                        `**📱 Conseil #2 :** Optimisez pour **${aiData.devices[0]?.device || 'mobile'}** (${Math.round((aiData.devices[0]?.count / aiData.totalVisits) * 100)}% de votre trafic).`,
-
-                        `**🔍 Conseil #3 :** Améliorez le SEO de votre page **"${aiData.topPages[2]?.page_url?.split('/').pop() || 'à fort potentiel'}"** pour +30% de trafic organique.`,
-
-                        `**💰 Conseil #4 :** Testez une offre spéciale le **${['lundi', 'mercredi', 'vendredi'][Math.floor(Math.random() * 3)]}**, jour de plus forte activité.`,
-
-                        `**📊 Conseil #5 :** Créez un rapport automatisé pour suivre vos KPIs clés chaque lundi matin.`
-                    ];
-
-                    return tips[Math.floor(Math.random() * tips.length)];
-                },
-
-                'pays|géographie|international': function() {
-                    if (aiData.countries.length > 0) {
-                        let response = `**🌍 Répartition géographique :**\n\n`;
-                        aiData.countries.slice(0, 3).forEach((country, index) => {
-                            const percentage = Math.round((country.visits / aiData.totalVisits) * 100);
-                            response += `${index + 1}. **${country.country}** : ${country.visits} visites (${percentage}%)\n`;
-                        });
-
-                        response += `\n**💡 Opportunité :** Développez du contenu en ${aiData.countries[1]?.language || 'anglais'} pour toucher ${aiData.countries[1]?.country || 'de nouveaux marchés'}.`;
-                        return response;
-                    }
-                    return "Vos visiteurs viennent de divers pays. Analysez la carte pour plus de détails.";
-                }
-            },
-
-            // Réponses par défaut intelligentes
-            defaultResponses: [
-                "D'après vos données, je vois que **{device}** est votre principal appareil. Assurez-vous que l'expérience mobile est parfaite !",
-
-                "Vos visiteurs viennent principalement de **{country}**. Avez-vous pensé à localiser votre contenu ?",
-
-                "Je détecte que **{source}** est votre meilleure source de trafic. Pensez à y investir davantage !",
-
-                "Avec {visits} visites en {period} jours, vous pourriez générer environ {conversions} conversions avec un taux de 3%.",
-
-                "Le temps moyen de session est de {time} minutes. C'est {verdict} pour votre secteur !",
-
-                "Pour maximiser vos résultats, concentrez-vous sur l'amélioration de votre taux de conversion actuel.",
-
-                "Cette Assistant IA est en développement ... il se peut qu'il ne réponde pas toujours de manière pertinente. Pour toute question, contactez le developpeur contact@gael-berru.com"
-            ]
-        };
-
-        // Fonction principale de l'assistant
-        async function askAI(question) {
-            const conversation = document.getElementById('aiConversation');
-
-            // Ajouter la question
-            conversation.innerHTML += `
-        <div class="ai-message user">
-            <div class="message-content">${question}</div>
-            <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
-        </div>
-    `;
-
-            // Simuler un "typing" de l'IA
-            conversation.innerHTML += `
-        <div class="ai-message bot typing">
-            <div class="typing-indicator">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
-    `;
-
-            conversation.scrollTop = conversation.scrollHeight;
-
-            // Générer une réponse intelligente après un délai
-            setTimeout(() => {
-                // Retirer l'indicateur de typing
-                document.querySelector('.typing')?.remove();
-
-                // Générer la réponse
-                const response = generateAIResponse(question);
-
-                // Ajouter la réponse
-                conversation.innerHTML += `
-            <div class="ai-message bot">
-                <div class="message-content">${formatResponse(response)}</div>
-                <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
-            </div>
-        `;
-
-                conversation.scrollTop = conversation.scrollHeight;
-            }, 1000 + Math.random() * 1000); // Délai aléatoire pour paraître naturel
-        }
-
-        function generateAIResponse(question) {
-            const questionLower = question.toLowerCase();
-
-            // Chercher une correspondance de mots-clés
-            for (const [pattern, responseFunc] of Object.entries(aiKnowledgeBase.keywords)) {
-                const patterns = pattern.split('|');
-                if (patterns.some(p => questionLower.includes(p))) {
-                    return responseFunc();
-                }
-            }
-
-            // Sinon, générer une réponse contextuelle par défaut
-            return generateDefaultResponse();
-        }
-
-        function generateDefaultResponse() {
-            const template = aiKnowledgeBase.defaultResponses[
-                Math.floor(Math.random() * aiKnowledgeBase.defaultResponses.length)
-            ];
-
-            return template
-                .replace('{device}', aiData.devices[0]?.device || 'mobile')
-                .replace('{country}', aiData.countries[0]?.country || 'France')
-                .replace('{source}', aiData.sources[0]?.source || 'recherche organique')
-                .replace('{visits}', aiData.totalVisits)
-                .replace('{period}', aiData.period)
-                .replace('{conversions}', Math.round(aiData.totalVisits * 0.03))
-                .replace('{time}', aiData.avgSessionTime)
-                .replace('{verdict}', aiData.avgSessionTime > 3 ? 'excellent' : 'moyen');
-        }
-
-        function formatResponse(text) {
-            // Convertir le markdown simple en HTML
-            return text
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/✅/g, '<span class="emoji-success">✅</span>')
-                .replace(/❌/g, '<span class="emoji-error">❌</span>')
-                .replace(/🎯/g, '<span class="emoji-target">🎯</span>')
-                .replace(/💰/g, '<span class="emoji-money">💰</span>')
-                .replace(/\n\n/g, '</p><p>')
-                .replace(/\n/g, '<br>');
-        }
-
-        function sendAIQuestion() {
-            const input = document.getElementById('aiInput');
-            if (input.value.trim()) {
-                askAI(input.value);
-                input.value = '';
-            }
-        }
-
-        function toggleAIAssistant() {
-            const panel = document.getElementById('aiPanel');
-            panel.classList.toggle('active');
-
-            // Initialiser avec un message de bienvenue
-            if (panel.classList.contains('active') && !document.querySelector('.ai-message.bot')) {
-                setTimeout(() => {
-                    askAI("Bonjour ! Que pouvez-vous m'apprendre sur mes données ?");
-                }, 500);
-            }
-        }
-
-        // Questions automatiques périodiques (simule une IA proactive)
-        setTimeout(() => {
-            if (Math.random() > 0.7 && document.getElementById('aiPanel')?.classList.contains('active')) {
-                const proactiveQuestions = [
-                    "J'ai remarqué que votre trafic augmente. Voulez-vous des conseils pour capitaliser dessus ?",
-                    "Votre taux d'engagement est intéressant. Puis-je vous suggérer des optimisations ?",
-                    "Je vois une opportunité sur votre source de trafic principale. En discuter ?"
-                ];
-
-                // Simuler une suggestion de l'IA
-                const conversation = document.getElementById('aiConversation');
-                conversation.innerHTML += `
-            <div class="ai-message bot suggestion">
-                <div class="message-content">
-                    💡 <strong>Suggestion proactive :</strong><br>
-                    ${proactiveQuestions[Math.floor(Math.random() * proactiveQuestions.length)]}
-                </div>
-            </div>
-        `;
-                conversation.scrollTop = conversation.scrollHeight;
-            }
-        }, 15000); // Toutes les 15 secondes
-        // FIN DU TEST PSEUDO IA
-
         // Fonction pour changer d'onglet
         function openTab(tabName) {
             // Masquer tous les contenus d'onglets
@@ -1933,7 +1693,7 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
 
                 polygonSeries.mapPolygons.template.setAll({
                     tooltipText: "{name}: {value} visites",
-                    fill: am5.color(0xe0e0e0),
+                    fill: am5.color(0xffffff),
                     stroke: am5.color(0xffffff),
                     strokeWidth: 1
                 });
@@ -2321,10 +2081,50 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
         }
 
         function confirmParametre() {
-            if (confirm('En cours de developpement. Merci de votre patience !')) {
-                window.location.href = '#';
+            const modal = document.getElementById('modalParametres');
+            if (!modal) {
+                // Fallback si la modale n'existe pas (comportement original)
+                if (confirm('Trouver vos réponses dans la doc complète ?')) {
+                    window.location.href = '../../doc/';
+                }
+                return;
             }
+
+            // Ouvre la modale
+            modal.showModal();
+
+            // Gestion du clic sur "Documentation complète" → redirection
+            const linkDoc = document.getElementById('linkToDoc');
+            if (linkDoc) {
+                linkDoc.addEventListener('click', function(e) {
+                    e.preventDefault(); // empêche le lien direct
+                    modal.close(); // ferme la modale
+                    window.location.href = '../../doc/'; // redirige
+                }, {
+                    once: true
+                }); // écouteur jetable
+            }
+
+            // Bouton Annuler → ferme juste la modale
+            const btnCancel = document.getElementById('btnCancel');
+            if (btnCancel) {
+                btnCancel.addEventListener('click', function() {
+                    modal.close();
+                }, {
+                    once: true
+                });
+            }
+
+            //  fermer en cliquant sur le backdrop
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.close();
+                }
+            }, {
+                once: true
+            });
         }
+
 
         function showUpgradeForm(plan) {
             document.getElementById('newPlanInput').value = plan;
@@ -2401,7 +2201,8 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
             });
         });
 
-        // Fonction de copie du code
+        // Fonction pour copier le code d'integration
+        // séparé du script pour eviter les conflits normalement !
         function copyCode() {
             const codeElement = document.querySelector('.integration-code');
             if (!codeElement) return;
@@ -2424,6 +2225,27 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
             });
         }
 
+        // Fonction pour copier le code SP_
+        function copyTrackingCode(code) {
+            navigator.clipboard.writeText(code)
+                .then(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Copié !',
+                        text: 'Votre SmartPixel a été copié.',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 1100
+                    });
+                })
+                .catch(err => {
+                    console.error('Erreur lors de la copie :', err);
+                    alert('Impossible de copier le code. Veuillez le sélectionner manuellement.');
+                });
+        }
+
+
         // Fonction de déconnexion
         function confirmLogout() {
             Swal.fire({
@@ -2432,7 +2254,7 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonColor: '#f87171', // Rouge pour le bouton "Oui"
-                cancelButtonColor: '#34d399', // Bleu pour "Annuler"
+                cancelButtonColor: '#9d86ff', // Bleu pour "Annuler"
                 confirmButtonText: 'Oui',
                 cancelButtonText: 'Annuler'
             }).then((result) => {
@@ -2557,7 +2379,7 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
             }, 100);
         });
 
-        // 1. HEATMAP avec vos données existantes
+        /* 1. HEATMAP avec vos données existantes
         document.addEventListener('DOMContentLoaded', function() {
             if (typeof visitsByHour !== 'undefined') {
                 const ctx = document.getElementById('heatmapChart').getContext('2d');
@@ -2594,60 +2416,186 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
             }
 
             // 3. GANTT CHART avec amCharts
-            function initGantt() {
-                am5.ready(function() {
-                    const root = am5.Root.new("ganttChart");
-                    root.setThemes([am5.themes.Animated.new(root)]);
+            // 3. GANTT CHART avec amCharts
+            document.addEventListener('DOMContentLoaded', function() {
 
-                    const gantt = root.container.children.push(
-                        am5gantt.Gantt.new(root, {})
-                    );
+                // Variable pour éviter les initialisations multiples
+                window.ganttInitialized = false;
 
-                    // Données basées sur les heures de fréquentation
-                    const now = new Date();
-                    const peakHour = getPeakHour(visitsByHour || {});
+                // Fonction d'initialisation du Gantt
+                function initGantt() {
+                    if (window.ganttInitialized) return;
 
-                    gantt.yAxis.data.setAll([{
-                            name: "Publication Social",
-                            id: "social"
-                        },
-                        {
-                            name: "Article Blog",
-                            id: "blog"
+                    console.log('Initialisation du Gantt...');
+
+                    // Vérifier que amCharts est chargé
+                    if (typeof am5 === 'undefined') {
+                        console.error('amCharts non chargé !');
+                        document.getElementById('ganttChart').innerHTML =
+                            '<div style="text-align: center; padding: 20px;">⚠️ Chargement du planning...</div>';
+                        return;
+                    }
+
+                    try {
+                        am5.ready(function() {
+                            // Nettoyer le conteneur
+                            const container = document.getElementById("ganttChart");
+                            if (!container) return;
+                            container.innerHTML = '';
+
+                            // Créer la racine
+                            var root = am5.Root.new("ganttChart");
+
+                            // Appliquer le thème
+                            root.setThemes([
+                                am5themes_Animated.new(root)
+                            ]);
+
+                            // Créer le Gantt avec configuration simplifiée
+                            var gantt = root.container.children.push(
+                                am5gantt.Gantt.new(root, {
+                                    layout: root.verticalLayout,
+                                    headerHeight: 60
+                                })
+                            );
+
+                            // Données des catégories
+                            gantt.get("yAxis").data.setAll([{
+                                    name: "Idée",
+                                    id: "gantt_0"
+                                },
+                                {
+                                    name: "Lancement MVP",
+                                    id: "gantt_1"
+                                },
+                                {
+                                    name: "Planification",
+                                    id: "gantt_2"
+                                },
+                                {
+                                    name: "Développement",
+                                    id: "gantt_3"
+                                },
+                                {
+                                    name: "Tests",
+                                    id: "gantt_4"
+                                },
+                                {
+                                    name: "Finalisation",
+                                    id: "gantt_5"
+                                },
+                                {
+                                    name: "Publication",
+                                    id: "gantt_6"
+                                }
+                            ]);
+
+                            // Données des séries
+                            gantt.series.data.setAll([{
+                                    start: 1758142800000,
+                                    duration: 0,
+                                    progress: 1,
+                                    id: "gantt_0",
+                                    linkTo: ["gantt_1"]
+                                },
+                                {
+                                    start: 1758142800000,
+                                    duration: 2,
+                                    progress: 1,
+                                    id: "gantt_1",
+                                    linkTo: ["gantt_2"]
+                                },
+                                {
+                                    start: 1758488400000,
+                                    duration: 2,
+                                    progress: 0.2,
+                                    id: "gantt_2",
+                                    linkTo: ["gantt_3"]
+                                },
+                                {
+                                    start: 1758661200000,
+                                    duration: 1,
+                                    progress: 0.8,
+                                    id: "gantt_3",
+                                    linkTo: ["gantt_4"]
+                                },
+                                {
+                                    start: 1758747600000,
+                                    duration: 3,
+                                    progress: 0,
+                                    id: "gantt_4",
+                                    linkTo: ["gantt_5"]
+                                },
+                                {
+                                    start: 1759179600000,
+                                    duration: 0,
+                                    progress: 0,
+                                    id: "gantt_5",
+                                    linkTo: ["gantt_6"]
+                                },
+                                {
+                                    start: 1759179600000,
+                                    duration: 4,
+                                    progress: 0,
+                                    id: "gantt_6"
+                                }
+                            ]);
+
+                            gantt.appear(1000);
+
+                            window.ganttInitialized = true;
+                            console.log('✅ Gantt initialisé avec succès');
+                        });
+                    } catch (error) {
+                        console.error('❌ Erreur Gantt:', error);
+                        document.getElementById('ganttChart').innerHTML =
+                            '<div style="text-align: center; padding: 20px; color: #ff6b6b;">' +
+                            'Erreur de chargement du planning' +
+                            '</div>';
+                    }
+                }
+
+                // Initialiser si l'onglet AgendaReco est actif au chargement
+                const agendaReco = document.getElementById('AgendaReco');
+                if (agendaReco && agendaReco.classList.contains('active')) {
+                    setTimeout(initGantt, 500);
+                }
+
+                // Observer les clics sur les onglets
+                const tabs = document.querySelectorAll('.tab');
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        const tabText = this.textContent.trim();
+                        if (tabText === 'Agenda' || tabText === 'AgendaReco') {
+                            setTimeout(() => {
+                                if (!window.ganttInitialized) {
+                                    initGantt();
+                                }
+                            }, 300);
                         }
-                    ]);
-
-                    gantt.series.data.setAll([{
-                            start: setHour(now, peakHour).getTime(),
-                            duration: 0,
-                            id: "social",
-                            name: "Post optimal"
-                        },
-                        {
-                            start: setHour(addDays(now, 2), peakHour).getTime(),
-                            duration: 2,
-                            id: "blog",
-                            name: "Création contenu"
-                        }
-                    ]);
-
-                    gantt.appear(1000, 100);
+                    });
                 });
-            }
 
-            // Initialiser le Gantt quand l'onglet est visible
-            const inPlusTab = document.getElementById('InPlusTab');
-            const observer = new MutationObserver(function() {
-                if (inPlusTab.style.display !== 'flex') {
-                    initGantt();
-                    observer.disconnect();
+                // Observer les changements de classe de l'onglet
+                if (agendaReco) {
+                    const observer = new MutationObserver(function(mutations) {
+                        mutations.forEach(function(mutation) {
+                            if (mutation.attributeName === 'class' &&
+                                agendaReco.classList.contains('active') &&
+                                !window.ganttInitialized) {
+                                setTimeout(initGantt, 200);
+                            }
+                        });
+                    });
+
+                    observer.observe(agendaReco, {
+                        attributes: true
+                    });
                 }
             });
-            observer.observe(inPlusTab, {
-                attributes: true,
-                attributeFilter: ['style']
-            });
-        });
+
+
+        });*/
 
         // Fonctions utilitaires
         function getPeakHour(hourData) {
@@ -2676,11 +2624,80 @@ Votre croissance est ${growth > 0 ? 'positive' : 'à améliorer'}. ${growth > 20
             newDate.setDate(newDate.getDate() + days);
             return newDate;
         }
-        // Fonction pour basculer vers l'onglet insights (au cas où)
-        function openInsightsTab() {
-            openTab('insights');
+        /*!-- PWA: Enregistrement du Service Worker --*/
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => console.log('SW enregistré avec succès !'))
+                    .catch(err => console.error('Échec de l\'enregistrement du SW :', err));
+            });
+        }
+
+        // Gestion de l'installation PWA
+        let deferredPrompt;
+        const installPWA = document.getElementById('installPWA');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+
+            // Affiche le bouton uniquement si l'app n'est pas déjà installée
+            if (!isPWAInstalled()) {
+                installPWA.style.display = 'block';
+            }
+        });
+
+        // Gestion du clic sur le bouton d'installation
+        if (installPWA) {
+            installPWA.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('L\'utilisateur a accepté l\'installation');
+                            installPWA.style.display = 'none';
+                        }
+                        deferredPrompt = null;
+                    });
+                } else {
+                    console.log('Le prompt d\'installation n\'est pas disponible');
+                    // Fallback pour les navigateurs qui ne supportent pas l'API
+                    showManualInstallInstructions();
+                }
+            });
+        }
+
+        // Vérifie si l'app est déjà installée
+        function isPWAInstalled() {
+            return window.matchMedia('(display-mode: standalone)').matches ||
+                navigator.standalone ||
+                document.referrer.includes('android-app://');
+        }
+
+        // Cache le bouton si l'app est déjà installée
+        window.addEventListener('appinstalled', () => {
+            console.log('PWA déjà installée');
+            if (installPWA) installPWA.style.display = 'none';
+        });
+
+        // Vérification au chargement
+        document.addEventListener('DOMContentLoaded', () => {
+            if (isPWAInstalled() && installPWA) {
+                installPWA.style.display = 'none';
+            }
+        });
+
+        // Fallback pour les navigateurs moins supportés
+        function showManualInstallInstructions() {
+            // Tu peux ajouter une modal ou un tooltip ici
+            console.log('Instructions manuelles pour installer la PWA');
+            alert("Pour installer l'application :\n\n- Sur Chrome/Edge : cliquez sur l'icône 'Installer' dans la barre d'adresse\n- Sur iOS : utilisez l'option 'Partager' puis 'Ajouter à l'écran d'accueil'");
         }
     </script>
+
 </body>
 
 </html>
