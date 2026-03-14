@@ -114,9 +114,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alternative à Google Analytics (Française & RGPD) – Libre Analytics</title>
+    <title>Alternative souveraines à Google Analytics – Libre Analytics</title>
     <meta name="description"
-        content="Remplacez Google Analytics par Libre Analytics, alternative google analytics rgpd, la solution analytics souveraines : Dashboard simple, conforme RGPD, installation 2min. Premier dashboard gratuit.">
+        content="LibreAnalytics est une alternative souveraines à Google Analytics. Dashboard simple, accés API, conforme RGPD, open source, installation 2min. Premier dashboard gratuit.">
     <meta name="keywords"
         content="alternative google analytics français, statistiques site web, analytics rgpd, dashboard simple, tracker visiteurs, analytics open source, analytics français, remplacer google analytics, analytics souverain, données france">
     <link rel="canonical" href="https://gael-berru.com/LibreAnalytics/">
@@ -130,6 +130,7 @@
     <meta name="robots" content="index, follow">
     <link rel="stylesheet" href="./RGPD/cookie.css" hreflang="fr">
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="/manifest.json">
     <script data-sp-id="SP_79747769" src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js"
         async></script>
 
@@ -521,17 +522,13 @@
                     <i class="fas fa-gem"></i>
                     Devenir Pro
                 </a>
-
-                <!--<div class="limited-offer">
-                        <i class="fas fa-gift" style="color: var(--warning);"></i>
-                        <strong>Offre MVP :</strong> Prix garanti à vie
-                    </div>-->
             </div>
 
-            <!-- Plan Annuel -->
+            <!-- Plan Annuel 
             <div class="pricing-card animate">
+                <div class="featured-badge">Version à venir</div>
                 <h3>License</h3>
-                <div class="price-tag">399€<span></span></div>
+                <div class="price-tag4">499€<span></span></div>
                 <p>Pour les besoins sur mesure et auto hebergé</p>
 
                 <ul class="pricing-features">
@@ -544,11 +541,8 @@
                     <li><i class="fas fa-check feature-check"></i> Intégrations custom</li>
                 </ul>
 
-                <a href="#" class="btn btn-primary" style="margin-top: auto; text-decoration: line-through;">
-                    <i class="fas fa-gem"></i>
-                    Devenir Pro
-                </a>
-            </div>
+                
+            </div>-->
         </div>
 
         <div style="text-align: center; margin-top: 3rem;">
@@ -560,12 +554,50 @@
     </div>
 </section>
 
-<button id="installPWA" class="install-btn">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-    </svg>
-    Installer l'app
-</button>
+<button id="installButton" class="btn btn-primary" style="margin: 40px auto;"><i class="fa-regular fa-folder-open"></i> Installer l'app</button>
+
+<script>
+    let deferredPrompt;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        document.getElementById('installButton').style.display = 'block';
+    });
+
+    document.getElementById('installButton').addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                console.log('Installation acceptée');
+            } else {
+                console.log('Installation refusée');
+            }
+            deferredPrompt = null;
+            document.getElementById('installButton').style.display = 'none';
+        }
+    });
+
+    window.addEventListener('appinstalled', () => {
+        console.log('PWA installée !');
+        document.getElementById('installButton').style.display = 'none';
+    });
+
+    // Enregistrement du service worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then((registration) => {
+                    console.log('ServiceWorker enregistré:', registration);
+                })
+                .catch((error) => {
+                    console.log('Échec de l\'enregistrement du ServiceWorker:', error);
+                });
+        });
+    }
+</script>
+
 
 <!-- === FOOTER === -->
 <footer class="footer" role="contentinfo">

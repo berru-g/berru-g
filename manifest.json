@@ -1,19 +1,19 @@
 {
   "name": "LibreAnalytics",
-  "short_name": "L_A",
+  "short_name": "saas open source",
   "version": "1.0.8",
-  "start_url": "/smart_pixel_v2/public/login.php",
+  "start_url": "/LibreAnalytics/smart_pixel_v2/public/login.php",
   "display": "standalone",
   "background_color": "#9d86dd",
   "theme_color": "#9d86ff",
   "icons": [
     {
-      "src": "/smart_pixel_v2/assets/img/icon-192x192.png",
+      "src": "/LibreAnalytics/smart_pixel_v2/assets/img/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/smart_pixel_v2/assets/img/icon-512x512.png",
+      "src": "/LibreAnalytics/smart_pixel_v2/assets/img/icon-192x192.png",
       "sizes": "512x512",
       "type": "image/png"
     }
