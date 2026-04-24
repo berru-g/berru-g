@@ -1,6 +1,6 @@
 {
   "name": "LibreAnalytics",
-  "short_name": "saas open source",
+  "short_name": "LibreAnalytics",
   "version": "1.0.8",
   "start_url": "/LibreAnalytics/smart_pixel_v2/public/login.php",
   "display": "standalone",

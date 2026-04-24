@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur Éolienne/Solaire</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e9f7ef;
+            border-radius: 4px;
+            border-left: 4px solid #4CAF50;
+        }
+        .formula {
+            font-style: italic;
+            color: #555;
+            margin-top: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculateur Éolienne/Solaire</h1>
+
+        <!-- Choix du type de projet -->
+        <h2>1. Type de projet</h2>
+        <div class="form-group">
+            <label for="project-type">Sélectionnez votre projet :</label>
+            <select id="project-type" onchange="toggleFields()">
+                <option value="eolienne">Éolienne</option>
+                <option value="solaire">Panneau solaire</option>
+            </select>
+        </div>
+
+        <!-- Paramètres spécifiques à l'éolienne -->
+        <div id="eolienne-fields">
+            <h2>2. Paramètres du moteur (éolienne)</h2>
+            <div class="form-group">
+                <label for="kv">KV du moteur :</label>
+                <input type="number" id="kv" placeholder="Ex: 2600" step="1">
+            </div>
+            <div class="form-group">
+                <label for="poles">Nombre de pôles :</label>
+                <input type="number" id="poles" placeholder="Ex: 14" step="2">
+            </div>
+            <div class="form-group">
+                <label for="resistance">Résistance interne (Ω) :</label>
+                <input type="number" id="resistance" placeholder="Ex: 0.1" step="0.01">
+            </div>
+        </div>
+
+        <!-- Paramètres spécifiques au solaire -->
+        <div id="solaire-fields" class="hidden">
+            <h2>2. Paramètres du panneau solaire</h2>
+            <div class="form-group">
+                <label for="panel-power">Puissance du panneau (W) :</label>
+                <input type="number" id="panel-power" placeholder="Ex: 30" step="1">
+            </div>
+            <div class="form-group">
+                <label for="panel-voltage">Tension du panneau (V) :</label>
+                <input type="number" id="panel-voltage" placeholder="Ex: 18" step="0.1">
+            </div>
+        </div>
+
+        <!-- Paramètres communs -->
+        <h2>3. Sortie souhaitée</h2>
+        <div class="form-group">
+            <label for="voltage">Tension souhaitée (V) :</label>
+            <input type="number" id="voltage" placeholder="Ex: 12" step="0.1">
+        </div>
+        <div class="form-group">
+            <label for="current">Courant souhaité (A) :</label>
+            <input type="number" id="current" placeholder="Ex: 2" step="0.1">
+        </div>
+        <div class="form-group">
+            <label for="autonomy">Autonomie souhaitée (h) :</label>
+            <input type="number" id="autonomy" placeholder="Ex: 5" step="0.1">
+        </div>
+
+        <!-- Composants -->
+        <h2>4. Composants</h2>
+        <div class="form-group">
+            <label for="controller">Type de contrôleur :</label>
+            <select id="controller">
+                <option value="mppt">MPPT</option>
+                <option value="pwm">PWM</option>
+            </select>
+        </div>
+
+        <!-- Bouton de calcul -->
+        <button onclick="calculate()">Calculer</button>
+
+        <!-- Résultats -->
+        <div id="result" class="result hidden">
+            <h2>Résultats</h2>
+            <div id="speed-result"></div>
+            <div id="power-result"></div>
+            <div id="battery-result"></div>
+            <div id="formulas" class="formula"></div>
+        </div>
+    </div>
+
+    <script>
+        // Affiche/masque les champs selon le type de projet
+        function toggleFields() {
+            const projectType = document.getElementById('project-type').value;
+            if (projectType === 'eolienne') {
+                document.getElementById('eolienne-fields').classList.remove('hidden');
+                document.getElementById('solaire-fields').classList.add('hidden');
+            } else {
+                document.getElementById('eolienne-fields').classList.add('hidden');
+                document.getElementById('solaire-fields').classList.remove('hidden');
+            }
+        }
+
+        // Calculs principaux
+        function calculate() {
+            const projectType = document.getElementById('project-type').value;
+            const voltage = parseFloat(document.getElementById('voltage').value);
+            const current = parseFloat(document.getElementById('current').value);
+            const autonomy = parseFloat(document.getElementById('autonomy').value);
+            const controller = document.getElementById('controller').value;
+
+            // Vérifier les entrées communes
+            if (isNaN(voltage) || isNaN(current) || isNaN(autonomy)) {
+                alert("Veuillez remplir tous les champs.");
+                return;
+            }
+
+            let power, minSpeed, batteryCapacity, formulas;
+
+            if (projectType === 'eolienne') {
+                // Récupérer les paramètres éolien
+                const kv = parseFloat(document.getElementById('kv').value);
+                const poles = parseInt(document.getElementById('poles').value);
+                const resistance = parseFloat(document.getElementById('resistance').value);
+
+                if (isNaN(kv) || isNaN(poles) || isNaN(resistance)) {
+                    alert("Veuillez remplir tous les champs pour l'éolienne.");
+                    return;
+                }
+
+                // Calculs éolien
+                const polePairs = poles / 2;
+                minSpeed = Math.round((voltage * kv) / polePairs * 1.1); // +10% pour les pertes
+                power = Math.round(voltage * current);
+                //batteryCapacity = Math.round((power * autonomy) / voltage, 2);
+              const rendement = 0.75; // 75% de rendement global
+const dod = 0.7; // Profondeur de décharge à 70%
+batteryCapacity = Math.round((power * autonomy) / (voltage * rendement * dod), 2);
+
+                // Formules éolien
+                formulas = `
+                    <p><strong>Formules utilisées (éolienne) :</strong></p>
+                    <p>Vitesse minimale (tr/min) = (Tension × KV) / (Nombre de paires de pôles) × 1.1</p>
+                    <p>Puissance (W) = Tension (V) × Courant (A)</p>
+                    <p>Capacité batterie (Ah) = (Puissance × Autonomie) / Tension</p>
+                `;
+
+            } else {
+                // Récupérer les paramètres solaire
+                const panelPower = parseFloat(document.getElementById('panel-power').value);
+                const panelVoltage = parseFloat(document.getElementById('panel-voltage').value);
+
+                if (isNaN(panelPower) || isNaN(panelVoltage)) {
+                    alert("Veuillez remplir tous les champs pour le solaire.");
+                    return;
+                }
+
+                // Calculs solaire
+                power = panelPower;
+                batteryCapacity = Math.round((power * autonomy) / voltage, 2);
+
+                // Formules solaire
+                formulas = `
+                    <p><strong>Formules utilisées (solaire) :</strong></p>
+                    <p>Puissance (W) = Puissance du panneau</p>
+                    <p>Capacité batterie (Ah) = (Puissance × Autonomie) / Tension</p>
+                `;
+            }
+
+            // Afficher les résultats
+            document.getElementById('speed-result').innerHTML =
+                projectType === 'eolienne'
+                    ? `<p><strong>Vitesse minimale pour ${voltage}V :</strong> ${minSpeed} tr/min</p>`
+                    : '';
+
+            document.getElementById('power-result').innerHTML =
+                `<p><strong>Puissance générée :</strong> ${power} W</p>`;
+
+            document.getElementById('battery-result').innerHTML =
+                `<p><strong>Capacité batterie nécessaire :</strong> ${batteryCapacity} Ah (pour ${autonomy}h d'autonomie)</p>
+                 <p><strong>Contrôleur recommandé :</strong> ${controller.toUpperCase()} (min. ${current}A)</p>`;
+
+            document.getElementById('formulas').innerHTML = formulas;
+
+            // Afficher le bloc résultat
+            document.getElementById('result').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

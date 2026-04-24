@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<!--A=W/V & AH=(WxAu)/(VxRxDoD)-->
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur Énergie</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e9f7ef;
+            border-radius: 4px;
+            border-left: 4px solid #4CAF50;
+        }
+        .formula-box {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f0f8ff;
+            border-radius: 4px;
+            border-left: 3px solid #6495ed;
+        }
+        .warning {
+            color: red;
+            font-weight: bold;
+        }
+        .hidden {
+            display: none;
+        }
+        .project-selector {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculateur Énergie</h1>
+        <p>Outil pour dimensionner vos projets éolien ou moteur. <strong>Vérifiez toujours les résultats avec un expert ou des mesures réelles.</strong></p>
+
+        <!-- Choix du type de projet -->
+        <div class="project-selector">
+            <h2>1. Sélectionnez votre projet</h2>
+            <select id="project-type" onchange="toggleProjectFields()">
+                <option value="eolien">Projet Éolien</option>
+                <option value="moteur">Moteur (Vélo/Kayak/ULM)</option>
+            </select>
+        </div>
+
+        <!-- Champs pour projet éolien -->
+        <div id="eolien-fields">
+            <h2>2. Paramètres du projet éolien</h2>
+            <div class="form-group">
+                <label for="motor-kv">KV du moteur brushless :</label>
+                <input type="number" id="motor-kv" placeholder="Ex: 2600" step="1" value="2600">
+            </div>
+            <div class="form-group">
+                <label for="motor-poles">Nombre de pôles du moteur :</label>
+                <input type="number" id="motor-poles" placeholder="Ex: 14" step="2" value="14">
+            </div>
+            <div class="form-group">
+                <label for="desired-voltage">Tension souhaitée (V) :</label>
+                <input type="number" id="desired-voltage" placeholder="Ex: 12" step="0.1" value="12">
+            </div>
+            <div class="form-group">
+                <label for="desired-current">Courant souhaité (A) :</label>
+                <input type="number" id="desired-current" placeholder="Ex: 2" step="0.1" value="2">
+            </div>
+            <div class="form-group">
+                <label for="autonomy">Autonomie souhaitée (h) :</label>
+                <input type="number" id="autonomy" placeholder="Ex: 5" step="0.1" value="5">
+            </div>
+            <div class="form-group">
+                <label for="dod">Profondeur de décharge (0.5 à 0.9) :</label>
+                <input type="number" id="dod" placeholder="Ex: 0.7" step="0.05" value="0.7">
+            </div>
+            <div class="form-group">
+                <label for="efficiency">Rendement (0.6 à 0.9) :</label>
+                <input type="number" id="efficiency" placeholder="Ex: 0.8" step="0.05" value="0.8">
+            </div>
+        </div>
+
+        <!-- Champs pour projet moteur -->
+        <div id="moteur-fields" class="hidden">
+            <h2>2. Paramètres du moteur</h2>
+            <div class="form-group">
+                <label for="motor-type">Type de moteur :</label>
+                <select id="motor-type">
+                    <option value="velo">Vélo électrique (250-500W)</option>
+                    <option value="kayak">Moteur nautique (300-1000W)</option>
+                    <option value="ulm">ULM (5000W+)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="motor-power">Puissance du moteur (W) :</label>
+                <input type="number" id="motor-power" placeholder="Ex: 300" step="1" value="300">
+            </div>
+            <div class="form-group">
+                <label for="motor-voltage">Tension du moteur (V) :</label>
+                <input type="number" id="motor-voltage" placeholder="Ex: 12" step="1" value="12">
+            </div>
+            <div class="form-group">
+                <label for="motor-autonomy">Autonomie souhaitée (h) :</label>
+                <input type="number" id="motor-autonomy" placeholder="Ex: 2" step="0.1" value="2">
+            </div>
+            <div class="form-group">
+                <label for="motor-dod">Profondeur de décharge (0.5 à 0.9) :</label>
+                <input type="number" id="motor-dod" placeholder="Ex: 0.7" step="0.05" value="0.7">
+            </div>
+            <div class="form-group">
+                <label for="motor-efficiency">Rendement (0.6 à 0.9) :</label>
+                <input type="number" id="motor-efficiency" placeholder="Ex: 0.8" step="0.05" value="0.8">
+            </div>
+        </div>
+
+        <!-- Bouton de calcul -->
+        <button onclick="calculate()">Calculer</button>
+
+        <!-- Résultats -->
+        <div id="result" class="result hidden">
+            <h2>Résultats</h2>
+            <div id="eolien-results" class="hidden">
+                <h3>Projet Éolien</h3>
+                <div id="min-speed"></div>
+                <div id="battery-capacity"></div>
+                <div id="mppt-controller"></div>
+                <div class="formula-box">
+                    <h4>Formules utilisées :</h4>
+                    <p><strong>1. Vitesse minimale (tr/min) :</strong></p>
+                    <p>(Tension souhaitée × KV) / (Nombre de paires de pôles) × 1.1 (marge pour pertes)</p>
+                    <p><strong>2. Capacité batterie (Ah) :</strong></p>
+                    <p>(Puissance × Autonomie) / (Tension × Rendement × DoD)</p>
+                    <p><strong>3. Contrôleur MPPT :</strong></p>
+                    <p>Courant minimal = Courant souhaité (A)</p>
+                    <p>Tension = Tension souhaitée (V)</p>
+                </div>
+            </div>
+            <div id="moteur-results" class="hidden">
+                <h3>Projet Moteur</h3>
+                <div id="motor-current"></div>
+                <div id="motor-battery"></div>
+                <div class="formula-box">
+                    <h4>Formules utilisées :</h4>
+                    <p><strong>1. Courant nécessaire (A) :</strong></p>
+                    <p>Puissance (W) / Tension (V)</p>
+                    <p><strong>2. Capacité batterie (Ah) :</strong></p>
+                    <p>(Puissance × Autonomie) / (Tension × Rendement × DoD)</p>
+                    <p><strong>3. Vérifications :</strong></p>
+                    <p>Si courant > 50A ou capacité > 100Ah → <span class="warning">Attention : vérifiez les câbles et la sécurité.</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Affiche/masque les champs selon le projet
+        function toggleProjectFields() {
+            const projectType = document.getElementById('project-type').value;
+            if (projectType === 'eolien') {
+                document.getElementById('eolien-fields').classList.remove('hidden');
+                document.getElementById('moteur-fields').classList.add('hidden');
+            } else {
+                document.getElementById('eolien-fields').classList.add('hidden');
+                document.getElementById('moteur-fields').classList.remove('hidden');
+            }
+        }
+
+        // Calculs pour projet éolien
+        function calculateEolien() {
+            // Récupérer les valeurs
+            const kv = parseFloat(document.getElementById('motor-kv').value);
+            const poles = parseInt(document.getElementById('motor-poles').value);
+            const voltage = parseFloat(document.getElementById('desired-voltage').value);
+            const current = parseFloat(document.getElementById('desired-current').value);
+            const autonomy = parseFloat(document.getElementById('autonomy').value);
+            const dod = parseFloat(document.getElementById('dod').value);
+            const efficiency = parseFloat(document.getElementById('efficiency').value);
+
+            // Vérifications
+            if (isNaN(kv) || isNaN(poles) || isNaN(voltage) || isNaN(current) || isNaN(autonomy) ||
+                isNaN(dod) || isNaN(efficiency) || dod <= 0 || dod > 0.9 || efficiency <= 0 || efficiency > 0.9) {
+                alert("Veuillez remplir tous les champs avec des valeurs valides (DoD et rendement entre 0.5 et 0.9).");
+                return;
+            }
+
+            // Calculs
+            const polePairs = poles / 2;
+            const minSpeed = Math.round((voltage * kv) / polePairs * 1.1); // +10% pour pertes
+            const power = Math.round(voltage * current);
+            const batteryCapacity = Math.round((power * autonomy) / (voltage * efficiency * dod), 2);
+
+            // Résultats
+            document.getElementById('min-speed').innerHTML =
+                `<p><strong>Vitesse minimale pour ${voltage}V :</strong> ${minSpeed} tr/min</p>`;
+            document.getElementById('battery-capacity').innerHTML =
+                `<p><strong>Capacité batterie nécessaire :</strong> ${batteryCapacity} Ah (pour ${autonomie}h d'autonomie)</p>`;
+            document.getElementById('mppt-controller').innerHTML =
+                `<p><strong>Contrôleur MPPT recommandé :</strong> Min. ${current}A, tension ${voltage}V</p>`;
+        }
+
+        // Calculs pour projet moteur
+        function calculateMoteur() {
+            // Récupérer les valeurs
+            const motorType = document.getElementById('motor-type').value;
+            const power = parseFloat(document.getElementById('motor-power').value);
+            const voltage = parseFloat(document.getElementById('motor-voltage').value);
+            const autonomy = parseFloat(document.getElementById('motor-autonomy').value);
+            const dod = parseFloat(document.getElementById('motor-dod').value);
+            const efficiency = parseFloat(document.getElementById('motor-efficiency').value);
+
+            // Vérifications
+            if (isNaN(power) || isNaN(voltage) || isNaN(autonomy) || isNaN(dod) || isNaN(efficiency) ||
+                dod <= 0 || dod > 0.9 || efficiency <= 0 || efficiency > 0.9) {
+                alert("Veuillez remplir tous les champs avec des valeurs valides (DoD et rendement entre 0.5 et 0.9).");
+                return;
+            }
+
+            // Calculs
+            const current = Math.round(power / voltage, 2);
+            const batteryCapacity = Math.round((power * autonomy) / (voltage * efficiency * dod), 2);
+
+            // Avertissements
+            let warnings = "";
+            if (current > 50) {
+                warnings += `<p class="warning">⚠️ Courant élevé (${current}A) : vérifiez les câbles et le contrôleur.</p>`;
+            }
+            if (batteryCapacity > 100) {
+                warnings += `<p class="warning">⚠️ Capacité élevée (${batteryCapacity}Ah) : envisagez une tension plus haute (24V/48V).</p>`;
+            }
+
+            // Résultats
+            document.getElementById('motor-current').innerHTML =
+                `<p><strong>Courant nécessaire :</strong> ${current}A</p>`;
+            document.getElementById('motor-battery').innerHTML =
+                `<p><strong>Capacité batterie nécessaire :</strong> ${batteryCapacity}Ah (pour ${autonomy}h d'autonomie)</p>
+                 ${warnings}`;
+        }
+
+        // Fonction principale de calcul
+        function calculate() {
+            const projectType = document.getElementById('project-type').value;
+            document.getElementById('result').classList.remove('hidden');
+
+            if (projectType === 'eolien') {
+                document.getElementById('eolien-results').classList.remove('hidden');
+                document.getElementById('moteur-results').classList.add('hidden');
+                calculateEolien();
+            } else {
+                document.getElementById('moteur-results').classList.remove('hidden');
+                document.getElementById('eolien-results').classList.add('hidden');
+                calculateMoteur();
+            }
+        }
+    </script>
+</body>
+</html>

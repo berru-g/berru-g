@@ -18,7 +18,7 @@ const projectsDatabase = [
         longDesc: 'Création d\'une guinguette open air au parc de la gaudiniére à Nantes. de 2018 à 2022.',
         keywords: ['guinguette', 'organisation', 'asso', 'concert', 'open-air'],
         image: './img/flanerie22.gif',
-        link: 'https://berru-g.github.io/assoberru/', 
+        link: 'https://berru-g.github.io/assoberru/',
         category: 'guinguette',
         features: ['guinguette', 'concert', 'open-air'],
         tags: ['guinguette', 'concert', 'open-ai', 'dj set']
@@ -35,18 +35,18 @@ const projectsDatabase = [
         features: ['Interface drag & drop', 'Export code prêt', 'Gamification crédits', 'Paiement Euro/Solana'],
         tags: ['SAAS', 'WebGL', 'Animation', '3d', 'threejs', 'génerateur de code', 'php']
     },
-   /* {
-        id: 'animation',
-        title: 'animation stop motion',
-        shortDesc: 'Création d\'animations stop motion',
-        longDesc: 'Créez des animations stop motion avec une interface simple et intuitive.',
-        keywords: ['animation', 'stop motion', 'video', 'creative', 'design'],
-        image: './img/jeanjean2024.mp4',
-        link: 'https://youtube.com/shorts/XRlEr9VIdyc?si=SYAYvrhyyUXAokOh',
-        category: 'animation',
-        features: ['animation', 'stop motion', 'video', 'creative', 'design'],
-        tags: ['animation', 'stop motion', 'video', 'creative', 'design']
-    },*/
+    /* {
+         id: 'animation',
+         title: 'animation stop motion',
+         shortDesc: 'Création d\'animations stop motion',
+         longDesc: 'Créez des animations stop motion avec une interface simple et intuitive.',
+         keywords: ['animation', 'stop motion', 'video', 'creative', 'design'],
+         image: './img/jeanjean2024.mp4',
+         link: 'https://youtube.com/shorts/XRlEr9VIdyc?si=SYAYvrhyyUXAokOh',
+         category: 'animation',
+         features: ['animation', 'stop motion', 'video', 'creative', 'design'],
+         tags: ['animation', 'stop motion', 'video', 'creative', 'design']
+     },*/
     {
         id: 'smart-pixel',
         title: 'Libre Analytics',
@@ -81,7 +81,7 @@ const projectsDatabase = [
         link: 'https://agora-dataviz.com',
         category: 'saas',
         features: ['Éditeur SQL visuel', 'Import CSV/Excel/JSON', 'Cartographie automatique'],
-        tags: ['SAAS','messagerie', 'reseau-social', 'social-network', 'sql', 'dataviz', 'data', 'json', 'editor-sql']
+        tags: ['SAAS', 'messagerie', 'reseau-social', 'social-network', 'sql', 'dataviz', 'data', 'json', 'editor-sql']
     },
     {
         id: 'blockchain-explorer',
@@ -300,6 +300,30 @@ const projectsDatabase = [
         tags: ['arduino', 'electronic', "cooper", 'cuivre', 'daw', 'music', 'hackster']
     },
     {
+        id: 'arduino',
+        title: 'Conception pcb',
+        shortDesc: '',
+        longDesc: 'Conception de PCB optimisé. ',
+        keywords: ['conception pcb', 'electronic', "pcb", 'hackster'],
+        image: 'https://user-images.githubusercontent.com/61543927/230877531-184f9646-a850-4e15-8ea6-a71579c1232b.png',
+        link: 'https://github.com/berru-g/MAKE_PLAY-1/',
+        category: 'Arduino',
+        features: ['arduino', 'electronic', 'conception pcb optimisé'],
+        tags: ['arduino', 'electronic', "conception pcb", 'hackster']
+    },
+    {
+        id: 'arduino',
+        title: 'Conception pcb',
+        shortDesc: '',
+        longDesc: 'Conception de PCB ( circuit éléctronique ) optimisé. Controlleur midi usb 16 potards mappable et plug & play. (Code de 2020, des maj sont certainement nécessaire)',
+        keywords: ['conception pcb', 'electronic', "pcb", 'hackster'],
+        image: 'https://github.com/berru-g/MAKE_PLAY-1/blob/master/img/xiao16.jpg?raw=true',
+        link: 'https://github.com/berru-g/MAKE_PLAY-1/',
+        category: 'Arduino',
+        features: ['arduino', 'electronic', 'conception pcb optimisé', 'controller pour DAW'],
+        tags: ['arduino', 'electronic', "conception pcb", 'cuivre', 'daw', 'music', 'hackster']
+    },
+    {
         id: 'advent-calendar',
         title: 'Advent calendar',
         shortDesc: 'Calendrier de l\'avent',
@@ -322,6 +346,159 @@ const projectsDatabase = [
         category: 'Wikipedia',
         features: ['quoi d\'autre ?'],
         tags: ['wikipédia', 'wikipedia']
+    },
+    { // test de galerie de projet, à intégrer dans le menu ou pas, à voir et enchainer avec une page articles.
+        "id": "galerie",
+        "title": "Galerie de projets",
+        "shortDesc": "Découvrez mes réalisations en images",
+        "longDesc": `
+    <div id="galerie-section">
+        <h3>Mes réalisations</h3>
+        <p>Voici une sélection de projets développés avec une approche souverainiste.</p>
+
+        <!-- Galerie responsive -->
+        <div class="galerie-grid">
+            <!-- Image 1 -->
+            <div class="galerie-item" onclick="openModal('./img/galerie/libreanalytics.jpg', 'LibreAnalytics', 'Alternative souveraine à Google Analytics, développée en PHP et JavaScript vanilla.')">
+                <img src="./img/galerie/thumbs/libreanalytics-thumb.jpg" alt="LibreAnalytics">
+                <div class="galerie-caption">
+                    <h4>LibreAnalytics</h4>
+                    <p>Alternative souveraine à Google Analytics</p>
+                </div>
+            </div>
+
+            <!-- Image 2 -->
+            <div class="galerie-item" onclick="openModal('./img/galerie/otto.jpg', 'OTTO', 'Outil de scraping et d\'automatisation pour identifier des prospects.')">
+                <img src="./img/galerie/thumbs/otto-thumb.jpg" alt="OTTO">
+                <div class="galerie-caption">
+                    <h4>OTTO</h4>
+                    <p>Outil de scraping et d'automatisation</p>
+                </div>
+            </div>
+
+            <!-- Image 3 -->
+            <div class="galerie-item" onclick="openModal('./img/galerie/site-vitrine.jpg', 'Site vitrine', 'Exemple de site vitrine développé sans framework, avec un backend PHP.')">
+                <img src="./img/galerie/thumbs/site-vitrine-thumb.jpg" alt="Site vitrine">
+                <div class="galerie-caption">
+                    <h4>Site vitrine</h4>
+                    <p>Développé sans framework, backend PHP</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal pour l'affichage agrandi -->
+        <div id="galerie-modal" class="modal">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <img class="modal-content" id="modal-image">
+            <div id="modal-caption"></div>
+        </div>
+    </div>
+
+    <!-- Script intégré pour la galerie -->
+    <script>
+        function openModal(imageUrl, title, description) {
+            document.getElementById('galerie-modal').style.display = 'block';
+            document.getElementById('modal-image').src = imageUrl;
+            document.getElementById('modal-caption').innerHTML = '<h3>' + title + '</h3><p>' + description + '</p>';
+        }
+
+        function closeModal() {
+            document.getElementById('galerie-modal').style.display = 'none';
+        }
+
+        // Fermer le modal en cliquant en dehors
+        window.addEventListener('click', function(e) {
+            const modal = document.getElementById('galerie-modal');
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    </script>
+
+    <!-- Style intégré pour la galerie -->
+    <style>
+        .galerie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .galerie-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .galerie-item:hover {
+            transform: scale(1.03);
+        }
+
+        .galerie-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .galerie-caption {
+            padding: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            overflow: auto;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 80%;
+            max-height: 80%;
+            margin-top: 50px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #modal-caption {
+            text-align: center;
+            color: white;
+            padding: 10px;
+            font-size: 1.2em;
+        }
+    </style>
+    `,
+        "keywords": ["galerie", "projets", "réalisations"],
+        "image": "./img/galerie/thumbnail.jpg",
+        "link": "#galerie",
+        "category": "Portfolio",
+        "features": ["Galerie dynamique", "Responsive"],
+        "tags": ["galerie", "portfolio"]
     },
     {
         id: 'welcome',
