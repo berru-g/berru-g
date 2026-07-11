@@ -297,6 +297,150 @@
     <main class="main-content">
 
       <!--<canvas id="canvas-bg"></canvas>-->
+      <div id="galerie-section">
+        <h3>Mes dernièresréalisations</h3>
+        <p>Voici un concentré de mes derniers projets 2025/2026.</p>
+
+        <!-- Galerie responsive -->
+        <div class="galerie-grid">
+            <!-- Image 1 -->
+            <div class="galerie-item" onclick="openModal('./LibreAnalytics/smart_pixel_v2/assets/img/LibreAnalytics-horizontal.png', 'LibreAnalytics', 'Alternative souveraine à Google Analytics, développée en PHP et JavaScript vanilla.')">
+                <img src="./LibreAnalytics/smart_pixel_v2/assets/img/LibreAnalytics-horizontal.png" alt="LibreAnalytics">
+                <div class="galerie-caption">
+                    <h4>LibreAnalytics</h4>
+                    <p>Alternative souveraine à Google Analytics. <a href="https://gael-berru.com/LibreAnalytics/" target="_blank">Visiter</a></p>
+                </div>
+            </div>
+
+            <!-- Image 2 
+            <div class="galerie-item" onclick="openModal('./img/galerie/otto.jpg', 'OTTO', 'Outil de scraping et d\'automatisation pour identifier des prospects.')">
+                <img src="./img/galerie/thumbs/otto-thumb.jpg" alt="OTTO">
+                <div class="galerie-caption">
+                    <h4>OTTO</h4>
+                    <p>Outil de scraping et d'automatisation</p>
+                </div>
+            </div>-->
+
+            <!-- Image 3 -->
+            <div class="galerie-item" onclick="openModal('https://github.com/berru-g/rc-plane/raw/main/img/pcb-final.png', 'RC plane', 'Système radio commandé pour avion, bateau ou voiture RC.')">
+                <img src="https://github.com/berru-g/rc-plane/raw/main/img/pcb-final.png" alt="Rc plane">
+                <div class="galerie-caption">
+                    <h4>RC Plane</h4>
+                    <p>Systeme radio commandé pour avion, bateau ou voiture RC. <a href="https://github.com/berru-g/rc-plane" target="_blank">Visiter</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal pour l'affichage agrandi -->
+        <div id="galerie-modal" class="modal">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <img class="modal-content" id="modal-image">
+            <div id="modal-caption"></div>
+        </div>
+    </div>
+
+    <!-- Script intégré pour la galerie -->
+    <script>
+        function openModal(imageUrl, title, description) {
+            document.getElementById('galerie-modal').style.display = 'block';
+            document.getElementById('modal-image').src = imageUrl;
+            document.getElementById('modal-caption').innerHTML = '<h3>' + title + '</h3><p>' + description + '</p>';
+        }
+
+        function closeModal() {
+            document.getElementById('galerie-modal').style.display = 'none';
+        }
+
+        // Fermer le modal en cliquant en dehors
+        window.addEventListener('click', function(e) {
+            const modal = document.getElementById('galerie-modal');
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    </script>
+
+    <!-- Style intégré pour la galerie -->
+    <style>
+        .galerie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .galerie-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .galerie-item:hover {
+            transform: scale(1.03);
+        }
+
+        .galerie-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+        .galerie-item a {
+            color: #9d86ff;
+            text-decoration: underline;
+        }
+
+        .galerie-caption {
+            padding: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            overflow: auto;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 80%;
+            max-height: 80%;
+            margin-top: 50px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #modal-caption {
+            text-align: center;
+            color: white;
+            padding: 10px;
+            font-size: 1.2em;
+        }
+    </style>
 
     </main>
 

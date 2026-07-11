@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="fr" prefix="og: https://ogp.me/ns#">
+<!-- 
+                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                            -+:                                                                         
+                                                                                                                          ++=::                                                                         
+                                                                                                                        -+--:..                                                                         
+                                                                                                                      --=:::..                                                                          
+                                                                                                                    .=:-::.::.                                                                          
+                                                                                           -+*+.                   -==::-::.:                                                                           
+                                                                                          =--:::                 .*====-::::                                                                            
+                                                                                         +=:::.:                +==:-----:--                               -                                            
+                                                                                        :=:=+:::              .*+--+++-::::.                            -=++::                                          
+                                                                                       :++++=:::             ===---=--::-::                         .**-:-:+=:                                          
+                                                                        +*+=-          =+--:::::            ====-**-=-:-=-:                        =++=:-.::..                                          
+                                                                      +==----.       :+=+*+-::::          :++==---:--=:-::.                     :+=-:::.---::.                                          
+                                                                     ---+:::::       +*====+=--=:        ++++++--==-:::::.                     +-:-::::-:::::                                           
+                                                                    ==+=--+=:-      ===*===+-==---     .+++====--::--=-:-.                  :+=:--::==-::::..                                           
+                                                                   ==+=---:-::     ==-=*-===--=-**=  :=*++==---==--=-::::                 ====::-:-:+++::-.                                             
+                                                          =+++.   --+==----+-+=- -*===+--=-=--=*-+==+#=*--------:----=:==             .+=+=::--=====-::...                                              
+                                                         +===*+===*===--:::-=+=--==+-==--++==--=+--=-====-=-===+---==-:::          -=+==-=:---=-:-:::..:                                                
+                                                       :=-=++=*=++====-=+==+--==-=====++==--=:-+-----=-+---=+=---:=:::::-     :+++====-:-::::::-:---+..                                                 
+                                                      :+==++=*==-+-====-==:-===-=++=-===++==----+=====--=+====----=-:--=+*#===+====-==---:----:==:-..                                                   
+                                                     .--=**++-=---===---=-=---:====-+=-+---*=---=-==-+=-=--===-=:::--===*#*===+--=--:-=::-::-:::::::                                                    
+                                                    ----==--++*=**==--+-+=-*==:=-=-===*+++=+-+=++--==-=*--+*+-=-:---=-+===--==+-=---:=-+=--:-:=--:.                                                     
+                                                    =-=*+=====+=--=+=+-==:-==:-*+-+=+=-+++++=+=+==--=-++--==+---------+-=---===-+=---+===----=::.                                                       
+                                                    -*+=*+**#+=+++-++*++====-+=--=---=-==--=---=---+--=---=-------==-==--=-+----==-==-=------::.                       :--:.:                           
+                                                    -++#-+=---==-+-+===--:-----=-==**+=+*=++=+=+=-=====-===--=-=-=---==----=====-=-==--:=:::::.                  .-=-:-::::::                           
+                                                    -+*++-+*=*+=+==--==:=====**=*+*=+-==+-*--=--=:----==-=-+=--=--+---:=-----==-=::--+++--=====-=+-=*==+==+++-:=:::.--==-:::=.                          
+                                                    :==+=%++-----::--+++=++++**+=--:----=-+=+=--==+==++======+-=+=--=-=-=-:=--==+===:=:=:::--==+==-:+-+==::--+=----:=---=-=+--                          
+                                                  .=+*+*=+=---+-++-=-=---:::------=----=-=-+=+=+=-=*+#+==*++===+=-=-=---:--=-=+===---==::=:===:-:-:-=-:-:=-::-:---:-:-::=..:..                          
+                                                 -=*=====--=*+=+=--:---==++==+==--=-+=-=+-=*++*=*#=*+**++=+=++==+-=--=-:-:----=---::-==::+=:-=-=:-:::-:::::-+-::..:.-..:::=-.                           
+                                                :++++=-=#++*-=++*=----:-====+=======%***+##+*=*%++#+++#**+-+++*=+===+=---+-*:----=-:-+:--:=-+=---==:-----:-::::-=:=-:-+*:=+..                           
+                                               :=+-+=+*=----*=----++-::---=-==+===-%%**#+*+##%*##+*+++==*==+==--==+***%%*--:--=--::--::--:=-=-+=--:=:-=-:::=----:--=-=:::...                            
+                                              :=+--*=+-:--:-:--+=*+=--=---=-+--=#*%##%*##*%%%#%#%@%%%###**#*+--=--=--:-=-:=:==---::=:-----=---=:::-------:::--=:=-::..:.::..                            
+                                             -+-=**--:++==-=+------+--=---====+#####**%#%##%@%%@%#+++=+#*=++--==--:-=-=:::--=--=+--==-:-------:----=-:-==::-:--=-:.::::--:-=-.:                         
+                                             =-+++-:=-::----*=*-+--==--===+*+=#####*%#%#@%+=*#%%@@@@@@@@%##=-:=:--::----:-::-----+::--:-::-=---=:---=::::::..:---+.:-:=:::-:-::::.                      
+                                             =-+=---+*--=--=-===+-+++++-*%*+*###*##++*=+++*#%%%*%@#%%%%%%%%%%%#*:-:-:------==--==:==::==:--:-:-:-::=::---+*-:-+-:-.=:--:.:::=.--..                      
+                                             :--+++*=*=-=-+=:-+====#+=++*+==##*++=*=*=*=**=+%*+-+#****##%###%##%###*---::------=----:=-:=---=:::--==-:::--=:==-=:::.::=.::=.-:::..                      
+                                              --=---+=+=--*++=--:::::::*==+*****+++==*#*++**+*=+-#=+=*+=++*#**##*#####*:-:-+:-=-----=-:-----:-:::-:---=-:..:--:.:::=-::...:....:.                       
+                                               +%#**-*-=:+-:::::-:....-:+*=-+-=+-=-===:::::-+-=-=:***#+++++***********#**+:::---=-=-=-=-:::-::=--:--=:::-::-:=-:::=-::.:-.:.-:=.                        
+                                            #@@%%%%##*---:..:....-=--+*===-:----=-:::::::::::::-=-+=*##*#+*+*****+*++****+=:::-:--=::-::::-:::::..:-:::::::..:::.:--:=:=-:-:-:.                         
+                                          @@@%%###***####*++====+-==-:....:.:-----:::::*++-==:::-+=++##%************###****+--::=:---:-=-:-::::::----:::::::::..:::-=:-:.....                           
+                                        -@%%##****+++*++++++*+-:=-==:+--::--+==------:-.....=-:+-=+--=-**#************#####***-::::--::---::-:::::-.::::-..-::::::.::::::.                              
+                                       .%%*:            ::---==-==--:===++=-==*+*=-===-:...==:=--==+-:-:-++****##*##**######****+.:-:-:--:--:-::-::-..::::-.::-.=.:.:....                               
+                                                                .:---+==-=-#*++=*====*++==--==::-++=-::.::+=+***#*#####*#####***++=.:.:::::-:=--:::-::::.:-:::-:::::...                                 
+                                                                      =:+++=*=*+=+++*-=---::-*+==++-:::::+=++******###**##***#***++==..:::::::::::-:..::::::-:..::..                                    
+                                                                       .-:-==--===+**+*+****+++=#=-+:+*#%#####%##++****###*##****+=++=:.:-:-.::::..::.:.:-::::::::                                      
+                                                                         +=::::-+=+*#*++====+==+-=--####%##%#######+++****###*###=+**==+.....::::.:::.:::::::                                           
+                                                                          +::::-=:-#=+##====*+=-==+*#*#*###%########*+*+++**=+****+=++===+.  ....                                                       
+                                                                        +%*#::::=:::=-+==++==--:-=#**+#*###*##*%#%*#+-+=*++=**++**=+++++===-                                                            
+                                                                     =#%*+*--=:-:--==--::---=--===++=-===+=-=---:=+-::==+++++*+#**+*+==*+===-                                                           
+                                                              :######**+=-----=-=-*===++------=--=++=-*+*==::::.-:.:--++*+******+*****+=====+-                                                          
+                                                         :#%%%%#*==*=----------=-==*===-=-=-:---==---%=+==:.=:::::..:*+++*++**********#**=+++*                                                          
+                                                     +@@%%#+++*+=-:::-:-:--:-===:---:=-----:--==---%+-=-+::::-+::.:-=++=***+#***#**********+***.                                                        
+                                                 .@@%#**++====+=-*-::::-==:---=-:-:+:::-::::-:::::#==*-::=:=-+-:=-:-+****#**#****##*********++++*                                                       
+                                              .%%##*++++====----:::::..::=::::::::::::::::::::::+*+==-=:--=::--*++=+*+*#*#*#****+*#***********=====                                                     
+                                             %%#**++==----:::-:-*-:::.::-+::-:-:::::-::::-:::-:#+--==---=++====***::##*#***#****+*****++*****#**++++-                                                   
+                                           %%#*++=:         =*=-:::::.:---:---:=--:--:--::::::%#===+--++==+=+=++*+:++*##**#***+*******=*+****###**++=*=                                                 
+                                                            =-::::::::::-::::::=+--+*-:-:-=:-##*#++=-====+++--=*+=****###+#*##*****+***#******##***+=+**:                                               
+                                                           .=-:::::::::--=::.:-::=-----:::::+#%+==#+===++=:=*#+**=######**+##****#***++**#*##**####****+*+:                                             
+                                                           :--::::::::-+=-::.:::-:::-=::-:::#+++#**+*+=-==-+***=--*##*##********+*#****+*##**####%##=*+**=++                                            
+                                                           ---:::::::=:=--:::...:::--:-+-:::+*==*+==-++=-=-==+=*:+*##*###**+*+*###*#**##*#*#=##**###***#**+==+                                          
+                                                           .-=:::::::+-==--::.::::--::-+=:::*#==##==*-+--=+#*++::*+***##*+*##++########**##**+*##**##***+++==-=+-                                       
+                                                            .+-:::::+-++-::::..:::::::-==:::+=##**=+---+%#*+-+-:+=*##**##***##++***#####**###+***#*##**+****===-==-                                     
+                                                            -=::-::-+=--+:--::.::-----:-+:.:#+#==---+##*+=-==+=:****#*+###**#**==*+**#**#**###++*****##*******++===+=                                   
+                                                            =-:::::++=+--::-::..:::-:--=-::.#+#***-%%#+=+*=-=++=##****=###**#***+**###**#**+##*+++***+*+**+*++**+*+-+*=                                 
+                                                           +=-:::::+=+=--:--::::::::--:=-::.==---*++-=*+--::+=:+####**+#*=####**++**##*+*****##**++***++***+**=++****-=+-                               
+                                                          ==:::::::=*===-:::::::::-:::==*:::-*:+*+**+-=-=-====++***###+**####*+*+*+*##****#***##***+*+*++****-*++++##+===+.                             
+                                                         +-:::::::-++-+--:-:::::::::--=+-:::.+--=-:=++=-:--=+#+*#*###***+#*##*+=****#*#+*#*#+*+*#+**++***+*+*#*+*+=++=*+-=++                            
+                                                        --:::::::==*+-+=-:::::::::::::*--::...:-:---==:=:--=-=##*#*##***+####*+:=*##+#*#*****+=**#*#*++*+*+++*-#***==+*+**+=+:                          
+                                                        ---+--=+==+*+----:--:::::::=--++::::...-=++---::::-==+-**#*#***+*+###***=*+**#####*++++++***+***++**++=+****+=++=+*#*++                         
+                                                        -=++=++=+++=---:::::::::::-:-=*-::::....:==-=-::::-=+**********+*##%##***#*##*#*###****=**#*#**#++***=*++***+*=-+*++***+=                       
+                                                        ===+*=++**-===-:::::::::::::-*--::::....::+--:-:=--=-*#**=***########**##*#**#*####*+++++******-*#++*****+*****+*++++**++=:                     
+                                                        .+*+=+=*+==-==-:=:::::::::::-*=::::......:.=-::-==+*++*+#**=########**#####*%**%*###+=****+**+*+*#+=+**=*#***+*#*+*=+***+++=                    
+                                                        :+=**+=+*=-:=-:::::::::::::-*=-:::::......::--+=+=+*#*=****####*#*##+###=#*#**#*#%#=#**++**#*#+*+*=+*+*+*+**++=***+***++*=++*-                  
+                                                        :=+++-==-+----:-:::::::::-:+*-::::::......::-*++==+*=*=*+**#*#+#####*###+*#**###***###++*#**#**++**+*+**+++**#*++=****=++++==*+                 
+                                                         .-=++=-=-=::+-:::::::::-:-=+-::::::......:::*-=+**##*#***#+*##*##**##+####+#*##*%#%###**++*##-*+=**-****++****#+++=***=+++***+*                
+                                                         .++-+=+=-=::--:::::::::::++-:::::::...:..:--:-+++#=#*#+#*####*#*##*###*##*##**##*+#**#=**+**#***#***+*=***++-***##*++*++**#*#*++               
+                                                          -*+==-:--::--:::::::::::=--::::::...:.:::.--+-=****##*##**###**###**##*##**##*##**###++##*-=+*=*****+*****=++*+**+*+++****##*+++.             
+                                                           -+===--::::--:::::::::-=-:::::::-::-::..+=++##**#=#*###**###*###****###****-##%*++#+*=*#+=:+*=+*****+**+*#+++++**#*+++*+*=+**++=-            
+                                                            ---::::::::--::::::::==-::::::. ::...=.:=**#**=#*#*#*######*###*#*######****##*++++*++=*++-+%*=+***#*****#*-*++++*+++*+*++*#*++=+           
+                                                           :+=-::::::::--::::::::=-:::::::.  :.-=.:+*#*+*+=###*###*###*=####**######***###*+=++=*+*+*+.=*#****##*+******+#*+*+**++***+++###*=+:         
+                                                            .:=:::::::::-:::::::-=--::::::.  :...:+=+*+++=*+#*######*****##***#####***#+##***==+:*#**#=***#**#***+**+**+#*+***++**+*+*+*+***#*=-        
+                                                              =-:::::::--:::::::=--:::::::   +:::+=:*#****##*####*+*##*+#%##**##*##**+**#*+**=+*=**#=##+#**#*+***#******+**+#***=+=-+***#*+*+=++=       
+                                                              .-:::::--=----::::=-:::::::.  :-=:+==+#=##*+#%*#+#*#####*-##*#**##+*#****-*###************++*+**********+*+****#*****+++****#**+=++=      
+                                                               .----:-+=-==:::::+-:::::::  .-==*==:=+-*#***###***#-#%#####**#*#####****+********#++*+*#*+=+++**=**+****+**+***=**+=*=+=++*#**++=+++     
+                                                                 :------+--::::---::::::: .  *=+=++*==*##*#+##*+*#=#%*#####*-####**+*******=*++**+++**+**++=**+***##**+*+++=+**=**+**+*==++***+===+=    
+                                                                  .-=---=-:-:::--:::::::-.   +=*:=++=:#++#*###**#%###*%#####=#+#+#*###**+****+*=+++=***#************#**+*++++***=*+*=+++++*+*+++++===.  
+                                                                   .---:--:-:::-::::::::    -==-:+-.=*#**#*####*+##%%=##%%*#######**#*+*=+**-***+=++*****+*+:**+***+**#**=++*****=+*+*+++*:*++==*+++==: 
+                                                                     .:=--::::::::::::.    .=+--=+*:+##**#%#=#*##*+#####%%##%+#*#**##**+*-+**++*+==+-*+*++*+++*++*##+*****+**-+**++++**+***-*++=*+=++-+=
+                                                                       .--:::-:---::::     =+--=++*--=+*######%#*#*#%%#%#%*######%#*##***-+**+++-==++=+***+#*+*+++**#****+**+*++***+++**++**=*+=-*-=++-=
+                                                                         .::::--=-:::     :+-=-=:*+****#%%*####*##=#%%###%**#**###+##**+*+=+*+:++==*+-++*+++*+:+*++****-**+*++*+-*#******++**=+**=*-+++=
+                                                                            .::==--:     :=+=-==-=*-+*#*%##*###%#*###%###%###*=#*#****=-===*++++=+=+=+==*+-++*++=*******=*++*++*+:******+++=+****#+*+++=
+                                                                                         =+=++-+#+*####%%+*###%#**+#######*#**=**##+*#*+=*+-+*+-=-===+:++*==+++*++*+*****=*+**+***+******.+++****+#+++==
+                                                                                        ++-++++=++**#%%*%**#*#****=#-#####+**+**##*-**+***+-++++-==+======++-+*++=++*+****:+=++-*+-+***+**==++**=*=##-*+
+                                                                                       =--+*++*+#+%*#%=@%%+#%#*+++*#+*####*#*+***###*##*+*+++++*+====+=:==+++:+**+-+++++**+:=++++++++=*+***+-*=++:*=##:*
+                                                                                     .+===+--:+#*%+#*=*%####*%*=+***#*#+#+##*=+*=###***+-+++++=+++==+===-+=+=+-++++=++++++++++++=+***+*****=+*+==+*****-
+                                                                                    ===-++=*=-=-%+*=*%%%#####=*=+*##*#+##*+**=+*##**+*#*+*++*-+++-=+====:++===+-++*=:++==++++-+++**+=*#****+=+:**+*+**+#
+                                                                                   ==+++=+*+++-+%##+%%%#%=####++###***=*##**#*+++*****=++-++*+++++===+===-=+==++-+++==++++++++:==++**=+++*++*+*:*==*=***
+                                                                                  -++++=++*:*=*#*%+##%###*#*+#**###*#*###=#**-**+*++*****+=***-+++++=+===--==+++=++++:+***+++++=+=+***+****+*+*****-+*+*
+                                                                                 -**+=-*+*#***+**#+*#%#*###*=*=**####**##:***+*++=+***++*++*+**=+*++++==+==+++==+++**+-+****++++++-+***+****++***.**+*++
+
+                                                                                ============================================
+                                                                                    Project : Analytics Souverain no GAFAM no Framework no IA
+                                                                                    Developed by : https://github.com/berru-g/
+                                                                                    First Commits on Nov 21, 2025
+                                                                                    Version : 1.0.8
+                                                                                    Copyright (c) 2025 Berru
+                                                                                    License : MIT servez vous 🤍
+                                                                                ============================================
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alternative souveraines à Google Analytics – Libre Analytics</title>
+    <meta name="description"
+        content="LibreAnalytics est une alternative souveraines à Google Analytics. Dashboard simple, accés API, conforme RGPD, open source, installation 2min. Premier dashboard gratuit.">
+    <meta name="keywords"
+        content="alternative google analytics français, statistiques site web, analytics rgpd, dashboard simple, tracker visiteurs, analytics open source, analytics français, remplacer google analytics, analytics souverain, données france">
+    <link rel="canonical" href="https://gael-berru.com/LibreAnalytics/">
+    <meta property="og:title" content="Libre Analytics : Alternative Française à Google Analytics">
+    <meta property="og:description" content="Dashboard analytics simple et RGPD-compliant. Remplacez GA4 en 2 minutes.">
+    <meta property="og:image" content="https://gael-berru.com/img/smart-pixel.png">
+    <meta property="og:url" content="https://gael-berru.com/LibreAnalytics/">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="fr_FR">
+    <meta name="author" content="Gael Berru.">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="./RGPD/cookie.css" hreflang="fr">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="/manifest.json">
+    <script data-sp-id="SP_79747769" src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js"
+        async></script>
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Libre Analytics - Alternative Google Analytics">
+    <meta name="twitter:description" content="Solution analytics française, simple et conforme RGPD">
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "Libre Analytics",
+            "url": "https://gael-berru.com/LibreAnalytics/",
+            "description": "Libre Analytics est une plateforme européenne d'analyse web respectueuse de la vie privée et alternative à Google Analytics, avec tracking temps réel, géolocalisation, sources de trafic, UTM, tableau de bord intuitif et API.",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web",
+            "softwareVersion": "1.0.1",
+            "author": {
+                "@type": "Person",
+                "name": "Gaël Berru"
+            },
+            "creator": {
+                "@type": "Organization",
+                "name": "Libre Analytics",
+                "url": "https://gael-berru.com/"
+            },
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "EUR",
+                "availability": "https://schema.org/InStock"
+            },
+            "featureList": [
+                "Tracking en temps réel des pages vues et sessions",
+                "Géolocalisation des visiteurs",
+                "Sources de trafic avec UTM",
+                "Interactions et clics utilisateurs",
+                "Données techniques (appareil, navigateur)",
+                "Dashboard multi-sites (plan Pro)",
+                "API REST pour intégration externe"
+            ],
+            "category": ["Web Analytics", "Privacy-First Analytics", "RGPD Compliance", "Open Source SaaS"],
+            "screenshot": "https://gael-berru.com/LibreAnalytics/assets/dashboard.png"
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+</head>
+
+<!-- === HEADER === -->
+<header class="header" role="banner">
+    <div class="container">
+        <nav class="nav" role="navigation" aria-label="Navigation principale">
+            <a href="/" class="logo" itemprop="url">
+                <div class="logo-icon" aria-hidden="true"></div>
+                <span itemprop="name">Libre Analytics</span>
+            </a>
+            <div class="nav-links" id="navLinks">
+                <a href="#pourquoi" itemprop="url">Pourquoi</a>
+                <a href="#comment" itemprop="url">Comment</a>
+                <a href="https://github.com/berru-g/smart_pixel_v2" class="btn btn-secondary" target="_blank">
+                    <i class="fab fa-github"></i> Code
+                </a>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu mobile" aria-expanded="false">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </div>
+</header>
+
+<!-- === HERO SECTION === -->
+<section class="hero" role="region" aria-labelledby="hero-title">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-badge" role="note">
+                <span>Open Source · V.1.0.8</span>
+            </div>
+            <h1 id="hero-title" class="hero-title">
+                Libre Analytics : <span style="color: var(--primary);">mon alternative open source</span> <br>
+                <span style="color: var(--danger);">à Google Analytics.</span>
+            </h1>
+            <p class="hero-subtitle">
+                J’ai créé cet outil pour me libérer de Google. <strong>Il est à toi.</strong><br>
+                Utilise-le, auto-héberge-le, modifie-le. <strong>Gratuitement. Sans attente.</strong>
+            </p>
+            <div class="hero-cta">
+                <a href="https://github.com/berru-g/smart_pixel_v2" target="_blank" class="btn btn-primary">
+                    <i class="fab fa-github"></i> Voir le code
+                </a>
+                <a href="#comment" class="btn btn-secondary">
+                    <i class="fas fa-server"></i> Auto-héberger
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Open Source</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">0€</div>
+                    <div class="stat-label">À vie</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">RGPD</div>
+                    <div class="stat-label">Conforme</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container" id="demo">
+    <img src="../img/demo_dashboard.gif" alt="Dashboard Libre Analytics" class="dashboard-preview">
+</div>
+
+<!-- === POURQUOI === -->
+<section id="pourquoi" class="problem-section" role="region" aria-labelledby="pourquoi-title">
+    <div class="container">
+        <div class="section-title">
+            <h2 id="pourquoi-title">Pourquoi j’ai fait ça</h2>
+        </div>
+        <div class="problem-grid">
+           <!-- <div class="problem-column animate">
+                <h3 style="color: var(--danger);"><i class="fas fa-times-circle"></i> Google Analytics</h3>
+                <p>Ils vendent tes données.</p>
+                <p>Ils te verrouillent.</p>
+                <p>Ils ne respectent pas ta vie privée.</p>
+            </div>-->
+            <div class="solution-column animate">
+                <h3 style="color: var(--accent);"><i class="fas fa-check-circle"></i> Pour rester libre de ses données</h3>
+                <p>Tes données <strong>t'appartiennent</strong>.</p>
+                <p>Tu contrôles <strong>tout</strong>, auto-héberge-le.</p>
+                <p>C’est <strong>open source</strong>, les dev sont invitées à mettre leurs touches au projet.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- === POUR QUI === -->
+<section class="clients-section" role="region" aria-labelledby="clients-title">
+    <div class="container">
+        <div class="section-title">
+            <h2 id="clients-title">Pour qui ?</h2>
+        </div>
+        <div class="clients-grid">
+            <div class="client-card animate">
+                <div class="client-avatar"><i class="fa-solid fa-user-ninja"></i></div>
+                <h3>Les rebelles</h3>
+                <p>Ceux qui en ont marre des GAFAM.</p>
+            </div>
+            <div class="client-card animate">
+                <div class="client-avatar"><i class="fa-solid fa-code"></i></div>
+                <h3>Les devs</h3>
+                <p>Ceux qui veulent du code simple et libre.</p>
+            </div>
+            <div class="client-card animate">
+                <div class="client-avatar"><i class="fa-solid fa-lock"></i></div>
+                <h3>Les parano</h3>
+                <p>Ceux qui veulent garder leurs données chez eux.</p>
+            </div>
+            <div class="client-card animate">
+                <div class="client-avatar"><i class="fa-solid fa-heart"></i></div>
+                <h3>Les humains</h3>
+                <p>Ceux qui croient en un web libre.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- === COMMENT === -->
+<section id="comment" class="integration-section" role="region" aria-labelledby="comment-title">
+    <div class="container">
+        <div class="section-title">
+            <h2 id="comment-title">Comment l’utiliser</h2>
+        </div>
+        <div class="integration-steps">
+            <div class="step animate">
+                <div class="step-number">1</div>
+                <h3>Instance publique</h3>
+                <p>Teste gratuitement sur mon serveur.</p>
+                <a href="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/index.php" target="_blank" class="btn btn-secondary">Essayer</a>
+            </div>
+            <div class="step animate">
+                <div class="step-number">2</div>
+                <h3>Auto-hébergement</h3>
+                <p>Héberge-le toi-même pour un contrôle total.</p>
+                <a href="https://github.com/berru-g/smart_pixel_v2" target="_blank" class="btn btn-primary">Guide</a>
+            </div>
+        </div>
+        <div class="code-snippet animate">
+            <div class="code-header">
+                <span>Code d’intégration</span>
+                <button class="copy-btn" onclick="copyCode()" aria-label="Copier le code">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+            <pre><code style="color: #e2e8f0;">&lt;script data-sp-id="TON_ID"
+    src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js"
+    async&gt;&lt;/script&gt;</code></pre>
+        </div>
+    </div>
+</section>
+
+<button id="installButton" class="btn btn-primary" style="margin: 40px auto;">
+    <i class="fa-regular fa-folder-open"></i> Installer l'app
+</button>
+
+<!-- === FOOTER === -->
+<footer class="footer" role="contentinfo">
+    <div class="container">
+        <div class="footer-grid">
+            <div>
+                <a href="#" class="footer-logo">
+                    <div class="logo-icon"><i class="fas fa-chart-line"></i></div>
+                    Libre Analytics
+                </a>
+                <p class="footer-description">
+                    Mon cadeau à l’humanité. <strong>Libre. Gratuit. Sans bullshit.</strong>
+                </p>
+                <div class="social-links">
+                    <a href="https://github.com/berru-g/smart_pixel_v2" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Liens</h4>
+                <ul>
+                    <li><a href="https://github.com/berru-g/smart_pixel_v2">Code</a></li>
+                    <li><a href="https://github.com/berru-g/smart_pixel_v2/wiki">Doc</a></li>
+                    <li><a href="mailto:contact@gael-berru.com">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 · Développé avec rage en France par <a href="https://gael-berru.com" style="color: var(--primary);">Berru-g</a>.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- === SCRIPTS === 
+<script src="./RGPD/cookie.js"></script>
+<script>
+    // Mobile Menu
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navLinks = document.getElementById('navLinks');
+    mobileMenuBtn.addEventListener('click', () => {
+        const isExpanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
+        mobileMenuBtn.setAttribute('aria-expanded', !isExpanded);
+        navLinks.classList.toggle('active');
+        mobileMenuBtn.innerHTML = isExpanded ? '<i class="fas fa-bars"></i>' : '<i class="fas fa-times"></i>';
+    });
+
+    // Copy Code
+    function copyCode() {
+        const code = '<script data-sp-id="TON_ID" src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js" async></script>';
+        navigator.clipboard.writeText(code).then(() => {
+            const btn = document.querySelector('.copy-btn');
+            btn.innerHTML = '<i class="fas fa-check"></i> Copié !';
+            setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i>'; }, 2000);
+        });
+    }
+
+    // PWA Install
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        document.getElementById('installButton').style.display = 'block';
+    });
+    document.getElementById('installButton').addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt = null;
+            document.getElementById('installButton').style.display = 'none';
+        }
+    });
+    window.addEventListener('appinstalled', () => {
+        document.getElementById('installButton').style.display = 'none';
+    });
+
+    // Service Worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js').catch(console.error);
+        });
+    }
+
+    // Smooth Scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+                if (navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            }
+        });
+    });
+</script>
+-->

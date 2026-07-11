@@ -51,7 +51,7 @@ const projectsDatabase = [
         id: 'smart-pixel',
         title: 'Libre Analytics',
         shortDesc: 'Alternative souveraine à Google Analytics',
-        longDesc: 'Analysez vos données et soyez réelement le seul à pouvoir les exploiter. Integration en 2 min, dashboard complet, accées à l\'API, conforme RGPD et open source. Doc compléte d\'integration. Analysez votre trafic sans compromettre la vie privée de vos visiteurs, avec un outil 100% Souverains et open source.',
+        longDesc: 'Alternative souveraine à Google Analytics. Analysez vos données et soyez réelement le seul à pouvoir les exploiter. Integration en 2 min, dashboard complet, accées à l\'API, conforme RGPD et open source. Doc compléte d\'integration. Analysez votre trafic sans compromettre la vie privée de vos visiteurs, avec un outil 100% Souverains et open source.',
         keywords: ['analytics', 'tracking', 'privacy', 'api', 'dashboard', 'data', 'open source'],
         image: './img/demo_dashboard.gif',
         link: 'https://gael-berru.com/LibreAnalytics?utm_source=monsite',
@@ -347,7 +347,7 @@ const projectsDatabase = [
         features: ['quoi d\'autre ?'],
         tags: ['wikipédia', 'wikipedia']
     },
-    { // test de galerie de projet, à intégrer dans le menu ou pas, à voir et enchainer avec une page articles.
+   /* { // test de galerie de projet, à intégrer dans le menu ou pas, à voir et enchainer avec une page articles.
         "id": "galerie",
         "title": "Galerie de projets",
         "shortDesc": "Découvrez mes réalisations en images",
@@ -454,7 +454,6 @@ const projectsDatabase = [
             right: 0;
         }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -499,7 +498,7 @@ const projectsDatabase = [
         "category": "Portfolio",
         "features": ["Galerie dynamique", "Responsive"],
         "tags": ["galerie", "portfolio"]
-    },
+    },*/
     {
         id: 'welcome',
         title: 'Bienvenue',
@@ -508,7 +507,7 @@ const projectsDatabase = [
 <div id="welcome-section">    
 <h3>Ma méthode : la souveraineté technique</h3>
 
-<p>Depuis 2020, j'ai choisi une voie singulière :</p>
+<p>Voici comment je travail :</p>
 
 <ul>
     <li>• <strong>Ni frameworks ni template</strong> → Un contrôle total sur chaque section de votre site/outils.</li>
@@ -518,7 +517,7 @@ const projectsDatabase = [
 
 <h3>Mon atelier</h3>
 
-<p>Je travaille avec les technologies fondamentales :</p>
+<p>Je code avec les technologies fondamentales :</p>
 
 <ul>
     <li>• <strong>Frontend</strong> : HTML, CSS, JavaScript vanilla</li>
@@ -528,7 +527,7 @@ const projectsDatabase = [
 
 <h3>Ce que ça change pour vous</h3>
 
-<p><strong>Si vous cherchez :</strong></p>
+<p><strong>100% de control sur votre site/logiciel si vous voulez:</strong></p>
 
 <ul>
     <li>• Une solution <strong>sur-mesure, car vous ne trouvez pas le template idéal.</strong></li>

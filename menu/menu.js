@@ -16,7 +16,7 @@ function updateThemeIndicator() {
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateThemeIndicator);
 
 // ===== EASTER EGG - MOT DE PASSE DANS LA RECHERCHE =====
-const EASTER_EGG_PASSWORD = "firstpixel"; // ee
+const EASTER_EGG_PASSWORD = "firstpixel"; // héhé welcome
 const EASTER_EGG_URL = "../LibreAnalytics/pixel/dashboard.php"; // URL à ouvrir
 
 function checkEasterEgg(searchTerm) {
