@@ -1,7 +1,6 @@
-<h3>Développeur autodidacte, artisan du code souverain. Depuis 2020.</h3>
+<h3>Artisan du code souverain. Depuis 2020.</h3>
 
-<p>Logiciel en cours : <a href="https://gael-berru.com/LibreAnalytics?utm_source=github">LibreAnalytics</a></p>
-<img src="https://gael-berru.com/LibreAnalytics/pixel/pixel.php?source=github" width="1" height="1" style="display:none;">
+
 
     npm like list
       +-- learn@7.7.7 
