@@ -1,7 +1,8 @@
 <h3>Artisan du code souverain. Depuis 2020.</h3>
 
+
 <div align="center">
-  <div style="
+  <pre style="
     background-color: #1e1e1e;
     color: #a1a1a1;
     padding: 15px;
@@ -11,34 +12,13 @@
     margin: 0 auto;
     text-align: left;
   ">
-    <pre style="margin: 0;">
-<span style="color: #9d86ff;">berru-g@dev:</span><span style="color: #2196F3;">~</span>$ <span id="command" style="color: #FFD700;">npm like</span>
-<span id="cursor" style="border-right: 2px solid #a1a1a1; animation: blink 0.7s infinite;"></span>
-<pre id="output" style="margin: 0; white-space: pre-wrap;"></pre>
-    </pre>
-  </div>
-</div>
+<span style="color: #9d86ff;">berru-g@dev:</span><span style="color: #2196F3;">~</span>$ <span style="color: #FFD700;">npm like</span>
 
-<style>
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-  }
-</style>
-
-<script>
-  // Étape 1 : Afficher "npm like" et simuler une pause
-  setTimeout(() => {
-    // Étape 2 : Effacer le curseur et afficher la réponse sur une nouvelle ligne
-    document.getElementById('cursor').style.display = 'none';
-    const output = document.getElementById('output');
-    output.innerHTML = `
   +-- learn@7.7.7
   +-- make@1.0.1
   -- play@1.2.3
-`;
-  }, 1500); // Pause de 1.5 secondes avant d'afficher la réponse
-</script>
+  </pre>
+</div>
 
 <!--
     npm like list
