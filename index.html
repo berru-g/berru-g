@@ -298,14 +298,16 @@
 
       <!--<canvas id="canvas-bg"></canvas>-->
       <div id="galerie-section">
-    <h3>Mes dernières réalisations</h3>
-    <p>2025/2026</p>
 
     <!-- Nouvelle image en pleine largeur -->
     <div class="galerie-hero">
-        <img src="https://gael-berru.com/img/berru-vue-par-gpt4.png" alt="Vue d'ensemble par GPT4">
+        <img src="https://gael-berru.com/img/berru-vue-par-gpt4.png" alt="berru-g Vue par GPT4">
     </div>
 
+    <h3>Mes dernières réalisations ( et R&D )</h3>
+    <p>2025/2026</p>
+    <br>
+    <p style="color: grey;">Pour en voir plus, utilisez la barre de recherche. Essayez par mots clef, api, arduino, bockchain ...</p>
     <!-- Galerie responsive (inchangée) -->
     <div class="galerie-grid">
         <!-- Image 1 -->
@@ -313,16 +315,32 @@
             <img src="./LibreAnalytics/smart_pixel_v2/assets/img/LibreAnalytics-horizontal.png" alt="LibreAnalytics">
             <div class="galerie-caption">
                 <h4>LibreAnalytics</h4>
-                <p>Alternative souveraine à Google Analytics. <a href="https://gael-berru.com/LibreAnalytics/" target="_blank">Visiter</a></p>
+                <p>Alternative libre et souveraine à Google Analytics. <a href="https://gael-berru.com/LibreAnalytics/" target="_blank">Visiter</a></p>
+            </div>
+        </div>
+
+        <div class="galerie-item" onclick="openModal('./img/bitcoin-explorer.png', 'Suivi blockchain')">
+            <img src="./img/bitcoin-explorer.png" alt="Suivi blockchain">
+            <div class="galerie-caption">
+                <h4>Suivi blockchain</h4>
+                <p>Suivi de transaction depuis un wallet d'arnaqueur sur la blockchain. <a href="https://github.com/berru-g/crypto-tool/blob/main/scam-radar/enquete/readme.md" target="_blank">Visiter</a></p>
             </div>
         </div>
 
         <!-- Image 2 (corrigée : balise `onclick` complète) -->
-        <div class="galerie-item" onclick="openModal('./img/galerie/thumbs/otto-thumb.jpg', 'OTTO', 'Outil de scraping et d\'automatisation pour identifier des prospects.')">
-            <img src="./img/galerie/thumbs/otto-thumb.jpg" alt="OTTO">
+        <div class="galerie-item" onclick="openModal('./img/ornithopter.gif', 'ornithopter')">
+            <img src="./img/ornithopter.gif" alt="Ornithopter">
             <div class="galerie-caption">
-                <h4>OTTO</h4>
-                <p>Outil de scraping et d'automatisation</p>
+                <h4>Ornithopter</h4>
+                <p>Ornithoptere en cours de conception...</p>
+            </div>
+        </div>
+
+        <div class="galerie-item" onclick="openModal('./img/mochiscanble.gif', 'mochiscanble')">
+            <img src="./img/mochiscanble.gif" alt="Mochiscanble">
+            <div class="galerie-caption">
+                <h4>Mochi scan ble</h4>
+                <p>Scanne les appareils bluetooth environnants et prends le control de l'app.</p>
             </div>
         </div>
 
@@ -331,7 +349,7 @@
             <img src="https://github.com/berru-g/rc-plane/raw/main/img/pcb-final.png" alt="Rc plane">
             <div class="galerie-caption">
                 <h4>RC Plane</h4>
-                <p>Systeme radio commandé pour avion, bateau ou voiture RC. <a href="https://github.com/berru-g/rc-plane" target="_blank">Visiter</a></p>
+                <p>Conception d'un système radio commandé de A à Z, pour avion, bateau ou voiture. Plan électronique, gerber et code ➡️ <a href="https://github.com/berru-g/rc-plane" target="_blank">Visiter</a></p>
             </div>
         </div>
     </div>
