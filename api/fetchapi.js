@@ -313,9 +313,7 @@ Liste des commandes :
 b.me()               // 👤 Pour voir mon manifeste
 b.skill()       // 🛠️  Pour lister toutes mes compétences
 b.skill("frontend") // 🔧 Pour explorer une catégorie spécifique
-b.projetsEnCours()    // 🚀 Pour voir mes vrais projets actuels
-b.projetsRefs()       // 🏆 Pour la liste de mes projets phares
-b.roadmap()           // 🗺️  Pour mes prochaines étapes
+
         `,
         'color: #8a6ff8; font-family: monospace;',
         'color: #4cc9f0;',

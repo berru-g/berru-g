@@ -1,133 +1,54 @@
 {
-  "meta": {
-    "auteur": "berru-g",
-    "date_creation": "2025-12-31",
-    "date_maj": "2024-01-15",
-    "version": "3.0",
-    "description": "Régles à suivre lors de nos sessions code et référenciel."
-  },
-  "identite_philosophie": {
+  "identite": {
     "pseudo": "berru-g",
-    "principes_fondateurs": [
-      "Souveraineté numérique : créer des alternatives aux services GAFAM (ex: Smart Pixel).",
-      "Cypherpunk appliqué : utiliser la crypto et l'open source pour enquêter (scam-radar) et protéger.",
-      "Artisanat logiciel : priorité à l'utilité, au code sur-mesure et au contrôle total de la stack.",
-      "Sécurité offensive : considérer la sécurité comme la base, pas un ajout, et documenter les vulnérabilités.",
-      "Réseau local souverain : développer des outils P2P, fonctionnant sans internet pour la suite."
-    ],
-    "manifeste": "Développeur autodidacte créant des sites et outils souverains.",
-    "references_publics": [
-      "https://gael-berru.com",
-      "https://github.com/berru-g"
+    "titre": "Dév Amateur & Puriste",
+    "manifeste": "Développeur autodidacte. Code propre, sans dépendances inutiles. Souveraineté numérique, cypherpunk, sécurité offensive.",
+    "principes": [
+      "Souveraineté numérique : pas de GAFAM, tout est auto-hébergé ou open source.",
+      "Cypherpunk appliqué : crypto pour enquêter et protéger la vie privée.",
+      "Artisanat logiciel : code sur-mesure, contrôle total de la stack.",
+      "Sécurité offensive : sécurité par défaut, tout est documenté et testé.",
+      "Borné et puriste : Pas de dépendance. Pas de framework juste pour le plaisir."
     ]
   },
-  "competences_techniques": {
-    "frontend": {
-      "langages": ["HTML5", "CSS3", "JavaScript (ES6+)"],
-      "librairies_ui": ["SweetAlert2", "Toastify-js", "BasicLightbox", "AOS", "Font Awesome"],
-      "graphismes_3d_avances": {
-        "core": ["Three.js"],
-        "composants": ["GLTFLoader", "OrbitControls"],
-        "pratiques": ["Gestion asynchrone des assets", "Optimisation des ombres/rendu"]
+  "github": {
+    "username": "berru-g",
+    "repos": [
+      {
+        "nom": "3Dscrollanimator",
+        "description": "Créez des animations 3D fluides synchronisées au scroll — no code tool.",
+        "langages": ["JavaScript", "PHP", "HTML", "CSS"],
+        "lien": "https://github.com/berru-g/3Dscrollanimator"
       },
-      "bonnes_pratiques": [
-        "CSS : Toujours coder la base du mode dark/light avcec detection automatique du navigateur.",
-        "Code auto-documenté avec des séparateurs explicites (// ====== SECTION ======)",
-        "Attention à la compatibilité navigateur (notes spécifiques pour Firefox)",
-        "Concernant des projets avec threejs, pour un rendu 3D, tu dois te réferer à ce script pour l'affichage (https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/3D/script2.js)."
-      ]
-    },
-    "backend": {
-      "langages": ["PHP (Procédural, orienté fonction)", "Python (Scripting, automation, P2P)"],
-      "securite_offensive": {
-        "architecture": {
-          "principe": "Séparation stricte configuration / logique métier.",
-          "implementation": "Variables sensibles (DB, logs, API keys) dans `/app/config/`, fichier exclu via `.gitignore`. Inclusion via `require_once`.",
-          "exemple": "Voir la structure de `header.php` dans 3Dscrollanimator."
-        },
-        "defenses_actives": [
-          "Validation et nettoyage centralisé de toutes les entrées utilisateur (`$_GET`, `$_POST`, `$_COOKIE`).",
-          "Protection contre les injections SQL via l'utilisation de requêtes préparées (mysqli/PDO).",
-          "Protection contre le XSS via l'échappement HTML systématique en sortie (`htmlspecialchars`).",
-          "Mesures anti-bruteforce (délais, compteurs de tentatives, CAPTCHA après N essais).",
-          "Journalisation des activités suspectes dans un fichier de log sécurisé."
-        ]
+      {
+        "nom": "berru-g",
+        "description": "Organisation principale pour mes projets.",
+        "langages": ["JavaScript", "PHP", "Python"],
+        "lien": "https://github.com/berru-g/berru-g"
       },
-    "style_code_ref": {
-      "HTML": "https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/index.html",
-      "CSS": "https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/menu/menu.css",
-      "JavaScript": "Aucun FrameWork, js pure avec toute les lib sitée dans ce fichier.",
-      "PHP": "Bon sens et sécurité. Ref de code dans references_projets_cle ",
-      "SQL": [
-        "MySQL maria_db. Toujours SQL en brut, éviter Supabase et c'est autre merdier.",
-        "Gestion des erreurs réseau avec retry logic"
-      ]
-    }
-  },
-  "references_projets_cle": [
-    {
-      "nom": "Smart Pixel",
-      "lien_readme": "https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/smart_phpixel/index.html",
-      "lien_code": "https://github.com/berru-g/berru-g/tree/main/smart_phpixel",
-      "lien_js": "https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/smart_phpixel/smart-pixel.js",
-      "lien_php": "https://raw.githubusercontent.com/berru-g/berru-g/refs/heads/main/smart_phpixel/pixel.php",
-      "description": "Système d'analytics éthique et souverain. Archétype de l'outil anti-GAFAM.",
-      "tags": ["JavaScript", "RGPD", "Souveraineté", "Open Source"],
-      "principe_illustre": "Souveraineté numérique"
-    },
-    {
-      "nom": "Enquête Scam Radar",
-      "lien_readme": "https://raw.githubusercontent.com/berru-g/crypto-tool/main/scam-radar/enquete/readme.md",
-      "lien_js": "https://raw.githubusercontent.com/berru-g/crypto-tool/main/scam-radar/enquete/script/script.js",
-      "description": "Outil d'investigation forensique blockchain pour tracer des arnaques.",
-      "tags": ["Blockchain", "Forensique", "JavaScript", "threejs", "Cypherpunk"],
-      "principe_illustre": "Cypherpunk appliqué, sécurité offensive"
-    },
-    {
-      "nom": "3D Scroll Animator",
-      "lien_readme": "https://raw.githubusercontent.com/berru-g/3Dscrollanimator/refs/heads/main/readme.md",
-      "lien_code": "https://github.com/berru-g/3Dscrollanimator",
-      "lien_js": "https://raw.githubusercontent.com/berru-g/3Dscrollanimator/refs/heads/main/app/scriptV2.js",
-      "lien_php": "https://raw.githubusercontent.com/berru-g/3Dscrollanimator/refs/heads/main/app/header.php",
-      "description": "Créez des animations 3D fluides synchronisées au scroll — no code tool. Importez votre modèle, définissez vos animations liés au pourcentage de scroll, exportez un package HTML/CSS/JS prêt à l'emploi ou ouvrez-le directement dans CodePen.",
-      "tags": ["PHP", "Sécurité", "threejs", "Architecture", "CSS"],
-      "principe_illustre": "Sécurité par conception, artisanat"
-    },
-    {
-      "nom": "Crypto Heatmap 3D",
-      "lien_js": "https://raw.githubusercontent.com/berru-g/crypto-tool/refs/heads/main/heatmap-space/app.js",
-      "description": "Visualisation temps réel des marchés crypto sur un globe interactif.",
-      "tags": ["Three.js", "DataViz", "API", "WebGL"],
-      "principe_illustre": "Artisanat, visualisation avancée"
-    },
-    {
-      "nom": "Réseau Local Toolkit",
-      "description": "Exploration des possibilités réseau local : partage fichiers, honeypot, scanning, P2P",
-      "tags": ["Python", "Réseau", "Sécurité", "P2P", "Cypherpunk"],
-      "principe_illustre": "Artisanat logiciel, sécurité offensive",
-      "concepts_novateurs": [
-        "Mixer crypto local (standby)",
-        "Honeypot avec logging avancé",
-        "Serveurs HTTP sur-mesure"
-      ]
-    }
-  ],
-  "roadmap_technique": {
-    "court_terme": [
-      "Continuer de créer le SAAS autour de Smart Pixel",
-      "Finalisation du serveur honeypot pour le formulaire GD",
-      "Documentation des outils"
-    ],
-    "moyen_terme": [
-      "web3 ? Blockchain ? SAAS ?",
-      "Reprise du projet mixer crypto avec dépendances gérées",
-      "Intégration Bitcoin/Lightning testnet",
-      "Développement d'outils forensiques réseau avancés"
-    ],
-    "long_terme": [
-      "Suite d'outils cypherpunk auto-hébergée",
-      "Créer une blockcahin sécurisé ou chaque node est un user contenant ces dossier perso. Objectif, simplifier le partege de fichier administratif, juridique, santé avec les pôles concernés."
+      {
+        "nom": "smart_phpixel",
+        "description": "Système d'analytics éthique et souverain. Alternative à Google Analytics.",
+        "langages": ["JavaScript", "PHP"],
+        "lien": "https://github.com/berru-g/smart_phpixel"
+      },
+      {
+        "nom": "crypto-tool",
+        "description": "Outils liés à la crypto : heatmap 3D, scam-radar, etc.",
+        "langages": ["JavaScript", "Python"],
+        "lien": "https://github.com/berru-g/crypto-tool"
+      },
+      {
+        "nom": "scam-radar",
+        "description": "Outil d'investigation forensique blockchain pour tracer des arnaques.",
+        "langages": ["JavaScript", "Python", "Three.js"],
+        "lien": "https://github.com/berru-g/crypto-tool/tree/main/scam-radar"
+      }
     ]
+  },
+  "competences": {
+    "frontend": ["HTML5", "CSS3", "JavaScript (ES6+)", "Three.js"],
+    "backend": ["PHP", "Python"],
+    "outils": ["Git", "GitHub", "VSCode", "Linux"]
   }
-}
 }
