@@ -1,7 +1,7 @@
 <h3>Artisan du code souverain. Depuis 2020.</h3>
 
 <div align="center"> 
-<img src="/img/berru-vue-par-gpt4.png" alt="gael berru-g leberruyer" /> </div>
+<img src="/img/berru-vue-par-gpt4-V2.png" alt="gael berru-g leberruyer" /> </div>
 <p style="text-align: center; color: grey; font-size: 8px;">Wam vue par gpt4</p>
 
 <br>
