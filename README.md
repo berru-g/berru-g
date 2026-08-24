@@ -7,8 +7,8 @@
 <br>
 <div><h3>Dernières mise à jour de mes outils : </h3>
 <ul>
-  <li>2026-06-10 : <a href="/LibreAnalytics/smart_pixel_v2/api_LibreAnalytics_ESP32/api_LibreAnalytics.ino" target="_blank">API Libre Analytics sur ESP32</a>( tjr plus d'indépendance )"</li>
-  <li>2026-01-09 : <a href="https://gael-berru.com/LibreAnalytics?utm_source=github" target="_blank">Libre Analytics</a>( reprendre un peut d'indépendance )"</li>
+  <li>2026-06-10 : <a href="/LibreAnalytics/smart_pixel_v2/api_LibreAnalytics_ESP32/api_LibreAnalytics.ino" target="_blank">API Libre Analytics sur oled via ESP32</a>( tjr plus d'indépendance )"</li>
+  <li>2026-01-09 : <a href="https://gael-berru.com/LibreAnalytics?utm_source=github" target="_blank">Libre Analytics</a>( reprendre un peut de pouvoir sur ces data )"</li>
  </ul> 
 
 </div>
