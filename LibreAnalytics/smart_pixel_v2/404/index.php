@@ -121,7 +121,7 @@ http_response_code(404);  // Vrai 404 pour les humains + SEO + bons bots
             </p>
             
             <div class="action-buttons">
-                <a href="../../index.php" class="btn-primary">Retour à l'accueil</a>
+                <a href="../../index.php?utm_source=404" class="btn-primary">Retour à l'accueil</a>
                 <a href="../public/dashboard.php" class="btn-primary">Accéder au dashboard</a>
                 <a href="../../doc/" class="btn-outline">Consulter la documentation</a>
             </div>

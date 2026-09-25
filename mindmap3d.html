@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mindmap 3D - Projets Berru-g</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      overflow: hidden;
+      background: #0a0a1a;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    #container { width: 100vw; height: 100vh; }
+    #info-panel {
+      position: absolute; top: 20px; left: 20px;
+      background: rgba(0,0,0,0.85); color: #fff; padding: 15px;
+      border-radius: 10px; max-width: 350px; font-size: 14px;
+      backdrop-filter: blur(10px); z-index: 100; max-height: 70vh; overflow-y: auto;
+    }
+    #info-panel::-webkit-scrollbar { width: 6px; }
+    #info-panel::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); }
+    #info-panel::-webkit-scrollbar-thumb { background: #4fc3f7; border-radius: 3px; }
+    #info-panel h2 { margin-bottom: 10px; color: #4fc3f7; font-size: 16px; border-bottom: 1px solid #444; padding-bottom: 8px; }
+    #info-panel .detail { margin: 5px 0; padding: 5px; background: rgba(255,255,255,0.05); border-radius: 5px; }
+    #info-panel a { color: #4fc3f7; text-decoration: none; }
+    #info-panel a:hover { text-decoration: underline; }
+
+    #search-container {
+      position: absolute; top: 20px; right: 20px;
+      background: rgba(0,0,0,0.85); color: #fff; padding: 10px;
+      border-radius: 10px; font-size: 14px; backdrop-filter: blur(10px); z-index: 100; min-width: 300px;
+    }
+    #search-input {
+      width: 100%; padding: 8px 30px 8px 12px; background: rgba(255,255,255,0.1);
+      border: 1px solid #444; border-radius: 5px; color: #fff; font-size: 14px; outline: none;
+    }
+    #search-input::placeholder { color: #aaa; }
+    #search-input:focus { border-color: #4fc3f7; }
+    #search-results { margin-top: 10px; max-height: 300px; overflow-y: auto; display: none; }
+    #search-results.show { display: block; }
+    #search-results::-webkit-scrollbar { width: 6px; }
+    #search-results::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); }
+    #search-results::-webkit-scrollbar-thumb { background: #4fc3f7; border-radius: 3px; }
+    .search-result-item { padding: 8px; border-radius: 5px; cursor: pointer; margin: 2px 0; background: rgba(255,255,255,0.05); }
+    .search-result-item:hover { background: rgba(79,195,247,0.2); }
+    .search-result-item .name { font-weight: bold; color: #4fc3f7; }
+    .search-result-item .meta { font-size: 12px; color: #aaa; margin-top: 3px; }
+    #search-clear { position: absolute; right: 18px; top: 18px; background: none; border: none; color: #aaa; cursor: pointer; font-size: 14px; padding: 0; width: 20px; height: 20px; }
+    #search-clear:hover { color: #fff; }
+
+    #controls {
+      position: absolute; bottom: 20px; left: 20px;
+      background: rgba(0,0,0,0.85); color: #fff; padding: 10px;
+      border-radius: 10px; font-size: 12px; backdrop-filter: blur(10px); z-index: 100;
+      max-width: calc(100vw - 320px);
+    }
+    #controls button {
+      background: #4fc3f7; border: none; color: #000; padding: 6px 12px; margin: 5px;
+      border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 12px;
+    }
+    #controls button:hover { background: #81d4fa; }
+    #controls button:disabled { background: #666; cursor: not-allowed; }
+
+    .legend {
+      position: absolute; bottom: 20px; right: 20px;
+      background: rgba(0,0,0,0.85); color: #fff; padding: 15px;
+      border-radius: 10px; font-size: 12px; backdrop-filter: blur(10px); z-index: 100; max-width: 250px;
+    }
+    .legend h3 { margin-bottom: 10px; color: #aaa; font-size: 13px; }
+    .legend-item { display: flex; align-items: center; margin: 5px 0; }
+    .legend-color { width: 15px; height: 15px; border-radius: 50%; margin-right: 8px; box-shadow: 0 0 3px rgba(255,255,255,0.3); }
+
+    #loading {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      color: #4fc3f7; font-size: 18px; z-index: 1000; text-align: center;
+    }
+    #loading::after {
+      content: ''; display: block; width: 40px; height: 40px;
+      border: 4px solid rgba(79,195,247,0.3); border-top: 4px solid #4fc3f7;
+      border-radius: 50%; margin: 20px auto; animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    #result-count {
+      position: absolute; top: 10px; right: 10px;
+      background: rgba(79,195,247,0.9); color: #000; padding: 5px 10px;
+      border-radius: 20px; font-size: 12px; font-weight: bold; z-index: 101; display: none;
+    }
+    #result-count.show { display: block; }
+
+    #stats {
+      position: absolute; bottom: 20px; right: 20px;
+      color: #aaa; font-size: 12px; z-index: 100;
+      background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+      #info-panel { max-width: 200px; font-size: 12px; }
+      #search-container { min-width: 180px; max-width: 220px; }
+      .legend { display: none; }
+      #controls { max-width: calc(100vw - 20px); }
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+  <div id="info-panel">
+    <h2>Mindmap 3D - Projets Berru-g</h2>
+    <p style="color: #aaa;">Passez la souris sur un nœud pour voir les détails.</p>
+    <p style="color: #aaa; font-size: 12px; margin-top: 10px;">Cliquez sur un nœud pour ouvrir le lien.</p>
+  </div>
+
+  <div id="search-container">
+    <input type="text" id="search-input" placeholder="🔍 Rechercher un projet..." />
+    <button id="search-clear" onclick="clearSearch()" aria-label="Effacer">✕</button>
+    <div id="search-results"></div>
+  </div>
+
+  <div id="result-count"></div>
+  <div id="stats">Chargement...</div>
+
+  <div id="controls">
+    <button onclick="resetView()">Réinitialiser la vue</button>
+    <button onclick="toggleRotation()">Rotation auto: <span id="rotation-status">OFF</span></button>
+    <button onclick="toggleLabels()">Afficher les étiquettes</button>
+    <button onclick="highlightSearchResults()" id="highlight-btn" disabled>Surligner les résultats</button>
+  </div>
+
+  <div class="legend">
+    <h3>Légende</h3>
+    <div style="margin-bottom: 8px; border-bottom: 1px solid #444; padding-bottom: 8px;">
+      <div class="legend-item"><div class="legend-color" style="background: #4fc3f7;"></div>SAAS</div>
+      <div class="legend-item"><div class="legend-color" style="background: #8bc34a;"></div>Outil</div>
+      <div class="legend-item"><div class="legend-color" style="background: #ff9800;"></div>Site Web</div>
+      <div class="legend-item"><div class="legend-color" style="background: #e91e63;"></div>E-commerce</div>
+      <div class="legend-item"><div class="legend-color" style="background: #673ab7;"></div>Guide</div>
+      <div class="legend-item"><div class="legend-color" style="background: #ff5722;"></div>Arduino</div>
+      <div class="legend-item"><div class="legend-color" style="background: #2196f3;"></div>Jeu</div>
+    </div>
+    <div>
+      <div class="legend-item"><div class="legend-color" style="background: #4caf50;"></div>JavaScript</div>
+      <div class="legend-item"><div class="legend-color" style="background: #ffc107;"></div>PHP</div>
+    </div>
+  </div>
+
+  <div id="loading">Initialisation...</div>
+
+  <!--
+    Solution moderne : importmap + ES Modules.
+    Plus aucun warning de dépréciation, une seule instance de Three.js.
+  -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+        "3d-force-graph": "https://unpkg.com/3d-force-graph@1.73.0/dist/3d-force-graph.mjs"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import ForceGraph3D from '3d-force-graph';
+
+    // ============================================
+    // DONNÉES PROJETS
+    // ============================================
+    const rawProjects = [
+      { id: 'berru-clothing', title: 'Berru Clothing', shortDesc: 'Création d une marque de fringue et site e-commerce de vêtements', longDesc: 'Création d une marque de vêtements et site e-commerce de 2016 à 2018.', keywords: ['e-commerce', 'vetement', 'fringue', 'marque'], link: 'https://berru-clothing.com', category: 'e-commerce', tags: ['e-commerce', 'vetement', 'fringue', 'marque'] },
+      { id: 'les-flaneries', title: 'Les Flaneries', shortDesc: 'Création d une guinguette open air', longDesc: 'Création d une guinguette open air au parc de la gaudinière à Nantes de 2018 à 2022.', keywords: ['guinguette', 'organisation', 'asso', 'concert', 'open-air'], link: 'https://berru-g.github.io/assoberru/', category: 'guinguette', tags: ['guinguette', 'concert', 'open-air', 'dj set'] },
+      { id: '3dscrollanimator', title: '3D Scroll Animator', shortDesc: 'SAAS - Création d animations 3D synchronisées au scroll', longDesc: 'Créez des animations 3D synchronisées au scroll de votre site en 2 minutes. Interface facile avec génération automatique des scripts à intégrer.', keywords: ['3d', 'animation', 'scroll', 'saas', 'webgl', 'threejs', 'creative', 'design'], link: 'https://3dscrollanimator.com', category: 'saas', tags: ['SAAS', 'WebGL', 'Animation', '3d', 'threejs', 'générateur de code', 'php'] },
+      { id: 'smart-pixel', title: 'Libre Analytics', shortDesc: 'Alternative souveraine à Google Analytics', longDesc: 'Alternative souveraine à Google Analytics. Analysez vos données et soyez vraiment le seul à pouvoir les exploiter. Intégration en 2 min, dashboard complet, accès à l API, conforme RGPD et open source.', keywords: ['analytics', 'tracking', 'privacy', 'api', 'dashboard', 'data', 'open source'], link: 'https://gael-berru.com/LibreAnalytics?utm_source=monsite', category: 'saas', tags: ['SAAS', 'Analytics', 'Privacy', 'google', 'analytics', 'gafam', 'philosophie', 'ethique', 'php'] },
+      { id: 'sql-editor', title: 'SQL Editor to Map', shortDesc: 'SAAS - Visualisation de données SQL/JSON', longDesc: 'Plateforme de partage et visualisation graphique de fichiers CSV, Excel, JSON avec éditeur SQL to Map.', keywords: ['sql', 'database', 'visualization', 'data', 'chart', 'map', 'json'], link: 'https://agora-dataviz.com', category: 'saas', tags: ['SAAS', 'dataViz', 'data', 'sql'] },
+      { id: 'agora-dataviz', title: 'Agora Dataviz', shortDesc: 'SAAS - Social network et Visualisation de données SQL/JSON', longDesc: 'Réseau social, plateforme de partage et visualisation graphique de fichiers CSV, Excel, JSON avec éditeur SQL to Map.', keywords: ['messagerie', 'social-network', 'réseau social', 'visualization', 'data', 'chart', 'map', 'json'], link: 'https://agora-dataviz.com', category: 'saas', tags: ['SAAS', 'messagerie', 'réseau-social', 'sql', 'dataviz', 'data', 'json'] },
+      { id: 'blockchain-explorer', title: 'Blockchain Explorer', shortDesc: 'Outil d investigation blockchain', longDesc: 'Suivi de transactions Bitcoin, identification d exchanges, création de diagrammes automatiques.', keywords: ['blockchain', 'bitcoin', 'crypto', 'investigation', 'transactions', 'security'], link: 'https://crypto-free-tools.netlify.app/scam-radar?utm_source=monsite/', category: 'tool', tags: ['tool', 'Blockchain', 'btc'] },
+      { id: 'admin-dashboard', title: 'Interface Admin', shortDesc: 'Dashboard de gestion de bases de données', longDesc: 'Accédez à toutes vos bases de données dans un dashboard unique avec fonctionnalités développées sur mesure.', keywords: ['admin', 'dashboard', 'database', 'management', 'interface', 'panel'], link: './board/login.php', category: 'tool', tags: ['tool', 'Admin', 'Database'] },
+      { id: 'golden-dessert', title: 'Golden Dessert CMS', shortDesc: 'Site vitrine avec CMS pour chef pâtissier', longDesc: 'Site avec formulaire, galerie photo CMS, envoi automatique de mails.', keywords: ['cms', 'website', 'portfolio', 'vitrine', 'restaurant', 'gallery'], link: 'https://goldendessert.fr?utm_source=monsite', category: 'website', tags: ['SITE', 'CMS', 'Vitrine'] },
+      { id: 'crypto-tools', title: 'Crypto Free tools', shortDesc: 'Suite d outils pour traders crypto', longDesc: 'Suite d outils pour trader. Utilisation des API TradingView, CoinGecko et Binance pour analyse de marché et trading.', keywords: ['fibonnacci', 'tradingview', 'tool', 'binance', 'coingecko', 'market'], link: 'https://crypto-free-tools.netlify.app/?utm_source=monsite', category: 'tool', tags: ['tool', 'Crypto', 'Trading', 'api', 'btc', 'chart'] },
+      { id: 'smb-chat', title: 'Local Network Chat', shortDesc: 'Chat chiffré en réseau local', longDesc: 'Communication en réseau local via le protocole SMB, avec messages chiffrés AES-128 + HMAC-SHA256.', keywords: ['chat', 'local', 'network', 'encryption', 'security', 'smb', 'chiffrement'], link: 'https://berru-g.github.io/OTTO/SMBchat/SMBchatV2/', category: 'tool', tags: ['tool', 'Security', 'Network', 'smb', 'protocol'] },
+      { id: 'Enquete', title: 'Enquete blockchain', shortDesc: 'Outil d investigation blockchain', longDesc: 'Outil open source d investigation blockchain pour tracer des transactions Bitcoin et identifier les plateformes KYC.', keywords: ['blockchain', 'bitcoin', 'enquete', 'investigation', 'api'], link: 'https://github.com/berru-g/crypto-tool/blob/main/scam-radar/enquete/readme.md/', category: 'tool', tags: ['tool', 'Forensic', 'investigation', 'btc', 'bitcoin', 'crypto'] },
+      { id: 'Heatmap', title: 'Heat map 3D', shortDesc: 'Explorer les volumes comme jamais', longDesc: 'Observez la carte thermique des capitalisations crypto sous forme de forêt 3D.', keywords: ['blockchain', 'bitcoin', '3d', 'threejs', 'api'], link: 'https://crypto-free-tools.netlify.app/heatmap-forest/', category: 'tool', tags: ['tool', '3D', 'crypto', 'heatmap', 'api', 'threejs'] },
+      { id: 'guide-crypto', title: 'Guide Crypto débutant', shortDesc: 'Guide crypto débutant', longDesc: 'Guide crypto débutant. Pas pour devenir riche mais pour apprendre à faire des transactions sécurisées, ouvrir un wallet décentralisé sans KYC, stacker sur le web3 et récupérer vos fonds.', keywords: ['guide', 'crypto', 'solana'], link: 'https://crypto-free-tools.netlify.app/guide-pour-debutants/', category: 'guide', tags: ['guide', 'crypto', 'solana'] },
+      { id: 'Contact', title: 'Contact', shortDesc: 'Vous voulez discuter', longDesc: 'Le formulaire se situe dans le menu ou via contact@gael-berru.com. Commencez par me parler de votre problématique actuelle et en quoi je peux vous aider.', keywords: ['contact', 'message'], link: '#contact', category: 'contact', tags: ['contact'] },
+      { id: 'jeu-3d', title: 'Immersion 3D', shortDesc: 'Visitez mon site en immersion', longDesc: 'Visitez mon site en immersion. Plongez dans un univers avec des missions et système de gamification pour récupérer le trésor caché.', keywords: ['3d', 'jeu', 'immersion', 'proto', 'glb', 'threejs', 'webgl'], link: './3D/', category: 'jeu dans navigateur', tags: ['Proto', '3D', 'jeu', 'immersion', 'glb', 'threejs', 'webgl'] },
+      { id: 'help-desk', title: 'Help Desk', shortDesc: 'Terminal de surveillance système HELP DESK', longDesc: 'Terminal de surveillance système HELP DESK avec SCAN Réseau style NMAP', keywords: ['help', 'desk', 'nmap', 'python', 'console', 'cmd', 'scan', 'exe', 'tool'], link: 'https://github.com/berru-g/OTTO/tree/main/secu', category: 'tool', tags: ['help', 'desk', 'nmap', 'python', 'console', 'cmd', 'scan'] },
+      { id: 'help-desk-basic', title: 'help desk basic js', shortDesc: 'Connaître votre machine', longDesc: 'Accédez aux informations basiques de votre machine via un pseudo terminal.', keywords: ['help', 'desk', 'tool'], link: 'https://berru-g.github.io/console-interactive/', category: 'tool', tags: ['help', 'console', 'tool'] },
+      { id: 'github', title: 'Visitez mon github', shortDesc: 'Explorer mes travaux ligne après ligne depuis 2020', longDesc: 'Tous mes scripts visibles ici', keywords: ['github', 'code', 'travaux', 'code source', 'skill'], link: 'https://github.com/berru-g/', category: 'github', tags: ['code', 'github', 'programmation', 'berru-g'] },
+      { id: 'Qrcode', title: 'Qr-code generator', shortDesc: 'Créez votre QRcode gratuitement', longDesc: 'Créez votre QRcode sans pub et gratuitement', keywords: ['qrcode', 'generator'], link: 'https://berru-g.github.io/generate-qrcode/', category: 'QRcode', tags: ['qrcode', 'générateur'] },
+      { id: 'npm-or-pip', title: 'Philosophie et algorithme', shortDesc: 'install ce que tu veux', longDesc: 'npm install resilience', keywords: ['philosophie', 'npm', 'pip', 'install'], link: 'https://github.com/berru-g/phylorythme/tree/main', category: 'Phylorythme', tags: ['philosophie', 'npm', 'pip', 'install'] },
+      { id: 'arduino-micro', title: 'Controller pseudo MIDI - USB C with Arduino', shortDesc: 'Plug & play controller pour DAW', longDesc: 'Conception du circuit électronique et PCB d un Microcontrôleur usb midi lowcost. Plug & play sur tout logiciel DAW comme Ableton, Arena ou tout autre logiciel de création musicale ou vidéo.', keywords: ['arduino', 'electronic', 'pcb', 'daw', 'music', 'hackster', 'mapping', 'ableton', 'arena'], link: 'https://www.hackster.io/gleberruyer', category: 'Arduino', tags: ['arduino', 'electronic', 'pcb', 'daw', 'music', 'hackster'] },
+      { id: 'arduino-1', title: 'Controller with Arduino', shortDesc: 'Controller pour DAW', longDesc: 'Conception du circuit électronique et PCB d un Microcontrôleur pour tout logiciel DAW comme Ableton.', keywords: ['arduino', 'electronic', 'pcb', 'daw', 'cuivre', 'music', 'hackster'], link: 'https://www.hackster.io/gleberruyer/midi-copper-key-144c42', category: 'Arduino', tags: ['arduino', 'electronic', 'cuivre', 'daw', 'music', 'hackster'] },
+      { id: 'arduino-2', title: 'Conception pcb', shortDesc: 'Conception de PCB optimisé', longDesc: 'Conception de PCB optimisé.', keywords: ['conception pcb', 'electronic', 'pcb', 'hackster'], link: 'https://github.com/berru-g/MAKE_PLAY-1/', category: 'Arduino', tags: ['arduino', 'electronic', 'conception pcb', 'hackster'] },
+      { id: 'arduino-3', title: 'Conception pcb 16 potards', shortDesc: 'Conception de PCB pour contrôleur MIDI', longDesc: 'Conception de PCB (circuit électronique) optimisé. Contrôleur midi usb 16 potards mappable et plug & play.', keywords: ['conception pcb', 'electronic', 'pcb', 'hackster'], link: 'https://github.com/berru-g/MAKE_PLAY-1/', category: 'Arduino', tags: ['arduino', 'electronic', 'conception pcb', 'cuivre', 'daw', 'music', 'hackster'] },
+      { id: 'advent-calendar', title: 'Advent calendar', shortDesc: 'Calendrier de l avent', longDesc: 'Calendrier de l avent de mes projets open source', keywords: ['surprise', 'calendrier', 'noël', 'advent'], link: './advent-calendar/index.html', category: 'site', tags: ['surprise', 'calendrier', 'noël', 'advent'] },
+      { id: 'what', title: 'C est ça que tu cherche ?', shortDesc: 'Wikipédia - Algorithme', longDesc: 'Si tu cherches autre chose, consulte Wikipédia.', keywords: ['wikipédia', 'wikipedia'], link: 'https://fr.wikipedia.org/wiki/Algorithme', category: 'Wikipedia', tags: ['wikipédia', 'wikipedia'] },
+      { id: 'welcome', title: 'Bienvenue', shortDesc: 'Ma méthode de développement souverain', longDesc: 'Développeur full-stack autodidacte depuis 2020. Artisan du code souverain. Pas de frameworks, pas de dépendances superflues, 100% contrôle sur le code source.', keywords: ['bienvenue', 'philosophie', 'souveraineté'], link: '#', category: 'Message de bienvenue', tags: ['bienvenue', 'philosophie'] }
+    ];
+
+    // ============================================
+    // COULEURS
+    // ============================================
+    function getYearColor(year) {
+      const colors = {
+        2016: '#ff5722', 2017: '#ff9800', 2018: '#ffc107',
+        2019: '#4caf50', 2020: '#8bc34a', 2021: '#2196f3',
+        2022: '#3f51b5', 2023: '#673ab7', 2024: '#9c27b0', 2025: '#e91e63'
+      };
+      return colors[year] || '#999999';
+    }
+
+    function getTypeColor(type) {
+      const colors = {
+        saas: '#4fc3f7', tool: '#8bc34a', website: '#ff9800',
+        'e-commerce': '#e91e63', guide: '#673ab7', arduino: '#ff5722',
+        jeu: '#2196f3', 'jeu dans navigateur': '#2196f3', other: '#999999',
+        guinguette: '#ff9800', contact: '#999999', github: '#999999',
+        'Message de bienvenue': '#673ab7', Wikipedia: '#999999', QRcode: '#999999',
+        Phylorythme: '#673ab7'
+      };
+      return colors[type] || '#999999';
+    }
+
+    function getTechColor(tech) {
+      const colors = {
+        'JavaScript': '#4fc3f7', 'PHP': '#ffc107', 'HTML/CSS': '#f44336',
+        'HTML': '#f44336', 'CSS': '#f44336', 'Python': '#9c27b0',
+        'C++': '#607d8b', 'Three.js': '#4fc3f7', 'WebGL': '#4fc3f7'
+      };
+      return colors[tech] || '#999999';
+    }
+
+    // ============================================
+    // CONVERSION EN DONNÉES DE GRAPHE
+    // ============================================
+    const projectsData = (() => {
+      const nodes = [];
+      const links = [];
+
+      nodes.push({
+        id: 'berru-g',
+        name: 'Berru-g',
+        type: 'profile',
+        shortDesc: 'Développeur Full Stack autodidacte depuis 2020. Artisan du code souverain.',
+        color: '#ffffff',
+        size: 30,
+        link: 'https://github.com/berru-g/',
+        year: 2020,
+        category: 'profile',
+        tech: ['JavaScript', 'PHP', 'Python', 'C++']
+      });
+
+      rawProjects.forEach(project => {
+        let nodeType, color, nodeSize;
+        switch (project.category) {
+          case 'saas': nodeType = 'saas'; color = '#4fc3f7'; nodeSize = 20; break;
+          case 'tool': nodeType = 'tool'; color = '#8bc34a'; nodeSize = 14; break;
+          case 'website': case 'site': nodeType = 'website'; color = '#ff9800'; nodeSize = 14; break;
+          case 'e-commerce': nodeType = 'e-commerce'; color = '#e91e63'; nodeSize = 16; break;
+          case 'guide': nodeType = 'guide'; color = '#673ab7'; nodeSize = 12; break;
+          case 'Arduino': nodeType = 'arduino'; color = '#ff5722'; nodeSize = 14; break;
+          case 'jeu dans navigateur': nodeType = 'jeu'; color = '#2196f3'; nodeSize = 14; break;
+          default: nodeType = project.category || 'other'; color = '#999999'; nodeSize = 10;
+        }
+
+        const year = project.year || 2024;
+        const tech = [];
+
+        (project.tags || []).forEach(tag => {
+          if (!tag) return;
+          const t = tag.toLowerCase();
+          if (t.includes('javascript') || t === 'js') tech.push('JavaScript');
+          else if (t.includes('php')) tech.push('PHP');
+          else if (t.includes('html') || t.includes('css')) tech.push('HTML/CSS');
+          else if (t.includes('python')) tech.push('Python');
+          else if (t.includes('threejs') || t.includes('webgl')) tech.push('Three.js');
+          else if (t.includes('c++') || t.includes('arduino')) tech.push('C++');
+        });
+
+        if (tech.length === 0) {
+          tech.push(nodeType === 'arduino' ? 'C++' : 'JavaScript');
+        }
+
+        nodes.push({
+          id: project.id,
+          name: project.title,
+          type: nodeType,
+          shortDesc: project.shortDesc || '',
+          longDesc: project.longDesc || '',
+          color: color,
+          size: nodeSize,
+          link: project.link || null,
+          year: year,
+          category: project.category || 'other',
+          keywords: project.keywords || [],
+          tech: [...new Set(tech)],
+          tags: project.tags || []
+        });
+
+        links.push({ source: 'berru-g', target: project.id });
+      });
+
+      const years = [...new Set(nodes.map(n => n.year).filter(y => y))].sort((a, b) => a - b);
+      years.forEach(year => {
+        nodes.push({
+          id: `year-${year}`,
+          name: year.toString(),
+          type: 'category-year',
+          description: `Projets de l'année ${year}`,
+          color: getYearColor(year),
+          size: 6,
+          year: year
+        });
+        nodes.filter(n => n.year === year && !n.id.startsWith('year-')).forEach(node => {
+          links.push({ source: node.id, target: `year-${year}` });
+        });
+      });
+
+      const types = [...new Set(nodes.map(n => n.category).filter(c => c && c !== 'profile'))];
+      types.forEach(type => {
+        nodes.push({
+          id: `type-${type}`,
+          name: type.charAt(0).toUpperCase() + type.slice(1),
+          type: 'category-type',
+          description: `Projets de type ${type}`,
+          color: getTypeColor(type),
+          size: 5,
+          category: type
+        });
+        nodes.filter(n => n.category === type && !n.id.startsWith('type-')).forEach(node => {
+          links.push({ source: node.id, target: `type-${type}` });
+        });
+      });
+
+      const allTechs = nodes.flatMap(n => n.tech || []).filter(t => t);
+      const uniqueTechs = [...new Set(allTechs)];
+      uniqueTechs.forEach(tech => {
+        nodes.push({
+          id: `tech-${tech}`,
+          name: tech,
+          type: 'category-tech',
+          description: `Projets utilisant ${tech}`,
+          color: getTechColor(tech),
+          size: 4,
+          tech: [tech]
+        });
+        nodes.filter(n => (n.tech || []).includes(tech) && !n.id.startsWith('tech-')).forEach(node => {
+          links.push({ source: node.id, target: `tech-${tech}` });
+        });
+      });
+
+      const statsEl = document.getElementById('stats');
+      if (statsEl) {
+        statsEl.textContent = `${rawProjects.length} projets | ${nodes.length} nœuds | ${links.length} liens`;
+      }
+
+      return { nodes, links };
+    })();
+
+    // ============================================
+    // ÉTAT GLOBAL
+    // ============================================
+    let graph = null;
+    let rotationEnabled = false;
+    let rotationRAF = null;
+    let rotationAngle = 0;
+    let showLabels = true;
+    let searchResults = [];
+
+    // ============================================
+    // ÉTOILES
+    // ============================================
+    function addStarfield(scene) {
+      const starsGeometry = new THREE.BufferGeometry();
+      const starsMaterial = new THREE.PointsMaterial({
+        color: 0xffffff, size: 1.2, transparent: true, opacity: 0.8, sizeAttenuation: true
+      });
+      const starsVertices = [];
+      for (let i = 0; i < 2000; i++) {
+        starsVertices.push(
+          (Math.random() - 0.5) * 3000,
+          (Math.random() - 0.5) * 3000,
+          (Math.random() - 0.5) * 3000
+        );
+      }
+      starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starsVertices, 3));
+      scene.add(new THREE.Points(starsGeometry, starsMaterial));
+    }
+
+    // ============================================
+    // INITIALISATION DU GRAPHE
+    // ============================================
+    function initGraph() {
+      const container = document.getElementById('container');
+      const loadingEl = document.getElementById('loading');
+
+      try {
+        graph = ForceGraph3D(container)
+          .graphData(projectsData)
+          .nodeId('id')
+          .nodeLabel(node => (showLabels && node.size > 10) ? node.name : '')
+          .nodeColor(node => node.color)
+          .nodeVal(node => node.size * 2)
+          .nodeOpacity(0.95)
+          .nodeResolution(16)
+          .linkColor(() => '#444444')
+          .linkWidth(1)
+          .linkDirectionalArrowLength(4)
+          .linkDirectionalArrowRelPos(1)
+          .linkCurvature(0.15)
+          .linkOpacity(0.6)
+          .d3VelocityDecay(0.25)
+          .onNodeClick(node => {
+            if (node.link && node.link !== '#') {
+              window.open(node.link, '_blank', 'noopener,noreferrer');
+            }
+          })
+          .onNodeHover(node => {
+            if (node) {
+              showNodeInfo(node);
+              container.style.cursor = 'pointer';
+            } else {
+              resetInfoPanel();
+              container.style.cursor = 'default';
+            }
+          })
+          .onBackgroundClick(() => {
+            resetInfoPanel();
+            clearHighlight();
+          })
+          .width(container.clientWidth)
+          .height(container.clientHeight);
+
+        const charge = graph.d3Force('charge');
+        if (charge && typeof charge.strength === 'function') {
+          charge.strength(-180);
+          if (typeof charge.distanceMax === 'function') charge.distanceMax(800);
+        }
+
+        const link = graph.d3Force('link');
+        if (link && typeof link.distance === 'function') {
+          link.distance(70);
+          if (typeof link.strength === 'function') link.strength(0.6);
+        }
+
+        const center = graph.d3Force('center');
+        if (center && typeof center.strength === 'function') {
+          center.strength(0.4);
+        }
+
+        addStarfield(graph.scene());
+
+        loadingEl.style.display = 'none';
+
+        resetView();
+        initSearch();
+      } catch (err) {
+        console.error('Erreur d\'initialisation du graphe :', err);
+        loadingEl.textContent = 'Erreur : ' + err.message;
+      }
+    }
+
+    // ============================================
+    // AFFICHAGE INFO
+    // ============================================
+    function showNodeInfo(node) {
+      const infoPanel = document.getElementById('info-panel');
+      let html = `<h2>${escapeHtml(node.name || 'Sans nom')}</h2>`;
+
+      if (node.shortDesc) {
+        html += `<div class="detail"><strong>Description:</strong> ${escapeHtml(node.shortDesc)}</div>`;
+      }
+
+      const isCategory = node.id.startsWith('year-') || node.id.startsWith('type-') || node.id.startsWith('tech-');
+
+      if (node.type === 'category-year' || node.type === 'category-type' || node.type === 'category-tech') {
+        if (node.description) {
+          html += `<div class="detail" style="color: #aaa;">${escapeHtml(node.description)}</div>`;
+        }
+      } else if (!isCategory && node.type !== 'profile') {
+        if (node.year) html += `<div class="detail"><strong>Année:</strong> ${node.year}</div>`;
+        if (node.category) html += `<div class="detail"><strong>Catégorie:</strong> ${escapeHtml(node.category)}</div>`;
+        if (node.tech && node.tech.length) html += `<div class="detail"><strong>Technos:</strong> ${escapeHtml(node.tech.join(', '))}</div>`;
+        if (node.keywords && node.keywords.length) html += `<div class="detail"><strong>Mots-clés:</strong> ${escapeHtml(node.keywords.slice(0, 5).join(', '))}</div>`;
+        if (node.link && node.link !== '#') {
+          html += `<div class="detail"><strong>Lien:</strong> <a href="${escapeAttr(node.link)}" target="_blank" rel="noopener noreferrer">Voir →</a></div>`;
+        }
+      }
+
+      infoPanel.innerHTML = html;
+    }
+
+    function resetInfoPanel() {
+      document.getElementById('info-panel').innerHTML = `
+        <h2>Mindmap 3D - Projets Berru-g</h2>
+        <p style="color: #aaa;">Passez la souris sur un nœud pour voir les détails.</p>
+        <p style="color: #aaa; font-size: 12px; margin-top: 10px;">Cliquez sur un nœud pour ouvrir le lien.</p>
+      `;
+    }
+
+    function escapeHtml(str) {
+      if (str == null) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function escapeAttr(str) { return escapeHtml(str); }
+
+    // ============================================
+    // CONTRÔLES
+    // ============================================
+    function resetView() {
+      if (!graph) return;
+      graph.cameraPosition({ x: 0, y: 0, z: 200 }, { x: 0, y: 0, z: 0 }, 1000);
+      graph.d3ReheatSimulation();
+      clearHighlight();
+    }
+
+    function toggleRotation() {
+      rotationEnabled = !rotationEnabled;
+      document.getElementById('rotation-status').textContent = rotationEnabled ? 'ON' : 'OFF';
+
+      if (rotationEnabled) {
+        if (rotationRAF) cancelAnimationFrame(rotationRAF);
+        rotationAngle = 0;
+        const rotate = () => {
+          if (!rotationEnabled || !graph) { rotationRAF = null; return; }
+          rotationAngle += 0.003;
+          const r = 200;
+          graph.cameraPosition(
+            {
+              x: Math.sin(rotationAngle) * r,
+              y: Math.sin(rotationAngle * 0.7) * 80,
+              z: Math.cos(rotationAngle) * r
+            },
+            { x: 0, y: 0, z: 0 }, 0
+          );
+          rotationRAF = requestAnimationFrame(rotate);
+        };
+        rotate();
+      } else {
+        if (rotationRAF) { cancelAnimationFrame(rotationRAF); rotationRAF = null; }
+      }
+    }
+
+    function toggleLabels() {
+      showLabels = !showLabels;
+      if (graph) {
+        graph.nodeLabel(node => (showLabels && node.size > 10) ? node.name : '');
+      }
+    }
+
+    function clearHighlight() {
+      searchResults = [];
+      if (graph) graph.nodeColor(node => node.color);
+      const btn = document.getElementById('highlight-btn');
+      if (btn) btn.disabled = true;
+      document.getElementById('result-count').classList.remove('show');
+      document.getElementById('search-results').classList.remove('show');
+    }
+
+    function highlightSearchResults() {
+      if (!graph || searchResults.length === 0) return;
+      const ids = new Set(searchResults.map(r => r.id));
+      graph.nodeColor(node => ids.has(node.id) ? '#ffff00' : node.color);
+      document.getElementById('highlight-btn').disabled = false;
+    }
+
+    // ============================================
+    // RECHERCHE
+    // ============================================
+    function initSearch() {
+      const searchInput = document.getElementById('search-input');
+      const searchResultsDiv = document.getElementById('search-results');
+      const resultCountDiv = document.getElementById('result-count');
+
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        if (query.length < 2) {
+          searchResultsDiv.classList.remove('show');
+          resultCountDiv.classList.remove('show');
+          clearHighlight();
+          return;
+        }
+
+        searchResults = projectsData.nodes.filter(node => {
+          if (node.id.startsWith('year-') || node.id.startsWith('type-') || node.id.startsWith('tech-')) return false;
+          const haystack = [
+            node.name || '', node.shortDesc || '', node.longDesc || '',
+            (node.keywords || []).join(' '), (node.tags || []).join(' '),
+            (node.tech || []).join(' '), node.category || ''
+          ].join(' ').toLowerCase();
+          return haystack.includes(query);
+        });
+
+        if (searchResults.length > 0) {
+          searchResultsDiv.innerHTML = searchResults.slice(0, 10).map(node => `
+            <div class="search-result-item" onclick="focusOnNode('${escapeAttr(node.id)}')">
+              <div class="name">${escapeHtml(node.name)}</div>
+              <div class="meta">
+                ${node.year ? `📅 ${node.year} | ` : ''}${node.category ? `📁 ${escapeHtml(node.category)} | ` : ''}${node.tech ? `💻 ${escapeHtml(node.tech.join(', '))}` : ''}
+              </div>
+            </div>
+          `).join('');
+          searchResultsDiv.classList.add('show');
+          resultCountDiv.textContent = `${searchResults.length} résultat${searchResults.length > 1 ? 's' : ''}`;
+          resultCountDiv.classList.add('show');
+          document.getElementById('highlight-btn').disabled = false;
+        } else {
+          searchResultsDiv.innerHTML = '<div style="padding: 8px; color: #aaa;">Aucun résultat</div>';
+          searchResultsDiv.classList.add('show');
+          resultCountDiv.classList.remove('show');
+          document.getElementById('highlight-btn').disabled = true;
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('#search-container')) {
+          searchResultsDiv.classList.remove('show');
+        }
+      });
+    }
+
+    function focusOnNode(nodeId) {
+      if (!graph) return;
+      const node = projectsData.nodes.find(n => n.id === nodeId);
+      if (!node) return;
+
+      graph.d3ReheatSimulation();
+
+      const doFocus = () => {
+        const nx = node.x || 0, ny = node.y || 0, nz = node.z || 0;
+        const dist = 90;
+        const mag = Math.hypot(nx, ny, nz) || 1;
+        const ratio = 1 + dist / mag;
+        graph.cameraPosition(
+          { x: nx * ratio, y: ny * ratio, z: nz * ratio },
+          { x: nx, y: ny, z: nz }, 1000
+        );
+      };
+      requestAnimationFrame(() => requestAnimationFrame(doFocus));
+
+      const ids = new Set([nodeId]);
+      graph.nodeColor(n => ids.has(n.id) ? '#ffff00' : n.color);
+      showNodeInfo(node);
+      document.getElementById('search-results').classList.remove('show');
+      document.getElementById('result-count').classList.remove('show');
+      document.getElementById('search-input').value = '';
+    }
+
+    function clearSearch() {
+      document.getElementById('search-input').value = '';
+      document.getElementById('search-results').classList.remove('show');
+      document.getElementById('result-count').classList.remove('show');
+      clearHighlight();
+      if (graph) graph.nodeColor(node => node.color);
+    }
+
+    // ============================================
+    // RESIZE
+    // ============================================
+    let resizeTimeout = null;
+    window.addEventListener('resize', () => {
+      if (resizeTimeout) clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (graph) {
+          const c = document.getElementById('container');
+          graph.width(c.clientWidth);
+          graph.height(c.clientHeight);
+        }
+      }, 100);
+    });
+
+    // ============================================
+    // DÉMARRAGE
+    // ============================================
+    window.addEventListener('load', () => {
+      setTimeout(initGraph, 50);
+    });
+
+    // ============================================
+    // EXPOSITION GLOBALE (pour onclick inline)
+    // ============================================
+    window.focusOnNode = focusOnNode;
+    window.clearSearch = clearSearch;
+    window.highlightSearchResults = highlightSearchResults;
+    window.resetView = resetView;
+    window.toggleRotation = toggleRotation;
+    window.toggleLabels = toggleLabels;
+  </script>
+</body>
+</html>

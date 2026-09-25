@@ -80,12 +80,12 @@ try {
     $stmt->execute([$siteId, $apiKey]);
     $site = $stmt->fetch();
 
-    // limite d'accees test
+    /* limite d'accees test
     if ($user['plan'] === 'free') {
         http_response_code(403);
         echo json_encode(['error' => 'API Key non disponible pour les comptes gratuits']);
         exit;
-    }
+    }*/
     // 403
     if (!$site) {
         http_response_code(403);
