@@ -83,7 +83,7 @@ try {
     $stmt = $pdo->query("SELECT plan, COUNT(*) AS count FROM users GROUP BY plan");
     $plansStats = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
-    // Activité récente
+    // Activité récente (7 jours)
     $stmt = $pdo->query("
         SELECT DATE(created_at) AS date, COUNT(*) AS count
         FROM users
@@ -121,15 +121,14 @@ if (isset($_GET['export_emails'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LibreAnalytics - Administration</title>
-    <!-- Police moderne et icônes pour une meilleure identité visuelle -->
+    <title>LibreAnalytics — Contrôle</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- CSS existant -->
+    <!-- CSS existant (versionné) -->
     <link rel="stylesheet" href="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/assets/dashboard.css">
-    <!-- CDN optimisés -->
+    <!-- CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
@@ -141,669 +140,959 @@ if (isset($_GET['export_emails'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <style>
-        /* ===== VARIABLES & RESET ===== */
+        /* =====================================================
+           LIBREANALYTICS — "TERMINAL ÉDITORIAL"
+           Thème singulier : fond encre profonde, typographie
+           mono/grotesk, coins vifs, filets fins, accent lime
+           + violet. Structure en "rapport" plutôt qu'en admin.
+           ===================================================== */
+
+        :root {
+            --ink: #0b0d12;
+            --ink-2: #10131b;
+            --ink-3: #161a25;
+            --line: #232839;
+            --line-soft: #1b2030;
+            --txt: #e8eaf2;
+            --txt-dim: #8b90a5;
+            --lime: #c8f65d;
+            --violet: #ab9ff2;
+            --rose: #ff7a8a;
+            --mono: 'JetBrains Mono', monospace;
+            --grot: 'Space Grotesk', sans-serif;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        html { scroll-behavior: smooth; }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f6f8fb;
-            color: #1e293b;
+            font-family: var(--grot);
+            background: var(--ink);
+            color: var(--txt);
             line-height: 1.5;
+            background-image:
+                linear-gradient(var(--line-soft) 1px, transparent 1px),
+                linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+            background-size: 44px 44px;
         }
 
-        .main-content {
-            padding: 2rem;
-            max-width: 1600px;
+        ::selection { background: var(--lime); color: var(--ink); }
+
+        a { color: inherit; }
+
+        .shell {
+            max-width: 1520px;
             margin: 0 auto;
+            padding: 0 clamp(0.8rem, 3vw, 2.5rem) 4rem;
         }
 
-        /* ===== BOUTONS NAVIGATION ===== */
-        .nav-buttons {
+        /* ===== TOPBAR ===== */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(11, 13, 18, 0.88);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .topbar-inner {
+            max-width: 1520px;
+            margin: 0 auto;
+            padding: 0.75rem clamp(0.8rem, 3vw, 2.5rem);
             display: flex;
+            align-items: center;
+            justify-content: space-between;
             gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
         }
 
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.6rem 1.2rem;
-            border-radius: 12px;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: all 0.2s ease;
+        .brand {
+            display: flex;
+            align-items: baseline;
+            gap: 0.6rem;
             text-decoration: none;
-            border: 1px solid transparent;
-            cursor: pointer;
         }
 
-        .btn i {
-            font-size: 1rem;
-        }
-
-        .btn-secondary {
-            background: white;
-            color: #475569;
-            border-color: #e2e8f0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-        }
-
-        .btn-secondary:hover {
-            background: #f8fafc;
-            border-color: #cbd5e1;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        /* ===== GRILLE STATISTIQUES ===== */
-        .admin-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 1.5rem 1.2rem;
-            border-radius: 20px;
-            text-align: left;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(0, 0, 0, 0.03);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-        }
-
-        .stat-card h3 {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #64748b;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .stat-card h3 i {
-            color: #6366f1;
-            font-size: 1rem;
-        }
-
-        .stat-value {
-            font-size: 2.2rem;
+        .brand .sigil {
+            font-family: var(--mono);
             font-weight: 700;
-            color: #0f172a;
-            line-height: 1.2;
+            font-size: 1.05rem;
+            color: var(--lime);
+            letter-spacing: -1px;
         }
 
-        /* ===== CARTES GÉNÉRIQUES ===== */
-        .card {
-            background: white;
-            border-radius: 24px;
-            padding: 1.8rem;
-            margin-bottom: 2.5rem;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02);
-            border: 1px solid #f1f5f9;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #0f172a;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .card-title i {
-            color: #6366f1;
-            background: #eef2ff;
-            padding: 0.5rem;
-            border-radius: 12px;
-            font-size: 1rem;
-        }
-
-        /* ===== TABLEAUX ===== */
-        .table-responsive {
-            overflow-x: auto;
-            border-radius: 18px;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.95rem;
-        }
-
-        .data-table th {
-            text-align: left;
-            padding: 1rem 1rem;
-            background-color: #f8fafc;
-            color: #475569;
-            font-weight: 600;
-            font-size: 0.85rem;
+        .brand small {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            color: var(--txt-dim);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 1px solid #e2e8f0;
+            letter-spacing: 2px;
         }
 
-        .data-table td {
-            padding: 1rem 1rem;
-            border-bottom: 1px solid #f1f5f9;
-            color: #334155;
-        }
-
-        .data-table tbody tr {
-            transition: background-color 0.15s;
-        }
-
-        .data-table tbody tr:hover {
-            background-color: #f8fafc;
-        }
-
-        .data-table code {
-            background: #f1f5f9;
-            padding: 0.2rem 0.4rem;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            color: #0f172a;
-        }
-
-        /* ===== BADGES ===== */
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .badge-free {
-            background: #f1f5f9;
-            color: #475569;
-        }
-
-        .badge-pro {
-            background: #e0f2fe;
-            color: #0369a1;
-        }
-
-        .badge-business {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        /* fallback pour d'autres plans */
-        .badge-premium {
-            background: #f1f0ff;
-            color: #4f46e5;
-        }
-
-        /* ===== BOUTON EXPORT ===== */
-        .export-btn {
-            background: white;
-            border: 1px solid #e2e8f0;
-            color: #1e293b;
-            padding: 0.6rem 1.2rem;
-            border-radius: 30px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
-        }
-
-        .export-btn:hover {
-            background: #f1f5f9;
-            border-color: #94a3b8;
-        }
-
-        .export-btn i {
-            color: #6366f1;
-        }
-
-        /* ===== CARTE MONDE ===== */
-        #worldMap {
-            width: 100%;
-            height: 400px;
-            border-radius: 18px;
-            overflow: hidden;
-            background: #fafcff;
-        }
-
-        /* ===== MESSAGE AUCUNE DONNÉE ===== */
-        .empty-state {
-            text-align: center;
-            padding: 3rem 1rem;
-            color: #94a3b8;
-            font-style: italic;
-        }
-
-        /* ==========================================
-           ===== WALLET CRYPTO (fusion) =============
-           Adapte le thème sombre du wallet au thème
-           clair du dashboard : cartes blanches,
-           accent #6366f1, badges, tables.
-           ========================================== */
-
-        .crypto-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 1.5rem;
-        }
-
-        @media (max-width: 900px) {
-            .crypto-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        #portfolio-total {
-            background: linear-gradient(135deg, #eef2ff, #f5f3ff);
-            border: 1px solid #e0e7ff;
-            border-radius: 18px;
-            padding: 1.2rem 1.5rem;
-            margin-bottom: 1.2rem;
+        .topbar-right {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        #portfolio-total .label {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #64748b;
-        }
-
-        #portfolio-total h3 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #6366f1;
-        }
-
-        #crypto-prices {
-            display: flex;
-            flex-direction: column;
             gap: 0.6rem;
         }
 
-        .crypto-item {
-            display: grid;
-            grid-template-columns: 34px 1fr auto auto;
-            align-items: center;
-            gap: 12px;
-            padding: 0.8rem 1rem;
-            background: #f8fafc;
-            border: 1px solid #f1f5f9;
-            border-radius: 14px;
-            transition: border-color 0.2s;
-        }
-
-        .crypto-item:hover {
-            border-color: #c7d2fe;
-        }
-
-        .crypto-item img {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-        }
-
-        .crypto-item .name {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .crypto-item .symbol {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #0f172a;
-        }
-
-        .crypto-item .price {
-            font-size: 0.8rem;
-            color: #64748b;
-        }
-
-        .crypto-item .holdings {
-            display: flex;
-            flex-direction: column;
-            text-align: right;
-        }
-
-        .crypto-item .holdings .amount {
-            font-size: 0.85rem;
-            color: #64748b;
-        }
-
-        .crypto-item .holdings .value {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #6366f1;
-        }
-
-        .crypto-item .change {
-            font-size: 0.9rem;
-            font-weight: 600;
-            min-width: 70px;
-            text-align: right;
-        }
-
-        .crypto-item .change.positive { color: #3ad38b; }
-        .crypto-item .change.negative { color: #f56545; }
-
-        /* Bouton liens wallet (ex-hamburger) */
-        .wallet-links-btn {
-            background: white;
-            border: 1px solid #e2e8f0;
-            color: #1e293b;
-            padding: 0.6rem 1.2rem;
-            border-radius: 30px;
-            font-weight: 500;
-            font-size: 0.9rem;
+        .live-dot {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.4rem;
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--txt-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .live-dot::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--lime);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.25; }
+        }
+
+        /* ===== MENU DÉROULANT "COMMANDES" ===== */
+        .cmd {
+            position: relative;
+        }
+
+        .cmd-toggle {
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--txt);
+            background: var(--ink-3);
+            border: 1px solid var(--line);
+            padding: 0.55rem 1rem;
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: border-color 0.2s, color 0.2s;
         }
 
-        .wallet-links-btn:hover {
-            background: #f8fafc;
-            border-color: #94a3b8;
+        .cmd-toggle:hover { border-color: var(--lime); color: var(--lime); }
+
+        .cmd-toggle .caret { transition: transform 0.25s; font-size: 0.6rem; }
+
+        .cmd.open .cmd-toggle .caret { transform: rotate(180deg); }
+
+        .cmd-menu {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 0.4rem);
+            min-width: 260px;
+            background: var(--ink-2);
+            border: 1px solid var(--line);
+            border-top: 2px solid var(--lime);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-6px);
+            transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
         }
 
-        .wallet-links-btn i { color: #6366f1; }
+        .cmd.open .cmd-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
 
-        /* Adresses + bouton copier */
-        .wallet-row {
+        .cmd-menu a {
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 0.7rem 0;
-            border-bottom: 1px solid #f1f5f9;
+            padding: 0.7rem 1rem;
+            font-size: 0.85rem;
+            text-decoration: none;
+            color: var(--txt);
+            border-bottom: 1px solid var(--line-soft);
+            transition: background 0.15s, color 0.15s, padding-left 0.15s;
+        }
+
+        .cmd-menu a:last-child { border-bottom: none; }
+
+        .cmd-menu a i {
+            width: 1.2rem;
+            text-align: center;
+            color: var(--violet);
+            font-size: 0.8rem;
+        }
+
+        .cmd-menu a:hover {
+            background: var(--ink-3);
+            color: var(--lime);
+            padding-left: 1.35rem;
+        }
+
+        /* ===== HERO / RAPPORT ===== */
+        .report {
+            padding: 3.5rem 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: end;
+            gap: 1.5rem;
+        }
+
+        .report h1 {
+            font-size: clamp(2rem, 6vw, 4.2rem);
+            font-weight: 700;
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+        }
+
+        .report h1 .stroke {
+            color: transparent;
+            -webkit-text-stroke: 1.5px var(--violet);
+        }
+
+        .report .meta {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--txt-dim);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 0.8rem;
+        }
+
+        .report .meta strong { color: var(--lime); font-weight: 700; }
+
+        @media (max-width: 700px) {
+            .report { grid-template-columns: 1fr; }
+        }
+
+        /* ===== SECTIONS ===== */
+        .section { margin-bottom: 3rem; }
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-head .index {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--lime);
+            letter-spacing: 1px;
+        }
+
+        .section-head h2 {
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--txt);
+        }
+
+        .section-head::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--line);
+        }
+
+        /* ===== STATS — bandeau horizontal défilable ===== */
+        .stats-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border: 1px solid var(--line);
+            background: var(--ink-2);
+        }
+
+        .stat {
+            padding: 1.4rem 1.2rem;
+            border-right: 1px solid var(--line);
+            position: relative;
+            transition: background 0.2s;
+        }
+
+        .stat:last-child { border-right: none; }
+
+        .stat:hover { background: var(--ink-3); }
+
+        .stat .k {
+            font-family: var(--mono);
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--txt-dim);
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .stat .k i { color: var(--violet); font-size: 0.7rem; }
+
+        .stat .v {
+            font-family: var(--mono);
+            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            font-weight: 700;
+            color: var(--txt);
+            letter-spacing: -1px;
+        }
+
+        .stat::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 0;
+            height: 2px;
+            background: var(--lime);
+            transition: width 0.35s;
+        }
+
+        .stat:hover::after { width: 100%; }
+
+        @media (max-width: 900px) {
+            .stats-strip { grid-template-columns: repeat(2, 1fr); }
+            .stat:nth-child(2) { border-right: none; }
+            .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--line); }
+        }
+
+        @media (max-width: 480px) {
+            .stats-strip { grid-template-columns: 1fr; }
+            .stat { border-right: none; border-bottom: 1px solid var(--line); }
+            .stat:last-child { border-bottom: none; }
+        }
+
+        /* ===== PANNEAUX ===== */
+        .panel {
+            background: var(--ink-2);
+            border: 1px solid var(--line);
+            position: relative;
+        }
+
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            width: 14px;
+            height: 14px;
+            border-top: 2px solid var(--lime);
+            border-left: 2px solid var(--lime);
+        }
+
+        .panel-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 1rem 1.4rem;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .panel-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .panel-title i { color: var(--lime); font-size: 0.85rem; }
+
+        .panel-body { padding: 1.4rem; }
+
+        .duo {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 1.2rem;
+            margin-bottom: 1.2rem;
+        }
+
+        @media (max-width: 1000px) {
+            .duo { grid-template-columns: 1fr; }
+        }
+
+        .duo-2 {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 1.2rem;
+        }
+
+        @media (max-width: 1000px) {
+            .duo-2 { grid-template-columns: 1fr; }
+        }
+
+        /* ===== WALLET ===== */
+        #portfolio-total {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 1.1rem 1.4rem;
+            background: var(--ink-3);
+            border: 1px solid var(--line);
+            border-left: 3px solid var(--lime);
+            margin-bottom: 0.9rem;
+        }
+
+        #portfolio-total .label {
+            font-family: var(--mono);
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--txt-dim);
+        }
+
+        #portfolio-total h3 {
+            font-family: var(--mono);
+            font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+            font-weight: 700;
+            color: var(--lime);
+            letter-spacing: -1px;
+        }
+
+        #crypto-prices { display: flex; flex-direction: column; }
+
+        .crypto-item {
+            display: grid;
+            grid-template-columns: 36px 1fr auto auto;
+            align-items: center;
+            gap: 0.9rem;
+            padding: 0.9rem 1.1rem;
+            border-bottom: 1px solid var(--line-soft);
+            transition: background 0.15s;
+        }
+
+        .crypto-item:last-child { border-bottom: none; }
+        .crypto-item:hover { background: var(--ink-3); }
+
+        .crypto-item img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            filter: grayscale(30%);
+            transition: filter 0.2s;
+        }
+
+        .crypto-item:hover img { filter: none; }
+
+        .crypto-item .name { display: flex; flex-direction: column; }
+
+        .crypto-item .symbol {
+            font-family: var(--mono);
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--txt);
+        }
+
+        .crypto-item .price {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--txt-dim);
+        }
+
+        .crypto-item .holdings { display: flex; flex-direction: column; text-align: right; }
+
+        .crypto-item .holdings .amount {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--txt-dim);
+        }
+
+        .crypto-item .holdings .value {
+            font-family: var(--mono);
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--violet);
+        }
+
+        .crypto-item .change {
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            font-weight: 700;
+            min-width: 72px;
+            text-align: right;
+        }
+
+        .crypto-item .change.positive::before { content: '▲ '; font-size: 0.6rem; }
+        .crypto-item .change.negative::before { content: '▼ '; font-size: 0.6rem; }
+        .crypto-item .change.positive { color: var(--lime); }
+        .crypto-item .change.negative { color: var(--rose); }
+
+        @media (max-width: 420px) {
+            .crypto-item { grid-template-columns: 32px 1fr auto; }
+            .crypto-item .holdings { display: none; }
+        }
+
+        /* Adresses wallet */
+        .wallet-row {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 0.85rem 0;
+            border-bottom: 1px dashed var(--line);
         }
 
         .wallet-row:last-child { border-bottom: none; }
 
         .wallet-row .network {
-            font-size: 0.72rem;
+            font-family: var(--mono);
+            font-size: 0.62rem;
             font-weight: 700;
             text-transform: uppercase;
-            color: #6366f1;
-            background: #eef2ff;
-            border-radius: 8px;
-            padding: 0.25rem 0.5rem;
-            min-width: 62px;
+            letter-spacing: 1px;
+            color: var(--ink);
+            background: var(--lime);
+            padding: 0.3rem 0.5rem;
+            min-width: 52px;
             text-align: center;
         }
 
         .wallet-row .address {
             flex: 1;
-            font-family: monospace;
-            font-size: 0.78rem;
-            color: #64748b;
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            color: var(--txt-dim);
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
         .copy-button {
-            border: 1px solid #c7d2fe;
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid var(--violet);
             background: transparent;
-            color: #6366f1;
-            border-radius: 8px;
-            padding: 0.35rem 0.8rem;
-            font-size: 0.75rem;
-            font-weight: 600;
+            color: var(--violet);
+            padding: 0.4rem 0.8rem;
             cursor: pointer;
-            transition: background 0.2s, color 0.2s;
+            transition: all 0.2s;
         }
 
         .copy-button:hover {
-            background: #6366f1;
-            color: white;
+            background: var(--violet);
+            color: var(--ink);
         }
 
-        /* SweetAlert personnalisé (thème dashboard) */
-        .custom-swal-popup {
-            border-radius: 20px !important;
-            font-family: 'Inter', sans-serif !important;
+        .wallet-links-btn {
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid var(--line);
+            background: transparent;
+            color: var(--txt);
+            padding: 0.5rem 0.9rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
         }
 
-        .custom-swal-content ul {
-            list-style: none;
-            padding: 0;
+        .wallet-links-btn i { color: var(--lime); }
+
+        .wallet-links-btn:hover {
+            border-color: var(--lime);
+            color: var(--lime);
+        }
+
+        /* ===== TABLEAUX ===== */
+        .table-responsive { overflow-x: auto; }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--mono);
+            font-size: 0.78rem;
+        }
+
+        .data-table th {
             text-align: left;
+            padding: 0.8rem 1rem;
+            color: var(--txt-dim);
+            font-weight: 700;
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px solid var(--line);
+            white-space: nowrap;
         }
+
+        .data-table td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--line-soft);
+            color: var(--txt);
+            white-space: nowrap;
+        }
+
+        .data-table tbody tr { transition: background 0.15s; }
+        .data-table tbody tr:hover { background: var(--ink-3); }
+
+        .data-table code {
+            background: var(--ink-3);
+            padding: 0.15rem 0.4rem;
+            color: var(--lime);
+            font-size: 0.72rem;
+        }
+
+        /* ===== BADGES PLANS ===== */
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            font-family: var(--mono);
+            font-size: 0.62rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid;
+        }
+
+        .badge-free { background: transparent; color: var(--txt-dim); border-color: var(--line); }
+        .badge-pro { background: transparent; color: var(--lime); border-color: var(--lime); }
+        .badge-business { background: transparent; color: var(--rose); border-color: var(--rose); }
+        .badge-premium { background: transparent; color: var(--violet); border-color: var(--violet); }
+
+        /* ===== EXPORT ===== */
+        .export-btn {
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: var(--lime);
+            color: var(--ink);
+            padding: 0.55rem 1rem;
+            border: none;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: filter 0.2s;
+        }
+
+        .export-btn:hover { filter: brightness(1.1); }
+
+        /* ===== GRAPHIQUE & CARTE ===== */
+        #worldMap {
+            width: 100%;
+            height: 400px;
+            background: var(--ink-2);
+        }
+
+        .chart-wrap { position: relative; max-height: 320px; }
+
+        /* ===== EMPTY ===== */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--txt-dim);
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        /* ===== SWEETALERT ===== */
+        .custom-swal-popup {
+            background: var(--ink-2) !important;
+            color: var(--txt) !important;
+            border: 1px solid var(--line) !important;
+            border-radius: 0 !important;
+            font-family: var(--grot) !important;
+        }
+
+        .custom-swal-popup h2 {
+            font-family: var(--mono) !important;
+            color: var(--lime) !important;
+            letter-spacing: 2px;
+        }
+
+        .custom-swal-close-button { color: var(--txt-dim) !important; }
+
+        .custom-swal-content ul { list-style: none; padding: 0; text-align: left; }
 
         .custom-swal-content li {
             padding: 0.7rem 0;
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid var(--line);
+            font-family: var(--mono);
+            font-size: 0.85rem;
         }
 
         .custom-swal-content li:last-child { border-bottom: none; }
 
         .custom-swal-content a {
-            color: #6366f1;
+            color: var(--lime);
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .custom-swal-content a:hover { text-decoration: underline; }
+
+        /* ===== TOASTIFY ===== */
+        .toastify {
+            font-family: var(--mono) !important;
+            border-radius: 0 !important;
+            border-left: 3px solid var(--ink) !important;
+        }
     </style>
 </head>
 
 <body>
-    <div class="main-content">
-        <div class="container">
-            <div class="nav-buttons">
-                <a href="dashboard.php" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Dashboard
-                </a>
-                <a href="../campain/rapport.php" class="btn btn-secondary">
-                    <i class="fas fa-file-alt"></i> Rapport id5
-                </a>
-                <a href="../campain/rapport_golden.php" class="btn btn-secondary">
-                    <i class="fas fa-file-alt"></i> Rapport id4
-                </a>
-                <a href="../campain/prospect_template.php" class="btn btn-secondary">
-                    <i class="fa-regular fa-file-code"></i> Script prospection
-                </a>
-            </div>
-
-            <!-- Statistiques globales -->
-            <div class="admin-stats">
-                <div class="stat-card">
-                    <h3><i class="fas fa-users"></i> Utilisateurs</h3>
-                    <div class="stat-value"><?= number_format(count($usersList)) ?></div>
-                </div>
-                <div class="stat-card">
-                    <h3><i class="fas fa-globe"></i> Sites</h3>
-                    <div class="stat-value"><?= number_format(array_sum(array_column($topSites, 'total_site'))) ?></div>
-                </div>
-                <div class="stat-card">
-                    <h3><i class="fas fa-eye"></i> Visites</h3>
-                    <div class="stat-value"><?= number_format(array_sum(array_column($visitedCountries, 'visits'))) ?></div>
-                </div>
-                <div class="stat-card">
-                    <h3><i class="fas fa-user-check"></i> Visiteurs uniques</h3>
-                    <div class="stat-value"><?= number_format(end($historicalData)['cumulative_unique_visitors']) ?></div>
-                </div>
-            </div>
-
-            <!-- ===== WALLET CRYPTO (fusion) ===== -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><i class="fas fa-wallet"></i> Portefeuille Crypto</h2>
-                    <button class="wallet-links-btn" id="wallet-links-btn">
-                        <i class="fas fa-link"></i> Mes liens 0x
+    <!-- ===== TOPBAR avec menu déroulant "Commandes" ===== -->
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="dashboard.php">
+                <span class="sigil">LB—PX</span>
+                <small>LibreAnalytics / contrôle</small>
+            </a>
+            <div class="topbar-right">
+                <span class="live-dot">Live</span>
+                <nav class="cmd" id="cmd-menu">
+                    <button class="cmd-toggle" id="cmd-toggle" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-terminal"></i> Commandes <i class="fas fa-chevron-down caret"></i>
                     </button>
+                    <div class="cmd-menu" role="menu">
+                        <a href="dashboard.php" role="menuitem"><i class="fas fa-arrow-left"></i> Dashboard</a>
+                        <a href="../campain/rapport.php" role="menuitem"><i class="fas fa-file-alt"></i> Rapport id5</a>
+                        <a href="../campain/rapport_golden.php" role="menuitem"><i class="fas fa-file-alt"></i> Rapport id4</a>
+                        <a href="../campain/prospect_template.php" role="menuitem"><i class="fa-regular fa-file-code"></i> Script prospection</a>
+                        <a href="?export_emails=1" role="menuitem"><i class="fas fa-download"></i> Export emails CSV</a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="shell">
+        <!-- ===== HERO ===== -->
+        <section class="report">
+            <div>
+                <h1>Rapport<br><span class="stroke">SmartPixel</span></h1>
+                <p class="meta">console admin — <strong><?= date('d.m.Y') ?></strong> — accès : <?= htmlspecialchars($_SESSION['user_email']) ?></p>
+            </div>
+        </section>
+
+        <!-- ===== 01 — STATS ===== -->
+        <section class="section">
+            <div class="section-head"><span class="index">01</span><h2>Signaux globaux</h2></div>
+            <div class="stats-strip">
+                <div class="stat">
+                    <div class="k"><i class="fas fa-users"></i> Utilisateurs</div>
+                    <div class="v"><?= number_format(count($usersList)) ?></div>
                 </div>
-                <div class="crypto-grid">
-                    <div>
-                        <!-- Total + tokens injectés par le JS -->
-                        <div id="crypto-wallet">
-                            <div id="crypto-prices"></div>
+                <div class="stat">
+                    <div class="k"><i class="fas fa-globe"></i> Sites</div>
+                    <div class="v"><?= number_format(array_sum(array_column($topSites, 'total_site'))) ?></div>
+                </div>
+                <div class="stat">
+                    <div class="k"><i class="fas fa-eye"></i> Visites</div>
+                    <div class="v"><?= number_format(array_sum(array_column($visitedCountries, 'visits'))) ?></div>
+                </div>
+                <div class="stat">
+                    <div class="k"><i class="fas fa-user-check"></i> Visiteurs uniques</div>
+                    <div class="v"><?= number_format(end($historicalData)['cumulative_unique_visitors']) ?></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== 02 — WALLET CRYPTO ===== -->
+        <section class="section">
+            <div class="section-head"><span class="index">02</span><h2>Wallet — temps réel</h2></div>
+            <div class="duo">
+                <div class="panel">
+                    <div class="panel-head">
+                        <h3 class="panel-title"><i class="fas fa-wallet"></i> Token</h3>
+                        <button class="wallet-links-btn" id="wallet-links-btn">
+                            <i class="fas fa-link"></i> Liens 0x
+                        </button>
+                    </div>
+                    <div class="panel-body">
+                        <div id="crypto-prices"></div>
+                    </div>
+                </div>
+                <div class="panel">
+                    <div class="panel-head">
+                        <h3 class="panel-title"><i class="fas fa-key"></i> Adresses</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="wallet-row">
+                            <span class="network">Sol</span>
+                            <span class="address" id="sol-address">D6khWoqvc2zX46HVtSZcNrPumnPLPM72SnSuDhBrZeTC</span>
+                            <button class="copy-button" data-target="sol-address">Copy</button>
+                        </div>
+                        <div class="wallet-row">
+                            <span class="network">BTC</span>
+                            <span class="address" id="btc-address">bc1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
+                            <button class="copy-button" data-target="btc-address">Copy</button>
                         </div>
                     </div>
-                    <div>
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Réseau</th>
-                                    <th>Adresse</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="wallet-row">
-                                    <td><span class="network">Sol</span></td>
-                                    <td><span class="address" id="sol-address">D6khWoqvc2zX46HVtSZcNrPumnPLPM72SnSuDhBrZeTC</span></td>
-                                    <td><button class="copy-button" data-target="sol-address">Copier</button></td>
-                                </tr>
-                                <tr class="wallet-row">
-                                    <td><span class="network">BTC</span></td>
-                                    <td><span class="address" id="btc-address">bc1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span></td>
-                                    <td><button class="copy-button" data-target="btc-address">Copier</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== 03 — CROISSANCE ===== -->
+        <section class="section">
+            <div class="section-head"><span class="index">03</span><h2>Croissance générale</h2></div>
+            <div class="panel">
+                <div class="panel-head">
+                    <h3 class="panel-title"><i class="fas fa-chart-line"></i> Évolution cumulative — 7 jours</h3>
+                </div>
+                <div class="panel-body chart-wrap">
+                    <canvas id="globalStatsChart" height="110"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== 04 — TOP SITES + CARTE ===== -->
+        <section class="section">
+            <div class="section-head"><span class="index">04</span><h2>Top sites &amp; géographie</h2></div>
+            <div class="duo-2">
+                <div class="panel">
+                    <div class="panel-head">
+                        <h3 class="panel-title"><i class="fas fa-trophy"></i> Top 5 sites</h3>
+                    </div>
+                    <div class="panel-body" style="padding: 0;">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Visites</th>
+                                        <th>ID</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if (!empty($topSites)): ?>
+                                        <?php foreach ($topSites as $site): ?>
+                                            <tr>
+                                                <td><?= htmlspecialchars($site['site_name']) ?></td>
+                                                <td><strong style="color: var(--lime);"><?= number_format($site['total_visits']) ?></strong></td>
+                                                <td><code><?= htmlspecialchars($site['id']) ?></code></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="3" class="empty-state">Aucune donnée</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel">
+                    <div class="panel-head">
+                        <h3 class="panel-title"><i class="fas fa-map-marked-alt"></i> Pays visités (Top 20)</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="worldMap"></div>
                     </div>
                 </div>
             </div>
-            <!-- ===== /WALLET CRYPTO ===== -->
+        </section>
 
-            <!-- Graphique 4 courbes -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><i class="fas fa-chart-line"></i> Croissance générale</h2>
-                    <span style="font-size:0.85rem; color:#64748b;">Évolution cumulative</span>
+        <!-- ===== 05 — UTILISATEURS ===== -->
+        <section class="section">
+            <div class="section-head"><span class="index">05</span><h2>Registre des utilisateurs (<?= count($usersList) ?>)</h2></div>
+            <div class="panel">
+                <div class="panel-head">
+                    <h3 class="panel-title"><i class="fas fa-address-card"></i> Comptes</h3>
+                    <a href="?export_emails=1" class="export-btn">
+                        <i class="fas fa-download"></i> Exporter les emails
+                    </a>
                 </div>
-                <canvas id="globalStatsChart" height="110" style="max-height:300px; width:100%;"></canvas>
-            </div>
-
-            <!-- Top 5 des sites + Carte -->
-            <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 1.5rem; margin-bottom: 2.5rem;">
-                <div class="card" style="padding: 1.5rem;">
-                    <div class="card-header" style="margin-bottom: 0.5rem;">
-                        <h3 class="card-title"><i class="fas fa-trophy"></i> Top 5 sites</h3>
-                    </div>
+                <div class="panel-body" style="padding: 0;">
                     <div class="table-responsive">
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>Nom</th>
+                                    <th>Email</th>
+                                    <th>Plan</th>
+                                    <th>Sites</th>
                                     <th>Visites</th>
-                                    <th>ID</th>
+                                    <th>Inscription</th>
+                                    <th>Dernière connexion</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php if (!empty($topSites)): ?>
-                                    <?php foreach ($topSites as $site): ?>
+                                <?php if (!empty($usersList)): ?>
+                                    <?php foreach ($usersList as $user):
+                                        // Gestion de la classe du badge selon le plan
+                                        $planClass = 'free'; // default
+                                        if (isset($user['plan'])) {
+                                            $planClass = strtolower($user['plan']);
+                                        }
+                                    ?>
                                         <tr>
-                                            <td><?= htmlspecialchars($site['site_name']) ?></td>
-                                            <td><strong><?= number_format($site['total_visits']) ?></strong></td>
-                                            <td><code><?= htmlspecialchars($site['id']) ?></code></td>
+                                            <td><?= htmlspecialchars($user['email']) ?></td>
+                                            <td><span class="badge badge-<?= $planClass ?>"><?= strtoupper($user['plan'] ?? 'free') ?></span></td>
+                                            <td><?= (int)($user['site_count'] ?? 0) ?></td>
+                                            <td><?= number_format($user['total_visits'] ?? 0) ?></td>
+                                            <td><?= isset($user['created_at']) ? (new DateTime($user['created_at']))->format('d/m/Y') : '-' ?></td>
+                                            <td><?= isset($user['last_login']) && $user['last_login'] ? (new DateTime($user['last_login']))->format('d/m/Y H:i') : '<span style="color:var(--txt-dim);">Jamais</span>' ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="3" class="empty-state">Aucune donnée</td>
+                                        <td colspan="6" class="empty-state">Aucun utilisateur enregistré</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="card" style="padding: 1.5rem;">
-                    <div class="card-header" style="margin-bottom: 0.5rem;">
-                        <h3 class="card-title"><i class="fas fa-map-marked-alt"></i> Pays visités (Top 20)</h3>
-                    </div>
-                    <div id="worldMap"></div>
-                </div>
             </div>
-
-            <!-- Liste des utilisateurs -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><i class="fas fa-address-card"></i> Utilisateurs (<?= count($usersList) ?>)</h2>
-                    <a href="?export_emails=1" class="export-btn">
-                        <i class="fas fa-download"></i> Exporter les emails
-                    </a>
-                </div>
-                <div class="table-responsive">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Email</th>
-                                <th>Plan</th>
-                                <th>Sites</th>
-                                <th>Visites</th>
-                                <th>Inscription</th>
-                                <th>Dernière connexion</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (!empty($usersList)): ?>
-                                <?php foreach ($usersList as $user):
-                                    $planClass = 'free';
-                                    if (isset($user['plan'])) {
-                                        $planClass = strtolower($user['plan']);
-                                    }
-                                ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($user['email']) ?></td>
-                                        <td><span class="badge badge-<?= $planClass ?>"><?= strtoupper($user['plan'] ?? 'free') ?></span></td>
-                                        <td><?= (int)($user['site_count'] ?? 0) ?></td>
-                                        <td><?= number_format($user['total_visits'] ?? 0) ?></td>
-                                        <td><?= isset($user['created_at']) ? (new DateTime($user['created_at']))->format('d/m/Y') : '-' ?></td>
-                                        <td><?= isset($user['last_login']) && $user['last_login'] ? (new DateTime($user['last_login']))->format('d/m/Y H:i') : '<span style="color:#94a3b8;">Jamais</span>' ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <tr>
-                                    <td colspan="6" class="empty-state">Aucun utilisateur enregistré</td>
-                                </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </div> <!-- .container -->
-    </div> <!-- .main-content -->
+        </section>
+    </div> <!-- .shell -->
 
     <script>
+        // ===== MENU DÉROULANT "COMMANDES" =====
+        (function () {
+            const cmd = document.getElementById('cmd-menu');
+            const toggle = document.getElementById('cmd-toggle');
+
+            toggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const open = cmd.classList.toggle('open');
+                toggle.setAttribute('aria-expanded', open);
+            });
+
+            // Fermer au clic extérieur ou à l'échappement
+            document.addEventListener('click', (e) => {
+                if (!cmd.contains(e.target)) {
+                    cmd.classList.remove('open');
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    cmd.classList.remove('open');
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        })();
+
         // ===== WALLET CRYPTO =====
         const tokenHoldings = {
             bitcoin: 0,
@@ -818,7 +1107,7 @@ if (isset($_GET['export_emails'])) {
                     const container = document.getElementById('crypto-prices');
                     let totalPortfolioValue = 0;
 
-                    // Total en tête de la liste
+                    // Total du portefeuille en tête
                     let totalElement = document.querySelector('#portfolio-total');
                     if (!totalElement) {
                         totalElement = document.createElement('div');
@@ -866,7 +1155,7 @@ if (isset($_GET['export_emails'])) {
                         changeElement.classList.toggle('negative', change24h < 0);
                     });
 
-                    totalElement.innerHTML = `<div class="label">Valeur totale (temps réel)</div><h3>${totalPortfolioValue.toFixed(2)} €</h3>`;
+                    totalElement.innerHTML = `<div class="label">Valeur totale — live</div><h3>${totalPortfolioValue.toFixed(2)} €</h3>`;
                 })
                 .catch(error => console.error('Erreur lors de la récupération des données:', error));
         }
@@ -875,7 +1164,7 @@ if (isset($_GET['export_emails'])) {
         // Rafraîchissement toutes les 60s (limite gratuite CoinGecko)
         setInterval(refreshCryptoPrices, 60000);
 
-        // Liens 0x (ex-hamburger menu) via SweetAlert2
+        // Liens 0x via SweetAlert2
         document.getElementById('wallet-links-btn').addEventListener('click', () => {
             Swal.fire({
                 title: '0x',
@@ -900,7 +1189,7 @@ if (isset($_GET['export_emails'])) {
                     duration: 2000,
                     gravity: "center",
                     position: "center",
-                    backgroundColor: "#6366f1",
+                    backgroundColor: "#c8f65d",
                 }).showToast();
 
                 if (navigator.clipboard && window.isSecureContext) {
@@ -924,6 +1213,9 @@ if (isset($_GET['export_emails'])) {
         // ===== DASHBOARD PIXEL =====
         // --- Graphique 4 courbes ---
         const globalCtx = document.getElementById('globalStatsChart').getContext('2d');
+        Chart.defaults.font.family = "'JetBrains Mono', monospace";
+        Chart.defaults.color = '#8b90a5';
+
         new Chart(globalCtx, {
             type: 'line',
             data: {
@@ -931,8 +1223,8 @@ if (isset($_GET['export_emails'])) {
                 datasets: [{
                         label: 'Utilisateurs',
                         data: <?= json_encode(array_column($historicalData, 'cumulative_users')) ?>,
-                        borderColor: '#9d86ff',
-                        backgroundColor: 'rgba(244, 63, 94, 0.05)',
+                        borderColor: '#ab9ff2',
+                        backgroundColor: 'rgba(171, 159, 242, 0.06)',
                         tension: 0.2,
                         fill: true,
                         pointRadius: 2
@@ -941,7 +1233,7 @@ if (isset($_GET['export_emails'])) {
                         label: 'Sites',
                         data: <?= json_encode(array_column($historicalData, 'cumulative_sites')) ?>,
                         borderColor: '#86baff',
-                        backgroundColor: 'rgba(59, 130, 246, 0.05)',
+                        backgroundColor: 'rgba(134, 186, 255, 0.06)',
                         tension: 0.2,
                         fill: true,
                         pointRadius: 2
@@ -949,8 +1241,8 @@ if (isset($_GET['export_emails'])) {
                     {
                         label: 'Visites',
                         data: <?= json_encode(array_column($historicalData, 'cumulative_visits')) ?>,
-                        borderColor: '#86ff94',
-                        backgroundColor: 'rgba(16, 185, 129, 0.05)',
+                        borderColor: '#c8f65d',
+                        backgroundColor: 'rgba(200, 246, 93, 0.06)',
                         tension: 0.2,
                         fill: true,
                         pointRadius: 2
@@ -958,8 +1250,8 @@ if (isset($_GET['export_emails'])) {
                     {
                         label: 'Visiteurs uniques',
                         data: <?= json_encode(array_column($historicalData, 'cumulative_unique_visitors')) ?>,
-                        borderColor: '#ff9686',
-                        backgroundColor: 'rgba(245, 158, 11, 0.05)',
+                        borderColor: '#ff7a8a',
+                        backgroundColor: 'rgba(255, 122, 138, 0.06)',
                         tension: 0.2,
                         fill: true,
                         pointRadius: 2
@@ -995,7 +1287,7 @@ if (isset($_GET['export_emails'])) {
                     y: {
                         beginAtZero: true,
                         grid: {
-                            color: '#f1f5f9'
+                            color: '#1b2030'
                         },
                         title: {
                             display: true,
@@ -1054,6 +1346,7 @@ if (isset($_GET['export_emails'])) {
 
             const root = am5.Root.new("worldMap");
             root.setThemes([am5themes_Animated.new(root)]);
+            root._logo && root._logo.dispose && root._logo.dispose();
 
             const chart = root.container.children.push(
                 am5map.MapChart.new(root, {
@@ -1074,21 +1367,22 @@ if (isset($_GET['export_emails'])) {
             polygonSeries.mapPolygons.template.setAll({
                 tooltipText: "{name}: {value} visites",
                 interactive: true,
-                fill: am5.color(0x9d86ff),
-                stroke: am5.color(0xffffff),
+                fill: am5.color(0x232839),
+                stroke: am5.color(0x0b0d12),
                 strokeWidth: 0.5
             });
 
             polygonSeries.data.setAll(countryData);
             polygonSeries.set("heatRules", [{
                 target: polygonSeries.mapPolygons.template,
-                min: am5.color(0x3333aa),
-                max: am5.color(0x5f3dc4),
+                min: am5.color(0x3d3568),
+                max: am5.color(0xc8f65d),
                 dataField: "value"
             }]);
 
+            // Animation de survol
             polygonSeries.mapPolygons.template.states.create("hover", {
-                fill: am5.color(0x3333aa)
+                fill: am5.color(0xab9ff2)
             });
         });
     </script>
