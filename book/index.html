@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>truc</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+  <style>
+    :root {
+      --bg: #1d1d1e;
+      --card: #1e1e1e;
+      --accent: #9d86ff;
+      --green: #4ecd94;
+      --red: #ff6b8b;
+      --text: #e8eaf2;
+      --muted: #8b90a5;
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+    }
+
+    /* ===== Header ===== */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      letter-spacing: 0.5px;
+    }
+
+    .hamburger-menu {
+      width: 42px;
+      height: 42px;
+      border: 1px solid #2e3247;
+      border-radius: 10px;
+      background: var(--card);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: border-color 0.2s;
+    }
+
+    .hamburger-menu:hover { border-color: var(--accent); }
+
+    .hamburger-menu span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+    }
+
+    /* ===== Total portefeuille ===== */
+    #portfolio-total {
+      background: linear-gradient(135deg, #262a40, #1a1d2e);
+      border: 1px solid #2e3247;
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #portfolio-total .label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    #portfolio-total h3 {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    /* ===== Liste des cryptos ===== */
+    #crypto-prices {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .crypto-item {
+      background: var(--card);
+      border: 1px solid #2e3247;
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: 34px 1fr auto auto;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .crypto-item img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+    }
+
+    .crypto-item .name {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .crypto-item .symbol {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .crypto-item .price {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .crypto-item .holdings {
+      display: flex;
+      flex-direction: column;
+      text-align: right;
+    }
+
+    .crypto-item .holdings .amount {
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .crypto-item .holdings .value {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .crypto-item .change {
+      font-size: 0.95rem;
+      font-weight: 600;
+      min-width: 70px;
+      text-align: right;
+    }
+
+    /* ===== Adresses / boutons copier ===== */
+    .wallets {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .wallet-row {
+      background: var(--card);
+      border: 1px solid #2e3247;
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .wallet-row .network {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--accent);
+      min-width: 60px;
+    }
+
+    .wallet-row .address {
+      flex: 1;
+      font-family: monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .copy-button {
+      border: 1px solid var(--accent);
+      background: transparent;
+      color: var(--accent);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .copy-button:hover {
+      background: var(--accent);
+      color: #14161f;
+    }
+
+    /* ===== SweetAlert personnalisé ===== */
+    .custom-swal-popup {
+      background: #1e2130 !important;
+      color: #e8eaf2 !important;
+      border-radius: 16px !important;
+    }
+
+    .custom-swal-close-button {
+      color: #8b90a5 !important;
+    }
+
+    .custom-swal-content ul {
+      list-style: none;
+      padding: 0;
+      text-align: left;
+    }
+
+    .custom-swal-content li {
+      padding: 10px 0;
+      border-bottom: 1px solid #2e3247;
+      font-size: 1rem;
+    }
+
+    .custom-swal-content a {
+      color: #ab9ff2;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .custom-swal-content a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 400px) {
+      .crypto-item .change {
+        min-width: 55px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>.</h1>
+      <div class="hamburger-menu" title="Liens">
+        <span></span><span></span><span></span>
+      </div>
+    </header>
+
+    <!-- Le total est injecté ici par le JS (#portfolio-total) -->
+    <div id="crypto-prices"></div>
+
+    <div class="wallets">
+      <div class="wallet-row">
+        <span class="network">Sol</span>
+        <span class="address" id="sol-address">D6khWoqvc2zX46HVtSZcNrPumnPLPM72SnSuDhBrZeTC</span>
+        <button class="copy-button" data-target="sol-address">Copier</button>
+      </div>
+      <div class="wallet-row">
+        <span class="network">BTC</span>
+        <span class="address" id="btc-address">bc1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
+        <button class="copy-button" data-target="btc-address">Copier</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tokenHoldings = {
+      bitcoin: 0,
+      solana: 4.65,
+      sui: 613,
+    };
+
+    function refreshPrices() {
+      fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=bitcoin,solana,sui')
+        .then(response => response.json())
+        .then(data => {
+          const container = document.getElementById('crypto-prices');
+
+          let totalPortfolioValue = 0;
+
+          data.forEach(crypto => {
+            const price = crypto.current_price;
+            const change24h = crypto.price_change_percentage_24h.toFixed(2);
+            const holdings = tokenHoldings[crypto.id] || 0;
+            const totalValue = (price * holdings).toFixed(2);
+            const imageUrl = crypto.image;
+
+            totalPortfolioValue += parseFloat(totalValue);
+
+            let cryptoElement = document.querySelector(`#${crypto.id}`);
+
+            if (!cryptoElement) {
+              cryptoElement = document.createElement('div');
+              cryptoElement.id = crypto.id;
+              cryptoElement.classList.add('crypto-item');
+              cryptoElement.innerHTML = `
+                <img src="${imageUrl}" alt="${crypto.id} logo">
+                <div class="name">
+                  <span class="symbol">${crypto.symbol.toUpperCase()}</span>
+                  <span class="price">${price.toFixed(2)} €</span>
+                </div>
+                <div class="holdings">
+                  <span class="amount">${holdings} ${crypto.symbol.toUpperCase()}</span>
+                  <span class="value">${totalValue} €</span>
+                </div>
+                <p class="change">${change24h}%</p>
+              `;
+              container.appendChild(cryptoElement);
+            } else {
+              cryptoElement.querySelector('.price').textContent = `${price.toFixed(2)} €`;
+              cryptoElement.querySelector('.amount').textContent = `${holdings} ${crypto.symbol.toUpperCase()}`;
+              cryptoElement.querySelector('.value').textContent = `${totalValue} €`;
+              cryptoElement.querySelector('.change').textContent = `${change24h}%`;
+            }
+
+            const changeElement = cryptoElement.querySelector('.change');
+            changeElement.style.color = change24h < 0 ? '#f56545' : '#3ad38b';
+          });
+
+          let totalElement = document.querySelector('#portfolio-total');
+          if (!totalElement) {
+            totalElement = document.createElement('div');
+            totalElement.id = 'portfolio-total';
+            totalElement.classList.add('portfolio-total');
+            container.prepend(totalElement);
+          }
+
+          totalElement.innerHTML = `<div class="label">Valeur totale (temps réel)</div><h3 id="total" style="color:#ab9ff2">${totalPortfolioValue.toFixed(2)} €</h3>`;
+        })
+        .catch(error => console.error('Erreur lors de la récupération des données:', error));
+    }
+
+    refreshPrices();
+    // Rafraîchissement toutes les 60 secondes (limite gratuite CoinGecko)
+    setInterval(refreshPrices, 60000);
+
+    const hamburgerMenu = document.querySelector('.hamburger-menu');
+
+    hamburgerMenu.addEventListener('click', () => {
+      Swal.fire({
+        title: '0x',
+        html: '<ul><li><a href="https://accounts.binance.com/register?ref=">Binance</a>.com</li><li><a href="https://shop.ledger.com/?r=">Ledger</a>/live</li><li><a href="https://app.uniswap.org">Uniswap</a>.org<li><a href="#">Phantom</a>/app</li><li><a href="https://solscan.io/account/D6khWoqvc2zX46HVtSZcNrPumnPLPM72SnSuDhBrZeTC#portfolio">Solscan</a>.io</li><li><a href="https://pump.fun/profile/D6khWo">Pump</a>.fun</li><li><a href="https://jup.ag">jup</a>.ag</li></ul>',
+        showCloseButton: true,
+        showConfirmButton: false,
+        customClass: {
+          popup: 'custom-swal-popup',
+          closeButton: 'custom-swal-close-button',
+          content: 'custom-swal-content',
+        }
+      });
+    });
+
+    document.querySelectorAll('.copy-button').forEach(button => {
+      button.addEventListener('click', function () {
+        const targetId = this.getAttribute('data-target');
+        const addressElement = document.getElementById(targetId);
+        const address = addressElement.textContent;
+
+        const tempInput = document.createElement('input');
+        tempInput.value = address;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+
+        Toastify({
+          text: "✅ Adresse copiée !",
+          duration: 2000,
+          gravity: "center",
+          position: "center",
+          backgroundColor: "#3ad38b",
+        }).showToast();
+      });
+    });
+  </script>
+</body>
+</html>

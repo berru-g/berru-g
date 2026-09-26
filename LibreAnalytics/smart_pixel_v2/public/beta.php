@@ -83,7 +83,7 @@ try {
     $stmt = $pdo->query("SELECT plan, COUNT(*) AS count FROM users GROUP BY plan");
     $plansStats = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
-    // Activité récente (7 jours)
+    // Activité récente
     $stmt = $pdo->query("
         SELECT DATE(created_at) AS date, COUNT(*) AS count
         FROM users
@@ -127,15 +127,19 @@ if (isset($_GET['export_emails'])) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Votre CSS existant (s'assurer qu'il est bien versionné) -->
+    <!-- CSS existant -->
     <link rel="stylesheet" href="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/assets/dashboard.css">
-    <!-- CDN optimisés (conservés) -->
+    <!-- CDN optimisés -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <!-- Wallet crypto : SweetAlert2 + Toastify -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <style>
         /* ===== VARIABLES & RESET ===== */
         * {
@@ -399,6 +403,223 @@ if (isset($_GET['export_emails'])) {
             color: #94a3b8;
             font-style: italic;
         }
+
+        /* ==========================================
+           ===== WALLET CRYPTO (fusion) =============
+           Adapte le thème sombre du wallet au thème
+           clair du dashboard : cartes blanches,
+           accent #6366f1, badges, tables.
+           ========================================== */
+
+        .crypto-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .crypto-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        #portfolio-total {
+            background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+            border: 1px solid #e0e7ff;
+            border-radius: 18px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        #portfolio-total .label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #64748b;
+        }
+
+        #portfolio-total h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #6366f1;
+        }
+
+        #crypto-prices {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .crypto-item {
+            display: grid;
+            grid-template-columns: 34px 1fr auto auto;
+            align-items: center;
+            gap: 12px;
+            padding: 0.8rem 1rem;
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            border-radius: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .crypto-item:hover {
+            border-color: #c7d2fe;
+        }
+
+        .crypto-item img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        .crypto-item .name {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .crypto-item .symbol {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .crypto-item .price {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        .crypto-item .holdings {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .crypto-item .holdings .amount {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .crypto-item .holdings .value {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #6366f1;
+        }
+
+        .crypto-item .change {
+            font-size: 0.9rem;
+            font-weight: 600;
+            min-width: 70px;
+            text-align: right;
+        }
+
+        .crypto-item .change.positive { color: #3ad38b; }
+        .crypto-item .change.negative { color: #f56545; }
+
+        /* Bouton liens wallet (ex-hamburger) */
+        .wallet-links-btn {
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: #1e293b;
+            padding: 0.6rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+        }
+
+        .wallet-links-btn:hover {
+            background: #f8fafc;
+            border-color: #94a3b8;
+        }
+
+        .wallet-links-btn i { color: #6366f1; }
+
+        /* Adresses + bouton copier */
+        .wallet-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .wallet-row:last-child { border-bottom: none; }
+
+        .wallet-row .network {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #6366f1;
+            background: #eef2ff;
+            border-radius: 8px;
+            padding: 0.25rem 0.5rem;
+            min-width: 62px;
+            text-align: center;
+        }
+
+        .wallet-row .address {
+            flex: 1;
+            font-family: monospace;
+            font-size: 0.78rem;
+            color: #64748b;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .copy-button {
+            border: 1px solid #c7d2fe;
+            background: transparent;
+            color: #6366f1;
+            border-radius: 8px;
+            padding: 0.35rem 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .copy-button:hover {
+            background: #6366f1;
+            color: white;
+        }
+
+        /* SweetAlert personnalisé (thème dashboard) */
+        .custom-swal-popup {
+            border-radius: 20px !important;
+            font-family: 'Inter', sans-serif !important;
+        }
+
+        .custom-swal-content ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .custom-swal-content li {
+            padding: 0.7rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .custom-swal-content li:last-child { border-bottom: none; }
+
+        .custom-swal-content a {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .custom-swal-content a:hover { text-decoration: underline; }
     </style>
 </head>
 
@@ -420,7 +641,7 @@ if (isset($_GET['export_emails'])) {
                 </a>
             </div>
 
-            <!-- Statistiques globales : design plus aéré -->
+            <!-- Statistiques globales -->
             <div class="admin-stats">
                 <div class="stat-card">
                     <h3><i class="fas fa-users"></i> Utilisateurs</h3>
@@ -440,7 +661,49 @@ if (isset($_GET['export_emails'])) {
                 </div>
             </div>
 
-            <!-- Graphique 4 courbes : plus d'espace -->
+            <!-- ===== WALLET CRYPTO (fusion) ===== -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-wallet"></i> Portefeuille Crypto</h2>
+                    <button class="wallet-links-btn" id="wallet-links-btn">
+                        <i class="fas fa-link"></i> Mes liens 0x
+                    </button>
+                </div>
+                <div class="crypto-grid">
+                    <div>
+                        <!-- Total + tokens injectés par le JS -->
+                        <div id="crypto-wallet">
+                            <div id="crypto-prices"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Réseau</th>
+                                    <th>Adresse</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="wallet-row">
+                                    <td><span class="network">Sol</span></td>
+                                    <td><span class="address" id="sol-address">D6khWoqvc2zX46HVtSZcNrPumnPLPM72SnSuDhBrZeTC</span></td>
+                                    <td><button class="copy-button" data-target="sol-address">Copier</button></td>
+                                </tr>
+                                <tr class="wallet-row">
+                                    <td><span class="network">BTC</span></td>
+                                    <td><span class="address" id="btc-address">bc1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span></td>
+                                    <td><button class="copy-button" data-target="btc-address">Copier</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- ===== /WALLET CRYPTO ===== -->
+
+            <!-- Graphique 4 courbes -->
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title"><i class="fas fa-chart-line"></i> Croissance générale</h2>
@@ -449,9 +712,8 @@ if (isset($_GET['export_emails'])) {
                 <canvas id="globalStatsChart" height="110" style="max-height:300px; width:100%;"></canvas>
             </div>
 
-            <!-- Top 5 des sites + Carte (deux colonnes sur écran large) -->
+            <!-- Top 5 des sites + Carte -->
             <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 1.5rem; margin-bottom: 2.5rem;">
-                <!-- Top sites -->
                 <div class="card" style="padding: 1.5rem;">
                     <div class="card-header" style="margin-bottom: 0.5rem;">
                         <h3 class="card-title"><i class="fas fa-trophy"></i> Top 5 sites</h3>
@@ -483,7 +745,6 @@ if (isset($_GET['export_emails'])) {
                         </table>
                     </div>
                 </div>
-                <!-- Carte -->
                 <div class="card" style="padding: 1.5rem;">
                     <div class="card-header" style="margin-bottom: 0.5rem;">
                         <h3 class="card-title"><i class="fas fa-map-marked-alt"></i> Pays visités (Top 20)</h3>
@@ -515,8 +776,7 @@ if (isset($_GET['export_emails'])) {
                         <tbody>
                             <?php if (!empty($usersList)): ?>
                                 <?php foreach ($usersList as $user):
-                                    // Gestion de la classe du badge selon le plan
-                                    $planClass = 'free'; // default
+                                    $planClass = 'free';
                                     if (isset($user['plan'])) {
                                         $planClass = strtolower($user['plan']);
                                     }
@@ -544,7 +804,125 @@ if (isset($_GET['export_emails'])) {
     </div> <!-- .main-content -->
 
     <script>
-        // --- Graphique 4 courbes (inchangé mais design préservé) ---
+        // ===== WALLET CRYPTO =====
+        const tokenHoldings = {
+            bitcoin: 0,
+            solana: 4.65,
+            sui: 613,
+        };
+
+        function refreshCryptoPrices() {
+            fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=bitcoin,solana,sui')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('crypto-prices');
+                    let totalPortfolioValue = 0;
+
+                    // Total en tête de la liste
+                    let totalElement = document.querySelector('#portfolio-total');
+                    if (!totalElement) {
+                        totalElement = document.createElement('div');
+                        totalElement.id = 'portfolio-total';
+                        container.prepend(totalElement);
+                    }
+
+                    data.forEach(crypto => {
+                        const price = crypto.current_price;
+                        const change24h = crypto.price_change_percentage_24h.toFixed(2);
+                        const holdings = tokenHoldings[crypto.id] || 0;
+                        const totalValue = (price * holdings).toFixed(2);
+                        const imageUrl = crypto.image;
+
+                        totalPortfolioValue += parseFloat(totalValue);
+
+                        let cryptoElement = document.querySelector(`#${crypto.id}`);
+
+                        if (!cryptoElement) {
+                            cryptoElement = document.createElement('div');
+                            cryptoElement.id = crypto.id;
+                            cryptoElement.classList.add('crypto-item');
+                            cryptoElement.innerHTML = `
+                                <img src="${imageUrl}" alt="${crypto.id} logo">
+                                <div class="name">
+                                    <span class="symbol">${crypto.symbol.toUpperCase()}</span>
+                                    <span class="price">${price.toLocaleString('fr-FR', {minimumFractionDigits: 2})} €</span>
+                                </div>
+                                <div class="holdings">
+                                    <span class="amount">${holdings} ${crypto.symbol.toUpperCase()}</span>
+                                    <span class="value">${totalValue} €</span>
+                                </div>
+                                <p class="change">${change24h}%</p>
+                            `;
+                            container.appendChild(cryptoElement);
+                        } else {
+                            cryptoElement.querySelector('.price').textContent = `${price.toLocaleString('fr-FR', {minimumFractionDigits: 2})} €`;
+                            cryptoElement.querySelector('.amount').textContent = `${holdings} ${crypto.symbol.toUpperCase()}`;
+                            cryptoElement.querySelector('.value').textContent = `${totalValue} €`;
+                            cryptoElement.querySelector('.change').textContent = `${change24h}%`;
+                        }
+
+                        const changeElement = cryptoElement.querySelector('.change');
+                        changeElement.classList.toggle('positive', change24h >= 0);
+                        changeElement.classList.toggle('negative', change24h < 0);
+                    });
+
+                    totalElement.innerHTML = `<div class="label">Valeur totale (temps réel)</div><h3>${totalPortfolioValue.toFixed(2)} €</h3>`;
+                })
+                .catch(error => console.error('Erreur lors de la récupération des données:', error));
+        }
+
+        refreshCryptoPrices();
+        // Rafraîchissement toutes les 60s (limite gratuite CoinGecko)
+        setInterval(refreshCryptoPrices, 60000);
+
+        // Liens 0x (ex-hamburger menu) via SweetAlert2
+        document.getElementById('wallet-links-btn').addEventListener('click', () => {
+            Swal.fire({
+                title: '0x',
+                html: '<ul><li><a href="https://accounts.binance.com/register?ref=">Binance</a>.com</li><li><a href="https://shop.ledger.com/?r=">Ledger</a>/live</li><li><a href="https://app.uniswap.org">Uniswap</a>.org<li><a href="#">Phantom</a>/app</li><li><a href="https://solscan.io/account/D6khWoqvc2zX46HVtSZcNrPumnPLPM72SnSuDhBrZeTC#portfolio">Solscan</a>.io</li><li><a href="https://pump.fun/profile/D6khWo">Pump</a>.fun</li><li><a href="https://jup.ag">jup</a>.ag</li></ul>',
+                showCloseButton: true,
+                showConfirmButton: false,
+                customClass: {
+                    popup: 'custom-swal-popup',
+                    closeButton: 'custom-swal-close-button',
+                    content: 'custom-swal-content',
+                }
+            });
+        });
+
+        // Copie des adresses (API Clipboard moderne + fallback)
+        document.querySelectorAll('.copy-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const address = document.getElementById(this.getAttribute('data-target')).textContent;
+
+                const done = () => Toastify({
+                    text: "✅ Adresse copiée !",
+                    duration: 2000,
+                    gravity: "center",
+                    position: "center",
+                    backgroundColor: "#6366f1",
+                }).showToast();
+
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(address).then(done).catch(() => fallbackCopy(address, done));
+                } else {
+                    fallbackCopy(address, done);
+                }
+            });
+        });
+
+        function fallbackCopy(text, callback) {
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            callback();
+        }
+
+        // ===== DASHBOARD PIXEL =====
+        // --- Graphique 4 courbes ---
         const globalCtx = document.getElementById('globalStatsChart').getContext('2d');
         new Chart(globalCtx, {
             type: 'line',
@@ -628,7 +1006,7 @@ if (isset($_GET['export_emails'])) {
             }
         });
 
-        // --- Carte du monde (optimisation) ---
+        // --- Carte du monde ---
         document.addEventListener('DOMContentLoaded', function() {
             const countries = <?= json_encode($visitedCountries ?? []) ?>;
             if (!countries.length) {
@@ -709,7 +1087,6 @@ if (isset($_GET['export_emails'])) {
                 dataField: "value"
             }]);
 
-            // Ajout d'une animation de survol
             polygonSeries.mapPolygons.template.states.create("hover", {
                 fill: am5.color(0x3333aa)
             });
