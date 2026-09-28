@@ -1,5 +1,17 @@
 const projectsDatabase = [
     {
+        id: 'NFC-Badge',
+        title: 'NFC Badge',
+        shortDesc: 'Création d\'un Badge NFC.',
+        longDesc: 'Création d\'un Badge NFC reprogrammable open-source. Basé sur la puce NT3H2111.',
+        keywords: ['nfc', 'badge', 'open-source', 'NT3H2111', 'hardware', 'pcb', 'hardware'],
+        image: 'https://github.com/berru-g/NFC_Badge/raw/main/img/Scarabe-nfc-broche.png',
+        link: 'https://github.com/berru-g/NFC-Badge',
+        category: 'hardware',
+        features: ['Création électronique', 'easyeda', 'PCB', 'open-source'],
+        tags: ['nfc', 'badge', 'open-source', 'NT3H2111', 'hardware']
+    },
+    {
         id: 'berru-clothing',
         title: 'Berru Clothing',
         shortDesc: 'Création d\'une marque de fringue et site e-commerce de vêtements',
@@ -167,18 +179,6 @@ const projectsDatabase = [
         features: ['API CoinGecko', '3D', 'Threejs', 'map', 'webgl'],
         tags: ['tool', '3D', 'crypto', 'heatmap', 'api', 'threejs']
     },
-    /* {
-         id: 'guide-crypto',
-         title: 'Guide Crypto débutant',
-         shortDesc: 'Guide crypto débutant',
-         longDesc: 'Guide crypto débutant. Pas pour devenir riche mais pour apprendre à naviguer en sécurité.',
-         keywords: ['guide','crypto', 'solana'],
-         image: './img/guide.png',
-         link: 'https://crypto-free-tools.netlify.app/guide-pour-debutants/',
-         category: 'guide',
-         features: ['Guide de stacking Solana', 'Apprendre à faire des transactions sécurisé'],
-         tags: ['guide','crypto', 'solana']
-     },*/
     {
         id: 'guide-crypto',
         title: 'Guide Crypto débutant',
@@ -347,158 +347,6 @@ const projectsDatabase = [
         features: ['quoi d\'autre ?'],
         tags: ['wikipédia', 'wikipedia']
     },
-   /* { // test de galerie de projet, à intégrer dans le menu ou pas, à voir et enchainer avec une page articles.
-        "id": "galerie",
-        "title": "Galerie de projets",
-        "shortDesc": "Découvrez mes réalisations en images",
-        "longDesc": `
-    <div id="galerie-section">
-        <h3>Mes réalisations</h3>
-        <p>Voici une sélection de projets développés avec une approche souverainiste.</p>
-
-        <!-- Galerie responsive -->
-        <div class="galerie-grid">
-            <!-- Image 1 -->
-            <div class="galerie-item" onclick="openModal('./img/galerie/libreanalytics.jpg', 'LibreAnalytics', 'Alternative souveraine à Google Analytics, développée en PHP et JavaScript vanilla.')">
-                <img src="./img/galerie/thumbs/libreanalytics-thumb.jpg" alt="LibreAnalytics">
-                <div class="galerie-caption">
-                    <h4>LibreAnalytics</h4>
-                    <p>Alternative souveraine à Google Analytics</p>
-                </div>
-            </div>
-
-            <!-- Image 2 -->
-            <div class="galerie-item" onclick="openModal('./img/galerie/otto.jpg', 'OTTO', 'Outil de scraping et d\'automatisation pour identifier des prospects.')">
-                <img src="./img/galerie/thumbs/otto-thumb.jpg" alt="OTTO">
-                <div class="galerie-caption">
-                    <h4>OTTO</h4>
-                    <p>Outil de scraping et d'automatisation</p>
-                </div>
-            </div>
-
-            <!-- Image 3 -->
-            <div class="galerie-item" onclick="openModal('./img/galerie/site-vitrine.jpg', 'Site vitrine', 'Exemple de site vitrine développé sans framework, avec un backend PHP.')">
-                <img src="./img/galerie/thumbs/site-vitrine-thumb.jpg" alt="Site vitrine">
-                <div class="galerie-caption">
-                    <h4>Site vitrine</h4>
-                    <p>Développé sans framework, backend PHP</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal pour l'affichage agrandi -->
-        <div id="galerie-modal" class="modal">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-            <img class="modal-content" id="modal-image">
-            <div id="modal-caption"></div>
-        </div>
-    </div>
-
-    <!-- Script intégré pour la galerie -->
-    <script>
-        function openModal(imageUrl, title, description) {
-            document.getElementById('galerie-modal').style.display = 'block';
-            document.getElementById('modal-image').src = imageUrl;
-            document.getElementById('modal-caption').innerHTML = '<h3>' + title + '</h3><p>' + description + '</p>';
-        }
-
-        function closeModal() {
-            document.getElementById('galerie-modal').style.display = 'none';
-        }
-
-        // Fermer le modal en cliquant en dehors
-        window.addEventListener('click', function(e) {
-            const modal = document.getElementById('galerie-modal');
-            if (e.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-    </script>
-
-    <!-- Style intégré pour la galerie -->
-    <style>
-        .galerie-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .galerie-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .galerie-item:hover {
-            transform: scale(1.03);
-        }
-
-        .galerie-item img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .galerie-caption {
-            padding: 10px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.9);
-            overflow: auto;
-        }
-
-        .modal-content {
-            margin: auto;
-            display: block;
-            max-width: 80%;
-            max-height: 80%;
-            margin-top: 50px;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            color: white;
-            font-size: 35px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        #modal-caption {
-            text-align: center;
-            color: white;
-            padding: 10px;
-            font-size: 1.2em;
-        }
-    </style>
-    `,
-        "keywords": ["galerie", "projets", "réalisations"],
-        "image": "./img/galerie/thumbnail.jpg",
-        "link": "#galerie",
-        "category": "Portfolio",
-        "features": ["Galerie dynamique", "Responsive"],
-        "tags": ["galerie", "portfolio"]
-    },*/
     {
         id: 'welcome',
         title: 'Bienvenue',
@@ -511,7 +359,7 @@ const projectsDatabase = [
 
 <ul>
     <li>• <strong>Ni frameworks ni template</strong> → Un contrôle total sur chaque section de votre site/outils.</li>
-    <li>• <strong>Pas de dépendances superflues</strong> → Le code source, vos données et celle de vos clients vous appartienent vraiment.</li>
+    <li>• <strong>Pas de dépendances superflues</strong> → Pour éviter à vos données d'atterir dans des systèmes externes.</li>
     <li>• <strong>Pas de Lovable</strong> → Pas de copier coller de code que je ne comprends pas = pas de boite noire.</li>
 </ul>
 

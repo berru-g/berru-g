@@ -514,7 +514,7 @@ if (isset($_GET['export_emails'])) {
 
         .panel-title i { color: var(--lime); font-size: 0.85rem; }
 
-        .panel-body { padding: 1.4rem; }
+        .panel-body { padding: 1rem; }
 
         .duo {
             display: grid;
@@ -544,7 +544,7 @@ if (isset($_GET['export_emails'])) {
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 0.5rem;
-            padding: 1.1rem 1.4rem;
+            padding: 1rem 1rem;
             background: var(--ink-3);
             border: 1px solid var(--line);
             border-left: 3px solid var(--lime);
