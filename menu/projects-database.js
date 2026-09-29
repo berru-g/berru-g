@@ -324,6 +324,18 @@ const projectsDatabase = [
         tags: ['arduino', 'electronic', "conception pcb", 'cuivre', 'daw', 'music', 'hackster']
     },
     {
+        id: 'arduino-shield',
+        title: 'Shield-arduino-lego',
+        shortDesc: '',
+        longDesc: 'Shield Arduino uno adaptable au format Lego. Shield éducatif pour vos projets robotique, daw et pour laisser les kids exprimer leur créativité.',
+        keywords: ['shield-arduino', 'electronic', "pcb", 'uno', 'lego', 'hackster'],
+        image: './img/shield-arduino-uno-lego.jpg',
+        link: 'https://www.hackster.io/gleberruyer/shield-arduino-uno-lego-bc2029',
+        category: 'Arduino',
+        features: ['arduino', 'shield', 'lego', 'educatif', 'robotique', 'daw', 'créativité'],
+        tags: ['arduino', 'shield', 'lego', 'educatif', 'robotique', 'daw']
+    },
+    {
         id: 'advent-calendar',
         title: 'Advent calendar',
         shortDesc: 'Calendrier de l\'avent',
