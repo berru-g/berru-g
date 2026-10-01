@@ -47,7 +47,7 @@ const projectsDatabase = [
         features: ['Interface drag & drop', 'Export code prêt', 'Gamification crédits', 'Paiement Euro/Solana'],
         tags: ['SAAS', 'WebGL', 'Animation', '3d', 'threejs', 'génerateur de code', 'php']
     },
-    /* {
+    {
          id: 'animation',
          title: 'animation stop motion',
          shortDesc: 'Création d\'animations stop motion',
@@ -58,7 +58,7 @@ const projectsDatabase = [
          category: 'animation',
          features: ['animation', 'stop motion', 'video', 'creative', 'design'],
          tags: ['animation', 'stop motion', 'video', 'creative', 'design']
-     },*/
+     },
     {
         id: 'smart-pixel',
         title: 'Libre Analytics',
