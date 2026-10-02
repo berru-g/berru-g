@@ -140,12 +140,7 @@ if (isset($_GET['export_emails'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <style>
-        /* =====================================================
-           LIBREANALYTICS — "TERMINAL ÉDITORIAL"
-           Thème singulier : fond encre profonde, typographie
-           mono/grotesk, coins vifs, filets fins, accent lime
-           + violet. Structure en "rapport" plutôt qu'en admin.
-           ===================================================== */
+     
 
         :root {
             --ink: #0b0d12;
@@ -917,7 +912,7 @@ if (isset($_GET['export_emails'])) {
 
         <!-- ===== 02 — WALLET CRYPTO ===== -->
         <section class="section">
-            <div class="section-head"><span class="index">02</span><h2>Wallet — temps réel</h2></div>
+            <div class="section-head"><span class="index">02</span><h2>Wallet</h2></div>
             <div class="duo">
                 <div class="panel">
                     <div class="panel-head">
@@ -930,7 +925,7 @@ if (isset($_GET['export_emails'])) {
                         <div id="crypto-prices"></div>
                     </div>
                 </div>
-                <div class="panel">
+                <!--<div class="panel">
                     <div class="panel-head">
                         <h3 class="panel-title"><i class="fas fa-key"></i> Adresses</h3>
                     </div>
@@ -946,7 +941,7 @@ if (isset($_GET['export_emails'])) {
                             <button class="copy-button" data-target="btc-address">Copy</button>
                         </div>
                     </div>
-                </div>
+                </div>-->
             </div>
         </section>
 
@@ -1097,12 +1092,13 @@ if (isset($_GET['export_emails'])) {
         const tokenHoldings = {
             bitcoin: 0,
             solana: 4.65,
-            sui: 608,
-            usdc: 882,
+            sui: 610,
+            [usd-coin]: 832,
+            ami: 35535,
         };
 
         function refreshCryptoPrices() {
-            fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=bitcoin,solana,sui,usdc')
+            fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=bitcoin,solana,sui,usd-coin,ami')
                 .then(response => response.json())
                 .then(data => {
                     const container = document.getElementById('crypto-prices');
