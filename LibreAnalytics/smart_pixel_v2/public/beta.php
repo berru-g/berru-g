@@ -1098,10 +1098,11 @@ if (isset($_GET['export_emails'])) {
             bitcoin: 0,
             solana: 4.65,
             sui: 613,
+            usdc: 1582,
         };
 
         function refreshCryptoPrices() {
-            fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=bitcoin,solana,sui')
+            fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=bitcoin,solana,sui,usdc')
                 .then(response => response.json())
                 .then(data => {
                     const container = document.getElementById('crypto-prices');
