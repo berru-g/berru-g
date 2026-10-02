@@ -866,15 +866,15 @@ if (isset($_GET['export_emails'])) {
                 <small>LibreAnalytics / contrôle</small>
             </a>
             <div class="topbar-right">
-                <span class="live-dot">Live</span>
+                <span class="live-dot">API</span>
                 <nav class="cmd" id="cmd-menu">
                     <button class="cmd-toggle" id="cmd-toggle" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-terminal"></i> Commandes <i class="fas fa-chevron-down caret"></i>
                     </button>
                     <div class="cmd-menu" role="menu">
                         <a href="dashboard.php" role="menuitem"><i class="fas fa-arrow-left"></i> Dashboard</a>
-                        <a href="../campain/rapport.php" role="menuitem"><i class="fas fa-file-alt"></i> Rapport id5</a>
-                        <a href="../campain/rapport_golden.php" role="menuitem"><i class="fas fa-file-alt"></i> Rapport id4</a>
+                        <a href="../campain/rapport.php" role="menuitem"><i class="fas fa-file-alt"></i> Rapport id_gb</a>
+                        <a href="../campain/rapport_lb.php" role="menuitem"><i class="fas fa-file-alt"></i> Rapport id_lb</a>
                         <a href="../campain/prospect_template.php" role="menuitem"><i class="fa-regular fa-file-code"></i> Script prospection</a>
                         <a href="?export_emails=1" role="menuitem"><i class="fas fa-download"></i> Export emails CSV</a>
                     </div>
@@ -1097,11 +1097,12 @@ if (isset($_GET['export_emails'])) {
         const tokenHoldings = {
             bitcoin: 0,
             solana: 4.65,
-            sui: 613,
+            sui: 608,
+            usdc: 882,
         };
 
         function refreshCryptoPrices() {
-            fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=bitcoin,solana,sui')
+            fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=bitcoin,solana,sui,usdc')
                 .then(response => response.json())
                 .then(data => {
                     const container = document.getElementById('crypto-prices');
@@ -1155,7 +1156,7 @@ if (isset($_GET['export_emails'])) {
                         changeElement.classList.toggle('negative', change24h < 0);
                     });
 
-                    totalElement.innerHTML = `<div class="label">Valeur totale — live</div><h3>${totalPortfolioValue.toFixed(2)} €</h3>`;
+                    totalElement.innerHTML = `<div class="label">Total</div><h3>${totalPortfolioValue.toFixed(2)} €</h3>`;
                 })
                 .catch(error => console.error('Erreur lors de la récupération des données:', error));
         }
