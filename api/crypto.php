@@ -1,5 +1,5 @@
 <?php
-// api/crypto.php — proxy CoinGecko avec cache (protège du 429)
+// api/crypto.php — proxy CoinGecko avec cache (protège du 429) / Restaurer l'appel api dans beta
 header('Content-Type: application/json');
 
 define('CG_URL', 'https://api.coingecko.com/api/v3/coins/markets');

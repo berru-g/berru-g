@@ -1,12 +1,12 @@
 <?php
-// 
+//
 session_start();
 
 // --- Vérification de l'authentification ---
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/auth.php';
 
-if (!Auth::isLoggedIn() || $_SESSION['user_email'] !== 'contact@gael-berru.com') {
+if (!Auth::isLoggedIn() || ($_SESSION['user_email'] ?? '') !== 'contact@gael-berru.com') {
     header('Location: account.php');
     exit;
 }
@@ -23,7 +23,8 @@ try {
         ]
     );
 } catch (PDOException $e) {
-    die("Erreur de connexion à la base de données : " . $e->getMessage());
+    error_log('DB connection failed: ' . $e->getMessage());
+    die("Erreur de connexion à la base de données. Réessayez plus tard.");
 }
 
 // --- Récupération des données ---
@@ -83,7 +84,7 @@ try {
     $stmt = $pdo->query("SELECT plan, COUNT(*) AS count FROM users GROUP BY plan");
     $plansStats = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
-    // Activité récente (7 jours)
+    // Activité récente
     $stmt = $pdo->query("
         SELECT DATE(created_at) AS date, COUNT(*) AS count
         FROM users
@@ -93,19 +94,21 @@ try {
     ");
     $recentActivity = $stmt->fetchAll();
 } catch (PDOException $e) {
-    die("Erreur lors de la récupération des données : " . $e->getMessage());
+    error_log('Data fetch failed: ' . $e->getMessage());
+    die("Erreur lors de la récupération des données. Réessayez plus tard.");
 }
 
 // --- Export des emails ---
 if (isset($_GET['export_emails'])) {
-    header('Content-Type: text/csv');
+    header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="smartpixel_users_emails.csv"');
     $out = fopen('php://output', 'w');
-    fputcsv($out, ['Email', 'Plan', 'Nombre de sites', 'Date d\'inscription', 'Dernière connexion']);
+    fprintf($out, chr(0xEF) . chr(0xBB) . chr(0xBF)); // BOM UTF-8 pour Excel
+    fputcsv($out, ['Email', 'Plan', 'Nombre de sites', 'Date d\'inscription', 'Derniere connexion']);
     foreach ($usersList as $user) {
         fputcsv($out, [
             $user['email'],
-            strtoupper($user['plan']),
+            strtoupper($user['plan'] ?? 'free'),
             $user['site_count'],
             $user['created_at'],
             $user['last_login'] ?? 'Jamais'
@@ -114,6 +117,55 @@ if (isset($_GET['export_emails'])) {
     fclose($out);
     exit;
 }
+
+// ================================================================
+// PRIX CRYPTO — CoinGecko côté serveur (clé privée + cache 5 min)
+// La clé ne quitte JAMAIS le serveur : le navigateur ne reçoit
+// que le JSON des prix.
+// ================================================================
+$coingeckoData = null;
+
+if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KEY !== 'TA_CLE_DEMO_ICI') {
+    $coingeckoCache = __DIR__ . '/cache_coingecko.json';
+
+    if (is_file($coingeckoCache) && (time() - filemtime($coingeckoCache)) < 300) {
+        // Cache encore frais (5 min) → pas d'appel API
+        $coingeckoData = json_decode(file_get_contents($coingeckoCache), true);
+    } else {
+        $cgUrl = 'https://api.coingecko.com/api/v3/coins/markets?' . http_build_query([
+            'vs_currency' => 'eur',
+            'ids'         => 'bitcoin,solana,sui,usd-coin,ami',
+            'sparkline'   => 'false',
+        ]);
+
+        $ch = curl_init($cgUrl);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT        => 10,
+            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_HTTPHEADER     => ['x-cg-demo-api-key: ' . COINGECKO_API_KEY],
+        ]);
+        $resp = curl_exec($ch);
+        $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($code === 200 && $resp) {
+            $decoded = json_decode($resp, true);
+            if (is_array($decoded) && $decoded !== []) {
+                $coingeckoData = $decoded;
+                // Mise à jour du cache (LOCK_EX = accès concurrent sécurisé)
+                file_put_contents($coingeckoCache, $resp, LOCK_EX);
+            }
+        } else {
+            error_log("CoinGecko error HTTP {$code}");
+        }
+
+        // Échec API → servir le dernier cache connu plutôt qu'un panneau vide
+        if ($coingeckoData === null && is_file($coingeckoCache)) {
+            $coingeckoData = json_decode(file_get_contents($coingeckoCache), true);
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -121,19 +173,16 @@ if (isset($_GET['export_emails'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <title>LibreAnalytics — Contrôle</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- CSS existant (versionné) -->
     <link rel="stylesheet" href="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/assets/dashboard.css">
     <!-- CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
@@ -164,9 +213,7 @@ if (isset($_GET['export_emails'])) {
             box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
 
         body {
             font-family: var(--grot);
@@ -179,14 +226,9 @@ if (isset($_GET['export_emails'])) {
             background-size: 44px 44px;
         }
 
-        ::selection {
-            background: var(--lime);
-            color: var(--ink);
-        }
+        ::selection { background: var(--lime); color: var(--ink); }
 
-        a {
-            color: inherit;
-        }
+        a { color: inherit; }
 
         .shell {
             max-width: 1520px;
@@ -264,21 +306,12 @@ if (isset($_GET['export_emails'])) {
         }
 
         @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.25;
-            }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.25; }
         }
 
         /* ===== MENU DÉROULANT "COMMANDES" ===== */
-        .cmd {
-            position: relative;
-        }
+        .cmd { position: relative; }
 
         .cmd-toggle {
             font-family: var(--mono);
@@ -296,19 +329,11 @@ if (isset($_GET['export_emails'])) {
             transition: border-color 0.2s, color 0.2s;
         }
 
-        .cmd-toggle:hover {
-            border-color: var(--lime);
-            color: var(--lime);
-        }
+        .cmd-toggle:hover { border-color: var(--lime); color: var(--lime); }
 
-        .cmd-toggle .caret {
-            transition: transform 0.25s;
-            font-size: 0.6rem;
-        }
+        .cmd-toggle .caret { transition: transform 0.25s; font-size: 0.6rem; }
 
-        .cmd.open .cmd-toggle .caret {
-            transform: rotate(180deg);
-        }
+        .cmd.open .cmd-toggle .caret { transform: rotate(180deg); }
 
         .cmd-menu {
             position: absolute;
@@ -342,9 +367,7 @@ if (isset($_GET['export_emails'])) {
             transition: background 0.15s, color 0.15s, padding-left 0.15s;
         }
 
-        .cmd-menu a:last-child {
-            border-bottom: none;
-        }
+        .cmd-menu a:last-child { border-bottom: none; }
 
         .cmd-menu a i {
             width: 1.2rem;
@@ -390,21 +413,14 @@ if (isset($_GET['export_emails'])) {
             margin-top: 0.8rem;
         }
 
-        .report .meta strong {
-            color: var(--lime);
-            font-weight: 700;
-        }
+        .report .meta strong { color: var(--lime); font-weight: 700; }
 
         @media (max-width: 700px) {
-            .report {
-                grid-template-columns: 1fr;
-            }
+            .report { grid-template-columns: 1fr; }
         }
 
         /* ===== SECTIONS ===== */
-        .section {
-            margin-bottom: 3rem;
-        }
+        .section { margin-bottom: 3rem; }
 
         .section-head {
             display: flex;
@@ -435,7 +451,7 @@ if (isset($_GET['export_emails'])) {
             background: var(--line);
         }
 
-        /* ===== STATS — bandeau horizontal défilable ===== */
+        /* ===== STATS ===== */
         .stats-strip {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -450,13 +466,8 @@ if (isset($_GET['export_emails'])) {
             transition: background 0.2s;
         }
 
-        .stat:last-child {
-            border-right: none;
-        }
-
-        .stat:hover {
-            background: var(--ink-3);
-        }
+        .stat:last-child { border-right: none; }
+        .stat:hover { background: var(--ink-3); }
 
         .stat .k {
             font-family: var(--mono);
@@ -470,10 +481,7 @@ if (isset($_GET['export_emails'])) {
             gap: 0.45rem;
         }
 
-        .stat .k i {
-            color: var(--violet);
-            font-size: 0.7rem;
-        }
+        .stat .k i { color: var(--violet); font-size: 0.7rem; }
 
         .stat .v {
             font-family: var(--mono);
@@ -494,38 +502,18 @@ if (isset($_GET['export_emails'])) {
             transition: width 0.35s;
         }
 
-        .stat:hover::after {
-            width: 100%;
-        }
+        .stat:hover::after { width: 100%; }
 
         @media (max-width: 900px) {
-            .stats-strip {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .stat:nth-child(2) {
-                border-right: none;
-            }
-
-            .stat:nth-child(1),
-            .stat:nth-child(2) {
-                border-bottom: 1px solid var(--line);
-            }
+            .stats-strip { grid-template-columns: repeat(2, 1fr); }
+            .stat:nth-child(2) { border-right: none; }
+            .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--line); }
         }
 
         @media (max-width: 480px) {
-            .stats-strip {
-                grid-template-columns: 1fr;
-            }
-
-            .stat {
-                border-right: none;
-                border-bottom: 1px solid var(--line);
-            }
-
-            .stat:last-child {
-                border-bottom: none;
-            }
+            .stats-strip { grid-template-columns: 1fr; }
+            .stat { border-right: none; border-bottom: 1px solid var(--line); }
+            .stat:last-child { border-bottom: none; }
         }
 
         /* ===== PANNEAUX ===== */
@@ -566,14 +554,9 @@ if (isset($_GET['export_emails'])) {
             gap: 0.7rem;
         }
 
-        .panel-title i {
-            color: var(--lime);
-            font-size: 0.85rem;
-        }
+        .panel-title i { color: var(--lime); font-size: 0.85rem; }
 
-        .panel-body {
-            padding: 1rem;
-        }
+        .panel-body { padding: 1rem; }
 
         .duo {
             display: grid;
@@ -583,9 +566,7 @@ if (isset($_GET['export_emails'])) {
         }
 
         @media (max-width: 1000px) {
-            .duo {
-                grid-template-columns: 1fr;
-            }
+            .duo { grid-template-columns: 1fr; }
         }
 
         .duo-2 {
@@ -595,9 +576,7 @@ if (isset($_GET['export_emails'])) {
         }
 
         @media (max-width: 1000px) {
-            .duo-2 {
-                grid-template-columns: 1fr;
-            }
+            .duo-2 { grid-template-columns: 1fr; }
         }
 
         /* ===== WALLET ===== */
@@ -630,10 +609,7 @@ if (isset($_GET['export_emails'])) {
             letter-spacing: -1px;
         }
 
-        #crypto-prices {
-            display: flex;
-            flex-direction: column;
-        }
+        #crypto-prices { display: flex; flex-direction: column; }
 
         .crypto-item {
             display: grid;
@@ -645,13 +621,8 @@ if (isset($_GET['export_emails'])) {
             transition: background 0.15s;
         }
 
-        .crypto-item:last-child {
-            border-bottom: none;
-        }
-
-        .crypto-item:hover {
-            background: var(--ink-3);
-        }
+        .crypto-item:last-child { border-bottom: none; }
+        .crypto-item:hover { background: var(--ink-3); }
 
         .crypto-item img {
             width: 32px;
@@ -661,14 +632,9 @@ if (isset($_GET['export_emails'])) {
             transition: filter 0.2s;
         }
 
-        .crypto-item:hover img {
-            filter: none;
-        }
+        .crypto-item:hover img { filter: none; }
 
-        .crypto-item .name {
-            display: flex;
-            flex-direction: column;
-        }
+        .crypto-item .name { display: flex; flex-direction: column; }
 
         .crypto-item .symbol {
             font-family: var(--mono);
@@ -684,11 +650,7 @@ if (isset($_GET['export_emails'])) {
             color: var(--txt-dim);
         }
 
-        .crypto-item .holdings {
-            display: flex;
-            flex-direction: column;
-            text-align: right;
-        }
+        .crypto-item .holdings { display: flex; flex-direction: column; text-align: right; }
 
         .crypto-item .holdings .amount {
             font-family: var(--mono);
@@ -711,32 +673,14 @@ if (isset($_GET['export_emails'])) {
             text-align: right;
         }
 
-        .crypto-item .change.positive::before {
-            content: '▲ ';
-            font-size: 0.6rem;
-        }
-
-        .crypto-item .change.negative::before {
-            content: '▼ ';
-            font-size: 0.6rem;
-        }
-
-        .crypto-item .change.positive {
-            color: var(--lime);
-        }
-
-        .crypto-item .change.negative {
-            color: var(--rose);
-        }
+        .crypto-item .change.positive::before { content: '▲ '; font-size: 0.6rem; }
+        .crypto-item .change.negative::before { content: '▼ '; font-size: 0.6rem; }
+        .crypto-item .change.positive { color: var(--lime); }
+        .crypto-item .change.negative { color: var(--rose); }
 
         @media (max-width: 420px) {
-            .crypto-item {
-                grid-template-columns: 32px 1fr auto;
-            }
-
-            .crypto-item .holdings {
-                display: none;
-            }
+            .crypto-item { grid-template-columns: 32px 1fr auto; }
+            .crypto-item .holdings { display: none; }
         }
 
         /* Adresses wallet */
@@ -748,9 +692,7 @@ if (isset($_GET['export_emails'])) {
             border-bottom: 1px dashed var(--line);
         }
 
-        .wallet-row:last-child {
-            border-bottom: none;
-        }
+        .wallet-row:last-child { border-bottom: none; }
 
         .wallet-row .network {
             font-family: var(--mono);
@@ -809,9 +751,7 @@ if (isset($_GET['export_emails'])) {
             transition: all 0.2s;
         }
 
-        .wallet-links-btn i {
-            color: var(--lime);
-        }
+        .wallet-links-btn i { color: var(--lime); }
 
         .wallet-links-btn:hover {
             border-color: var(--lime);
@@ -819,9 +759,7 @@ if (isset($_GET['export_emails'])) {
         }
 
         /* ===== TABLEAUX ===== */
-        .table-responsive {
-            overflow-x: auto;
-        }
+        .table-responsive { overflow-x: auto; }
 
         .data-table {
             width: 100%;
@@ -849,13 +787,8 @@ if (isset($_GET['export_emails'])) {
             white-space: nowrap;
         }
 
-        .data-table tbody tr {
-            transition: background 0.15s;
-        }
-
-        .data-table tbody tr:hover {
-            background: var(--ink-3);
-        }
+        .data-table tbody tr { transition: background 0.15s; }
+        .data-table tbody tr:hover { background: var(--ink-3); }
 
         .data-table code {
             background: var(--ink-3);
@@ -876,29 +809,10 @@ if (isset($_GET['export_emails'])) {
             border: 1px solid;
         }
 
-        .badge-free {
-            background: transparent;
-            color: var(--txt-dim);
-            border-color: var(--line);
-        }
-
-        .badge-pro {
-            background: transparent;
-            color: var(--lime);
-            border-color: var(--lime);
-        }
-
-        .badge-business {
-            background: transparent;
-            color: var(--rose);
-            border-color: var(--rose);
-        }
-
-        .badge-premium {
-            background: transparent;
-            color: var(--violet);
-            border-color: var(--violet);
-        }
+        .badge-free { background: transparent; color: var(--txt-dim); border-color: var(--line); }
+        .badge-pro { background: transparent; color: var(--lime); border-color: var(--lime); }
+        .badge-business { background: transparent; color: var(--rose); border-color: var(--rose); }
+        .badge-premium { background: transparent; color: var(--violet); border-color: var(--violet); }
 
         /* ===== EXPORT ===== */
         .export-btn {
@@ -919,9 +833,7 @@ if (isset($_GET['export_emails'])) {
             transition: filter 0.2s;
         }
 
-        .export-btn:hover {
-            filter: brightness(1.1);
-        }
+        .export-btn:hover { filter: brightness(1.1); }
 
         /* ===== GRAPHIQUE & CARTE ===== */
         #worldMap {
@@ -930,10 +842,7 @@ if (isset($_GET['export_emails'])) {
             background: var(--ink-2);
         }
 
-        .chart-wrap {
-            position: relative;
-            max-height: 320px;
-        }
+        .chart-wrap { position: relative; max-height: 320px; }
 
         /* ===== EMPTY ===== */
         .empty-state {
@@ -960,15 +869,9 @@ if (isset($_GET['export_emails'])) {
             letter-spacing: 2px;
         }
 
-        .custom-swal-close-button {
-            color: var(--txt-dim) !important;
-        }
+        .custom-swal-close-button { color: var(--txt-dim) !important; }
 
-        .custom-swal-content ul {
-            list-style: none;
-            padding: 0;
-            text-align: left;
-        }
+        .custom-swal-content ul { list-style: none; padding: 0; text-align: left; }
 
         .custom-swal-content li {
             padding: 0.7rem 0;
@@ -977,9 +880,7 @@ if (isset($_GET['export_emails'])) {
             font-size: 0.85rem;
         }
 
-        .custom-swal-content li:last-child {
-            border-bottom: none;
-        }
+        .custom-swal-content li:last-child { border-bottom: none; }
 
         .custom-swal-content a {
             color: var(--lime);
@@ -987,9 +888,7 @@ if (isset($_GET['export_emails'])) {
             font-weight: 700;
         }
 
-        .custom-swal-content a:hover {
-            text-decoration: underline;
-        }
+        .custom-swal-content a:hover { text-decoration: underline; }
 
         /* ===== TOASTIFY ===== */
         .toastify {
@@ -1001,7 +900,7 @@ if (isset($_GET['export_emails'])) {
 </head>
 
 <body>
-    <!-- ===== TOPBAR avec menu déroulant "Commandes" ===== -->
+    <!-- ===== TOPBAR ===== -->
     <header class="topbar">
         <div class="topbar-inner">
             <a class="brand" href="dashboard.php">
@@ -1016,12 +915,9 @@ if (isset($_GET['export_emails'])) {
                     </button>
                     <div class="cmd-menu" role="menu">
                         <a href="dashboard.php" role="menuitem"><i class="fas fa-arrow-left"></i> Dashboard</a>
-                        <a href="../campain/rapport.php" role="menuitem"><i class="fas fa-file-alt"></i> Rapport
-                            id_gb</a>
-                        <a href="../campain/rapport_lb.php" role="menuitem"><i class="fas fa-file-alt"></i> Rapport
-                            id_lb</a>
-                        <a href="../campain/prospect_template.php" role="menuitem"><i
-                                class="fa-regular fa-file-code"></i> Script prospection</a>
+                        <a href="../campain/rapport.php" role="menuitem"><i class="fas fa-file-alt"></i> Rapport id_gb</a>
+                        <a href="../campain/rapport_lb.php" role="menuitem"><i class="fas fa-file-alt"></i> Rapport id_lb</a>
+                        <a href="../campain/prospect_template.php" role="menuitem"><i class="fa-regular fa-file-code"></i> Script prospection</a>
                         <a href="?export_emails=1" role="menuitem"><i class="fas fa-download"></i> Export emails CSV</a>
                     </div>
                 </nav>
@@ -1034,16 +930,13 @@ if (isset($_GET['export_emails'])) {
         <section class="report">
             <div>
                 <h1>Rapport<br><span class="stroke">SmartPixel</span></h1>
-                <p class="meta">console admin — <strong><?= date('d.m.Y') ?></strong> — accès :
-                    <?= htmlspecialchars($_SESSION['user_email']) ?></p>
+                <p class="meta">console admin — <strong><?= date('d.m.Y') ?></strong> — accès : <?= htmlspecialchars($_SESSION['user_email']) ?></p>
             </div>
         </section>
 
         <!-- ===== 01 — STATS ===== -->
         <section class="section">
-            <div class="section-head"><span class="index">01</span>
-                <h2>Signaux globaux</h2>
-            </div>
+            <div class="section-head"><span class="index">01</span><h2>Signaux globaux</h2></div>
             <div class="stats-strip">
                 <div class="stat">
                     <div class="k"><i class="fas fa-users"></i> Utilisateurs</div>
@@ -1051,7 +944,7 @@ if (isset($_GET['export_emails'])) {
                 </div>
                 <div class="stat">
                     <div class="k"><i class="fas fa-globe"></i> Sites</div>
-                    <div class="v"><?= number_format(array_sum(array_column($topSites, 'total_site'))) ?></div>
+                    <div class="v"><?= number_format(array_sum(array_column($topSites, 'total_visits'))) ?></div>
                 </div>
                 <div class="stat">
                     <div class="k"><i class="fas fa-eye"></i> Visites</div>
@@ -1059,16 +952,14 @@ if (isset($_GET['export_emails'])) {
                 </div>
                 <div class="stat">
                     <div class="k"><i class="fas fa-user-check"></i> Visiteurs uniques</div>
-                    <div class="v"><?= number_format(end($historicalData)['cumulative_unique_visitors']) ?></div>
+                    <div class="v"><?= number_format($historicalData ? (int) end($historicalData)['cumulative_unique_visitors'] : 0) ?></div>
                 </div>
             </div>
         </section>
 
         <!-- ===== 02 — WALLET CRYPTO ===== -->
         <section class="section">
-            <div class="section-head"><span class="index">02</span>
-                <h2>Wallet</h2>
-            </div>
+            <div class="section-head"><span class="index">02</span><h2>Wallet</h2></div>
             <div class="duo">
                 <div class="panel">
                     <div class="panel-head">
@@ -1103,9 +994,7 @@ if (isset($_GET['export_emails'])) {
 
         <!-- ===== 03 — CROISSANCE ===== -->
         <section class="section">
-            <div class="section-head"><span class="index">03</span>
-                <h2>Croissance générale</h2>
-            </div>
+            <div class="section-head"><span class="index">03</span><h2>Croissance générale</h2></div>
             <div class="panel">
                 <div class="panel-head">
                     <h3 class="panel-title"><i class="fas fa-chart-line"></i> Évolution cumulative — 7 jours</h3>
@@ -1118,9 +1007,7 @@ if (isset($_GET['export_emails'])) {
 
         <!-- ===== 04 — TOP SITES + CARTE ===== -->
         <section class="section">
-            <div class="section-head"><span class="index">04</span>
-                <h2>Top sites &amp; géographie</h2>
-            </div>
+            <div class="section-head"><span class="index">04</span><h2>Top sites &amp; géographie</h2></div>
             <div class="duo-2">
                 <div class="panel">
                     <div class="panel-head">
@@ -1141,10 +1028,8 @@ if (isset($_GET['export_emails'])) {
                                         <?php foreach ($topSites as $site): ?>
                                             <tr>
                                                 <td><?= htmlspecialchars($site['site_name']) ?></td>
-                                                <td><strong
-                                                        style="color: var(--lime);"><?= number_format($site['total_visits']) ?></strong>
-                                                </td>
-                                                <td><code><?= htmlspecialchars($site['id']) ?></code></td>
+                                                <td><strong style="color: var(--lime);"><?= number_format($site['total_visits']) ?></strong></td>
+                                                <td><code><?= htmlspecialchars((string) $site['id']) ?></code></td>
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php else: ?>
@@ -1170,9 +1055,7 @@ if (isset($_GET['export_emails'])) {
 
         <!-- ===== 05 — UTILISATEURS ===== -->
         <section class="section">
-            <div class="section-head"><span class="index">05</span>
-                <h2>Registre des utilisateurs (<?= count($usersList) ?>)</h2>
-            </div>
+            <div class="section-head"><span class="index">05</span><h2>Registre des utilisateurs (<?= count($usersList) ?>)</h2></div>
             <div class="panel">
                 <div class="panel-head">
                     <h3 class="panel-title"><i class="fas fa-address-card"></i> Comptes</h3>
@@ -1196,23 +1079,15 @@ if (isset($_GET['export_emails'])) {
                             <tbody>
                                 <?php if (!empty($usersList)): ?>
                                     <?php foreach ($usersList as $user):
-                                        // Gestion de la classe du badge selon le plan
-                                        $planClass = 'free'; // default
-                                        if (isset($user['plan'])) {
-                                            $planClass = strtolower($user['plan']);
-                                        }
-                                        ?>
+                                        $planClass = strtolower($user['plan'] ?? 'free');
+                                    ?>
                                         <tr>
                                             <td><?= htmlspecialchars($user['email']) ?></td>
-                                            <td><span
-                                                    class="badge badge-<?= $planClass ?>"><?= strtoupper($user['plan'] ?? 'free') ?></span>
-                                            </td>
+                                            <td><span class="badge badge-<?= htmlspecialchars($planClass) ?>"><?= strtoupper($user['plan'] ?? 'free') ?></span></td>
                                             <td><?= (int) ($user['site_count'] ?? 0) ?></td>
                                             <td><?= number_format($user['total_visits'] ?? 0) ?></td>
-                                            <td><?= isset($user['created_at']) ? (new DateTime($user['created_at']))->format('d/m/Y') : '-' ?>
-                                            </td>
-                                            <td><?= isset($user['last_login']) && $user['last_login'] ? (new DateTime($user['last_login']))->format('d/m/Y H:i') : '<span style="color:var(--txt-dim);">Jamais</span>' ?>
-                                            </td>
+                                            <td><?= !empty($user['created_at']) ? (new DateTime($user['created_at']))->format('d/m/Y') : '-' ?></td>
+                                            <td><?= !empty($user['last_login']) ? (new DateTime($user['last_login']))->format('d/m/Y H:i') : '<span style="color:var(--txt-dim);">Jamais</span>' ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
@@ -1226,7 +1101,7 @@ if (isset($_GET['export_emails'])) {
                 </div>
             </div>
         </section>
-    </div> <!-- .shell -->
+    </div><!-- .shell -->
 
     <script>
         // ===== MENU DÉROULANT "COMMANDES" =====
@@ -1240,7 +1115,6 @@ if (isset($_GET['export_emails'])) {
                 toggle.setAttribute('aria-expanded', open);
             });
 
-            // Fermer au clic extérieur ou à l'échappement
             document.addEventListener('click', (e) => {
                 if (!cmd.contains(e.target)) {
                     cmd.classList.remove('open');
@@ -1257,53 +1131,50 @@ if (isset($_GET['export_emails'])) {
         })();
 
         // ===== WALLET CRYPTO =====
+        // Données injectées par PHP (appel CoinGecko côté serveur, caché 5 min,
+        // clé API privée). Zéro appel navigateur -> plus jamais de 429.
+        const cryptoData = <?= json_encode($coingeckoData ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
         const tokenHoldings = {
             bitcoin: 0,
             solana: 4.65,
             sui: 610,
             'usd-coin': 832,
+            ami: 35535,
         };
 
-        function fmtEur(n) {
-            return n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €';
-        }
+        (function renderCrypto() {
+            const container = document.getElementById('crypto-prices');
 
-        function refreshCryptoPrices() {
-            fetch('../../../api/crypto.php') // ← ton proxy, pas CoinGecko en direct
-                .then(r => {
-                    if (!r.ok) throw new Error('HTTP ' + r.status);
-                    return r.json();
-                })
-                .then(data => {
-                    if (!Array.isArray(data)) throw new Error('Réponse invalide');
+            if (!Array.isArray(cryptoData) || cryptoData.length === 0) {
+                container.innerHTML = '<div class="empty-state">Prix crypto indisponibles</div>';
+                return;
+            }
 
-                    const container = document.getElementById('crypto-prices');
-                    let totalPortfolioValue = 0;
+            let totalPortfolioValue = 0;
 
-                    // Vide puis reconstruit (évite l'accumulation d'états incohérents)
-                    container.innerHTML = '';
+            // Total du portefeuille en tête
+            const totalElement = document.createElement('div');
+            totalElement.id = 'portfolio-total';
+            container.appendChild(totalElement);
 
-                    const totalElement = document.createElement('div');
-                    totalElement.id = 'portfolio-total';
-                    container.appendChild(totalElement);
+            cryptoData.forEach(crypto => {
+                const price = crypto.current_price ?? 0;
+                // Null-safe : CoinGecko peut renvoyer null sur cette valeur
+                const change24h = crypto.price_change_percentage_24h ?? 0;
+                const changeTxt = (change24h >= 0 ? '+' : '') + change24h.toFixed(2);
+                const holdings = tokenHoldings[crypto.id] || 0;
+                const totalValue = price * holdings;
 
-                    data.forEach(crypto => {
-                        const price = crypto.current_price ?? 0;
-                        // null-safe : CoinGecko renvoie parfois null sur le % 24h
-                        const change24h = crypto.price_change_percentage_24h ?? 0;
-                        const changeTxt = (change24h >= 0 ? '+' : '') + change24h.toFixed(2);
-                        const holdings = tokenHoldings[crypto.id] || 0;
-                        const totalValue = price * holdings;
+                totalPortfolioValue += totalValue;
 
-                        totalPortfolioValue += totalValue;
-
-                        const el = document.createElement('div');
-                        el.classList.add('crypto-item');
-                        el.innerHTML = `
+                const el = document.createElement('div');
+                el.id = crypto.id;
+                el.classList.add('crypto-item');
+                el.innerHTML = `
                     <img src="${crypto.image}" alt="${crypto.id} logo">
                     <div class="name">
                         <span class="symbol">${crypto.symbol.toUpperCase()}</span>
-                        <span class="price">${fmtEur(price)}</span>
+                        <span class="price">${price.toLocaleString('fr-FR', {minimumFractionDigits: 2})} €</span>
                     </div>
                     <div class="holdings">
                         <span class="amount">${holdings} ${crypto.symbol.toUpperCase()}</span>
@@ -1311,23 +1182,12 @@ if (isset($_GET['export_emails'])) {
                     </div>
                     <p class="change ${change24h >= 0 ? 'positive' : 'negative'}">${changeTxt}%</p>
                 `;
-                        container.appendChild(el);
-                    });
+                container.appendChild(el);
+            });
 
-                    totalElement.innerHTML =
-                        `<div class="label">Total</div><h3>${totalPortfolioValue.toFixed(2)} €</h3>`;
-                })
-                .catch(() => {
-                    const container = document.getElementById('crypto-prices');
-                    if (container && !container.querySelector('.crypto-item')) {
-                        container.innerHTML =
-                            '<div class="empty-state">Prix crypto indisponibles (réessai dans 60s)</div>';
-                    }
-                });
-        }
-
-        refreshCryptoPrices();
-        setInterval(refreshCryptoPrices, 60000);
+            totalElement.innerHTML =
+                `<div class="label">Total</div><h3>${totalPortfolioValue.toFixed(2)} €</h3>`;
+        })();
 
         // Liens 0x via SweetAlert2
         document.getElementById('wallet-links-btn').addEventListener('click', () => {
@@ -1386,41 +1246,41 @@ if (isset($_GET['export_emails'])) {
             data: {
                 labels: <?= json_encode(array_column($historicalData, 'date')) ?>,
                 datasets: [{
-                    label: 'Utilisateurs',
-                    data: <?= json_encode(array_column($historicalData, 'cumulative_users')) ?>,
-                    borderColor: '#ab9ff2',
-                    backgroundColor: 'rgba(171, 159, 242, 0.06)',
-                    tension: 0.2,
-                    fill: true,
-                    pointRadius: 2
-                },
-                {
-                    label: 'Sites',
-                    data: <?= json_encode(array_column($historicalData, 'cumulative_sites')) ?>,
-                    borderColor: '#86baff',
-                    backgroundColor: 'rgba(134, 186, 255, 0.06)',
-                    tension: 0.2,
-                    fill: true,
-                    pointRadius: 2
-                },
-                {
-                    label: 'Visites',
-                    data: <?= json_encode(array_column($historicalData, 'cumulative_visits')) ?>,
-                    borderColor: '#c8f65d',
-                    backgroundColor: 'rgba(200, 246, 93, 0.06)',
-                    tension: 0.2,
-                    fill: true,
-                    pointRadius: 2
-                },
-                {
-                    label: 'Visiteurs uniques',
-                    data: <?= json_encode(array_column($historicalData, 'cumulative_unique_visitors')) ?>,
-                    borderColor: '#ff7a8a',
-                    backgroundColor: 'rgba(255, 122, 138, 0.06)',
-                    tension: 0.2,
-                    fill: true,
-                    pointRadius: 2
-                }
+                        label: 'Utilisateurs',
+                        data: <?= json_encode(array_column($historicalData, 'cumulative_users')) ?>,
+                        borderColor: '#ab9ff2',
+                        backgroundColor: 'rgba(171, 159, 242, 0.06)',
+                        tension: 0.2,
+                        fill: true,
+                        pointRadius: 2
+                    },
+                    {
+                        label: 'Sites',
+                        data: <?= json_encode(array_column($historicalData, 'cumulative_sites')) ?>,
+                        borderColor: '#86baff',
+                        backgroundColor: 'rgba(134, 186, 255, 0.06)',
+                        tension: 0.2,
+                        fill: true,
+                        pointRadius: 2
+                    },
+                    {
+                        label: 'Visites',
+                        data: <?= json_encode(array_column($historicalData, 'cumulative_visits')) ?>,
+                        borderColor: '#c8f65d',
+                        backgroundColor: 'rgba(200, 246, 93, 0.06)',
+                        tension: 0.2,
+                        fill: true,
+                        pointRadius: 2
+                    },
+                    {
+                        label: 'Visiteurs uniques',
+                        data: <?= json_encode(array_column($historicalData, 'cumulative_unique_visitors')) ?>,
+                        borderColor: '#ff7a8a',
+                        backgroundColor: 'rgba(255, 122, 138, 0.06)',
+                        tension: 0.2,
+                        fill: true,
+                        pointRadius: 2
+                    }
                 ]
             },
             options: {
@@ -1441,23 +1301,13 @@ if (isset($_GET['export_emails'])) {
                 },
                 scales: {
                     x: {
-                        grid: {
-                            display: false
-                        },
-                        title: {
-                            display: true,
-                            text: 'Date'
-                        }
+                        grid: { display: false },
+                        title: { display: true, text: 'Date' }
                     },
                     y: {
                         beginAtZero: true,
-                        grid: {
-                            color: '#1b2030'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Nombre'
-                        }
+                        grid: { color: '#1b2030' },
+                        title: { display: true, text: 'Nombre' }
                     }
                 }
             }
@@ -1465,7 +1315,7 @@ if (isset($_GET['export_emails'])) {
 
         // --- Carte du monde ---
         document.addEventListener('DOMContentLoaded', function () {
-            const countries = <?= json_encode($visitedCountries ?? []) ?>;
+            const countries = <?= json_encode($visitedCountries ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
             if (!countries.length) {
                 document.getElementById('worldMap').innerHTML = '<div class="empty-state">Données géographiques indisponibles</div>';
                 return;
@@ -1496,7 +1346,7 @@ if (isset($_GET['export_emails'])) {
                     'south korea': 'KR',
                     'singapore': 'SG'
                 };
-                return map[countryName.toLowerCase().trim()] || null;
+                return map[String(countryName).toLowerCase().trim()] || null;
             };
 
             const countryData = countries.map(country => ({
@@ -1545,7 +1395,6 @@ if (isset($_GET['export_emails'])) {
                 dataField: "value"
             }]);
 
-            // Animation de survol
             polygonSeries.mapPolygons.template.states.create("hover", {
                 fill: am5.color(0xab9ff2)
             });

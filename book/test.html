@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -8,13 +7,16 @@
     <title>LibreAnalytics — Contrôle</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- CSS existant (versionné) -->
     <link rel="stylesheet" href="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/assets/dashboard.css">
     <!-- CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
@@ -24,8 +26,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <style>
-     
-
         :root {
             --ink: #0b0d12;
             --ink-2: #10131b;
@@ -47,7 +47,9 @@
             box-sizing: border-box;
         }
 
-        html { scroll-behavior: smooth; }
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             font-family: var(--grot);
@@ -60,9 +62,14 @@
             background-size: 44px 44px;
         }
 
-        ::selection { background: var(--lime); color: var(--ink); }
+        ::selection {
+            background: var(--lime);
+            color: var(--ink);
+        }
 
-        a { color: inherit; }
+        a {
+            color: inherit;
+        }
 
         .shell {
             max-width: 1520px;
@@ -140,8 +147,15 @@
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.25; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.25;
+            }
         }
 
         /* ===== MENU DÉROULANT "COMMANDES" ===== */
@@ -165,11 +179,19 @@
             transition: border-color 0.2s, color 0.2s;
         }
 
-        .cmd-toggle:hover { border-color: var(--lime); color: var(--lime); }
+        .cmd-toggle:hover {
+            border-color: var(--lime);
+            color: var(--lime);
+        }
 
-        .cmd-toggle .caret { transition: transform 0.25s; font-size: 0.6rem; }
+        .cmd-toggle .caret {
+            transition: transform 0.25s;
+            font-size: 0.6rem;
+        }
 
-        .cmd.open .cmd-toggle .caret { transform: rotate(180deg); }
+        .cmd.open .cmd-toggle .caret {
+            transform: rotate(180deg);
+        }
 
         .cmd-menu {
             position: absolute;
@@ -203,7 +225,9 @@
             transition: background 0.15s, color 0.15s, padding-left 0.15s;
         }
 
-        .cmd-menu a:last-child { border-bottom: none; }
+        .cmd-menu a:last-child {
+            border-bottom: none;
+        }
 
         .cmd-menu a i {
             width: 1.2rem;
@@ -249,14 +273,21 @@
             margin-top: 0.8rem;
         }
 
-        .report .meta strong { color: var(--lime); font-weight: 700; }
+        .report .meta strong {
+            color: var(--lime);
+            font-weight: 700;
+        }
 
         @media (max-width: 700px) {
-            .report { grid-template-columns: 1fr; }
+            .report {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* ===== SECTIONS ===== */
-        .section { margin-bottom: 3rem; }
+        .section {
+            margin-bottom: 3rem;
+        }
 
         .section-head {
             display: flex;
@@ -302,9 +333,13 @@
             transition: background 0.2s;
         }
 
-        .stat:last-child { border-right: none; }
+        .stat:last-child {
+            border-right: none;
+        }
 
-        .stat:hover { background: var(--ink-3); }
+        .stat:hover {
+            background: var(--ink-3);
+        }
 
         .stat .k {
             font-family: var(--mono);
@@ -318,7 +353,10 @@
             gap: 0.45rem;
         }
 
-        .stat .k i { color: var(--violet); font-size: 0.7rem; }
+        .stat .k i {
+            color: var(--violet);
+            font-size: 0.7rem;
+        }
 
         .stat .v {
             font-family: var(--mono);
@@ -339,18 +377,38 @@
             transition: width 0.35s;
         }
 
-        .stat:hover::after { width: 100%; }
+        .stat:hover::after {
+            width: 100%;
+        }
 
         @media (max-width: 900px) {
-            .stats-strip { grid-template-columns: repeat(2, 1fr); }
-            .stat:nth-child(2) { border-right: none; }
-            .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--line); }
+            .stats-strip {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stat:nth-child(2) {
+                border-right: none;
+            }
+
+            .stat:nth-child(1),
+            .stat:nth-child(2) {
+                border-bottom: 1px solid var(--line);
+            }
         }
 
         @media (max-width: 480px) {
-            .stats-strip { grid-template-columns: 1fr; }
-            .stat { border-right: none; border-bottom: 1px solid var(--line); }
-            .stat:last-child { border-bottom: none; }
+            .stats-strip {
+                grid-template-columns: 1fr;
+            }
+
+            .stat {
+                border-right: none;
+                border-bottom: 1px solid var(--line);
+            }
+
+            .stat:last-child {
+                border-bottom: none;
+            }
         }
 
         /* ===== PANNEAUX ===== */
@@ -391,9 +449,14 @@
             gap: 0.7rem;
         }
 
-        .panel-title i { color: var(--lime); font-size: 0.85rem; }
+        .panel-title i {
+            color: var(--lime);
+            font-size: 0.85rem;
+        }
 
-        .panel-body { padding: 1rem; }
+        .panel-body {
+            padding: 1rem;
+        }
 
         .duo {
             display: grid;
@@ -403,7 +466,9 @@
         }
 
         @media (max-width: 1000px) {
-            .duo { grid-template-columns: 1fr; }
+            .duo {
+                grid-template-columns: 1fr;
+            }
         }
 
         .duo-2 {
@@ -413,7 +478,9 @@
         }
 
         @media (max-width: 1000px) {
-            .duo-2 { grid-template-columns: 1fr; }
+            .duo-2 {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* ===== WALLET ===== */
@@ -446,7 +513,10 @@
             letter-spacing: -1px;
         }
 
-        #crypto-prices { display: flex; flex-direction: column; }
+        #crypto-prices {
+            display: flex;
+            flex-direction: column;
+        }
 
         .crypto-item {
             display: grid;
@@ -458,8 +528,13 @@
             transition: background 0.15s;
         }
 
-        .crypto-item:last-child { border-bottom: none; }
-        .crypto-item:hover { background: var(--ink-3); }
+        .crypto-item:last-child {
+            border-bottom: none;
+        }
+
+        .crypto-item:hover {
+            background: var(--ink-3);
+        }
 
         .crypto-item img {
             width: 32px;
@@ -469,9 +544,14 @@
             transition: filter 0.2s;
         }
 
-        .crypto-item:hover img { filter: none; }
+        .crypto-item:hover img {
+            filter: none;
+        }
 
-        .crypto-item .name { display: flex; flex-direction: column; }
+        .crypto-item .name {
+            display: flex;
+            flex-direction: column;
+        }
 
         .crypto-item .symbol {
             font-family: var(--mono);
@@ -487,7 +567,11 @@
             color: var(--txt-dim);
         }
 
-        .crypto-item .holdings { display: flex; flex-direction: column; text-align: right; }
+        .crypto-item .holdings {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
 
         .crypto-item .holdings .amount {
             font-family: var(--mono);
@@ -510,14 +594,32 @@
             text-align: right;
         }
 
-        .crypto-item .change.positive::before { content: '▲ '; font-size: 0.6rem; }
-        .crypto-item .change.negative::before { content: '▼ '; font-size: 0.6rem; }
-        .crypto-item .change.positive { color: var(--lime); }
-        .crypto-item .change.negative { color: var(--rose); }
+        .crypto-item .change.positive::before {
+            content: '▲ ';
+            font-size: 0.6rem;
+        }
+
+        .crypto-item .change.negative::before {
+            content: '▼ ';
+            font-size: 0.6rem;
+        }
+
+        .crypto-item .change.positive {
+            color: var(--lime);
+        }
+
+        .crypto-item .change.negative {
+            color: var(--rose);
+        }
 
         @media (max-width: 420px) {
-            .crypto-item { grid-template-columns: 32px 1fr auto; }
-            .crypto-item .holdings { display: none; }
+            .crypto-item {
+                grid-template-columns: 32px 1fr auto;
+            }
+
+            .crypto-item .holdings {
+                display: none;
+            }
         }
 
         /* Adresses wallet */
@@ -529,7 +631,9 @@
             border-bottom: 1px dashed var(--line);
         }
 
-        .wallet-row:last-child { border-bottom: none; }
+        .wallet-row:last-child {
+            border-bottom: none;
+        }
 
         .wallet-row .network {
             font-family: var(--mono);
@@ -588,7 +692,9 @@
             transition: all 0.2s;
         }
 
-        .wallet-links-btn i { color: var(--lime); }
+        .wallet-links-btn i {
+            color: var(--lime);
+        }
 
         .wallet-links-btn:hover {
             border-color: var(--lime);
@@ -596,7 +702,9 @@
         }
 
         /* ===== TABLEAUX ===== */
-        .table-responsive { overflow-x: auto; }
+        .table-responsive {
+            overflow-x: auto;
+        }
 
         .data-table {
             width: 100%;
@@ -624,8 +732,13 @@
             white-space: nowrap;
         }
 
-        .data-table tbody tr { transition: background 0.15s; }
-        .data-table tbody tr:hover { background: var(--ink-3); }
+        .data-table tbody tr {
+            transition: background 0.15s;
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--ink-3);
+        }
 
         .data-table code {
             background: var(--ink-3);
@@ -646,10 +759,29 @@
             border: 1px solid;
         }
 
-        .badge-free { background: transparent; color: var(--txt-dim); border-color: var(--line); }
-        .badge-pro { background: transparent; color: var(--lime); border-color: var(--lime); }
-        .badge-business { background: transparent; color: var(--rose); border-color: var(--rose); }
-        .badge-premium { background: transparent; color: var(--violet); border-color: var(--violet); }
+        .badge-free {
+            background: transparent;
+            color: var(--txt-dim);
+            border-color: var(--line);
+        }
+
+        .badge-pro {
+            background: transparent;
+            color: var(--lime);
+            border-color: var(--lime);
+        }
+
+        .badge-business {
+            background: transparent;
+            color: var(--rose);
+            border-color: var(--rose);
+        }
+
+        .badge-premium {
+            background: transparent;
+            color: var(--violet);
+            border-color: var(--violet);
+        }
 
         /* ===== EXPORT ===== */
         .export-btn {
@@ -670,7 +802,9 @@
             transition: filter 0.2s;
         }
 
-        .export-btn:hover { filter: brightness(1.1); }
+        .export-btn:hover {
+            filter: brightness(1.1);
+        }
 
         /* ===== GRAPHIQUE & CARTE ===== */
         #worldMap {
@@ -679,7 +813,10 @@
             background: var(--ink-2);
         }
 
-        .chart-wrap { position: relative; max-height: 320px; }
+        .chart-wrap {
+            position: relative;
+            max-height: 320px;
+        }
 
         /* ===== EMPTY ===== */
         .empty-state {
@@ -706,9 +843,15 @@
             letter-spacing: 2px;
         }
 
-        .custom-swal-close-button { color: var(--txt-dim) !important; }
+        .custom-swal-close-button {
+            color: var(--txt-dim) !important;
+        }
 
-        .custom-swal-content ul { list-style: none; padding: 0; text-align: left; }
+        .custom-swal-content ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
 
         .custom-swal-content li {
             padding: 0.7rem 0;
@@ -717,7 +860,9 @@
             font-size: 0.85rem;
         }
 
-        .custom-swal-content li:last-child { border-bottom: none; }
+        .custom-swal-content li:last-child {
+            border-bottom: none;
+        }
 
         .custom-swal-content a {
             color: var(--lime);
@@ -725,7 +870,9 @@
             font-weight: 700;
         }
 
-        .custom-swal-content a:hover { text-decoration: underline; }
+        .custom-swal-content a:hover {
+            text-decoration: underline;
+        }
 
         /* ===== TOASTIFY ===== */
         .toastify {
@@ -752,9 +899,12 @@
                     </button>
                     <div class="cmd-menu" role="menu">
                         <a href="dashboard.php" role="menuitem"><i class="fas fa-arrow-left"></i> Dashboard</a>
-                        <a href="../campain/rapport.php" role="menuitem"><i class="fas fa-file-alt"></i> Rapport id_gb</a>
-                        <a href="../campain/rapport_lb.php" role="menuitem"><i class="fas fa-file-alt"></i> Rapport id_lb</a>
-                        <a href="../campain/prospect_template.php" role="menuitem"><i class="fa-regular fa-file-code"></i> Script prospection</a>
+                        <a href="../campain/rapport.php" role="menuitem"><i class="fas fa-file-alt"></i> Rapport
+                            id_gb</a>
+                        <a href="../campain/rapport_lb.php" role="menuitem"><i class="fas fa-file-alt"></i> Rapport
+                            id_lb</a>
+                        <a href="../campain/prospect_template.php" role="menuitem"><i
+                                class="fa-regular fa-file-code"></i> Script prospection</a>
                         <a href="?export_emails=1" role="menuitem"><i class="fas fa-download"></i> Export emails CSV</a>
                     </div>
                 </nav>
@@ -767,36 +917,52 @@
         <section class="report">
             <div>
                 <h1>Rapport<br><span class="stroke">SmartPixel</span></h1>
-                <p class="meta">console admin — <strong><?= date('d.m.Y') ?></strong> — accès : <?= htmlspecialchars($_SESSION['user_email']) ?></p>
+                <p class="meta">console admin — <strong>
+                        <?= date('d.m.Y') ?>
+                    </strong> — accès :
+                    <?= htmlspecialchars($_SESSION['user_email']) ?>
+                </p>
             </div>
         </section>
 
         <!-- ===== 01 — STATS ===== -->
         <section class="section">
-            <div class="section-head"><span class="index">01</span><h2>Signaux globaux</h2></div>
+            <div class="section-head"><span class="index">01</span>
+                <h2>Signaux globaux</h2>
+            </div>
             <div class="stats-strip">
                 <div class="stat">
                     <div class="k"><i class="fas fa-users"></i> Utilisateurs</div>
-                    <div class="v"><?= number_format(count($usersList)) ?></div>
+                    <div class="v">
+                        <?= number_format(count($usersList)) ?>
+                    </div>
                 </div>
                 <div class="stat">
                     <div class="k"><i class="fas fa-globe"></i> Sites</div>
-                    <div class="v"><?= number_format(array_sum(array_column($topSites, 'total_site'))) ?></div>
+                    <div class="v">
+                        <?= number_format(array_sum(array_column($topSites, 'total_site'))) ?>
+                    </div>
                 </div>
                 <div class="stat">
                     <div class="k"><i class="fas fa-eye"></i> Visites</div>
-                    <div class="v"><?= number_format(array_sum(array_column($visitedCountries, 'visits'))) ?></div>
+                    <div class="v">
+                        <?= number_format(array_sum(array_column($visitedCountries, 'visits'))) ?>
+                    </div>
                 </div>
                 <div class="stat">
                     <div class="k"><i class="fas fa-user-check"></i> Visiteurs uniques</div>
-                    <div class="v"><?= number_format(end($historicalData)['cumulative_unique_visitors']) ?></div>
+                    <div class="v">
+                        <?= number_format(end($historicalData)['cumulative_unique_visitors']) ?>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- ===== 02 — WALLET CRYPTO ===== -->
         <section class="section">
-            <div class="section-head"><span class="index">02</span><h2>Wallet</h2></div>
+            <div class="section-head"><span class="index">02</span>
+                <h2>Wallet</h2>
+            </div>
             <div class="duo">
                 <div class="panel">
                     <div class="panel-head">
@@ -831,7 +997,9 @@
 
         <!-- ===== 03 — CROISSANCE ===== -->
         <section class="section">
-            <div class="section-head"><span class="index">03</span><h2>Croissance générale</h2></div>
+            <div class="section-head"><span class="index">03</span>
+                <h2>Croissance générale</h2>
+            </div>
             <div class="panel">
                 <div class="panel-head">
                     <h3 class="panel-title"><i class="fas fa-chart-line"></i> Évolution cumulative — 7 jours</h3>
@@ -844,7 +1012,9 @@
 
         <!-- ===== 04 — TOP SITES + CARTE ===== -->
         <section class="section">
-            <div class="section-head"><span class="index">04</span><h2>Top sites &amp; géographie</h2></div>
+            <div class="section-head"><span class="index">04</span>
+                <h2>Top sites &amp; géographie</h2>
+            </div>
             <div class="duo-2">
                 <div class="panel">
                     <div class="panel-head">
@@ -862,17 +1032,21 @@
                                 </thead>
                                 <tbody>
                                     <?php if (!empty($topSites)): ?>
-                                        <?php foreach ($topSites as $site): ?>
-                                            <tr>
-                                                <td><?= htmlspecialchars($site['site_name']) ?></td>
-                                                <td><strong style="color: var(--lime);"><?= number_format($site['total_visits']) ?></strong></td>
-                                                <td><code><?= htmlspecialchars($site['id']) ?></code></td>
-                                            </tr>
-                                        <?php endforeach; ?>
+                                    <?php foreach ($topSites as $site): ?>
+                                    <tr>
+                                        <td>
+                                            <?= htmlspecialchars($site['site_name']) ?>
+                                        </td>
+                                        <td><strong style="color: var(--lime);">
+                                                <?= number_format($site['total_visits']) ?>
+                                            </strong></td>
+                                        <td><code><?= htmlspecialchars($site['id']) ?></code></td>
+                                    </tr>
+                                    <?php endforeach; ?>
                                     <?php else: ?>
-                                        <tr>
-                                            <td colspan="3" class="empty-state">Aucune donnée</td>
-                                        </tr>
+                                    <tr>
+                                        <td colspan="3" class="empty-state">Aucune donnée</td>
+                                    </tr>
                                     <?php endif; ?>
                                 </tbody>
                             </table>
@@ -892,7 +1066,11 @@
 
         <!-- ===== 05 — UTILISATEURS ===== -->
         <section class="section">
-            <div class="section-head"><span class="index">05</span><h2>Registre des utilisateurs (<?= count($usersList) ?>)</h2></div>
+            <div class="section-head"><span class="index">05</span>
+                <h2>Registre des utilisateurs (
+                    <?= count($usersList) ?>)
+                </h2>
+            </div>
             <div class="panel">
                 <div class="panel-head">
                     <h3 class="panel-title"><i class="fas fa-address-card"></i> Comptes</h3>
@@ -915,26 +1093,38 @@
                             </thead>
                             <tbody>
                                 <?php if (!empty($usersList)): ?>
-                                    <?php foreach ($usersList as $user):
+                                <?php foreach ($usersList as $user):
                                         // Gestion de la classe du badge selon le plan
                                         $planClass = 'free'; // default
                                         if (isset($user['plan'])) {
                                             $planClass = strtolower($user['plan']);
                                         }
                                     ?>
-                                        <tr>
-                                            <td><?= htmlspecialchars($user['email']) ?></td>
-                                            <td><span class="badge badge-<?= $planClass ?>"><?= strtoupper($user['plan'] ?? 'free') ?></span></td>
-                                            <td><?= (int)($user['site_count'] ?? 0) ?></td>
-                                            <td><?= number_format($user['total_visits'] ?? 0) ?></td>
-                                            <td><?= isset($user['created_at']) ? (new DateTime($user['created_at']))->format('d/m/Y') : '-' ?></td>
-                                            <td><?= isset($user['last_login']) && $user['last_login'] ? (new DateTime($user['last_login']))->format('d/m/Y H:i') : '<span style="color:var(--txt-dim);">Jamais</span>' ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
+                                <tr>
+                                    <td>
+                                        <?= htmlspecialchars($user['email']) ?>
+                                    </td>
+                                    <td><span class="badge badge-<?= $planClass ?>">
+                                            <?= strtoupper($user['plan'] ?? 'free') ?>
+                                        </span></td>
+                                    <td>
+                                        <?= (int)($user['site_count'] ?? 0) ?>
+                                    </td>
+                                    <td>
+                                        <?= number_format($user['total_visits'] ?? 0) ?>
+                                    </td>
+                                    <td>
+                                        <?= isset($user['created_at']) ? (new DateTime($user['created_at']))->format('d/m/Y') : '-' ?>
+                                    </td>
+                                    <td>
+                                        <?= isset($user['last_login']) && $user['last_login'] ? (new DateTime($user['last_login']))->format('d/m/Y H:i') : '<span style="color:var(--txt-dim);">Jamais</span>' ?>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
                                 <?php else: ?>
-                                    <tr>
-                                        <td colspan="6" class="empty-state">Aucun utilisateur enregistré</td>
-                                    </tr>
+                                <tr>
+                                    <td colspan="6" class="empty-state">Aucun utilisateur enregistré</td>
+                                </tr>
                                 <?php endif; ?>
                             </tbody>
                         </table>
@@ -972,78 +1162,70 @@
             });
         })();
 
-        // ===== WALLET CRYPTO =====
-        const tokenHoldings = {
-            bitcoin: 0,
-            solana: 4.65,
-            sui: 610,
-            //ami: 35000,
-           //"usd-coin": 832,
-        };
- 
-        function refreshCryptoPrices() {
-            fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=bitcoin,solana,sui')
-                .then(response => response.json())
-                .then(data => {
-                    const container = document.getElementById('crypto-prices');
-                    let totalPortfolioValue = 0;
+        // ===== WALLET CRYPTO (adapté du script fonctionnel) =====
+        fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=bitcoin,solana,sui')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('crypto-prices');
 
-                    // Total du portefeuille en tête
-                    let totalElement = document.querySelector('#portfolio-total');
-                    if (!totalElement) {
-                        totalElement = document.createElement('div');
-                        totalElement.id = 'portfolio-total';
-                        container.prepend(totalElement);
+                const tokenHoldings = {
+                    bitcoin: 0,
+                    solana: 4.65,
+                    sui: 610,
+                };
+
+                let totalPortfolioValue = 0;
+
+                data.forEach(crypto => {
+                    const price = crypto.current_price;
+                    // Garde null-safe : CoinGecko renvoie parfois null → crash du forEach
+                    const change24h = (crypto.price_change_percentage_24h ?? 0).toFixed(2);
+                    const holdings = tokenHoldings[crypto.id] || 0;
+                    const totalValue = (price * holdings).toFixed(2);
+                    const imageUrl = crypto.image;
+
+                    totalPortfolioValue += parseFloat(totalValue);
+
+                    let cryptoElement = document.querySelector(`#${crypto.id}`);
+
+                    if (!cryptoElement) {
+                        cryptoElement = document.createElement('div');
+                        cryptoElement.id = crypto.id;
+                        cryptoElement.classList.add('crypto-item');
+                        cryptoElement.innerHTML = `
+          <img src="${imageUrl}" alt="${crypto.id} logo">
+          <div class="name">
+            <span class="symbol">${crypto.symbol.toUpperCase()}</span>
+            <span class="price">${price.toLocaleString('fr-FR', { minimumFractionDigits: 2 })} €</span>
+          </div>
+          <div class="holdings">
+            <span class="amount">${holdings} ${crypto.symbol.toUpperCase()}</span>
+            <span class="value">${totalValue} €</span>
+          </div>
+          <p class="change">${change24h}%</p>
+        `;
+                        container.appendChild(cryptoElement);
+                    } else {
+                        cryptoElement.querySelector('.price').textContent = `${price.toLocaleString('fr-FR', { minimumFractionDigits: 2 })} €`;
+                        cryptoElement.querySelector('.amount').textContent = `${holdings} ${crypto.symbol.toUpperCase()}`;
+                        cryptoElement.querySelector('.value').textContent = `${totalValue} €`;
+                        cryptoElement.querySelector('.change').textContent = `${change24h}%`;
                     }
 
-                    data.forEach(crypto => {
-                        const price = crypto.current_price;
-                        const change24h = crypto.price_change_percentage_24h.toFixed(2);
-                        const holdings = tokenHoldings[crypto.id] || 0;
-                        const totalValue = (price * holdings).toFixed(2);
-                        const imageUrl = crypto.image;
+                    const changeElement = cryptoElement.querySelector('.change');
+                    changeElement.classList.toggle('positive', change24h >= 0);
+                    changeElement.classList.toggle('negative', change24h < 0);
+                });
 
-                        totalPortfolioValue += parseFloat(totalValue);
-
-                        let cryptoElement = document.querySelector(`#${crypto.id}`);
-
-                        if (!cryptoElement) {
-                            cryptoElement = document.createElement('div');
-                            cryptoElement.id = crypto.id;
-                            cryptoElement.classList.add('crypto-item');
-                            cryptoElement.innerHTML = `
-                                <img src="${imageUrl}" alt="${crypto.id} logo">
-                                <div class="name">
-                                    <span class="symbol">${crypto.symbol.toUpperCase()}</span>
-                                    <span class="price">${price.toLocaleString('fr-FR', {minimumFractionDigits: 2})} €</span>
-                                </div>
-                                <div class="holdings">
-                                    <span class="amount">${holdings} ${crypto.symbol.toUpperCase()}</span>
-                                    <span class="value">${totalValue} €</span>
-                                </div>
-                                <p class="change">${change24h}%</p>
-                            `;
-                            container.appendChild(cryptoElement);
-                        } else {
-                            cryptoElement.querySelector('.price').textContent = `${price.toLocaleString('fr-FR', {minimumFractionDigits: 2})} €`;
-                            cryptoElement.querySelector('.amount').textContent = `${holdings} ${crypto.symbol.toUpperCase()}`;
-                            cryptoElement.querySelector('.value').textContent = `${totalValue} €`;
-                            cryptoElement.querySelector('.change').textContent = `${change24h}%`;
-                        }
-
-                        const changeElement = cryptoElement.querySelector('.change');
-                        changeElement.classList.toggle('positive', change24h >= 0);
-                        changeElement.classList.toggle('negative', change24h < 0);
-                    });
-
-                    totalElement.innerHTML = `<div class="label">Total</div><h3>${totalPortfolioValue.toFixed(2)} €</h3>`;
-                })
-                .catch(error => console.error('Erreur lors de la récupération des données:', error));
-        }
-
-        refreshCryptoPrices();
-        // Rafraîchissement toutes les 60s (limite gratuite CoinGecko)
-        setInterval(refreshCryptoPrices, 60000);
+                let totalElement = document.querySelector('#portfolio-total');
+                if (!totalElement) {
+                    totalElement = document.createElement('div');
+                    totalElement.id = 'portfolio-total';
+                    container.prepend(totalElement);
+                }
+                totalElement.innerHTML = `<div class="label">Total</div><h3>${totalPortfolioValue.toFixed(2)} €</h3>`;
+            })
+            .catch(error => console.error('Erreur lors de la récupération des données:', error));
 
         // Liens 0x via SweetAlert2
         document.getElementById('wallet-links-btn').addEventListener('click', () => {
@@ -1102,41 +1284,41 @@
             data: {
                 labels: <?= json_encode(array_column($historicalData, 'date')) ?>,
                 datasets: [{
-                        label: 'Utilisateurs',
-                        data: <?= json_encode(array_column($historicalData, 'cumulative_users')) ?>,
-                        borderColor: '#ab9ff2',
-                        backgroundColor: 'rgba(171, 159, 242, 0.06)',
-                        tension: 0.2,
-                        fill: true,
-                        pointRadius: 2
-                    },
-                    {
-                        label: 'Sites',
-                        data: <?= json_encode(array_column($historicalData, 'cumulative_sites')) ?>,
-                        borderColor: '#86baff',
-                        backgroundColor: 'rgba(134, 186, 255, 0.06)',
-                        tension: 0.2,
-                        fill: true,
-                        pointRadius: 2
-                    },
-                    {
-                        label: 'Visites',
-                        data: <?= json_encode(array_column($historicalData, 'cumulative_visits')) ?>,
-                        borderColor: '#c8f65d',
-                        backgroundColor: 'rgba(200, 246, 93, 0.06)',
-                        tension: 0.2,
-                        fill: true,
-                        pointRadius: 2
-                    },
-                    {
-                        label: 'Visiteurs uniques',
-                        data: <?= json_encode(array_column($historicalData, 'cumulative_unique_visitors')) ?>,
-                        borderColor: '#ff7a8a',
-                        backgroundColor: 'rgba(255, 122, 138, 0.06)',
-                        tension: 0.2,
-                        fill: true,
-                        pointRadius: 2
-                    }
+                    label: 'Utilisateurs',
+                    data: <?= json_encode(array_column($historicalData, 'cumulative_users')) ?>,
+                    borderColor: '#ab9ff2',
+                    backgroundColor: 'rgba(171, 159, 242, 0.06)',
+                    tension: 0.2,
+                    fill: true,
+                    pointRadius: 2
+                },
+                {
+                    label: 'Sites',
+                    data: <?= json_encode(array_column($historicalData, 'cumulative_sites')) ?>,
+                    borderColor: '#86baff',
+                    backgroundColor: 'rgba(134, 186, 255, 0.06)',
+                    tension: 0.2,
+                    fill: true,
+                    pointRadius: 2
+                },
+                {
+                    label: 'Visites',
+                    data: <?= json_encode(array_column($historicalData, 'cumulative_visits')) ?>,
+                    borderColor: '#c8f65d',
+                    backgroundColor: 'rgba(200, 246, 93, 0.06)',
+                    tension: 0.2,
+                    fill: true,
+                    pointRadius: 2
+                },
+                {
+                    label: 'Visiteurs uniques',
+                    data: <?= json_encode(array_column($historicalData, 'cumulative_unique_visitors')) ?>,
+                    borderColor: '#ff7a8a',
+                    backgroundColor: 'rgba(255, 122, 138, 0.06)',
+                    tension: 0.2,
+                    fill: true,
+                    pointRadius: 2
+                }
                 ]
             },
             options: {
@@ -1180,7 +1362,7 @@
         });
 
         // --- Carte du monde ---
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const countries = <?= json_encode($visitedCountries ?? []) ?>;
             if (!countries.length) {
                 document.getElementById('worldMap').innerHTML = '<div class="empty-state">Données géographiques indisponibles</div>';
