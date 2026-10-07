@@ -1,54 +1,74 @@
 {
   "identite": {
     "pseudo": "berru-g",
-    "titre": "Dév Amateur & Puriste",
-    "manifeste": "Développeur autodidacte. Code propre, sans dépendances inutiles. Souveraineté numérique, cypherpunk, sécurité offensive.",
+    "titre": "Créateur autodidacte — Hardware & Software",
+    "manifeste": "Créateur autodidacte depuis 2020 : logiciel, PCB, API, et bien plus. Code propre, sans dépendances inutiles. Souveraineté numérique, cypherpunk, sécurité offensive. For the fun.",
     "principes": [
       "Souveraineté numérique : pas de GAFAM, tout est auto-hébergé ou open source.",
       "Cypherpunk appliqué : crypto pour enquêter et protéger la vie privée.",
-      "Artisanat logiciel : code sur-mesure, contrôle total de la stack.",
-      "Sécurité offensive : sécurité par défaut, tout est documenté et testé.",
-      "Borné et puriste : Pas de dépendance. Pas de framework juste pour le plaisir."
+      "Artisanat logiciel : code sur-mesure en PHP natif, sans framework par défaut.",
+      "Hardware & software : du PCB au déploiement web, contrôle total de la stack.",
+      "Sécurité offensive : sécurité par défaut, chiffrement natif, tout est documenté et testé."
     ]
   },
   "github": {
     "username": "berru-g",
     "repos": [
       {
+        "nom": "LibreAnalytics",
+        "description": "Alternative libre et souveraine à Google Analytics. PHP natif, sans framework.",
+        "langages": ["PHP", "JavaScript"],
+        "lien": "https://github.com/berru-g/smart_phpixel"
+      },
+      {
+        "nom": "Suivi Blockchain / scam-radar",
+        "description": "Investigation forensique blockchain : suivi de transactions Bitcoin, identification d'exchanges, diagrammes automatiques.",
+        "langages": ["JavaScript", "Python", "Three.js"],
+        "lien": "https://github.com/berru-g/crypto-tool/tree/main/scam-radar"
+      },
+      {
         "nom": "3Dscrollanimator",
-        "description": "Créez des animations 3D fluides synchronisées au scroll — no code tool.",
+        "description": "SAAS — animations 3D synchronisées au scroll en 2 minutes, génération automatique des scripts.",
         "langages": ["JavaScript", "PHP", "HTML", "CSS"],
         "lien": "https://github.com/berru-g/3Dscrollanimator"
       },
       {
-        "nom": "berru-g",
-        "description": "Organisation principale pour mes projets.",
-        "langages": ["JavaScript", "PHP", "Python"],
-        "lien": "https://github.com/berru-g/berru-g"
+        "nom": "Local Network Chat",
+        "description": "Chat chiffré en réseau local via SMB — AES-128 + HMAC-SHA256, sans serveur externe.",
+        "langages": ["JavaScript", "Security"],
+        "lien": "https://github.com/berru-g"
       },
       {
-        "nom": "smart_phpixel",
-        "description": "Système d'analytics éthique et souverain. Alternative à Google Analytics.",
-        "langages": ["JavaScript", "PHP"],
-        "lien": "https://github.com/berru-g/smart_phpixel"
+        "nom": "Make & Play USB C",
+        "description": "Circuit et PCB d'un microcontrôleur USB MIDI low-cost, plug & play sur tout DAW.",
+        "langages": ["Arduino", "PCB", "MIDI"],
+        "lien": "https://www.hackster.io/berru-g"
       },
       {
-        "nom": "crypto-tool",
-        "description": "Outils liés à la crypto : heatmap 3D, scam-radar, etc.",
-        "langages": ["JavaScript", "Python"],
-        "lien": "https://github.com/berru-g/crypto-tool"
+        "nom": "NFC Badge",
+        "description": "Badge NFC reprogrammable open-source, puce NT3H2111. Plan électronique, Gerber et BOM.",
+        "langages": ["Arduino", "PCB", "NFC"],
+        "lien": "https://github.com/berru-g"
       },
       {
-        "nom": "scam-radar",
-        "description": "Outil d'investigation forensique blockchain pour tracer des arnaques.",
-        "langages": ["JavaScript", "Python", "Three.js"],
-        "lien": "https://github.com/berru-g/crypto-tool/tree/main/scam-radar"
+        "nom": "Help Desk",
+        "description": "Terminal de surveillance système avec scan réseau style NMAP.",
+        "langages": ["Python", "Terminal"],
+        "lien": "https://github.com/berru-g"
+      },
+      {
+        "nom": "Ornithopter",
+        "description": "Ornithoptère mécanique en cours de conception. DIY mécanique + électronique.",
+        "langages": ["DIY", "Mécanique", "Électronique"],
+        "lien": "https://gael-berru.com"
       }
     ]
   },
   "competences": {
-    "frontend": ["HTML5", "CSS3", "JavaScript (ES6+)", "Three.js"],
-    "backend": ["PHP", "Python"],
-    "outils": ["Git", "GitHub", "VSCode", "Linux"]
+    "frontend": ["HTML5", "CSS3", "JavaScript (ES6+)", "Three.js", "WebGL"],
+    "backend": ["PHP natif", "Python", "SQL"],
+    "hardware": ["Arduino", "PCB (EasyEDA)", "Gerber", "MIDI", "NFC"],
+    "crypto": ["Blockchain BTC", "Investigation forensique", "AES-128", "HMAC-SHA256"],
+    "outils": ["Git", "GitHub", "VSCode", "Linux", "Hackster"]
   }
 }
