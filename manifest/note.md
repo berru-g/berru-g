@@ -1,11 +1,11 @@
 # essai philosophie de comptior
 
-Titre :
+## Titre :
 Pourquoi Dieu est le plus gros fdp de l’univers ? Et je vais vous le prouver.
 ou
 Dieu existe. Il s’appelle la sélection naturelle… et Il n’a jamais été du côté des faibles. 
  
-PREFACE :
+## PREFACE :
 
 Notre histoire débute il y’a environ 500 millions d’années, à l’ère édacarian tardif.
 Le monde ressemble à un immense desert, posé sur une sphére océanique.

@@ -112,6 +112,13 @@ window.b = {
             });
             console.log('%c💡 Usage: b.git("php") pour filtrer', 'color: #888;');
         }).catch(console.error);
+    },
+
+    // 4️⃣ TREASURE — accès direct à l'univers 3D caché du site
+    treasure: function () {
+        console.log('%c🏴‍☠️ Un trésor est caché quelque part sur ce site...', 'color: #ffd700; font-size: 16px; font-weight: bold;');
+        console.log('%c➡️  Lancement de l\'immersion 3D...', 'color: #8a6ff8;');
+        window.location.href = 'https://gael-berru.com/3D/';
     }
 };
 
@@ -125,21 +132,23 @@ setTimeout(async () => {
         console.log(
 `%c
 ╔══════════════════════════════════╗
-║      berru-g · console API       ║
+║      berru-g · easter eggs       ║
 ╚══════════════════════════════════╝
-%cSalut, curieux 👋 Commandes disponibles :
+%cCommandes disponibles :
 
 %c b.manifest()      👤  Manifeste & principes
 %c b.skill()         🛠️  Compétences (b.skill("backend"))
 %c b.git()           📦  Repos GitHub (b.git("php"))
+%c b.treasure()      🏴‍☠️  Entrer dans l'univers 3D
 `,
             'color: #8a6ff8; font-family: monospace; font-weight: bold;',
             'color: #4cc9f0;',
             'color: #8a6ff8;',
             'color: #8a6ff8;',
+            'color: #8a6ff8;',
             'color: #8a6ff8;'
         );
     } catch (error) {
-        console.warn('API non chargée :', error.message);
+        console.warn('pseudo API non chargée :', error.message);
     }
 }, 2000);

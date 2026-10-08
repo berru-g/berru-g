@@ -48,17 +48,17 @@ const projectsDatabase = [
         tags: ['SAAS', 'WebGL', 'Animation', '3d', 'threejs', 'génerateur de code', 'php']
     },
     {
-         id: 'animation',
-         title: 'animation stop motion',
-         shortDesc: 'Création d\'animations stop motion',
-         longDesc: 'Créez des animations stop motion avec une interface simple et intuitive.',
-         keywords: ['animation', 'stop motion', 'video', 'creative', 'design'],
-         image: './img/jeanjean2024.mp4',
-         link: 'https://youtube.com/shorts/XRlEr9VIdyc?si=SYAYvrhyyUXAokOh',
-         category: 'animation',
-         features: ['animation', 'stop motion', 'video', 'creative', 'design'],
-         tags: ['animation', 'stop motion', 'video', 'creative', 'design']
-     },
+        id: 'animation',
+        title: 'animation stop motion',
+        shortDesc: 'Création d\'animations stop motion',
+        longDesc: 'Créez des animations stop motion avec une interface simple et intuitive.',
+        keywords: ['animation', 'stop motion', 'video', 'creative', 'design'],
+        image: './img/jeanjean2024.mp4',
+        link: 'https://youtube.com/shorts/XRlEr9VIdyc?si=SYAYvrhyyUXAokOh',
+        category: 'animation',
+        features: ['animation', 'stop motion', 'video', 'creative', 'design'],
+        tags: ['animation', 'stop motion', 'video', 'creative', 'design']
+    },
     {
         id: 'smart-pixel',
         title: 'Libre Analytics',
@@ -348,31 +348,25 @@ const projectsDatabase = [
         tags: ['surprise', 'calendrier', 'noël', 'advent']
     },
     {
-        id: 'what',
-        title: 'C\'est ça que tu cherche ?',
-        shortDesc: '...',
-        longDesc: '...',
-        keywords: ['wikipédia', 'wikipedia'],
-        image: 'https://upload.wikimedia.org/wikipedia/commons/a/aa/Wikipedia-logo-v2-o50.svg',
-        link: 'https://fr.wikipedia.org/wiki/Algorithme',
-        category: 'Wikipedia',
-        features: ['quoi d\'autre ?'],
-        tags: ['wikipédia', 'wikipedia']
-    },
-    {
         id: 'welcome',
         title: 'Bienvenue',
         shortDesc: 'bienvenue',
-        longDesc: `<strong>Qui suis-je ?</strong> Développeur full-stack autodidacte depuis 2020. Artisan du code souverain.
+        longDesc: `<strong>Qui suis-je ?</strong> Développeur autodidacte depuis 2020. Artisan du code souverain et open source.
 <div id="welcome-section">    
-<h3>Ma méthode : la souveraineté technique</h3>
+<h3>Rien n'est à vendre ici</h3>
 
-<p>Voici comment je travail :</p>
+<p><strong>Tous mes projets sont open source.</strong> Les script sont sur mon GitHub, librement accessible : si un outil vous est utile, il est à vous. Pas de licence, pas de contrepartie.</p>
+
+<p>Si vous tenez à faire un don, faites-le plutôt aux <a href="https://dons.restosducoeur.org/faire-un-don/~mon-don/">Restos du Cœur</a>. C'est la seule monnaie que j'accepte.</p>
+
+<h3>Ma méthode : la souveraineté technique</h3> 
+
+<p>Voici comment je travaille :</p>
 
 <ul>
-    <li>• <strong>Ni frameworks ni template</strong> → Un contrôle total sur chaque section de votre site/outils.</li>
-    <li>• <strong>Pas de dépendances superflues</strong> → Pour éviter à vos données d'atterir dans des systèmes externes.</li>
-    <li>• <strong>Pas de Lovable</strong> → Pas de copier coller de code que je ne comprends pas = pas de boite noire.</li>
+    <li>• <strong>Ni frameworks ni template</strong> → Un contrôle total sur chaque section de mes sites/outils.</li>
+    <li>• <strong>Pas de dépendances superflues</strong> → Pour éviter que les données atterrissent dans des systèmes externes.</li>
+    <li>• <strong>Pas de Lovable</strong> → Pas de copier-coller de code que je ne comprends pas = pas de boîte noire.</li>
 </ul>
 
 <h3>Mon atelier</h3>
@@ -387,34 +381,22 @@ const projectsDatabase = [
 
 <h3>Ce que ça change pour vous</h3>
 
-<p><strong>100% de control sur votre site/logiciel si vous voulez:</strong></p>
+<p><strong>Aucune dépendance, vos données reste chez vous. Vous pouvez vous approprier mes outils comme bon vous semble.</strong></p>
 
 <ul>
-    <li>• Une solution <strong>sur-mesure, car vous ne trouvez pas le template idéal.</strong></li>
-    <li>• Un projet <strong> dont le code source vous appartient à 100%</strong></li>
-    <li>• Une alternative <strong>souveraine aux solutions standards</strong></li>
+    <li>• Une base de code <strong>complète, documentée et sans piège</strong>, que vous comprenez de bout en bout.</li>
+    <li>• Des projets <strong>dont le code source vous appartient à 100%</strong>, sans exploitation ni condition.</li>
+    <li>• Une alternative <strong>souveraine et gratuite aux solutions standards.</strong></li>
 </ul>
-<p>→ Vous êtes au bon endroit.</p>
 
-<p><em>Exemple : LibreAnalytics, mon alternative à Google Analytics</em></p>
 
-<h3>Comment ça marche ?</h3>
-
-<p>Cherchez vos besoins dans la barre de recherche ou tapez "/". Selon les résultats :</p>
-
-<ol>
-    <li>1. <strong>Des projets similaires</strong> → Parlons réalisation</li>
-    <li>2. <strong>Peu de résultats</strong> → Explorons l'adaptation</li>
-    <li>3. <strong>Aucun projet correspondant</strong> → Créons quelque chose d'unique</li>
-</ol>
-
-<p class="disclaimer"><small>Pour les tech : ma pseudo API est accessible, vous savez où chercher </small></p></div>`,
+<p class="disclaimer"><small>Pour les tech : ma pseudo API est accessible, vous savez où chercher 😉</small></p></div>`,
         keywords: ['bienvenue'],
-        image: './img/wam.gif',
-        link: '#',
+        image: './img/Earth-by-MOODMAN.gif',
+        link: 'https://github.com/berru-g',
         category: 'Message de bienvenue',
         features: ['Développement souverain'],
-        tags: ['bienvenue']
+        tags: ['bienvenue', 'welcome']
     }
 
 ];
