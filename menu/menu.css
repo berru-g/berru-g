@@ -89,9 +89,7 @@ body {
 
 /* ===== RECHERCHE ===== */
 .search-box {
-  position: fixed;
-  top: 10%;
-  left: 50%;
+  position: relative;
 }
 
 .search-input {
