@@ -134,16 +134,16 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
     } else {
         $cgUrl = 'https://api.coingecko.com/api/v3/coins/markets?' . http_build_query([
             'vs_currency' => 'eur',
-            'ids'         => 'bitcoin,solana,sui,usd-coin,ami',
-            'sparkline'   => 'false',
+            'ids' => 'bitcoin,solana,sui,usd-coin,ami',
+            'sparkline' => 'false',
         ]);
 
         $ch = curl_init($cgUrl);
         curl_setopt_array($ch, [
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT        => 10,
+            CURLOPT_TIMEOUT => 10,
             CURLOPT_CONNECTTIMEOUT => 5,
-            CURLOPT_HTTPHEADER     => ['x-cg-demo-api-key: ' . COINGECKO_API_KEY],
+            CURLOPT_HTTPHEADER => ['x-cg-demo-api-key: ' . COINGECKO_API_KEY],
         ]);
         $resp = curl_exec($ch);
         $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -177,12 +177,15 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
     <title>LibreAnalytics — Contrôle</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/assets/dashboard.css">
     <!-- CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
@@ -213,7 +216,9 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             box-sizing: border-box;
         }
 
-        html { scroll-behavior: smooth; }
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             font-family: var(--grot);
@@ -226,9 +231,14 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             background-size: 44px 44px;
         }
 
-        ::selection { background: var(--lime); color: var(--ink); }
+        ::selection {
+            background: var(--lime);
+            color: var(--ink);
+        }
 
-        a { color: inherit; }
+        a {
+            color: inherit;
+        }
 
         .shell {
             max-width: 1520px;
@@ -306,12 +316,21 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.25; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.25;
+            }
         }
 
         /* ===== MENU DÉROULANT "COMMANDES" ===== */
-        .cmd { position: relative; }
+        .cmd {
+            position: relative;
+        }
 
         .cmd-toggle {
             font-family: var(--mono);
@@ -329,11 +348,19 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             transition: border-color 0.2s, color 0.2s;
         }
 
-        .cmd-toggle:hover { border-color: var(--lime); color: var(--lime); }
+        .cmd-toggle:hover {
+            border-color: var(--lime);
+            color: var(--lime);
+        }
 
-        .cmd-toggle .caret { transition: transform 0.25s; font-size: 0.6rem; }
+        .cmd-toggle .caret {
+            transition: transform 0.25s;
+            font-size: 0.6rem;
+        }
 
-        .cmd.open .cmd-toggle .caret { transform: rotate(180deg); }
+        .cmd.open .cmd-toggle .caret {
+            transform: rotate(180deg);
+        }
 
         .cmd-menu {
             position: absolute;
@@ -367,7 +394,9 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             transition: background 0.15s, color 0.15s, padding-left 0.15s;
         }
 
-        .cmd-menu a:last-child { border-bottom: none; }
+        .cmd-menu a:last-child {
+            border-bottom: none;
+        }
 
         .cmd-menu a i {
             width: 1.2rem;
@@ -413,14 +442,21 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             margin-top: 0.8rem;
         }
 
-        .report .meta strong { color: var(--lime); font-weight: 700; }
+        .report .meta strong {
+            color: var(--lime);
+            font-weight: 700;
+        }
 
         @media (max-width: 700px) {
-            .report { grid-template-columns: 1fr; }
+            .report {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* ===== SECTIONS ===== */
-        .section { margin-bottom: 3rem; }
+        .section {
+            margin-bottom: 3rem;
+        }
 
         .section-head {
             display: flex;
@@ -466,8 +502,13 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             transition: background 0.2s;
         }
 
-        .stat:last-child { border-right: none; }
-        .stat:hover { background: var(--ink-3); }
+        .stat:last-child {
+            border-right: none;
+        }
+
+        .stat:hover {
+            background: var(--ink-3);
+        }
 
         .stat .k {
             font-family: var(--mono);
@@ -481,7 +522,10 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             gap: 0.45rem;
         }
 
-        .stat .k i { color: var(--violet); font-size: 0.7rem; }
+        .stat .k i {
+            color: var(--violet);
+            font-size: 0.7rem;
+        }
 
         .stat .v {
             font-family: var(--mono);
@@ -502,18 +546,38 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             transition: width 0.35s;
         }
 
-        .stat:hover::after { width: 100%; }
+        .stat:hover::after {
+            width: 100%;
+        }
 
         @media (max-width: 900px) {
-            .stats-strip { grid-template-columns: repeat(2, 1fr); }
-            .stat:nth-child(2) { border-right: none; }
-            .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--line); }
+            .stats-strip {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stat:nth-child(2) {
+                border-right: none;
+            }
+
+            .stat:nth-child(1),
+            .stat:nth-child(2) {
+                border-bottom: 1px solid var(--line);
+            }
         }
 
         @media (max-width: 480px) {
-            .stats-strip { grid-template-columns: 1fr; }
-            .stat { border-right: none; border-bottom: 1px solid var(--line); }
-            .stat:last-child { border-bottom: none; }
+            .stats-strip {
+                grid-template-columns: 1fr;
+            }
+
+            .stat {
+                border-right: none;
+                border-bottom: 1px solid var(--line);
+            }
+
+            .stat:last-child {
+                border-bottom: none;
+            }
         }
 
         /* ===== PANNEAUX ===== */
@@ -554,9 +618,14 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             gap: 0.7rem;
         }
 
-        .panel-title i { color: var(--lime); font-size: 0.85rem; }
+        .panel-title i {
+            color: var(--lime);
+            font-size: 0.85rem;
+        }
 
-        .panel-body { padding: 1rem; }
+        .panel-body {
+            padding: 1rem;
+        }
 
         .duo {
             display: grid;
@@ -566,7 +635,9 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
         }
 
         @media (max-width: 1000px) {
-            .duo { grid-template-columns: 1fr; }
+            .duo {
+                grid-template-columns: 1fr;
+            }
         }
 
         .duo-2 {
@@ -576,7 +647,9 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
         }
 
         @media (max-width: 1000px) {
-            .duo-2 { grid-template-columns: 1fr; }
+            .duo-2 {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* ===== WALLET ===== */
@@ -609,7 +682,25 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             letter-spacing: -1px;
         }
 
-        #crypto-prices { display: flex; flex-direction: column; }
+        #portfolio-total .pnl {
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        #portfolio-total .pnl.positive {
+            color: var(--lime);
+        }
+
+        #portfolio-total .pnl.negative {
+            color: var(--rose);
+        }
+
+        #crypto-prices {
+            display: flex;
+            flex-direction: column;
+        }
 
         .crypto-item {
             display: grid;
@@ -621,8 +712,13 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             transition: background 0.15s;
         }
 
-        .crypto-item:last-child { border-bottom: none; }
-        .crypto-item:hover { background: var(--ink-3); }
+        .crypto-item:last-child {
+            border-bottom: none;
+        }
+
+        .crypto-item:hover {
+            background: var(--ink-3);
+        }
 
         .crypto-item img {
             width: 32px;
@@ -632,9 +728,14 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             transition: filter 0.2s;
         }
 
-        .crypto-item:hover img { filter: none; }
+        .crypto-item:hover img {
+            filter: none;
+        }
 
-        .crypto-item .name { display: flex; flex-direction: column; }
+        .crypto-item .name {
+            display: flex;
+            flex-direction: column;
+        }
 
         .crypto-item .symbol {
             font-family: var(--mono);
@@ -650,7 +751,11 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             color: var(--txt-dim);
         }
 
-        .crypto-item .holdings { display: flex; flex-direction: column; text-align: right; }
+        .crypto-item .holdings {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
 
         .crypto-item .holdings .amount {
             font-family: var(--mono);
@@ -673,14 +778,32 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             text-align: right;
         }
 
-        .crypto-item .change.positive::before { content: '▲ '; font-size: 0.6rem; }
-        .crypto-item .change.negative::before { content: '▼ '; font-size: 0.6rem; }
-        .crypto-item .change.positive { color: var(--lime); }
-        .crypto-item .change.negative { color: var(--rose); }
+        .crypto-item .change.positive::before {
+            content: '▲ ';
+            font-size: 0.6rem;
+        }
+
+        .crypto-item .change.negative::before {
+            content: '▼ ';
+            font-size: 0.6rem;
+        }
+
+        .crypto-item .change.positive {
+            color: var(--lime);
+        }
+
+        .crypto-item .change.negative {
+            color: var(--rose);
+        }
 
         @media (max-width: 420px) {
-            .crypto-item { grid-template-columns: 32px 1fr auto; }
-            .crypto-item .holdings { display: none; }
+            .crypto-item {
+                grid-template-columns: 32px 1fr auto;
+            }
+
+            .crypto-item .holdings {
+                display: none;
+            }
         }
 
         /* Adresses wallet */
@@ -692,7 +815,9 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             border-bottom: 1px dashed var(--line);
         }
 
-        .wallet-row:last-child { border-bottom: none; }
+        .wallet-row:last-child {
+            border-bottom: none;
+        }
 
         .wallet-row .network {
             font-family: var(--mono);
@@ -751,7 +876,9 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             transition: all 0.2s;
         }
 
-        .wallet-links-btn i { color: var(--lime); }
+        .wallet-links-btn i {
+            color: var(--lime);
+        }
 
         .wallet-links-btn:hover {
             border-color: var(--lime);
@@ -759,7 +886,9 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
         }
 
         /* ===== TABLEAUX ===== */
-        .table-responsive { overflow-x: auto; }
+        .table-responsive {
+            overflow-x: auto;
+        }
 
         .data-table {
             width: 100%;
@@ -787,8 +916,13 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             white-space: nowrap;
         }
 
-        .data-table tbody tr { transition: background 0.15s; }
-        .data-table tbody tr:hover { background: var(--ink-3); }
+        .data-table tbody tr {
+            transition: background 0.15s;
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--ink-3);
+        }
 
         .data-table code {
             background: var(--ink-3);
@@ -809,10 +943,29 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             border: 1px solid;
         }
 
-        .badge-free { background: transparent; color: var(--txt-dim); border-color: var(--line); }
-        .badge-pro { background: transparent; color: var(--lime); border-color: var(--lime); }
-        .badge-business { background: transparent; color: var(--rose); border-color: var(--rose); }
-        .badge-premium { background: transparent; color: var(--violet); border-color: var(--violet); }
+        .badge-free {
+            background: transparent;
+            color: var(--txt-dim);
+            border-color: var(--line);
+        }
+
+        .badge-pro {
+            background: transparent;
+            color: var(--lime);
+            border-color: var(--lime);
+        }
+
+        .badge-business {
+            background: transparent;
+            color: var(--rose);
+            border-color: var(--rose);
+        }
+
+        .badge-premium {
+            background: transparent;
+            color: var(--violet);
+            border-color: var(--violet);
+        }
 
         /* ===== EXPORT ===== */
         .export-btn {
@@ -833,7 +986,9 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             transition: filter 0.2s;
         }
 
-        .export-btn:hover { filter: brightness(1.1); }
+        .export-btn:hover {
+            filter: brightness(1.1);
+        }
 
         /* ===== GRAPHIQUE & CARTE ===== */
         #worldMap {
@@ -842,7 +997,10 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             background: var(--ink-2);
         }
 
-        .chart-wrap { position: relative; max-height: 320px; }
+        .chart-wrap {
+            position: relative;
+            max-height: 320px;
+        }
 
         /* ===== EMPTY ===== */
         .empty-state {
@@ -869,9 +1027,15 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             letter-spacing: 2px;
         }
 
-        .custom-swal-close-button { color: var(--txt-dim) !important; }
+        .custom-swal-close-button {
+            color: var(--txt-dim) !important;
+        }
 
-        .custom-swal-content ul { list-style: none; padding: 0; text-align: left; }
+        .custom-swal-content ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
 
         .custom-swal-content li {
             padding: 0.7rem 0;
@@ -880,7 +1044,9 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             font-size: 0.85rem;
         }
 
-        .custom-swal-content li:last-child { border-bottom: none; }
+        .custom-swal-content li:last-child {
+            border-bottom: none;
+        }
 
         .custom-swal-content a {
             color: var(--lime);
@@ -888,7 +1054,9 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             font-weight: 700;
         }
 
-        .custom-swal-content a:hover { text-decoration: underline; }
+        .custom-swal-content a:hover {
+            text-decoration: underline;
+        }
 
         /* ===== TOASTIFY ===== */
         .toastify {
@@ -915,9 +1083,12 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
                     </button>
                     <div class="cmd-menu" role="menu">
                         <a href="dashboard.php" role="menuitem"><i class="fas fa-arrow-left"></i> Dashboard</a>
-                        <a href="../campain/rapport.php" role="menuitem"><i class="fas fa-file-alt"></i> Rapport id_gb</a>
-                        <a href="../campain/rapport_lb.php" role="menuitem"><i class="fas fa-file-alt"></i> Rapport id_lb</a>
-                        <a href="../campain/prospect_template.php" role="menuitem"><i class="fa-regular fa-file-code"></i> Script prospection</a>
+                        <a href="../campain/rapport.php" role="menuitem"><i class="fas fa-file-alt"></i> Rapport
+                            id_gb</a>
+                        <a href="../campain/rapport_lb.php" role="menuitem"><i class="fas fa-file-alt"></i> Rapport
+                            id_lb</a>
+                        <a href="../campain/prospect_template.php" role="menuitem"><i
+                                class="fa-regular fa-file-code"></i> Script prospection</a>
                         <a href="?export_emails=1" role="menuitem"><i class="fas fa-download"></i> Export emails CSV</a>
                     </div>
                 </nav>
@@ -930,13 +1101,16 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
         <section class="report">
             <div>
                 <h1>Rapport<br><span class="stroke">SmartPixel</span></h1>
-                <p class="meta">console admin — <strong><?= date('d.m.Y') ?></strong> — accès : <?= htmlspecialchars($_SESSION['user_email']) ?></p>
+                <p class="meta">console admin — <strong><?= date('d.m.Y') ?></strong> — accès :
+                    <?= htmlspecialchars($_SESSION['user_email']) ?></p>
             </div>
         </section>
 
         <!-- ===== 01 — STATS ===== -->
         <section class="section">
-            <div class="section-head"><span class="index">01</span><h2>Signaux globaux</h2></div>
+            <div class="section-head"><span class="index">01</span>
+                <h2>Signaux globaux</h2>
+            </div>
             <div class="stats-strip">
                 <div class="stat">
                     <div class="k"><i class="fas fa-users"></i> Utilisateurs</div>
@@ -952,14 +1126,18 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
                 </div>
                 <div class="stat">
                     <div class="k"><i class="fas fa-user-check"></i> Visiteurs uniques</div>
-                    <div class="v"><?= number_format($historicalData ? (int) end($historicalData)['cumulative_unique_visitors'] : 0) ?></div>
+                    <div class="v">
+                        <?= number_format($historicalData ? (int) end($historicalData)['cumulative_unique_visitors'] : 0) ?>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- ===== 02 — WALLET CRYPTO ===== -->
         <section class="section">
-            <div class="section-head"><span class="index">02</span><h2>Wallet</h2></div>
+            <div class="section-head"><span class="index">02</span>
+                <h2>Wallet</h2>
+            </div>
             <div class="duo">
                 <div class="panel">
                     <div class="panel-head">
@@ -994,7 +1172,9 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
 
         <!-- ===== 03 — CROISSANCE ===== -->
         <section class="section">
-            <div class="section-head"><span class="index">03</span><h2>Croissance générale</h2></div>
+            <div class="section-head"><span class="index">03</span>
+                <h2>Croissance générale</h2>
+            </div>
             <div class="panel">
                 <div class="panel-head">
                     <h3 class="panel-title"><i class="fas fa-chart-line"></i> Évolution cumulative — 7 jours</h3>
@@ -1007,7 +1187,9 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
 
         <!-- ===== 04 — TOP SITES + CARTE ===== -->
         <section class="section">
-            <div class="section-head"><span class="index">04</span><h2>Top sites &amp; géographie</h2></div>
+            <div class="section-head"><span class="index">04</span>
+                <h2>Top sites &amp; géographie</h2>
+            </div>
             <div class="duo-2">
                 <div class="panel">
                     <div class="panel-head">
@@ -1028,7 +1210,9 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
                                         <?php foreach ($topSites as $site): ?>
                                             <tr>
                                                 <td><?= htmlspecialchars($site['site_name']) ?></td>
-                                                <td><strong style="color: var(--lime);"><?= number_format($site['total_visits']) ?></strong></td>
+                                                <td><strong
+                                                        style="color: var(--lime);"><?= number_format($site['total_visits']) ?></strong>
+                                                </td>
                                                 <td><code><?= htmlspecialchars((string) $site['id']) ?></code></td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -1055,7 +1239,9 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
 
         <!-- ===== 05 — UTILISATEURS ===== -->
         <section class="section">
-            <div class="section-head"><span class="index">05</span><h2>Registre des utilisateurs (<?= count($usersList) ?>)</h2></div>
+            <div class="section-head"><span class="index">05</span>
+                <h2>Registre des utilisateurs (<?= count($usersList) ?>)</h2>
+            </div>
             <div class="panel">
                 <div class="panel-head">
                     <h3 class="panel-title"><i class="fas fa-address-card"></i> Comptes</h3>
@@ -1080,14 +1266,18 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
                                 <?php if (!empty($usersList)): ?>
                                     <?php foreach ($usersList as $user):
                                         $planClass = strtolower($user['plan'] ?? 'free');
-                                    ?>
+                                        ?>
                                         <tr>
                                             <td><?= htmlspecialchars($user['email']) ?></td>
-                                            <td><span class="badge badge-<?= htmlspecialchars($planClass) ?>"><?= strtoupper($user['plan'] ?? 'free') ?></span></td>
+                                            <td><span
+                                                    class="badge badge-<?= htmlspecialchars($planClass) ?>"><?= strtoupper($user['plan'] ?? 'free') ?></span>
+                                            </td>
                                             <td><?= (int) ($user['site_count'] ?? 0) ?></td>
                                             <td><?= number_format($user['total_visits'] ?? 0) ?></td>
-                                            <td><?= !empty($user['created_at']) ? (new DateTime($user['created_at']))->format('d/m/Y') : '-' ?></td>
-                                            <td><?= !empty($user['last_login']) ? (new DateTime($user['last_login']))->format('d/m/Y H:i') : '<span style="color:var(--txt-dim);">Jamais</span>' ?></td>
+                                            <td><?= !empty($user['created_at']) ? (new DateTime($user['created_at']))->format('d/m/Y') : '-' ?>
+                                            </td>
+                                            <td><?= !empty($user['last_login']) ? (new DateTime($user['last_login']))->format('d/m/Y H:i') : '<span style="color:var(--txt-dim);">Jamais</span>' ?>
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
@@ -1137,10 +1327,13 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
         const tokenHoldings = {
             bitcoin: 0,
             solana: 4.65,
-            sui: 610,
-            'usd-coin': 832,
+            sui: 1390,
+            'usd-coin': 0,
             ami: 35535,
         };
+
+        // Capital investi à l'origine (€) sol=312, sui=1300, ami=40
+        const INITIAL_INVESTMENT = 1652;
 
         (function renderCrypto() {
             const container = document.getElementById('crypto-prices');
@@ -1174,7 +1367,7 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
                     <img src="${crypto.image}" alt="${crypto.id} logo">
                     <div class="name">
                         <span class="symbol">${crypto.symbol.toUpperCase()}</span>
-                        <span class="price">${price.toLocaleString('fr-FR', {minimumFractionDigits: 2})} €</span>
+                        <span class="price">${price.toLocaleString('fr-FR', { minimumFractionDigits: 2 })} €</span>
                     </div>
                     <div class="holdings">
                         <span class="amount">${holdings} ${crypto.symbol.toUpperCase()}</span>
@@ -1185,8 +1378,16 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
                 container.appendChild(el);
             });
 
+            // totalElement.innerHTML =
+            //  `<div class="label">Total</div><h3>${totalPortfolioValue.toFixed(2)} €</h3>`;
+            // P&L = valeur actuelle - capital investi
+            const pnl = totalPortfolioValue - INITIAL_INVESTMENT;
+            const isGain = pnl >= 0;
+            const pnlTxt = (isGain ? '+' : '') + pnl.toFixed(2) + ' €';
+
             totalElement.innerHTML =
-                `<div class="label">Total</div><h3>${totalPortfolioValue.toFixed(2)} €</h3>`;
+                `<div class="label">Total</div><h3>${totalPortfolioValue.toFixed(2)} €</h3>
+     <div class="pnl ${isGain ? 'positive' : 'negative'}">${pnlTxt}</div>`;
         })();
 
         // Liens 0x via SweetAlert2
@@ -1246,41 +1447,41 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             data: {
                 labels: <?= json_encode(array_column($historicalData, 'date')) ?>,
                 datasets: [{
-                        label: 'Utilisateurs',
-                        data: <?= json_encode(array_column($historicalData, 'cumulative_users')) ?>,
-                        borderColor: '#ab9ff2',
-                        backgroundColor: 'rgba(171, 159, 242, 0.06)',
-                        tension: 0.2,
-                        fill: true,
-                        pointRadius: 2
-                    },
-                    {
-                        label: 'Sites',
-                        data: <?= json_encode(array_column($historicalData, 'cumulative_sites')) ?>,
-                        borderColor: '#86baff',
-                        backgroundColor: 'rgba(134, 186, 255, 0.06)',
-                        tension: 0.2,
-                        fill: true,
-                        pointRadius: 2
-                    },
-                    {
-                        label: 'Visites',
-                        data: <?= json_encode(array_column($historicalData, 'cumulative_visits')) ?>,
-                        borderColor: '#c8f65d',
-                        backgroundColor: 'rgba(200, 246, 93, 0.06)',
-                        tension: 0.2,
-                        fill: true,
-                        pointRadius: 2
-                    },
-                    {
-                        label: 'Visiteurs uniques',
-                        data: <?= json_encode(array_column($historicalData, 'cumulative_unique_visitors')) ?>,
-                        borderColor: '#ff7a8a',
-                        backgroundColor: 'rgba(255, 122, 138, 0.06)',
-                        tension: 0.2,
-                        fill: true,
-                        pointRadius: 2
-                    }
+                    label: 'Utilisateurs',
+                    data: <?= json_encode(array_column($historicalData, 'cumulative_users')) ?>,
+                    borderColor: '#ab9ff2',
+                    backgroundColor: 'rgba(171, 159, 242, 0.06)',
+                    tension: 0.2,
+                    fill: true,
+                    pointRadius: 2
+                },
+                {
+                    label: 'Sites',
+                    data: <?= json_encode(array_column($historicalData, 'cumulative_sites')) ?>,
+                    borderColor: '#86baff',
+                    backgroundColor: 'rgba(134, 186, 255, 0.06)',
+                    tension: 0.2,
+                    fill: true,
+                    pointRadius: 2
+                },
+                {
+                    label: 'Visites',
+                    data: <?= json_encode(array_column($historicalData, 'cumulative_visits')) ?>,
+                    borderColor: '#c8f65d',
+                    backgroundColor: 'rgba(200, 246, 93, 0.06)',
+                    tension: 0.2,
+                    fill: true,
+                    pointRadius: 2
+                },
+                {
+                    label: 'Visiteurs uniques',
+                    data: <?= json_encode(array_column($historicalData, 'cumulative_unique_visitors')) ?>,
+                    borderColor: '#ff7a8a',
+                    backgroundColor: 'rgba(255, 122, 138, 0.06)',
+                    tension: 0.2,
+                    fill: true,
+                    pointRadius: 2
+                }
                 ]
             },
             options: {

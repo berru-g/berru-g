@@ -31,7 +31,7 @@
                         </div>
                         <h3>Bienvenue</h3>
                         <p>Plutôt que de vous présenter mes compétences, je vous propose de chercher des mots clef dans ma base de projets.</p>
-                        <p><small>Essayez "3D", "dashboard", "analytics" etc.</small></p>
+                        <p><small>Essayez "3D", "dashboard", "arduino" etc.</small></p>
                         
                     `,
                     position: 'bottom'
