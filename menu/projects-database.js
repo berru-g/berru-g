@@ -3,13 +3,25 @@ const projectsDatabase = [
         id: 'NFC-Badge',
         title: 'NFC Badge',
         shortDesc: 'Création d\'un Badge NFC.',
-        longDesc: 'Création d\'un Badge NFC reprogrammable open-source. Basé sur la puce NT3H2111.',
+        longDesc: 'Création d\'un Badge NFC reprogrammable open-source. Basé sur la puce NT3H2111. Fait pour stocker un lien vers un dossier médical par exemple.',
         keywords: ['nfc', 'badge', 'open-source', 'NT3H2111', 'hardware', 'pcb', 'hardware'],
         image: 'https://github.com/berru-g/NFC_Badge/raw/main/img/Scarabe-nfc-broche.png',
         link: 'https://github.com/berru-g/NFC-Badge',
         category: 'hardware',
         features: ['Création électronique', 'easyeda', 'PCB', 'open-source'],
         tags: ['nfc', 'badge', 'open-source', 'NT3H2111', 'hardware']
+    },
+    {
+        id: 'RC-motor',
+        title: 'RC Motor',
+        shortDesc: 'Création d\'un systeme radio commandé.',
+        longDesc: 'Création d\'un systéme radio commandé, émetteur et récepteur de A à Z, pour avion, bateau ou voiture télecommandé. Prévu pour un moteur brushless 2600 Kv et 3 servos 9g. Capte jusqu\'a 2km. Poussée de 1Kg.',
+        keywords: ['rc plane', 'radio control', 'remote control', 'avion', 'hardware', 'pcb', 'motor', 'moteur'],
+        image: 'https://github.com/berru-g/rc-plane/raw/main/img/pcb-final.png',
+        link: 'https://github.com/berru-g/rc-plane',
+        category: 'hardware',
+        features: ['Création électronique', 'easyeda', 'PCB', 'open-source'],
+        tags: ['rc plane', 'radio control', 'remote control', 'avion', 'hardware']
     },
     {
         id: 'berru-clothing',

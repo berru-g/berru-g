@@ -7,14 +7,15 @@
     <title>search v4</title>
     <link rel="shortcut icon" href="/img/logo.png">
     <link rel="stylesheet" href="./menu/dynamic-search.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         /* ===== BERRU SEARCH — moteur de recherche ===== */
 
         /* ===== THÈMES AUTO (light / dark selon le navigateur) ===== */
         :root {
-            --grot:  -apple-system, BlinkMacSystemFont, sans-serif;
+            --grot: -apple-system, BlinkMacSystemFont, sans-serif;
             --mono: ui-monospace, monospace;
-            --radius: 28px;
+            --radius: 14px;
             --max-search: 640px;
             --max-results: 1020px;
         }
@@ -106,7 +107,7 @@
         /* ===== BARRE DE RECHERCHE ===== */
         .search-box {
             position: sticky;
-            top: 1rem;
+            top: 1.4rem;
             margin: 0 auto;
             width: min(var(--max-search), calc(100% - 2rem));
             display: flex;
@@ -389,12 +390,12 @@
 </head>
 
 <body>
-    <!-- Logo façon Google -->
+    <!-- Logo -->
     <header class="brand">
         <div class="brand-logo">
-            <span class="b1">Berru</span><span class="b2">-</span><span class="b3">g</span>
+            <span class="b1">Open</span><span class="b2"> Source</span><span class="b3"> Projects</span>
         </div>
-        <p class="brand-tagline">project open source 2020/2026</p>
+        <p class="brand-tagline">by berru-g - 2020/2026</p>
     </header>
 
     <!-- Barre de recherche -->
@@ -403,9 +404,9 @@
             stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
-        <input type="text" class="search-input" id="searchInput" placeholder="Search, api, blockchain, pcb ..."
+        <input type="text" class="search-input" id="searchInput" placeholder="Search api, blockchain, pcb ..."
             autocomplete="on">
-        <kbd class="search-shortcut">/</kbd> 
+        <kbd class="search-shortcut">/</kbd>
     </div>
 
     <!-- Résultats injectés ici par search.js -->
@@ -414,19 +415,23 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({
-            duration: 700,
-            easing: 'ease-out-cubic',
+            duration: 1000,
+            easing: 'fade-up',
             once: true,
             offset: 40
         });
     </script>
-
+    <script src="./LibreAnalytics/RGPD/cookie.js"></script>
     <script src="./menu/projects-database.js"></script>
+    <script src="./api/fetchapi.js"></script>
+    <script src="./menu/honey.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // ===== SEARCH ONLY — version BERRU SEARCH =====
         const searchInput = document.getElementById('searchInput');
 
-        const EASTER_EGG_PASSWORD = 'cenaiou';
+        const EASTER_EGG_PASSWORD = 'board';
         const EASTER_EGG_URL = '../LibreAnalytics/smart_pixel_v2/public/beta.php';
 
         function checkEasterEgg(term) {
@@ -481,7 +486,7 @@
                 empty.className = 'no-results';
                 mainContent.prepend(empty);
             }
-            empty.innerHTML = '⌘ Aucun résultat — essayez "api", "arduino", "crypto"...';
+            empty.innerHTML = '⌘ Aucun résultat — essayez "api", "arduino", "crypto"... ou <a href="index.html" target="_blank" style="color: #ab9ff2; text-decoration: none;">revenir au site.</a>';
             empty.setAttribute('data-aos', 'fade-up');
             AOS.refreshHard();
         }
@@ -502,13 +507,13 @@
             }
 
             let html = `
-    <div class="preview-header" data-aos="fade-down" data-aos-delay="100">
+    <div class="preview-header" data-aos="fade-down" data-aos-delay="200">
       <span class="preview-badge">${matches.length === 1 ? 'Projet correspondant' : matches.length + ' résultats'}</span>
       <button class="preview-close" onclick="hideProjectPreview()">×</button>
     </div>`;
 
             matches.forEach((m, i) => {
-                const delay = 100 + i * 120; // effet cascade fluide
+                const delay = 500 + i * 120; // effet cascade fluide
 
                 if (m.type === 'project') {
                     const p = m.data;
