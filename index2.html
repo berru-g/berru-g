@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>search v4</title>
+    <link rel="shortcut icon" href="/img/logo.png">
+    <link rel="stylesheet" href="./menu/dynamic-search.css">
+    <style>
+        /* ===== BERRU SEARCH — moteur de recherche ===== */
+
+        /* ===== THÈMES AUTO (light / dark selon le navigateur) ===== */
+        :root {
+            --grot:  -apple-system, BlinkMacSystemFont, sans-serif;
+            --mono: ui-monospace, monospace;
+            --radius: 28px;
+            --max-search: 640px;
+            --max-results: 1020px;
+        }
+
+        /* Dark (défaut) */
+        body {
+            --bg: #0b0d12;
+            --bg-card: #10131b;
+            --bg-input: #161a25;
+            --line: #232839;
+            --txt: #e8eaf2;
+            --txt-dim: #8b90a5;
+            --primary: #34d399;
+            --primary-dim: rgba(52, 211, 153, 0.14);
+            --violet: #ab9ff2;
+            --rose: #ff7a8a;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+        }
+
+        /* Light */
+        @media (prefers-color-scheme: light) {
+            body {
+                --bg: #f7f8fa;
+                --bg-card: #ffffff;
+                --bg-input: #ffffff;
+                --line: #dfe3ec;
+                --txt: #14161f;
+                --txt-dim: #5a6070;
+                --primary: #0d9668;
+                --primary-dim: rgba(13, 150, 104, 0.12);
+                --violet: #7c6bd9;
+                --rose: #e0526a;
+                --shadow: 0 8px 32px rgba(20, 25, 40, 0.12);
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--txt);
+            font-family: var(--grot);
+            min-height: 100vh;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        /* ===== LOGO BERRU ===== */
+        .brand {
+            text-align: center;
+            padding: clamp(2rem, 8vh, 4rem) 1rem 1.2rem;
+            user-select: none;
+        }
+
+        .brand-logo {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 0.15em;
+            font-family: var(--grot);
+            font-size: clamp(2.4rem, 7vw, 3.6rem);
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1;
+        }
+
+        .brand-logo .b1 {
+            color: var(--txt);
+        }
+
+        .brand-logo .b2 {
+            color: var(--primary);
+        }
+
+        .brand-logo .b3 {
+            color: var(--violet);
+        }
+
+        .brand-tagline {
+            margin: 0.6rem 0 0;
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--txt-dim);
+        }
+
+        /* ===== BARRE DE RECHERCHE ===== */
+        .search-box {
+            position: sticky;
+            top: 1rem;
+            margin: 0 auto;
+            width: min(var(--max-search), calc(100% - 2rem));
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.85rem 1.2rem;
+            background: var(--bg-input);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            z-index: 100;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease, width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .search-box:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-dim), var(--shadow);
+        }
+
+        .search-icon {
+            color: var(--txt-dim);
+            flex-shrink: 0;
+            transition: color 0.25s;
+        }
+
+        .search-box:focus-within .search-icon {
+            color: var(--primary);
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 0;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--txt);
+            font-family: var(--grot);
+            font-size: 1rem;
+        }
+
+        .search-input::placeholder {
+            color: var(--txt-dim);
+        }
+
+        .search-shortcut {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--txt-dim);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 0.1rem 0.45rem;
+            flex-shrink: 0;
+        }
+
+        /* ===== ZONE RÉSULTATS ===== */
+        .main-content {
+            max-width: var(--max-results);
+            margin: 0 auto;
+            padding: 2rem 1rem 4rem;
+        }
+
+        .dynamic-preview {
+            margin-top: 0.5rem;
+        }
+
+        /* Header : compteur + croix */
+        .preview-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .preview-badge {
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--txt-dim);
+            padding-bottom: 0.4rem;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .preview-close {
+            background: transparent;
+            border: none;
+            color: var(--txt-dim);
+            font-size: 1.5rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.3s ease;
+        }
+
+        .preview-close:hover {
+            color: var(--rose);
+            transform: rotate(90deg);
+        }
+
+        /* ===== CARTE RÉSULTAT — style SERP ===== */
+        .preview-content {
+            display: flex;
+            gap: 1.1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 1.1rem 1.2rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .preview-content:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Trait latéral façon "resultat selectionné" */
+        .preview-content::before {
+            content: '';
+            position: absolute;
+        }
+
+        .preview-image {
+            flex-shrink: 0;
+        }
+
+        .preview-image img {
+            width: 120px;
+            height: 84px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+            filter: grayscale(45%) contrast(1.05);
+            transition: filter 0.35s ease, transform 0.35s ease;
+        }
+
+        .preview-content:hover .preview-image img {
+            filter: none;
+            transform: scale(1.04);
+        }
+
+        /* Variante service (icône) */
+        .preview-icon {
+            flex-shrink: 0;
+            width: 58px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+            background: var(--bg);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+        }
+
+        .preview-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .preview-title {
+            margin: 0 0 0.45rem;
+            font-family: var(--mono);
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--txt);
+        }
+
+        .preview-title::before {
+            content: '/ ';
+            color: var(--primary);
+        }
+
+        .preview-tags,
+        .preview-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            margin-bottom: 0.55rem;
+        }
+
+        .preview-tag,
+        .preview-keyword {
+            font-family: var(--mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.5px;
+            color: var(--violet);
+            background: transparent;
+            border: 1px solid var(--line);
+            padding: 0.15rem 0.55rem;
+            border-radius: 999px;
+            transition: border-color 0.2s;
+        }
+
+        .preview-content:hover .preview-tag,
+        .preview-content:hover .preview-keyword {
+            border-color: var(--violet);
+        }
+
+        .preview-desc {
+            margin: 0 0 0.6rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--txt-dim);
+        }
+
+        .preview-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem 1.1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .preview-feature {
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            color: var(--txt);
+        }
+
+        .preview-feature::before {
+            content: '✓ ';
+            color: var(--primary);
+        }
+
+        .preview-link {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .preview-link:hover {
+            color: var(--violet);
+            text-decoration: underline;
+        }
+
+        /* ===== ÉTAT VIDE (message "aucun résultat") ===== */
+        .no-results {
+            text-align: center;
+            font-family: var(--mono);
+            color: var(--txt-dim);
+            font-size: 0.85rem;
+            padding: 2.5rem 0;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .search-shortcut {
+                display: none;
+            }
+
+            .preview-content {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+
+            .preview-image img {
+                width: 100%;
+                height: 150px;
+            }
+
+            .brand {
+                padding-top: 1.5rem;
+            }
+        }
+
+        /* Respect des préférences de réduction de mouvement */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+                animation: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Logo façon Google -->
+    <header class="brand">
+        <div class="brand-logo">
+            <span class="b1">Berru</span><span class="b2">-</span><span class="b3">g</span>
+        </div>
+        <p class="brand-tagline">project open source 2020/2026</p>
+    </header>
+
+    <!-- Barre de recherche -->
+    <div class="search-box">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search, api, blockchain, pcb ..."
+            autocomplete="on">
+        <kbd class="search-shortcut">/</kbd> 
+    </div>
+
+    <!-- Résultats injectés ici par search.js -->
+    <main class="main-content"></main>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 700,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 40
+        });
+    </script>
+
+    <script src="./menu/projects-database.js"></script>
+    <script>
+        // ===== SEARCH ONLY — version BERRU SEARCH =====
+        const searchInput = document.getElementById('searchInput');
+
+        const EASTER_EGG_PASSWORD = 'cenaiou';
+        const EASTER_EGG_URL = '../LibreAnalytics/smart_pixel_v2/public/beta.php';
+
+        function checkEasterEgg(term) {
+            if (term.toLowerCase().trim() === EASTER_EGG_PASSWORD) {
+                window.open(EASTER_EGG_URL, '_blank');
+                searchInput.value = '';
+                return true;
+            }
+            return false;
+        }
+
+        function calculateRelevance(project, term) {
+            let r = 0;
+            if (project.title.toLowerCase().includes(term)) r += 5;
+            if (project.keywords.some(kw => kw === term)) r += 3;
+            if (project.longDesc.toLowerCase().includes(term)) r += 2;
+            if (project.shortDesc.toLowerCase().includes(term)) r += 1;
+            return r;
+        }
+
+        function performExtendedSearch(searchTerm) {
+            if (!searchTerm || searchTerm.length < 2) return hideProjectPreview();
+
+            const term = searchTerm.toLowerCase();
+            const matches = [];
+
+            projectsDatabase.forEach(project => {
+                const searchSpace = [project.title, project.shortDesc, project.longDesc,
+                ...project.keywords, ...project.tags.map(t => t.toLowerCase())].join(' ').toLowerCase();
+                if (searchSpace.includes(term)) {
+                    matches.push({ type: 'project', data: project, relevance: calculateRelevance(project, term) });
+                }
+            });
+
+            servicesDatabase.forEach(service => {
+                const searchSpace = [service.title, service.desc, ...service.keywords].join(' ').toLowerCase();
+                if (searchSpace.includes(term)) matches.push({ type: 'service', data: service, relevance: 1 });
+            });
+
+            matches.sort((a, b) => b.relevance - a.relevance);
+            matches.length ? showProjectPreview(matches) : showNoResults();
+        }
+
+        function showNoResults() {
+            const mainContent = document.querySelector('.main-content');
+            if (!mainContent) return;
+            hideProjectPreview(true);
+            let empty = document.getElementById('no-results');
+            if (!empty) {
+                empty = document.createElement('div');
+                empty.id = 'no-results';
+                empty.className = 'no-results';
+                mainContent.prepend(empty);
+            }
+            empty.innerHTML = '⌘ Aucun résultat — essayez "api", "arduino", "crypto"...';
+            empty.setAttribute('data-aos', 'fade-up');
+            AOS.refreshHard();
+        }
+
+        function showProjectPreview(matches) {
+            const mainContent = document.querySelector('.main-content');
+            if (!mainContent) return;
+
+            // supprimer l'état vide éventuel
+            document.getElementById('no-results')?.remove();
+
+            let preview = document.getElementById('dynamic-preview');
+            if (!preview) {
+                preview = document.createElement('div');
+                preview.id = 'dynamic-preview';
+                preview.className = 'dynamic-preview';
+                mainContent.prepend(preview);
+            }
+
+            let html = `
+    <div class="preview-header" data-aos="fade-down" data-aos-delay="100">
+      <span class="preview-badge">${matches.length === 1 ? 'Projet correspondant' : matches.length + ' résultats'}</span>
+      <button class="preview-close" onclick="hideProjectPreview()">×</button>
+    </div>`;
+
+            matches.forEach((m, i) => {
+                const delay = 100 + i * 120; // effet cascade fluide
+
+                if (m.type === 'project') {
+                    const p = m.data;
+                    html += `
+        <div class="preview-content" data-aos="fade-up" data-aos-delay="${delay}" data-aos-anchor-placement="top-bottom">
+          <div class="preview-image"><img src="${p.image}" alt="${p.title}" loading="lazy"></div>
+          <div class="preview-details">
+            <h3 class="preview-title">${p.title}</h3>
+            <div class="preview-tags">${p.tags.map(t => `<span class="preview-tag"># ${t}</span>`).join('')}</div>
+            <p class="preview-desc">${p.longDesc}</p>
+            <div class="preview-features">${p.features.map(f => `<span class="preview-feature">${f}</span>`).join('')}</div>
+            <a href="${p.link}" target="_blank" class="preview-link">Voir le projet →</a>
+          </div>
+        </div>`;
+                } else {
+                    const s = m.data;
+                    html += `
+        <div class="preview-content service-preview" data-aos="fade-up" data-aos-delay="${delay}">
+          <div class="preview-icon">${s.icon}</div>
+          <div class="preview-details">
+            <h3 class="preview-title">${s.title}</h3>
+            <p class="preview-desc">${s.desc}</p>
+            <div class="preview-keywords">${s.keywords.map(k => `<span class="preview-keyword">#${k}</span>`).join('')}</div>
+          </div>
+        </div>`;
+                }
+            });
+
+            preview.innerHTML = html;
+
+            // ← CRUCIAL : réinitialiser AOS sur le contenu injecté
+            AOS.refreshHard();
+
+            // Smooth apparition du conteneur
+            preview.style.opacity = '0';
+            preview.style.transform = 'translateY(-14px)';
+            requestAnimationFrame(() => {
+                preview.style.transition = 'all 0.45s cubic-bezier(0.4, 0, 0.2, 1)';
+                preview.style.opacity = '1';
+                preview.style.transform = 'translateY(0)';
+            });
+        }
+
+        function hideProjectPreview(instant = false) {
+            document.getElementById('no-results')?.remove();
+            const preview = document.getElementById('dynamic-preview');
+            if (preview) {
+                if (instant) return preview.remove();
+                preview.style.opacity = '0';
+                preview.style.transform = 'translateY(-14px)';
+                setTimeout(() => preview.remove(), 400);
+            }
+        }
+
+        // ===== ÉVÉNEMENTS =====
+        let searchTimeout;
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.trim();
+            if (checkEasterEgg(term)) return hideProjectPreview();
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => performExtendedSearch(term), 150);
+        });
+
+        document.addEventListener('keydown', (e) => {
+            const tag = e.target.tagName.toLowerCase();
+            const isInput = tag === 'input' || tag === 'textarea';
+            if (e.key === '/' && !isInput) {
+                e.preventDefault();
+                searchInput.focus();
+                searchInput.select();
+            }
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                hideProjectPreview();
+            }
+        });
+    </script>
+</body>
+
+</html>

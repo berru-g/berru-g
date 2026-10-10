@@ -203,7 +203,7 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             --line-soft: #1b2030;
             --txt: #e8eaf2;
             --txt-dim: #8b90a5;
-            --lime: #c8f65d;
+            --lime: #34d399;
             --violet: #ab9ff2;
             --rose: #ff7a8a;
             --mono: 'JetBrains Mono', monospace;
@@ -690,7 +690,7 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
         }
 
         #portfolio-total .pnl.positive {
-            color: var(--lime);
+            color: var(--violet);
         }
 
         #portfolio-total .pnl.negative {
@@ -1332,8 +1332,8 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             ami: 35535,
         };
 
-        // Capital investi à l'origine (€) sol=312, sui=1300, ami=40
-        const INITIAL_INVESTMENT = 1652;
+        // Capital investi à l'origine (€) sol=312 € à 68 l'unité, sui=1260€ à 0.90 l'unité, ami=40€ à 0.001 l'unité, btc=0 € à 0 l'unité, usdc=0 € à 0 l'unité
+        const INITIAL_INVESTMENT = 1612;
 
         (function renderCrypto() {
             const container = document.getElementById('crypto-prices');

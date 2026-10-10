@@ -20,7 +20,7 @@
     width: 90%;
     max-width: 500px;
     background: #fff;
-    color: var(--text-color);
+    color:grey;
     padding: 25px;
     border-radius: 16px;
     box-shadow: 0 8px 32px var(--shadow-color);
@@ -60,7 +60,7 @@
 
 .cookie-title {
     font-weight: 600;
-    color: var(--text-color);
+    color:grey;
     margin: 0
 }
 
@@ -96,7 +96,7 @@
 
 .accept-necessary {
     background: var(--input-background);
-    color: var(--text-color);
+    color:grey;
     border: 1px solid var(--border-color)
 }
 
