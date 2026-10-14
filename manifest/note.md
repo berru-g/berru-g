@@ -7,6 +7,15 @@ Dieu existe. Il s’appelle la sélection naturelle… et Il n’a jamais été 
  
 ## PREFACE :
 
+Enchanté,  Gaël 39 ans,  une adolescence anti clericale, anti religions, car j'avais deja compris que toute cette supercherie inventé par les puissant de ce monde pour asservir les prolo, avait comme unique but d'éviter que le peuple devienne fou en sappercevant que cette vie n'as aucun réel objectif ni sens. 
+
+je suis arrivé cependant a avoir la foi, par les sciences qui rejoignent bcp de principe religieux et spirituel. Et aussi, soyons honnête,  apres plusieurs années de galère intensive qui mon fait connaître,  la trahison,  la faim, l'impuissance face a l’absurde, le doute de l'importance de ma propre existence et le suicide,  raté qui m'as value 2 semaine sans pouvoir bouger un orteil, il y'a de cela 4 ans maintenant. 
+
+Même en toute conscience que cette foi étais  un produit de mon cerveau pour éviter de devenir fou, je la conserve et l'entretien aujourd'hui avec discernement pour... rester ici encore un peu. 
+
+
+## Chapitre 1
+
 Notre histoire débute il y’a environ 500 millions d’années, à l’ère édacarian tardif.
 Le monde ressemble à un immense desert, posé sur une sphére océanique.
 Les organismes unicellulaires sans predation du jardin d’édiacara ont laissé place à des organisme se nourrisant d’autre organisme. Nous sommes à la naissance de la prédation.
