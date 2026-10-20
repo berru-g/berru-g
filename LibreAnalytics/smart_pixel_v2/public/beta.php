@@ -1327,7 +1327,7 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
         const tokenHoldings = {
             bitcoin: 0,
             solana: 4.65,
-            sui: 1390,
+            sui: 1675,
             'usd-coin': 0,
             ami: 35535,
         };
