@@ -297,6 +297,96 @@ if (is_array($weatherRaw) && isset($weatherRaw['daily']['time'])) {
     }
 }
 
+// ================================================================
+// INFOS DU JOUR — APIs gratuites sans clé (appel serveur + cache)
+// ================================================================
+function fetchJsonCached(string $url, string $cacheFile, int $ttl): ?array
+{
+    if (is_file($cacheFile) && (time() - filemtime($cacheFile)) < $ttl) {
+        $data = json_decode(file_get_contents($cacheFile), true);
+        if (is_array($data)) {
+            return $data;
+        }
+    }
+
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 8,
+        CURLOPT_CONNECTTIMEOUT => 4,
+        CURLOPT_USERAGENT => 'Mozilla/5.0 (compatible; LibreAnalytics/1.0)',
+    ]);
+    $resp = curl_exec($ch);
+    $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($code === 200 && $resp) {
+        $decoded = json_decode($resp, true);
+        if (is_array($decoded) && $decoded !== []) {
+            file_put_contents($cacheFile, $resp, LOCK_EX);
+            return $decoded;
+        }
+    }
+    error_log("Fetch failed HTTP {$code} : {$url}");
+
+    // Cache périmé plutôt que rien
+    if (is_file($cacheFile)) {
+        $data = json_decode(file_get_contents($cacheFile), true);
+        if (is_array($data)) {
+            return $data;
+        }
+    }
+    return null;
+}
+
+// 1) Sentiment crypto — Fear & Greed Index (alternative.me, sans clé)
+$fearGreed = null;
+$fgRaw = fetchJsonCached('https://api.alternative.me/fng/?limit=1', __DIR__ . '/cache_fng.json', 1800);
+if (is_array($fgRaw) && isset($fgRaw['data'][0]['value'])) {
+    $fgLabels = [
+        'Extreme Fear' => 'Peur extrême',
+        'Fear'         => 'Peur',
+        'Neutral'      => 'Neutre',
+        'Greed'        => 'Avidité',
+        'Extreme Greed' => 'Avidité extrême',
+    ];
+    $fgClass = (string) ($fgRaw['data'][0]['value_classification'] ?? '');
+    $fgValue = (int) $fgRaw['data'][0]['value'];
+    $fearGreed = [
+        'value' => $fgValue,
+        'label' => $fgLabels[$fgClass] ?? $fgClass,
+        'state' => $fgValue <= 45 ? 'low' : ($fgValue >= 55 ? 'high' : 'mid'),
+    ];
+}
+
+// 2) « Un jour comme aujourd'hui » — Wikipédia FR (API Wikimedia, sans clé)
+$onThisDay = null;
+$otdCache  = __DIR__ . '/cache_onthisday_' . date('Ymd') . '.json';
+$otdRaw = fetchJsonCached(
+    'https://api.wikimedia.org/feed/v1/wikipedia/fr/onthisday/selected/' . date('m/d'),
+    $otdCache,
+    21600
+);
+if (is_array($otdRaw) && isset($otdRaw['events']) && is_array($otdRaw['events'])) {
+    $onThisDay = array_slice($otdRaw['events'], 0, 3);
+}
+
+// 3) Actu tech — page d'accueil Hacker News (API Algolia, sans clé)
+$hnHits = null;
+$hnRaw = fetchJsonCached(
+    'https://hn.algolia.com/api/v1/search?tags=front_page&hitsPerPage=4',
+    __DIR__ . '/cache_hn.json',
+    1800
+);
+if (is_array($hnRaw) && isset($hnRaw['hits']) && is_array($hnRaw['hits'])) {
+    $hnHits = array_slice($hnRaw['hits'], 0, 4);
+}
+
+// Date longue en français pour le titre « Infos du jour »
+$daysFr   = ['Monday' => 'lundi', 'Tuesday' => 'mardi', 'Wednesday' => 'mercredi', 'Thursday' => 'jeudi', 'Friday' => 'vendredi', 'Saturday' => 'samedi', 'Sunday' => 'dimanche'];
+$monthsFr = ['January' => 'janvier', 'February' => 'février', 'March' => 'mars', 'April' => 'avril', 'May' => 'mai', 'June' => 'juin', 'July' => 'juillet', 'August' => 'août', 'September' => 'septembre', 'October' => 'octobre', 'November' => 'novembre', 'December' => 'décembre'];
+$todayLong = ($daysFr[date('l')] ?? date('l')) . ' ' . (int) date('j') . ' ' . ($monthsFr[date('F')] ?? date('F')) . ' ' . date('Y');
+
 // Données passées aux graphiques
 $chartPayload = [
     'period' => $period,
@@ -461,45 +551,8 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             }
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 0;
-        }
-
-        .brand .logo {
-            width: 26px;
-            height: 26px;
-            border-radius: 7px;
-            background: var(--green);
-            color: var(--bg);
-            display: grid;
-            place-items: center;
-            font-size: 13px;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .brand .wordmark {
-            font-weight: 600;
-            font-size: 15px;
-            letter-spacing: -0.01em;
-            white-space: nowrap;
-        }
-
-        .brand .env {
-            font-family: var(--mono);
-            font-size: 11px;
-            color: var(--text-3);
-            border: 1px solid var(--border);
-            border-radius: 999px;
-            padding: 2px 8px;
-            white-space: nowrap;
-        }
-
-        @media (max-width: 560px) {
-            .brand .env {
+        @media (max-width: 480px) {
+            .back-label {
                 display: none;
             }
         }
@@ -602,33 +655,6 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
         }
 
         /* --- Météo --- */
-        .weather-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--border-soft);
-            font-size: 13px;
-        }
-
-        .weather-head .loc {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
-        }
-
-        .weather-head .loc i {
-            color: var(--green);
-            font-size: 12px;
-        }
-
-        .weather-head .src {
-            font-family: var(--mono);
-            font-size: 11px;
-            color: var(--text-3);
-        }
-
         .weather-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -770,12 +796,14 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             position: relative;
         }
 
-        .cmd-menu {
+        .cmd-menu,
+        .menu-nav {
             min-width: 264px;
             overflow: hidden;
         }
 
-        .cmd-menu a {
+        .cmd-menu a,
+        .menu-nav a {
             display: flex;
             align-items: center;
             gap: 12px;
@@ -787,11 +815,13 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             transition: background var(--t-fast), color var(--t-fast);
         }
 
-        .cmd-menu a:last-child {
+        .cmd-menu a:last-child,
+        .menu-nav a:last-child {
             border-bottom: none;
         }
 
-        .cmd-menu a i {
+        .cmd-menu a i,
+        .menu-nav a i {
             width: 16px;
             text-align: center;
             color: var(--text-3);
@@ -799,12 +829,14 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             transition: color var(--t-fast);
         }
 
-        .cmd-menu a:hover {
+        .cmd-menu a:hover,
+        .menu-nav a:hover {
             background: var(--surface-2);
             color: var(--green);
         }
 
-        .cmd-menu a:hover i {
+        .cmd-menu a:hover i,
+        .menu-nav a:hover i {
             color: var(--green);
         }
 
@@ -1573,6 +1605,205 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             }
         }
 
+        /* ===== ANCRAGES DE SECTION (menu de navigation) ===== */
+        .section {
+            scroll-margin-top: 76px;
+        }
+
+        /* ===== INFOS DU JOUR ===== */
+        .info-hero {
+            padding: 6px 0 14px;
+        }
+
+        .info-hero h2 {
+            font-size: clamp(26px, 4vw, 32px);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+        }
+
+        .info-hero .meta {
+            font-size: 13px;
+            color: var(--text-3);
+            margin-top: 4px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            align-items: start;
+        }
+
+        @media (max-width: 1020px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .fg-score {
+            font-size: 44px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1;
+        }
+
+        .fg-score span {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-3);
+            letter-spacing: 0;
+        }
+
+        .fg-label {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 999px;
+            margin: 12px 0 14px;
+        }
+
+        .fg-label.low {
+            color: var(--red);
+            background: var(--red-soft);
+        }
+
+        .fg-label.high {
+            color: var(--green);
+            background: var(--green-soft);
+        }
+
+        .fg-label.mid {
+            color: var(--amber);
+            background: rgba(227, 179, 65, 0.12);
+        }
+
+        .fg-meter {
+            height: 6px;
+            border-radius: 3px;
+            background: var(--surface-2);
+            overflow: hidden;
+        }
+
+        .fg-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+
+        .fg-fill.low {
+            background: var(--red);
+        }
+
+        .fg-fill.high {
+            background: var(--green);
+        }
+
+        .fg-fill.mid {
+            background: var(--amber);
+        }
+
+        .fg-scale {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-3);
+            margin-top: 6px;
+        }
+
+        .today-event {
+            display: flex;
+            gap: 12px;
+            padding: 11px 0;
+            border-bottom: 1px solid var(--border-soft);
+            align-items: flex-start;
+        }
+
+        .today-event .year {
+            font-family: var(--mono);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--green);
+            background: var(--green-soft);
+            border-radius: 6px;
+            padding: 2px 8px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .today-event p {
+            font-size: 13.5px;
+            color: var(--text-2);
+            line-height: 1.5;
+        }
+
+        .news-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 11px 0;
+            border-bottom: 1px solid var(--border-soft);
+        }
+
+        .news-item:last-of-type {
+            border-bottom: none;
+        }
+
+        .news-item .news-title {
+            font-size: 13.5px;
+            font-weight: 500;
+            line-height: 1.45;
+            transition: color var(--t-fast);
+        }
+
+        .news-item:hover .news-title {
+            color: var(--green);
+        }
+
+        .news-item .news-meta {
+            display: flex;
+            gap: 14px;
+            font-size: 12px;
+            color: var(--text-3);
+        }
+
+        .news-item .news-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .news-item .news-meta i {
+            font-size: 10px;
+        }
+
+        .card-src {
+            font-size: 11.5px;
+            color: var(--text-3);
+            margin-top: 14px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-soft);
+        }
+
+        /* ===== MÉTÉO EN SECTION PLEINE ===== */
+        .weather-section .weather-day {
+            padding: 20px 12px 16px;
+        }
+
+        .weather-section .weather-day .d-icon {
+            font-size: 26px;
+        }
+
+        .weather-section .weather-chart {
+            height: 150px;
+            padding: 14px 16px;
+        }
+
+        @media (max-width: 480px) {
+            .weather-section .weather-day {
+                padding: 14px 16px;
+            }
+        }
+
         /* ===== ÉTATS VIDES ===== */
         .empty-state {
             text-align: center;
@@ -1644,52 +1875,34 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
     <!-- ===== TOPBAR ===== -->
     <header class="topbar">
         <div class="topbar-inner">
-            <a class="brand" href="dashboard.php">
-                <span class="logo"><i class="fas fa-chart-line"></i></span>
-                <span class="wordmark">LibreAnalytics</span>
-                <span class="env">admin</span>
-            </a>
+            <button class="tb-btn" id="back-btn" aria-label="Retour à la page précédente">
+                <i class="fas fa-arrow-left"></i>
+                <span class="back-label">Retour</span>
+            </button>
             <div class="topbar-right">
                 <span class="status-chip">API</span>
 
-                <?php if (!empty($weatherDays)): ?>
-                    <div class="menu-anchor">
-                        <button class="tb-btn" id="wx-pill" aria-expanded="false" aria-controls="wx-pop">
-                            <i class="fas <?= htmlspecialchars($weatherDays[0]['icon']) ?>"></i>
-                            <span class="num"><?= $weatherDays[0]['t_max'] ?>° / <?= $weatherDays[0]['t_min'] ?>°</span>
-                            <span class="loc-label">Vertou</span>
-                        </button>
-                        <div class="pop wx-pop" id="wx-pop" role="dialog" aria-label="Météo Vertou 3 jours">
-                            <div class="weather-head">
-                                <span class="loc"><i class="fas fa-location-dot"></i> Vertou (44)</span>
-                                <span class="src">open-meteo · j+2</span>
-                            </div>
-                            <div class="weather-grid">
-                                <?php foreach ($weatherDays as $i => $day): ?>
-                                    <div class="weather-day <?= $i === 0 ? 'today' : '' ?>">
-                                        <div class="d-label"><?= htmlspecialchars($day['day_label']) ?></div>
-                                        <div class="d-icon"><i class="fas <?= htmlspecialchars($day['icon']) ?>"></i></div>
-                                        <div class="d-desc"><?= htmlspecialchars($day['label']) ?></div>
-                                        <div class="d-temps num"><?= $day['t_max'] ?>° <span
-                                                class="min">/ <?= $day['t_min'] ?>°</span></div>
-                                        <div class="d-rain"><i class="fas fa-umbrella"></i>
-                                            <?= $day['rain_prob'] ?>%</div>
-                                        <div class="d-wind"><i class="fas fa-wind"></i> <?= $day['wind_max'] ?> km/h
-                                        </div>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-                            <div class="weather-chart">
-                                <canvas id="weatherChart"></canvas>
-                            </div>
-                        </div>
+                <div class="menu-anchor">
+                    <button class="tb-btn" id="menu-toggle" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bars"></i>
+                        Menu
+                        <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
+                    </button>
+                    <div class="pop menu-nav" id="menu-nav" role="menu" aria-label="Navigation entre les sections">
+                        <a href="#kpis" role="menuitem"><i class="fas fa-gauge-high"></i> Vue d'ensemble</a>
+                        <a href="#wallet" role="menuitem"><i class="fas fa-wallet"></i> Wallet</a>
+                        <a href="#infos" role="menuitem"><i class="fas fa-bolt"></i> Infos du jour</a>
+                        <a href="#meteo" role="menuitem"><i class="fas fa-cloud-sun"></i> Météo</a>
+                        <a href="#activite" role="menuitem"><i class="fas fa-chart-bar"></i> Activité détaillée</a>
+                        <a href="#geo" role="menuitem"><i class="fas fa-earth-europe"></i> Top sites &amp; géo</a>
+                        <a href="#users" role="menuitem"><i class="fas fa-users"></i> Utilisateurs</a>
                     </div>
-                <?php endif; ?>
+                </div>
 
                 <div class="menu-anchor">
                     <button class="tb-btn" id="cmd-toggle" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-terminal"></i>
-                        <span class="cmd-label">Menu</span>
+                        CMD
                         <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
                     </button>
                     <div class="pop cmd-menu" id="cmd-menu" role="menu">
@@ -1725,7 +1938,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
         </div>
 
         <!-- ===== KPI : valeur + delta + sparkline ===== -->
-        <section class="section" aria-label="Indicateurs clés">
+        <section class="section" id="kpis" aria-label="Indicateurs clés">
             <?php
             $kpis = [
                 ['key' => 'users', 'label' => 'Nouveaux utilisateurs', 'icon' => 'fa-user-plus',
@@ -1773,7 +1986,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
         </section>
 
         <!-- ===== WALLET ===== -->
-        <section class="section">
+        <section class="section" id="wallet">
             <div class="section-head">
                 <h2>Wallet</h2>
                 <span class="hint">CoinGecko · cache 5 min</span>
@@ -1809,8 +2022,129 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             </div>
         </section>
 
+        <!-- ===== INFOS DU JOUR ===== -->
+        <section class="section" id="infos">
+            <div class="info-hero">
+                <h2>Infos du jour</h2>
+                <p class="meta"><?= htmlspecialchars($todayLong) ?> · alternative.me · Wikipédia · Hacker News</p>
+            </div>
+            <div class="info-grid">
+                <?php if ($fearGreed !== null): ?>
+                    <div class="card">
+                        <div class="card-head">
+                            <h3 class="card-title"><i class="fas fa-face-meh"></i> Sentiment crypto</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="fg-score num"><?= $fearGreed['value'] ?><span> / 100</span></div>
+                            <span class="fg-label <?= $fearGreed['state'] ?>"><?= htmlspecialchars($fearGreed['label']) ?></span>
+                            <div class="fg-meter">
+                                <div class="fg-fill <?= $fearGreed['state'] ?>"
+                                    style="width: <?= max(2, min(100, $fearGreed['value'])) ?>%"></div>
+                            </div>
+                            <div class="fg-scale"><span>0 · Peur</span><span>Avidité · 100</span></div>
+                            <div class="card-src">Fear &amp; Greed Index · alternative.me</div>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <div class="card">
+                        <div class="card-head">
+                            <h3 class="card-title"><i class="fas fa-face-meh"></i> Sentiment crypto</h3>
+                        </div>
+                        <div class="empty-state">Indice indisponible pour le moment</div>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (!empty($onThisDay)): ?>
+                    <div class="card">
+                        <div class="card-head">
+                            <h3 class="card-title"><i class="fas fa-landmark"></i> Un jour comme aujourd'hui</h3>
+                        </div>
+                        <div class="card-body">
+                            <?php foreach ($onThisDay as $ev): ?>
+                                <div class="today-event">
+                                    <span class="year num"><?= htmlspecialchars((string) ($ev['year'] ?? '')) ?></span>
+                                    <p><?= htmlspecialchars(strip_tags((string) ($ev['text'] ?? ''))) ?></p>
+                                </div>
+                            <?php endforeach; ?>
+                            <div class="card-src">Wikipédia FR · « On this day »</div>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <div class="card">
+                        <div class="card-head">
+                            <h3 class="card-title"><i class="fas fa-landmark"></i> Un jour comme aujourd'hui</h3>
+                        </div>
+                        <div class="empty-state">Événements indisponibles pour le moment</div>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (!empty($hnHits)): ?>
+                    <div class="card">
+                        <div class="card-head">
+                            <h3 class="card-title"><i class="fas fa-microchip"></i> Actu tech</h3>
+                        </div>
+                        <div class="card-body">
+                            <?php foreach ($hnHits as $hit):
+                                $link = !empty($hit['url']) ? $hit['url'] : 'https://news.ycombinator.com/item?id=' . ($hit['objectID'] ?? '');
+                            ?>
+                                <a class="news-item" href="<?= htmlspecialchars($link) ?>" target="_blank"
+                                    rel="noopener">
+                                    <span class="news-title"><?= htmlspecialchars($hit['title'] ?? '') ?></span>
+                                    <span class="news-meta num">
+                                        <span><i class="fas fa-arrow-up"></i><?= (int) ($hit['points'] ?? 0) ?></span>
+                                        <span><i class="fas fa-comment"></i><?= (int) ($hit['num_comments'] ?? 0) ?></span>
+                                    </span>
+                                </a>
+                            <?php endforeach; ?>
+                            <div class="card-src">Hacker News · page d'accueil</div>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <div class="card">
+                        <div class="card-head">
+                            <h3 class="card-title"><i class="fas fa-microchip"></i> Actu tech</h3>
+                        </div>
+                        <div class="empty-state">Actu indisponible pour le moment</div>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </section>
+
+        <!-- ===== MÉTÉO ===== -->
+        <section class="section weather-section" id="meteo">
+            <div class="section-head">
+                <h2>Météo — Vertou (44)</h2>
+                <span class="hint">open-meteo · aujourd'hui + J+2</span>
+            </div>
+            <?php if (!empty($weatherDays)): ?>
+                <div class="card">
+                    <div class="weather-grid">
+                        <?php foreach ($weatherDays as $i => $day): ?>
+                            <div class="weather-day <?= $i === 0 ? 'today' : '' ?>">
+                                <div class="d-label"><?= htmlspecialchars($day['day_label']) ?></div>
+                                <div class="d-icon"><i class="fas <?= htmlspecialchars($day['icon']) ?>"></i></div>
+                                <div class="d-desc"><?= htmlspecialchars($day['label']) ?></div>
+                                <div class="d-temps num"><?= $day['t_max'] ?>° <span
+                                        class="min">/ <?= $day['t_min'] ?>°</span></div>
+                                <div class="d-rain"><i class="fas fa-umbrella"></i>
+                                    <?= $day['rain_prob'] ?>%</div>
+                                <div class="d-wind"><i class="fas fa-wind"></i> <?= $day['wind_max'] ?> km/h</div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="weather-chart">
+                        <canvas id="weatherChart"></canvas>
+                    </div>
+                </div>
+            <?php else: ?>
+                <div class="card">
+                    <div class="empty-state">Météo indisponible pour le moment</div>
+                </div>
+            <?php endif; ?>
+        </section>
+
         <!-- ===== ACTIVITÉ DÉTAILLÉE (chaque métrique à son échelle) ===== -->
-        <section class="section">
+        <section class="section" id="activite">
             <div class="section-head">
                 <h2>Activité détaillée</h2>
                 <span class="hint"><?= $period ?> jours</span>
@@ -1852,7 +2186,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
         </section>
 
         <!-- ===== TOP SITES + GÉO ===== -->
-        <section class="section">
+        <section class="section" id="geo">
             <div class="section-head">
                 <h2>Top sites &amp; géographie</h2>
             </div>
@@ -1884,7 +2218,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
         </section>
 
         <!-- ===== REGISTRE UTILISATEURS ===== -->
-        <section class="section">
+        <section class="section" id="users">
             <div class="section-head">
                 <h2>Registre des utilisateurs (<?= count($usersList) ?>)</h2>
                 <?php if (!empty($plansStats)): ?>
@@ -2274,8 +2608,29 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 });
             }
 
-            bindPopover('wx-pill', 'wx-pop');
+            bindPopover('menu-toggle', 'menu-nav');
             bindPopover('cmd-toggle', 'cmd-menu');
+
+            // Le menu de navigation referme le popover après un clic sur une ancre
+            const menuNav = document.getElementById('menu-nav');
+            if (menuNav) {
+                menuNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+                    menuNav.classList.remove('open');
+                    document.getElementById('menu-toggle').setAttribute('aria-expanded', 'false');
+                }));
+            }
+
+            // Bouton retour : historique navigateur, sinon page compte
+            const backBtn = document.getElementById('back-btn');
+            if (backBtn) {
+                backBtn.addEventListener('click', () => {
+                    if (history.length > 1) {
+                        history.back();
+                    } else {
+                        location.href = 'account.php';
+                    }
+                });
+            }
 
             document.addEventListener('click', (e) => {
                 document.querySelectorAll('.pop.open').forEach(p => {
