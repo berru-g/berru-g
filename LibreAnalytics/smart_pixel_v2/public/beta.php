@@ -29,9 +29,9 @@ try {
 // ================================================================
 // PÉRIODE SÉLECTIONNÉE (7 / 30 / 90 jours) — pilote les requêtes
 // ================================================================
-$period = (int) ($_GET['period'] ?? 30);
-if (!in_array($period, [7, 30, 90], true)) {
-    $period = 30;
+$period = (int) ($_GET['period'] ?? 365);
+if (!in_array($period, [7, 30, 90, 365], true)) {
+    $period = 365;
 }
 
 // --- Récupération des données ---
@@ -341,7 +341,7 @@ $chartPayload = [
             --txt-dim: #9aa0b4;
             --txt-faint: #62688a;
             --lime: #34d399;
-            --acid: #c8f65d;
+            --acid: #62faa4;
             --violet: #ab9ff2;
             --rose: #ff7a8a;
             --blue: #86baff;
@@ -1677,6 +1677,7 @@ $chartPayload = [
                 <a href="?period=7" class="<?= $period === 7 ? 'active' : '' ?>">7j</a>
                 <a href="?period=30" class="<?= $period === 30 ? 'active' : '' ?>">30j</a>
                 <a href="?period=90" class="<?= $period === 90 ? 'active' : '' ?>">90j</a>
+                <a href="?period=365" class="<?= $period === 365 ? 'active' : '' ?>">365j</a>
             </nav>
         </div>
 
@@ -1728,9 +1729,46 @@ $chartPayload = [
             </div>
         </section>
 
-        <!-- ===== 02 — PETIT-MULTIPLES (chaque métrique à son échelle) ===== -->
+        <!-- ===== 02 — WALLET ===== -->
         <section class="section">
             <div class="section-head"><span class="index">02</span>
+                <h2>Wallet</h2>
+            </div>
+            <div class="duo">
+                <div class="panel">
+                    <div class="panel-head">
+                        <h3 class="panel-title"><i class="fas fa-wallet"></i> Token</h3>
+                        <button class="wallet-links-btn" id="wallet-links-btn">
+                            <i class="fas fa-link"></i> Liens 0x
+                        </button>
+                    </div>
+                    <div class="panel-body">
+                        <div id="crypto-prices"></div>
+                    </div>
+                </div>
+                <!--<div class="panel">
+                    <div class="panel-head">
+                        <h3 class="panel-title"><i class="fas fa-key"></i> Adresses</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="wallet-row">
+                            <span class="network">Sol</span>
+                            <span class="address" id="sol-address">D6khWoqvc2zX46HVtSZcNrPumnPLPM72SnSuDhBrZeTC</span>
+                            <button class="copy-button" data-target="sol-address">Copy</button>
+                        </div>
+                        <div class="wallet-row">
+                            <span class="network">BTC</span>
+                            <span class="address" id="btc-address">bc1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
+                            <button class="copy-button" data-target="btc-address">Copy</button>
+                        </div>
+                    </div>
+                </div>-->
+            </div>
+        </section>
+
+        <!-- ===== 03 — PETIT-MULTIPLES (chaque métrique à son échelle) ===== -->
+        <section class="section">
+            <div class="section-head"><span class="index">03</span>
                 <h2>Activité détaillée — <?= $period ?> jours</h2>
             </div>
             <div class="multiples">
@@ -1769,9 +1807,9 @@ $chartPayload = [
             </div>
         </section>
 
-        <!-- ===== 03 — TOP SITES + GÉO ===== -->
+        <!-- ===== 04 — TOP SITES + GÉO ===== -->
         <section class="section">
-            <div class="section-head"><span class="index">03</span>
+            <div class="section-head"><span class="index">04</span>
                 <h2>Top sites &amp; géographie</h2>
             </div>
             <div class="duo">
@@ -1799,43 +1837,6 @@ $chartPayload = [
                             <div class="map-holder" id="map-holder">
                                 <div id="worldMap"></div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== 04 — WALLET ===== -->
-        <section class="section">
-            <div class="section-head"><span class="index">04</span>
-                <h2>Wallet</h2>
-            </div>
-            <div class="duo">
-                <div class="panel">
-                    <div class="panel-head">
-                        <h3 class="panel-title"><i class="fas fa-wallet"></i> Token</h3>
-                        <button class="wallet-links-btn" id="wallet-links-btn">
-                            <i class="fas fa-link"></i> Liens 0x
-                        </button>
-                    </div>
-                    <div class="panel-body">
-                        <div id="crypto-prices"></div>
-                    </div>
-                </div>
-                <div class="panel">
-                    <div class="panel-head">
-                        <h3 class="panel-title"><i class="fas fa-key"></i> Adresses</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="wallet-row">
-                            <span class="network">Sol</span>
-                            <span class="address" id="sol-address">D6khWoqvc2zX46HVtSZcNrPumnPLPM72SnSuDhBrZeTC</span>
-                            <button class="copy-button" data-target="sol-address">Copy</button>
-                        </div>
-                        <div class="wallet-row">
-                            <span class="network">BTC</span>
-                            <span class="address" id="btc-address">bc1qxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>
-                            <button class="copy-button" data-target="btc-address">Copy</button>
                         </div>
                     </div>
                 </div>
@@ -1930,7 +1931,7 @@ $chartPayload = [
             const METRIC_COLORS = {
                 users: '#ab9ff2',
                 sites: '#86baff',
-                visits: '#c8f65d',
+                visits: '#62faa4',
                 uniques: '#ff7a8a'
             };
 
@@ -2006,7 +2007,7 @@ $chartPayload = [
                     data: {
                         labels: weatherDays.map(d => d.day_label),
                         datasets: [
-                            { label: 'Max', data: weatherDays.map(d => d.t_max), backgroundColor: 'rgba(200,246,93,0.75)', borderColor: '#c8f65d', borderWidth: 1, barPercentage: 0.6 },
+                            { label: 'Max', data: weatherDays.map(d => d.t_max), backgroundColor: 'rgba(200,246,93,0.75)', borderColor: '#62faa4', borderWidth: 1, barPercentage: 0.6 },
                             { label: 'Min', data: weatherDays.map(d => d.t_min), backgroundColor: 'rgba(134,186,255,0.55)', borderColor: '#86baff', borderWidth: 1, barPercentage: 0.6 }
                         ]
                     },
@@ -2239,15 +2240,18 @@ $chartPayload = [
                 }
             });
 
-            // ===== WALLET =====
-            const tokenHoldings = {
-                bitcoin: 0,
-                solana: 4.65,
-                sui: 1390,
-                'usd-coin': 0,
-                ami: 35535,
-            };
-            const INITIAL_INVESTMENT = 1612;
+            // ===== WALLET CRYPTO =====
+        //const cryptoData = <?= json_encode($coingeckoData ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
+        const tokenHoldings = {
+            bitcoin: 0,
+            solana: 4.67,
+            sui: 1675,
+            'usd-coin': 0,
+            ami: 35535,
+        };
+
+        // Capital investi à l'origine (€) sol=312 € à 68 l'unité, sui=1600€ à 0.95 l'unité, ami=44€ à 0.001237 l'unité, btc=0 € à 0 l'unité, usdc=0 € à 0 l'unité
+        const INITIAL_INVESTMENT = 1956;
 
             (function renderCrypto() {
                 const container = document.getElementById('crypto-prices');
@@ -2317,7 +2321,7 @@ $chartPayload = [
                         duration: 2000,
                         gravity: "center",
                         position: "center",
-                        backgroundColor: "#c8f65d",
+                        backgroundColor: "#62faa4",
                     }).showToast();
 
                     if (navigator.clipboard && window.isSecureContext) {
