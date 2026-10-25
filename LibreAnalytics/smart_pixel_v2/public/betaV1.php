@@ -1,5 +1,4 @@
 <?php
-//
 session_start();
 
 // --- Vérification de l'authentification ---
@@ -56,6 +55,9 @@ try {
     ");
     $topSites = $stmt->fetchAll();
 
+    // Nombre total de sites (fix : la carte "Sites" comptait des visites)
+    $totalSites = (int) $pdo->query("SELECT COUNT(*) FROM user_sites")->fetchColumn();
+
     // Pays visités (top 20)
     $stmt = $pdo->query("
         SELECT country, COUNT(*) AS visits
@@ -84,11 +86,11 @@ try {
     $stmt = $pdo->query("SELECT plan, COUNT(*) AS count FROM users GROUP BY plan");
     $plansStats = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
-    // Activité récente
+    // Activité récente (inscriptions/jour, 90 derniers jours pour le bar chart)
     $stmt = $pdo->query("
         SELECT DATE(created_at) AS date, COUNT(*) AS count
         FROM users
-        WHERE created_at >= DATE_SUB(NOW(), INTERVAL 365 DAY)
+        WHERE created_at >= DATE_SUB(NOW(), INTERVAL 90 DAY)
         GROUP BY DATE(created_at)
         ORDER BY date ASC
     ");
@@ -120,8 +122,6 @@ if (isset($_GET['export_emails'])) {
 
 // ================================================================
 // PRIX CRYPTO — CoinGecko côté serveur (clé privée + cache 5 min)
-// La clé ne quitte JAMAIS le serveur : le navigateur ne reçoit
-// que le JSON des prix.
 // ================================================================
 $coingeckoData = null;
 
@@ -129,7 +129,6 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
     $coingeckoCache = __DIR__ . '/cache_coingecko.json';
 
     if (is_file($coingeckoCache) && (time() - filemtime($coingeckoCache)) < 300) {
-        // Cache encore frais (5 min) → pas d'appel API
         $coingeckoData = json_decode(file_get_contents($coingeckoCache), true);
     } else {
         $cgUrl = 'https://api.coingecko.com/api/v3/coins/markets?' . http_build_query([
@@ -153,17 +152,121 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             $decoded = json_decode($resp, true);
             if (is_array($decoded) && $decoded !== []) {
                 $coingeckoData = $decoded;
-                // Mise à jour du cache (LOCK_EX = accès concurrent sécurisé)
                 file_put_contents($coingeckoCache, $resp, LOCK_EX);
             }
         } else {
             error_log("CoinGecko error HTTP {$code}");
         }
 
-        // Échec API → servir le dernier cache connu plutôt qu'un panneau vide
         if ($coingeckoData === null && is_file($coingeckoCache)) {
             $coingeckoData = json_decode(file_get_contents($coingeckoCache), true);
         }
+    }
+}
+
+// ================================================================
+// MÉTÉO VERTOU (44) — Open-Meteo, API gratuite, AUCUNE clé requise.
+// Appel 100 % côté serveur + cache 30 min. Coordonnées Vertou :
+// 47.1667 N, -1.4667 W. Jour en cours inclus (forecast_days=3).
+// ================================================================
+$weatherDays = null;
+
+/**
+ * Mappe un code WMO vers [libellé, icône FontAwesome].
+ */
+function wmoInfo(int $code): array
+{
+    $map = [
+        0 => ['Ciel dégagé', 'fa-sun'],
+        1 => ['Plutôt dégagé', 'fa-sun'],
+        2 => ['Partiellement nuageux', 'fa-cloud-sun'],
+        3 => ['Couvert', 'fa-cloud'],
+        45 => ['Brouillard', 'fa-smog'],
+        48 => ['Brouillard givrant', 'fa-smog'],
+        51 => ['Bruine légère', 'fa-cloud-rain'],
+        53 => ['Bruine', 'fa-cloud-rain'],
+        55 => ['Bruine dense', 'fa-cloud-rain'],
+        56 => ['Bruine verglaçante', 'fa-cloud-rain'],
+        57 => ['Bruine verglaçante dense', 'fa-cloud-rain'],
+        61 => ['Pluie légère', 'fa-cloud-rain'],
+        63 => ['Pluie', 'fa-cloud-showers-heavy'],
+        65 => ['Pluie forte', 'fa-cloud-showers-heavy'],
+        66 => ['Pluie verglaçante', 'fa-cloud-rain'],
+        67 => ['Pluie verglaçante forte', 'fa-cloud-rain'],
+        71 => ['Neige légère', 'fa-snowflake'],
+        73 => ['Neige', 'fa-snowflake'],
+        75 => ['Neige forte', 'fa-snowflake'],
+        77 => ['Grains de neige', 'fa-snowflake'],
+        80 => ['Averses légères', 'fa-cloud-sun-rain'],
+        81 => ['Averses', 'fa-cloud-showers-heavy'],
+        82 => ['Averses violentes', 'fa-cloud-showers-heavy'],
+        85 => ['Averses de neige', 'fa-snowflake'],
+        86 => ['Averses de neige fortes', 'fa-snowflake'],
+        95 => ['Orage', 'fa-bolt'],
+        96 => ['Orage et grêle', 'fa-bolt'],
+        99 => ['Orage et grêle forte', 'fa-bolt'],
+    ];
+    return $map[$code] ?? ['Temps indéterminé', 'fa-cloud'];
+}
+
+$weatherCache = __DIR__ . '/cache_meteo.json';
+$weatherRaw = null;
+
+if (is_file($weatherCache) && (time() - filemtime($weatherCache)) < 1800) {
+    $weatherRaw = json_decode(file_get_contents($weatherCache), true);
+} else {
+    $omUrl = 'https://api.open-meteo.com/v1/forecast?' . http_build_query([
+        'latitude' => 47.1667,
+        'longitude' => -1.4667,
+        'daily' => 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max',
+        'timezone' => 'Europe/Paris',
+        'forecast_days' => 3,
+    ]);
+
+    $ch = curl_init($omUrl);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 8,
+        CURLOPT_CONNECTTIMEOUT => 4,
+    ]);
+    $resp = curl_exec($ch);
+    $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($code === 200 && $resp) {
+        $weatherRaw = json_decode($resp, true);
+        if (is_array($weatherRaw) && isset($weatherRaw['daily'])) {
+            file_put_contents($weatherCache, $resp, LOCK_EX);
+        } else {
+            $weatherRaw = null;
+        }
+    } else {
+        error_log("Open-Meteo error HTTP {$code}");
+    }
+
+    // Échec API → dernier cache connu plutôt qu'un panneau vide
+    if ($weatherRaw === null && is_file($weatherCache)) {
+        $weatherRaw = json_decode(file_get_contents($weatherCache), true);
+    }
+}
+
+// Mise en forme des 3 jours (aujourd'hui compris)
+if (is_array($weatherRaw) && isset($weatherRaw['daily']['time'])) {
+    $weatherDays = [];
+    foreach ($weatherRaw['daily']['time'] as $i => $day) {
+        $wmo = (int) ($weatherRaw['daily']['weather_code'][$i] ?? 0);
+        [$label, $icon] = wmoInfo($wmo);
+        $weatherDays[] = [
+            'date' => $day,
+            'day_label' => $i === 0 ? "Aujourd'hui" : ($i === 1 ? 'Demain' : (new DateTime($day))->format('D d/m')),
+            'wmo' => $wmo,
+            'label' => $label,
+            'icon' => $icon,
+            't_max' => round((float) ($weatherRaw['daily']['temperature_2m_max'][$i] ?? 0)),
+            't_min' => round((float) ($weatherRaw['daily']['temperature_2m_min'][$i] ?? 0)),
+            'rain_prob' => (int) ($weatherRaw['daily']['precipitation_probability_max'][$i] ?? 0),
+            'wind_max' => round((float) ($weatherRaw['daily']['wind_speed_10m_max'][$i] ?? 0)),
+        ];
     }
 }
 ?>
@@ -182,7 +285,6 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/assets/dashboard.css">
-    <!-- CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script
         src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
@@ -190,25 +292,71 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
     <script src="https://cdn.amcharts.com/lib/5/map.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
-    <!-- Wallet crypto : SweetAlert2 + Toastify -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <style>
+        /* ============================================================
+   LibreAnalytics — dashboard.css
+   Refonte UI/UX, à utiliser en complément du markup existant
+   (mêmes classes : .topbar, .report, .weather, .stats-strip,
+   .panel, .duo, .data-table, .badge, etc.)
+
+   Principes :
+   1. Une seule source de vérité : design tokens en :root
+   2. Hiérarchie par typographie, pas par décor
+   3. Densité maîtrisée : les données respirent
+   4. Feedback : hover / focus visibles et cohérents
+   5. Accessibilité : contraste AA, reduced-motion respecté
+   ============================================================ */
+
         :root {
-            --ink: #0b0d12;
-            --ink-2: #10131b;
-            --ink-3: #161a25;
-            --line: #232839;
-            --line-soft: #1b2030;
-            --txt: #e8eaf2;
-            --txt-dim: #8b90a5;
+            /* --- Couleurs : fond encre chaude, accent unique --- */
+            --ink: #0d0f14;
+            --ink-2: #13161d;
+            --ink-3: #1a1e27;
+            --ink-4: #212634;
+            --line: #262b38;
+            --line-soft: #1c212d;
+
+            --txt: #eef0f6;
+            --txt-dim: #9aa0b4;
+            --txt-faint: #62688a;
+
             --lime: #34d399;
+            --acid: #c8f65d;
             --violet: #ab9ff2;
             --rose: #ff7a8a;
-            --mono: 'JetBrains Mono', monospace;
-            --grot: 'Space Grotesk', sans-serif;
+            --blue: #86baff;
+
+            /* --- Typo --- */
+            --mono: 'JetBrains Mono', ui-monospace, monospace;
+            --grot: 'Space Grotesk', system-ui, sans-serif;
+
+            /* --- Rythme : échelle 4px --- */
+            --s-1: 0.25rem;
+            --s-2: 0.5rem;
+            --s-3: 0.75rem;
+            --s-4: 1rem;
+            --s-5: 1.5rem;
+            --s-6: 2.25rem;
+            --s-7: 3.25rem;
+
+            /* --- Rayons : très légers, signature "précision" --- */
+            --r-1: 3px;
+            --r-2: 6px;
+
+            /* --- Ombres discrètes, jamais de glow gratuit --- */
+            --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.18);
+
+            /* --- Mouvements --- */
+            --t-fast: 120ms cubic-bezier(0.4, 0, 0.2, 1);
+            --t-med: 220ms cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+        /* ============================================================
+   BASE
+   ============================================================ */
 
         * {
             margin: 0;
@@ -218,58 +366,91 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
 
         html {
             scroll-behavior: smooth;
+            scrollbar-color: var(--ink-4) transparent;
         }
 
         body {
             font-family: var(--grot);
+            font-size: 15px;
             background: var(--ink);
             color: var(--txt);
-            line-height: 1.5;
+            line-height: 1.55;
+            /* Fond : dégradé radial très léger pour donner de la profondeur
+       sans "dashboard SaaS générique" */
             background-image:
-                linear-gradient(var(--line-soft) 1px, transparent 1px),
-                linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
-            background-size: 44px 44px;
+                radial-gradient(1100px 500px at 80% -10%, rgba(171, 159, 242, 0.05), transparent 60%),
+                radial-gradient(900px 400px at 10% -5%, rgba(200, 246, 93, 0.035), transparent 55%);
+            background-repeat: no-repeat;
         }
 
         ::selection {
-            background: var(--lime);
+            background: var(--acid);
             color: var(--ink);
+        }
+
+        /* Focus clavier toujours visible — UX clavier */
+        :focus-visible {
+            outline: 2px solid var(--lime);
+            outline-offset: 2px;
         }
 
         a {
             color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        /* Scrollbars sobres (WebKit) */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--ink-4);
+            border-radius: var(--r-1);
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
         }
 
         .shell {
-            max-width: 1520px;
+            max-width: 1440px;
             margin: 0 auto;
-            padding: 0 clamp(0.8rem, 3vw, 2.5rem) 4rem;
+            padding: 0 clamp(1rem, 3.5vw, 2.5rem) var(--s-7);
         }
 
-        /* ===== TOPBAR ===== */
+        /* ============================================================
+   TOPBAR
+   ============================================================ */
+
         .topbar {
             position: sticky;
             top: 0;
             z-index: 50;
-            background: rgba(11, 13, 18, 0.88);
-            backdrop-filter: blur(12px);
+            background: color-mix(in srgb, var(--ink) 82%, transparent);
+            backdrop-filter: blur(14px) saturate(1.2);
             border-bottom: 1px solid var(--line);
         }
 
         .topbar-inner {
-            max-width: 1520px;
+            max-width: 1440px;
             margin: 0 auto;
-            padding: 0.75rem clamp(0.8rem, 3vw, 2.5rem);
+            padding: var(--s-3) clamp(1rem, 3.5vw, 2.5rem);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 1rem;
+            gap: var(--s-4);
         }
 
         .brand {
             display: flex;
             align-items: baseline;
-            gap: 0.6rem;
+            gap: var(--s-2);
             text-decoration: none;
         }
 
@@ -283,27 +464,27 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
 
         .brand small {
             font-family: var(--mono);
-            font-size: 0.65rem;
-            color: var(--txt-dim);
+            font-size: 0.62rem;
+            color: var(--txt-faint);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 0.18em;
         }
 
         .topbar-right {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
+            gap: var(--s-3);
         }
 
         .live-dot {
             display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.45rem;
             font-family: var(--mono);
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             color: var(--txt-dim);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.12em;
         }
 
         .live-dot::before {
@@ -312,7 +493,8 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             height: 7px;
             border-radius: 50%;
             background: var(--lime);
-            animation: pulse 2s infinite;
+            box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.15);
+            animation: pulse 2.4s ease-in-out infinite;
         }
 
         @keyframes pulse {
@@ -320,42 +502,54 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             0%,
             100% {
                 opacity: 1;
+                transform: scale(1);
             }
 
             50% {
-                opacity: 0.25;
+                opacity: 0.4;
+                transform: scale(0.85);
             }
         }
 
-        /* ===== MENU DÉROULANT "COMMANDES" ===== */
+        /* ============================================================
+   MENU "COMMANDES"
+   ============================================================ */
+
         .cmd {
             position: relative;
         }
 
         .cmd-toggle {
             font-family: var(--mono);
-            font-size: 0.78rem;
-            letter-spacing: 1px;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
             color: var(--txt);
             background: var(--ink-3);
             border: 1px solid var(--line);
+            border-radius: var(--r-1);
             padding: 0.55rem 1rem;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
-            transition: border-color 0.2s, color 0.2s;
+            transition: border-color var(--t-fast), color var(--t-fast), background var(--t-fast);
         }
 
         .cmd-toggle:hover {
             border-color: var(--lime);
             color: var(--lime);
+            background: var(--ink-4);
         }
 
         .cmd-toggle .caret {
-            transition: transform 0.25s;
+            transition: transform var(--t-med);
             font-size: 0.6rem;
+        }
+
+        .cmd.open .cmd-toggle {
+            border-color: var(--lime);
+            color: var(--lime);
         }
 
         .cmd.open .cmd-toggle .caret {
@@ -365,15 +559,17 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
         .cmd-menu {
             position: absolute;
             right: 0;
-            top: calc(100% + 0.4rem);
-            min-width: 260px;
+            top: calc(100% + 0.5rem);
+            min-width: 270px;
             background: var(--ink-2);
             border: 1px solid var(--line);
-            border-top: 2px solid var(--lime);
+            border-radius: var(--r-2);
+            box-shadow: var(--shadow);
+            overflow: hidden;
             opacity: 0;
             visibility: hidden;
             transform: translateY(-6px);
-            transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+            transition: opacity var(--t-fast), transform var(--t-fast), visibility var(--t-fast);
         }
 
         .cmd.open .cmd-menu {
@@ -385,13 +581,12 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
         .cmd-menu a {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            padding: 0.7rem 1rem;
-            font-size: 0.85rem;
-            text-decoration: none;
+            gap: var(--s-3);
+            padding: 0.7rem 1.1rem;
+            font-size: 0.82rem;
             color: var(--txt);
             border-bottom: 1px solid var(--line-soft);
-            transition: background 0.15s, color 0.15s, padding-left 0.15s;
+            transition: background var(--t-fast), color var(--t-fast), padding-left var(--t-fast);
         }
 
         .cmd-menu a:last-child {
@@ -399,31 +594,39 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
         }
 
         .cmd-menu a i {
-            width: 1.2rem;
+            width: 1.1rem;
             text-align: center;
             color: var(--violet);
-            font-size: 0.8rem;
+            font-size: 0.78rem;
+            transition: color var(--t-fast);
         }
 
         .cmd-menu a:hover {
             background: var(--ink-3);
             color: var(--lime);
-            padding-left: 1.35rem;
+            padding-left: 1.4rem;
         }
 
-        /* ===== HERO / RAPPORT ===== */
+        .cmd-menu a:hover i {
+            color: var(--lime);
+        }
+
+        /* ============================================================
+   HERO / RAPPORT
+   ============================================================ */
+
         .report {
-            padding: 3.5rem 0 2rem;
+            padding: var(--s-7) 0 var(--s-5);
             display: grid;
-            grid-template-columns: 1fr auto;
+            grid-template-columns: 1fr minmax(300px, 420px);
             align-items: end;
-            gap: 1.5rem;
+            gap: var(--s-5);
         }
 
         .report h1 {
-            font-size: clamp(2rem, 6vw, 4.2rem);
+            font-size: clamp(2.1rem, 6vw, 4rem);
             font-weight: 700;
-            line-height: 0.95;
+            line-height: 0.98;
             letter-spacing: -0.03em;
             text-transform: uppercase;
         }
@@ -435,11 +638,11 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
 
         .report .meta {
             font-family: var(--mono);
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             color: var(--txt-dim);
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 0.8rem;
+            letter-spacing: 0.15em;
+            margin-top: var(--s-3);
         }
 
         .report .meta strong {
@@ -447,59 +650,232 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             font-weight: 700;
         }
 
-        @media (max-width: 700px) {
+        @media (max-width: 1100px) {
             .report {
                 grid-template-columns: 1fr;
             }
         }
 
-        /* ===== SECTIONS ===== */
-        .section {
-            margin-bottom: 3rem;
+        /* ============================================================
+   MÉTÉO
+   ============================================================ */
+
+        .weather {
+            border: 1px solid var(--line);
+            border-radius: var(--r-2);
+            background: var(--ink-2);
+            box-shadow: var(--shadow);
+            overflow: hidden;
         }
 
+        .weather-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .weather-head .loc {
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--txt);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .weather-head .loc i {
+            color: var(--lime);
+        }
+
+        .weather-head .src {
+            font-family: var(--mono);
+            font-size: 0.56rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--txt-faint);
+        }
+
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .weather-day {
+            padding: var(--s-4) var(--s-3) var(--s-3);
+            text-align: center;
+            border-right: 1px solid var(--line-soft);
+            position: relative;
+            transition: background var(--t-fast);
+        }
+
+        .weather-day:last-child {
+            border-right: none;
+        }
+
+        .weather-day:hover {
+            background: var(--ink-3);
+        }
+
+        /* Jour courant : marqueur discret, pas de gadget */
+        .weather-day.today::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 28px;
+            height: 2px;
+            background: var(--acid);
+            border-radius: 2px;
+        }
+
+        .weather-day .d-label {
+            font-family: var(--mono);
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--txt-dim);
+            margin-bottom: var(--s-2);
+        }
+
+        .weather-day .d-icon {
+            font-size: 1.45rem;
+            color: var(--acid);
+            margin-bottom: var(--s-2);
+        }
+
+        .weather-day .d-desc {
+            font-family: var(--mono);
+            font-size: 0.56rem;
+            color: var(--txt-dim);
+            letter-spacing: 0.04em;
+            margin-bottom: var(--s-3);
+            min-height: 1.6em;
+        }
+
+        .weather-day .d-temps {
+            font-family: var(--mono);
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .weather-day .d-temps .min {
+            color: var(--txt-faint);
+            font-weight: 400;
+        }
+
+        .weather-day .d-rain {
+            font-family: var(--mono);
+            font-size: 0.6rem;
+            color: var(--blue);
+            margin-top: 0.3rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .weather-day .d-rain i {
+            font-size: 0.55rem;
+        }
+
+        .weather-day .d-wind {
+            font-family: var(--mono);
+            font-size: 0.56rem;
+            color: var(--txt-faint);
+            margin-top: 0.15rem;
+        }
+
+        .weather-chart {
+            height: 90px;
+            padding: 0.4rem 0.6rem 0.5rem;
+            border-top: 1px solid var(--line-soft);
+        }
+
+        @media (max-width: 520px) {
+            .weather-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .weather-day {
+                border-right: none;
+                border-bottom: 1px solid var(--line-soft);
+            }
+
+            .weather-day:last-child {
+                border-bottom: none;
+            }
+        }
+
+        /* ============================================================
+   SECTIONS
+   ============================================================ */
+
+        .section {
+            margin-bottom: var(--s-6);
+        }
+
+        /* Le titre de section devient une vraie légende éditoriale :
+   index mono + règle horizontale qui respire */
         .section-head {
             display: flex;
             align-items: center;
-            gap: 0.8rem;
-            margin-bottom: 1rem;
+            gap: var(--s-3);
+            margin-bottom: var(--s-4);
         }
 
         .section-head .index {
             font-family: var(--mono);
-            font-size: 0.7rem;
+            font-size: 0.68rem;
+            font-weight: 700;
             color: var(--lime);
-            letter-spacing: 1px;
+            letter-spacing: 0.1em;
+            background: rgba(52, 211, 153, 0.08);
+            border: 1px solid rgba(52, 211, 153, 0.25);
+            border-radius: var(--r-1);
+            padding: 0.15rem 0.5rem;
         }
 
         .section-head h2 {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 0.22em;
             color: var(--txt);
+            white-space: nowrap;
         }
 
         .section-head::after {
             content: '';
             flex: 1;
             height: 1px;
-            background: var(--line);
+            background: linear-gradient(90deg, var(--line), transparent);
         }
 
-        /* ===== STATS ===== */
+        /* ============================================================
+   STATS STRIP
+   ============================================================ */
+
         .stats-strip {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             border: 1px solid var(--line);
+            border-radius: var(--r-2);
             background: var(--ink-2);
+            box-shadow: var(--shadow);
+            overflow: hidden;
         }
 
         .stat {
-            padding: 1.4rem 1.2rem;
-            border-right: 1px solid var(--line);
+            padding: var(--s-5) var(--s-4);
+            border-right: 1px solid var(--line-soft);
             position: relative;
-            transition: background 0.2s;
+            transition: background var(--t-fast);
         }
 
         .stat:last-child {
@@ -512,11 +888,11 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
 
         .stat .k {
             font-family: var(--mono);
-            font-size: 0.62rem;
+            font-size: 0.6rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 0.16em;
             color: var(--txt-dim);
-            margin-bottom: 0.4rem;
+            margin-bottom: var(--s-2);
             display: flex;
             align-items: center;
             gap: 0.45rem;
@@ -524,26 +900,27 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
 
         .stat .k i {
             color: var(--violet);
-            font-size: 0.7rem;
+            font-size: 0.68rem;
         }
 
         .stat .v {
             font-family: var(--mono);
-            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            font-size: clamp(1.6rem, 3vw, 2.3rem);
             font-weight: 700;
             color: var(--txt);
-            letter-spacing: -1px;
+            letter-spacing: -0.04em;
+            font-variant-numeric: tabular-nums;
         }
 
         .stat::after {
             content: '';
             position: absolute;
             left: 0;
-            bottom: -1px;
+            bottom: 0;
             width: 0;
             height: 2px;
-            background: var(--lime);
-            transition: width 0.35s;
+            background: var(--acid);
+            transition: width var(--t-med);
         }
 
         .stat:hover::after {
@@ -561,7 +938,7 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
 
             .stat:nth-child(1),
             .stat:nth-child(2) {
-                border-bottom: 1px solid var(--line);
+                border-bottom: 1px solid var(--line-soft);
             }
         }
 
@@ -572,7 +949,7 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
 
             .stat {
                 border-right: none;
-                border-bottom: 1px solid var(--line);
+                border-bottom: 1px solid var(--line-soft);
             }
 
             .stat:last-child {
@@ -580,22 +957,29 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             }
         }
 
-        /* ===== PANNEAUX ===== */
+        /* ============================================================
+   PANNEAUX
+   ============================================================ */
+
         .panel {
             background: var(--ink-2);
             border: 1px solid var(--line);
+            border-radius: var(--r-2);
+            box-shadow: var(--shadow);
             position: relative;
+            overflow: hidden;
         }
 
+        /* Signature : coin supérieur gauche en accent lime.
+   Discret, structurel, cohérent sur tout le site. */
         .panel::before {
             content: '';
             position: absolute;
-            top: -1px;
-            left: -1px;
-            width: 14px;
-            height: 14px;
-            border-top: 2px solid var(--lime);
-            border-left: 2px solid var(--lime);
+            top: 0;
+            left: 0;
+            width: 18px;
+            height: 2px;
+            background: var(--lime);
         }
 
         .panel-head {
@@ -603,35 +987,35 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 1rem;
-            padding: 1rem 1.4rem;
-            border-bottom: 1px solid var(--line);
+            gap: var(--s-3);
+            padding: var(--s-4) var(--s-5);
+            border-bottom: 1px solid var(--line-soft);
         }
 
         .panel-title {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 0.16em;
             display: flex;
             align-items: center;
-            gap: 0.7rem;
+            gap: 0.65rem;
         }
 
         .panel-title i {
             color: var(--lime);
-            font-size: 0.85rem;
+            font-size: 0.82rem;
         }
 
         .panel-body {
-            padding: 1rem;
+            padding: var(--s-4);
         }
 
         .duo {
             display: grid;
             grid-template-columns: 1.1fr 1fr;
-            gap: 1.2rem;
-            margin-bottom: 1.2rem;
+            gap: var(--s-4);
+            margin-bottom: var(--s-4);
         }
 
         @media (max-width: 1000px) {
@@ -643,7 +1027,7 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
         .duo-2 {
             display: grid;
             grid-template-columns: 1fr 1.5fr;
-            gap: 1.2rem;
+            gap: var(--s-4);
         }
 
         @media (max-width: 1000px) {
@@ -652,45 +1036,50 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             }
         }
 
-        /* ===== WALLET ===== */
+        /* ============================================================
+   WALLET
+   ============================================================ */
+
         #portfolio-total {
             display: flex;
             align-items: baseline;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 0.5rem;
-            padding: 1rem 1rem;
-            background: var(--ink-3);
+            gap: var(--s-2);
+            padding: var(--s-4);
+            background: linear-gradient(180deg, var(--ink-3), var(--ink-2));
             border: 1px solid var(--line);
             border-left: 3px solid var(--lime);
-            margin-bottom: 0.9rem;
+            border-radius: var(--r-1);
+            margin-bottom: var(--s-3);
         }
 
         #portfolio-total .label {
             font-family: var(--mono);
-            font-size: 0.62rem;
+            font-size: 0.6rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 0.16em;
             color: var(--txt-dim);
         }
 
         #portfolio-total h3 {
             font-family: var(--mono);
-            font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+            font-size: clamp(1.4rem, 3.5vw, 2rem);
             font-weight: 700;
             color: var(--lime);
-            letter-spacing: -1px;
+            letter-spacing: -0.04em;
+            font-variant-numeric: tabular-nums;
         }
 
         #portfolio-total .pnl {
             font-family: var(--mono);
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 700;
-            letter-spacing: 1px;
+            letter-spacing: 0.06em;
         }
 
         #portfolio-total .pnl.positive {
-            color: var(--violet);
+            color: var(--acid);
         }
 
         #portfolio-total .pnl.negative {
@@ -706,10 +1095,10 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             display: grid;
             grid-template-columns: 36px 1fr auto auto;
             align-items: center;
-            gap: 0.9rem;
-            padding: 0.9rem 1.1rem;
+            gap: var(--s-4);
+            padding: var(--s-3) var(--s-4);
             border-bottom: 1px solid var(--line-soft);
-            transition: background 0.15s;
+            transition: background var(--t-fast);
         }
 
         .crypto-item:last-child {
@@ -725,11 +1114,12 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             height: 32px;
             border-radius: 50%;
             filter: grayscale(30%);
-            transition: filter 0.2s;
+            transition: filter var(--t-med), transform var(--t-med);
         }
 
         .crypto-item:hover img {
             filter: none;
+            transform: scale(1.08);
         }
 
         .crypto-item .name {
@@ -739,16 +1129,17 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
 
         .crypto-item .symbol {
             font-family: var(--mono);
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             font-weight: 700;
-            letter-spacing: 1px;
+            letter-spacing: 0.08em;
             color: var(--txt);
         }
 
         .crypto-item .price {
             font-family: var(--mono);
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: var(--txt-dim);
+            font-variant-numeric: tabular-nums;
         }
 
         .crypto-item .holdings {
@@ -759,23 +1150,25 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
 
         .crypto-item .holdings .amount {
             font-family: var(--mono);
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: var(--txt-dim);
         }
 
         .crypto-item .holdings .value {
             font-family: var(--mono);
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             font-weight: 700;
             color: var(--violet);
+            font-variant-numeric: tabular-nums;
         }
 
         .crypto-item .change {
             font-family: var(--mono);
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 700;
             min-width: 72px;
             text-align: right;
+            font-variant-numeric: tabular-nums;
         }
 
         .crypto-item .change.positive::before {
@@ -810,8 +1203,8 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
         .wallet-row {
             display: flex;
             align-items: center;
-            gap: 0.7rem;
-            padding: 0.85rem 0;
+            gap: var(--s-3);
+            padding: var(--s-3) 0;
             border-bottom: 1px dashed var(--line);
         }
 
@@ -821,12 +1214,13 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
 
         .wallet-row .network {
             font-family: var(--mono);
-            font-size: 0.62rem;
+            font-size: 0.6rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.1em;
             color: var(--ink);
             background: var(--lime);
+            border-radius: var(--r-1);
             padding: 0.3rem 0.5rem;
             min-width: 52px;
             text-align: center;
@@ -835,7 +1229,7 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
         .wallet-row .address {
             flex: 1;
             font-family: var(--mono);
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             color: var(--txt-dim);
             overflow: hidden;
             text-overflow: ellipsis;
@@ -844,28 +1238,35 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
 
         .copy-button {
             font-family: var(--mono);
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.1em;
             border: 1px solid var(--violet);
+            border-radius: var(--r-1);
             background: transparent;
             color: var(--violet);
             padding: 0.4rem 0.8rem;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
         }
 
         .copy-button:hover {
             background: var(--violet);
             color: var(--ink);
+            border-color: var(--violet);
+        }
+
+        .copy-button:active {
+            transform: translateY(1px);
         }
 
         .wallet-links-btn {
             font-family: var(--mono);
-            font-size: 0.68rem;
+            font-size: 0.66rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.1em;
             border: 1px solid var(--line);
+            border-radius: var(--r-1);
             background: transparent;
             color: var(--txt);
             padding: 0.5rem 0.9rem;
@@ -873,7 +1274,7 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            transition: all 0.2s;
+            transition: border-color var(--t-fast), color var(--t-fast);
         }
 
         .wallet-links-btn i {
@@ -885,7 +1286,10 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             color: var(--lime);
         }
 
-        /* ===== TABLEAUX ===== */
+        /* ============================================================
+   TABLEAUX
+   ============================================================ */
+
         .table-responsive {
             overflow-x: auto;
         }
@@ -894,53 +1298,66 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             width: 100%;
             border-collapse: collapse;
             font-family: var(--mono);
-            font-size: 0.78rem;
+            font-size: 0.76rem;
         }
 
         .data-table th {
             text-align: left;
-            padding: 0.8rem 1rem;
-            color: var(--txt-dim);
+            padding: 0.75rem var(--s-4);
+            color: var(--txt-faint);
             font-weight: 700;
-            font-size: 0.62rem;
+            font-size: 0.6rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 0.16em;
             border-bottom: 1px solid var(--line);
             white-space: nowrap;
+            position: sticky;
+            top: 0;
+            background: var(--ink-2);
         }
 
         .data-table td {
-            padding: 0.8rem 1rem;
+            padding: 0.75rem var(--s-4);
             border-bottom: 1px solid var(--line-soft);
             color: var(--txt);
             white-space: nowrap;
+            font-variant-numeric: tabular-nums;
         }
 
         .data-table tbody tr {
-            transition: background 0.15s;
+            transition: background var(--t-fast);
         }
 
         .data-table tbody tr:hover {
             background: var(--ink-3);
         }
 
-        .data-table code {
-            background: var(--ink-3);
-            padding: 0.15rem 0.4rem;
-            color: var(--lime);
-            font-size: 0.72rem;
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
         }
 
-        /* ===== BADGES PLANS ===== */
+        .data-table code {
+            background: var(--ink-3);
+            border-radius: var(--r-1);
+            padding: 0.15rem 0.4rem;
+            color: var(--lime);
+            font-size: 0.7rem;
+        }
+
+        /* ============================================================
+   BADGES PLANS
+   ============================================================ */
+
         .badge {
             display: inline-block;
-            padding: 0.2rem 0.6rem;
+            padding: 0.22rem 0.6rem;
             font-family: var(--mono);
-            font-size: 0.62rem;
+            font-size: 0.6rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.1em;
             border: 1px solid;
+            border-radius: 999px;
         }
 
         .badge-free {
@@ -950,81 +1367,146 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
         }
 
         .badge-pro {
-            background: transparent;
+            background: rgba(52, 211, 153, 0.08);
             color: var(--lime);
-            border-color: var(--lime);
+            border-color: rgba(52, 211, 153, 0.5);
         }
 
         .badge-business {
-            background: transparent;
+            background: rgba(255, 122, 138, 0.08);
             color: var(--rose);
-            border-color: var(--rose);
+            border-color: rgba(255, 122, 138, 0.5);
         }
 
         .badge-premium {
-            background: transparent;
+            background: rgba(171, 159, 242, 0.08);
             color: var(--violet);
-            border-color: var(--violet);
+            border-color: rgba(171, 159, 242, 0.5);
         }
 
-        /* ===== EXPORT ===== */
+        /* ============================================================
+   EXPORT
+   ============================================================ */
+
         .export-btn {
             font-family: var(--mono);
-            font-size: 0.68rem;
+            font-size: 0.66rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.1em;
             background: var(--lime);
             color: var(--ink);
             padding: 0.55rem 1rem;
             border: none;
+            border-radius: var(--r-1);
             font-weight: 700;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
             cursor: pointer;
-            transition: filter 0.2s;
+            transition: filter var(--t-fast), transform var(--t-fast);
         }
 
         .export-btn:hover {
-            filter: brightness(1.1);
+            filter: brightness(1.12);
         }
 
-        /* ===== GRAPHIQUE & CARTE ===== */
+        .export-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* ============================================================
+   GRAPHIQUES & CARTE
+   ============================================================ */
+
         #worldMap {
             width: 100%;
             height: 400px;
             background: var(--ink-2);
+            border-radius: var(--r-1);
         }
 
         .chart-wrap {
             position: relative;
-            max-height: 320px;
+            height: 320px;
         }
 
-        /* ===== EMPTY ===== */
+        .chart-wrap-sm {
+            position: relative;
+            height: 220px;
+        }
+
+        /* Doughnut plans */
+        .plans-flex {
+            display: flex;
+            align-items: center;
+            gap: var(--s-5);
+            flex-wrap: wrap;
+        }
+
+        .plans-flex .chart-wrap-sm {
+            width: 200px;
+            height: 200px;
+            flex-shrink: 0;
+        }
+
+        .plans-legend {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .plan-legend-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--mono);
+            font-size: 0.74rem;
+            padding: 0.55rem 0;
+            border-bottom: 1px dashed var(--line);
+        }
+
+        .plan-legend-row:last-child {
+            border-bottom: none;
+        }
+
+        .plan-legend-row .dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: var(--r-1);
+            margin-right: 0.5rem;
+        }
+
+        /* ============================================================
+   ÉTATS VIDES
+   ============================================================ */
+
         .empty-state {
             text-align: center;
-            padding: 3rem 1rem;
+            padding: var(--s-6) var(--s-4);
             color: var(--txt-dim);
             font-family: var(--mono);
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-style: italic;
         }
 
-        /* ===== SWEETALERT ===== */
+        /* ============================================================
+   SWEETALERT & TOASTIFY
+   ============================================================ */
+
         .custom-swal-popup {
             background: var(--ink-2) !important;
             color: var(--txt) !important;
             border: 1px solid var(--line) !important;
-            border-radius: 0 !important;
+            border-radius: var(--r-2) !important;
             font-family: var(--grot) !important;
+            box-shadow: var(--shadow) !important;
         }
 
         .custom-swal-popup h2 {
             font-family: var(--mono) !important;
             color: var(--lime) !important;
-            letter-spacing: 2px;
+            letter-spacing: 0.15em;
         }
 
         .custom-swal-close-button {
@@ -1041,7 +1523,7 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             padding: 0.7rem 0;
             border-bottom: 1px solid var(--line);
             font-family: var(--mono);
-            font-size: 0.85rem;
+            font-size: 0.84rem;
         }
 
         .custom-swal-content li:last-child {
@@ -1052,17 +1534,34 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             color: var(--lime);
             text-decoration: none;
             font-weight: 700;
+            border-bottom: 1px dotted rgba(52, 211, 153, 0.4);
         }
 
         .custom-swal-content a:hover {
-            text-decoration: underline;
+            border-bottom-style: solid;
         }
 
-        /* ===== TOASTIFY ===== */
         .toastify {
             font-family: var(--mono) !important;
-            border-radius: 0 !important;
+            border-radius: var(--r-1) !important;
             border-left: 3px solid var(--ink) !important;
+            box-shadow: var(--shadow) !important;
+        }
+
+        /* ============================================================
+   ACCESSIBILITÉ & PRÉFÉRENCES
+   ============================================================ */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
         }
     </style>
 </head>
@@ -1097,12 +1596,40 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
     </header>
 
     <div class="shell">
-        <!-- ===== HERO ===== -->
+        <!-- ===== HERO + MÉTÉO ===== -->
         <section class="report">
             <div>
                 <h1>Rapport<br><span class="stroke">SmartPixel</span></h1>
                 <p class="meta">console admin — <strong><?= date('d.m.Y') ?></strong> — accès :
-                    <?= htmlspecialchars($_SESSION['user_email']) ?></p>
+                    <?= htmlspecialchars($_SESSION['user_email']) ?>
+                </p>
+            </div>
+
+            <div class="weather" aria-label="Météo Vertou, 3 jours">
+                <div class="weather-head">
+                    <span class="loc"><i class="fas fa-location-dot"></i> Vertou (44)</span>
+                    <span class="src">open-meteo · j+2</span>
+                </div>
+                <?php if (!empty($weatherDays)): ?>
+                    <div class="weather-grid">
+                        <?php foreach ($weatherDays as $i => $day): ?>
+                            <div class="weather-day <?= $i === 0 ? 'today' : '' ?>">
+                                <div class="d-label"><?= htmlspecialchars($day['day_label']) ?></div>
+                                <div class="d-icon"><i class="fas <?= htmlspecialchars($day['icon']) ?>"></i></div>
+                                <div class="d-desc"><?= htmlspecialchars($day['label']) ?></div>
+                                <div class="d-temps"><?= $day['t_max'] ?>° <span class="min">/ <?= $day['t_min'] ?>°</span>
+                                </div>
+                                <div class="d-rain"><i class="fas fa-umbrella"></i> <?= $day['rain_prob'] ?>%</div>
+                                <div class="d-wind"><i class="fas fa-wind"></i> <?= $day['wind_max'] ?> km/h</div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="weather-chart">
+                        <canvas id="weatherChart"></canvas>
+                    </div>
+                <?php else: ?>
+                    <div class="empty-state">Météo indisponible</div>
+                <?php endif; ?>
             </div>
         </section>
 
@@ -1118,7 +1645,7 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
                 </div>
                 <div class="stat">
                     <div class="k"><i class="fas fa-globe"></i> Sites</div>
-                    <div class="v"><?= number_format(array_sum(array_column($topSites, 'total_visits'))) ?></div>
+                    <div class="v"><?= number_format($totalSites) ?></div>
                 </div>
                 <div class="stat">
                     <div class="k"><i class="fas fa-eye"></i> Visites</div>
@@ -1170,17 +1697,49 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             </div>
         </section>
 
-        <!-- ===== 03 — CROISSANCE ===== -->
+        <!-- ===== 03 — CROISSANCE + PLANS ===== -->
         <section class="section">
             <div class="section-head"><span class="index">03</span>
                 <h2>Croissance générale</h2>
             </div>
-            <div class="panel">
-                <div class="panel-head">
-                    <h3 class="panel-title"><i class="fas fa-chart-line"></i> Évolution cumulative — 7 jours</h3>
+            <div class="duo">
+                <div class="panel">
+                    <div class="panel-head">
+                        <h3 class="panel-title"><i class="fas fa-chart-line"></i> Évolution cumulative — 7 jours</h3>
+                    </div>
+                    <div class="panel-body chart-wrap">
+                        <canvas id="globalStatsChart"></canvas>
+                    </div>
                 </div>
-                <div class="panel-body chart-wrap">
-                    <canvas id="globalStatsChart" height="110"></canvas>
+                <div class="panel">
+                    <div class="panel-head">
+                        <h3 class="panel-title"><i class="fas fa-chart-pie"></i> Répartition des plans</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="plans-flex">
+                            <div class="chart-wrap-sm"><canvas id="plansChart"></canvas></div>
+                            <div class="plans-legend">
+                                <?php
+                                $planColors = [
+                                    'free' => '#8b90a5',
+                                    'pro' => '#34d399',
+                                    'business' => '#ff7a8a',
+                                    'premium' => '#ab9ff2',
+                                ];
+                                $totalPlans = max(1, array_sum($plansStats));
+                                foreach ($plansStats as $plan => $count):
+                                    $color = $planColors[$plan] ?? '#86baff';
+                                    ?>
+                                    <div class="plan-legend-row">
+                                        <span><span class="dot"
+                                                style="background: <?= $color ?>"></span><?= strtoupper(htmlspecialchars((string) $plan)) ?></span>
+                                        <span><strong><?= (int) $count ?></strong> <span
+                                                style="color:var(--txt-dim)"><?= round($count * 100 / $totalPlans) ?>%</span></span>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1195,35 +1754,8 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
                     <div class="panel-head">
                         <h3 class="panel-title"><i class="fas fa-trophy"></i> Top 5 sites</h3>
                     </div>
-                    <div class="panel-body" style="padding: 0;">
-                        <div class="table-responsive">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>Nom</th>
-                                        <th>Visites</th>
-                                        <th>ID</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (!empty($topSites)): ?>
-                                        <?php foreach ($topSites as $site): ?>
-                                            <tr>
-                                                <td><?= htmlspecialchars($site['site_name']) ?></td>
-                                                <td><strong
-                                                        style="color: var(--lime);"><?= number_format($site['total_visits']) ?></strong>
-                                                </td>
-                                                <td><code><?= htmlspecialchars((string) $site['id']) ?></code></td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <tr>
-                                            <td colspan="3" class="empty-state">Aucune donnée</td>
-                                        </tr>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="panel-body chart-wrap-sm">
+                        <canvas id="topSitesChart"></canvas>
                     </div>
                 </div>
                 <div class="panel">
@@ -1237,9 +1769,24 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             </div>
         </section>
 
-        <!-- ===== 05 — UTILISATEURS ===== -->
+        <!-- ===== 05 — ACTIVITÉ ===== -->
         <section class="section">
             <div class="section-head"><span class="index">05</span>
+                <h2>Inscriptions — 90 jours</h2>
+            </div>
+            <div class="panel">
+                <div class="panel-head">
+                    <h3 class="panel-title"><i class="fas fa-wave-square"></i> Nouveaux comptes par jour</h3>
+                </div>
+                <div class="panel-body chart-wrap-sm">
+                    <canvas id="activityChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== 06 — UTILISATEURS ===== -->
+        <section class="section">
+            <div class="section-head"><span class="index">06</span>
                 <h2>Registre des utilisateurs (<?= count($usersList) ?>)</h2>
             </div>
             <div class="panel">
@@ -1321,19 +1868,17 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
         })();
 
         // ===== WALLET CRYPTO =====
-        // Données injectées par PHP (appel CoinGecko côté serveur, caché 5 min,
-        // clé API privée). Zéro appel navigateur -> plus jamais de 429.
         const cryptoData = <?= json_encode($coingeckoData ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
         const tokenHoldings = {
             bitcoin: 0,
-            solana: 4.65,
-            sui: 1390,
+            solana: 4.67,
+            sui: 1675,
             'usd-coin': 0,
             ami: 35535,
         };
 
-        // Capital investi à l'origine (€) sol=312 € à 68 l'unité, sui=1260€ à 0.90 l'unité, ami=40€ à 0.001 l'unité, btc=0 € à 0 l'unité, usdc=0 € à 0 l'unité
-        const INITIAL_INVESTMENT = 1612;
+        // Capital investi à l'origine (€) sol=312 € à 68 l'unité, sui=1650€ à 0.96 l'unité, ami=40€ à 0.001 l'unité, btc=0 € à 0 l'unité, usdc=0 € à 0 l'unité
+        const INITIAL_INVESTMENT = 1962;
 
         (function renderCrypto() {
             const container = document.getElementById('crypto-prices');
@@ -1344,15 +1889,12 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             }
 
             let totalPortfolioValue = 0;
-
-            // Total du portefeuille en tête
             const totalElement = document.createElement('div');
             totalElement.id = 'portfolio-total';
             container.appendChild(totalElement);
 
             cryptoData.forEach(crypto => {
                 const price = crypto.current_price ?? 0;
-                // Null-safe : CoinGecko peut renvoyer null sur cette valeur
                 const change24h = crypto.price_change_percentage_24h ?? 0;
                 const changeTxt = (change24h >= 0 ? '+' : '') + change24h.toFixed(2);
                 const holdings = tokenHoldings[crypto.id] || 0;
@@ -1378,9 +1920,6 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
                 container.appendChild(el);
             });
 
-            // totalElement.innerHTML =
-            //  `<div class="label">Total</div><h3>${totalPortfolioValue.toFixed(2)} €</h3>`;
-            // P&L = valeur actuelle - capital investi
             const pnl = totalPortfolioValue - INITIAL_INVESTMENT;
             const isGain = pnl >= 0;
             const pnlTxt = (isGain ? '+' : '') + pnl.toFixed(2) + ' €';
@@ -1436,52 +1975,104 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
             callback();
         }
 
-        // ===== DASHBOARD PIXEL =====
-        // --- Graphique 4 courbes ---
-        const globalCtx = document.getElementById('globalStatsChart').getContext('2d');
+        // ===== GRAPHIQUES =====
         Chart.defaults.font.family = "'JetBrains Mono', monospace";
         Chart.defaults.color = '#8b90a5';
 
+        const sharedScales = {
+            x: { grid: { display: false } },
+            y: { beginAtZero: true, grid: { color: '#1b2030' } }
+        };
+
+        // --- Météo : températures min/max sur 3 jours ---
+        const weatherDays = <?= json_encode($weatherDays ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
+        const weatherCtx = document.getElementById('weatherChart');
+        if (weatherCtx && weatherDays.length) {
+            new Chart(weatherCtx, {
+                type: 'bar',
+                data: {
+                    labels: weatherDays.map(d => d.day_label),
+                    datasets: [
+                        {
+                            label: 'Max',
+                            data: weatherDays.map(d => d.t_max),
+                            backgroundColor: 'rgba(200, 246, 93, 0.75)',
+                            borderColor: '#c8f65d',
+                            borderWidth: 1,
+                            barPercentage: 0.6,
+                        },
+                        {
+                            label: 'Min',
+                            data: weatherDays.map(d => d.t_min),
+                            backgroundColor: 'rgba(134, 186, 255, 0.55)',
+                            borderColor: '#86baff',
+                            borderWidth: 1,
+                            barPercentage: 0.6,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => ctx.dataset.label + ' : ' + ctx.parsed.y + ' °C'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { size: 9 } } },
+                        y: { grid: { color: '#1b2030' }, ticks: { font: { size: 9 }, callback: (v) => v + '°' } }
+                    }
+                }
+            });
+        }
+
+        // --- Graphique 4 courbes cumulatives ---
+        const globalCtx = document.getElementById('globalStatsChart').getContext('2d');
         new Chart(globalCtx, {
             type: 'line',
             data: {
                 labels: <?= json_encode(array_column($historicalData, 'date')) ?>,
-                datasets: [{
-                    label: 'Utilisateurs',
-                    data: <?= json_encode(array_column($historicalData, 'cumulative_users')) ?>,
-                    borderColor: '#ab9ff2',
-                    backgroundColor: 'rgba(171, 159, 242, 0.06)',
-                    tension: 0.2,
-                    fill: true,
-                    pointRadius: 2
-                },
-                {
-                    label: 'Sites',
-                    data: <?= json_encode(array_column($historicalData, 'cumulative_sites')) ?>,
-                    borderColor: '#86baff',
-                    backgroundColor: 'rgba(134, 186, 255, 0.06)',
-                    tension: 0.2,
-                    fill: true,
-                    pointRadius: 2
-                },
-                {
-                    label: 'Visites',
-                    data: <?= json_encode(array_column($historicalData, 'cumulative_visits')) ?>,
-                    borderColor: '#c8f65d',
-                    backgroundColor: 'rgba(200, 246, 93, 0.06)',
-                    tension: 0.2,
-                    fill: true,
-                    pointRadius: 2
-                },
-                {
-                    label: 'Visiteurs uniques',
-                    data: <?= json_encode(array_column($historicalData, 'cumulative_unique_visitors')) ?>,
-                    borderColor: '#ff7a8a',
-                    backgroundColor: 'rgba(255, 122, 138, 0.06)',
-                    tension: 0.2,
-                    fill: true,
-                    pointRadius: 2
-                }
+                datasets: [
+                    {
+                        label: 'Utilisateurs',
+                        data: <?= json_encode(array_column($historicalData, 'cumulative_users')) ?>,
+                        borderColor: '#ab9ff2',
+                        backgroundColor: 'rgba(171, 159, 242, 0.06)',
+                        tension: 0.2,
+                        fill: true,
+                        pointRadius: 2
+                    },
+                    {
+                        label: 'Sites',
+                        data: <?= json_encode(array_column($historicalData, 'cumulative_sites')) ?>,
+                        borderColor: '#86baff',
+                        backgroundColor: 'rgba(134, 186, 255, 0.06)',
+                        tension: 0.2,
+                        fill: true,
+                        pointRadius: 2
+                    },
+                    {
+                        label: 'Visites',
+                        data: <?= json_encode(array_column($historicalData, 'cumulative_visits')) ?>,
+                        borderColor: '#c8f65d',
+                        backgroundColor: 'rgba(200, 246, 93, 0.06)',
+                        tension: 0.2,
+                        fill: true,
+                        pointRadius: 2
+                    },
+                    {
+                        label: 'Visiteurs uniques',
+                        data: <?= json_encode(array_column($historicalData, 'cumulative_unique_visitors')) ?>,
+                        borderColor: '#ff7a8a',
+                        backgroundColor: 'rgba(255, 122, 138, 0.06)',
+                        tension: 0.2,
+                        fill: true,
+                        pointRadius: 2
+                    }
                 ]
             },
             options: {
@@ -1490,15 +2081,9 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
                 plugins: {
                     legend: {
                         position: 'top',
-                        labels: {
-                            usePointStyle: true,
-                            boxWidth: 8
-                        }
+                        labels: { usePointStyle: true, boxWidth: 8 }
                     },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false
-                    }
+                    tooltip: { mode: 'index', intersect: false }
                 },
                 scales: {
                     x: {
@@ -1510,6 +2095,104 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
                         grid: { color: '#1b2030' },
                         title: { display: true, text: 'Nombre' }
                     }
+                }
+            }
+        });
+
+        // --- Doughnut répartition des plans ---
+        const plansData = <?= json_encode($plansStats ?: [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
+        const planColorsMap = {
+            free: '#8b90a5',
+            pro: '#34d399',
+            business: '#ff7a8a',
+            premium: '#ab9ff2'
+        };
+        new Chart(document.getElementById('plansChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(plansData).map(p => p.toUpperCase()),
+                datasets: [{
+                    data: Object.values(plansData),
+                    backgroundColor: Object.keys(plansData).map(p => planColorsMap[p] || '#86baff'),
+                    borderColor: '#10131b',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => ' ' + ctx.label + ' : ' + ctx.parsed + ' compte(s)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // --- Top 5 sites : barres horizontales ---
+        const topSites = <?= json_encode($topSites ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
+        new Chart(document.getElementById('topSitesChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: topSites.map(s => s.site_name),
+                datasets: [{
+                    label: 'Visites',
+                    data: topSites.map(s => Number(s.total_visits)),
+                    backgroundColor: 'rgba(52, 211, 153, 0.7)',
+                    borderColor: '#34d399',
+                    borderWidth: 1,
+                    borderRadius: 0
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => ' ' + ctx.parsed.x.toLocaleString('fr-FR') + ' visites'
+                        }
+                    }
+                },
+                scales: {
+                    x: { beginAtZero: true, grid: { color: '#1b2030' } },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+
+        // --- Activité : inscriptions/jour sur 90 jours ---
+        const activityData = <?= json_encode($recentActivity ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
+        new Chart(document.getElementById('activityChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: activityData.map(d => d.date),
+                datasets: [{
+                    label: 'Inscriptions',
+                    data: activityData.map(d => Number(d.count)),
+                    backgroundColor: 'rgba(171, 159, 242, 0.65)',
+                    borderColor: '#ab9ff2',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: { unit: 'week', displayFormats: { week: 'dd/MM' } },
+                        grid: { display: false },
+                        ticks: { maxRotation: 0, autoSkipPadding: 20 }
+                    },
+                    y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#1b2030' } }
                 }
             }
         });
