@@ -1326,14 +1326,14 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
         const cryptoData = <?= json_encode($coingeckoData ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
         const tokenHoldings = {
             bitcoin: 0,
-            solana: 4.65,
-            sui: 1390,
+            solana: 4.67,
+            sui: 1675,
             'usd-coin': 0,
             ami: 35535,
         };
 
-        // Capital investi à l'origine (€) sol=312 € à 68 l'unité, sui=1260€ à 0.90 l'unité, ami=40€ à 0.001 l'unité, btc=0 € à 0 l'unité, usdc=0 € à 0 l'unité
-        const INITIAL_INVESTMENT = 1612;
+        // Capital investi à l'origine (€) sol=312 € à 68 l'unité, sui=1650€ à 0.96 l'unité, ami=40€ à 0.001 l'unité, btc=0 € à 0 l'unité, usdc=0 € à 0 l'unité
+        const INITIAL_INVESTMENT = 1962;
 
         (function renderCrypto() {
             const container = document.getElementById('crypto-prices');
