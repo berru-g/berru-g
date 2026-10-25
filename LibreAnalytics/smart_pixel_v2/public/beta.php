@@ -1611,8 +1611,8 @@ $chartPayload = [
     <header class="topbar">
         <div class="topbar-inner">
             <a class="brand" href="dashboard.php">
-                <span class="sigil">LB—PX</span>
-                <small>LibreAnalytics / contrôle</small>
+                <span class="sigil"><</span>
+                <small>/</small>
             </a>
             <div class="topbar-right">
                 <!-- Météo : pill compacte, popover au clic -->
@@ -1651,7 +1651,7 @@ $chartPayload = [
                 <span class="live-dot">API</span>
                 <nav class="cmd" id="cmd-menu">
                     <button class="cmd-toggle" id="cmd-toggle" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-terminal"></i> Commandes <i class="fas fa-chevron-down caret"></i>
+                        <i class="fas fa-terminal"></i> CMD <i class="fas fa-chevron-down caret"></i>
                     </button>
                     <div class="cmd-menu" role="menu">
                         <a href="dashboard.php" role="menuitem"><i class="fas fa-arrow-left"></i> Dashboard</a>
