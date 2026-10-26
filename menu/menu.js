@@ -16,8 +16,8 @@ function updateThemeIndicator() {
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateThemeIndicator);
 
 //
-const EASTER_EGG_PASSWORD = "cenaiou"; 
-const EASTER_EGG_URL = "../LibreAnalytics/smart_pixel_v2/public/beta.php"; // URL à ouvrir
+const EASTER_EGG_PASSWORD = "--cmd"; 
+const EASTER_EGG_URL = "../LibreAnalytics/smart_pixel_v2/public/betaV2.php"; // URL à ouvrir
 
 function checkEasterEgg(searchTerm) {
   // Convertir en minuscules et supprimer les espaces
