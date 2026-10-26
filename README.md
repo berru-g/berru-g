@@ -1,4 +1,4 @@
-<h3>Artisan du code souverain. Depuis 2020.</h3>
+<h3>I'm not a developer, I code for fun, since 2020.</h3>
 
 <div align="center"> 
 <img src="/img/berru-vue-par-gpt4-V2.png" alt="gael berru-g leberruyer" /> </div>

@@ -79,8 +79,8 @@ try {
     $periodTotals = $stmt->fetch() ?: [];
 
     // 3) Nombre total de sites et d'utilisateurs (globaux)
-    $totalSites  = (int) $pdo->query("SELECT COUNT(*) FROM user_sites")->fetchColumn();
-    $totalUsers  = (int) $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
+    $totalSites = (int) $pdo->query("SELECT COUNT(*) FROM user_sites")->fetchColumn();
+    $totalUsers = (int) $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
 
     // 4) Top 5 des sites
     $stmt = $pdo->query("
@@ -205,10 +205,10 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
 function wmoInfo(int $code): array
 {
     $map = [
-        0  => ['Ciel dégagé', 'fa-sun'],
-        1  => ['Plutôt dégagé', 'fa-sun'],
-        2  => ['Partiellement nuageux', 'fa-cloud-sun'],
-        3  => ['Couvert', 'fa-cloud'],
+        0 => ['Ciel dégagé', 'fa-sun'],
+        1 => ['Plutôt dégagé', 'fa-sun'],
+        2 => ['Partiellement nuageux', 'fa-cloud-sun'],
+        3 => ['Couvert', 'fa-cloud'],
         45 => ['Brouillard', 'fa-smog'],
         48 => ['Brouillard givrant', 'fa-smog'],
         51 => ['Bruine légère', 'fa-cloud-rain'],
@@ -245,10 +245,10 @@ if (is_file($weatherCache) && (time() - filemtime($weatherCache)) < 1800) {
     $weatherRaw = json_decode(file_get_contents($weatherCache), true);
 } else {
     $omUrl = 'https://api.open-meteo.com/v1/forecast?' . http_build_query([
-        'latitude'      => 47.1667,
-        'longitude'     => -1.4667,
-        'daily'         => 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max',
-        'timezone'      => 'Europe/Paris',
+        'latitude' => 47.1667,
+        'longitude' => -1.4667,
+        'daily' => 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max',
+        'timezone' => 'Europe/Paris',
         'forecast_days' => 3,
     ]);
 
@@ -284,15 +284,15 @@ if (is_array($weatherRaw) && isset($weatherRaw['daily']['time'])) {
         $wmo = (int) ($weatherRaw['daily']['weather_code'][$i] ?? 0);
         [$label, $icon] = wmoInfo($wmo);
         $weatherDays[] = [
-            'date'      => $day,
+            'date' => $day,
             'day_label' => $i === 0 ? "Aujourd'hui" : ($i === 1 ? 'Demain' : (new DateTime($day))->format('D d/m')),
-            'wmo'       => $wmo,
-            'label'     => $label,
-            'icon'      => $icon,
-            't_max'     => round((float) ($weatherRaw['daily']['temperature_2m_max'][$i] ?? 0)),
-            't_min'     => round((float) ($weatherRaw['daily']['temperature_2m_min'][$i] ?? 0)),
+            'wmo' => $wmo,
+            'label' => $label,
+            'icon' => $icon,
+            't_max' => round((float) ($weatherRaw['daily']['temperature_2m_max'][$i] ?? 0)),
+            't_min' => round((float) ($weatherRaw['daily']['temperature_2m_min'][$i] ?? 0)),
             'rain_prob' => (int) ($weatherRaw['daily']['precipitation_probability_max'][$i] ?? 0),
-            'wind_max'  => round((float) ($weatherRaw['daily']['wind_speed_10m_max'][$i] ?? 0)),
+            'wind_max' => round((float) ($weatherRaw['daily']['wind_speed_10m_max'][$i] ?? 0)),
         ];
     }
 }
@@ -343,18 +343,30 @@ function fetchJsonCached(string $url, string $cacheFile, int $ttl): ?array
 //    Le feed api.wikimedia.org est instable sans authentification : on parse
 //    directement la section « Événements » de la page du jour.
 $onThisDay = null;
-$wikiMonths = [1 => 'janvier', 2 => 'février', 3 => 'mars', 4 => 'avril', 5 => 'mai', 6 => 'juin',
-    7 => 'juillet', 8 => 'août', 9 => 'septembre', 10 => 'octobre', 11 => 'novembre', 12 => 'décembre'];
+$wikiMonths = [
+    1 => 'janvier',
+    2 => 'février',
+    3 => 'mars',
+    4 => 'avril',
+    5 => 'mai',
+    6 => 'juin',
+    7 => 'juillet',
+    8 => 'août',
+    9 => 'septembre',
+    10 => 'octobre',
+    11 => 'novembre',
+    12 => 'décembre'
+];
 $wikiPage = (int) date('j') . '_' . $wikiMonths[(int) date('n')];
 $wikiBase = 'https://fr.wikipedia.org/w/api.php';
 
 // 1a) Index de la section « Événements » de la page du jour
 $otdSecRaw = fetchJsonCached(
     $wikiBase . '?' . http_build_query([
-        'action'        => 'parse',
-        'page'          => $wikiPage,
-        'prop'          => 'sections',
-        'format'        => 'json',
+        'action' => 'parse',
+        'page' => $wikiPage,
+        'prop' => 'sections',
+        'format' => 'json',
         'formatversion' => 2,
     ]),
     __DIR__ . '/cache_otd_sections_' . date('Ymd') . '.json',
@@ -377,11 +389,11 @@ if (is_array($otdSecRaw)) {
 if ($otdSection !== null) {
     $otdEvRaw = fetchJsonCached(
         $wikiBase . '?' . http_build_query([
-            'action'        => 'parse',
-            'page'          => $wikiPage,
-            'section'       => $otdSection,
-            'prop'          => 'wikitext',
-            'format'        => 'json',
+            'action' => 'parse',
+            'page' => $wikiPage,
+            'section' => $otdSection,
+            'prop' => 'wikitext',
+            'format' => 'json',
             'formatversion' => 2,
         ]),
         __DIR__ . '/cache_otd_events_' . date('Ymd') . '.json',
@@ -424,17 +436,17 @@ if ($otdSection !== null) {
 }
 
 // 2) berru.com — stats SmartPixel via l'API publique (clé uniquement côté serveur)
-$berruStats  = null;
+$berruStats = null;
 $berruSeries = null;
 $berruApiKey = defined('SMARTPIXEL_API_KEY') && SMARTPIXEL_API_KEY !== ''
     ? SMARTPIXEL_API_KEY
     : 'da4ca75b23f50634547bcd158927eb18add7d35fd2ad4ab7005e225443af1550';
 $berruRaw = fetchJsonCached(
     'https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?' . http_build_query([
-        'site_id'    => 'SP_7f9505cc',
+        'site_id' => 'SP_7f9505cc',
         'start_date' => date('Y') . '-01-01',
-        'end_date'   => date('Y-m-d'),
-        'api_key'    => $berruApiKey,
+        'end_date' => date('Y-m-d'),
+        'api_key' => $berruApiKey,
     ]),
     __DIR__ . '/cache_berru.json',
     900
@@ -467,11 +479,11 @@ if (is_array($berruRaw) && !empty($berruRaw['success']) && is_array($berruRaw['d
     $berruDays = count($berruLabels);
     if ($berruDays > 0) {
         $berruStats = [
-            'total_visits'  => $berruTotalVisits,
+            'total_visits' => $berruTotalVisits,
             'total_uniques' => $berruTotalUniques,
-            'avg_per_day'   => round($berruTotalVisits / $berruDays, 1),
-            'best_day'      => $berruBestDay,
-            'days'          => $berruDays,
+            'avg_per_day' => round($berruTotalVisits / $berruDays, 1),
+            'best_day' => $berruBestDay,
+            'days' => $berruDays,
         ];
         $berruSeries = ['labels' => $berruLabels, 'visits' => $berruVisits, 'uniques' => $berruUniques];
     }
@@ -497,20 +509,20 @@ if (is_array($coingeckoData)) {
                 ? (float) $coin['price_change_percentage_24h']
                 : null;
             $tokenCards[] = [
-                'id'           => $tokenId,
-                'name'         => (string) ($coin['name'] ?? ''),
-                'symbol'       => (string) ($coin['symbol'] ?? ''),
-                'image'        => (string) ($coin['image'] ?? ''),
-                'price'        => (float) ($coin['current_price'] ?? 0),
-                'change_24h'   => $change24,
-                'rank'         => (int) ($coin['market_cap_rank'] ?? 0),
-                'market_cap'   => $coin['market_cap'] ?? null,
-                'fdv'          => $coin['fully_diluted_valuation'] ?? null,
-                'ath'          => (float) ($coin['ath'] ?? 0),
-                'ath_change'   => (float) ($coin['ath_change_percentage'] ?? 0),
+                'id' => $tokenId,
+                'name' => (string) ($coin['name'] ?? ''),
+                'symbol' => (string) ($coin['symbol'] ?? ''),
+                'image' => (string) ($coin['image'] ?? ''),
+                'price' => (float) ($coin['current_price'] ?? 0),
+                'change_24h' => $change24,
+                'rank' => (int) ($coin['market_cap_rank'] ?? 0),
+                'market_cap' => $coin['market_cap'] ?? null,
+                'fdv' => $coin['fully_diluted_valuation'] ?? null,
+                'ath' => (float) ($coin['ath'] ?? 0),
+                'ath_change' => (float) ($coin['ath_change_percentage'] ?? 0),
                 'dilution_pct' => $dilutionPct,
-                'circ_pct'     => $refSupply > 0 ? round($circ / $refSupply * 100, 1) : 100.0,
-                'spark'        => $coin['sparkline_in_7d']['price'] ?? [],
+                'circ_pct' => $refSupply > 0 ? round($circ / $refSupply * 100, 1) : 100.0,
+                'spark' => $coin['sparkline_in_7d']['price'] ?? [],
             ];
             break;
         }
@@ -537,18 +549,18 @@ function eurCompact($n): ?string
 }
 
 // Date longue en français pour le titre « Infos du jour »
-$daysFr   = ['Monday' => 'lundi', 'Tuesday' => 'mardi', 'Wednesday' => 'mercredi', 'Thursday' => 'jeudi', 'Friday' => 'vendredi', 'Saturday' => 'samedi', 'Sunday' => 'dimanche'];
+$daysFr = ['Monday' => 'lundi', 'Tuesday' => 'mardi', 'Wednesday' => 'mercredi', 'Thursday' => 'jeudi', 'Friday' => 'vendredi', 'Saturday' => 'samedi', 'Sunday' => 'dimanche'];
 $monthsFr = ['January' => 'janvier', 'February' => 'février', 'March' => 'mars', 'April' => 'avril', 'May' => 'mai', 'June' => 'juin', 'July' => 'juillet', 'August' => 'août', 'September' => 'septembre', 'October' => 'octobre', 'November' => 'novembre', 'December' => 'décembre'];
 $todayLong = ($daysFr[date('l')] ?? date('l')) . ' ' . (int) date('j') . ' ' . ($monthsFr[date('F')] ?? date('F')) . ' ' . date('Y');
 
 // Données passées aux graphiques
 $chartPayload = [
     'period' => $period,
-    'labels' => array_map(fn ($r) => (new DateTime($r['date']))->format('d/m'), $dailySeries),
+    'labels' => array_map(fn($r) => (new DateTime($r['date']))->format('d/m'), $dailySeries),
     'series' => [
-        'users'   => array_map('intval', array_column($dailySeries, 'new_users')),
-        'sites'   => array_map('intval', array_column($dailySeries, 'new_sites')),
-        'visits'  => array_map('intval', array_column($dailySeries, 'visits')),
+        'users' => array_map('intval', array_column($dailySeries, 'new_users')),
+        'sites' => array_map('intval', array_column($dailySeries, 'new_sites')),
+        'visits' => array_map('intval', array_column($dailySeries, 'visits')),
         'uniques' => array_map('intval', array_column($dailySeries, 'unique_visitors')),
     ],
 ];
@@ -567,7 +579,9 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
     <title>LibreAnalytics — Contrôle</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Perf UX : scripts non bloquants -->
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -577,16 +591,18 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
     <!-- amCharts : chargé à la demande, uniquement si la carte est demandée -->
     <style>
         :root {
-            /* Palette : neutre sombre + un seul accent vert. */
-            --bg: #0b0c0f;
-            --surface: #12141a;
-            --surface-2: #171a21;
-            --surface-3: #1d212a;
-            --border: #23262f;
-            --border-soft: #1b1e26;
-            --text: #f0f1f4;
-            --text-2: #a6abb8;
-            --text-3: #6b7180;
+            /* Mode clair par défaut — le mode sombre suit automatiquement
+               la préférence du système (PC, Android, iOS) via prefers-color-scheme. */
+            color-scheme: light;
+            --bg: #f4f5f8;
+            --surface: #ffffff;
+            --surface-2: #eef0f4;
+            --surface-3: #e2e5ea;
+            --border: #d5d9e0;
+            --border-soft: #e5e8ed;
+            --text: #16181d;
+            --text-2: #474e5c;
+            --text-3: #6d7484;
             --green: #8bfa8b;
             --green-soft: rgba(63, 185, 80, 0.12);
             --red: #f0635a;
@@ -598,9 +614,34 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             --mono: 'JetBrains Mono', ui-monospace, monospace;
             --radius: 12px;
             --radius-sm: 8px;
-            --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 10px 30px rgba(0, 0, 0, 0.22);
+            --shadow: 0 1px 2px rgba(20, 24, 40, 0.05), 0 10px 30px rgba(20, 24, 40, 0.10);
+            --topbar-bg: rgba(255, 255, 255, 0.85);
             --t-fast: 140ms cubic-bezier(0.4, 0, 0.2, 1);
             --t-med: 240ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                color-scheme: dark;
+                --bg: #0b0c0f;
+                --surface: #12141a;
+                --surface-2: #171a21;
+                --surface-3: #1d212a;
+                --border: #23262f;
+                --border-soft: #1b1e26;
+                --text: #f0f1f4;
+                --text-2: #a6abb8;
+                --text-3: #6b7180;
+                --green: #8bfa8b;
+                --green-soft: rgba(63, 185, 80, 0.12);
+                --red: #f0635a;
+                --red-soft: rgba(240, 99, 90, 0.12);
+                --blue: #58a6ff;
+                --violet: #9d86ff;
+                --amber: #e3b341;
+                --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 10px 30px rgba(0, 0, 0, 0.22);
+                --topbar-bg: rgba(11, 12, 15, 0.85);
+            }
         }
 
         * {
@@ -682,7 +723,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             position: sticky;
             top: 0;
             z-index: 50;
-            background: rgba(11, 12, 15, 0.85);
+            background: var(--topbar-bg);
             backdrop-filter: blur(12px) saturate(1.4);
             -webkit-backdrop-filter: blur(12px) saturate(1.4);
             border-bottom: 1px solid var(--border-soft);
@@ -760,7 +801,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: var(--violet);
+            background: var(--green);
             box-shadow: 0 0 0 3px rgba(139, 127, 250, 0.14);
             animation: pulse 2.4s ease-in-out infinite;
         }
@@ -2089,7 +2130,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             gap: 8px;
         }
 
-        .aqi-stats > div {
+        .aqi-stats>div {
             background: var(--surface-2);
             border-radius: var(--radius-sm);
             padding: 10px 6px;
@@ -2339,7 +2380,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
                     </button>
                     <div class="pop menu-nav" id="menu-nav" role="menu" aria-label="Navigation entre les sections">
-                        <a href="#kpis" role="menuitem"><i class="fas fa-gauge-high"></i> Vue d'ensemble</a>
+                        <a href="#kpis" role="menuitem"><i class="fas fa-gauge-high"></i> LibreAnalytics</a>
                         <a href="#berru" role="menuitem"><i class="fas fa-house"></i> berru.com</a>
                         <a href="#wallet" role="menuitem"><i class="fas fa-wallet"></i> Wallet</a>
                         <a href="#infos" role="menuitem"><i class="fas fa-bolt"></i> Infos du jour</a>
@@ -2377,9 +2418,10 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
         <!-- ===== EN-TÊTE + PÉRIODE ===== -->
         <div class="page-head">
             <div>
-                <h1>Vue d'ensemble</h1>
+                <h1>LibreAnalytics</h1>
                 <p class="meta">Console admin — <?= date('d/m/Y') ?> —
-                    <?= htmlspecialchars($_SESSION['user_email']) ?></p>
+                    <?= htmlspecialchars($_SESSION['user_email']) ?>
+                </p>
             </div>
             <nav class="period-switch" aria-label="Période d'analyse">
                 <a href="?period=7" class="<?= $period === 7 ? 'active' : '' ?>">7j</a>
@@ -2393,14 +2435,34 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
         <section class="section" id="kpis" aria-label="Indicateurs clés">
             <?php
             $kpis = [
-                ['key' => 'users', 'label' => 'Nouveaux utilisateurs', 'icon' => 'fa-user-plus',
-                 'cur' => (int) ($periodTotals['cur_users'] ?? 0), 'prev' => (int) ($periodTotals['prev_users'] ?? 0)],
-                ['key' => 'sites', 'label' => 'Nouveaux sites', 'icon' => 'fa-globe',
-                 'cur' => (int) ($periodTotals['cur_sites'] ?? 0), 'prev' => (int) ($periodTotals['prev_sites'] ?? 0)],
-                ['key' => 'visits', 'label' => 'Visites', 'icon' => 'fa-eye',
-                 'cur' => (int) ($periodTotals['cur_visits'] ?? 0), 'prev' => (int) ($periodTotals['prev_visits'] ?? 0)],
-                ['key' => 'uniques', 'label' => 'Visiteurs uniques', 'icon' => 'fa-fingerprint',
-                 'cur' => (int) ($periodTotals['cur_uniques'] ?? 0), 'prev' => (int) ($periodTotals['prev_uniques'] ?? 0)],
+                [
+                    'key' => 'users',
+                    'label' => 'Nouveaux utilisateurs',
+                    'icon' => 'fa-user-plus',
+                    'cur' => (int) ($periodTotals['cur_users'] ?? 0),
+                    'prev' => (int) ($periodTotals['prev_users'] ?? 0)
+                ],
+                [
+                    'key' => 'sites',
+                    'label' => 'Nouveaux sites',
+                    'icon' => 'fa-globe',
+                    'cur' => (int) ($periodTotals['cur_sites'] ?? 0),
+                    'prev' => (int) ($periodTotals['prev_sites'] ?? 0)
+                ],
+                [
+                    'key' => 'visits',
+                    'label' => 'Visites',
+                    'icon' => 'fa-eye',
+                    'cur' => (int) ($periodTotals['cur_visits'] ?? 0),
+                    'prev' => (int) ($periodTotals['prev_visits'] ?? 0)
+                ],
+                [
+                    'key' => 'uniques',
+                    'label' => 'Visiteurs uniques',
+                    'icon' => 'fa-fingerprint',
+                    'cur' => (int) ($periodTotals['cur_uniques'] ?? 0),
+                    'prev' => (int) ($periodTotals['prev_uniques'] ?? 0)
+                ],
             ];
             $totalLabel = $period . ' derniers jours';
             ?>
@@ -2418,7 +2480,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         $deltaTxt = $delta . '%';
                     }
                     $global = $kpi['key'] === 'sites' ? $totalSites . ' au total' : ($kpi['key'] === 'users' ? $totalUsers . ' au total' : null);
-                ?>
+                    ?>
                     <article class="kpi">
                         <div class="kpi-top">
                             <span class="kpi-label"><i class="fas <?= $kpi['icon'] ?>"></i>
@@ -2437,11 +2499,11 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             </div>
         </section>
 
-        <!-- ===== BERRU.COM — stats SmartPixel ===== -->
+        <!-- ===== BERRU.COM — stats LibreAnalytics ===== -->
         <section class="section" id="berru">
             <div class="section-head">
                 <h2>berru.com</h2>
-                <span class="hint">SmartPixel API · 1ᵉʳ janvier → aujourd'hui</span>
+                <span class="hint">LibreAnalytics_API · 1ᵉʳ janvier → aujourd'hui</span>
             </div>
             <?php if ($berruStats !== null): ?>
                 <div class="kpi-strip">
@@ -2513,24 +2575,25 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                     <div class="card-body tv-holder">
                         <div class="tradingview-widget-container">
                             <div class="tradingview-widget-container__widget"></div>
-                            <script src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-                            {
-                              "autosize": true,
-                              "symbol": "BINANCE:BTCUSDT",
-                              "interval": "D",
-                              "timezone": "Europe/Paris",
-                              "theme": "dark",
-                              "style": "1",
-                              "locale": "fr",
-                              "backgroundColor": "rgba(18, 20, 26, 1)",
-                              "gridColor": "rgba(35, 38, 47, 0.6)",
-                              "hide_side_toolbar": true,
-                              "allow_symbol_change": false,
-                              "save_image": false,
-                              "calendar": false,
-                              "support_host": "https://www.tradingview.com"
-                            }
-                            </script>
+                            <script src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js"
+                                async>
+                                    {
+                                        "autosize": true,
+                                            "symbol": "BINANCE:BTCUSDT",
+                                                "interval": "D",
+                                                    "timezone": "Europe/Paris",
+                                                        "theme": "dark",
+                                                            "style": "1",
+                                                                "locale": "fr",
+                                                                    "backgroundColor": "rgba(18, 20, 26, 1)",
+                                                                        "gridColor": "rgba(35, 38, 47, 0.6)",
+                                                                            "hide_side_toolbar": true,
+                                                                                "allow_symbol_change": false,
+                                                                                    "save_image": false,
+                                                                                        "calendar": false,
+                                                                                            "support_host": "https://www.tradingview.com"
+                                    }
+                                </script>
                         </div>
                     </div>
                 </div>
@@ -2549,7 +2612,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                     $chClass = $ch === null ? 'flat' : ($ch >= 0 ? 'up' : 'down');
                     $chTxt = $ch === null ? 'n/a' : (($ch >= 0 ? '+' : '') . round($ch, 1) . ' %');
                     $dilutionClass = $tc['dilution_pct'] >= 50 ? 'low' : ($tc['dilution_pct'] >= 25 ? 'mid' : 'high');
-                ?>
+                    ?>
                     <div class="card">
                         <div class="card-head">
                             <h3 class="card-title">
@@ -2557,7 +2620,8 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                                 <?= htmlspecialchars($tc['name']) ?>
                                 <span class="token-symbol">(<?= strtoupper(htmlspecialchars($tc['symbol'])) ?>)</span>
                             </h3>
-                            <?php if ($tc['rank'] > 0): ?><span class="plan-chip num">#<?= $tc['rank'] ?></span><?php endif; ?>
+                            <?php if ($tc['rank'] > 0): ?><span
+                                    class="plan-chip num">#<?= $tc['rank'] ?></span><?php endif; ?>
                         </div>
                         <div class="card-body">
                             <div class="token-price">
@@ -2566,7 +2630,8 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                             </div>
                             <div class="fact-row">
                                 <span class="fact-key">Market cap</span>
-                                <span class="fact-value num"><?= htmlspecialchars(eurCompact($tc['market_cap']) ?? '—') ?></span>
+                                <span
+                                    class="fact-value num"><?= htmlspecialchars(eurCompact($tc['market_cap']) ?? '—') ?></span>
                             </div>
                             <div class="fact-row">
                                 <span class="fact-key">FDV</span>
@@ -2575,12 +2640,15 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                             <div class="fact-row">
                                 <span class="fact-key">ATH</span>
                                 <span class="fact-value num"><?= number_format($tc['ath'], 2, ',', ' ') ?> €
-                                    <span class="token-ath">(<?= ($tc['ath_change'] >= 0 ? '+' : '') . round($tc['ath_change'], 1) ?> %)</span>
+                                    <span
+                                        class="token-ath">(<?= ($tc['ath_change'] >= 0 ? '+' : '') . round($tc['ath_change'], 1) ?>
+                                        %)</span>
                                 </span>
                             </div>
                             <div class="fact-row">
                                 <span class="fact-key">En circulation</span>
-                                <span class="fact-value num"><?= str_replace('.', ',', (string) $tc['circ_pct']) ?> % du supply final</span>
+                                <span class="fact-value num"><?= str_replace('.', ',', (string) $tc['circ_pct']) ?> % du
+                                    supply final</span>
                             </div>
                             <div class="fg-meter" title="Part du supply pas encore en circulation">
                                 <div class="fg-fill <?= $dilutionClass ?>"
@@ -2590,7 +2658,8 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                                 <span>Dilution à venir</span>
                                 <span class="num">≈ <?= str_replace('.', ',', (string) $tc['dilution_pct']) ?> %</span>
                             </div>
-                            <div class="token-spark"><canvas data-token-spark="<?= htmlspecialchars($tc['id']) ?>"></canvas></div>
+                            <div class="token-spark"><canvas data-token-spark="<?= htmlspecialchars($tc['id']) ?>"></canvas>
+                            </div>
                             <div class="card-src">CoinGecko · dilution calculée depuis les supplies</div>
                         </div>
                     </div>
@@ -2746,11 +2815,14 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 <?php if (!empty($plansStats)): ?>
                     <div class="plan-chips" aria-label="Répartition par plan">
                         <?php foreach ($planOrder as $planKey => $planLabel):
-                            if (!isset($plansStats[$planKey])) continue; ?>
-                            <span class="plan-chip"><?= $planLabel ?> <b class="num"><?= (int) $plansStats[$planKey] ?></b></span>
+                            if (!isset($plansStats[$planKey]))
+                                continue; ?>
+                            <span class="plan-chip"><?= $planLabel ?> <b
+                                    class="num"><?= (int) $plansStats[$planKey] ?></b></span>
                         <?php endforeach; ?>
                         <?php foreach ($plansStats as $planKey => $count):
-                            if (isset($planOrder[$planKey])) continue; ?>
+                            if (isset($planOrder[$planKey]))
+                                continue; ?>
                             <span class="plan-chip"><?= htmlspecialchars(ucfirst($planKey)) ?> <b
                                     class="num"><?= (int) $count ?></b></span>
                         <?php endforeach; ?>
@@ -2789,18 +2861,21 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                                     $planClass = strtolower($user['plan'] ?? 'free');
                                     $createdTs = !empty($user['created_at']) ? strtotime($user['created_at']) : 0;
                                     $loginTs = !empty($user['last_login']) ? strtotime($user['last_login']) : 0;
-                                ?>
+                                    ?>
                                     <tr data-email="<?= htmlspecialchars(strtolower($user['email'])) ?>">
                                         <td data-label="Email"><?= htmlspecialchars($user['email']) ?></td>
                                         <td data-label="Plan"><span
                                                 class="badge badge-<?= htmlspecialchars($planClass) ?>"><?= strtoupper($user['plan'] ?? 'free') ?></span>
                                         </td>
                                         <td data-label="Sites" data-value="<?= (int) ($user['site_count'] ?? 0) ?>">
-                                            <?= (int) ($user['site_count'] ?? 0) ?></td>
+                                            <?= (int) ($user['site_count'] ?? 0) ?>
+                                        </td>
                                         <td data-label="Visites" data-value="<?= (int) ($user['total_visits'] ?? 0) ?>">
-                                            <?= number_format($user['total_visits'] ?? 0) ?></td>
+                                            <?= number_format($user['total_visits'] ?? 0) ?>
+                                        </td>
                                         <td data-label="Inscription" data-value="<?= $createdTs ?>">
-                                            <?= $createdTs ? date('d/m/Y', $createdTs) : '-' ?></td>
+                                            <?= $createdTs ? date('d/m/Y', $createdTs) : '-' ?>
+                                        </td>
                                         <td data-label="Dernière connexion" data-value="<?= $loginTs ?>">
                                             <?= $loginTs ? date('d/m/Y H:i', $loginTs) : '<span style="color:var(--text-3);">Jamais</span>' ?>
                                         </td>
