@@ -512,6 +512,7 @@ if (is_array($coingeckoData)) {
                 'id' => $tokenId,
                 'name' => (string) ($coin['name'] ?? ''),
                 'symbol' => (string) ($coin['symbol'] ?? ''),
+                'tv_symbol' => strtoupper((string) ($coin['symbol'] ?? '')) . 'USDT',
                 'image' => (string) ($coin['image'] ?? ''),
                 'price' => (float) ($coin['current_price'] ?? 0),
                 'change_24h' => $change24,
@@ -1246,6 +1247,19 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
 
         .card-body {
             padding: 18px;
+        }
+
+        .card-title a {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: inherit;
+            transition: color var(--t-fast);
+        }
+
+        .card-title a:hover,
+        .card-title a:hover .token-symbol {
+            color: var(--violet);
         }
 
         .duo {
@@ -2380,9 +2394,9 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
                     </button>
                     <div class="pop menu-nav" id="menu-nav" role="menu" aria-label="Navigation entre les sections">
-                        <a href="#kpis" role="menuitem"><i class="fas fa-gauge-high"></i> LibreAnalytics</a>
-                        <a href="#berru" role="menuitem"><i class="fas fa-house"></i> berru.com</a>
-                        <a href="#wallet" role="menuitem"><i class="fas fa-wallet"></i> Wallet</a>
+                        <a href="#kpis" role="menuitem"><i class="fas fa-gauge-high"></i> LibreAnalytics.com</a>
+                        <a href="#berru" role="menuitem"><i class="fas fa-house"></i> gael-berru.com</a>
+                        <a href="#wallet" role="menuitem"><i class="fas fa-wallet"></i> Wallet all in one</a>
                         <a href="#infos" role="menuitem"><i class="fas fa-bolt"></i> Infos du jour</a>
                         <a href="#meteo" role="menuitem"><i class="fas fa-cloud-sun"></i> Météo</a>
                         <a href="#activite" role="menuitem"><i class="fas fa-chart-bar"></i> Activité détaillée</a>
@@ -2418,7 +2432,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
         <!-- ===== EN-TÊTE + PÉRIODE ===== -->
         <div class="page-head">
             <div>
-                <h1>LibreAnalytics</h1>
+                <h2>LibreAnalytics.com</h2>
                 <p class="meta">Console admin — <?= date('d/m/Y') ?> —
                     <?= htmlspecialchars($_SESSION['user_email']) ?>
                 </p>
@@ -2569,9 +2583,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                     <div id="crypto-prices"></div>
                 </div>
                 <div class="card">
-                    <div class="card-head">
-                        <h3 class="card-title"><i class="fas fa-chart-area"></i> BTC / USDT — TradingView</h3>
-                    </div>
+
                     <div class="card-body tv-holder">
                         <div class="tradingview-widget-container">
                             <div class="tradingview-widget-container__widget"></div>
@@ -2587,10 +2599,10 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                                                                 "locale": "fr",
                                                                     "backgroundColor": "rgba(18, 20, 26, 1)",
                                                                         "gridColor": "rgba(35, 38, 47, 0.6)",
-                                                                            "hide_side_toolbar": true,
-                                                                                "allow_symbol_change": false,
+                                                                            "hide_side_toolbar": false,
+                                                                                "allow_symbol_change": true,
                                                                                     "save_image": false,
-                                                                                        "calendar": false,
+                                                                                        "details": true,
                                                                                             "support_host": "https://www.tradingview.com"
                                     }
                                 </script>
@@ -2616,9 +2628,13 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                     <div class="card">
                         <div class="card-head">
                             <h3 class="card-title">
-                                <img src="<?= htmlspecialchars($tc['image']) ?>" alt="" class="token-logo">
-                                <?= htmlspecialchars($tc['name']) ?>
-                                <span class="token-symbol">(<?= strtoupper(htmlspecialchars($tc['symbol'])) ?>)</span>
+                                <a href="https://www.tradingview.com/chart/?symbol=BINANCE:<?= htmlspecialchars($tc['tv_symbol']) ?>"
+                                    target="_blank" rel="noopener"
+                                    title="Voir le graphique TradingView de <?= htmlspecialchars($tc['name']) ?>">
+                                    <img src="<?= htmlspecialchars($tc['image']) ?>" alt="" class="token-logo">
+                                    <?= htmlspecialchars($tc['name']) ?>
+                                    <span class="token-symbol">(<?= strtoupper(htmlspecialchars($tc['symbol'])) ?>)</span>
+                                </a>
                             </h3>
                             <?php if ($tc['rank'] > 0): ?><span
                                     class="plan-chip num">#<?= $tc['rank'] ?></span><?php endif; ?>
