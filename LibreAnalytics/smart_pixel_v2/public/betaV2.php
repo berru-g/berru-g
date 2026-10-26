@@ -79,8 +79,8 @@ try {
     $periodTotals = $stmt->fetch() ?: [];
 
     // 3) Nombre total de sites et d'utilisateurs (globaux)
-    $totalSites  = (int) $pdo->query("SELECT COUNT(*) FROM user_sites")->fetchColumn();
-    $totalUsers  = (int) $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
+    $totalSites = (int) $pdo->query("SELECT COUNT(*) FROM user_sites")->fetchColumn();
+    $totalUsers = (int) $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
 
     // 4) Top 5 des sites
     $stmt = $pdo->query("
@@ -205,10 +205,10 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
 function wmoInfo(int $code): array
 {
     $map = [
-        0  => ['Ciel dégagé', 'fa-sun'],
-        1  => ['Plutôt dégagé', 'fa-sun'],
-        2  => ['Partiellement nuageux', 'fa-cloud-sun'],
-        3  => ['Couvert', 'fa-cloud'],
+        0 => ['Ciel dégagé', 'fa-sun'],
+        1 => ['Plutôt dégagé', 'fa-sun'],
+        2 => ['Partiellement nuageux', 'fa-cloud-sun'],
+        3 => ['Couvert', 'fa-cloud'],
         45 => ['Brouillard', 'fa-smog'],
         48 => ['Brouillard givrant', 'fa-smog'],
         51 => ['Bruine légère', 'fa-cloud-rain'],
@@ -245,10 +245,10 @@ if (is_file($weatherCache) && (time() - filemtime($weatherCache)) < 1800) {
     $weatherRaw = json_decode(file_get_contents($weatherCache), true);
 } else {
     $omUrl = 'https://api.open-meteo.com/v1/forecast?' . http_build_query([
-        'latitude'      => 47.1667,
-        'longitude'     => -1.4667,
-        'daily'         => 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max',
-        'timezone'      => 'Europe/Paris',
+        'latitude' => 47.1667,
+        'longitude' => -1.4667,
+        'daily' => 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max',
+        'timezone' => 'Europe/Paris',
         'forecast_days' => 3,
     ]);
 
@@ -284,15 +284,15 @@ if (is_array($weatherRaw) && isset($weatherRaw['daily']['time'])) {
         $wmo = (int) ($weatherRaw['daily']['weather_code'][$i] ?? 0);
         [$label, $icon] = wmoInfo($wmo);
         $weatherDays[] = [
-            'date'      => $day,
+            'date' => $day,
             'day_label' => $i === 0 ? "Aujourd'hui" : ($i === 1 ? 'Demain' : (new DateTime($day))->format('D d/m')),
-            'wmo'       => $wmo,
-            'label'     => $label,
-            'icon'      => $icon,
-            't_max'     => round((float) ($weatherRaw['daily']['temperature_2m_max'][$i] ?? 0)),
-            't_min'     => round((float) ($weatherRaw['daily']['temperature_2m_min'][$i] ?? 0)),
+            'wmo' => $wmo,
+            'label' => $label,
+            'icon' => $icon,
+            't_max' => round((float) ($weatherRaw['daily']['temperature_2m_max'][$i] ?? 0)),
+            't_min' => round((float) ($weatherRaw['daily']['temperature_2m_min'][$i] ?? 0)),
             'rain_prob' => (int) ($weatherRaw['daily']['precipitation_probability_max'][$i] ?? 0),
-            'wind_max'  => round((float) ($weatherRaw['daily']['wind_speed_10m_max'][$i] ?? 0)),
+            'wind_max' => round((float) ($weatherRaw['daily']['wind_speed_10m_max'][$i] ?? 0)),
         ];
     }
 }
@@ -345,9 +345,9 @@ $fgRaw = fetchJsonCached('https://api.alternative.me/fng/?limit=1', __DIR__ . '/
 if (is_array($fgRaw) && isset($fgRaw['data'][0]['value'])) {
     $fgLabels = [
         'Extreme Fear' => 'Peur extrême',
-        'Fear'         => 'Peur',
-        'Neutral'      => 'Neutre',
-        'Greed'        => 'Avidité',
+        'Fear' => 'Peur',
+        'Neutral' => 'Neutre',
+        'Greed' => 'Avidité',
         'Extreme Greed' => 'Avidité extrême',
     ];
     $fgClass = (string) ($fgRaw['data'][0]['value_classification'] ?? '');
@@ -361,7 +361,7 @@ if (is_array($fgRaw) && isset($fgRaw['data'][0]['value'])) {
 
 // 2) « Un jour comme aujourd'hui » — Wikipédia FR (API Wikimedia, sans clé)
 $onThisDay = null;
-$otdCache  = __DIR__ . '/cache_onthisday_' . date('Ymd') . '.json';
+$otdCache = __DIR__ . '/cache_onthisday_' . date('Ymd') . '.json';
 $otdRaw = fetchJsonCached(
     'https://api.wikimedia.org/feed/v1/wikipedia/fr/onthisday/selected/' . date('m/d'),
     $otdCache,
@@ -383,18 +383,18 @@ if (is_array($hnRaw) && isset($hnRaw['hits']) && is_array($hnRaw['hits'])) {
 }
 
 // Date longue en français pour le titre « Infos du jour »
-$daysFr   = ['Monday' => 'lundi', 'Tuesday' => 'mardi', 'Wednesday' => 'mercredi', 'Thursday' => 'jeudi', 'Friday' => 'vendredi', 'Saturday' => 'samedi', 'Sunday' => 'dimanche'];
+$daysFr = ['Monday' => 'lundi', 'Tuesday' => 'mardi', 'Wednesday' => 'mercredi', 'Thursday' => 'jeudi', 'Friday' => 'vendredi', 'Saturday' => 'samedi', 'Sunday' => 'dimanche'];
 $monthsFr = ['January' => 'janvier', 'February' => 'février', 'March' => 'mars', 'April' => 'avril', 'May' => 'mai', 'June' => 'juin', 'July' => 'juillet', 'August' => 'août', 'September' => 'septembre', 'October' => 'octobre', 'November' => 'novembre', 'December' => 'décembre'];
 $todayLong = ($daysFr[date('l')] ?? date('l')) . ' ' . (int) date('j') . ' ' . ($monthsFr[date('F')] ?? date('F')) . ' ' . date('Y');
 
 // Données passées aux graphiques
 $chartPayload = [
     'period' => $period,
-    'labels' => array_map(fn ($r) => (new DateTime($r['date']))->format('d/m'), $dailySeries),
+    'labels' => array_map(fn($r) => (new DateTime($r['date']))->format('d/m'), $dailySeries),
     'series' => [
-        'users'   => array_map('intval', array_column($dailySeries, 'new_users')),
-        'sites'   => array_map('intval', array_column($dailySeries, 'new_sites')),
-        'visits'  => array_map('intval', array_column($dailySeries, 'visits')),
+        'users' => array_map('intval', array_column($dailySeries, 'new_users')),
+        'sites' => array_map('intval', array_column($dailySeries, 'new_sites')),
+        'visits' => array_map('intval', array_column($dailySeries, 'visits')),
         'uniques' => array_map('intval', array_column($dailySeries, 'unique_visitors')),
     ],
 ];
@@ -413,7 +413,9 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
     <title>LibreAnalytics — Contrôle</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Perf UX : scripts non bloquants -->
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -1906,7 +1908,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
                     </button>
                     <div class="pop cmd-menu" id="cmd-menu" role="menu">
-                        <a href="dashboard.php" role="menuitem"><i class="fas fa-gauge-high"></i> Dashboard</a>
+                        <a href="dashboard.php?site_id=5" role="menuitem"><i class="fas fa-gauge-high"></i> berru.com</a>
                         <a href="../campain/rapport.php" role="menuitem"><i class="fas fa-file-lines"></i> Rapport
                             id_gb</a>
                         <a href="../campain/rapport_lb.php" role="menuitem"><i class="fas fa-file-lines"></i> Rapport
@@ -1927,7 +1929,8 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             <div>
                 <h1>Vue d'ensemble</h1>
                 <p class="meta">Console admin — <?= date('d/m/Y') ?> —
-                    <?= htmlspecialchars($_SESSION['user_email']) ?></p>
+                    <?= htmlspecialchars($_SESSION['user_email']) ?>
+                </p>
             </div>
             <nav class="period-switch" aria-label="Période d'analyse">
                 <a href="?period=7" class="<?= $period === 7 ? 'active' : '' ?>">7j</a>
@@ -1941,14 +1944,34 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
         <section class="section" id="kpis" aria-label="Indicateurs clés">
             <?php
             $kpis = [
-                ['key' => 'users', 'label' => 'Nouveaux utilisateurs', 'icon' => 'fa-user-plus',
-                 'cur' => (int) ($periodTotals['cur_users'] ?? 0), 'prev' => (int) ($periodTotals['prev_users'] ?? 0)],
-                ['key' => 'sites', 'label' => 'Nouveaux sites', 'icon' => 'fa-globe',
-                 'cur' => (int) ($periodTotals['cur_sites'] ?? 0), 'prev' => (int) ($periodTotals['prev_sites'] ?? 0)],
-                ['key' => 'visits', 'label' => 'Visites', 'icon' => 'fa-eye',
-                 'cur' => (int) ($periodTotals['cur_visits'] ?? 0), 'prev' => (int) ($periodTotals['prev_visits'] ?? 0)],
-                ['key' => 'uniques', 'label' => 'Visiteurs uniques', 'icon' => 'fa-fingerprint',
-                 'cur' => (int) ($periodTotals['cur_uniques'] ?? 0), 'prev' => (int) ($periodTotals['prev_uniques'] ?? 0)],
+                [
+                    'key' => 'users',
+                    'label' => 'Nouveaux utilisateurs',
+                    'icon' => 'fa-user-plus',
+                    'cur' => (int) ($periodTotals['cur_users'] ?? 0),
+                    'prev' => (int) ($periodTotals['prev_users'] ?? 0)
+                ],
+                [
+                    'key' => 'sites',
+                    'label' => 'Nouveaux sites',
+                    'icon' => 'fa-globe',
+                    'cur' => (int) ($periodTotals['cur_sites'] ?? 0),
+                    'prev' => (int) ($periodTotals['prev_sites'] ?? 0)
+                ],
+                [
+                    'key' => 'visits',
+                    'label' => 'Visites',
+                    'icon' => 'fa-eye',
+                    'cur' => (int) ($periodTotals['cur_visits'] ?? 0),
+                    'prev' => (int) ($periodTotals['prev_visits'] ?? 0)
+                ],
+                [
+                    'key' => 'uniques',
+                    'label' => 'Visiteurs uniques',
+                    'icon' => 'fa-fingerprint',
+                    'cur' => (int) ($periodTotals['cur_uniques'] ?? 0),
+                    'prev' => (int) ($periodTotals['prev_uniques'] ?? 0)
+                ],
             ];
             $totalLabel = $period . ' derniers jours';
             ?>
@@ -1966,7 +1989,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         $deltaTxt = $delta . '%';
                     }
                     $global = $kpi['key'] === 'sites' ? $totalSites . ' au total' : ($kpi['key'] === 'users' ? $totalUsers . ' au total' : null);
-                ?>
+                    ?>
                     <article class="kpi">
                         <div class="kpi-top">
                             <span class="kpi-label"><i class="fas <?= $kpi['icon'] ?>"></i>
@@ -2002,6 +2025,30 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                     <div class="wallet-hero" id="portfolio-total"></div>
                     <div id="crypto-prices"></div>
                 </div>
+                <div class="card">
+                    <!-- Widget TradingView -->
+                    <script type="text/javascript"
+                        src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+                            {
+                                "width": "100%",
+                                    "height": "530",
+                                        "symbol": "BINANCE:BTCUSDT",
+                                            "interval": "D",
+                                                "timezone": "Etc/UTC",
+                                                    "theme": "dark",
+                                                        "style": "1",
+                                                            "locale": "en",
+                                                                "backgroundColor": "#23262f",
+                                                                    "withdateranges": true,
+                                                                        "hide_side_toolbar": false,
+                                                                            "allow_symbol_change": true,
+                                                                                "save_image": false,
+                                                                                    "details": true,
+                                                                                        "calendar": false,
+                                                                                            "support_host": "https://www.tradingview.com"
+                            }
+                        </script>
+                </div>
                 <!--<div class="card">
                     <div class="card-head">
                         <h3 class="card-title"><i class="fas fa-key"></i> Adresses</h3>
@@ -2029,14 +2076,15 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 <p class="meta"><?= htmlspecialchars($todayLong) ?> · alternative.me · Wikipédia · Hacker News</p>
             </div>
             <div class="info-grid">
-                <?php if ($fearGreed !== null): ?>
+                <!--<?php if ($fearGreed !== null): ?>
                     <div class="card">
                         <div class="card-head">
                             <h3 class="card-title"><i class="fas fa-face-meh"></i> Sentiment crypto</h3>
                         </div>
                         <div class="card-body">
                             <div class="fg-score num"><?= $fearGreed['value'] ?><span> / 100</span></div>
-                            <span class="fg-label <?= $fearGreed['state'] ?>"><?= htmlspecialchars($fearGreed['label']) ?></span>
+                            <span
+                                class="fg-label <?= $fearGreed['state'] ?>"><?= htmlspecialchars($fearGreed['label']) ?></span>
                             <div class="fg-meter">
                                 <div class="fg-fill <?= $fearGreed['state'] ?>"
                                     style="width: <?= max(2, min(100, $fearGreed['value'])) ?>%"></div>
@@ -2052,7 +2100,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         </div>
                         <div class="empty-state">Indice indisponible pour le moment</div>
                     </div>
-                <?php endif; ?>
+                <?php endif; ?>-->
 
                 <?php if (!empty($onThisDay)): ?>
                     <div class="card">
@@ -2086,9 +2134,8 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         <div class="card-body">
                             <?php foreach ($hnHits as $hit):
                                 $link = !empty($hit['url']) ? $hit['url'] : 'https://news.ycombinator.com/item?id=' . ($hit['objectID'] ?? '');
-                            ?>
-                                <a class="news-item" href="<?= htmlspecialchars($link) ?>" target="_blank"
-                                    rel="noopener">
+                                ?>
+                                <a class="news-item" href="<?= htmlspecialchars($link) ?>" target="_blank" rel="noopener">
                                     <span class="news-title"><?= htmlspecialchars($hit['title'] ?? '') ?></span>
                                     <span class="news-meta num">
                                         <span><i class="fas fa-arrow-up"></i><?= (int) ($hit['points'] ?? 0) ?></span>
@@ -2124,17 +2171,18 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                                 <div class="d-label"><?= htmlspecialchars($day['day_label']) ?></div>
                                 <div class="d-icon"><i class="fas <?= htmlspecialchars($day['icon']) ?>"></i></div>
                                 <div class="d-desc"><?= htmlspecialchars($day['label']) ?></div>
-                                <div class="d-temps num"><?= $day['t_max'] ?>° <span
-                                        class="min">/ <?= $day['t_min'] ?>°</span></div>
+                                <div class="d-temps num"><?= $day['t_max'] ?>° <span class="min">/ <?= $day['t_min'] ?>°</span>
+                                </div>
                                 <div class="d-rain"><i class="fas fa-umbrella"></i>
-                                    <?= $day['rain_prob'] ?>%</div>
+                                    <?= $day['rain_prob'] ?>%
+                                </div>
                                 <div class="d-wind"><i class="fas fa-wind"></i> <?= $day['wind_max'] ?> km/h</div>
                             </div>
                         <?php endforeach; ?>
                     </div>
-                    <div class="weather-chart">
+                   <!--<div class="weather-chart">
                         <canvas id="weatherChart"></canvas>
-                    </div>
+                    </div>-->
                 </div>
             <?php else: ?>
                 <div class="card">
@@ -2146,7 +2194,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
         <!-- ===== ACTIVITÉ DÉTAILLÉE (chaque métrique à son échelle) ===== -->
         <section class="section" id="activite">
             <div class="section-head">
-                <h2>Activité détaillée</h2>
+                <h2>Activité détaillée LibreAnalytics</h2>
                 <span class="hint"><?= $period ?> jours</span>
             </div>
             <div class="multiples">
@@ -2224,11 +2272,14 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 <?php if (!empty($plansStats)): ?>
                     <div class="plan-chips" aria-label="Répartition par plan">
                         <?php foreach ($planOrder as $planKey => $planLabel):
-                            if (!isset($plansStats[$planKey])) continue; ?>
-                            <span class="plan-chip"><?= $planLabel ?> <b class="num"><?= (int) $plansStats[$planKey] ?></b></span>
+                            if (!isset($plansStats[$planKey]))
+                                continue; ?>
+                            <span class="plan-chip"><?= $planLabel ?> <b
+                                    class="num"><?= (int) $plansStats[$planKey] ?></b></span>
                         <?php endforeach; ?>
                         <?php foreach ($plansStats as $planKey => $count):
-                            if (isset($planOrder[$planKey])) continue; ?>
+                            if (isset($planOrder[$planKey]))
+                                continue; ?>
                             <span class="plan-chip"><?= htmlspecialchars(ucfirst($planKey)) ?> <b
                                     class="num"><?= (int) $count ?></b></span>
                         <?php endforeach; ?>
@@ -2267,18 +2318,21 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                                     $planClass = strtolower($user['plan'] ?? 'free');
                                     $createdTs = !empty($user['created_at']) ? strtotime($user['created_at']) : 0;
                                     $loginTs = !empty($user['last_login']) ? strtotime($user['last_login']) : 0;
-                                ?>
+                                    ?>
                                     <tr data-email="<?= htmlspecialchars(strtolower($user['email'])) ?>">
                                         <td data-label="Email"><?= htmlspecialchars($user['email']) ?></td>
                                         <td data-label="Plan"><span
                                                 class="badge badge-<?= htmlspecialchars($planClass) ?>"><?= strtoupper($user['plan'] ?? 'free') ?></span>
                                         </td>
                                         <td data-label="Sites" data-value="<?= (int) ($user['site_count'] ?? 0) ?>">
-                                            <?= (int) ($user['site_count'] ?? 0) ?></td>
+                                            <?= (int) ($user['site_count'] ?? 0) ?>
+                                        </td>
                                         <td data-label="Visites" data-value="<?= (int) ($user['total_visits'] ?? 0) ?>">
-                                            <?= number_format($user['total_visits'] ?? 0) ?></td>
+                                            <?= number_format($user['total_visits'] ?? 0) ?>
+                                        </td>
                                         <td data-label="Inscription" data-value="<?= $createdTs ?>">
-                                            <?= $createdTs ? date('d/m/Y', $createdTs) : '-' ?></td>
+                                            <?= $createdTs ? date('d/m/Y', $createdTs) : '-' ?>
+                                        </td>
                                         <td data-label="Dernière connexion" data-value="<?= $loginTs ?>">
                                             <?= $loginTs ? date('d/m/Y H:i', $loginTs) : '<span style="color:var(--text-3);">Jamais</span>' ?>
                                         </td>

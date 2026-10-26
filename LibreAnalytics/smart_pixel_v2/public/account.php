@@ -484,7 +484,7 @@ if (isset($_POST['regenerate_api_key'])) {
                     <h3>Informations personnelles</h3>
                     <p>
                         <span>Email</span>
-                        <span class="value"><a href="betaV2.php" style="text-decoration:none;"><?= htmlspecialchars($user['email']) ?></a></span>
+                        <span class="value"><a href="beta.php" style="text-decoration:none;"><?= htmlspecialchars($user['email']) ?></a></span>
                     </p>
                     <p>
                         <span>Date d'inscription</span>
