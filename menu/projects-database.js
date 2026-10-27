@@ -132,6 +132,18 @@ const projectsDatabase = [
         tags: ['tool', 'Admin', 'Database']
     },
     {
+        id: 'libreanalytics-dashboard',
+        title: 'Dashboard sur mesure',
+        shortDesc: 'Dashboard personnel multi-sources — analytics, crypto, agenda, météo',
+        longDesc: 'Commander moi votre version adapté en m\'envoyant un mail. Un dashboard unique regroupant l\'analytics de mon logiciel LibreAnalytics et de mon site perso, mes wallets crypto (SOL, SUI, AMI, USDC) via l\'API CoinGecko, la chart TradingView avec sentiment du jour, mon agenda Google Calendar, la météo et les infos utiles du jour — avec envoi automatique de rapports clients par cron. Né en V0.1 en 2020, version 2 en 2026.',
+        keywords: ['dashboard', 'analytics', 'crypto', 'coingecko', 'tradingview', 'php', 'api', 'reporting', 'calendar', 'meteo'],
+        image: './img/dashboard-betaV2.png',
+        link: '#',
+        category: 'tool',
+        features: ['Analytics multi-sites', 'Wallets all in one', 'Chart TradingView & signaux du jour', 'Rapports clients automatisés CRON', 'Cache serveur & quotas API gérés'],
+        tags: ['tool', 'Analytics', 'Crypto', 'api', 'dashboard', 'reporting', 'calendar', 'meteo']
+    },
+    {
         id: 'golden-dessert',
         title: 'Golden Dessert CMS',
         shortDesc: 'Site vitrine avec CMS pour chef pâtissier',
