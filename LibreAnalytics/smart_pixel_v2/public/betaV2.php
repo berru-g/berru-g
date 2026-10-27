@@ -530,6 +530,27 @@ if (is_array($coingeckoData)) {
     }
 }
 
+// 4) Faits réseau figés par chaîne (features blockchain + unlocks).
+//    Ces données architecturales évoluent rarement : elles vivent ici en dur
+//    pour rester affichables même si une API externe tombe.
+$chainFacts = [
+    'solana' => [
+        'unlocks' => 'Aucun déblocage programmé : supply max illimité, émissions continues de staking (inflation décroissante).',
+        'network' => 'Preuve d\'histoire + PoS · exécution parallèle (Sealevel) · contrats Rust · frais < 0,01 $.',
+    ],
+    'sui' => [
+        'unlocks' => 'Déblocages programmés par paliers mensuels (équipe, fondation, investisseurs) jusqu\'en ~2030.',
+        'network' => 'Langage Move · modèle objet · exécution parallèle · consensus objet-par-objet (Mysticeti) · finalité sub-seconde · zkLogin natif.',
+    ],
+];
+
+// 5) Planning — embed Google Calendar.
+//    ⚠️ Google interdit l'affichage de « /calendar/u/0/r » dans une iframe
+//    (X-Frame-Options). Pour voir ton planning dans la card, ouvre
+//    Google Calendar → Paramètres → « Intégrer le calendrier » et colle
+//    l'URL obtenue (https://calendar.google.com/calendar/embed?src=…) ici.
+$gcalEmbedUrl = 'https://calendar.google.com/calendar/u/0/r';
+
 // Montant € compact (42 500 000 -> « 42,5 M € »)
 function eurCompact($n): ?string
 {
@@ -1247,19 +1268,6 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
 
         .card-body {
             padding: 18px;
-        }
-
-        .card-title a {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            color: inherit;
-            transition: color var(--t-fast);
-        }
-
-        .card-title a:hover,
-        .card-title a:hover .token-symbol {
-            color: var(--violet);
         }
 
         .duo {
@@ -2000,6 +2008,78 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
         }
 
         /* ===== TOKENS SOL & SUI (infos du jour) ===== */
+        .chain-block+.chain-block {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border-soft);
+        }
+
+        .chain-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
+        }
+
+        .chain-head .chain-name {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 14px;
+            font-weight: 600;
+            color: inherit;
+            transition: color var(--t-fast);
+        }
+
+        .chain-head .chain-name:hover,
+        .chain-head .chain-name:hover .token-symbol {
+            color: var(--violet);
+        }
+
+        .chain-head .chain-price {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .chain-block .fg-meter {
+            margin: 2px 0 10px;
+        }
+
+        /* ===== GOOGLE CALENDAR (infos du jour) ===== */
+        .gcal-holder {
+            padding: 10px 10px 0;
+            height: 470px;
+        }
+
+        .gcal-holder iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: var(--radius-sm);
+            background: var(--surface-2);
+        }
+
+        .card-title a {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: inherit;
+            transition: color var(--t-fast);
+        }
+
+        .card-title a:hover {
+            color: var(--violet);
+        }
+
+        .card-title a:hover .token-symbol {
+            color: var(--violet);
+        }
+
         .token-logo {
             width: 20px;
             height: 20px;
@@ -2513,10 +2593,10 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             </div>
         </section>
 
-        <!-- ===== BERRU.COM — stats LibreAnalytics ===== -->
+        <!-- ===== BERRU.COM — stats SmartPixel ===== -->
         <section class="section" id="berru">
             <div class="section-head">
-                <h2>berru.com</h2>
+                <h2>gael-berru.com</h2>
                 <span class="hint">LibreAnalytics_API · 1ᵉʳ janvier → aujourd'hui</span>
             </div>
             <?php if ($berruStats !== null): ?>
@@ -2585,28 +2665,28 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 <div class="card">
 
                     <div class="card-body tv-holder">
-                        <div class="tradingview-widget-container">
-                            <div class="tradingview-widget-container__widget"></div>
-                            <script src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js"
-                                async>
-                                    {
-                                        "autosize": true,
-                                            "symbol": "BINANCE:BTCUSDT",
-                                                "interval": "D",
-                                                    "timezone": "Europe/Paris",
-                                                        "theme": "dark",
-                                                            "style": "1",
-                                                                "locale": "fr",
-                                                                    "backgroundColor": "rgba(18, 20, 26, 1)",
-                                                                        "gridColor": "rgba(35, 38, 47, 0.6)",
+                        <div class="tradingview-widget-container__widget"></div>
+                        <script src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js"
+                            async>
+                                {
+                                    "autosize": true,
+                                        "symbol": "BINANCE:BTCUSDT",
+                                            "interval": "D",
+                                                "timezone": "Europe/Paris",
+                                                    "theme": "dark",
+                                                        "style": "1",
+                                                            "locale": "fr",
+                                                                "backgroundColor": "rgba(18, 20, 26, 0.65)",
+                                                                    "gridColor": "rgba(35, 38, 47, 0.6)",
+                                                                        "withdateranges": true,
                                                                             "hide_side_toolbar": false,
                                                                                 "allow_symbol_change": true,
                                                                                     "save_image": false,
                                                                                         "details": true,
-                                                                                            "support_host": "https://www.tradingview.com"
-                                    }
-                                </script>
-                        </div>
+                                                                                            "calendar": false,
+                                                                                                "support_host": "https://www.tradingview.com"
+                                }
+                            </script>
                     </div>
                 </div>
             </div>
@@ -2619,76 +2699,81 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 <p class="meta"><?= htmlspecialchars($todayLong) ?> · CoinGecko · Wikipédia FR</p>
             </div>
             <div class="info-grid">
-                <?php foreach ($tokenCards as $tc):
-                    $ch = $tc['change_24h'];
-                    $chClass = $ch === null ? 'flat' : ($ch >= 0 ? 'up' : 'down');
-                    $chTxt = $ch === null ? 'n/a' : (($ch >= 0 ? '+' : '') . round($ch, 1) . ' %');
-                    $dilutionClass = $tc['dilution_pct'] >= 50 ? 'low' : ($tc['dilution_pct'] >= 25 ? 'mid' : 'high');
-                    ?>
-                    <div class="card">
-                        <div class="card-head">
-                            <h3 class="card-title">
-                                <a href="https://www.tradingview.com/chart/?symbol=BINANCE:<?= htmlspecialchars($tc['tv_symbol']) ?>"
-                                    target="_blank" rel="noopener"
-                                    title="Voir le graphique TradingView de <?= htmlspecialchars($tc['name']) ?>">
-                                    <img src="<?= htmlspecialchars($tc['image']) ?>" alt="" class="token-logo">
-                                    <?= htmlspecialchars($tc['name']) ?>
-                                    <span class="token-symbol">(<?= strtoupper(htmlspecialchars($tc['symbol'])) ?>)</span>
-                                </a>
-                            </h3>
-                            <?php if ($tc['rank'] > 0): ?><span
-                                    class="plan-chip num">#<?= $tc['rank'] ?></span><?php endif; ?>
-                        </div>
-                        <div class="card-body">
-                            <div class="token-price">
-                                <span class="token-value num"><?= number_format($tc['price'], 2, ',', ' ') ?> €</span>
-                                <span class="delta <?= $chClass ?>"><?= $chTxt ?></span>
-                            </div>
-                            <div class="fact-row">
-                                <span class="fact-key">Market cap</span>
-                                <span
-                                    class="fact-value num"><?= htmlspecialchars(eurCompact($tc['market_cap']) ?? '—') ?></span>
-                            </div>
-                            <div class="fact-row">
-                                <span class="fact-key">FDV</span>
-                                <span class="fact-value num"><?= htmlspecialchars(eurCompact($tc['fdv']) ?? '—') ?></span>
-                            </div>
-                            <div class="fact-row">
-                                <span class="fact-key">ATH</span>
-                                <span class="fact-value num"><?= number_format($tc['ath'], 2, ',', ' ') ?> €
-                                    <span
-                                        class="token-ath">(<?= ($tc['ath_change'] >= 0 ? '+' : '') . round($tc['ath_change'], 1) ?>
-                                        %)</span>
-                                </span>
-                            </div>
-                            <div class="fact-row">
-                                <span class="fact-key">En circulation</span>
-                                <span class="fact-value num"><?= str_replace('.', ',', (string) $tc['circ_pct']) ?> % du
-                                    supply final</span>
-                            </div>
-                            <div class="fg-meter" title="Part du supply pas encore en circulation">
-                                <div class="fg-fill <?= $dilutionClass ?>"
-                                    style="width: <?= max(2, min(100, $tc['dilution_pct'])) ?>%"></div>
-                            </div>
-                            <div class="fg-scale">
-                                <span>Dilution à venir</span>
-                                <span class="num">≈ <?= str_replace('.', ',', (string) $tc['dilution_pct']) ?> %</span>
-                            </div>
-                            <div class="token-spark"><canvas data-token-spark="<?= htmlspecialchars($tc['id']) ?>"></canvas>
-                            </div>
-                            <div class="card-src">CoinGecko · dilution calculée depuis les supplies</div>
-                        </div>
+                <div class="card">
+                    <div class="card-head">
+                        <h3 class="card-title"><i class="fas fa-cubes"></i> Solana &amp; Sui — dilutions &amp; réseau
+                        </h3>
                     </div>
-                <?php endforeach; ?>
+                    <div class="card-body">
+                        <?php foreach ($tokenCards as $tc):
+                            $ch = $tc['change_24h'];
+                            $chClass = $ch === null ? 'flat' : ($ch >= 0 ? 'up' : 'down');
+                            $chTxt = $ch === null ? 'n/a' : (($ch >= 0 ? '+' : '') . round($ch, 1) . ' %');
+                            $dilutionClass = $tc['dilution_pct'] >= 50 ? 'low' : ($tc['dilution_pct'] >= 25 ? 'mid' : 'high');
+                            $facts = $chainFacts[$tc['id']] ?? ['unlocks' => '—', 'network' => '—'];
+                            ?>
+                            <div class="chain-block">
+                                <div class="chain-head">
+                                    <a class="chain-name"
+                                        href="https://www.tradingview.com/chart/?symbol=BINANCE:<?= htmlspecialchars($tc['tv_symbol']) ?>"
+                                        target="_blank" rel="noopener"
+                                        title="Voir le graphique TradingView de <?= htmlspecialchars($tc['name']) ?>">
+                                        <img src="<?= htmlspecialchars($tc['image']) ?>" alt="" class="token-logo">
+                                        <?= htmlspecialchars($tc['name']) ?>
+                                        <span
+                                            class="token-symbol">(<?= strtoupper(htmlspecialchars($tc['symbol'])) ?>)</span>
+                                    </a>
+                                    <span class="chain-price num">
+                                        <?= number_format($tc['price'], 2, ',', ' ') ?> €
+                                        <span class="delta <?= $chClass ?>"><?= $chTxt ?></span>
+                                    </span>
+                                </div>
+                                <div class="fact-row">
+                                    <span class="fact-key">Dilution à venir</span>
+                                    <span class="fact-value num">≈
+                                        <?= str_replace('.', ',', (string) $tc['dilution_pct']) ?> %
+                                        · <?= str_replace('.', ',', (string) $tc['circ_pct']) ?> % en circulation</span>
+                                </div>
+                                <div class="fg-meter" title="Part du supply pas encore en circulation">
+                                    <div class="fg-fill <?= $dilutionClass ?>"
+                                        style="width: <?= max(2, min(100, $tc['dilution_pct'])) ?>%"></div>
+                                </div>
+                                <div class="fact-row">
+                                    <span class="fact-key">Unlocks</span>
+                                    <span class="fact-value"><?= htmlspecialchars($facts['unlocks']) ?></span>
+                                </div>
+                                <div class="fact-row">
+                                    <span class="fact-key">Réseau</span>
+                                    <span class="fact-value"><?= htmlspecialchars($facts['network']) ?></span>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
 
-                <?php if ($tokenCards === []): ?>
-                    <div class="card">
-                        <div class="card-head">
-                            <h3 class="card-title"><i class="fas fa-coins"></i> Solana &amp; Sui</h3>
-                        </div>
-                        <div class="empty-state">Données tokens indisponibles pour le moment</div>
+                        <?php if ($tokenCards === []): ?>
+                            <div class="empty-state">Données blockchain indisponibles pour le moment</div>
+                        <?php endif; ?>
+                        <?php if ($tokenCards !== []): ?>
+                            <div class="card-src">CoinGecko · supplies en direct — calendrier d'unlocks exact : APIs
+                                payantes (TokenUnlocks, CryptoRank)</div>
+                        <?php endif; ?>
                     </div>
-                <?php endif; ?>
+                </div>
+
+                <div class="card">
+                    <div class="card-head">
+                        <h3 class="card-title"><i class="fas fa-calendar-days"></i> Mon planning — Google Calendar</h3>
+                        <a class="ghost-btn" href="https://calendar.google.com/calendar/u/0/r" target="_blank"
+                            rel="noopener">
+                            <i class="fas fa-arrow-up-right-from-square"></i> Ouvrir
+                        </a>
+                    </div>
+                    <div class="card-body gcal-holder">
+                        <iframe src="<?= htmlspecialchars($gcalEmbedUrl) ?>" title="Planning Google Calendar"
+                            loading="lazy" referrerpolicy="no-referrer"></iframe>
+                    </div>
+                    <div class="card-src">Google bloque « /calendar/u/0/r » en iframe : colle ton URL « Intégrer le
+                        calendrier » dans $gcalEmbedUrl pour afficher ton planning ici</div>
+                </div>
 
                 <?php if (!empty($onThisDay)): ?>
                     <div class="card">
