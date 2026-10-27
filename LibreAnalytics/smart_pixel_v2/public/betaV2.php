@@ -2663,8 +2663,9 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                     <div id="crypto-prices"></div>
                 </div>
                 <div class="card">
-                    
-                        <div class="card-body tv-holder">
+
+                    <div class="card-body tv-holder">
+                        <div class="tradingview-widget-container">
                             <div class="tradingview-widget-container__widget"></div>
                             <script src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js"
                                 async>
@@ -2688,7 +2689,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                                     }
                                 </script>
                         </div>
-                    
+                    </div>
                 </div>
             </div>
         </section>
