@@ -549,7 +549,7 @@ $chainFacts = [
 //    (X-Frame-Options). Pour voir ton planning dans la card, ouvre
 //    Google Calendar → Paramètres → « Intégrer le calendrier » et colle
 //    l'URL obtenue (https://calendar.google.com/calendar/embed?src=…) ici.
-$gcalEmbedUrl = 'https://calendar.google.com/calendar/u/0/r';
+$gcalEmbedUrl = 'https://calendar.google.com/calendar/embed?src=g.leberruyer%40gmail.com&ctz=Europe%2FParis';
 
 // Montant € compact (42 500 000 -> « 42,5 M € »)
 function eurCompact($n): ?string
@@ -2663,30 +2663,31 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                     <div id="crypto-prices"></div>
                 </div>
                 <div class="card">
-
-                    <div class="card-body tv-holder">
-                        <div class="tradingview-widget-container__widget"></div>
-                        <script src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js"
-                            async>
-                                {
-                                    "autosize": true,
-                                        "symbol": "BINANCE:BTCUSDT",
-                                            "interval": "D",
-                                                "timezone": "Europe/Paris",
-                                                    "theme": "dark",
-                                                        "style": "1",
-                                                            "locale": "fr",
-                                                                "backgroundColor": "rgba(18, 20, 26, 0.65)",
-                                                                    "gridColor": "rgba(35, 38, 47, 0.6)",
-                                                                        "withdateranges": true,
-                                                                            "hide_side_toolbar": false,
-                                                                                "allow_symbol_change": true,
-                                                                                    "save_image": false,
-                                                                                        "details": true,
-                                                                                            "calendar": false,
-                                                                                                "support_host": "https://www.tradingview.com"
-                                }
-                            </script>
+                    <div class="tradingview-widget-container">
+                        <div class="card-body tv-holder">
+                            <div class="tradingview-widget-container__widget"></div>
+                            <script src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js"
+                                async>
+                                    {
+                                        "autosize": true,
+                                            "symbol": "BINANCE:BTCUSDT",
+                                                "interval": "D",
+                                                    "timezone": "Europe/Paris",
+                                                        "theme": "dark",
+                                                            "style": "1",
+                                                                "locale": "fr",
+                                                                    "backgroundColor": "rgba(18, 20, 26, 0.65)",
+                                                                        "gridColor": "rgba(35, 38, 47, 0.6)",
+                                                                            "withdateranges": true,
+                                                                                "hide_side_toolbar": false,
+                                                                                    "allow_symbol_change": true,
+                                                                                        "save_image": false,
+                                                                                            "details": true,
+                                                                                                "calendar": false,
+                                                                                                    "support_host": "https://www.tradingview.com"
+                                    }
+                                </script>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -3421,7 +3422,12 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 ami: 35535,
             };
 
-            // Capital investi à l'origine (€) sol=312 € à 68 l'unité, sui=1600€ à 0.95 l'unité, ami=44€ à 0.001237 l'unité, btc=0 € à 0 l'unité, usdc=0 € à 0 l'unité
+            // Capital investi à l'origine (€) 
+            // sol=312 € à 68 l'unité, 
+            // sui=1600€ à 0.95 l'unité, 
+            // ami=44€ à 0.001237 l'unité, 
+            // btc=0 € à 0 l'unité, 
+            // usdc=0 € à 0 l'unité
             const INITIAL_INVESTMENT = 1956;
 
             (function renderCrypto() {
