@@ -611,7 +611,8 @@ foreach (['solana', 'sui'] as $tokenId) {
 //    (X-Frame-Options). Pour voir ton planning dans la card, ouvre
 //    Google Calendar → Paramètres → « Intégrer le calendrier » et colle
 //    l'URL obtenue (https://calendar.google.com/calendar/embed?src=…) ici.
-$gcalEmbedUrl = 'https://calendar.google.com/calendar/u/0/r';
+$gcalEmbedUrl = 'https://calendar.google.com/calendar/embed?src=g.leberruyer%40gmail.com&ctz=Europe%2FParis';
+
 
 // Montant € compact (42 500 000 -> « 42,5 M € »)
 function eurCompact($n): ?string
