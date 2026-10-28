@@ -162,8 +162,7 @@ Disponible
 
 # Guide Utilisateur
 
-Bienvenue sur Libre Analytics, l'alternative française simple et respectueuse à Google Analytics. 
-Ce guide vous aidera à installer, configurer et utiliser votre tableau de bord analytics dans son plein potentiel.
+Bienvenue sur Libre Analytics, ce guide vous aidera à installer, configurer et utiliser votre tableau de bord analytics à son plein potentiel.
 
 ---
 

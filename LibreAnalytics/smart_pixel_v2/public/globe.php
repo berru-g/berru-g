@@ -313,8 +313,8 @@ foreach ($rawVisits as $v) {
             .pointsData(visits)
             .pointLat('lat')
             .pointLng('lng')
-            .pointColor(() => '#f9f8fc')
-            .pointAltitude(0.015)
+            .pointColor(() => '#ff9886')
+            .pointAltitude(0.025)
             .pointRadius(0.42)
             .pointsMerge(false)
             .pointLabel(d => `
@@ -337,7 +337,7 @@ foreach ($rawVisits as $v) {
         resize();
 
         globe.onPointClick(p => {
-            if (p && p.page_url) window.open(p.page_url, '_blank');
+            //if (p && p.page_url) window.open(p.page_url, '_blank');
         });
     </script>
 
