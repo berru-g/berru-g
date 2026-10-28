@@ -312,7 +312,7 @@ foreach ($rawVisits as $v) {
             .pointsData(visits)
             .pointLat('lat')
             .pointLng('lng')
-            .pointColor(() => '#ffb24d')
+            .pointColor(() => '#ccc1f9')
             .pointAltitude(0.015)
             .pointRadius(0.22)
             .pointsMerge(false)
