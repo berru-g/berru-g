@@ -298,14 +298,15 @@ foreach ($rawVisits as $v) {
         console.log(visits.length + ' points à afficher');
 
         const globe = Globe()
-            .globeImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-night.jpg')
+            //.globeImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-night.jpg')
+            .globeImageUrl('../../../img/earth-night-neo-ab9ff2.png')
             .bumpImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png')
             .backgroundImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/night-sky.png')
             (document.getElementById('globeViz'));
 
         globe
             .showAtmosphere(true)
-            .atmosphereColor('#2a6fdb')
+            .atmosphereColor('#ab9ff2')
             .atmosphereAltitude(0.25);
 
         globe
@@ -328,7 +329,7 @@ foreach ($rawVisits as $v) {
 
         globe.camera().position.z = 320;
         globe.controls().autoRotate = true;
-        globe.controls().autoRotateSpeed = 0.33;
+        globe.controls().autoRotateSpeed = 0.28;
         globe.controls().enableDamping = true;
 
         const resize = () => globe.width(window.innerWidth).height(window.innerHeight);
