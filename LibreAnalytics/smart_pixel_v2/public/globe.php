@@ -265,7 +265,7 @@ foreach ($rawVisits as $v) {
             left: 16px;
             z-index: 10;
             background: rgba(8, 12, 24, 0.85);
-            border: 1px solid #2a6fdb;
+            border: 1px solid #d5deec;
             border-radius: 8px;
             padding: 10px 16px;
             color: #d6e4ff;
@@ -275,7 +275,7 @@ foreach ($rawVisits as $v) {
         }
 
         .badge span {
-            color: #4da3ff;
+            color: #9d86ff;
             font-weight: bold;
         }
     </style>
@@ -286,7 +286,7 @@ foreach ($rawVisits as $v) {
     <div id="globeViz"></div>
 
     <div class="badge">
-        <span><?= htmlspecialchars($site['site_name']) ?></span><br>
+        <span>Live</span><br>
         <?= count($points) ?> visiteurs<br>
     </div>
 
@@ -312,9 +312,9 @@ foreach ($rawVisits as $v) {
             .pointsData(visits)
             .pointLat('lat')
             .pointLng('lng')
-            .pointColor(() => '#ccc1f9')
+            .pointColor(() => '#f9f8fc')
             .pointAltitude(0.015)
-            .pointRadius(0.22)
+            .pointRadius(0.42)
             .pointsMerge(false)
             .pointLabel(d => `
         <div class="globe-tooltip">
@@ -328,7 +328,7 @@ foreach ($rawVisits as $v) {
 
         globe.camera().position.z = 320;
         globe.controls().autoRotate = true;
-        globe.controls().autoRotateSpeed = 0.45;
+        globe.controls().autoRotateSpeed = 0.33;
         globe.controls().enableDamping = true;
 
         const resize = () => globe.width(window.innerWidth).height(window.innerHeight);
