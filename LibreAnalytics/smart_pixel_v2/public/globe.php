@@ -1,16 +1,19 @@
 <?php
 /**
  * globe.php
- * Globe 3D des visiteurs LibreAnalytics.
- * À placer à côté de dashboard.php et api.php.
+ * Globe 3D des visiteurs – utilise le tracking_code et l'api_key publics
+ * pour authentifier la requête, puis lit les villes dans smart_pixel_tracking
+ * exactement comme le fait dashboard.php (ligne 84).
+ *
+ * URL d'accès : globe.php?site_id=VOTRE_TRACKING_CODE&api_key=VOTRE_API_KEY
  */
 
 // ============================================================
-// 1. CONNEXION À LA BASE
-// Adaptez le chemin selon votre structure.
-// Le dashboard utilise déjà $pdo : on reprend la même inclusion.
+// 1. CONNEXION À LA BASE (identique à dashboard.php et api.php)
 // ============================================================
 $configCandidates = [
+    __DIR__ . '/config.php',
+    __DIR__ . '/../config.php',
     __DIR__ . '/../includes/config.php',
 ];
 foreach ($configCandidates as $c) {
@@ -18,54 +21,105 @@ foreach ($configCandidates as $c) {
 }
 
 if (!isset($pdo)) {
-    http_response_code(500);
-    die('Connexion PDO non disponible. Vérifiez l\'inclusion de config.php.');
+    // Si $pdo n'est pas déjà défini, on le crée comme dans api.php
+    try {
+        $pdo = new PDO(
+            "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4",
+            DB_USER, DB_PASS,
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false,
+            ]
+        );
+    } catch (PDOException $e) {
+        http_response_code(500);
+        die('Erreur de connexion à la base : ' . $e->getMessage());
+    }
 }
 
 // ============================================================
-// 2. RÉCUPÉRATION DES VISITES (même logique que le dashboard)
+// 2. AUTHENTIFICATION (même logique que api.php lignes 24-26)
 // ============================================================
-$siteId = $_GET['site_id'] ?? null;
+$trackingCode = $_GET['SP_79747769'] ?? null;
+$apiKey       = $_GET['da4ca75b23f50634547bcd158927eb18add7d35fd2ad4ab7005e225443af1550'] ?? null;
 
-$sql = "SELECT city, country, page_url, timestamp
-        FROM smart_pixel_tracking
-        WHERE city IS NOT NULL AND city != ''
-          AND country IS NOT NULL AND country != ''
-        " . ($siteId ? "AND site_id = :site_id" : "") . "
-        ORDER BY timestamp DESC
-        LIMIT 500";
+if (!$trackingCode || !$apiKey) {
+    http_response_code(400);
+    die('Paramètres site_id (tracking_code) et api_key requis.');
+}
 
-$stmt = $pdo->prepare($sql);
-if ($siteId) $stmt->bindValue(':site_id', $siteId);
-$stmt->execute();
-$visits = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt = $pdo->prepare("
+    SELECT us.id as site_id, us.site_name, us.domain
+    FROM user_sites us
+    JOIN users u ON us.user_id = u.id
+    WHERE us.tracking_code = ? AND u.api_key = ?
+");
+$stmt->execute([$trackingCode, $apiKey]);
+$site = $stmt->fetch();
+
+if (!$site) {
+    http_response_code(403);
+    die('Site non trouvé ou clé API invalide.');
+}
+
+$siteId = (int) $site['site_id'];
 
 // ============================================================
-// 3. GÉOCODAGE AVEC CACHE FICHIER
+// 3. RÉCUPÉRATION DES DONNÉES DÉTAILLÉES
+//    Même requête que dashboard.php ligne 84, filtrée par site_id.
+//    On ne garde que les lignes avec city ET country non vides.
+// ============================================================
+$stmt = $pdo->prepare("
+    SELECT country, city, page_url, timestamp
+    FROM smart_pixel_tracking
+    WHERE site_id = :site_id
+      AND city IS NOT NULL AND city != ''
+      AND country IS NOT NULL AND country != ''
+    ORDER BY timestamp DESC
+    LIMIT 500
+");
+$stmt->execute(['site_id' => $siteId]);
+$rawVisits = $stmt->fetchAll();
+
+// ============================================================
+// 4. FALLBACK PAYS → COORDONNÉES (inspiré de getCountryCodeSimple)
+//    Repris tel quel depuis dashboard.php lignes 93-99.
+// ============================================================
+function getCountryCodeSimple($countryName) {
+    $countryMap = [
+        'france' => 'FR', 'united states' => 'US', 'germany' => 'DE',
+        'united kingdom' => 'GB', 'canada' => 'CA', 'australia' => 'AU',
+        'japan' => 'JP', 'china' => 'CN', 'brazil' => 'BR', 'india' => 'IN',
+        'italy' => 'IT', 'spain' => 'ES', 'netherlands' => 'NL', 'belgium' => 'BE',
+        'switzerland' => 'CH', 'portugal' => 'PT', 'russia' => 'RU',
+        'mexico' => 'MX', 'south korea' => 'KR', 'singapore' => 'SG',
+        'usa' => 'US', 'uk' => 'GB',
+    ];
+    $normalized = strtolower(trim($countryName));
+    return $countryMap[$normalized] ?? null;
+}
+
+$countryCoords = [
+    'FR' => [46.2276, 2.2137], 'US' => [37.0902, -95.7129],
+    'DE' => [51.1657, 10.4515], 'GB' => [55.3781, -3.4360],
+    'CA' => [56.1304, -106.3468], 'AU' => [-25.2744, 133.7751],
+    'JP' => [36.2048, 138.2529], 'CN' => [35.8617, 104.1954],
+    'BR' => [-14.2350, -51.9253], 'IN' => [20.5937, 78.9629],
+    'IT' => [41.8719, 12.5674], 'ES' => [40.4637, -3.7492],
+    'NL' => [52.1326, 5.2913], 'BE' => [50.5039, 4.4699],
+    'CH' => [46.8182, 8.2275], 'PT' => [39.3999, -8.2245],
+    'RU' => [61.5240, 105.3188], 'MX' => [23.6345, -102.5528],
+    'KR' => [35.9078, 127.7669], 'SG' => [1.3521, 103.8198],
+];
+
+// ============================================================
+// 5. GÉOCODAGE AVEC CACHE FICHIER
 // ============================================================
 $cacheFile = __DIR__ . '/geocache.json';
 $cache = file_exists($cacheFile)
     ? json_decode(file_get_contents($cacheFile), true) ?: []
     : [];
-
-// Centroïdes pays (fallback si Nominatim échoue)
-$countryFallback = [
-    'france' => [46.2276, 2.2137], 'united states' => [37.0902, -95.7129],
-    'germany' => [51.1657, 10.4515], 'united kingdom' => [55.3781, -3.4360],
-    'canada' => [56.1304, -106.3468], 'australia' => [-25.2744, 133.7751],
-    'japan' => [36.2048, 138.2529], 'china' => [35.8617, 104.1954],
-    'brazil' => [-14.2350, -51.9253], 'india' => [20.5937, 78.9629],
-    'italy' => [41.8719, 12.5674], 'spain' => [40.4637, -3.7492],
-    'netherlands' => [52.1326, 5.2913], 'belgium' => [50.5039, 4.4699],
-    'switzerland' => [46.8182, 8.2275], 'portugal' => [39.3999, -8.2245],
-    'poland' => [51.9194, 19.1451], 'sweden' => [60.1282, 18.6435],
-    'norway' => [60.4720, 8.4689], 'denmark' => [56.2639, 9.5018],
-    'ireland' => [53.4129, -8.2439], 'mexico' => [23.6345, -102.5528],
-    'argentina' => [-38.4161, -63.6167], 'russia' => [61.5240, 105.3188],
-    'south korea' => [35.9078, 127.7669], 'south africa' => [-30.5595, 22.9375],
-    'morocco' => [31.7917, -7.0926], 'algeria' => [28.0339, 1.6596],
-    'tunisia' => [33.8869, 9.5375],
-];
 
 function geocodeCity($city, $country, &$cache, $cacheFile) {
     $key = strtolower(trim($city)) . '|' . strtolower(trim($country));
@@ -76,7 +130,7 @@ function geocodeCity($city, $country, &$cache, $cacheFile) {
 
     $ctx = stream_context_create([
         'http' => [
-            'header' => "User-Agent: LibreAnalyticsGlobe/1.0\r\n",
+            'header'  => "User-Agent: LibreAnalyticsGlobe/1.0\r\n",
             'timeout' => 4,
             'ignore_errors' => true,
         ]
@@ -96,25 +150,26 @@ function geocodeCity($city, $country, &$cache, $cacheFile) {
 }
 
 // ============================================================
-// 4. CONSTRUCTION DES POINTS
+// 6. CONSTRUCTION DES POINTS
 // ============================================================
 $points = [];
-$newGeocodes = 0;
 
-foreach ($visits as $v) {
+foreach ($rawVisits as $v) {
     $coord = null;
     $cacheKey = strtolower(trim($v['city'])) . '|' . strtolower(trim($v['country']));
 
-    if (!isset($cache[$cacheKey])) {
-        $coord = geocodeCity($v['city'], $v['country'], $cache, $cacheFile);
-        if ($coord) $newGeocodes++;
-    } else {
+    if (isset($cache[$cacheKey])) {
         $coord = $cache[$cacheKey];
+    } else {
+        $coord = geocodeCity($v['city'], $v['country'], $cache, $cacheFile);
     }
 
+    // Fallback : centre du pays si Nominatim échoue
     if (!$coord) {
-        $fb = $countryFallback[strtolower(trim($v['country']))] ?? null;
-        if ($fb) $coord = ['lat' => $fb[0], 'lng' => $fb[1]];
+        $code = getCountryCodeSimple($v['country']);
+        if ($code && isset($countryCoords[$code])) {
+            $coord = ['lat' => $countryCoords[$code][0], 'lng' => $countryCoords[$code][1]];
+        }
     }
 
     if ($coord) {
@@ -134,7 +189,7 @@ foreach ($visits as $v) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LibreAnalytics – Globe 3D</title>
+    <title>LibreAnalytics – Globe 3D – <?= htmlspecialchars($site['site_name']) ?></title>
     <style>
         html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #000; }
         #globeViz { width: 100vw; height: 100vh; }
@@ -156,11 +211,11 @@ foreach ($visits as $v) {
             background: rgba(8, 12, 24, 0.85);
             border: 1px solid #2a6fdb;
             border-radius: 8px;
-            padding: 10px 14px;
+            padding: 10px 16px;
             color: #d6e4ff;
             font-family: 'Segoe UI', Arial, sans-serif;
             font-size: 13px;
-            line-height: 1.5;
+            line-height: 1.6;
         }
         .badge span { color: #4da3ff; font-weight: bold; }
     </style>
@@ -168,12 +223,11 @@ foreach ($visits as $v) {
 <body>
 
 <div id="globeViz"></div>
+
 <div class="badge">
-    <span><?= count($points) ?></span> visiteurs géolocalisés<br>
-    <span><?= count($visits) ?></span> visites au total<br>
-    <?php if ($newGeocodes > 0): ?>
-        <span><?= $newGeocodes ?></span> villes nouvellement géocodées
-    <?php endif; ?>
+    <span><?= htmlspecialchars($site['site_name']) ?></span><br>
+    <?= count($points) ?> visiteurs géolocalisés<br>
+    <?= count($rawVisits) ?> visites avec localisation
 </div>
 
 <script src="//cdn.jsdelivr.net/npm/globe.gl"></script>
@@ -210,9 +264,7 @@ globe
             <span style="opacity:0.5">${d.timestamp}</span>
         </div>
     `)
-    .onPointHover(p => {
-        document.body.style.cursor = p ? 'pointer' : 'default';
-    });
+    .onPointHover(p => { document.body.style.cursor = p ? 'pointer' : 'default'; });
 
 globe.camera().position.z = 320;
 globe.controls().autoRotate = true;
@@ -223,7 +275,6 @@ const resize = () => globe.width(window.innerWidth).height(window.innerHeight);
 window.addEventListener('resize', resize);
 resize();
 
-// Clic pour ouvrir la page visitée
 globe.onPointClick(p => {
     if (p && p.page_url) window.open(p.page_url, '_blank');
 });
