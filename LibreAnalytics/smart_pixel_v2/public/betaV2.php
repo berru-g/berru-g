@@ -945,7 +945,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             position: absolute;
             right: 0;
             top: calc(100% + 8px);
-            width: min(340px, calc(100vw - 32px));
+            width: min(280px, calc(100vw - 32px));
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius);
@@ -2153,7 +2153,11 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             height: 100%;
             border: 0;
             border-radius: var(--radius-sm);
-            background: var(--surface-2);
+            background: rgba(167, 139, 250, 0.1);
+        }
+
+        iframe {
+            background-color: rgba(167, 139, 250, 0.1);
         }
 
         .card-title a {
@@ -2567,8 +2571,8 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
                     </button>
                     <div class="pop menu-nav" id="menu-nav" role="menu" aria-label="Navigation entre les sections">
-                        <a href="#kpis" role="menuitem"><i class="fas fa-gauge-high"></i> LibreAnalytics.com</a>
-                        <a href="#berru" role="menuitem"><i class="fas fa-house"></i> gael-berru.com</a>
+                        <a href="dashboard.php?site_id=6" role="menuitem"><i class="fas fa-gauge-high"></i> LibreAnalytics.com</a>
+                        <a href="dashboard.php?site_id=5" role="menuitem"><i class="fas fa-house"></i> gael-berru.com</a>
                         <a href="#wallet" role="menuitem"><i class="fas fa-wallet"></i> Wallet all in one</a>
                         <a href="#infos" role="menuitem"><i class="fas fa-bolt"></i> Infos du jour</a>
                         <a href="#meteo" role="menuitem"><i class="fas fa-cloud-sun"></i> Météo</a>
@@ -2585,12 +2589,12 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
                     </button>
                     <div class="pop cmd-menu" id="cmd-menu" role="menu">
-                        <a href="dashboard.php?site_id=5" role="menuitem"><i class="fas fa-globe"></i>
-                            berru.com</a>
+                        
                         <a href="../campain/rapport.php" role="menuitem"><i class="fas fa-file-lines"></i> Rapport
                             id_gb</a>
                         <a href="../campain/rapport_lb.php" role="menuitem"><i class="fas fa-file-lines"></i> Rapport
                             id_lb</a>
+                            <a href="https://calendar.google.com/calendar/u/0/r" role="menuitem"><i class="fa-regular fa-calendar-days"></i> Calendar</a>
                         <a href="../campain/prospect_template.php" role="menuitem"><i
                                 class="fa-regular fa-file-code"></i> Script prospection</a>
                         <a href="?export_emails=1" role="menuitem"><i class="fas fa-download"></i> Export emails
@@ -2841,6 +2845,8 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                                         <span class="fact-key">Sentiment du jour</span>
                                         <!--<span class="fact-value num"><?= (int) $sent['score'] ?> %
                                 <span class="delta <?= $sentDelta ?>"><?= ucfirst($sentLabel) ?></span>-->
+                                        <span
+                                            class="fact-value num"><?= $sent['votes'] === null ? 'n/a' : str_replace('.', ',', (string) round($sent['votes'])) . ' % haussiers' ?></span>
                                         </span>
                                     </div>
                                     <div class="fg-meter"
@@ -2848,12 +2854,12 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                                         <div class="fg-fill <?= $sentFill ?>"
                                             style="width: <?= max(2, min(100, (int) $sent['score'])) ?>%"></div>
                                     </div>
-                                    <div class="fact-row">
+                                    <!--<div class="fact-row">
                                         <span class="fact-key">Votes communauté</span>
                                         <span
                                             class="fact-value num"><?= $sent['votes'] === null ? 'n/a' : str_replace('.', ',', (string) round($sent['votes'])) . ' % haussiers' ?></span>
                                     </div>
-                                    <!--<div class="fact-row">
+                                    <div class="fact-row">
                                         <span class="fact-key">Tendance 7 j / 30 j</span>
                                         <span class="fact-value num"><?= pctSigned($sent['chg7']) ?> /
                                             <?= pctSigned($sent['chg30']) ?></span>
@@ -2887,7 +2893,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         <?php endif; ?>
                     </div>
                 </div>
-
+ 
                 <div class="card">
                     <div class="card-head">
                         <h3 class="card-title"><i class="fas fa-calendar-days"></i> Mon planning — Google Calendar</h3>
@@ -3550,7 +3556,12 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 ami: 35535,
             };
 
-            // Capital investi à l'origine (€) sol=312 € à 68 l'unité, sui=1600€ à 0.95 l'unité, ami=44€ à 0.001237 l'unité, btc=0 € à 0 l'unité, usdc=0 € à 0 l'unité
+            // Capital investi à l'origine (€) 
+            // sol=312 € à 68 l'unité, 
+            // sui=1600€ à 0.95 l'unité, 
+            // ami=44€ à 0.001237 l'unité, 
+            // btc=0 € à 0 l'unité, 
+            // usdc=0 € à 0 l'unité
             const INITIAL_INVESTMENT = 1956;
 
             (function renderCrypto() {

@@ -140,7 +140,7 @@ const projectsDatabase = [
         image: './img/dashboard-betaV2.png',
         link: '#',
         category: 'tool',
-        features: ['Analytics multi-sites', 'Wallets all in one', 'Chart TradingView & signaux du jour', 'Rapports clients automatisés CRON', 'Cache serveur & quotas API gérés'],
+        features: ['Analytics multi-sites', 'Wallets all in one', 'Chart TradingView & signaux du jour', 'Rapports clients automatisés CRON'],
         tags: ['tool', 'Analytics', 'Crypto', 'api', 'dashboard', 'reporting', 'calendar', 'meteo']
     },
     {
