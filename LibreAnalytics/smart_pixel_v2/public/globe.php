@@ -287,8 +287,7 @@ foreach ($rawVisits as $v) {
 
     <div class="badge">
         <span><?= htmlspecialchars($site['site_name']) ?></span><br>
-        <?= count($points) ?> visiteurs géolocalisés<br>
-        <?= count($rawVisits) ?> visites avec localisation
+        <?= count($points) ?> visiteurs<br>
     </div>
 
     <script src="//cdn.jsdelivr.net/npm/globe.gl"></script>
@@ -313,7 +312,7 @@ foreach ($rawVisits as $v) {
             .pointsData(visits)
             .pointLat('lat')
             .pointLng('lng')
-            .pointColor(() => '#4da3ff')
+            .pointColor(() => '#ffb24d')
             .pointAltitude(0.015)
             .pointRadius(0.22)
             .pointsMerge(false)
