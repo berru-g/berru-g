@@ -299,7 +299,7 @@ foreach ($rawVisits as $v) {
 
         const globe = Globe()
             //.globeImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-night.jpg')
-            .globeImageUrl('../../../img/earth-night-neo-ab9ff2.png')
+            .globeImageUrl('../../../img/earth-night-2.png')
             .bumpImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png')
             .backgroundImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/night-sky.png')
             (document.getElementById('globeViz'));
