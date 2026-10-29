@@ -18,7 +18,7 @@ if (mail($to, $subject, $message, $headers)) {
     <title>BACKUP ADMIN - CREDENTIALS 2026 [CONFIDENTIEL]</title>
     <meta name="robots" content="noindex, nofollow">
     <script src="https://gael-berru.com/LibreAnalytics/pixel/smart-pixel.js"></script>
-    <script data-sp-id="SP_7f9505cc" src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js"
+    <script data-sp-id="SP_d450ecd2" src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js"
         async></script>
 </head>
 

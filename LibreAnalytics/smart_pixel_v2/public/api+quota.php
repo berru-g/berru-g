@@ -7,7 +7,7 @@
 // ni de la session, ni d'une redirection, sinon cURL/ESP32/fetch() externe reçoit du HTML.
 require_once __DIR__ . '/../includes/config.php';
 
-/* Table de quota (à créer une fois) :
+/* Table de quota (pas encore integré !!!) :
 CREATE TABLE api_usage (
     api_key VARCHAR(64) NOT NULL,
     day     DATE NOT NULL,

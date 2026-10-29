@@ -16,13 +16,23 @@ Analysez votre trafic sans compromettre la vie privée de vos visiteurs, avec un
 
   [Dashboard](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/dashboard.php) - [Api](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/account.php) - [Doc](https://gael-berru.com/LibreAnalytics/doc/) - [Chat](https://gael-berru.com/LibreAnalytics/chat/) - [Articles](https://gael-berru.com/LibreAnalytics/articles/)
 
+
 ## 🔌 Mise à Jour :
 
-- API Fonctionnel. Juillet 2025
-- [Call api depuis un Esp32](https://github.com/berru-g/LibreAnalytics/blob/main/smart_pixel_v2/api_LibreAnalytics_ESP32/api_LibreAnalytics.ino). Aout 2026
+- [API pour le plan FREE](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/account.php). Oct 2026
+- [Template Map 3D avec vos data via l\'api'](https://codepen.io/h-lautre/pen/EayBqeE). Oct 2026
 - [Templeae Dashboard](https://codepen.io/editor/h-lautre/pen/01a18491-b5d9-7aa2-bf25-c284698f19b0). Aout 2026
-- [Template Map 3D avec vos data](https://codepen.io/h-lautre/pen/EayBqeE). Oct 2026
+- [Call api depuis un Esp32](https://github.com/berru-g/LibreAnalytics/blob/main/smart_pixel_v2/api_LibreAnalytics_ESP32/api_LibreAnalytics.ino). Aout 2026
+- [API Fonctionnel](https://gael-berru.com/LibreAnalytics/doc/). Juillet 2025
+- LibreAnalytics est maintenant **Open Source**. Juin 2025
 
+
+Disponible :
+
+    ✅ V.0.0.1 pixel auto hebergé | 2024 | statut - gratuit open source
+    ✅ V.0.1.0 pixel multi tenant | 2025 | statut - SAAS fonctionnel
+    ✅ V.1.0.1 software friendly  | 2026 | statut - MVP fonctionnel 
+    ▶️ V.1.0.7 software fullindé  | 2026 | statut - API Gratuite limité 100 requetes / jour pour le plan FREE
 
 
 <img src="https://gael-berru.com/img/demo_dashboard.gif" style="width:90%; display:flex;margin:20px auto; border-radius: 12px;">
@@ -35,12 +45,7 @@ Vous pouvez sponsoriser LibreAnalytics via :
 - [Dont en BTC, SOL, USDC...](https://gael-berru.com/donation.html)
 
 
-Disponible
 
-    ✅ V.0.0.1 pixel auto hebergé | 2024 | statut - gratuit open source
-    ✅ V.0.1.0 pixel multi tenant | 2025 | statut - gratuit pour 1 dashboard
-    ✅ V.1.0.1 software friendly  | 2026 | statut - MVP fonctionnel + API
-    ▶️ V.1.0.7 software fullindé  | 2026 | statut - en cours de dev ...
 
 
 ## Sommaire
@@ -573,7 +578,9 @@ const url = `${proxyUrl}https://gael-berru.com/LibreAnalytics/smart_pixel_v2/pub
 </html>
 ```
 
-[Ouvrir le template dasn codepen](https://codepen.io/h-lautre/pen/EayBqeE?editors=1000)
+[Ouvrir le template /Graphique/ dans codepen](https://codepen.io/h-lautre/pen/EayBqeE?editors=1000)
+
+[Ouvrir le template /Map3D/ dans codepen](https://codepen.io/h-lautre/pen/EayBqeE)
 
 
 ---

@@ -1,0 +1,235 @@
+# LibreAnalytics — Documentation complète
+
+> Version 1.0.8. Ce document est la documentation intégrale de LibreAnalytics, formatée pour être lue directement par des modèles de langage et des agents IA. Les URL sont absolues et stables.
+
+## Présentation
+
+LibreAnalytics est un outil d'analytique web open source français, alternative à Google Analytics. Principes : léger, autonome, respectueux de la vie privée, sans dépendance aux GAFAM.
+
+- **Licence** : MIT (auto-hébergement gratuit et illimité via fork du dépôt GitHub)
+- **Technologie** : PHP 8.2+ natif, MySQL, JavaScript vanilla — aucun framework lourd, aucune dépendance superflue
+- **Script de tracking** : environ 4 Ko, chargé en `async`, sans cookies intrusifs
+- **Conformité** : RGPD natif, IP anonymisables, barre de gestion des cookies incluse, hébergement en Europe/France
+- **Statut** : bêta active, développement continu (V.1.0.8)
+
+## Fonctionnalités disponibles
+
+**Plan gratuit (1 site, 1000 vues/mois, 365 jours de rétention) :**
+
+- Tracking en temps réel : pages vues, sessions, visiteurs uniques
+- Géolocalisation des visiteurs : pays et villes (via IP)
+- Sources de trafic : référents, campagnes UTM, réseaux sociaux
+- Suivi des clics utilisateur : interactions, sections, CTA
+- Données techniques : viewport, user-agent, résolution
+- Tableau de bord complet avec graphiques interactifs (Chart.js, amCharts)
+- Carte géographique des visiteurs et globe 3D
+- Insights automatisés : analyse des tendances et recommandations SEO adaptées aux résultats
+- Formulaire de contact avec captcha maison (aucun appel vers Google reCAPTCHA)
+- Barre de cookies RGPD incluse
+- API publique avec clé API personnelle (quota journalier selon le plan)
+
+**Plan Pro (9 €/mois, gratuit pendant la bêta)** : toutes les fonctionnalités ci-dessus, dashboard multi-sites (10 sites), quotas étendus.
+
+**Plan Business (29 €/mois)** : 50 sites, historique 2 ans, support prioritaire.
+
+**En développement** : rapports hebdomadaires automatisés, export JSON/CSV complet, webhooks temps réel, intégrations WordPress/Shopify, extension du pixel dans les limites RGPD.
+
+## Installation du suivi (2 minutes)
+
+1. **Créer un compte gratuit** sur https://gael-berru.com/LibreAnalytics/ — email, mot de passe, URL de votre site. Aucun paiement requis.
+2. **Récupérer votre code de tracking** : identifiant unique de votre site, au format `SP_24031987`, visible dans la section « Code d'intégration » du dashboard.
+3. **Installer le script** : copier-coller juste avant la balise `</head>` de chaque page :
+
+```html
+<!-- LibreAnalytics -->
+<script data-sp-id="VOTRE_ID_DE_TRACKING"
+        src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js"
+        async>
+</script>
+```
+
+Le script se charge en arrière-plan (async), ne ralentit pas le site et commence à tracker immédiatement.
+
+## Auto-hébergement
+
+Le logiciel est auto-hébergeable gratuitement :
+
+- Prérequis : PHP 8.2+, MySQL, un serveur web
+- Code source : https://github.com/berru-g/LibreAnalytics (licence MIT)
+- Table principale des données : `smart_pixel_tracking` ; sites rattachés aux comptes via `user_sites`
+
+Exemple de requête SQL pour les statistiques journalières en auto-hébergement :
+
+```sql
+SELECT
+    DATE(timestamp) AS date,
+    COUNT(*) AS visits,
+    COUNT(DISTINCT ip_address) AS unique_visitors
+FROM smart_pixel_tracking
+WHERE site_id = 'SP_24031987'
+GROUP BY DATE(timestamp)
+ORDER BY date ASC;
+```
+
+## Tableau de bord
+
+Onglets disponibles après connexion (https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/dashboard.php) :
+
+- **Vue d'ensemble** : visites totales, visiteurs uniques (comptés par IP, sans cookie), sources de trafic, évolution sur un an, filtrage par période (7/30/90/365 jours)
+- **Géolocalisation** : carte interactive des pays, top 10 des pays, villes principales
+- **Device** : types d'appareils, navigateurs (Chrome, Firefox, Safari…)
+- **Contenu** : pages consultées, sous-domaines, paramètres UTM, derniers clics
+- **Détails** : liste des dernières visites, IP anonymisées, pages visitées, horodatage, ville, pays
+- **Insight** : analyse des tendances, points d'amélioration, conseils SEO
+
+## Paramètres UTM
+
+Pour tracer les campagnes marketing, ajoutez ces paramètres à vos URL partagées :
+
+```
+https://votre-site.fr?utm_source=facebook&utm_medium=social&utm_campaign=ete2026
+```
+
+- `utm_source` : origine du trafic (facebook, newsletter, google)
+- `utm_medium` : support (social, email, cpc)
+- `utm_campaign` : nom de campagne (promo_ete, lancement)
+
+Les données apparaissent dans l'onglet « Contenu » du tableau de bord.
+
+## Référence de l'API
+
+### Endpoint
+
+```
+https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php
+```
+
+### Authentification
+
+- `site_id` : le code de tracking du site (ex. `SP_24031987`)
+- `api_key` : votre clé API personnelle, disponible dans https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/account.php
+- La clé se passe en paramètre `api_key`, ou en en-tête HTTP `X-Api-Key` / `Authorization: Bearer` sur les versions récentes
+- Une même clé API est valable pour tous vos codes de tracking ; chaque site garde ses données isolées
+
+### Paramètres
+
+| Paramètre | Requis | Format | Défaut |
+|-----------|--------|--------|--------|
+| `site_id` | oui | `SP_XXXXXXX` | — |
+| `api_key` | oui | chaîne hexadécimale | — |
+| `start_date` | non | AAAA-MM-JJ | il y a 7 jours |
+| `end_date` | non | AAAA-MM-JJ | aujourd'hui |
+
+L'API est ouverte à tous les plans (gratuit inclus), avec un quota de requêtes journalier selon le plan.
+
+### Exemple de requête
+
+```
+https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?site_id=SP_24031987&api_key=VOTRE_CLE&start_date=2026-01-01&end_date=2026-02-01
+```
+
+cURL :
+
+```bash
+curl "https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?site_id=SP_24031987&api_key=VOTRE_CLE&start_date=2026-01-01&end_date=2026-02-01"
+```
+
+Python :
+
+```python
+import requests
+data = requests.get(
+    "https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php",
+    params={
+        "site_id": "SP_24031987",
+        "api_key": "VOTRE_CLE",
+        "start_date": "2026-01-01",
+        "end_date": "2026-02-01",
+    },
+).json()
+print(data["data"])
+```
+
+JavaScript :
+
+```javascript
+fetch("https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php?site_id=SP_24031987&api_key=VOTRE_CLE&start_date=2026-01-01&end_date=2026-02-01")
+  .then((r) => r.json())
+  .then((data) => console.log(data));
+```
+
+### Réponse JSON
+
+```json
+{
+  "success": true,
+  "data": [
+    { "date": "2026-01-01", "visits": 42, "unique_visitors": 30 },
+    { "date": "2026-01-02", "visits": 50, "unique_visitors": 38 }
+  ],
+  "meta": {
+    "site_id": "SP_24031987",
+    "start_date": "2026-01-01",
+    "end_date": "2026-02-01",
+    "total_visits": 92,
+    "total_unique_visitors": 68
+  }
+}
+```
+
+Champs : `date` (jour), `visits` (pages vues du jour), `unique_visitors` (IP distinctes du jour), `meta.total_visits` et `meta.total_unique_visitors` (sommes sur la période).
+
+### Codes d'erreur
+
+| Code | Cause | Solution |
+|------|-------|----------|
+| 400 | Paramètres manquants ou dates invalides | Vérifiez `site_id`, `api_key` et le format AAAA-MM-JJ |
+| 403 | Clé API ou code de tracking invalide | Vérifiez vos identifiants dans la page Mon compte |
+| 404 | Site non trouvé | Vérifiez le `site_id` |
+| 429 | Quota journalier atteint | Patientez ou changez de plan |
+| 500 | Erreur serveur | Contactez le support avec le message d'erreur |
+
+### Régénérer une clé compromise
+
+Page Mon compte → bouton « Régénérer la clé » → mettre à jour vos intégrations. En cas de publication accidentelle de la clé (push git, article), régénérez-la immédiatement et changez votre mot de passe.
+
+## Intégrations
+
+- **Google Data Studio / Looker** : source de données personnalisée via l'URL d'API ; `date` en dimension, `visits` en métrique
+- **Excel** : Données → À partir d'une source web
+- **Google Sheets** : `=IMPORTDATA("URL_DE_L_API")`
+- **Dashboards custom** : Chart.js, template officiel : https://codepen.io/h-lautre/pen/EayBqeE
+- **Microcontrôleurs** : exemple ESP32 : https://github.com/berru-g/LibreAnalytics/blob/main/smart_pixel_v2/api_LibreAnalytics_ESP32/api_LibreAnalytics.ino
+- **Automatisation** : scripts d'alertes (ex. trafic > 1000 visites/jour → notification), bots Discord
+
+## FAQ
+
+**Mes données sont-elles vraiment privées ?** Oui. Hébergement en France, aucune donnée vendue, pas de GAFAM, pas de revente. Code open source vérifiable.
+
+**Le pixel ralentit-il mon site ?** Non. 4 Ko en chargement async, environ 15 fois plus léger que Google Analytics.
+
+**Combien de temps les données sont-elles conservées ?** 365 jours sur tous les plans ; 2 ans en Business.
+
+**Puis-je exporter mes données ?** Oui, via l'API (JSON). Export CSV/JSON automatisé en développement.
+
+**Le RGPD est-il géré ?** Oui. Gestion des cookies conforme, IP anonymisables, aucun cookie intrusif, hébergement européen.
+
+**Gratuit, vraiment ?** Le logiciel est libre (MIT) : l'instance gael-berru.com propose un plan gratuit (1 site, 1000 vues/mois) et l'auto-hébergement via fork du dépôt est gratuit et illimité.
+
+## Glossaire
+
+| Terme | Définition |
+|-------|------------|
+| Pixel / Smart Pixel | Script de tracking qui enregistre une visite |
+| Code de tracking | Identifiant unique du site (ex. SP_24031987) |
+| Session | Ensemble des actions d'un visiteur pendant une visite |
+| Source | Origine du trafic (moteur, site, direct) |
+| UTM | Paramètres d'URL pour tracer les campagnes |
+| RGPD | Règlement européen sur la protection des données |
+
+## Support
+
+- Formulaire de contact : https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/contact.php
+- Email : contact@gael-berru.com
+- Bugs et suggestions : https://github.com/berru-g/LibreAnalytics/issues
+- Documentation interactive : https://gael-berru.com/LibreAnalytics/doc/

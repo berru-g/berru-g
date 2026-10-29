@@ -1,0 +1,34 @@
+# LibreAnalytics
+
+> Analytique web open source et souveraine : alternative française à Google Analytics. Sans cookies, conforme RGPD, script de tracking de 4 Ko chargé en async. Utilisable en SaaS (plan gratuit : 1 site, 1000 vues/mois) ou auto-hébergée gratuitement sous licence MIT (PHP 8.2+, MySQL). API publique JSON incluse. Développée en France, sans dépendance aux GAFAM.
+
+Produit:
+
+- [LibreAnalytics — page officielle](https://gael-berru.com/LibreAnalytics/): landing, création de compte gratuite, code d'intégration en une ligne, tarifs.
+- [Dashboard](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/dashboard.php): tableau de bord des statistiques après connexion.
+- [Mon compte / Clé API](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/account.php): gestion de la clé API personnelle et tutoriel d'intégration.
+
+Documentation:
+
+- [Documentation officielle](https://gael-berru.com/LibreAnalytics/doc/): guide d'installation en 2 minutes, tableau de bord, paramètres UTM, gestion multi-sites, tutoriel API complet, gestion des erreurs, FAQ, glossaire, roadmap.
+- [Documentation complète en un seul fichier](https://gael-berru.com/llms-full.txt): l'intégralité de la documentation en markdown brut, optimisée pour lecture par LLM.
+- [Compétence pour agents IA](https://gael-berru.com/SKILL.md): SKILL.md installable permettant à un agent de répondre aux questions LibreAnalytics et d'intégrer l'outil.
+
+API publique:
+
+- [Endpoint API](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/api.php): statistiques de visites agrégées par jour en JSON. Paramètres : `site_id` (code de tracking, ex. SP_24031987), `api_key`, `start_date` (AAAA-MM-JJ, défaut : il y a 7 jours), `end_date` (AAAA-MM-JJ, défaut : aujourd'hui). Ouverte à tous les plans, quota journalier selon le plan.
+
+Code source:
+
+- [Dépôt GitHub](https://github.com/berru-g/LibreAnalytics): code complet sous licence MIT, auto-hébergement (fork), issues et historique des versions.
+
+Aide:
+
+- [Contact](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/contact.php): formulaire de support.
+- [GitHub Issues](https://github.com/berru-g/LibreAnalytics/issues): signalement de bugs et propositions d'amélioration.
+- [Chat communautaire](https://gael-berru.com/LibreAnalytics/chat/): assistance entre utilisateurs.
+
+Mentions:
+
+- Hébergement en France/Europe, IP anonymisées, aucun cookie intrusif, aucune revente de données.
+- Version actuelle : V.1.0.8. Statut : bêta active, développement continu.
