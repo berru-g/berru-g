@@ -484,7 +484,8 @@ if (isset($_POST['regenerate_api_key'])) {
                     <h3>Informations personnelles</h3>
                     <p>
                         <span>Email</span>
-                        <span class="value"><a href="beta.php" style="text-decoration:none;"><?= htmlspecialchars($user['email']) ?></a></span>
+                        <span class="value"><a href="beta.php"
+                                style="text-decoration:none;"><?= htmlspecialchars($user['email']) ?></a></span>
                     </p>
                     <p>
                         <span>Date d'inscription</span>
@@ -512,7 +513,9 @@ if (isset($_POST['regenerate_api_key'])) {
 
             <div class="api-section">
                 <h2>Clé API</h2>
-                <p>Utilisez cette clé pour accéder à l'API de LibreAnalytics. <strong>Ne la partagez jamais. En cas de partage public (push git, article, etc), régénérez immédiatement votre clé et changer votre mdp.</strong></p>
+                <p>Utilisez cette clé pour accéder à l'API de LibreAnalytics. <strong>Ne la partagez jamais. En cas de
+                        partage public (push git, article, etc), régénérez immédiatement votre clé et changer votre
+                        mdp.</strong></p>
 
                 <!--<div class="api-key-container">
                     <div class="api-key-display">
@@ -521,7 +524,7 @@ if (isset($_POST['regenerate_api_key'])) {
                             <i class="fas fa-copy"></i>
                         </button>
                     </div>
-                </div>-->
+                </div>
                 <div class="api-key-container">
                     <div class="api-key-display">
                         <?php if ($user['plan'] !== 'free'): ?>
@@ -532,6 +535,24 @@ if (isset($_POST['regenerate_api_key'])) {
                         <?php else: ?>
                             <code id="apiKey">🔒 <a href="upgrade.php">API Key réservée aux plans payants</a></code>
                         <?php endif; ?>
+                    </div>
+                    <form method="POST" style="display: inline;">
+                        <button type="submit" name="regenerate_api_key" class="regenerate-button">
+                            <i class="fas fa-sync-alt"></i> Régénérer la clé
+                        </button>
+                    </form>
+                </div>-->
+                <?php
+                // Normalise le plan une seule fois : le badge utilise déjà strtolower(),
+// ce qui suggère que les valeurs ne sont pas homogènes en base.
+                $plan = strtolower($user['plan'] ?? 'free');
+                ?>
+                <div class="api-key-container">
+                    <div class="api-key-display">
+                        <code id="apiKey"><?= htmlspecialchars($user['api_key']) ?></code>
+                        <button class="copy-button" onclick="copyToClipboard('apiKey')">
+                            <i class="fas fa-copy"></i>
+                        </button>
                     </div>
                     <form method="POST" style="display: inline;">
                         <button type="submit" name="regenerate_api_key" class="regenerate-button">
@@ -568,10 +589,12 @@ if (isset($_POST['regenerate_api_key'])) {
                     <h3><i class="fas fa-key"></i> 1. Récupérer tes identifiants</h3>
                     <p>Pour utiliser l'API, tu as besoin de :</p>
                     <ul>
-                        <li><strong>Code de tracking</strong> : Identifiant de ton site (ex: <code>SP_24m87bb</code>).</li>
+                        <li><strong>Code de tracking</strong> : Identifiant de ton site (ex: <code>SP_24m87bb</code>).
+                        </li>
                         <li><strong>Clé API</strong> : Clé secrète pour authentifier tes requêtes (ci-dessus).</li>
                     </ul>
-                    <p>Tu peux trouver ton <strong>code de tracking</strong> dans la section "Mes sites" du dashboard.</p>
+                    <p>Tu peux trouver ton <strong>code de tracking</strong> dans la section "Mes sites" du dashboard.
+                    </p>
                 </div>
 
                 <!-- Étape 2 : Construire l'URL -->
@@ -601,7 +624,10 @@ if (isset($_POST['regenerate_api_key'])) {
                     <h3><i class="fas fa-download"></i> 3. Récupérer les données</h3>
                     <p>Tu peux récupérer les données de 3 manières :</p>
                     <ul>
-                        <li><strong>Depuis un navigateur</strong> : Copie-colle l'URL dans la barre d'adresse, ou crée ton propre dashboard,</li><strong><a href="https://codepen.io/h-lautre/pen/EayBqeE?editors=1000" target="_blank">A partir de ton template</a></strong>.</li>
+                        <li><strong>Depuis un navigateur</strong> : Copie-colle l'URL dans la barre d'adresse, ou crée
+                            ton propre dashboard,</li><strong><a
+                                href="https://codepen.io/h-lautre/pen/EayBqeE?editors=1000" target="_blank">A partir de
+                                ton template</a></strong>.</li>
                         <li><strong>Avec cURL</strong> (terminal) :
                             <code>curl "https://gael-berru.com/.../api.php?site_id=SP_24m87bb&api_key=1a2b3c..."</code>
                         </li>
@@ -716,7 +742,8 @@ if (isset($_POST['regenerate_api_key'])) {
                     </div>
 
                     <h3><i class="fa-regular fa-folder-open"></i></i>Documentation complète :</h3>
-                    <p>Pour plus de détails sur les paramètres, les data, et les limites de l'API, consulte notre documentation complète :</p>
+                    <p>Pour plus de détails sur les paramètres, les data, et les limites de l'API, consulte notre
+                        documentation complète :</p>
                     <a href="dashboard.php" class="back-button">
                         <i class="fas fa-arrow-left"></i> Retour au dashboard
                     </a>
@@ -771,17 +798,17 @@ if (isset($_POST['regenerate_api_key'])) {
     <script>
         // Données locales (fallback si API GitHub indisponible)
         let gitCommits = [{
-                "date": "2026-02-20T19:21:25+01:00",
-                "message": "API_done_V.1.0.5",
-                "author": "berru-g",
-                "hash": "2c58ba0452d5c0815c9cc15b7fb04388729f15de"
-            },
-            {
-                "date": "2026-02-18T17:00:09+01:00",
-                "message": "dd",
-                "author": "berru-g",
-                "hash": "55a2b6f704727cc1053cde9c428bc5c0e5af1ffc"
-            },
+            "date": "2026-02-20T19:21:25+01:00",
+            "message": "API_done_V.1.0.5",
+            "author": "berru-g",
+            "hash": "2c58ba0452d5c0815c9cc15b7fb04388729f15de"
+        },
+        {
+            "date": "2026-02-18T17:00:09+01:00",
+            "message": "dd",
+            "author": "berru-g",
+            "hash": "55a2b6f704727cc1053cde9c428bc5c0e5af1ffc"
+        },
             // ... (le reste de tes données)
         ];
 
@@ -820,7 +847,7 @@ if (isset($_POST['regenerate_api_key'])) {
         const calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             events: [],
-            eventClick: function(info) {
+            eventClick: function (info) {
                 const props = info.event.extendedProps;
                 const modalBody = document.getElementById('modalBody');
                 modalBody.innerHTML = `

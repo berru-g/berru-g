@@ -3,17 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentation LibreAnalytics</title>
+
+    <!-- ===== SEO : balises primaires ===== -->
+    <title>Documentation LibreAnalytics : installation, API et guide RGPD</title>
+    <meta name="description" content="Documentation officielle de LibreAnalytics : guide d'installation en 2 minutes, tutoriel API, paramètres UTM et FAQ. Open source, sans cookies, conforme RGPD, auto-hébergeable en PHP.">
+    <link rel="canonical" href="https://gael-berru.com/LibreAnalytics/doc/">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="author" content="Gael Berru">
+
+    <!-- Open Graph (partage réseaux sociaux, WhatsApp, Discord...) -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="LibreAnalytics">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:url" content="https://gael-berru.com/LibreAnalytics/doc/">
+    <meta property="og:title" content="Documentation LibreAnalytics : installation, API et guide RGPD">
+    <meta property="og:description" content="Guide d'installation en 2 minutes, tutoriel API, paramètres UTM et FAQ. Alternative française open source à Google Analytics, sans cookies, conforme RGPD.">
+    <!-- Remplacer par une image 1200x630 si disponible (celle-ci vient du README) -->
+    <meta property="og:image" content="https://gael-berru.com/img/demo_dashboard.gif">
+    <meta property="og:image:alt" content="Tableau de bord LibreAnalytics : statistiques de visite en temps réel">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Documentation LibreAnalytics : installation, API et guide RGPD">
+    <meta name="twitter:description" content="Guide d'installation, tutoriel API, UTM et FAQ. Open source, sans cookies, conforme RGPD, auto-hébergeable.">
+    <meta name="twitter:image" content="https://gael-berru.com/img/demo_dashboard.gif">
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <script data-sp-id="SP_79747769" src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js" async></script>
+
+    <!-- ===== JSON-LD structuré pour moteurs de recherche et IA ===== -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://gael-berru.com/LibreAnalytics/#app",
+          "name": "LibreAnalytics",
+          "alternateName": "Libre Analytics",
+          "url": "https://gael-berru.com/LibreAnalytics/",
+          "description": "Analytique web open source et conforme RGPD, alternative française à Google Analytics. Script de tracking léger (4 Ko), sans cookies, auto-hébergeable en PHP 8.2+ et MySQL.",
+          "applicationCategory": "WebApplication",
+          "applicationSubCategory": "Analytics",
+          "operatingSystem": "Web, Linux, auto-hébergement (PHP 8.2+, MySQL)",
+          "softwareVersion": "1.0.8",
+          "programmingLanguage": "PHP",
+          "softwareRequirements": "PHP 8.2+, MySQL",
+          "isAccessibleForFree": true,
+          "license": "https://opensource.org/licenses/MIT",
+          "downloadUrl": "https://github.com/berru-g/LibreAnalytics",
+          "screenshot": "https://gael-berru.com/img/demo_dashboard.gif",
+          "featureList": [
+            "Analytique web sans cookies, conforme RGPD",
+            "Script de tracking en une ligne, 4 Ko",
+            "Tableau de bord temps réel : vues, visiteurs uniques, sources de trafic, géolocalisation, appareils",
+            "Gestion multi-sites depuis un seul compte",
+            "Suivi des paramètres UTM",
+            "API publique (JSON/CSV) avec clé API",
+            "Auto-hébergement gratuit (fork MIT)"
+          ],
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "EUR",
+            "description": "Plan gratuit : 1 site, 1000 vues/mois. Auto-hébergement illimité et gratuit."
+          },
+          "author": { "@id": "https://gael-berru.com/#author" }
+        },
+        {
+          "@type": "Person",
+          "@id": "https://gael-berru.com/#author",
+          "name": "Gael Berru",
+          "alternateName": "berru-g",
+          "url": "https://gael-berru.com",
+          "sameAs": ["https://github.com/berru-g"]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://gael-berru.com/LibreAnalytics/doc/#breadcrumb",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://gael-berru.com/" },
+            { "@type": "ListItem", "position": 2, "name": "LibreAnalytics", "item": "https://gael-berru.com/LibreAnalytics/" },
+            { "@type": "ListItem", "position": 3, "name": "Documentation", "item": "https://gael-berru.com/LibreAnalytics/doc/" }
+          ]
+        },
+        {
+          "@type": "TechArticle",
+          "@id": "https://gael-berru.com/LibreAnalytics/doc/#article",
+          "headline": "Documentation LibreAnalytics : installation, API et guide RGPD",
+          "description": "Documentation officielle de LibreAnalytics : guide d'installation du pixel de tracking, tutoriel API avec exemples de requêtes, paramètres UTM, FAQ, glossaire et roadmap.",
+          "inLanguage": "fr-FR",
+          "proficiencyLevel": "Débutant à avancé",
+          "dependencies": "PHP 8.2+, MySQL",
+          "about": { "@id": "https://gael-berru.com/LibreAnalytics/#app" },
+          "isPartOf": { "@id": "https://gael-berru.com/LibreAnalytics/#app" },
+          "author": { "@id": "https://gael-berru.com/#author" },
+          "url": "https://gael-berru.com/LibreAnalytics/doc/",
+          "mainEntityOfPage": "https://gael-berru.com/LibreAnalytics/doc/",
+          "datePublished": "2026-10-01",
+          "dateModified": "2026-10-01"
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://gael-berru.com/LibreAnalytics/doc/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "LibreAnalytics est-il vraiment gratuit ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Oui. LibreAnalytics est un logiciel libre sous licence MIT. L'hébergement de l'instance gael-berru.com propose un plan gratuit (1 site, 1000 vues/mois) et l'auto-hébergement via un fork du dépôt GitHub est gratuit et illimité."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "LibreAnalytics utilise-t-il des cookies ? Est-il conforme au RGPD ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Non, LibreAnalytics ne dépose aucun cookie. Le script de tracking pèse environ 4 Ko, ne collecte pas de données personnelles invasives et les données sont hébergées en Europe. Le projet est conçu comme alternative souveraine et conforme au RGPD face à Google Analytics."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Comment installer le suivi LibreAnalytics sur mon site ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Créez un compte gratuit, ajoutez votre site pour obtenir votre ID de tracking, puis copiez une seule ligne de script dans la section head de vos pages. L'installation complète prend environ 2 minutes, sans carte bancaire."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Comment utiliser l'API LibreAnalytics ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Récupérez votre clé API depuis votre compte, construisez l'URL de l'API avec votre identifiant de site, puis interrogez vos statistiques en JSON ou CSV. La documentation inclut des exemples de requêtes et des intégrations (dashboards custom, ESP32)."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+    <!-- MAJ : pensez à mettre à jour softwareVersion et dateModified à chaque release -->
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>LibreAnalytics</h1>
-            <p>Documentation officielle – <a href="../smart_pixel_v2/public/">Dashboard</a> - <a href="../smart_pixel_v2/public/account.php">Api</a></p>
+            <h1>LibreAnalytics — Documentation officielle</h1>
+            <p>Guide d'installation, tutoriel API et référence de l'analytique web open source, sans cookies et conforme RGPD — <a href="../smart_pixel_v2/public/">Dashboard</a> - <a href="../smart_pixel_v2/public/account.php">Api</a></p>
         </div>
     </header>
 
@@ -31,11 +170,68 @@
               </ul>
             </div>
 
+            <!-- ============================================================ -->
+            <!-- SQUELETTE STATIQUE : lisible par Google, Bing, les crawlers   -->
+            <!-- et les IA (GPT, Perplexity...). Le README complet chargé     -->
+            <!-- depuis GitHub s'affiche juste après, sans être remplacé.     -->
+            <!-- ============================================================ -->
             <div class="content" id="doc-content">
+
+                <section>
+                    <h2 id="guide-installation">Guide d'installation et de tracking</h2>
+                    <p><strong>LibreAnalytics</strong> est une <strong>alternative française et open source à Google Analytics</strong> :
+                    un pixel de tracking de 4&nbsp;Ko, sans cookies, conforme au RGPD, hébergeable chez soi en PHP&nbsp;8.2+ et MySQL.
+                    L'installation se fait en trois étapes&nbsp;: création d'un compte gratuit, ajout du site pour récupérer votre
+                    ID de tracking, puis copier-coller d'une seule ligne de script dans le <code>&lt;head&gt;</code> de vos pages.
+                    Comptez environ 2&nbsp;minutes, sans carte bancaire.</p>
+                </section>
+
+                <section>
+                    <h2 id="tutoriel-api">Tutoriel API LibreAnalytics</h2>
+                    <p>La documentation couvre l'<strong>API publique</strong> étape par étape&nbsp;: récupération de votre clé API,
+                    construction de l'URL de requête, exemples d'appels et réponses en <strong>JSON et CSV</strong>, gestion des erreurs,
+                    et intégrations (dashboards HTML/JS personnalisés, tableurs, et même un microcontrôleur <strong>ESP32</strong>).
+                    L'API est idéale pour les développeurs qui veulent réutiliser leurs statistiques de trafic ailleurs.</p>
+                </section>
+
+                <section>
+                    <h2 id="utm-trafic">Paramètres UTM et analyse de trafic</h2>
+                    <p>Le guide utilisateur détaille le suivi des <strong>paramètres UTM</strong> (source, medium, campagne),
+                    la lecture du <strong>tableau de bord</strong> (vues, visiteurs uniques, pages/session, temps moyen),
+                    la gestion <strong>multi-sites</strong> depuis un seul compte, ainsi que la géolocalisation, les sources
+                    de trafic et les appareils de vos visiteurs.</p>
+                </section>
+
+                <section>
+                    <h2 id="faq-doc">FAQ, glossaire et roadmap</h2>
+                    <p>La documentation complète inclut une <strong>FAQ</strong> (gratuité, RGPD, installation, API), un
+                    <strong>glossaire</strong> de l'analytique web et la <strong>roadmap</strong> du projet. Le code source
+                    et l'historique des versions sont disponibles sur
+                    <a href="https://github.com/berru-g/LibreAnalytics" rel="noopener">GitHub</a> (licence MIT).</p>
+
+                    <h3>LibreAnalytics est-il vraiment gratuit&nbsp;?</h3>
+                    <p>Oui. Le logiciel est libre (MIT) : l'instance gael-berru.com propose un plan gratuit
+                    (1 site, 1000 vues/mois) et l'auto-hébergement via un fork du dépôt GitHub est gratuit et illimité.</p>
+
+                    <h3>LibreAnalytics utilise-t-il des cookies&nbsp;?</h3>
+                    <p>Non. Aucun cookie n'est déposé, le script pèse environ 4&nbsp;Ko, et les données sont hébergées en Europe.
+                    Le projet est pensé comme une alternative souveraine et conforme au RGPD face à Google Analytics.</p>
+                </section>
+
                 <div class="loading">
-                    <p>Chargement de la documentation...</p>
+                    <p>Chargement de la documentation complète…</p>
                 </div>
             </div>
+            <!-- ============================================================ -->
+
+            <noscript>
+                <div class="alert">
+                    <p>L'affichage dynamique de la documentation nécessite JavaScript.
+                    Vous pouvez lire la documentation complète directement sur
+                    <a href="https://github.com/berru-g/LibreAnalytics" rel="noopener">GitHub</a> ou le
+                    <a href="https://raw.githubusercontent.com/berru-g/LibreAnalytics/main/readme.md" rel="noopener">fichier README brut</a>.</p>
+                </div>
+            </noscript>
         </div>
     </div>
 
@@ -55,8 +251,15 @@
                 return response.text();
             })
             .then(markdown => {
-                const html = converter.makeHtml(markdown);
-                document.getElementById('doc-content').innerHTML = html;
+                // Le squelette statique reste en haut de page pour les crawlers ;
+                // le README complet est ajouté à la suite.
+                const dynamic = document.createElement('div');
+                dynamic.id = 'readme-content';
+                dynamic.innerHTML = converter.makeHtml(markdown);
+                const doc = document.getElementById('doc-content');
+                const loading = doc.querySelector('.loading');
+                if (loading) loading.remove();
+                doc.appendChild(dynamic);
                 generateTOC();
                 setupSearch();
             })

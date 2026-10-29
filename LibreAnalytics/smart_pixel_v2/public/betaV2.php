@@ -3,10 +3,10 @@ session_start();
 // Dashboard - beta V2 regroupant :
 // - l'analytics de mon soft LibreAnalytics, 
 // - l'analytics de mon site perso
-// - API coingeck pour les prix crypto (SOL, SUI, AMI, USDC) de mes différents wallet réunis en un seul
+// - API coingeck pour les prix crypto (SOL, SUI, AMI, USDC) de mes différents wallet et exchange réunis en un seul
 // - API de TradingView pour la chart et les signaux globaux
 // - Embed de mon agenda Google Calendar (planning perso)
-// - API météo
+// - API météo 
 // - API Wikipedia pour des info utiles
 // - CMD pour envoyer, un rapport à mes clients (emails, stats, etc.) ou un mail de prospection auto (cron)
 // par berru-g de la V0.1 en 2020 puis avec Mistral pour les version suivantes (2026)
@@ -563,7 +563,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             --green-soft: rgba(63, 185, 80, 0.12);
             --red: #f0635a;
             --red-soft: rgba(240, 99, 90, 0.12);
-            --blue: #58a6ff;
+            --blue: #58a6ff; 
             --violet: #9d86ff;
             --amber: #e3b341;
             --font: 'Inter', system-ui, -apple-system, sans-serif;
@@ -1315,6 +1315,15 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
         .crypto-item .symbol {
             font-weight: 600;
             font-size: 14px;
+        }
+
+        .crypto-item .symbol a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .crypto-item .symbol a:hover {
+            text-decoration: underline;
         }
 
         .crypto-item .price {
@@ -2147,7 +2156,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                                 async>
                                     {
                                         "autosize": true,
-                                            "symbol": "BINANCE:BTCUSDT",
+                                            "symbol": "BITSTAMP:SUIEUR",
                                                 "interval": "D",
                                                     "timezone": "Europe/Paris",
                                                         "theme": "dark",
@@ -2199,8 +2208,8 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         </a>
                     </div>
                     <div class="card-body gcal-holder">
-                        <iframe src="<?= htmlspecialchars($gcalEmbedUrl) ?>" title="Planning Google Calendar" loading="lazy"
-                            referrerpolicy="no-referrer"></iframe>
+                        <iframe src="<?= htmlspecialchars($gcalEmbedUrl) ?>" title="Planning Google Calendar"
+                            loading="lazy" referrerpolicy="no-referrer"></iframe>
                     </div>
                     <div class="card-src">Google bloque « /calendar/u/0/r » en iframe : colle ton URL « Intégrer le
                         calendrier » dans $gcalEmbedUrl pour afficher ton planning ici</div>
@@ -2346,7 +2355,8 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         <?php foreach ($planOrder as $planKey => $planLabel):
                             if (!isset($plansStats[$planKey]))
                                 continue; ?>
-                            <span class="plan-chip"><?= $planLabel ?> <b class="num"><?= (int) $plansStats[$planKey] ?></b></span>
+                            <span class="plan-chip"><?= $planLabel ?> <b
+                                    class="num"><?= (int) $plansStats[$planKey] ?></b></span>
                         <?php endforeach; ?>
                         <?php foreach ($plansStats as $planKey => $count):
                             if (isset($planOrder[$planKey]))
@@ -2817,7 +2827,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                     el.innerHTML = `
                         <img src="${crypto.image}" alt="${crypto.id} logo">
                         <div class="name">
-                            <span class="symbol">${crypto.symbol.toUpperCase()}</span>
+                            <span class="symbol"><a href="https://www.coingecko.com/fr/pi%C3%A8ces/${crypto.id}" target="_blank" rel="noopener" title="Voir ${crypto.symbol.toUpperCase()} sur CoinGecko">${crypto.symbol.toUpperCase()}</a></span>
                             <span class="price num">${price.toLocaleString('fr-FR', { minimumFractionDigits: 2 })} €</span>
                         </div>
                         <div class="holdings">
