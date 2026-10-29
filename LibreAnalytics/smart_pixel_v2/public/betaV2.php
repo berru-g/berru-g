@@ -945,7 +945,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             position: absolute;
             right: 0;
             top: calc(100% + 8px);
-            width: min(280px, calc(100vw - 32px));
+            width: min(240px, calc(100vw - 32px));
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius);
@@ -2571,8 +2571,10 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
                     </button>
                     <div class="pop menu-nav" id="menu-nav" role="menu" aria-label="Navigation entre les sections">
-                        <a href="dashboard.php?site_id=6" role="menuitem"><i class="fas fa-gauge-high"></i> LibreAnalytics.com</a>
-                        <a href="dashboard.php?site_id=5" role="menuitem"><i class="fas fa-house"></i> gael-berru.com</a>
+                        <a href="dashboard.php?site_id=6" role="menuitem"><i class="fas fa-gauge-high"></i>
+                            LibreAnalytics.com</a>
+                        <a href="dashboard.php?site_id=5" role="menuitem"><i class="fas fa-house"></i>
+                            gael-berru.com</a>
                         <a href="#wallet" role="menuitem"><i class="fas fa-wallet"></i> Wallet all in one</a>
                         <a href="#infos" role="menuitem"><i class="fas fa-bolt"></i> Infos du jour</a>
                         <a href="#meteo" role="menuitem"><i class="fas fa-cloud-sun"></i> Météo</a>
@@ -2589,12 +2591,13 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
                     </button>
                     <div class="pop cmd-menu" id="cmd-menu" role="menu">
-                        
+
                         <a href="../campain/rapport.php" role="menuitem"><i class="fas fa-file-lines"></i> Rapport
                             id_gb</a>
                         <a href="../campain/rapport_lb.php" role="menuitem"><i class="fas fa-file-lines"></i> Rapport
                             id_lb</a>
-                            <a href="https://calendar.google.com/calendar/u/0/r" role="menuitem"><i class="fa-regular fa-calendar-days"></i> Calendar</a>
+                        <a href="https://calendar.google.com/calendar/u/0/r" role="menuitem"><i
+                                class="fa-regular fa-calendar-days"></i> Calendar</a>
                         <a href="../campain/prospect_template.php" role="menuitem"><i
                                 class="fa-regular fa-file-code"></i> Script prospection</a>
                         <a href="?export_emails=1" role="menuitem"><i class="fas fa-download"></i> Export emails
@@ -2804,333 +2807,250 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                             du jour</h3>
                     </div>
                     <div class="card-body">
-                        <?php foreach ($tokenCards as $tc):
-                            $ch = $tc['change_24h'];
-                            $chClass = $ch === null ? 'flat' : ($ch >= 0 ? 'up' : 'down');
-                            $chTxt = $ch === null ? 'n/a' : (($ch >= 0 ? '+' : '') . round($ch, 1) . ' %');
-                            $dilutionClass = $tc['dilution_pct'] >= 50 ? 'low' : ($tc['dilution_pct'] >= 25 ? 'mid' : 'high');
-                            $sent = $sentiments[$tc['id']] ?? null;
-                            $sentLabel = $sent['label'] ?? '';
-                            $sentFill = $sentLabel === 'haussier' ? 'high' : ($sentLabel === 'neutre' ? 'mid' : 'low');
-                            $sentDelta = $sentLabel === 'haussier' ? 'up' : ($sentLabel === 'baissier' ? 'down' : 'flat');
-                            ?>
-                            <div class="chain-block">
-                                <div class="chain-head">
-                                    <a class="chain-name"
-                                        href="https://www.tradingview.com/chart/?symbol=BINANCE:<?= htmlspecialchars($tc['tv_symbol']) ?>"
-                                        target="_blank" rel="noopener"
-                                        title="Voir le graphique TradingView de <?= htmlspecialchars($tc['name']) ?>">
-                                        <img src="<?= htmlspecialchars($tc['image']) ?>" alt="" class="token-logo">
-                                        <?= htmlspecialchars($tc['name']) ?>
-                                        <span
-                                            class="token-symbol">(<?= strtoupper(htmlspecialchars($tc['symbol'])) ?>)</span>
-                                    </a>
-                                    <span class="chain-price num">
-                                        <?= number_format($tc['price'], 2, ',', ' ') ?> €
-                                        <span class="delta <?= $chClass ?>"><?= $chTxt ?></span>
-                                    </span>
-                                </div>
-                                <div class="fact-row">
-                                    <span class="fact-key">Dilution à venir</span>
-                                    <span class="fact-value num">≈
-                                        <?= str_replace('.', ',', (string) $tc['dilution_pct']) ?> %
-                                        · <?= str_replace('.', ',', (string) $tc['circ_pct']) ?> % en circulation</span>
-                                </div>
-                                <div class="fg-meter" title="Part du supply pas encore en circulation">
-                                    <div class="fg-fill <?= $dilutionClass ?>"
-                                        style="width: <?= max(2, min(100, $tc['dilution_pct'])) ?>%"></div>
-                                </div>
-                                <?php if ($sent !== null && $sent['score'] !== null): ?>
-                                    <div class="fact-row">
-                                        <span class="fact-key">Sentiment du jour</span>
-                                        <!--<span class="fact-value num"><?= (int) $sent['score'] ?> %
-                                <span class="delta <?= $sentDelta ?>"><?= ucfirst($sentLabel) ?></span>-->
-                                        <span
-                                            class="fact-value num"><?= $sent['votes'] === null ? 'n/a' : str_replace('.', ',', (string) round($sent['votes'])) . ' % haussiers' ?></span>
-                                        </span>
-                                    </div>
-                                    <div class="fg-meter"
-                                        title="Score composite : votes communauté (40) · momentum 7 j (30) · momentum 30 j (20) · position dans le range 24 h (10)">
-                                        <div class="fg-fill <?= $sentFill ?>"
-                                            style="width: <?= max(2, min(100, (int) $sent['score'])) ?>%"></div>
-                                    </div>
-                                    <!--<div class="fact-row">
-                                        <span class="fact-key">Votes communauté</span>
-                                        <span
-                                            class="fact-value num"><?= $sent['votes'] === null ? 'n/a' : str_replace('.', ',', (string) round($sent['votes'])) . ' % haussiers' ?></span>
-                                    </div>
-                                    <div class="fact-row">
-                                        <span class="fact-key">Tendance 7 j / 30 j</span>
-                                        <span class="fact-value num"><?= pctSigned($sent['chg7']) ?> /
-                                            <?= pctSigned($sent['chg30']) ?></span>
-                                    </div>
-                                    <div class="fact-row">
-                                        <span class="fact-key">Position 24 h</span>
-                                        <span
-                                            class="fact-value num"><?= $sent['range_pos'] === null ? 'n/a' : str_replace('.', ',', (string) $sent['range_pos']) ?>
-                                            % du range (bas → haut)</span>
-                                    </div>-->
-                                    <div class="fact-row">
-                                        <span class="fact-key">Activité devs</span>
-                                        <span
-                                            class="fact-value num"><?= $sent['commits'] === null ? 'n/a' : $sent['commits'] . ' commits / 4 sem' ?></span>
-                                    </div>
-                                <?php else: ?>
-                                    <div class="fact-row">
-                                        <span class="fact-key">Sentiment du jour</span>
-                                        <span class="fact-value">n/a — API CoinGecko momentanément indisponible</span>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                        <?php endforeach; ?>
+                        <script type="module"
+                            src="https://widgets.tradingview-widget.com/w/en/tv-news-feed.js"></script>
 
-                        <?php if ($tokenCards === []): ?>
-                            <div class="empty-state">Données blockchain indisponibles pour le moment</div>
-                        <?php endif; ?>
-                        <?php if ($tokenCards !== []): ?>
-                            <div class="card-src">CoinGecko · prix &amp; supplies : cache 5 min · votes, momentum &amp; devs
-                                : cache 2 h — score composite indicatif, pas un conseil d'investissement</div>
-                        <?php endif; ?>
+                        <tv-news-feed symbol="COINBASE:SUIUSD" news-type="all"></tv-news-feed>
                     </div>
                 </div>
- 
+            </div>
+
+            <div class="card">
+                <div class="card-head">
+                    <h3 class="card-title"><i class="fas fa-calendar-days"></i> Mon planning — Google Calendar</h3>
+                    <a class="ghost-btn" href="https://calendar.google.com/calendar/u/0/r" target="_blank"
+                        rel="noopener">
+                        <i class="fas fa-arrow-up-right-from-square"></i> Ouvrir
+                    </a>
+                </div>
+                <div class="card-body gcal-holder">
+                    <iframe src="<?= htmlspecialchars($gcalEmbedUrl) ?>" title="Planning Google Calendar" loading="lazy"
+                        referrerpolicy="no-referrer"></iframe>
+                </div>
+                <div class="card-src">Google bloque « /calendar/u/0/r » en iframe : colle ton URL « Intégrer le
+                    calendrier » dans $gcalEmbedUrl pour afficher ton planning ici</div>
+            </div>
+
+            <?php if (!empty($onThisDay)): ?>
                 <div class="card">
                     <div class="card-head">
-                        <h3 class="card-title"><i class="fas fa-calendar-days"></i> Mon planning — Google Calendar</h3>
-                        <a class="ghost-btn" href="https://calendar.google.com/calendar/u/0/r" target="_blank"
-                            rel="noopener">
-                            <i class="fas fa-arrow-up-right-from-square"></i> Ouvrir
-                        </a>
+                        <h3 class="card-title"><i class="fas fa-landmark"></i> Un jour comme aujourd'hui</h3>
                     </div>
-                    <div class="card-body gcal-holder">
-                        <iframe src="<?= htmlspecialchars($gcalEmbedUrl) ?>" title="Planning Google Calendar"
-                            loading="lazy" referrerpolicy="no-referrer"></iframe>
-                    </div>
-                    <div class="card-src">Google bloque « /calendar/u/0/r » en iframe : colle ton URL « Intégrer le
-                        calendrier » dans $gcalEmbedUrl pour afficher ton planning ici</div>
-                </div>
-
-                <?php if (!empty($onThisDay)): ?>
-                    <div class="card">
-                        <div class="card-head">
-                            <h3 class="card-title"><i class="fas fa-landmark"></i> Un jour comme aujourd'hui</h3>
-                        </div>
-                        <div class="card-body">
-                            <?php foreach ($onThisDay as $ev): ?>
-                                <div class="today-event">
-                                    <span class="year num"><?= htmlspecialchars((string) ($ev['year'] ?? '')) ?></span>
-                                    <p><?= htmlspecialchars(strip_tags((string) ($ev['text'] ?? ''))) ?></p>
-                                </div>
-                            <?php endforeach; ?>
-                            <div class="card-src">Wikipédia FR · section « Événements »</div>
-                        </div>
-                    </div>
-                <?php else: ?>
-                    <div class="card">
-                        <div class="card-head">
-                            <h3 class="card-title"><i class="fas fa-landmark"></i> Un jour comme aujourd'hui</h3>
-                        </div>
-                        <div class="empty-state">Événements indisponibles pour le moment</div>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </section>
-
-        <!-- ===== MÉTÉO ===== -->
-        <section class="section weather-section" id="meteo">
-            <div class="section-head">
-                <h2>Météo — Vertou (44)</h2>
-                <span class="hint">open-meteo · aujourd'hui + J+2</span>
-            </div>
-            <?php if (!empty($weatherDays)): ?>
-                <div class="card">
-                    <div class="weather-grid">
-                        <?php foreach ($weatherDays as $i => $day): ?>
-                            <div class="weather-day <?= $i === 0 ? 'today' : '' ?>">
-                                <div class="d-label"><?= htmlspecialchars($day['day_label']) ?></div>
-                                <div class="d-icon"><i class="fas <?= htmlspecialchars($day['icon']) ?>"></i></div>
-                                <div class="d-desc"><?= htmlspecialchars($day['label']) ?></div>
-                                <div class="d-temps num"><?= $day['t_max'] ?>° <span class="min">/ <?= $day['t_min'] ?>°</span>
-                                </div>
-                                <div class="d-rain"><i class="fas fa-umbrella"></i>
-                                    <?= $day['rain_prob'] ?>%
-                                </div>
-                                <div class="d-wind"><i class="fas fa-wind"></i> <?= $day['wind_max'] ?> km/h</div>
+                    <div class="card-body">
+                        <?php foreach ($onThisDay as $ev): ?>
+                            <div class="today-event">
+                                <span class="year num"><?= htmlspecialchars((string) ($ev['year'] ?? '')) ?></span>
+                                <p><?= htmlspecialchars(strip_tags((string) ($ev['text'] ?? ''))) ?></p>
                             </div>
                         <?php endforeach; ?>
+                        <div class="card-src">Wikipédia FR · section « Événements »</div>
                     </div>
-                    <!--<div class="weather-chart">
-                        <canvas id="weatherChart"></canvas>
-                    </div>-->
                 </div>
             <?php else: ?>
                 <div class="card">
-                    <div class="empty-state">Météo indisponible pour le moment</div>
+                    <div class="card-head">
+                        <h3 class="card-title"><i class="fas fa-landmark"></i> Un jour comme aujourd'hui</h3>
+                    </div>
+                    <div class="empty-state">Événements indisponibles pour le moment</div>
                 </div>
             <?php endif; ?>
-        </section>
+    </div>
+    </section>
 
-        <!-- ===== ACTIVITÉ DÉTAILLÉE (chaque métrique à son échelle) ===== -->
-        <section class="section" id="activite">
-            <div class="section-head">
-                <h2>Activité détaillée LibreAnalytics</h2>
-                <span class="hint"><?= $period ?> jours</span>
-            </div>
-            <div class="multiples">
-                <div class="mini">
-                    <div class="mini-head">
-                        <span class="t">Utilisateurs / jour</span>
-                        <span class="v num" style="color: var(--violet)"
-                            id="sum-users"><?= number_format(array_sum($chartPayload['series']['users'])) ?></span>
-                    </div>
-                    <div class="chart-sm"><canvas id="mini-users"></canvas></div>
-                </div>
-                <div class="mini">
-                    <div class="mini-head">
-                        <span class="t">Sites / jour</span>
-                        <span class="v num" style="color: var(--blue)"
-                            id="sum-sites"><?= number_format(array_sum($chartPayload['series']['sites'])) ?></span>
-                    </div>
-                    <div class="chart-sm"><canvas id="mini-sites"></canvas></div>
-                </div>
-                <div class="mini">
-                    <div class="mini-head">
-                        <span class="t">Visites / jour</span>
-                        <span class="v num" style="color: var(--green)"
-                            id="sum-visits"><?= number_format(array_sum($chartPayload['series']['visits'])) ?></span>
-                    </div>
-                    <div class="chart-sm"><canvas id="mini-visits"></canvas></div>
-                </div>
-                <div class="mini">
-                    <div class="mini-head">
-                        <span class="t">Visiteurs uniques / jour</span>
-                        <span class="v num" style="color: var(--amber)"
-                            id="sum-uniques"><?= number_format(array_sum($chartPayload['series']['uniques'])) ?></span>
-                    </div>
-                    <div class="chart-sm"><canvas id="mini-uniques"></canvas></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== TOP SITES + GÉO ===== -->
-        <section class="section" id="geo">
-            <div class="section-head">
-                <h2>Top sites &amp; géographie</h2>
-            </div>
-            <div class="duo">
-                <div class="card">
-                    <div class="card-head">
-                        <h3 class="card-title"><i class="fas fa-trophy"></i> Top 5 sites</h3>
-                    </div>
-                    <div class="card-body" style="height: 280px;">
-                        <canvas id="topSitesChart"></canvas>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-head">
-                        <h3 class="card-title"><i class="fas fa-earth-europe"></i> Pays visités</h3>
-                        <div class="geo-toggle" role="tablist">
-                            <button id="geo-bars" class="active">Barres</button>
-                            <button id="geo-map">Carte</button>
+    <!-- ===== MÉTÉO ===== -->
+    <section class="section weather-section" id="meteo">
+        <div class="section-head">
+            <h2>Météo — Vertou (44)</h2>
+            <span class="hint">open-meteo · aujourd'hui + J+2</span>
+        </div>
+        <?php if (!empty($weatherDays)): ?>
+            <div class="card">
+                <div class="weather-grid">
+                    <?php foreach ($weatherDays as $i => $day): ?>
+                        <div class="weather-day <?= $i === 0 ? 'today' : '' ?>">
+                            <div class="d-label"><?= htmlspecialchars($day['day_label']) ?></div>
+                            <div class="d-icon"><i class="fas <?= htmlspecialchars($day['icon']) ?>"></i></div>
+                            <div class="d-desc"><?= htmlspecialchars($day['label']) ?></div>
+                            <div class="d-temps num"><?= $day['t_max'] ?>° <span class="min">/ <?= $day['t_min'] ?>°</span>
+                            </div>
+                            <div class="d-rain"><i class="fas fa-umbrella"></i>
+                                <?= $day['rain_prob'] ?>%
+                            </div>
+                            <div class="d-wind"><i class="fas fa-wind"></i> <?= $day['wind_max'] ?> km/h</div>
                         </div>
-                    </div>
-                    <div class="card-body geo-view">
-                        <canvas id="countriesChart"></canvas>
-                        <div class="map-holder" id="map-holder">
-                            <div id="worldMap"></div>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
+                <!--<div class="weather-chart">
+                        <canvas id="weatherChart"></canvas>
+                    </div>-->
             </div>
-        </section>
+        <?php else: ?>
+            <div class="card">
+                <div class="empty-state">Météo indisponible pour le moment</div>
+            </div>
+        <?php endif; ?>
+    </section>
 
-        <!-- ===== REGISTRE UTILISATEURS ===== -->
-        <section class="section" id="users">
-            <div class="section-head">
-                <h2>Registre des utilisateurs (<?= count($usersList) ?>)</h2>
-                <?php if (!empty($plansStats)): ?>
-                    <div class="plan-chips" aria-label="Répartition par plan">
-                        <?php foreach ($planOrder as $planKey => $planLabel):
-                            if (!isset($plansStats[$planKey]))
-                                continue; ?>
-                            <span class="plan-chip"><?= $planLabel ?> <b
-                                    class="num"><?= (int) $plansStats[$planKey] ?></b></span>
-                        <?php endforeach; ?>
-                        <?php foreach ($plansStats as $planKey => $count):
-                            if (isset($planOrder[$planKey]))
-                                continue; ?>
-                            <span class="plan-chip"><?= htmlspecialchars(ucfirst($planKey)) ?> <b
-                                    class="num"><?= (int) $count ?></b></span>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
+    <!-- ===== ACTIVITÉ DÉTAILLÉE (chaque métrique à son échelle) ===== -->
+    <section class="section" id="activite">
+        <div class="section-head">
+            <h2>Activité détaillée LibreAnalytics</h2>
+            <span class="hint"><?= $period ?> jours</span>
+        </div>
+        <div class="multiples">
+            <div class="mini">
+                <div class="mini-head">
+                    <span class="t">Utilisateurs / jour</span>
+                    <span class="v num" style="color: var(--violet)"
+                        id="sum-users"><?= number_format(array_sum($chartPayload['series']['users'])) ?></span>
+                </div>
+                <div class="chart-sm"><canvas id="mini-users"></canvas></div>
+            </div>
+            <div class="mini">
+                <div class="mini-head">
+                    <span class="t">Sites / jour</span>
+                    <span class="v num" style="color: var(--blue)"
+                        id="sum-sites"><?= number_format(array_sum($chartPayload['series']['sites'])) ?></span>
+                </div>
+                <div class="chart-sm"><canvas id="mini-sites"></canvas></div>
+            </div>
+            <div class="mini">
+                <div class="mini-head">
+                    <span class="t">Visites / jour</span>
+                    <span class="v num" style="color: var(--green)"
+                        id="sum-visits"><?= number_format(array_sum($chartPayload['series']['visits'])) ?></span>
+                </div>
+                <div class="chart-sm"><canvas id="mini-visits"></canvas></div>
+            </div>
+            <div class="mini">
+                <div class="mini-head">
+                    <span class="t">Visiteurs uniques / jour</span>
+                    <span class="v num" style="color: var(--amber)"
+                        id="sum-uniques"><?= number_format(array_sum($chartPayload['series']['uniques'])) ?></span>
+                </div>
+                <div class="chart-sm"><canvas id="mini-uniques"></canvas></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TOP SITES + GÉO ===== -->
+    <section class="section" id="geo">
+        <div class="section-head">
+            <h2>Top sites &amp; géographie</h2>
+        </div>
+        <div class="duo">
+            <div class="card">
+                <div class="card-head">
+                    <h3 class="card-title"><i class="fas fa-trophy"></i> Top 5 sites</h3>
+                </div>
+                <div class="card-body" style="height: 280px;">
+                    <canvas id="topSitesChart"></canvas>
+                </div>
             </div>
             <div class="card">
                 <div class="card-head">
-                    <h3 class="card-title"><i class="fas fa-users"></i> Comptes</h3>
-                    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-                        <div class="search-box">
-                            <i class="fas fa-search"></i>
-                            <input type="search" id="user-search" placeholder="Rechercher un email…"
-                                aria-label="Rechercher un email">
-                        </div>
-                        <a href="?export_emails=1" class="export-btn">
-                            <i class="fas fa-download"></i> Export CSV
-                        </a>
+                    <h3 class="card-title"><i class="fas fa-earth-europe"></i> Pays visités</h3>
+                    <div class="geo-toggle" role="tablist">
+                        <button id="geo-bars" class="active">Barres</button>
+                        <button id="geo-map">Carte</button>
                     </div>
                 </div>
-                <div class="table-responsive">
-                    <table class="data-table" id="users-table">
-                        <thead>
-                            <tr>
-                                <th class="sortable" data-sort="text">Email</th>
-                                <th class="sortable" data-sort="text">Plan</th>
-                                <th class="sortable" data-sort="num">Sites</th>
-                                <th class="sortable" data-sort="num">Visites</th>
-                                <th class="sortable" data-sort="num">Inscription</th>
-                                <th class="sortable" data-sort="num">Dernière connexion</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (!empty($usersList)): ?>
-                                <?php foreach ($usersList as $user):
-                                    $planClass = strtolower($user['plan'] ?? 'free');
-                                    $createdTs = !empty($user['created_at']) ? strtotime($user['created_at']) : 0;
-                                    $loginTs = !empty($user['last_login']) ? strtotime($user['last_login']) : 0;
-                                    ?>
-                                    <tr data-email="<?= htmlspecialchars(strtolower($user['email'])) ?>">
-                                        <td data-label="Email"><?= htmlspecialchars($user['email']) ?></td>
-                                        <td data-label="Plan"><span
-                                                class="badge badge-<?= htmlspecialchars($planClass) ?>"><?= strtoupper($user['plan'] ?? 'free') ?></span>
-                                        </td>
-                                        <td data-label="Sites" data-value="<?= (int) ($user['site_count'] ?? 0) ?>">
-                                            <?= (int) ($user['site_count'] ?? 0) ?>
-                                        </td>
-                                        <td data-label="Visites" data-value="<?= (int) ($user['total_visits'] ?? 0) ?>">
-                                            <?= number_format($user['total_visits'] ?? 0) ?>
-                                        </td>
-                                        <td data-label="Inscription" data-value="<?= $createdTs ?>">
-                                            <?= $createdTs ? date('d/m/Y', $createdTs) : '-' ?>
-                                        </td>
-                                        <td data-label="Dernière connexion" data-value="<?= $loginTs ?>">
-                                            <?= $loginTs ? date('d/m/Y H:i', $loginTs) : '<span style="color:var(--text-3);">Jamais</span>' ?>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                                <tr class="search-empty">
-                                    <td colspan="6" class="empty-state">Aucun utilisateur ne correspond à cette
-                                        recherche</td>
-                                </tr>
-                            <?php else: ?>
-                                <tr>
-                                    <td colspan="6" class="empty-state">Aucun utilisateur enregistré</td>
-                                </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+                <div class="card-body geo-view">
+                    <canvas id="countriesChart"></canvas>
+                    <div class="map-holder" id="map-holder">
+                        <div id="worldMap"></div>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
+
+    <!-- ===== REGISTRE UTILISATEURS ===== -->
+    <section class="section" id="users">
+        <div class="section-head">
+            <h2>Registre des utilisateurs (<?= count($usersList) ?>)</h2>
+            <?php if (!empty($plansStats)): ?>
+                <div class="plan-chips" aria-label="Répartition par plan">
+                    <?php foreach ($planOrder as $planKey => $planLabel):
+                        if (!isset($plansStats[$planKey]))
+                            continue; ?>
+                        <span class="plan-chip"><?= $planLabel ?> <b class="num"><?= (int) $plansStats[$planKey] ?></b></span>
+                    <?php endforeach; ?>
+                    <?php foreach ($plansStats as $planKey => $count):
+                        if (isset($planOrder[$planKey]))
+                            continue; ?>
+                        <span class="plan-chip"><?= htmlspecialchars(ucfirst($planKey)) ?> <b
+                                class="num"><?= (int) $count ?></b></span>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+        <div class="card">
+            <div class="card-head">
+                <h3 class="card-title"><i class="fas fa-users"></i> Comptes</h3>
+                <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="search" id="user-search" placeholder="Rechercher un email…"
+                            aria-label="Rechercher un email">
+                    </div>
+                    <a href="?export_emails=1" class="export-btn">
+                        <i class="fas fa-download"></i> Export CSV
+                    </a>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="data-table" id="users-table">
+                    <thead>
+                        <tr>
+                            <th class="sortable" data-sort="text">Email</th>
+                            <th class="sortable" data-sort="text">Plan</th>
+                            <th class="sortable" data-sort="num">Sites</th>
+                            <th class="sortable" data-sort="num">Visites</th>
+                            <th class="sortable" data-sort="num">Inscription</th>
+                            <th class="sortable" data-sort="num">Dernière connexion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($usersList)): ?>
+                            <?php foreach ($usersList as $user):
+                                $planClass = strtolower($user['plan'] ?? 'free');
+                                $createdTs = !empty($user['created_at']) ? strtotime($user['created_at']) : 0;
+                                $loginTs = !empty($user['last_login']) ? strtotime($user['last_login']) : 0;
+                                ?>
+                                <tr data-email="<?= htmlspecialchars(strtolower($user['email'])) ?>">
+                                    <td data-label="Email"><?= htmlspecialchars($user['email']) ?></td>
+                                    <td data-label="Plan"><span
+                                            class="badge badge-<?= htmlspecialchars($planClass) ?>"><?= strtoupper($user['plan'] ?? 'free') ?></span>
+                                    </td>
+                                    <td data-label="Sites" data-value="<?= (int) ($user['site_count'] ?? 0) ?>">
+                                        <?= (int) ($user['site_count'] ?? 0) ?>
+                                    </td>
+                                    <td data-label="Visites" data-value="<?= (int) ($user['total_visits'] ?? 0) ?>">
+                                        <?= number_format($user['total_visits'] ?? 0) ?>
+                                    </td>
+                                    <td data-label="Inscription" data-value="<?= $createdTs ?>">
+                                        <?= $createdTs ? date('d/m/Y', $createdTs) : '-' ?>
+                                    </td>
+                                    <td data-label="Dernière connexion" data-value="<?= $loginTs ?>">
+                                        <?= $loginTs ? date('d/m/Y H:i', $loginTs) : '<span style="color:var(--text-3);">Jamais</span>' ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                            <tr class="search-empty">
+                                <td colspan="6" class="empty-state">Aucun utilisateur ne correspond à cette
+                                    recherche</td>
+                            </tr>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="6" class="empty-state">Aucun utilisateur enregistré</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
     </div><!-- .shell -->
 
     <script>
