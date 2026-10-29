@@ -311,7 +311,7 @@ if (is_array($weatherRaw) && isset($weatherRaw['daily']['time'])) {
 // ================================================================
 // INFOS DU JOUR — APIs gratuites sans clé (appel serveur + cache)
 // ================================================================
-function fetchJsonCached(string $url, string $cacheFile, int $ttl, array $extraHeaders = []): ?array
+function fetchJsonCached(string $url, string $cacheFile, int $ttl): ?array
 {
     if (is_file($cacheFile) && (time() - filemtime($cacheFile)) < $ttl) {
         $data = json_decode(file_get_contents($cacheFile), true);
@@ -320,17 +320,13 @@ function fetchJsonCached(string $url, string $cacheFile, int $ttl, array $extraH
         }
     }
 
-    $curlOpts = [
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_TIMEOUT => 8,
         CURLOPT_CONNECTTIMEOUT => 4,
         CURLOPT_USERAGENT => 'Mozilla/5.0 (compatible; LibreAnalytics/1.0)',
-    ];
-    if ($extraHeaders !== []) {
-        $curlOpts[CURLOPT_HTTPHEADER] = $extraHeaders;
-    }
-    $ch = curl_init($url);
-    curl_setopt_array($ch, $curlOpts);
+    ]);
     $resp = curl_exec($ch);
     $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
@@ -424,9 +420,8 @@ if ($otdSection !== null) {
             // Nettoyage wikitext : refs, modèles imbriqués, liens internes, gras/italique
             $line = preg_replace('/<ref[^>]*\/?>/i', '', $line);
             $line = preg_replace('/<\/ref>/i', '', $line);
-            $line = preg_replace('/\{\{[^{}]*\}\}/', '', $line);
-            $line = preg_replace('/\{\{[^{}]*\}\}/', '', $line);
-            $line = preg_replace('/\[\[(?:[^\]|]*\|)?([^\]|]+)\]\]/u', '$1', $line);
+            $line = preg_replace('/{{[^{}]*}}/', '', $line);
+            $line = preg_replace('/\[\[(?:[^|\]]*\|)?([^|\]]+)\]\]/u', '$1', $line);
             $line = str_replace(["'''", "''"], '', $line);
             $line = trim((string) preg_replace('/\s+/u', ' ', $line), " \t:");
             if ($line === '') {
@@ -504,163 +499,12 @@ if (is_array($berruRaw) && !empty($berruRaw['success']) && is_array($berruRaw['d
     }
 }
 
-// 3) Tokens SOL & SUI — données détaillées via CoinGecko (réponse déjà en cache).
-//    Le calendrier exact des unlocks/dilutions exige une API payante
-//    (TokenUnlocks, CryptoRank…) : on calcule le % de dilution restant
-//    depuis les supplies circulants / totaux, disponibles gratuitement.
-$tokenCards = [];
-if (is_array($coingeckoData)) {
-    foreach (['solana', 'sui'] as $tokenId) {
-        foreach ($coingeckoData as $coin) {
-            if (($coin['id'] ?? '') !== $tokenId) {
-                continue;
-            }
-            $circ = (float) ($coin['circulating_supply'] ?? 0);
-            $refSupply = max((float) ($coin['total_supply'] ?? 0), (float) ($coin['max_supply'] ?? 0));
-            $dilutionPct = ($refSupply > 0 && $refSupply > $circ)
-                ? round(($refSupply - $circ) / $refSupply * 100, 1)
-                : 0.0;
-            $change24 = ($coin['price_change_percentage_24h'] ?? null) !== null
-                ? (float) $coin['price_change_percentage_24h']
-                : null;
-            $tokenCards[] = [
-                'id' => $tokenId,
-                'name' => (string) ($coin['name'] ?? ''),
-                'symbol' => (string) ($coin['symbol'] ?? ''),
-                'tv_symbol' => strtoupper((string) ($coin['symbol'] ?? '')) . 'USDT',
-                'image' => (string) ($coin['image'] ?? ''),
-                'price' => (float) ($coin['current_price'] ?? 0),
-                'change_24h' => $change24,
-                'rank' => (int) ($coin['market_cap_rank'] ?? 0),
-                'market_cap' => $coin['market_cap'] ?? null,
-                'fdv' => $coin['fully_diluted_valuation'] ?? null,
-                'ath' => (float) ($coin['ath'] ?? 0),
-                'ath_change' => (float) ($coin['ath_change_percentage'] ?? 0),
-                'high_24h' => (float) ($coin['high_24h'] ?? 0),
-                'low_24h' => (float) ($coin['low_24h'] ?? 0),
-                'dilution_pct' => $dilutionPct,
-                'circ_pct' => $refSupply > 0 ? round($circ / $refSupply * 100, 1) : 100.0,
-                'spark' => $coin['sparkline_in_7d']['price'] ?? [],
-            ];
-            break;
-        }
-    }
-}
-
-// 4) Sentiment & signaux du jour par token — CoinGecko /coins/{id} :
-//    votes de la communauté (bullish/bearish), momentum 7 j et 30 j,
-//    activité développeurs. On y ajoute la position du prix dans le
-//    range 24 h (données markets déjà en cache 5 min).
-//    Le détail est mis en cache 2 h (quotas de l'API gratuite) ; le score
-//    composite est recalculé à chaque rendu.
-$sentiments = [];
-foreach (['solana', 'sui'] as $tokenId) {
-    $cgHeaders = defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KEY !== 'TA_CLE_DEMO_ICI'
-        ? ['x-cg-demo-api-key: ' . COINGECKO_API_KEY]
-        : [];
-    $sentRaw = fetchJsonCached(
-        'https://api.coingecko.com/api/v3/coins/' . urlencode($tokenId)
-        . '?localization=false&tickers=false&market_data=true&community_data=true&developer_data=true&sparkline=false',
-        __DIR__ . '/cache_sentiment_' . $tokenId . '.json',
-        7200,
-        $cgHeaders
-    );
-    if (!is_array($sentRaw) || isset($sentRaw['status']) || isset($sentRaw['error'])) {
-        // Une erreur 429/5xx ne doit pas polluer le cache 2 h : on le purge.
-        if (is_array($sentRaw)) {
-            @unlink(__DIR__ . '/cache_sentiment_' . $tokenId . '.json');
-        }
-        continue; // API indisponible : la card affichera le reste sans ces lignes
-    }
-
-    $md = is_array($sentRaw['market_data'] ?? null) ? $sentRaw['market_data'] : [];
-    $dd = is_array($sentRaw['developer_data'] ?? null) ? $sentRaw['developer_data'] : [];
-
-    $votes = ($sentRaw['sentiment_votes_up_percentage'] ?? null) !== null ? (float) $sentRaw['sentiment_votes_up_percentage'] : null;
-    $chg7 = ($md['price_change_percentage_7d'] ?? null) !== null ? (float) $md['price_change_percentage_7d'] : null;
-    $chg30 = ($md['price_change_percentage_30d'] ?? null) !== null ? (float) $md['price_change_percentage_30d'] : null;
-    $commits = ($dd['commit_count_4_weeks'] ?? null) !== null ? (int) $dd['commit_count_4_weeks'] : null;
-
-    // Position du prix dans le range 24 h (0 % = au plus bas, 100 % = au plus haut)
-    $rangePos = null;
-    foreach ($tokenCards as $tcRef) {
-        if ($tcRef['id'] === $tokenId) {
-            if ($tcRef['high_24h'] > $tcRef['low_24h'] && $tcRef['price'] > 0) {
-                $rangePos = (int) round(($tcRef['price'] - $tcRef['low_24h']) / ($tcRef['high_24h'] - $tcRef['low_24h']) * 100);
-            }
-            break;
-        }
-    }
-
-    // Score composite 0-100 : votes communauté (40), momentum 7 j (30),
-    // momentum 30 j (20), position 24 h (10). Composante indisponible :
-    // son poids est redistribué (moyenne pondérée de ce qui existe).
-    $parts = [];
-    if ($votes !== null) {
-        $parts[] = [max(0.0, min(100.0, $votes)), 40.0];
-    }
-    if ($chg7 !== null) {
-        $parts[] = [(max(-20.0, min(20.0, $chg7)) + 20) / 40 * 100, 30.0];
-    }
-    if ($chg30 !== null) {
-        $parts[] = [(max(-30.0, min(30.0, $chg30)) + 30) / 60 * 100, 20.0];
-    }
-    if ($rangePos !== null) {
-        $parts[] = [(float) $rangePos, 10.0];
-    }
-    $sSum = 0.0;
-    $wSum = 0.0;
-    foreach ($parts as $p) {
-        $sSum += $p[0] * $p[1];
-        $wSum += $p[1];
-    }
-    $score = $wSum > 0 ? (int) round($sSum / $wSum) : null;
-    $label = $score === null ? null
-        : ($score >= 60 ? 'haussier' : ($score >= 45 ? 'neutre' : 'baissier'));
-
-    $sentiments[$tokenId] = [
-        'votes' => $votes,
-        'chg7' => $chg7,
-        'chg30' => $chg30,
-        'commits' => $commits,
-        'range_pos' => $rangePos,
-        'score' => $score,
-        'label' => $label,
-    ];
-}
-
-// 5) Planning — embed Google Calendar.
+// 3) Planning — embed Google Calendar.
 //    ⚠️ Google interdit l'affichage de « /calendar/u/0/r » dans une iframe
 //    (X-Frame-Options). Pour voir ton planning dans la card, ouvre
 //    Google Calendar → Paramètres → « Intégrer le calendrier » et colle
 //    l'URL obtenue (https://calendar.google.com/calendar/embed?src=…) ici.
 $gcalEmbedUrl = 'https://calendar.google.com/calendar/embed?src=g.leberruyer%40gmail.com&ctz=Europe%2FParis';
-
-
-// Montant € compact (42 500 000 -> « 42,5 M € »)
-function eurCompact($n): ?string
-{
-    if ($n === null) {
-        return null;
-    }
-    $n = (float) $n;
-    if ($n >= 1e12) {
-        return number_format($n / 1e12, 2, ',', ' ') . ' Bn €';
-    }
-    if ($n >= 1e9) {
-        return number_format($n / 1e9, ($n / 1e9) >= 100 ? 0 : 1, ',', ' ') . ' Mds €';
-    }
-    if ($n >= 1e6) {
-        return number_format($n / 1e6, ($n / 1e6) >= 100 ? 0 : 1, ',', ' ') . ' M €';
-    }
-    return number_format($n, 0, ',', ' ') . ' €';
-}
-
-// Pourcentage signé court (+3,2 % / -1,4 % / n/a) pour les lignes dynamiques
-function pctSigned(?float $v): string
-{
-    return $v === null ? 'n/a' : (($v >= 0 ? '+' : '') . str_replace('.', ',', (string) round($v, 1)) . ' %');
-}
 
 // Date longue en français pour le titre « Infos du jour »
 $daysFr = ['Monday' => 'lundi', 'Tuesday' => 'mardi', 'Wednesday' => 'mercredi', 'Thursday' => 'jeudi', 'Friday' => 'vendredi', 'Saturday' => 'samedi', 'Sunday' => 'dimanche'];
@@ -700,8 +544,6 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
     <!-- Perf UX : scripts non bloquants -->
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <!-- amCharts : chargé à la demande, uniquement si la carte est demandée -->
     <style>
         :root {
@@ -1037,12 +879,6 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             margin-top: 2px;
         }
 
-        .weather-chart {
-            height: 84px;
-            padding: 8px 10px;
-            border-top: 1px solid var(--border-soft);
-        }
-
         @media (max-width: 480px) {
             .weather-grid {
                 grid-template-columns: 1fr;
@@ -1097,12 +933,6 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 grid-row: 3;
                 margin: 0;
                 text-align: right;
-            }
-
-            .weather-day .d-sun {
-                grid-column: 2 / -1;
-                grid-row: 4;
-                margin: 6px 0 0;
             }
         }
 
@@ -1955,76 +1785,6 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             }
         }
 
-        .fg-score {
-            font-size: 44px;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            line-height: 1;
-        }
-
-        .fg-score span {
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--text-3);
-            letter-spacing: 0;
-        }
-
-        .fg-label {
-            display: inline-block;
-            font-size: 13px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 999px;
-            margin: 12px 0 14px;
-        }
-
-        .fg-label.low {
-            color: var(--red);
-            background: var(--red-soft);
-        }
-
-        .fg-label.high {
-            color: var(--green);
-            background: var(--green-soft);
-        }
-
-        .fg-label.mid {
-            color: var(--amber);
-            background: rgba(227, 179, 65, 0.12);
-        }
-
-        .fg-meter {
-            height: 6px;
-            border-radius: 3px;
-            background: var(--surface-2);
-            overflow: hidden;
-        }
-
-        .fg-fill {
-            height: 100%;
-            border-radius: 3px;
-        }
-
-        .fg-fill.low {
-            background: var(--green);
-        }
-
-        .fg-fill.high {
-            background: var(--red);
-        }
-
-        .fg-fill.mid {
-            background: var(--amber);
-        }
-
-        .fg-scale {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            color: var(--text-3);
-            margin-top: 6px;
-        }
-
         .today-event {
             display: flex;
             gap: 12px;
@@ -2051,95 +1811,12 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             line-height: 1.5;
         }
 
-        .news-item {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            padding: 11px 0;
-            border-bottom: 1px solid var(--border-soft);
-        }
-
-        .news-item:last-of-type {
-            border-bottom: none;
-        }
-
-        .news-item .news-title {
-            font-size: 13.5px;
-            font-weight: 500;
-            line-height: 1.45;
-            transition: color var(--t-fast);
-        }
-
-        .news-item:hover .news-title {
-            color: var(--green);
-        }
-
-        .news-item .news-meta {
-            display: flex;
-            gap: 14px;
-            font-size: 12px;
-            color: var(--text-3);
-        }
-
-        .news-item .news-meta span {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .news-item .news-meta i {
-            font-size: 10px;
-        }
-
         .card-src {
             font-size: 11.5px;
             color: var(--text-3);
             margin-top: 14px;
             padding-top: 10px;
             border-top: 1px solid var(--border-soft);
-        }
-
-        /* ===== TOKENS SOL & SUI (infos du jour) ===== */
-        .chain-block+.chain-block {
-            margin-top: 16px;
-            padding-top: 14px;
-            border-top: 1px solid var(--border-soft);
-        }
-
-        .chain-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 4px;
-        }
-
-        .chain-head .chain-name {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            font-size: 14px;
-            font-weight: 600;
-            color: inherit;
-            transition: color var(--t-fast);
-        }
-
-        .chain-head .chain-name:hover,
-        .chain-head .chain-name:hover .token-symbol {
-            color: var(--violet);
-        }
-
-        .chain-head .chain-price {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .chain-block .fg-meter {
-            margin: 2px 0 10px;
         }
 
         /* ===== GOOGLE CALENDAR (infos du jour) ===== */
@@ -2158,59 +1835,6 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
 
         iframe {
             background-color: rgba(167, 139, 250, 0.1);
-        }
-
-        .card-title a {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            color: inherit;
-            transition: color var(--t-fast);
-        }
-
-        .card-title a:hover {
-            color: var(--violet);
-        }
-
-        .card-title a:hover .token-symbol {
-            color: var(--violet);
-        }
-
-        .token-logo {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-        }
-
-        .token-symbol {
-            color: var(--text-3);
-            font-weight: 500;
-            font-size: 12px;
-        }
-
-        .token-price {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 4px;
-        }
-
-        .token-price .token-value {
-            font-size: 26px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
-        .token-ath {
-            color: var(--text-3);
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .token-spark {
-            height: 56px;
-            margin-top: 14px;
         }
 
         /* ===== WIDGET TRADINGVIEW (wallet) ===== */
@@ -2237,253 +1861,10 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             font-size: 26px;
         }
 
-        .weather-section .weather-chart {
-            height: 150px;
-            padding: 14px 16px;
-        }
-
         @media (max-width: 480px) {
             .weather-section .weather-day {
                 padding: 14px 16px;
             }
-        }
-
-        /* ===== MÉTÉO : DUO CARTE + QUALITÉ DE L'AIR ===== */
-        .weather-duo {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) 300px;
-            gap: 14px;
-            align-items: stretch;
-        }
-
-        @media (max-width: 1020px) {
-            .weather-duo {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .weather-day .d-sun {
-            font-size: 11px;
-            color: var(--text-3);
-            margin-top: 4px;
-        }
-
-        .weather-day .d-sun i {
-            font-size: 10px;
-            margin: 0 2px;
-        }
-
-        .aqi-score {
-            font-size: 44px;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            line-height: 1;
-        }
-
-        .aqi-label {
-            display: inline-block;
-            font-size: 13px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 999px;
-            margin: 12px 0 8px;
-        }
-
-        .aqi-label.state-good {
-            color: var(--green);
-            background: var(--green-soft);
-        }
-
-        .aqi-label.state-mid {
-            color: var(--amber);
-            background: rgba(227, 179, 65, 0.12);
-        }
-
-        .aqi-label.state-warn {
-            color: #f0883e;
-            background: rgba(240, 136, 62, 0.12);
-        }
-
-        .aqi-label.state-bad {
-            color: var(--red);
-            background: var(--red-soft);
-        }
-
-        .aqi-sub {
-            font-size: 12px;
-            color: var(--text-3);
-            margin-bottom: 14px;
-        }
-
-        .aqi-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-        }
-
-        .aqi-stats>div {
-            background: var(--surface-2);
-            border-radius: var(--radius-sm);
-            padding: 10px 6px;
-            text-align: center;
-        }
-
-        .aqi-stats dt {
-            font-size: 11px;
-            color: var(--text-3);
-            margin-bottom: 2px;
-        }
-
-        .aqi-stats dd {
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        /* ===== FRANCE & SCIENCE ===== */
-        .science-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
-            align-items: start;
-        }
-
-        @media (max-width: 1120px) {
-            .science-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 640px) {
-            .science-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .fact-row {
-            display: flex;
-            gap: 12px;
-            align-items: baseline;
-            padding: 11px 0;
-            border-bottom: 1px solid var(--border-soft);
-            font-size: 13.5px;
-        }
-
-        .fact-row:last-of-type {
-            border-bottom: none;
-        }
-
-        .fact-key {
-            font-family: var(--mono);
-            font-size: 12px;
-            color: var(--text-3);
-            white-space: nowrap;
-            min-width: 84px;
-            flex-shrink: 0;
-        }
-
-        .fact-value {
-            flex: 1;
-            min-width: 0;
-            color: var(--text);
-            font-weight: 500;
-            line-height: 1.45;
-        }
-
-        .fact-tag {
-            display: inline-block;
-            font-size: 10.5px;
-            font-weight: 600;
-            padding: 1px 7px;
-            border-radius: 999px;
-            background: var(--surface-3);
-            color: var(--text-2);
-            margin-left: 8px;
-            vertical-align: middle;
-            white-space: nowrap;
-        }
-
-        .quake-mag {
-            font-family: var(--mono);
-            font-size: 11.5px;
-            font-weight: 700;
-            color: var(--text-2);
-            background: var(--surface-3);
-            border-radius: 6px;
-            padding: 2px 8px;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .quake-mag.mid {
-            color: var(--amber);
-            background: rgba(227, 179, 65, 0.12);
-        }
-
-        .quake-mag.high {
-            color: var(--red);
-            background: var(--red-soft);
-        }
-
-        .kp-score {
-            font-size: 44px;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            line-height: 1;
-        }
-
-        .kp-label {
-            display: inline-block;
-            font-size: 13px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 999px;
-            margin: 12px 0 16px;
-        }
-
-        .kp-label.calm {
-            color: var(--green);
-            background: var(--green-soft);
-        }
-
-        .kp-label.storm {
-            color: var(--amber);
-            background: rgba(227, 179, 65, 0.12);
-        }
-
-        .kp-label.severe {
-            color: var(--red);
-            background: var(--red-soft);
-        }
-
-        .kp-bars {
-            display: flex;
-            align-items: flex-end;
-            gap: 6px;
-            height: 64px;
-        }
-
-        .kp-bar {
-            flex: 1;
-            min-width: 10px;
-            border-radius: 3px 3px 0 0;
-        }
-
-        .kp-bar.calm {
-            background: rgba(63, 185, 80, 0.5);
-        }
-
-        .kp-bar.storm {
-            background: rgba(227, 179, 65, 0.6);
-        }
-
-        .kp-bar.severe {
-            background: rgba(240, 99, 90, 0.7);
-        }
-
-        .kp-sub {
-            font-size: 11.5px;
-            color: var(--text-3);
-            margin-top: 8px;
         }
 
         /* ===== ÉTATS VIDES ===== */
@@ -2494,7 +1875,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             font-size: 13.5px;
         }
 
-        /* ===== SWEETALERT & TOASTIFY ===== */
+        /* ===== SWEETALERT ===== */
         .custom-swal-popup {
             background: var(--surface) !important;
             color: var(--text) !important;
@@ -2532,11 +1913,6 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
         .custom-swal-content a {
             color: var(--green);
             font-weight: 600;
-        }
-
-        .toastify {
-            font-family: var(--font) !important;
-            border-radius: var(--radius-sm) !important;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -2813,253 +2189,248 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         <tv-news-feed symbol="COINBASE:SUIUSD" news-type="all"></tv-news-feed>
                     </div>
                 </div>
-            </div>
 
-            <div class="card">
-                <div class="card-head">
-                    <h3 class="card-title"><i class="fas fa-calendar-days"></i> Mon planning — Google Calendar</h3>
-                    <a class="ghost-btn" href="https://calendar.google.com/calendar/u/0/r" target="_blank"
-                        rel="noopener">
-                        <i class="fas fa-arrow-up-right-from-square"></i> Ouvrir
-                    </a>
-                </div>
-                <div class="card-body gcal-holder">
-                    <iframe src="<?= htmlspecialchars($gcalEmbedUrl) ?>" title="Planning Google Calendar" loading="lazy"
-                        referrerpolicy="no-referrer"></iframe>
-                </div>
-                <div class="card-src">Google bloque « /calendar/u/0/r » en iframe : colle ton URL « Intégrer le
-                    calendrier » dans $gcalEmbedUrl pour afficher ton planning ici</div>
-            </div>
-
-            <?php if (!empty($onThisDay)): ?>
                 <div class="card">
                     <div class="card-head">
-                        <h3 class="card-title"><i class="fas fa-landmark"></i> Un jour comme aujourd'hui</h3>
+                        <h3 class="card-title"><i class="fas fa-calendar-days"></i> Mon planning — Google Calendar</h3>
+                        <a class="ghost-btn" href="https://calendar.google.com/calendar/u/0/r" target="_blank"
+                            rel="noopener">
+                            <i class="fas fa-arrow-up-right-from-square"></i> Ouvrir
+                        </a>
                     </div>
-                    <div class="card-body">
-                        <?php foreach ($onThisDay as $ev): ?>
-                            <div class="today-event">
-                                <span class="year num"><?= htmlspecialchars((string) ($ev['year'] ?? '')) ?></span>
-                                <p><?= htmlspecialchars(strip_tags((string) ($ev['text'] ?? ''))) ?></p>
+                    <div class="card-body gcal-holder">
+                        <iframe src="<?= htmlspecialchars($gcalEmbedUrl) ?>" title="Planning Google Calendar" loading="lazy"
+                            referrerpolicy="no-referrer"></iframe>
+                    </div>
+                    <div class="card-src">Google bloque « /calendar/u/0/r » en iframe : colle ton URL « Intégrer le
+                        calendrier » dans $gcalEmbedUrl pour afficher ton planning ici</div>
+                </div>
+
+                <?php if (!empty($onThisDay)): ?>
+                    <div class="card">
+                        <div class="card-head">
+                            <h3 class="card-title"><i class="fas fa-landmark"></i> Un jour comme aujourd'hui</h3>
+                        </div>
+                        <div class="card-body">
+                            <?php foreach ($onThisDay as $ev): ?>
+                                <div class="today-event">
+                                    <span class="year num"><?= htmlspecialchars((string) ($ev['year'] ?? '')) ?></span>
+                                    <p><?= htmlspecialchars(strip_tags((string) ($ev['text'] ?? ''))) ?></p>
+                                </div>
+                            <?php endforeach; ?>
+                            <div class="card-src">Wikipédia FR · section « Événements »</div>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <div class="card">
+                        <div class="card-head">
+                            <h3 class="card-title"><i class="fas fa-landmark"></i> Un jour comme aujourd'hui</h3>
+                        </div>
+                        <div class="empty-state">Événements indisponibles pour le moment</div>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </section>
+
+        <!-- ===== MÉTÉO ===== -->
+        <section class="section weather-section" id="meteo">
+            <div class="section-head">
+                <h2>Météo — Vertou (44)</h2>
+                <span class="hint">open-meteo · aujourd'hui + J+2</span>
+            </div>
+            <?php if (!empty($weatherDays)): ?>
+                <div class="card">
+                    <div class="weather-grid">
+                        <?php foreach ($weatherDays as $i => $day): ?>
+                            <div class="weather-day <?= $i === 0 ? 'today' : '' ?>">
+                                <div class="d-label"><?= htmlspecialchars($day['day_label']) ?></div>
+                                <div class="d-icon"><i class="fas <?= htmlspecialchars($day['icon']) ?>"></i></div>
+                                <div class="d-desc"><?= htmlspecialchars($day['label']) ?></div>
+                                <div class="d-temps num"><?= $day['t_max'] ?>° <span class="min">/ <?= $day['t_min'] ?>°</span>
+                                </div>
+                                <div class="d-rain"><i class="fas fa-umbrella"></i>
+                                    <?= $day['rain_prob'] ?>%
+                                </div>
+                                <div class="d-wind"><i class="fas fa-wind"></i> <?= $day['wind_max'] ?> km/h</div>
                             </div>
                         <?php endforeach; ?>
-                        <div class="card-src">Wikipédia FR · section « Événements »</div>
                     </div>
                 </div>
             <?php else: ?>
                 <div class="card">
+                    <div class="empty-state">Météo indisponible pour le moment</div>
+                </div>
+            <?php endif; ?>
+        </section>
+
+        <!-- ===== ACTIVITÉ DÉTAILLÉE (chaque métrique à son échelle) ===== -->
+        <section class="section" id="activite">
+            <div class="section-head">
+                <h2>Activité détaillée LibreAnalytics</h2>
+                <span class="hint"><?= $period ?> jours</span>
+            </div>
+            <div class="multiples">
+                <div class="mini">
+                    <div class="mini-head">
+                        <span class="t">Utilisateurs / jour</span>
+                        <span class="v num" style="color: var(--violet)"
+                            id="sum-users"><?= number_format(array_sum($chartPayload['series']['users'])) ?></span>
+                    </div>
+                    <div class="chart-sm"><canvas id="mini-users"></canvas></div>
+                </div>
+                <div class="mini">
+                    <div class="mini-head">
+                        <span class="t">Sites / jour</span>
+                        <span class="v num" style="color: var(--blue)"
+                            id="sum-sites"><?= number_format(array_sum($chartPayload['series']['sites'])) ?></span>
+                    </div>
+                    <div class="chart-sm"><canvas id="mini-sites"></canvas></div>
+                </div>
+                <div class="mini">
+                    <div class="mini-head">
+                        <span class="t">Visites / jour</span>
+                        <span class="v num" style="color: var(--green)"
+                            id="sum-visits"><?= number_format(array_sum($chartPayload['series']['visits'])) ?></span>
+                    </div>
+                    <div class="chart-sm"><canvas id="mini-visits"></canvas></div>
+                </div>
+                <div class="mini">
+                    <div class="mini-head">
+                        <span class="t">Visiteurs uniques / jour</span>
+                        <span class="v num" style="color: var(--amber)"
+                            id="sum-uniques"><?= number_format(array_sum($chartPayload['series']['uniques'])) ?></span>
+                    </div>
+                    <div class="chart-sm"><canvas id="mini-uniques"></canvas></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== TOP SITES + GÉO ===== -->
+        <section class="section" id="geo">
+            <div class="section-head">
+                <h2>Top sites &amp; géographie</h2>
+            </div>
+            <div class="duo">
+                <div class="card">
                     <div class="card-head">
-                        <h3 class="card-title"><i class="fas fa-landmark"></i> Un jour comme aujourd'hui</h3>
+                        <h3 class="card-title"><i class="fas fa-trophy"></i> Top 5 sites</h3>
                     </div>
-                    <div class="empty-state">Événements indisponibles pour le moment</div>
+                    <div class="card-body" style="height: 280px;">
+                        <canvas id="topSitesChart"></canvas>
+                    </div>
                 </div>
-            <?php endif; ?>
-    </div>
-    </section>
-
-    <!-- ===== MÉTÉO ===== -->
-    <section class="section weather-section" id="meteo">
-        <div class="section-head">
-            <h2>Météo — Vertou (44)</h2>
-            <span class="hint">open-meteo · aujourd'hui + J+2</span>
-        </div>
-        <?php if (!empty($weatherDays)): ?>
-            <div class="card">
-                <div class="weather-grid">
-                    <?php foreach ($weatherDays as $i => $day): ?>
-                        <div class="weather-day <?= $i === 0 ? 'today' : '' ?>">
-                            <div class="d-label"><?= htmlspecialchars($day['day_label']) ?></div>
-                            <div class="d-icon"><i class="fas <?= htmlspecialchars($day['icon']) ?>"></i></div>
-                            <div class="d-desc"><?= htmlspecialchars($day['label']) ?></div>
-                            <div class="d-temps num"><?= $day['t_max'] ?>° <span class="min">/ <?= $day['t_min'] ?>°</span>
-                            </div>
-                            <div class="d-rain"><i class="fas fa-umbrella"></i>
-                                <?= $day['rain_prob'] ?>%
-                            </div>
-                            <div class="d-wind"><i class="fas fa-wind"></i> <?= $day['wind_max'] ?> km/h</div>
+                <div class="card">
+                    <div class="card-head">
+                        <h3 class="card-title"><i class="fas fa-earth-europe"></i> Pays visités</h3>
+                        <div class="geo-toggle" role="tablist">
+                            <button id="geo-bars" class="active">Barres</button>
+                            <button id="geo-map">Carte</button>
                         </div>
-                    <?php endforeach; ?>
+                    </div>
+                    <div class="card-body geo-view">
+                        <canvas id="countriesChart"></canvas>
+                        <div class="map-holder" id="map-holder">
+                            <div id="worldMap"></div>
+                        </div>
+                    </div>
                 </div>
-                <!--<div class="weather-chart">
-                        <canvas id="weatherChart"></canvas>
-                    </div>-->
             </div>
-        <?php else: ?>
-            <div class="card">
-                <div class="empty-state">Météo indisponible pour le moment</div>
-            </div>
-        <?php endif; ?>
-    </section>
+        </section>
 
-    <!-- ===== ACTIVITÉ DÉTAILLÉE (chaque métrique à son échelle) ===== -->
-    <section class="section" id="activite">
-        <div class="section-head">
-            <h2>Activité détaillée LibreAnalytics</h2>
-            <span class="hint"><?= $period ?> jours</span>
-        </div>
-        <div class="multiples">
-            <div class="mini">
-                <div class="mini-head">
-                    <span class="t">Utilisateurs / jour</span>
-                    <span class="v num" style="color: var(--violet)"
-                        id="sum-users"><?= number_format(array_sum($chartPayload['series']['users'])) ?></span>
-                </div>
-                <div class="chart-sm"><canvas id="mini-users"></canvas></div>
-            </div>
-            <div class="mini">
-                <div class="mini-head">
-                    <span class="t">Sites / jour</span>
-                    <span class="v num" style="color: var(--blue)"
-                        id="sum-sites"><?= number_format(array_sum($chartPayload['series']['sites'])) ?></span>
-                </div>
-                <div class="chart-sm"><canvas id="mini-sites"></canvas></div>
-            </div>
-            <div class="mini">
-                <div class="mini-head">
-                    <span class="t">Visites / jour</span>
-                    <span class="v num" style="color: var(--green)"
-                        id="sum-visits"><?= number_format(array_sum($chartPayload['series']['visits'])) ?></span>
-                </div>
-                <div class="chart-sm"><canvas id="mini-visits"></canvas></div>
-            </div>
-            <div class="mini">
-                <div class="mini-head">
-                    <span class="t">Visiteurs uniques / jour</span>
-                    <span class="v num" style="color: var(--amber)"
-                        id="sum-uniques"><?= number_format(array_sum($chartPayload['series']['uniques'])) ?></span>
-                </div>
-                <div class="chart-sm"><canvas id="mini-uniques"></canvas></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== TOP SITES + GÉO ===== -->
-    <section class="section" id="geo">
-        <div class="section-head">
-            <h2>Top sites &amp; géographie</h2>
-        </div>
-        <div class="duo">
-            <div class="card">
-                <div class="card-head">
-                    <h3 class="card-title"><i class="fas fa-trophy"></i> Top 5 sites</h3>
-                </div>
-                <div class="card-body" style="height: 280px;">
-                    <canvas id="topSitesChart"></canvas>
-                </div>
+        <!-- ===== REGISTRE UTILISATEURS ===== -->
+        <section class="section" id="users">
+            <div class="section-head">
+                <h2>Registre des utilisateurs (<?= count($usersList) ?>)</h2>
+                <?php if (!empty($plansStats)): ?>
+                    <div class="plan-chips" aria-label="Répartition par plan">
+                        <?php foreach ($planOrder as $planKey => $planLabel):
+                            if (!isset($plansStats[$planKey]))
+                                continue; ?>
+                            <span class="plan-chip"><?= $planLabel ?> <b class="num"><?= (int) $plansStats[$planKey] ?></b></span>
+                        <?php endforeach; ?>
+                        <?php foreach ($plansStats as $planKey => $count):
+                            if (isset($planOrder[$planKey]))
+                                continue; ?>
+                            <span class="plan-chip"><?= htmlspecialchars(ucfirst($planKey)) ?> <b
+                                    class="num"><?= (int) $count ?></b></span>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
             </div>
             <div class="card">
                 <div class="card-head">
-                    <h3 class="card-title"><i class="fas fa-earth-europe"></i> Pays visités</h3>
-                    <div class="geo-toggle" role="tablist">
-                        <button id="geo-bars" class="active">Barres</button>
-                        <button id="geo-map">Carte</button>
+                    <h3 class="card-title"><i class="fas fa-users"></i> Comptes</h3>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="search" id="user-search" placeholder="Rechercher un email…"
+                                aria-label="Rechercher un email">
+                        </div>
+                        <a href="?export_emails=1" class="export-btn">
+                            <i class="fas fa-download"></i> Export CSV
+                        </a>
                     </div>
                 </div>
-                <div class="card-body geo-view">
-                    <canvas id="countriesChart"></canvas>
-                    <div class="map-holder" id="map-holder">
-                        <div id="worldMap"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ===== REGISTRE UTILISATEURS ===== -->
-    <section class="section" id="users">
-        <div class="section-head">
-            <h2>Registre des utilisateurs (<?= count($usersList) ?>)</h2>
-            <?php if (!empty($plansStats)): ?>
-                <div class="plan-chips" aria-label="Répartition par plan">
-                    <?php foreach ($planOrder as $planKey => $planLabel):
-                        if (!isset($plansStats[$planKey]))
-                            continue; ?>
-                        <span class="plan-chip"><?= $planLabel ?> <b class="num"><?= (int) $plansStats[$planKey] ?></b></span>
-                    <?php endforeach; ?>
-                    <?php foreach ($plansStats as $planKey => $count):
-                        if (isset($planOrder[$planKey]))
-                            continue; ?>
-                        <span class="plan-chip"><?= htmlspecialchars(ucfirst($planKey)) ?> <b
-                                class="num"><?= (int) $count ?></b></span>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
-        </div>
-        <div class="card">
-            <div class="card-head">
-                <h3 class="card-title"><i class="fas fa-users"></i> Comptes</h3>
-                <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="search" id="user-search" placeholder="Rechercher un email…"
-                            aria-label="Rechercher un email">
-                    </div>
-                    <a href="?export_emails=1" class="export-btn">
-                        <i class="fas fa-download"></i> Export CSV
-                    </a>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <table class="data-table" id="users-table">
-                    <thead>
-                        <tr>
-                            <th class="sortable" data-sort="text">Email</th>
-                            <th class="sortable" data-sort="text">Plan</th>
-                            <th class="sortable" data-sort="num">Sites</th>
-                            <th class="sortable" data-sort="num">Visites</th>
-                            <th class="sortable" data-sort="num">Inscription</th>
-                            <th class="sortable" data-sort="num">Dernière connexion</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($usersList)): ?>
-                            <?php foreach ($usersList as $user):
-                                $planClass = strtolower($user['plan'] ?? 'free');
-                                $createdTs = !empty($user['created_at']) ? strtotime($user['created_at']) : 0;
-                                $loginTs = !empty($user['last_login']) ? strtotime($user['last_login']) : 0;
-                                ?>
-                                <tr data-email="<?= htmlspecialchars(strtolower($user['email'])) ?>">
-                                    <td data-label="Email"><?= htmlspecialchars($user['email']) ?></td>
-                                    <td data-label="Plan"><span
-                                            class="badge badge-<?= htmlspecialchars($planClass) ?>"><?= strtoupper($user['plan'] ?? 'free') ?></span>
-                                    </td>
-                                    <td data-label="Sites" data-value="<?= (int) ($user['site_count'] ?? 0) ?>">
-                                        <?= (int) ($user['site_count'] ?? 0) ?>
-                                    </td>
-                                    <td data-label="Visites" data-value="<?= (int) ($user['total_visits'] ?? 0) ?>">
-                                        <?= number_format($user['total_visits'] ?? 0) ?>
-                                    </td>
-                                    <td data-label="Inscription" data-value="<?= $createdTs ?>">
-                                        <?= $createdTs ? date('d/m/Y', $createdTs) : '-' ?>
-                                    </td>
-                                    <td data-label="Dernière connexion" data-value="<?= $loginTs ?>">
-                                        <?= $loginTs ? date('d/m/Y H:i', $loginTs) : '<span style="color:var(--text-3);">Jamais</span>' ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                            <tr class="search-empty">
-                                <td colspan="6" class="empty-state">Aucun utilisateur ne correspond à cette
-                                    recherche</td>
-                            </tr>
-                        <?php else: ?>
+                <div class="table-responsive">
+                    <table class="data-table" id="users-table">
+                        <thead>
                             <tr>
-                                <td colspan="6" class="empty-state">Aucun utilisateur enregistré</td>
+                                <th class="sortable" data-sort="text">Email</th>
+                                <th class="sortable" data-sort="text">Plan</th>
+                                <th class="sortable" data-sort="num">Sites</th>
+                                <th class="sortable" data-sort="num">Visites</th>
+                                <th class="sortable" data-sort="num">Inscription</th>
+                                <th class="sortable" data-sort="num">Dernière connexion</th>
                             </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($usersList)): ?>
+                                <?php foreach ($usersList as $user):
+                                    $planClass = strtolower($user['plan'] ?? 'free');
+                                    $createdTs = !empty($user['created_at']) ? strtotime($user['created_at']) : 0;
+                                    $loginTs = !empty($user['last_login']) ? strtotime($user['last_login']) : 0;
+                                    ?>
+                                    <tr data-email="<?= htmlspecialchars(strtolower($user['email'])) ?>">
+                                        <td data-label="Email"><?= htmlspecialchars($user['email']) ?></td>
+                                        <td data-label="Plan"><span
+                                                class="badge badge-<?= htmlspecialchars($planClass) ?>"><?= strtoupper($user['plan'] ?? 'free') ?></span>
+                                        </td>
+                                        <td data-label="Sites" data-value="<?= (int) ($user['site_count'] ?? 0) ?>">
+                                            <?= (int) ($user['site_count'] ?? 0) ?>
+                                        </td>
+                                        <td data-label="Visites" data-value="<?= (int) ($user['total_visits'] ?? 0) ?>">
+                                            <?= number_format($user['total_visits'] ?? 0) ?>
+                                        </td>
+                                        <td data-label="Inscription" data-value="<?= $createdTs ?>">
+                                            <?= $createdTs ? date('d/m/Y', $createdTs) : '-' ?>
+                                        </td>
+                                        <td data-label="Dernière connexion" data-value="<?= $loginTs ?>">
+                                            <?= $loginTs ? date('d/m/Y H:i', $loginTs) : '<span style="color:var(--text-3);">Jamais</span>' ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                <tr class="search-empty">
+                                    <td colspan="6" class="empty-state">Aucun utilisateur ne correspond à cette
+                                        recherche</td>
+                                </tr>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="6" class="empty-state">Aucun utilisateur enregistré</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
     </div><!-- .shell -->
 
     <script>
-        // Toutes les initialisations attendent les scripts defer (Chart, Swal, Toastify)
+        // Toutes les initialisations attendent les scripts defer (Chart, Swal)
         document.addEventListener('DOMContentLoaded', () => {
 
             // ===== DONNÉES SERVEUR =====
             const chartData = <?= json_encode($chartPayload, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
-            const weatherDays = <?= json_encode($weatherDays ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
             const topSites = <?= json_encode($topSites ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
             const countries = <?= json_encode($visitedCountries ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
             const cryptoData = <?= json_encode($coingeckoData ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
@@ -3140,33 +2511,6 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 });
             });
 
-            // ===== MÉTÉO : mini chart températures =====
-            const wxCanvas = document.getElementById('weatherChart');
-            if (wxCanvas && weatherDays.length) {
-                new Chart(wxCanvas.getContext('2d'), {
-                    type: 'bar',
-                    data: {
-                        labels: weatherDays.map(d => d.day_label),
-                        datasets: [
-                            { label: 'Max', data: weatherDays.map(d => d.t_max), backgroundColor: 'rgba(63,185,80,0.65)', borderColor: '#3fb950', borderWidth: 1, borderRadius: 3, barPercentage: 0.6 },
-                            { label: 'Min', data: weatherDays.map(d => d.t_min), backgroundColor: 'rgba(88,166,255,0.45)', borderColor: '#58a6ff', borderWidth: 1, borderRadius: 3, barPercentage: 0.6 }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: { callbacks: { label: (ctx) => ' ' + ctx.dataset.label + ' : ' + ctx.parsed.y + ' °C' } }
-                        },
-                        scales: {
-                            x: { grid: { display: false }, ticks: { font: { size: 10 } } },
-                            y: { grid: { color: GRID_COLOR }, ticks: { font: { size: 10 }, callback: v => v + '°' } }
-                        }
-                    }
-                });
-            }
-
             // ===== BERRU.COM : visites quotidiennes =====
             const berruData = <?= json_encode($berruSeries, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
             const berruCanvas = document.getElementById('berruChart');
@@ -3195,39 +2539,6 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                     }
                 });
             }
-
-            // ===== SPARKLINES 7 J — cards SOL & SUI =====
-            document.querySelectorAll('[data-token-spark]').forEach(canvas => {
-                const id = canvas.dataset.tokenSpark;
-                const coin = (Array.isArray(cryptoData) ? cryptoData : []).find(c => c && c.id === id);
-                const pts = coin && coin.sparkline_in_7d && Array.isArray(coin.sparkline_in_7d.price)
-                    ? coin.sparkline_in_7d.price
-                    : null;
-                if (!pts || pts.length < 2) return;
-                const up = pts[pts.length - 1] >= pts[0];
-                const color = up ? '#3fb950' : '#f0635a';
-                new Chart(canvas.getContext('2d'), {
-                    type: 'line',
-                    data: {
-                        labels: pts.map((_, i) => i),
-                        datasets: [{
-                            data: pts,
-                            borderColor: color,
-                            backgroundColor: color + '1a',
-                            borderWidth: 1.5,
-                            fill: true,
-                            tension: 0.35,
-                            pointRadius: 0
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: { x: { display: false }, y: { display: false } }
-                    }
-                });
-            });
 
             // ===== TOP SITES : barres horizontales =====
             new Chart(document.getElementById('topSitesChart').getContext('2d'), {
@@ -3317,7 +2628,6 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 'https://cdn.amcharts.com/lib/5/themes/Animated.js'
             ];
 
-            let mapReady = false;
             let mapRequested = false;
 
             const loadScript = (src) => new Promise((resolve, reject) => {
@@ -3368,8 +2678,6 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 polygonSeries.mapPolygons.template.states.create('hover', {
                     fill: am5.color(0xa78bfa)
                 });
-
-                mapReady = true;
             }
 
             async function showMap() {
@@ -3560,35 +2868,6 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                     }
                 });
             });
-
-            document.querySelectorAll('.copy-button').forEach(button => {
-                button.addEventListener('click', function () {
-                    const address = document.getElementById(this.getAttribute('data-target')).textContent;
-                    const done = () => Toastify({
-                        text: "Adresse copiée",
-                        duration: 2000,
-                        gravity: "center",
-                        position: "center",
-                        backgroundColor: "#3fb950",
-                    }).showToast();
-
-                    if (navigator.clipboard && window.isSecureContext) {
-                        navigator.clipboard.writeText(address).then(done).catch(() => fallbackCopy(address, done));
-                    } else {
-                        fallbackCopy(address, done);
-                    }
-                });
-            });
-
-            function fallbackCopy(text, callback) {
-                const tempInput = document.createElement('input');
-                tempInput.value = text;
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
-                callback();
-            }
 
             // ===== TABLE USERS : recherche + tri =====
             const table = document.getElementById('users-table');
