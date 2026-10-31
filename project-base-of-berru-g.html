@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>search v4</title>
+    <title>Project base of berru-g</title>
     <link rel="shortcut icon" href="/img/logo.png">
     <link rel="stylesheet" href="./menu/dynamic-search.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -22,13 +22,13 @@
 
         /* Dark (défaut) */
         body {
-            --bg: #0b0d12;
-            --bg-card: #10131b;
-            --bg-input: #161a25;
+            --bg: #151515;
+            --bg-card: #1d1d1e;
+            --bg-input: #282829;
             --line: #232839;
             --txt: #e8eaf2;
             --txt-dim: #8b90a5;
-            --primary: #34d399;
+            --primary: #ff86e9;
             --primary-dim: rgba(52, 211, 153, 0.14);
             --violet: #ab9ff2;
             --rose: #ff7a8a;
@@ -393,9 +393,9 @@
     <!-- Logo -->
     <header class="brand">
         <div class="brand-logo">
-            <span class="b1">Open</span><span class="b2"> Source</span><span class="b3"> Projects</span>
+            <span class="b1">Project</span><span class="b2"> </span><span class="b3">Base</span>
         </div>
-        <p class="brand-tagline">by berru-g - 2020/2026</p>
+        <p class="brand-tagline">of berru-g - 2020/2026</p>
     </header>
 
     <!-- Barre de recherche -->
@@ -486,7 +486,7 @@
                 empty.className = 'no-results';
                 mainContent.prepend(empty);
             }
-            empty.innerHTML = '⌘ Aucun résultat — essayez "api", "arduino", "crypto"... ou <a href="index.html" target="_blank" style="color: #ab9ff2; text-decoration: none;">revenir au site.</a>';
+            empty.innerHTML = '⌘ Aucun résultat — essayez "api", "arduino", "blockchain"... ou <a href="index.html" target="_blank" style="color: #ab9ff2; text-decoration: none;">visiter le site.</a>';
             empty.setAttribute('data-aos', 'fade-up');
             AOS.refreshHard();
         }
@@ -507,8 +507,8 @@
             }
 
             let html = `
-    <div class="preview-header" data-aos="fade-down" data-aos-delay="200">
-      <span class="preview-badge">${matches.length === 1 ? 'Projet correspondant' : matches.length + ' résultats'}</span>
+    <div class="preview-header" data-aos="fade-down" data-aos-delay="100">
+      <span class="preview-badge" data-aos="fade-down" data-aos-delay="200">${matches.length === 1 ? 'Projet correspondant' : matches.length + ' résultats'}</span>
       <button class="preview-close" onclick="hideProjectPreview()">×</button>
     </div>`;
 
@@ -519,9 +519,9 @@
                     const p = m.data;
                     html += `
         <div class="preview-content" data-aos="fade-up" data-aos-delay="${delay}" data-aos-anchor-placement="top-bottom">
-          <div class="preview-image"><img src="${p.image}" alt="${p.title}" loading="lazy"></div>
+          <div class="preview-image" data-aos="fade-down" data-aos-delay="150"><img src="${p.image}" alt="${p.title}" loading="lazy"></div>
           <div class="preview-details">
-            <h3 class="preview-title">${p.title}</h3>
+            <h3 class="preview-title" data-aos="fade-down" data-aos-delay="250">${p.title}</h3>
             <div class="preview-tags">${p.tags.map(t => `<span class="preview-tag"># ${t}</span>`).join('')}</div>
             <p class="preview-desc">${p.longDesc}</p>
             <div class="preview-features">${p.features.map(f => `<span class="preview-feature">${f}</span>`).join('')}</div>

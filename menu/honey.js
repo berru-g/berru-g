@@ -8,7 +8,7 @@ function initXSSDetectorWithSound() {
         
         // Détection des tentatives XSS basiques
         const xssPatterns = [
-            '<script>', '</script>', 'javascript:', 
+            '<script', '</script>', 'javascript:', 
             'onclick=', 'onload=', 'onerror=', 'alert(',
             'eval(', 'document.cookie', 'localStorage'
         ];

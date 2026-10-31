@@ -8,6 +8,7 @@
 :root {
   /* Couleurs Light Mode */
   --primary-color: #9d86ff;
+  --pink: #ff86e9;
   --primary-light: rgba(138, 111, 248, 0.1);
   --bg-color: #ffffff;
   --sidebar-bg: #ffffff;
@@ -23,6 +24,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --primary-color: #9d86ff;
+    --pink: #ff86e9;
     --primary-light: rgba(157, 134, 255, 0.15);
     --bg-color: #151515;
     --sidebar-bg: #1d1d1e;

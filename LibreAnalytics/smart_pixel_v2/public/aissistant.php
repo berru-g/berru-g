@@ -1,7 +1,7 @@
 <?php
 
 // 2. Extraire le nom avant @ dans l'email
-$emailParts = explode('@', $user['email']);
+$emailParts = explode('@', $user_id['email']);
 $name = $emailParts[0]; // Prénom = partie avant le "@"
 
 // Récupération des données avec vérifications
@@ -26,19 +26,21 @@ $period = $period ?? 30;
     <style>
         /* CSS complet ci-dessous */
         :root {
-            --first-color: #86acff;
+            --first-color: #ab9ff2;
+            --pink: #ff86e9;
             --just-primary: rgba(156, 134, 255, 0.53);
              --back-color: #f5f5f5;
-            --text-color: #333;
+            --text-color: #0b0d12;
             --border-color: #e0e0e0;
             --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         @media (prefers-color-scheme: dark) {
             :root {
-                --first-color: #8688ff;
+                --first-color: #ab9ff2;
+                --pink: #ff86e9;
                 --just-primary: rgba(140, 134, 255, 0.5);
-                 --back-color: #2b2a2a;
+                 --back-color: #0b0d12;
                 --text-color: #ffffff;
                 --border-color: #444;
             }
@@ -76,7 +78,7 @@ $period = $period ?? 30;
             position: absolute;
             top: -5px;
             right: -5px;
-            background: #ff6d6d;
+            background: var(--pink);
             color: white;
             border-radius: 50%;
             width: 20px;

@@ -120,6 +120,18 @@ const projectsDatabase = [
         tags: ['tool', 'Blockchain', 'btc']
     },
     {
+        id: 'base-de-donnee',
+        title: 'Base de données SQL',
+        shortDesc: 'Création de bases de données en SQL',
+        longDesc: 'Création de base de données en SQL via phpMyAdmin, server MAMP (Apache et MySQL). Requetes et fonctionnalités développées sur mesure.',
+        keywords: ['SQL', 'MAMP', 'database', 'requete', 'backend', 'panel', 'gestion bdd', 'phpMyAdmin', 'MySQL'],
+        image: './img/phpmyadmin.png',
+        link: '#',
+        category: 'tool',
+        features: ['bases de données', 'Mamp Server', 'bdd'],
+        tags: ['SQL', 'MAMP', 'database', 'requete', 'backend', 'panel', 'gestion bdd']
+    },
+    {
         id: 'admin-dashboard',
         title: 'Interface Admin',
         shortDesc: 'Dashboard de gestion de bases de données',
@@ -132,9 +144,9 @@ const projectsDatabase = [
         tags: ['tool', 'Admin', 'Database']
     },
     {
-        id: 'libreanalytics-dashboard',
+        id: 'All-in-one-dashboard',
         title: 'Dashboard sur mesure',
-        shortDesc: 'Dashboard personnel multi-sources — analytics, crypto, agenda, météo',
+        shortDesc: 'Dashboard personnel. Affiche vos — analytics, crypto, agenda, météo',
         longDesc: 'Commander moi votre version adapté en m\'envoyant un mail. Un dashboard unique regroupant l\'analytics de mon logiciel LibreAnalytics et de mon site perso, mes wallets crypto (SOL, SUI, AMI, USDC) via l\'API CoinGecko, la chart TradingView avec sentiment du jour, mon agenda Google Calendar, la météo et les infos utiles du jour — avec envoi automatique de rapports clients par cron. Né en V0.1 en 2020, version 2 en 2026.',
         keywords: ['dashboard', 'analytics', 'crypto', 'coingecko', 'tradingview', 'php', 'api', 'reporting', 'calendar', 'meteo'],
         image: './img/dashboard-betaV2.png',

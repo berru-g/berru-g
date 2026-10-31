@@ -2244,13 +2244,18 @@ $chartPayload = [
         //const cryptoData = <?= json_encode($coingeckoData ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
         const tokenHoldings = {
             bitcoin: 0,
-            solana: 4.67,
-            sui: 1675,
+            solana: 4.68,
+            sui: 1676,
             'usd-coin': 0,
             ami: 35535,
         };
 
-        // Capital investi à l'origine (€) sol=312 € à 68 l'unité, sui=1600€ à 0.95 l'unité, ami=44€ à 0.001237 l'unité, btc=0 € à 0 l'unité, usdc=0 € à 0 l'unité
+        // Capital investi à l'origine (€) 
+        // sol=312 € à 68 l'unité, 
+        // sui=1600€ à 0.95 l'unité, 
+        // ami=44€ à 0.001237 l'unité, 
+        // btc=0 € à 0 l'unité, 
+        // usdc=0 € 
         const INITIAL_INVESTMENT = 1956;
 
             (function renderCrypto() {
