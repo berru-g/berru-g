@@ -16,7 +16,7 @@ function updateThemeIndicator() {
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateThemeIndicator);
 
 //
-const EASTER_EGG_PASSWORD = "--cmd"; 
+const EASTER_EGG_PASSWORD = "--cmd";
 const EASTER_EGG_URL = "../LibreAnalytics/smart_pixel_v2/public/betaV2.php"; // URL à ouvrir
 
 function checkEasterEgg(searchTerm) {
@@ -92,24 +92,24 @@ function showEasterEggNotification() {
 
 // Précharger le son (optionnel mais recommandé)
 // ===== FONCTION SON GLOBALE =====
-window.playSound = function(soundFile, volume = 0.6) {
-    try {
-        const audio = new Audio(`./sounds/${soundFile}`);
-        audio.volume = volume;
-        audio.play().catch(() => {});
-        return audio;
-    } catch (e) {
-        return null;
-    }
+window.playSound = function (soundFile, volume = 0.6) {
+  try {
+    const audio = new Audio(`./sounds/${soundFile}`);
+    audio.volume = volume;
+    audio.play().catch(() => { });
+    return audio;
+  } catch (e) {
+    return null;
+  }
 };
 
 // Raccourcis pour les sons fréquents
 // utilisation - sounds.success();
 window.sounds = {
-    success: () => playSound('notification-success.mp3'),
-    error: () => playSound('notification-error.mp3'),
-    alert: () => playSound('gems.mp3', 0.4),
-    click: () => playSound('point.mp3', 0.9)
+  success: () => playSound('notification-success.mp3'),
+  error: () => playSound('notification-error.mp3'),
+  alert: () => playSound('gems.mp3', 0.4),
+  click: () => playSound('point.mp3', 0.9)
 };
 
 // ===== RECHERCHE FONCTIONNELLE =====
@@ -268,6 +268,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Raccourcis clavier
   setupKeyboardShortcuts();
+
+  // Popup "Vous y êtes" au clic sur "Le Site"
+  (function () {
+    let popup = document.querySelector('.yn-popup');
+    if (!popup) {
+      popup = document.createElement('div');
+      popup.className = 'yn-popup';
+      popup.textContent = 'Vous y êtes';
+      document.body.appendChild(popup);
+    }
+    let timer = null;
+    document.querySelectorAll('#popup[data-search]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();           // href="#" : on ne navigue pas
+        popup.classList.remove('show');
+        void popup.offsetWidth;      // reset de l'animation
+        popup.classList.add('show');
+        clearTimeout(timer);
+        timer = setTimeout(() => popup.classList.remove('show'), 2500);
+      });
+    });
+  })();
 
   // ===== BACKDOOR ADMIN  egotrip api test =====
   document.getElementById('settingsBtn').addEventListener('click', () => {
@@ -607,7 +629,7 @@ document.addEventListener('DOMContentLoaded', () => {
       sidebar.classList.remove('open');
     }
   });
-  
+
   console.log('✅ Menu Berru-g initialisé avec succès');
   console.log('🔍 Recherche fonctionnelle avec indexation');
   console.log('🌓 Mode sombre/clair auto-détecté');

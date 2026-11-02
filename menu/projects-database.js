@@ -102,7 +102,7 @@ const projectsDatabase = [
         longDesc: 'Plateforme de partage et visualisation graphique de fichiers CSV, Excel, JSON avec éditeur SQL to Map.',
         keywords: ['sql', 'database', 'visualization', 'data', 'chart', 'map', 'json'],
         image: './img/sql-editor.png',
-        link: 'https://agora-dataviz.com',
+        link: 'https://github.com/berru-g/projet-messagerie',
         category: 'saas',
         features: ['Éditeur SQL visuel', 'Import CSV/Excel/JSON', 'Cartographie automatique'],
         tags: ['SAAS', 'dataViz', 'data', 'sql']
@@ -114,7 +114,7 @@ const projectsDatabase = [
         longDesc: 'Réseau social, plateforme de partage et visualisation graphique de fichiers CSV, Excel, JSON avec éditeur SQL to Map.',
         keywords: ['messagerie', 'social-network', 'resau social', 'visualization', 'data', 'chart', 'map', 'json'],
         image: './img/agora.png',
-        link: 'https://agora-dataviz.com',
+        link: 'https://github.com/berru-g/projet-messagerie',
         category: 'saas',
         features: ['Éditeur SQL visuel', 'Import CSV/Excel/JSON', 'Cartographie automatique'],
         tags: ['SAAS', 'messagerie', 'reseau-social', 'social-network', 'sql', 'dataviz', 'data', 'json', 'editor-sql']

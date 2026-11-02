@@ -1,26 +1,18 @@
 <?php
 
 // LibreAssistant CLI — assistant analytics 100% local, EN STANDALONE.
-// Cette page s'utilise SEULE (pas de include depuis le dashboard).
-// Elle embarque son propre mini-API qui rejoue EXACTEMENT les mêmes
-// requêtes SQL que dashboard.php, et le site à analyser se choisit
-// sans login, l'outil liste tous les sites du serveur local.
+// requêtes SQL que dashboard, et le site à analyser se choisit
+// DANS LE TERMINAL : `sites` puis `use <id|nom|SP_code>`.
+// CHANGER EN PROD :
+// sans login, l'outil liste tous les sites du serveur local. 
+// Probleme acce absolue aux nom de site et key public si non connecté! pour l'instan balek ya degun
+// Si connecté, affiche les data du user_id
+
 
 require_once __DIR__ . '/../includes/config.php';
 if (is_file(__DIR__ . '/../includes/auth.php')) {
     require_once __DIR__ . '/../includes/auth.php';
 }
-
-// SÉCU — CLI ouvert à TOUT utilisateur connecté :
-//   - chaque user accède uniquement aux sites de son compte
-//   - l'admin accède à TOUS les sites du SaaS
-// Seuls les non-connectés sont éjectés.
-if (!class_exists('Auth') || !Auth::isLoggedIn()) {
-    header('Location: ./index.html');
-    exit;
-}
-
-const ADMIN_EMAIL = 'contact@gael-berru.com';
 
 $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4", DB_USER, DB_PASS, [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -34,18 +26,17 @@ $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb
 if (isset($_GET['api'])) {
     header('Content-Type: application/json; charset=utf-8');
     $action = $_GET['api'];
-    $userId = (int)($_SESSION['user_id'] ?? 0);
-    $isAdmin = ($_SESSION['user_email'] ?? '') === ADMIN_EMAIL;
+    $userId = $_SESSION['user_id'] ?? null;
+    $isLoggedIn = class_exists('Auth') && Auth::isLoggedIn();
 
     try {
         // ---- Liste des sites -----------------------------------
-        // admin → tous les sites du SaaS, autre session → ses sites
         if ($action === 'sites') {
-            if ($isAdmin) {
-                $stmt = $pdo->query("SELECT id, site_name, domain, tracking_code FROM user_sites ORDER BY id DESC");
-            } else {
+            if ($isLoggedIn) {
                 $stmt = $pdo->prepare("SELECT id, site_name, domain, tracking_code FROM user_sites WHERE user_id = ? ORDER BY id DESC");
                 $stmt->execute([$userId]);
+            } else {
+                $stmt = $pdo->query("SELECT id, site_name, domain, tracking_code FROM user_sites ORDER BY id DESC");
             }
             echo json_encode(['success' => true, 'sites' => $stmt->fetchAll()]);
             exit;
@@ -56,17 +47,17 @@ if (isset($_GET['api'])) {
             $siteQuery = trim($_GET['site'] ?? '');
             if ($siteQuery === '') {
                 http_response_code(400);
-                echo json_encode(['error' => "Aucun site sélectionné. Tapez 'sites' puis 'use id nom SP_code'."]);
+                echo json_encode(['error' => "Aucun site sélectionné. Tapez 'sites' puis 'use <id|nom|SP_code>'."]);
                 exit;
             }
             $period = max(1, (int)($_GET['period'] ?? 30));
 
-            // Résolution — on tape les identifiants séparés par des ESPACES :
-            // `use 6 smart-pixel SP_79747769` : le 1er qui matche gagne.
-            // (les anciennes syntaxes <...> et a|b restent tolérées par sécurité)
+            // Résolution — accepte aussi la syntaxe affichée dans l'aide :
+            // `use <6|smart-pixel|SP_79747769>` : on garde le 1er identifiant qui matche.
             $candidates = [];
-            foreach (preg_split('/[\s|]+/', $siteQuery) as $part) {
-                $part = trim($part, "<> \t");
+            $cleaned = trim($siteQuery, "<> \t");
+            foreach (explode('|', $cleaned) as $part) {
+                $part = trim($part);
                 if ($part !== '') $candidates[] = $part;
             }
             if (!$candidates) $candidates = [$siteQuery];
@@ -98,7 +89,7 @@ if (isset($_GET['api'])) {
                 echo json_encode(['error' => "Site introuvable : " . $siteQuery . ". Tapez 'sites' pour la liste."]);
                 exit;
             }
-            if (!$isAdmin && (int)$site['user_id'] !== $userId) {
+            if ($isLoggedIn && (int)$site['user_id'] !== (int)$userId) {
                 http_response_code(403);
                 echo json_encode(['error' => 'Accès interdit à ce site.']);
                 exit;
@@ -259,9 +250,8 @@ if (isset($_GET['api'])) {
             box-sizing: border-box;
         }
 
-        /* Zone scrollable : résultats + ligne de saisie DANS le flux.
-           Le prompt descend toujours sous le dernier résultat, comme un vrai tty. */
-        .term-scroll {
+        /* Sortie : scroll auto, préformaté */
+        .term-out {
             flex: 1;
             overflow-y: auto;
             white-space: pre-wrap;
@@ -269,8 +259,8 @@ if (isset($_GET['api'])) {
             line-height: 1.55;
         }
 
-        .term-scroll::-webkit-scrollbar { width: 8px; }
-        .term-scroll::-webkit-scrollbar-thumb { background: var(--term-dim); }
+        .term-out::-webkit-scrollbar { width: 8px; }
+        .term-out::-webkit-scrollbar-thumb { background: var(--term-dim); }
 
         .t-user   { color: var(--term-accent); }
         .t-bot    { color: var(--term-fg); }
@@ -288,12 +278,14 @@ if (isset($_GET['api'])) {
 
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* Ligne de saisie : suit le flux, sous les résultats */
+        /* Ligne de saisie : EN HAUT, prompt + champ invisible */
         .term-input-row {
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-top: 6px;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #1a2030;
         }
 
         .term-prompt { color: var(--term-green); white-space: nowrap; }
@@ -323,14 +315,12 @@ if (isset($_GET['api'])) {
 
 <body>
     <div class="terminal">
-        <div class="term-scroll" id="termScroll">
-            <div class="term-out" id="termOut"></div>
-            <div class="term-input-row" id="inputRow">
-                <span class="term-prompt" id="prompt">libreanalytics@cli:~$</span>
-                <input type="text" id="cmdInput" autocomplete="off" spellcheck="false">
-            </div>
+        <div class="term-input-row">
+            <span class="term-prompt" id="prompt">libreanalytics@cli:~$</span>
+            <input type="text" id="cmdInput" autocomplete="off" spellcheck="false">
         </div>
-        <div class="term-status" id="status">aucun site chargé — tapez 'sites' puis 'use id nom SP_code'</div>
+        <div class="term-out" id="termOut"></div>
+        <div class="term-status" id="status">aucun site chargé — tapez 'sites' puis 'use &lt;id|nom|SP_code&gt;'</div>
     </div>
 
     <script>
@@ -695,20 +685,17 @@ if (isset($_GET['api'])) {
     // 6. SORTIE TERMINAL — la commande s'affiche AU-DESSUS du résultat
     // ============================================================
     const $out = document.getElementById('termOut');
-    const $scroll = document.getElementById('termScroll');
-    const $inputRow = document.getElementById('inputRow');
     const $input = document.getElementById('cmdInput');
     const $status = document.getElementById('status');
     const $prompt = document.getElementById('prompt');
 
-    function scrollBottom() { $scroll.scrollTop = $scroll.scrollHeight; }
+    function scrollBottom() { $out.scrollTop = $out.scrollHeight; }
 
     function echo(text, cls = 't-bot', { silent = false } = {}) {
         const div = document.createElement('div');
         div.className = cls;
         div.textContent = text;
-        // toujours inséré AVANT la ligne de saisie : le prompt descend avec le flux
-        $scroll.insertBefore(div, $inputRow);
+        $out.appendChild(div);
         scrollBottom();
         if (!silent) Memory.log(cls === 't-user' ? 'user' : 'bot', text);
     }
@@ -726,7 +713,7 @@ if (isset($_GET['api'])) {
             div.className = 't-dim';
             div.textContent = '… ';
             div.innerHTML += '<span class="ai-cursor">&nbsp;</span>';
-            $scroll.insertBefore(div, $inputRow);
+            $out.appendChild(div);
         } else {
             document.getElementById('thinking')?.remove();
         }
@@ -768,7 +755,7 @@ if (isset($_GET['api'])) {
         if (!data.sites.length) { echo('aucun site enregistré sur ce serveur.', 't-warn'); return; }
         echoBlock('SITES DISPONIBLES', data.sites.map(s =>
             `  #${s.id}  ${s.site_name}  (${s.domain || '—'})  [${s.tracking_code}]`
-        ).concat(["  charger un site : use id nom SP_code (ex: use 6 smart-pixel SP_79747769)"]));
+        ).concat(["  charger un site : use <id|nom|SP_code>"]));
     }
 
     async function cmdUse(query) {
@@ -818,8 +805,8 @@ if (isset($_GET['api'])) {
 
     const HELP = [
         'COMMANDES',
-        '  sites ................ liste les sites à analyser',
-        '  use id nom SP_code ... charge un site (ex: use 6 smart-pixel SP_79747769)',
+        '  sites ................ liste les sites analyser',
+        '  use <id|nom|SP_code> . charge un site (obligatoire avant les questions)',
         '  period <jours> ........ change la période d\'analyse (ex: period 7)',
         '  trend ................ raccourci tendance (graphe ASCII)',
         '  clear ................ efface l\'écran ET la mémoire de conversation',
@@ -877,8 +864,9 @@ if (isset($_GET['api'])) {
     }
 
     function banner() {
-        echo('<a href="index.php" target="_blank" style="color: #fff; text-decoration: underline;">Connexion</a>', 't-title');
-        echo("tapez 'sites' pour lister, puis 'use id nom SP_code' pour charger.", 't-dim');
+        echo('LibreAnalytics CLI v1 ', 't-title');
+        //echo('<a href="index.php" target="_blank">Connexion</a>', 't-dim');
+        echo("tapez 'sites' pour lister, puis 'use <id|nom|SP_code>' pour charger.", 't-dim');
         echo("tapez 'help' pour toutes les commandes.", 't-dim');
         echo('');
     }

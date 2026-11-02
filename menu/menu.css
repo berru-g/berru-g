@@ -235,6 +235,30 @@ body {
   display: none;
 }
 
+/* Popup "Vous y êtes" */
+.yn-popup {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translate(-50%, -80px);
+  background: rgba(11, 13, 18, 0.603);
+  color: #c9f2d0;
+  border: 1px solid var(--primary-color);
+  padding: 14px 28px;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+  z-index: 9999;
+  pointer-events: none;
+}
+.yn-popup.show {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+.yn-popup::before { content: "$ "; color: var(--pink); }
+
 /* Icônes */
 .nav-toggle {
   margin-left: auto;
