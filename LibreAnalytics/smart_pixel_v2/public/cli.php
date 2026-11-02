@@ -1,16 +1,13 @@
 <?php
 
 // LibreAssistant CLI — assistant analytics 100% local, EN STANDALONE.
-// Cette page s'utilise SEULE (pas de include depuis le dashboard).
-// Elle embarque son propre mini-API qui rejoue EXACTEMENT les mêmes
-// requêtes SQL que dashboard.php, et le site à analyser se choisit
+// requêtes SQL que dashboard, et le site à analyser se choisit
 // DANS LE TERMINAL : `sites` puis `use <id|nom|SP_code>`.
-// Le front est un vrai terminal pleine page : on tape des lignes,
-// la commande s'affiche au-dessus, le résultat ASCII en dessous.
-//
-// Fichier à déposer dans smart_pixel_v2/public/ (pour garder l'accès
-// à ../includes/config.php). Fonctionne même sans session dashboard :
-// sans login, l'outil liste tous les sites du serveur local.
+// CHANGER EN PROD :
+// sans login, l'outil liste tous les sites du serveur local. 
+// Probleme acce absolue au data si non connecté! pour l'instan balek ya degun
+// Si connecté, affiche les data du user_id
+
 
 require_once __DIR__ . '/../includes/config.php';
 if (is_file(__DIR__ . '/../includes/auth.php')) {
@@ -337,7 +334,7 @@ if (isset($_GET['api'])) {
     let currentPeriod = 30;
 
     const API = location.pathname; // ce fichier sert aussi de mini-API (?api=...)
-    const LOG_URL = 'https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/pixel.php';
+    const LOG_URL = 'assistant_log.php';
     const DOC_SITE = 'https://gael-berru.com/LibreAnalytics/doc/';
 
     const pct = (part, total) => total > 0 ? Math.round(part / total * 100) : 0;
@@ -867,8 +864,8 @@ if (isset($_GET['api'])) {
     }
 
     function banner() {
-        echo('LibreAssistant CLI v2 — assistant analytics 100% local', 't-title');
-        echo('le site à analyser se choisit ici, par commande.', 't-dim');
+        echo('LibreAnalytics CLI v1 ', 't-title');
+        //echo('le site à analyser se choisit ici, par commande.', 't-dim');
         echo("tapez 'sites' pour lister, puis 'use <id|nom|SP_code>' pour charger.", 't-dim');
         echo("tapez 'help' pour toutes les commandes.", 't-dim');
         echo('');

@@ -1,5 +1,17 @@
 const projectsDatabase = [
     {
+        id: 'Pseudo-CLI',
+        title: 'Pseudo CLI',
+        shortDesc: 'Interface de ligne de commande pour Libre Analytics.',
+        longDesc: 'Interface de ligne de commande pour gérer Libre Analytics facilement.',
+        keywords: ['cli', 'command line', 'interface', 'libre-analytics', 'terminal'],
+        image: './img/pseudo-cli.png',
+        link: 'https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/cli.php',
+        category: 'hardware',
+        features: ['pseudo cli', 'cmd', 'terminal', 'gestin analytics'],
+        tags: ['cmd', 'cli', 'terminal', 'command line', 'interface', 'ligne de commande']
+    },
+    {
         id: 'NFC-Badge',
         title: 'NFC Badge',
         shortDesc: 'Création d\'un Badge NFC.',

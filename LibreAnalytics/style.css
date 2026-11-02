@@ -733,7 +733,7 @@ p {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: #94a3b8;
+    color: var(--light);
     font-size: 0.9rem;
 }
 
