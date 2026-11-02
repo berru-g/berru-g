@@ -2435,7 +2435,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
         </section>
     </div>
     <!-- .shell -->
-     <?php include "cli.php" ?>
+     <?php include "aissistant-cli.php" ?>
 
     <script>
         // Toutes les initialisations attendent les scripts defer (Chart, Swal)
