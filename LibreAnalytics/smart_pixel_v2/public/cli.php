@@ -55,18 +55,38 @@ if (isset($_GET['api'])) {
             }
             $period = max(1, (int)($_GET['period'] ?? 30));
 
-            // Résolution : id numérique, tracking_code SP_xxxx, ou nom
-            $stmt = $pdo->prepare("SELECT id, site_name, domain, tracking_code, user_id FROM user_sites WHERE id = ? LIMIT 1");
-            if (ctype_digit($siteQuery)) {
-                $stmt->execute([$siteQuery]);
-            } elseif (preg_match('/^SP_[0-9a-f]+$/i', $siteQuery)) {
-                $stmt = $pdo->prepare("SELECT id, site_name, domain, tracking_code, user_id FROM user_sites WHERE tracking_code = ? LIMIT 1");
-                $stmt->execute([$siteQuery]);
-            } else {
-                $stmt = $pdo->prepare("SELECT id, site_name, domain, tracking_code, user_id FROM user_sites WHERE site_name = ? LIMIT 1");
-                $stmt->execute([$siteQuery]);
+            // Résolution — accepte aussi la syntaxe affichée dans l'aide :
+            // `use <6|smart-pixel|SP_79747769>` : on garde le 1er identifiant qui matche.
+            $candidates = [];
+            $cleaned = trim($siteQuery, "<> \t");
+            foreach (explode('|', $cleaned) as $part) {
+                $part = trim($part);
+                if ($part !== '') $candidates[] = $part;
             }
-            $site = $stmt->fetch();
+            if (!$candidates) $candidates = [$siteQuery];
+
+            $site = false;
+            foreach ($candidates as $candidate) {
+                if (ctype_digit($candidate)) {
+                    $stmt = $pdo->prepare("SELECT id, site_name, domain, tracking_code, user_id FROM user_sites WHERE id = ? LIMIT 1");
+                    $stmt->execute([$candidate]);
+                } elseif (preg_match('/^SP_[0-9a-f]+$/i', $candidate)) {
+                    $stmt = $pdo->prepare("SELECT id, site_name, domain, tracking_code, user_id FROM user_sites WHERE tracking_code = ? LIMIT 1");
+                    $stmt->execute([$candidate]);
+                } else {
+                    $stmt = $pdo->prepare("SELECT id, site_name, domain, tracking_code, user_id FROM user_sites WHERE site_name = ? LIMIT 1");
+                    $stmt->execute([$candidate]);
+                }
+                $site = $stmt->fetch();
+                if ($site) break;
+                // Fallback nom insensible à la casse / tirets vs espaces
+                if (!ctype_digit($candidate) && !preg_match('/^SP_/i', $candidate)) {
+                    $stmt = $pdo->prepare("SELECT id, site_name, domain, tracking_code, user_id FROM user_sites WHERE LOWER(site_name) = LOWER(?) OR REPLACE(LOWER(site_name), ' ', '-') = LOWER(?) LIMIT 1");
+                    $stmt->execute([$candidate, $candidate]);
+                    $site = $stmt->fetch();
+                    if ($site) break;
+                }
+            }
             if (!$site) {
                 http_response_code(404);
                 echo json_encode(['error' => "Site introuvable : " . $siteQuery . ". Tapez 'sites' pour la liste."]);
@@ -261,12 +281,14 @@ if (isset($_GET['api'])) {
 
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* Ligne de saisie : en bas, prompt + champ invisible */
+        /* Ligne de saisie : EN HAUT, prompt + champ invisible */
         .term-input-row {
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-top: 4px;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #1a2030;
         }
 
         .term-prompt { color: var(--term-green); white-space: nowrap; }
@@ -296,11 +318,11 @@ if (isset($_GET['api'])) {
 
 <body>
     <div class="terminal">
-        <div class="term-out" id="termOut"></div>
         <div class="term-input-row">
             <span class="term-prompt" id="prompt">libreanalytics@cli:~$</span>
             <input type="text" id="cmdInput" autocomplete="off" spellcheck="false">
         </div>
+        <div class="term-out" id="termOut"></div>
         <div class="term-status" id="status">aucun site chargé — tapez 'sites' puis 'use &lt;id|nom|SP_code&gt;'</div>
     </div>
 
@@ -315,7 +337,7 @@ if (isset($_GET['api'])) {
     let currentPeriod = 30;
 
     const API = location.pathname; // ce fichier sert aussi de mini-API (?api=...)
-    const LOG_URL = 'cli.php';
+    const LOG_URL = 'https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/pixel.php';
     const DOC_SITE = 'https://gael-berru.com/LibreAnalytics/doc/';
 
     const pct = (part, total) => total > 0 ? Math.round(part / total * 100) : 0;
