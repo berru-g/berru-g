@@ -2433,7 +2433,9 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 </div>
             </div>
         </section>
-    </div><!-- .shell -->
+    </div>
+    <!-- .shell -->
+     <?php include "cli.php" ?>
 
     <script>
         // Toutes les initialisations attendent les scripts defer (Chart, Swal)

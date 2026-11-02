@@ -680,9 +680,9 @@ function e($v) { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
             }
         },
         // ---- NOUVEAU V2 : la documentation comme source de réponses ----
-        {
+        { 
             id: 'doc',
-            terms: { doc: 3, documentation: 3, installer: 3, installation: 3, integrer: 3, integration: 3, code: 1, suivi: 2, pixel: 2, script: 2, comment: 1, api: 2, webhook: 2, configurer: 3, regler: 2 },
+            terms: { utm: 3, doc: 3, documentation: 3, installer: 3, installation: 3, integrer: 3, integration: 3, code: 1, suivi: 2, pixel: 2, script: 2, comment: 1, api: 2, webhook: 2, configurer: 3, regler: 2 },
             build: (question) => {
                 const sec = DocSearch.search(question);
                 if (!sec) {
@@ -785,8 +785,7 @@ function e($v) { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
     function greet() {
         addBot(`
             <h4>👋 Salut ${esc(aiData.userName)} !</h4>
-            <p>Je lis <strong>votre base LibreAnalytics</strong> — aucune donnée ne quitte ce serveur.</p>
-            <p>Essayez : « Quelle est la tendance ? », « Top pages », ou « Comment installer le code de suivi ? »</p>`);
+            <p>Rappel je ne suis pas une IA, je suis un assistant virtuel.</p>`);
     }
 
     /** V2 : alerte proactive (chute/pic détecté) affichée une fois par session */
