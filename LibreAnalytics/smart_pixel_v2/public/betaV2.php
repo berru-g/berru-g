@@ -42,7 +42,7 @@ try {
 // ================================================================
 $period = (int) ($_GET['period'] ?? 365);
 if (!in_array($period, [7, 30, 90, 365], true)) {
-    $period = 365;
+    $period = 30;
 }
 
 // --- Récupération des données ---
@@ -1976,7 +1976,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
                     </button>
                     <div class="pop cmd-menu" id="cmd-menu" role="menu">
-
+                        <a href="cli.php" role="menuitem"><i class="fa-solid fa-terminal"></i> Terminal</a>
                         <a href="../campain/rapport.php" role="menuitem"><i class="fas fa-file-lines"></i> Rapport
                             id_gb</a>
                         <a href="../campain/rapport_lb.php" role="menuitem"><i class="fas fa-file-lines"></i> Rapport

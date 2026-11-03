@@ -3,15 +3,27 @@
 // LibreAssistant CLI — assistant analytics 100% local, EN STANDALONE.
 // requêtes SQL que dashboard, et le site à analyser se choisit
 // DANS LE TERMINAL : `sites` puis `use <id|nom|SP_code>`.
-// CHANGER EN PROD :
-// sans login, l'outil liste tous les sites du serveur local. 
-// Probleme acce absolue aux nom de site et key public si non connecté! pour l'instan balek ya degun
-// Si connecté, affiche les data du user_id
-
+//
+// SÉCURITÉ (v1.1) :
+//  - INVITÉ (non connecté) : AUCUN accès aux données. L'API renvoie 401 + guest:true,
+//    et le front propose un MINI-JEU (snake) jouable aux flèches sur PC, aux boutons sur mobile.
+//  - USER connecté : accès UNIQUEMENT aux sites de son user_id.
+//  - ADMIN connecté (contact@gael-berru.com) : accès à TOUS les sites.
+//
+// NOUVELLES COMMANDES (v1.1) :
+//  - dashboard ..... ouvre dashboard.php dans un autre onglet
+//  - doc ........... ouvre la doc (../../doc/) dans un autre onglet
+//  - doc <question>  cherche la réponse dans la doc (readme GitHub)
+//  - login ......... ouvre la page de connexion dans un autre onglet
+//  - game .......... lance le mini-jeu (flèches PC / boutons mobile)
 
 require_once __DIR__ . '/../includes/config.php';
 if (is_file(__DIR__ . '/../includes/auth.php')) {
     require_once __DIR__ . '/../includes/auth.php';
+}
+
+if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+    session_start();
 }
 
 $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4", DB_USER, DB_PASS, [
@@ -21,22 +33,52 @@ $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb
 ]);
 
 // ============================================================
+// SÉCURITÉ — qui suis-je ? guest / user / admin
+// ============================================================
+$ADMIN_EMAIL = 'contact@gael-berru.com'; // admin : accès total
+
+$userId       = (int)($_SESSION['user_id'] ?? 0);
+$sessionEmail = '';
+foreach (['user_email', 'email', 'mail'] as $k) {
+    if (!empty($_SESSION[$k]) && is_string($_SESSION[$k]) && filter_var($_SESSION[$k], FILTER_VALIDATE_EMAIL)) {
+        $sessionEmail = strtolower($_SESSION[$k]);
+        break;
+    }
+}
+$isLoggedIn = $userId > 0 && (!class_exists('Auth') || Auth::isLoggedIn());
+$isAdmin    = $isLoggedIn && ($sessionEmail === strtolower($ADMIN_EMAIL));
+
+// ============================================================
 // MINI-API — mêmes requêtes que dashboard.php, rien d'inventé
 // ============================================================
 if (isset($_GET['api'])) {
     header('Content-Type: application/json; charset=utf-8');
     $action = $_GET['api'];
-    $userId = $_SESSION['user_id'] ?? null;
-    $isLoggedIn = class_exists('Auth') && Auth::isLoggedIn();
 
     try {
+        // ---- Session : le front adapte l'UI (guest → mini-jeu) ----
+        if ($action === 'session') {
+            echo json_encode([
+                'success'   => true,
+                'logged_in' => $isLoggedIn,
+                'role'      => $isAdmin ? 'admin' : ($isLoggedIn ? 'user' : 'guest'),
+                'email'     => $isLoggedIn ? $sessionEmail : null,
+            ]);
+            exit;
+        }
+
         // ---- Liste des sites -----------------------------------
         if ($action === 'sites') {
-            if ($isLoggedIn) {
+            if (!$isLoggedIn) {
+                http_response_code(401);
+                echo json_encode(['error' => 'Connexion requise. Les statistiques sont réservées aux comptes connectés.', 'guest' => true]);
+                exit;
+            }
+            if ($isAdmin) {
+                $stmt = $pdo->query("SELECT id, site_name, domain, tracking_code FROM user_sites ORDER BY id DESC");
+            } else {
                 $stmt = $pdo->prepare("SELECT id, site_name, domain, tracking_code FROM user_sites WHERE user_id = ? ORDER BY id DESC");
                 $stmt->execute([$userId]);
-            } else {
-                $stmt = $pdo->query("SELECT id, site_name, domain, tracking_code FROM user_sites ORDER BY id DESC");
             }
             echo json_encode(['success' => true, 'sites' => $stmt->fetchAll()]);
             exit;
@@ -44,6 +86,11 @@ if (isset($_GET['api'])) {
 
         // ---- Stats d'un site ----------------------------------
         if ($action === 'stats') {
+            if (!$isLoggedIn) {
+                http_response_code(401);
+                echo json_encode(['error' => 'Connexion requise pour consulter les statistiques.', 'guest' => true]);
+                exit;
+            }
             $siteQuery = trim($_GET['site'] ?? '');
             if ($siteQuery === '') {
                 http_response_code(400);
@@ -89,7 +136,8 @@ if (isset($_GET['api'])) {
                 echo json_encode(['error' => "Site introuvable : " . $siteQuery . ". Tapez 'sites' pour la liste."]);
                 exit;
             }
-            if ($isLoggedIn && (int)$site['user_id'] !== (int)$userId) {
+            // ADMIN = accès à tout · USER = ses sites uniquement
+            if (!$isAdmin && (int)$site['user_id'] !== $userId) {
                 http_response_code(403);
                 echo json_encode(['error' => 'Accès interdit à ce site.']);
                 exit;
@@ -243,6 +291,7 @@ if (isset($_GET['api'])) {
         }
 
         .terminal {
+            position: relative; /* ancrage de l'écran mini-jeu */
             display: flex;
             flex-direction: column;
             height: 100vh;
@@ -310,6 +359,49 @@ if (isset($_GET['api'])) {
             margin-top: 6px;
             user-select: none;
         }
+
+        /* ============================================================
+           MINI-JEU (invités + commande 'game') — snake ASCII
+           ============================================================ */
+        #gameScreen {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            background: var(--term-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 12px;
+            box-sizing: border-box;
+        }
+        #gameScreen[hidden] { display: none; }
+
+        #gameGrid { margin: 0; font-size: clamp(10px, 2.6vw, 18px); line-height: 1.15; }
+        .g-empty { color: #1a2230; }
+        .g-wall  { color: var(--term-dim); }
+        .g-body  { color: var(--term-green); }
+        .g-head  { color: #ffffff; }
+        .g-food  { color: var(--term-pink); }
+
+        .game-hud  { color: var(--term-amber); font-size: 13px; text-align: center; min-height: 1.4em; }
+        .game-foot { color: var(--term-dim); font-size: 12px; text-align: center; }
+
+        /* Pad tactile : affiché uniquement sur écrans tactiles */
+        .game-pad { display: none; grid-template-areas: '. up .' 'left down right'; gap: 8px; }
+        .game-pad button {
+            width: 58px; height: 46px; font-size: 20px;
+            background: #141a26; color: var(--term-fg);
+            border: 1px solid #263042; border-radius: 6px;
+            font-family: inherit;
+        }
+        .game-pad button:active { background: var(--term-green); color: #0b0d12; }
+        .game-pad [data-dir="up"]    { grid-area: up; }
+        .game-pad [data-dir="down"]  { grid-area: down; }
+        .game-pad [data-dir="left"]  { grid-area: left; }
+        .game-pad [data-dir="right"] { grid-area: right; }
+        @media (pointer: coarse) { .game-pad { display: grid; } }
     </style>
 </head>
 
@@ -333,9 +425,15 @@ if (isset($_GET['api'])) {
     let currentSite = null;      // { id, site_name, domain, tracking_code }
     let currentPeriod = 30;
 
+    // Session : guest → mini-jeu, user → ses sites, admin → tout
+    let sessionState = { logged_in: false, role: 'guest', email: null };
+
     const API = location.pathname; // ce fichier sert aussi de mini-API (?api=...)
     const LOG_URL = 'assistant_log.php';
     const DOC_SITE = 'https://gael-berru.com/LibreAnalytics/doc/';
+    const DASHBOARD_URL = 'dashboard.php'; // ouvert via 'dashboard'
+    const DOC_PATH = '../../doc/';         // ouvert via 'doc'
+    const LOGIN_URL = 'index.php';         // ouvert via 'login'
 
     const pct = (part, total) => total > 0 ? Math.round(part / total * 100) : 0;
     const fmt = (n) => new Intl.NumberFormat('fr-FR').format(Number(n) || 0);
@@ -486,14 +584,14 @@ if (isset($_GET['api'])) {
             id: 'resume',
             terms: { resume: 3, global: 2, vue: 2, ensemble: 2, synthese: 3, overview: 3, situation: 2, stats: 1, statistique: 1 },
             build: () => ({
-                title: 'VUE D\'ENSEMBLE',
+                title: "VUE D'ENSEMBLE",
                 lines: [
                     `  visiteurs uniques ......... ${fmt(aiData.uniqueVisitorsPeriod)} (${aiData.period} jours)`,
                     `  temps moyen / session ..... ${aiData.avgSessionTime} min`,
                     `  page n°1 .................. ${aiData.topPages[0]?.page_url ?? '—'} (${fmt(aiData.topPages[0]?.views ?? 0)} vues)`,
                     `  source n°1 ................ ${aiData.sources[0]?.source ?? 'direct'}`,
                     `  appareil dominant ......... ${aiData.devices[0]?.device ?? '—'}`,
-                    '  [note] toutes les valeurs viennent de votre base, rien n\'est estimé.'
+                    "  [note] toutes les valeurs viennent de votre base, rien n'est estimé."
                 ]
             })
         },
@@ -501,7 +599,7 @@ if (isset($_GET['api'])) {
             id: 'top_pages',
             terms: { page: 3, pages: 3, top: 2, performant: 2, populaire: 2, visite: 1, url: 2, contenu: 1, article: 1 },
             build: () => {
-                if (!aiData.topPages.length) return { title: 'TOP PAGES', lines: ['  aucune donnée de page pour cette période.'] };
+                if (!aiData.topPages.length) return { title: 'TOP PAGES', lines: ['aucune donnée de page pour cette période.'] };
                 const total = aiData.topPages.reduce((s, p) => s + Number(p.views), 0);
                 return {
                     title: 'PAGES LES PLUS VISITÉES',
@@ -515,10 +613,10 @@ if (isset($_GET['api'])) {
             id: 'sources',
             terms: { source: 3, provenance: 3, referral: 3, trafic: 1, visite: 1, google: 1, vient: 2, arrivent: 2, acquisition: 2, utm: 2, campagne: 1 },
             build: () => {
-                if (!aiData.sources.length) return { title: 'SOURCES DE TRAFIC', lines: ['  aucune source enregistrée pour cette période.'] };
+                if (!aiData.sources.length) return { title: 'SOURCES DE TRAFIC', lines: ['aucune source enregistrée pour cette période.'] };
                 const total = aiData.sources.reduce((s, x) => s + Number(x.count), 0);
                 return {
-                    title: 'D\'OÙ VIENT VOTRE TRAFIC',
+                    title: "D'OÙ VIENT VOTRE TRAFIC",
                     lines: aiData.sources.slice(0, 5).map(x =>
                         `  ${fmt(x.count)} visites (${String(pct(x.count, total)).padStart(3)}%)  ${x.source || 'direct'}`
                     )
@@ -529,7 +627,7 @@ if (isset($_GET['api'])) {
             id: 'tendance',
             terms: { tendance: 3, evolution: 3, croissance: 3, progres: 2, chute: 3, baisse: 3, jour: 1, semaine: 1, historique: 2, serie: 1 },
             build: () => {
-                if (aiData.dailyStats.length < 2) return { title: 'TENDANCE', lines: ['  pas encore assez d\'historique. revenez dans quelques jours.'] };
+                if (aiData.dailyStats.length < 2) return { title: 'TENDANCE', lines: ["pas encore assez d'historique. revenez dans quelques jours."] };
                 const g = Compute.growth();
                 const proj = Compute.projection7d();
                 const arrow = g === null ? '~' : g > 5 ? '++' : g < -5 ? '--' : '->';
@@ -552,7 +650,7 @@ if (isset($_GET['api'])) {
             id: 'pays',
             terms: { pays: 3, geographie: 3, localisation: 2, monde: 1, etranger: 2, visiteur: 1 },
             build: () => {
-                if (!aiData.countries.length) return { title: 'RÉPARTITION GÉOGRAPHIQUE', lines: ['  aucune donnée géographique pour cette période.'] };
+                if (!aiData.countries.length) return { title: 'RÉPARTITION GÉOGRAPHIQUE', lines: ['aucune donnée géographique pour cette période.'] };
                 const total = aiData.countries.reduce((s, x) => s + Number(x.visits), 0);
                 return {
                     title: 'VOS VISITEURS PAR PAYS',
@@ -566,7 +664,7 @@ if (isset($_GET['api'])) {
             id: 'appareils',
             terms: { appareil: 3, mobile: 3, telephone: 2, tablette: 2, desktop: 2, ordinateur: 2, navigateur: 3, browser: 3, chrome: 2, safari: 2 },
             build: () => {
-                if (!aiData.devices.length) return { title: 'APPAREILS & NAVIGATEURS', lines: ['  aucune donnée d\'appareil pour cette période.'] };
+                if (!aiData.devices.length) return { title: 'APPAREILS & NAVIGATEURS', lines: ["aucune donnée d'appareil pour cette période."] };
                 const totalD = aiData.devices.reduce((s, x) => s + Number(x.count), 0);
                 const totalB = aiData.browsers.reduce((s, x) => s + Number(x.count), 0);
                 const mobile = aiData.devices.find(x => x.device === 'Mobile');
@@ -734,11 +832,149 @@ if (isset($_GET['api'])) {
     function setStatus() {
         $status.textContent = currentSite
             ? `site : ${currentSite.site_name} (#${currentSite.id}, ${currentSite.domain || '—'}) · période : ${currentPeriod} j · ${fmt(aiData?.uniqueVisitorsPeriod ?? 0)} visiteurs uniques`
-            : "aucun site chargé — tapez 'sites' puis 'use <id|nom|SP_code>'";
+            : sessionState.role === 'guest'
+                ? "mode invité — tapez 'login' pour accéder aux stats · 'game' pour jouer"
+                : "aucun site chargé — tapez 'sites' puis 'use <id|nom|SP_code>'";
         $prompt.textContent = currentSite
             ? `libreanalytics@cli:${currentSite.site_name}$`
             : 'libreanalytics@cli:~$';
     }
+
+    // ============================================================
+    // 6bis. MINI-JEU — Snake ASCII (invités + commande 'game')
+    // PC : flèches directionnelles · Mobile : pad tactile
+    // ============================================================
+    const Game = (function () {
+        const W = 24, H = 14;                      // grille du jeu
+        const BEST_KEY = 'libreassistant_snake_best';
+        let running = false, over = false;
+        let snake = [], dir = { x: 1, y: 0 }, nextDir = dir, food = null;
+        let score = 0, timer = null;
+        let best = Number(localStorage.getItem(BEST_KEY) || 0);
+        let $screen = null, $grid = null, $hud = null;
+
+        function build() {
+            if ($screen) return;
+            $screen = document.createElement('div');
+            $screen.id = 'gameScreen';
+            $screen.hidden = true;
+            $screen.innerHTML =
+                '<div class="game-hud" id="gameHud"></div>' +
+                '<pre id="gameGrid" aria-label="mini-jeu snake"></pre>' +
+                '<div class="game-pad" id="gamePad">' +
+                    '<button type="button" data-dir="up" aria-label="haut">▲</button>' +
+                    '<button type="button" data-dir="left" aria-label="gauche">◀</button>' +
+                    '<button type="button" data-dir="down" aria-label="bas">▼</button>' +
+                    '<button type="button" data-dir="right" aria-label="droite">▶</button>' +
+                '</div>' +
+                '<div class="game-foot">flèches = diriger · Entrée = rejouer · ESC = quitter</div>';
+            document.querySelector('.terminal').appendChild($screen);
+            $grid = $screen.querySelector('#gameGrid');
+            $hud = $screen.querySelector('#gameHud');
+            // Pad tactile (mobile) — un clic = une direction ; game over = rejouer
+            $screen.querySelectorAll('.game-pad button').forEach(b => {
+                b.addEventListener('click', (ev) => {
+                    ev.stopPropagation();
+                    if (over) { start(); return; }
+                    setDir(b.dataset.dir);
+                });
+            });
+        }
+
+        function setDir(name) {
+            const D = { up: { x: 0, y: -1 }, down: { x: 0, y: 1 }, left: { x: -1, y: 0 }, right: { x: 1, y: 0 } }[name];
+            if (!D) return;
+            if (D.x === -dir.x && D.y === -dir.y) return; // demi-tour interdit
+            nextDir = D;
+        }
+
+        function placeFood() {
+            do {
+                food = { x: Math.floor(Math.random() * W), y: Math.floor(Math.random() * H) };
+            } while (snake.some(s => s.x === food.x && s.y === food.y));
+        }
+
+        function hud(text) {
+            $hud.textContent = text || `score : ${score} · record : ${best}`;
+        }
+
+        function render() {
+            let html = '<span class="g-wall">┌' + '─'.repeat(W) + '┐</span>\n';
+            for (let y = 0; y < H; y++) {
+                html += '<span class="g-wall">│</span>';
+                for (let x = 0; x < W; x++) {
+                    if (food && x === food.x && y === food.y)          html += '<span class="g-food">◆</span>';
+                    else if (snake[0] && x === snake[0].x && y === snake[0].y) html += '<span class="g-head">▓</span>';
+                    else if (snake.some(s => s.x === x && s.y === y))  html += '<span class="g-body">█</span>';
+                    else                                               html += '<span class="g-empty">·</span>';
+                }
+                html += '<span class="g-wall">│</span>\n';
+            }
+            html += '<span class="g-wall">└' + '─'.repeat(W) + '┘</span>';
+            $grid.innerHTML = html;
+        }
+
+        function tick() {
+            dir = nextDir;
+            const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+            if (head.x < 0 || head.x >= W || head.y < 0 || head.y >= H
+                || snake.some(s => s.x === head.x && s.y === head.y)) {
+                gameOver();
+                return;
+            }
+            snake.unshift(head);
+            if (head.x === food.x && head.y === food.y) {
+                score += 10;
+                if (score > best) {
+                    best = score;
+                    try { localStorage.setItem(BEST_KEY, String(best)); } catch (e) {}
+                }
+                placeFood();
+            } else {
+                snake.pop();
+            }
+            hud();
+            render();
+            timer = setTimeout(tick, Math.max(70, 150 - score)); // accélère avec le score
+        }
+
+        function gameOver() {
+            over = true;
+            clearTimeout(timer);
+            hud(`GAME OVER — score : ${score} · record : ${best} — Entrée/▲▼◀▶ = rejouer · ESC = quitter`);
+        }
+
+        function start() {
+            build();
+            snake = [{ x: 8, y: 7 }, { x: 7, y: 7 }, { x: 6, y: 7 }];
+            dir = { x: 1, y: 0 }; nextDir = dir;
+            score = 0; over = false; running = true;
+            placeFood();
+            $screen.hidden = false;
+            $input.blur(); // les flèches pilotent le jeu, plus l'historique
+            hud();
+            render();
+            clearTimeout(timer);
+            timer = setTimeout(tick, 150);
+        }
+
+        function stop() {
+            running = false; over = false;
+            clearTimeout(timer);
+            if ($screen) $screen.hidden = true;
+            echo(`mini-jeu — score final : ${score} · record : ${best}. merci d'avoir joué !`, 't-dim', { silent: true });
+            $input.focus();
+        }
+
+        function key(ev) {
+            const map = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right' };
+            if (map[ev.key]) { ev.preventDefault(); over ? start() : setDir(map[ev.key]); return; }
+            if (ev.key === 'Escape') { ev.preventDefault(); stop(); return; }
+            if (over && (ev.key === 'Enter' || ev.key === ' ' || ev.key === 'r')) { ev.preventDefault(); start(); return; }
+        }
+
+        return { start, stop, key, get running() { return running; } };
+    })();
 
     // ============================================================
     // 7. COMMANDES — sites, use, period, puis langage naturel
@@ -746,16 +982,31 @@ if (isset($_GET['api'])) {
     async function fetchJson(url) {
         const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
         const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || 'HTTP ' + res.status);
+        if (!res.ok) {
+            const err = new Error(data.error || 'HTTP ' + res.status);
+            err.status = res.status;
+            if (data.guest) err.guest = true; // 401 invité
+            throw err;
+        }
         return data;
     }
 
+    function guestRefused() {
+        echo('accès refusé : les statistiques sont réservées aux comptes connectés.', 't-alert');
+        echo("tapez 'login' pour ouvrir la page de connexion dans un autre onglet.", 't-dim');
+        echo("en attendant, un mini-jeu vous attend — tapez 'game'.", 't-dim');
+    }
+
     async function cmdSites() {
-        const data = await fetchJson(`${API}?api=sites`);
-        if (!data.sites.length) { echo('aucun site enregistré sur ce serveur.', 't-warn'); return; }
-        echoBlock('SITES DISPONIBLES', data.sites.map(s =>
-            `  #${s.id}  ${s.site_name}  (${s.domain || '—'})  [${s.tracking_code}]`
-        ).concat(["  charger un site : use <id|nom|SP_code>"]));
+        try {
+            const data = await fetchJson(`${API}?api=sites`);
+            if (!data.sites.length) { echo('aucun site enregistré sur ce serveur.', 't-warn'); return; }
+            echoBlock('SITES DISPONIBLES', data.sites.map(s =>
+                `  #${s.id}  ${s.site_name}  (${s.domain || '—'})  [${s.tracking_code}]`
+            ).concat(["  charger un site : use <id|nom|SP_code>"]));
+        } catch (e) {
+            if (e.guest) guestRefused(); else echo('erreur : ' + e.message, 't-alert');
+        }
     }
 
     async function cmdUse(query) {
@@ -789,7 +1040,7 @@ if (isset($_GET['api'])) {
             }
             Memory.loadHistory();
         } catch (e) {
-            echo('erreur : ' + e.message, 't-alert');
+            if (e.guest) guestRefused(); else echo('erreur : ' + e.message, 't-alert');
         } finally {
             thinking(false);
         }
@@ -805,16 +1056,21 @@ if (isset($_GET['api'])) {
 
     const HELP = [
         'COMMANDES',
-        '  sites ................ liste les sites analyser',
+        "  sites ................ liste les sites à analyser",
         '  use <id|nom|SP_code> . charge un site (obligatoire avant les questions)',
-        '  period <jours> ........ change la période d\'analyse (ex: period 7)',
+        "  period <jours> ........ change la période d'analyse (ex: period 7)",
         '  trend ................ raccourci tendance (graphe ASCII)',
-        '  clear ................ efface l\'écran ET la mémoire de conversation',
+        '  dashboard ............. ouvre dashboard.php dans un autre onglet',
+        '  doc ................... ouvre la documentation (../../doc/) dans un autre onglet',
+        '  doc <question> ........ cherche la réponse dans la doc',
+        '  login ................. page de connexion (autre onglet)',
+        '  game .................. mini-jeu snake (flèches PC · pad tactile mobile)',
+        "  clear ................ efface l'écran ET la mémoire de conversation",
         '  help ................. cette aide',
         '',
         'SINON, posez votre question en langage naturel :',
         '  "résume-moi mes statistiques" · "top pages" · "d\'où vient mon trafic ?"',
-        '  "tendance" · "par pays" · "appareils" · "sessions" · "conseils" · "doc / installer"'
+        '  "tendance" · "par pays" · "appareils" · "sessions" · "conseils" · "installer"'
     ];
 
     const cmdHistory = [];
@@ -833,6 +1089,48 @@ if (isset($_GET['api'])) {
 
         if (nq === 'clear') { $out.innerHTML = ''; await Memory.clear(); banner(); echo('mémoire de conversation effacée.', 't-dim'); return; }
         if (nq === 'help' || nq === '?' || nq === 'man') { echoBlock(HELP[0], HELP.slice(1)); return; }
+
+        // ---- NOUVEAU v1.1 : ouvrir dans un autre onglet ----------------
+        if (nq === 'login' || nq === 'connexion') {
+            window.open(LOGIN_URL, '_blank');
+            echo('page de connexion ouverte dans un autre onglet.', 't-dim', { silent: true });
+            return;
+        }
+        if (nq === 'dashboard' || nq === 'dash' || nq === 'open dashboard' || nq === 'ouvrir dashboard' || nq === 'open dashboard.php') {
+            window.open(DASHBOARD_URL, '_blank');
+            echo('dashboard.php ouvert dans un autre onglet.', 't-dim', { silent: true });
+            return;
+        }
+        if (nq === 'doc' || nq === 'docs' || nq === 'documentation' || nq === 'open doc' || nq === 'ouvrir doc') {
+            window.open(DOC_PATH, '_blank');
+            echo('documentation ouverte dans un autre onglet.', 't-dim', { silent: true });
+            return;
+        }
+        if (nq.startsWith('doc ') || nq.startsWith('docs ')) {
+            const question = q.replace(/^docs?\s+/i, '');
+            thinking(true);
+            try {
+                if (!DocSearch.isReady()) await DocSearch.load();
+                runIntent(INTENTS.find(i => i.id === 'doc'), question);
+            } finally {
+                thinking(false);
+            }
+            return;
+        }
+
+        // ---- NOUVEAU v1.1 : mini-jeu -----------------------------------
+        if (nq === 'game' || nq === 'jeu' || nq === 'play' || nq === 'snake') {
+            echo('mini-jeu lancé — flèches sur PC, boutons sur mobile. ESC pour quitter.', 't-dim', { silent: true });
+            Game.start();
+            return;
+        }
+
+        // ---- SÉCURITÉ v1.1 : invité → aucune donnée --------------------
+        if (sessionState.role === 'guest') {
+            guestRefused();
+            return;
+        }
+
         if (nq === 'sites' || nq === 'site list' || nq === 'ls') { await cmdSites(); return; }
         if (nq.startsWith('use ') || nq.startsWith('site ')) { await cmdUse(q.replace(/^(use|site)\s+/i, '')); return; }
         if (nq.startsWith('period ') || nq.startsWith('période ')) { await cmdPeriod(q.split(/\s+/)[1]); return; }
@@ -864,10 +1162,11 @@ if (isset($_GET['api'])) {
     }
 
     function banner() {
-        echo('LibreAnalytics CLI v1 ', 't-title');
+        echo('LibreAnalytics CLI v1.1', 't-title');
         //echo('<a href="index.php" target="_blank">Connexion</a>', 't-dim');
         echo("tapez 'sites' pour lister, puis 'use <id|nom|SP_code>' pour charger.", 't-dim');
         echo("tapez 'help' pour toutes les commandes.", 't-dim');
+        echo("raccourcis : 'dashboard' · 'doc' (autre onglet) · 'login' · 'game'.", 't-dim');
         echo('');
     }
 
@@ -875,6 +1174,7 @@ if (isset($_GET['api'])) {
     // 8. ÉVÉNEMENTS + BOOT
     // ============================================================
     $input.addEventListener('keydown', (ev) => {
+        if (Game.running) { Game.key(ev); return; } // le jeu capte les flèches
         if (ev.key === 'Enter') submitLine();
         else if (ev.key === 'ArrowUp') {
             ev.preventDefault();
@@ -888,16 +1188,41 @@ if (isset($_GET['api'])) {
         else if (ev.key === 'l' && ev.ctrlKey) { ev.preventDefault(); $out.innerHTML = ''; banner(); }
     });
 
-    document.body.addEventListener('click', () => $input.focus());
+    document.body.addEventListener('click', () => { if (!Game.running) $input.focus(); });
 
-    banner();
-    setStatus();
-    DocSearch.load();
+    async function boot() {
+        banner();
+        setStatus();
+        DocSearch.load();
 
-    // Recharge automatiquement le dernier site utilisé (local)
-    const lastSite = localStorage.getItem('libreassistant_cli_site');
-    if (lastSite) cmdUse(lastSite);
+        // Session serveur : guest / user / admin
+        try {
+            const s = await fetchJson(`${API}?api=session`);
+            sessionState = { logged_in: !!s.logged_in, role: s.role || 'guest', email: s.email || null };
+        } catch (e) {
+            sessionState = { logged_in: false, role: 'guest', email: null };
+        }
+        setStatus();
 
+        if (sessionState.role === 'guest') {
+            // Invité : données verrouillées → mini-jeu
+            echo('mode invité : les statistiques sont verrouillées.', 't-warn');
+            echo("connectez-vous via 'login' (nouvel onglet) pour accéder à vos sites.", 't-dim');
+            echo('lancement du mini-jeu… flèches sur PC, boutons sur mobile.', 't-dim');
+            Game.start();
+        } else {
+            if (sessionState.role === 'admin') {
+                echo(`session ADMIN (${sessionState.email}) : accès à tous les sites.`, 't-title');
+            } else {
+                echo(`connecté en tant que ${sessionState.email}.`, 't-dim');
+            }
+            // Recharge automatiquement le dernier site utilisé (local)
+            const lastSite = localStorage.getItem('libreassistant_cli_site');
+            if (lastSite) cmdUse(lastSite);
+        }
+    }
+
+    boot();
     $input.focus();
     </script>
 </body>
