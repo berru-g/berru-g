@@ -64,6 +64,8 @@ Vous pouvez sponsoriser LibreAnalytics via :
    - [Exemples de requêtes](#-3-récupérer-les-données)
    - [Intégrations](#-5-intégrer-les-données-avec-des-outils)
    - [Gestion des erreurs](#-6-gérer-les-erreurs)
+4.bis.**Pseudo CLI**
+ - [Pseudo-CLI](#-pseudo-cli)
 5. [Mise à niveau](#-mettre-à-niveau-votre-compte)
 6. [FAQ & Support](#-faq)
 7. [Glossaire](#glossaire)
@@ -146,21 +148,7 @@ Vous pouvez sponsoriser LibreAnalytics via :
 - **Toutes les fonctionnalité précedemment cité plus :**
 - **Dashboard multi-sites** : Gérer plusieurs sites par compte
 - **API** : Accéder à vos données d'un simple appel API avec votre Key unique. ( 30 requetes / jour )
-
-#### Tarif  
-- **Gratuit** pour un dashboard
-- **Pro** 10 Dashboard (~ 100 pages ) 9€/mois ou 90€/an
-- **License** Droit d'exploitation et d'adaptation du logiciel à vos besoins ...€/an
-
-### 🚀 **En développement (version Premium)**
-- **Inclure la barre des cookies dans le pixel id**
-- **Rapport hebdomadaire** : Les rapport fonctionne manuellement pour le moment, l'automatisation est en cours de dev.
-- **Export JSON/CSV** : Données brutes pour traitement externe
-- **Webhooks** : Notifications en temps réel
-- **Intégrations** : ... wordpress / shopify ...
-- **Limites personnalisées** : Plans selon le volume de données
-
-
+- **Pseudo CLI** : Accéder à vos données depuis un terminal en ligne de commande (SSH ou local)
 
 [Crée ton premier dashboard gratuitement](https://gael-berru.com/LibreAnalytics?utm_source=la_doc)
 
@@ -584,8 +572,50 @@ const url = `${proxyUrl}https://gael-berru.com/LibreAnalytics/smart_pixel_v2/pub
 [Ouvrir le template /Map3D/ dans codepen](https://codepen.io/h-lautre/pen/EayBqeE)
 
 
+## Pseudo CLI : vos stats en mode terminal
+
+[Accéder au CLI](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/cli.php) — un vrai terminal dans le navigateur : zéro installation, ça se pilote comme un shell, et ça interroge **exactement les mêmes requêtes SQL que votre dashboard**. Rien n'est estimé, tout vient de votre base.
+
+### C'est quoi ?
+LibreAssistant CLI est un pseudo-terminal 100% local (PHP natif + JS, aucune dépendance) qui remplace le scrolling de graphiques par une conversation :
+
+- **Multi-sites** : chargez n'importe lequel de vos sites puis posez vos questions en langage naturel ("résume-moi mes statistiques", "d'où vient mon trafic ?").
+- **Assistant intégré** : tendance, projection 7 jours, détection automatique des pics et chutes de trafic, conseils actionnables basés sur VOS données.
+- **Mémoire de conversation** : chaque échange est conservé par site, retrouvez votre contexte à la prochaine session.
+- **Doc intégrée** : `doc comment installer le code de suivi` cherche la réponse dans la documentation officielle sans quitter le terminal.
+
+### 🔐 Sécurité des accès
+   Session | Accès |
+ |---------|-------|
+ | Non connecté | Aucune donnée exposée — le terminal invite à taper `login` |
+ | Utilisateur connecté | Uniquement les sites de son compte |
+ 
+### 📋 Le menu
+ | Commande | Action |
+ |----------|--------|
+ | `sites` | Liste vos sites disponibles |
+ | `use <id/nom/SP_code>` | Charge un site (ex: `use 5/mon-site/SP_24031987`) |
+ | `period <jours>` | Change la période d'analyse (ex: `period 7`) |
+ | `trend` | Tendance + graphe ASCII des 7 derniers jours |
+ | `dashboard` | Ouvre `dashboard.php` dans un autre onglet |
+ | `doc` | Ouvre la documentation dans un autre onglet |
+ | `doc <question>` | Cherche la réponse dans la doc officielle |
+ | `login` | Ouvre la page de connexion dans un autre onglet |
+ | `clear` | Efface l'écran ET la mémoire de conversation |
+ | `help` | Affiche ce menu |
+
+### 🚀 Mini-tuto (30 secondes)
+1. Ouvrez le [CLI](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/cli.php) — non connecté ? tapez `login`.
+2. Tapez `sites` pour lister vos sites.
+3. Chargez le vôtre : `use 5/mon-site/SP_24031987` — stats chargées, alerte automatique si un pic ou une chute de trafic est détecté.
+4. Tapez `period 7` pour réduire la période, puis posez vos questions : "top pages", "par pays", "appareils", "sessions", "conseils"…
+
+💡 **Astuces** : `↑` / `↓` = historique des commandes · `Ctrl+L` = nettoyage de l'écran.
+
+
+
 ---
-## **⚠️ 6. Gérer les erreurs**
+## **⚠️ 6. Gérer les erreurs API**
 | Code d’erreur | Cause probable                          | Solution                                  |
 |---------------|-----------------------------------------|-------------------------------------------|
 | `400`         | Paramètres manquants (`site_id` ou `api_key`). | Vérifie l’URL.                           |

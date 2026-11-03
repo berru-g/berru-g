@@ -10,11 +10,13 @@
 //  - USER connecté : accès UNIQUEMENT aux sites de son user_id.
 //  - ADMIN connecté (contact@gael-berru.com) : accès à TOUS les sites.
 //
-// NOUVELLES COMMANDES (v1.1) :
+// NOUVELLES COMMANDES (v1.2) :
 //  - dashboard ..... ouvre dashboard.php dans un autre onglet
 //  - doc ........... ouvre la doc (../../doc/) dans un autre onglet
 //  - doc <question>  cherche la réponse dans la doc (readme GitHub)
 //  - login ......... ouvre la page de connexion dans un autre onglet
+//  - watch [<sec>] . mode temps réel : affiche les nouvelles visites (défaut 30 s · 'watch off' / Ctrl+C = arrêt)
+//  - Tab ........... autocomplétion des commandes et des noms de sites
 
 require_once __DIR__ . '/../includes/config.php';
 if (is_file(__DIR__ . '/../includes/auth.php')) {
@@ -267,7 +269,7 @@ if (isset($_GET['api'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LibreAssistant CLI</title>
+    <title>Pseudo CLI</title>
     <style>
         /* Front : un vrai terminal pleine page, rien d'autre */
         :root {
@@ -787,10 +789,10 @@ if (isset($_GET['api'])) {
 
     function setStatus() {
         $status.textContent = currentSite
-            ? `site : ${currentSite.site_name} (#${currentSite.id}, ${currentSite.domain || '—'}) · période : ${currentPeriod} j · ${fmt(aiData?.uniqueVisitorsPeriod ?? 0)} visiteurs uniques`
+            ? `site : ${currentSite.site_name} (#${currentSite.id}, ${currentSite.domain || '—'}) · période : ${currentPeriod} j · ${fmt(aiData?.uniqueVisitorsPeriod ?? 0)} visiteurs uniques${watchTimer ? ` · watch ${watchInterval}s` : ''}`
             : sessionState.role === 'guest'
                 ? "invité — veuillez vous connecter en tapant 'login'"
-                : "aucun site chargé — tapez 'sites' puis 'use <id/nom/SP_code>'";
+                : "aucun site chargé — tapez 'sites' puis 'use id/nom/SP_code'";
         $prompt.textContent = currentSite
             ? `libreanalytics@cli:${currentSite.site_name}$`
             : 'libreanalytics@cli:~$';
@@ -818,6 +820,7 @@ if (isset($_GET['api'])) {
     async function cmdSites() {
         try {
             const data = await fetchJson(`${API}?api=sites`);
+            sitesCache = data.sites; // cache pour l'autocomplétion Tab
             if (!data.sites.length) { echo('aucun site enregistré sur ce serveur.', 't-warn'); return; }
             echoBlock('SITES DISPONIBLES', data.sites.map(s =>
                 `  #${s.id}  ${s.site_name}  (${s.domain || '—'})  [${s.tracking_code}]`
@@ -840,6 +843,7 @@ if (isset($_GET['api'])) {
                 period: data.period
             };
             localStorage.setItem('libreassistant_cli_site', query);
+            watchLastVisits = null; // watch : référence propre sur le nouveau site, pas de faux delta
             setStatus();
             echoBlock(`SITE CHARGÉ — ${currentSite.site_name}`, [
                 `  id .............. #${currentSite.id}`,
@@ -872,18 +876,130 @@ if (isset($_GET['api'])) {
         await cmdUse(currentSite.site_name);
     }
 
+    // ---- WATCH : mode temps réel (nouveau trafic à la volée) --------
+    let watchTimer = null;
+    let watchInterval = 30;
+    let watchLastVisits = null;
+    let watchLastUniques = null;
+
+    async function watchTick() {
+        if (!currentSite) return;
+        try {
+            const data = await fetchJson(`${API}?api=stats&site=${encodeURIComponent(currentSite.site_name)}&period=${currentPeriod}`);
+            const visits = data.dailyStats.reduce((s, x) => s + Number(x.visits), 0);
+            const uniques = Number(data.uniqueVisitorsPeriod) || 0;
+            // Le tick rafraîchit aussi les données du CLI : les questions restent à jour
+            aiData = {
+                topPages: data.topPages, countries: data.countries, devices: data.devices,
+                browsers: data.browsers, sources: data.sources, dailyStats: data.dailyStats,
+                sessionData: data.sessionData, totalVisits: uniques,
+                uniqueVisitorsPeriod: uniques, avgSessionTime: data.avgSessionTime,
+                period: data.period
+            };
+            if (watchLastVisits !== null && visits > watchLastVisits) {
+                const dv = visits - watchLastVisits;
+                const du = uniques - (watchLastUniques || 0);
+                const stamp = new Date().toLocaleTimeString('fr-FR');
+                const parts = [`+${fmt(dv)} visite${dv > 1 ? 's' : ''}`];
+                if (du > 0) parts.push(`+${fmt(du)} visiteur${du > 1 ? 's' : ''} unique${du > 1 ? 's' : ''}`);
+                if (data.topPages[0]) parts.push(`page n°1 : ${data.topPages[0].page_url}`);
+                echo(`[watch ${stamp}] ${parts.join(' · ')}`, 't-title');
+            }
+            watchLastVisits = visits;
+            watchLastUniques = uniques;
+            setStatus();
+        } catch (e) { /* silence : le watch retentera au prochain tick */ }
+    }
+
+    function startWatch(seconds) {
+        if (!currentSite) { echo("aucun site chargé. tapez 'sites' puis 'use <...>'.", 't-warn'); return; }
+        clearInterval(watchTimer);
+        watchInterval = Math.min(600, Math.max(10, seconds || 30));
+        watchLastVisits = null; // référence posée au premier tick : pas de faux delta au démarrage
+        watchTimer = setInterval(watchTick, watchInterval * 1000);
+        setStatus();
+        echo(`watch actif : nouveau trafic vérifié toutes les ${watchInterval} s — 'watch off' ou Ctrl+C pour arrêter.`, 't-dim');
+        watchTick();
+    }
+
+    function stopWatch() {
+        if (!watchTimer) { echo('aucun watch actif.', 't-dim'); return; }
+        clearInterval(watchTimer);
+        watchTimer = null;
+        setStatus();
+        echo('watch arrêté.', 't-dim');
+    }
+
+    // ---- AUTOCOMPLÉTION (Tab) --------------------------------------
+    const BASE_COMMANDS = ['clear', 'dashboard', 'doc', 'help', 'login', 'ls', 'period', 'sites', 'trend', 'use', 'watch'];
+    let sitesCache = null;
+
+    async function getSitesCache() {
+        if (sitesCache) return sitesCache;
+        try {
+            const data = await fetchJson(`${API}?api=sites`);
+            sitesCache = data.sites || [];
+        } catch (e) { sitesCache = []; }
+        return sitesCache;
+    }
+
+    function completeCommand(partial) {
+        if (!partial) { echo('  ' + BASE_COMMANDS.join('  '), 't-dim'); return; }
+        const matches = BASE_COMMANDS.filter(c => c.startsWith(partial.toLowerCase()));
+        if (!matches.length) return;
+        if (matches.length === 1) { $input.value = matches[0] + ' '; return; }
+        let common = matches[0];
+        for (const c of matches) { while (!c.startsWith(common)) common = common.slice(0, -1); }
+        $input.value = common;
+        echo('  ' + matches.join('  '), 't-dim');
+    }
+
+    async function completeSite(partial) {
+        const sites = await getSitesCache();
+        const q = normalize(partial);
+        if (q === '') {
+            if (sites.length) echo('  ' + sites.map(s => `#${s.id} ${s.site_name} [${s.tracking_code}]`).join('  '), 't-dim');
+            return;
+        }
+        const matches = [];
+        for (const s of sites) {
+            for (const key of [String(s.id), s.site_name, s.tracking_code]) {
+                if (normalize(key).startsWith(q)) { matches.push(key); break; }
+            }
+        }
+        if (!matches.length) return;
+        if (matches.length === 1) { $input.value = 'use ' + matches[0]; return; }
+        echo('  ' + matches.join('  '), 't-dim');
+    }
+
+    async function autocomplete() {
+        const raw = $input.value;
+        const useMatch = raw.match(/^(?:use|site)\s+(.*)$/i);
+        if (useMatch) { await completeSite(useMatch[1]); return; }
+        const periodMatch = raw.match(/^p[ée]riode\s+(.*)$/i);
+        if (periodMatch) {
+            const vals = ['7', '30', '90', '365'].filter(v => v.startsWith(periodMatch[1]));
+            if (vals.length === 1) $input.value = 'period ' + vals[0];
+            else if (vals.length) echo('  ' + vals.join('  '), 't-dim');
+            return;
+        }
+        if (!/\s/.test(raw)) completeCommand(raw.trim());
+    }
+
     const HELP = [
         'COMMANDES',
         "  sites ................ liste les sites à analyser",
         '  use <id/nom/SP_code> . charge un site (obligatoire avant les questions)',
         "  period <jours> ........ change la période d'analyse (ex: period 7)",
         '  trend ................ raccourci tendance (graphe ASCII)',
+        "  watch [<secondes>] ... temps réel : nouvelles visites à la volée (défaut 30s · watch off / Ctrl+C = arrêt)",
         '  dashboard ............. ouvre dashboard.php dans un autre onglet',
         '  doc ................... ouvre la documentation (../../doc/) dans un autre onglet',
         '  doc <question> ........ cherche la réponse dans la doc',
         '  login ................. page de connexion (autre onglet)',
         "  clear ................ efface l'écran ET la mémoire de conversation",
         '  help ................. cette aide',
+        "  (Tab = autocomplétion commandes & sites · ↑/↓ = historique · Ctrl+L = écran propre)",
         '',
         'SINON, posez votre question en langage naturel :',
         '  "résume-moi mes statistiques" · "top pages" · "d\'où vient mon trafic ?"',
@@ -945,6 +1061,12 @@ if (isset($_GET['api'])) {
         if (nq.startsWith('use ') || nq.startsWith('site ')) { await cmdUse(q.replace(/^(use|site)\s+/i, '')); return; }
         if (nq.startsWith('period ') || nq.startsWith('période ')) { await cmdPeriod(q.split(/\s+/)[1]); return; }
         if (nq === 'trend' || nq === 'tendance') { runIntent(INTENTS.find(i => i.id === 'tendance'), q); return; }
+        if (nq === 'watch' || nq.startsWith('watch ')) {
+            const arg = (q.split(/\s+/)[1] || '').toLowerCase();
+            if (['off', 'stop', 'arret'].includes(normalize(arg))) stopWatch();
+            else startWatch(parseInt(arg, 10) || 30);
+            return;
+        }
 
         // Langage naturel → moteur d'intents (nécessite un site chargé)
         if (!currentSite) {
@@ -972,11 +1094,11 @@ if (isset($_GET['api'])) {
     }
 
     function banner() {
-        echo('LibreAnalytics CLI v1.1', 't-title');
+        echo('LibreAnalytics CLI v1.2', 't-title');
         //echo('<a href="index.php" target="_blank">Connexion</a>', 't-dim');
-        echo("tapez 'sites' pour lister, puis 'use <id/nom/SP_code>' pour charger.", 't-dim');
+        echo("tapez 'sites' pour lister, puis 'use id/nom/SP_code' pour charger.", 't-dim');
         echo("tapez 'help' pour toutes les commandes.", 't-dim');
-        echo("raccourcis : 'dashboard' · 'doc' (autre onglet) · 'login'.", 't-dim');
+        echo("raccourcis : 'dashboard' · 'doc' · 'watch' (temps réel) · Tab (autocomplétion) ·", 't-dim');
         echo('');
     }
 
@@ -985,6 +1107,8 @@ if (isset($_GET['api'])) {
     // ============================================================
     $input.addEventListener('keydown', (ev) => {
         if (ev.key === 'Enter') submitLine();
+        else if (ev.key === 'Tab') { ev.preventDefault(); autocomplete(); }
+        else if (ev.key === 'c' && ev.ctrlKey && watchTimer) { ev.preventDefault(); stopWatch(); }
         else if (ev.key === 'ArrowUp') {
             ev.preventDefault();
             if (cmdHistory.length) { histPos = Math.max(0, histPos - 1); $input.value = cmdHistory[histPos] ?? ''; }
@@ -1018,7 +1142,7 @@ if (isset($_GET['api'])) {
             echo("veuillez vous connecter en tapant 'login'.", 't-warn');
         } else {
             if (sessionState.role === 'admin') {
-                echo(`session ADMIN (${sessionState.email}) : accès à tous les sites.`, 't-title');
+                echo(`session ADMIN (${sessionState.email}) : full access`, 't-title');
             } else {
                 echo(`connecté en tant que ${sessionState.email}.`, 't-dim');
             }
