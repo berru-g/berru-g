@@ -2,11 +2,11 @@
 
 // LibreAssistant CLI — assistant analytics 100% local, EN STANDALONE.
 // requêtes SQL que dashboard, et le site à analyser se choisit
-// DANS LE TERMINAL : `sites` puis `use <id|nom|SP_code>`.
+// DANS LE TERMINAL : `sites` puis `use <id/nom/SP_code>`.
 //
 // SÉCURITÉ (v1.1) :
 //  - INVITÉ (non connecté) : AUCUN accès aux données. L'API renvoie 401 + guest:true,
-//    et le front propose un MINI-JEU (snake) jouable aux flèches sur PC, aux boutons sur mobile.
+//    le terminal affiche "veuillez vous connecter en tapant 'login'".
 //  - USER connecté : accès UNIQUEMENT aux sites de son user_id.
 //  - ADMIN connecté (contact@gael-berru.com) : accès à TOUS les sites.
 //
@@ -15,7 +15,6 @@
 //  - doc ........... ouvre la doc (../../doc/) dans un autre onglet
 //  - doc <question>  cherche la réponse dans la doc (readme GitHub)
 //  - login ......... ouvre la page de connexion dans un autre onglet
-//  - game .......... lance le mini-jeu (flèches PC / boutons mobile)
 
 require_once __DIR__ . '/../includes/config.php';
 if (is_file(__DIR__ . '/../includes/auth.php')) {
@@ -56,7 +55,7 @@ if (isset($_GET['api'])) {
     $action = $_GET['api'];
 
     try {
-        // ---- Session : le front adapte l'UI (guest → mini-jeu) ----
+        // ---- Session : le front adapte l'UI (guest → message de connexion) ----
         if ($action === 'session') {
             echo json_encode([
                 'success'   => true,
@@ -94,16 +93,16 @@ if (isset($_GET['api'])) {
             $siteQuery = trim($_GET['site'] ?? '');
             if ($siteQuery === '') {
                 http_response_code(400);
-                echo json_encode(['error' => "Aucun site sélectionné. Tapez 'sites' puis 'use <id|nom|SP_code>'."]);
+                echo json_encode(['error' => "Aucun site sélectionné. Tapez 'sites' puis 'use <id/nom/SP_code>'."]);
                 exit;
             }
             $period = max(1, (int)($_GET['period'] ?? 30));
 
             // Résolution — accepte aussi la syntaxe affichée dans l'aide :
-            // `use <6|smart-pixel|SP_79747769>` : on garde le 1er identifiant qui matche.
+            // `use <6/smart-pixel/SP_79747769>` : on garde le 1er identifiant qui matche.
             $candidates = [];
-            $cleaned = trim($siteQuery, "<> \t");
-            foreach (explode('|', $cleaned) as $part) {
+            $cleaned = trim($siteQuery, "<>/ \t");
+            foreach (explode('/', $cleaned) as $part) {
                 $part = trim($part);
                 if ($part !== '') $candidates[] = $part;
             }
@@ -291,7 +290,6 @@ if (isset($_GET['api'])) {
         }
 
         .terminal {
-            position: relative; /* ancrage de l'écran mini-jeu */
             display: flex;
             flex-direction: column;
             height: 100vh;
@@ -360,48 +358,6 @@ if (isset($_GET['api'])) {
             user-select: none;
         }
 
-        /* ============================================================
-           MINI-JEU (invités + commande 'game') — snake ASCII
-           ============================================================ */
-        #gameScreen {
-            position: absolute;
-            inset: 0;
-            z-index: 10;
-            background: var(--term-bg);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            padding: 12px;
-            box-sizing: border-box;
-        }
-        #gameScreen[hidden] { display: none; }
-
-        #gameGrid { margin: 0; font-size: clamp(10px, 2.6vw, 18px); line-height: 1.15; }
-        .g-empty { color: #1a2230; }
-        .g-wall  { color: var(--term-dim); }
-        .g-body  { color: var(--term-green); }
-        .g-head  { color: #ffffff; }
-        .g-food  { color: var(--term-pink); }
-
-        .game-hud  { color: var(--term-amber); font-size: 13px; text-align: center; min-height: 1.4em; }
-        .game-foot { color: var(--term-dim); font-size: 12px; text-align: center; }
-
-        /* Pad tactile : affiché uniquement sur écrans tactiles */
-        .game-pad { display: none; grid-template-areas: '. up .' 'left down right'; gap: 8px; }
-        .game-pad button {
-            width: 58px; height: 46px; font-size: 20px;
-            background: #141a26; color: var(--term-fg);
-            border: 1px solid #263042; border-radius: 6px;
-            font-family: inherit;
-        }
-        .game-pad button:active { background: var(--term-green); color: #0b0d12; }
-        .game-pad [data-dir="up"]    { grid-area: up; }
-        .game-pad [data-dir="down"]  { grid-area: down; }
-        .game-pad [data-dir="left"]  { grid-area: left; }
-        .game-pad [data-dir="right"] { grid-area: right; }
-        @media (pointer: coarse) { .game-pad { display: grid; } }
     </style>
 </head>
 
@@ -412,7 +368,7 @@ if (isset($_GET['api'])) {
             <input type="text" id="cmdInput" autocomplete="off" spellcheck="false">
         </div>
         <div class="term-out" id="termOut"></div>
-        <div class="term-status" id="status">aucun site chargé — tapez 'sites' puis 'use &lt;id|nom|SP_code&gt;'</div>
+        <div class="term-status" id="status">aucun site chargé — tapez 'sites' puis 'use &lt;id/nom/SP_code&gt;'</div>
     </div>
 
     <script>
@@ -425,7 +381,7 @@ if (isset($_GET['api'])) {
     let currentSite = null;      // { id, site_name, domain, tracking_code }
     let currentPeriod = 30;
 
-    // Session : guest → mini-jeu, user → ses sites, admin → tout
+    // Session : guest → message de connexion, user → ses sites, admin → tout
     let sessionState = { logged_in: false, role: 'guest', email: null };
 
     const API = location.pathname; // ce fichier sert aussi de mini-API (?api=...)
@@ -833,148 +789,12 @@ if (isset($_GET['api'])) {
         $status.textContent = currentSite
             ? `site : ${currentSite.site_name} (#${currentSite.id}, ${currentSite.domain || '—'}) · période : ${currentPeriod} j · ${fmt(aiData?.uniqueVisitorsPeriod ?? 0)} visiteurs uniques`
             : sessionState.role === 'guest'
-                ? "mode invité — tapez 'login' pour accéder aux stats · 'game' pour jouer"
-                : "aucun site chargé — tapez 'sites' puis 'use <id|nom|SP_code>'";
+                ? "invité — veuillez vous connecter en tapant 'login'"
+                : "aucun site chargé — tapez 'sites' puis 'use <id/nom/SP_code>'";
         $prompt.textContent = currentSite
             ? `libreanalytics@cli:${currentSite.site_name}$`
             : 'libreanalytics@cli:~$';
     }
-
-    // ============================================================
-    // 6bis. MINI-JEU — Snake ASCII (invités + commande 'game')
-    // PC : flèches directionnelles · Mobile : pad tactile
-    // ============================================================
-    const Game = (function () {
-        const W = 24, H = 14;                      // grille du jeu
-        const BEST_KEY = 'libreassistant_snake_best';
-        let running = false, over = false;
-        let snake = [], dir = { x: 1, y: 0 }, nextDir = dir, food = null;
-        let score = 0, timer = null;
-        let best = Number(localStorage.getItem(BEST_KEY) || 0);
-        let $screen = null, $grid = null, $hud = null;
-
-        function build() {
-            if ($screen) return;
-            $screen = document.createElement('div');
-            $screen.id = 'gameScreen';
-            $screen.hidden = true;
-            $screen.innerHTML =
-                '<div class="game-hud" id="gameHud"></div>' +
-                '<pre id="gameGrid" aria-label="mini-jeu snake"></pre>' +
-                '<div class="game-pad" id="gamePad">' +
-                    '<button type="button" data-dir="up" aria-label="haut">▲</button>' +
-                    '<button type="button" data-dir="left" aria-label="gauche">◀</button>' +
-                    '<button type="button" data-dir="down" aria-label="bas">▼</button>' +
-                    '<button type="button" data-dir="right" aria-label="droite">▶</button>' +
-                '</div>' +
-                '<div class="game-foot">flèches = diriger · Entrée = rejouer · ESC = quitter</div>';
-            document.querySelector('.terminal').appendChild($screen);
-            $grid = $screen.querySelector('#gameGrid');
-            $hud = $screen.querySelector('#gameHud');
-            // Pad tactile (mobile) — un clic = une direction ; game over = rejouer
-            $screen.querySelectorAll('.game-pad button').forEach(b => {
-                b.addEventListener('click', (ev) => {
-                    ev.stopPropagation();
-                    if (over) { start(); return; }
-                    setDir(b.dataset.dir);
-                });
-            });
-        }
-
-        function setDir(name) {
-            const D = { up: { x: 0, y: -1 }, down: { x: 0, y: 1 }, left: { x: -1, y: 0 }, right: { x: 1, y: 0 } }[name];
-            if (!D) return;
-            if (D.x === -dir.x && D.y === -dir.y) return; // demi-tour interdit
-            nextDir = D;
-        }
-
-        function placeFood() {
-            do {
-                food = { x: Math.floor(Math.random() * W), y: Math.floor(Math.random() * H) };
-            } while (snake.some(s => s.x === food.x && s.y === food.y));
-        }
-
-        function hud(text) {
-            $hud.textContent = text || `score : ${score} · record : ${best}`;
-        }
-
-        function render() {
-            let html = '<span class="g-wall">┌' + '─'.repeat(W) + '┐</span>\n';
-            for (let y = 0; y < H; y++) {
-                html += '<span class="g-wall">│</span>';
-                for (let x = 0; x < W; x++) {
-                    if (food && x === food.x && y === food.y)          html += '<span class="g-food">◆</span>';
-                    else if (snake[0] && x === snake[0].x && y === snake[0].y) html += '<span class="g-head">▓</span>';
-                    else if (snake.some(s => s.x === x && s.y === y))  html += '<span class="g-body">█</span>';
-                    else                                               html += '<span class="g-empty">·</span>';
-                }
-                html += '<span class="g-wall">│</span>\n';
-            }
-            html += '<span class="g-wall">└' + '─'.repeat(W) + '┘</span>';
-            $grid.innerHTML = html;
-        }
-
-        function tick() {
-            dir = nextDir;
-            const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
-            if (head.x < 0 || head.x >= W || head.y < 0 || head.y >= H
-                || snake.some(s => s.x === head.x && s.y === head.y)) {
-                gameOver();
-                return;
-            }
-            snake.unshift(head);
-            if (head.x === food.x && head.y === food.y) {
-                score += 10;
-                if (score > best) {
-                    best = score;
-                    try { localStorage.setItem(BEST_KEY, String(best)); } catch (e) {}
-                }
-                placeFood();
-            } else {
-                snake.pop();
-            }
-            hud();
-            render();
-            timer = setTimeout(tick, Math.max(70, 150 - score)); // accélère avec le score
-        }
-
-        function gameOver() {
-            over = true;
-            clearTimeout(timer);
-            hud(`GAME OVER — score : ${score} · record : ${best} — Entrée/▲▼◀▶ = rejouer · ESC = quitter`);
-        }
-
-        function start() {
-            build();
-            snake = [{ x: 8, y: 7 }, { x: 7, y: 7 }, { x: 6, y: 7 }];
-            dir = { x: 1, y: 0 }; nextDir = dir;
-            score = 0; over = false; running = true;
-            placeFood();
-            $screen.hidden = false;
-            $input.blur(); // les flèches pilotent le jeu, plus l'historique
-            hud();
-            render();
-            clearTimeout(timer);
-            timer = setTimeout(tick, 150);
-        }
-
-        function stop() {
-            running = false; over = false;
-            clearTimeout(timer);
-            if ($screen) $screen.hidden = true;
-            echo(`mini-jeu — score final : ${score} · record : ${best}. merci d'avoir joué !`, 't-dim', { silent: true });
-            $input.focus();
-        }
-
-        function key(ev) {
-            const map = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right' };
-            if (map[ev.key]) { ev.preventDefault(); over ? start() : setDir(map[ev.key]); return; }
-            if (ev.key === 'Escape') { ev.preventDefault(); stop(); return; }
-            if (over && (ev.key === 'Enter' || ev.key === ' ' || ev.key === 'r')) { ev.preventDefault(); start(); return; }
-        }
-
-        return { start, stop, key, get running() { return running; } };
-    })();
 
     // ============================================================
     // 7. COMMANDES — sites, use, period, puis langage naturel
@@ -992,9 +812,7 @@ if (isset($_GET['api'])) {
     }
 
     function guestRefused() {
-        echo('accès refusé : les statistiques sont réservées aux comptes connectés.', 't-alert');
-        echo("tapez 'login' pour ouvrir la page de connexion dans un autre onglet.", 't-dim');
-        echo("en attendant, un mini-jeu vous attend — tapez 'game'.", 't-dim');
+        echo("veuillez vous connecter en tapant 'login'.", 't-alert');
     }
 
     async function cmdSites() {
@@ -1003,7 +821,7 @@ if (isset($_GET['api'])) {
             if (!data.sites.length) { echo('aucun site enregistré sur ce serveur.', 't-warn'); return; }
             echoBlock('SITES DISPONIBLES', data.sites.map(s =>
                 `  #${s.id}  ${s.site_name}  (${s.domain || '—'})  [${s.tracking_code}]`
-            ).concat(["  charger un site : use <id|nom|SP_code>"]));
+            ).concat(["  charger un site : use <id/nom/SP_code>"]));
         } catch (e) {
             if (e.guest) guestRefused(); else echo('erreur : ' + e.message, 't-alert');
         }
@@ -1057,14 +875,13 @@ if (isset($_GET['api'])) {
     const HELP = [
         'COMMANDES',
         "  sites ................ liste les sites à analyser",
-        '  use <id|nom|SP_code> . charge un site (obligatoire avant les questions)',
+        '  use <id/nom/SP_code> . charge un site (obligatoire avant les questions)',
         "  period <jours> ........ change la période d'analyse (ex: period 7)",
         '  trend ................ raccourci tendance (graphe ASCII)',
         '  dashboard ............. ouvre dashboard.php dans un autre onglet',
         '  doc ................... ouvre la documentation (../../doc/) dans un autre onglet',
         '  doc <question> ........ cherche la réponse dans la doc',
         '  login ................. page de connexion (autre onglet)',
-        '  game .................. mini-jeu snake (flèches PC · pad tactile mobile)',
         "  clear ................ efface l'écran ET la mémoire de conversation",
         '  help ................. cette aide',
         '',
@@ -1118,13 +935,6 @@ if (isset($_GET['api'])) {
             return;
         }
 
-        // ---- NOUVEAU v1.1 : mini-jeu -----------------------------------
-        if (nq === 'game' || nq === 'jeu' || nq === 'play' || nq === 'snake') {
-            echo('mini-jeu lancé — flèches sur PC, boutons sur mobile. ESC pour quitter.', 't-dim', { silent: true });
-            Game.start();
-            return;
-        }
-
         // ---- SÉCURITÉ v1.1 : invité → aucune donnée --------------------
         if (sessionState.role === 'guest') {
             guestRefused();
@@ -1138,7 +948,7 @@ if (isset($_GET['api'])) {
 
         // Langage naturel → moteur d'intents (nécessite un site chargé)
         if (!currentSite) {
-            echo("aucun site chargé. tapez 'sites' puis 'use <id|nom|SP_code>'.", 't-warn');
+            echo("aucun site chargé. tapez 'sites' puis 'use <id/nom/SP_code>'.", 't-warn');
             return;
         }
         thinking(true);
@@ -1164,9 +974,9 @@ if (isset($_GET['api'])) {
     function banner() {
         echo('LibreAnalytics CLI v1.1', 't-title');
         //echo('<a href="index.php" target="_blank">Connexion</a>', 't-dim');
-        echo("tapez 'sites' pour lister, puis 'use <id|nom|SP_code>' pour charger.", 't-dim');
+        echo("tapez 'sites' pour lister, puis 'use <id/nom/SP_code>' pour charger.", 't-dim');
         echo("tapez 'help' pour toutes les commandes.", 't-dim');
-        echo("raccourcis : 'dashboard' · 'doc' (autre onglet) · 'login' · 'game'.", 't-dim');
+        echo("raccourcis : 'dashboard' · 'doc' (autre onglet) · 'login'.", 't-dim');
         echo('');
     }
 
@@ -1174,7 +984,6 @@ if (isset($_GET['api'])) {
     // 8. ÉVÉNEMENTS + BOOT
     // ============================================================
     $input.addEventListener('keydown', (ev) => {
-        if (Game.running) { Game.key(ev); return; } // le jeu capte les flèches
         if (ev.key === 'Enter') submitLine();
         else if (ev.key === 'ArrowUp') {
             ev.preventDefault();
@@ -1188,7 +997,7 @@ if (isset($_GET['api'])) {
         else if (ev.key === 'l' && ev.ctrlKey) { ev.preventDefault(); $out.innerHTML = ''; banner(); }
     });
 
-    document.body.addEventListener('click', () => { if (!Game.running) $input.focus(); });
+    document.body.addEventListener('click', () => $input.focus());
 
     async function boot() {
         banner();
@@ -1205,11 +1014,8 @@ if (isset($_GET['api'])) {
         setStatus();
 
         if (sessionState.role === 'guest') {
-            // Invité : données verrouillées → mini-jeu
-            echo('mode invité : les statistiques sont verrouillées.', 't-warn');
-            echo("connectez-vous via 'login' (nouvel onglet) pour accéder à vos sites.", 't-dim');
-            echo('lancement du mini-jeu… flèches sur PC, boutons sur mobile.', 't-dim');
-            Game.start();
+            // Invité : données verrouillées → message de connexion
+            echo("veuillez vous connecter en tapant 'login'.", 't-warn');
         } else {
             if (sessionState.role === 'admin') {
                 echo(`session ADMIN (${sessionState.email}) : accès à tous les sites.`, 't-title');
