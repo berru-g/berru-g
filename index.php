@@ -237,10 +237,10 @@
               <a href="https://www.hackster.io/gleberruyer" target="_blank" class="nav-item"
                 data-search="pcb éléctronique arduino hackster diy circuit daw midi usbc shield">
                 <span><svg class="social-icon" viewBox="0 0 24 24">
-                        <path
-                            d="M11.9 12.9003C11.9 12.6003 12.1 12.4003 12.3 12.3003L15.1 11.5003C15.3 11.5003 15.5 11.5003 15.5 11.8003V12.8003C15.5 13.0003 15.3 13.2003 15.1 13.2003H12.3C12.1 13.2003 11.9 13.0003 11.9 12.8003V12.9003ZM23.4 15.4003H20.5999C20.3999 15.4003 20.2 15.2003 20.2 15.0003V10.6003C20.2 10.4003 20.3999 10.1003 20.5999 10.1003L23.4 9.30029C23.6 9.30029 23.7999 9.30029 23.7999 9.60029V15.0003C23.7999 15.2003 23.6 15.4003 23.4 15.4003ZM23.7999 23.0003C23.7999 23.3003 23.6 23.5003 23.4 23.6003L20.5999 24.4003C20.3999 24.4003 20.2 24.4003 20.2 24.1003V23.1003C20.2 22.9003 20.3999 22.7003 20.5999 22.7003H23.4C23.6 22.7003 23.7999 22.9003 23.7999 23.1003V23.0003ZM12.3 20.5003H15.1C15.3 20.5003 15.5 20.7003 15.5 20.9003V25.3003C15.5 25.5003 15.3 25.8003 15.1 25.8003L12.3 26.6003C12.1 26.6003 11.9 26.6003 11.9 26.3003V20.9003C11.9 20.7003 12.1 20.5003 12.3 20.5003ZM7.79993 16.1003C7.79993 16.1003 8.19993 16.0003 8.39993 15.9003L15.2 14.0003C15.4 14.0003 15.6 14.0003 15.6 14.3003V16.1003C15.6 16.3003 15.8 16.5003 16 16.5003H23.5C23.7 16.5003 23.9 16.7003 23.9 16.9003V18.9003C23.9 19.1003 24.0999 19.3003 24.2999 19.3003H27.9C28 19.3003 28.2 19.4003 28.2 19.6003C28.2 19.8003 28.2 19.7003 28.2 19.8003C28.2 19.8003 27.7999 19.9003 27.5999 20.0003C26.2999 20.4003 22.0999 21.5003 20.7999 21.9003C20.5999 21.9003 20.4 21.9003 20.4 21.6003V19.8003C20.4 19.6003 20.2 19.4003 20 19.4003H12.5C12.3 19.4003 12.1 19.2003 12.1 19.0003V16.9003C12.1 16.7003 11.9 16.5003 11.7 16.5003H8.09993C7.99993 16.5003 7.79993 16.4003 7.79993 16.2003C7.79993 16.0003 7.79993 16.1003 7.79993 16.0003V16.1003Z"
-                            fill="var(--staticWhite)"></path>
-                    </svg> Hackster</span>
+                    <path
+                      d="M11.9 12.9003C11.9 12.6003 12.1 12.4003 12.3 12.3003L15.1 11.5003C15.3 11.5003 15.5 11.5003 15.5 11.8003V12.8003C15.5 13.0003 15.3 13.2003 15.1 13.2003H12.3C12.1 13.2003 11.9 13.0003 11.9 12.8003V12.9003ZM23.4 15.4003H20.5999C20.3999 15.4003 20.2 15.2003 20.2 15.0003V10.6003C20.2 10.4003 20.3999 10.1003 20.5999 10.1003L23.4 9.30029C23.6 9.30029 23.7999 9.30029 23.7999 9.60029V15.0003C23.7999 15.2003 23.6 15.4003 23.4 15.4003ZM23.7999 23.0003C23.7999 23.3003 23.6 23.5003 23.4 23.6003L20.5999 24.4003C20.3999 24.4003 20.2 24.4003 20.2 24.1003V23.1003C20.2 22.9003 20.3999 22.7003 20.5999 22.7003H23.4C23.6 22.7003 23.7999 22.9003 23.7999 23.1003V23.0003ZM12.3 20.5003H15.1C15.3 20.5003 15.5 20.7003 15.5 20.9003V25.3003C15.5 25.5003 15.3 25.8003 15.1 25.8003L12.3 26.6003C12.1 26.6003 11.9 26.6003 11.9 26.3003V20.9003C11.9 20.7003 12.1 20.5003 12.3 20.5003ZM7.79993 16.1003C7.79993 16.1003 8.19993 16.0003 8.39993 15.9003L15.2 14.0003C15.4 14.0003 15.6 14.0003 15.6 14.3003V16.1003C15.6 16.3003 15.8 16.5003 16 16.5003H23.5C23.7 16.5003 23.9 16.7003 23.9 16.9003V18.9003C23.9 19.1003 24.0999 19.3003 24.2999 19.3003H27.9C28 19.3003 28.2 19.4003 28.2 19.6003C28.2 19.8003 28.2 19.7003 28.2 19.8003C28.2 19.8003 27.7999 19.9003 27.5999 20.0003C26.2999 20.4003 22.0999 21.5003 20.7999 21.9003C20.5999 21.9003 20.4 21.9003 20.4 21.6003V19.8003C20.4 19.6003 20.2 19.4003 20 19.4003H12.5C12.3 19.4003 12.1 19.2003 12.1 19.0003V16.9003C12.1 16.7003 11.9 16.5003 11.7 16.5003H8.09993C7.99993 16.5003 7.79993 16.4003 7.79993 16.2003C7.79993 16.0003 7.79993 16.1003 7.79993 16.0003V16.1003Z"
+                      fill="var(--staticWhite)"></path>
+                  </svg> Hackster</span>
               </a>
               <a href="https://github.com/berru-g/" target="_blank" class="nav-item"
                 data-search="github code open source javascript python php sql">
@@ -1502,7 +1502,281 @@
           }
         }
       </style>
-        <?php include "LibreAnalytics/smart_pixel_v2/public/chatbot.php" ?>
+      <?php include "LibreAnalytics/smart_pixel_v2/public/chatbot.php" ?>
+
+      <?php
+      // ============================================================================
+// FOOTER DYNAMIQUE pour index.php — combo RGPD live + GitHub live
+// ----------------------------------------------------------------------------
+// 100% REUTILISATION DES CLASSES DE menu.css — AUCUNE nouvelle classe,
+// AUCUN <style> ajouté :
+//   .nav-section        → conteneur de section
+//   .nav-section-title  → petits titres / légendes (uppercase, secondary)
+//   .sidebar-footer     → rangée flex de cartes (.footer-btn)
+//   .footer-btn         → cartes de stats (bordées, centrées)
+//   .nav-item           → lignes de liste (hover, radius) — liens repos
+//   .nav-badge          → pastille (★ étoiles)
+//   .yn-popup           → bloc TERMINAL déjà stylé dans menu.css
+//                         (fond sombre, #c9f2d0, monospace, préfixe "$" rose)
+//
+// Seuls overrides : inline styles (position/opacity du .yn-popup passé en
+// statique + couleurs des lignes JS via var(--pink)/var(--primary-color)).
+//
+// BLOC A (PHP)  : GitHub live — API publique, 0 token, cache fichier 6 h.
+// BLOC B (JS)   : démo RGPD "terminal" — 100% côté client, 0 stockage.
+//
+// À coller DANS <main class="main-content">, juste avant </main>.
+// Prérequis : dossier ./cache/ accessible en écriture (créé automatiquement).
+// ============================================================================
+      
+      /**
+       * Stats GitHub publiques pour un utilisateur, avec cache fichier.
+       * 2 requêtes API max par refresh : /users/:u + /search/repositories (1 seul
+       * appel pour TOUS les repos, leurs étoiles et leur date de dernier push).
+       * TTL 6h → ~8 requêtes/jour, très loin du rate limit (60/h/IP sans token).
+       * Si l'API échoue et pas de cache : le bloc ne s'affiche pas, jamais de
+       * chiffre bidonné (charte : ne jamais mentir ni exagérer).
+       */
+      function gh_stats(string $user, int $ttl = 21600): ?array
+      {
+        $dir = __DIR__ . '/cache';
+        $file = $dir . '/github_stats.json';
+
+        // Cache frais → on ne touche pas au réseau
+        if (is_file($file) && (time() - filemtime($file)) < $ttl) {
+          $d = json_decode((string) file_get_contents($file), true);
+          if (is_array($d) && !empty($d['repos']))
+            return $d;
+        }
+
+        $ctx = stream_context_create([
+          'http' => [
+            'header' => "User-Agent: gael-berru.com\r\nAccept: application/vnd.github+json\r\n",
+            'timeout' => 5,
+          ]
+        ]);
+
+        $uRaw = @file_get_contents("https://api.github.com/users/" . urlencode($user), false, $ctx);
+        $rRaw = @file_get_contents("https://api.github.com/search/repositories?q=user%3A" . urlencode($user) . "&sort=stars&per_page=100", false, $ctx);
+
+        // Échec réseau : on retombe sur le cache périmé (mieux que rien), sinon rien
+        if ($uRaw === false || $rRaw === false) {
+          if (is_file($file)) {
+            $d = json_decode((string) file_get_contents($file), true);
+            if (is_array($d) && !empty($d['repos']))
+              return $d;
+          }
+          return null;
+        }
+
+        $u = json_decode($uRaw, true);
+        $r = json_decode($rRaw, true);
+        if (!is_array($u) || !is_array($r) || empty($r['items']))
+          return null;
+
+        $stars = 0;
+        $lastPush = 0;
+        $langs = [];
+        foreach ($r['items'] as $repo) {           // NB : compte exact si ≤ 100 repos
+          $stars += (int) ($repo['stargazers_count'] ?? 0);
+          $lastPush = max($lastPush, strtotime((string) ($repo['pushed_at'] ?? '')) ?: 0);
+          $l = $repo['language'] ?? null;
+          if ($l)
+            $langs[$l] = ($langs[$l] ?? 0) + 1;
+        }
+        arsort($langs);
+
+        $stats = [
+          'repos' => (int) ($r['total_count'] ?: count($r['items'])),
+          'stars' => $stars,
+          'last_push' => $lastPush,
+          'since' => strtotime((string) ($u['created_at'] ?? '2020-01-01')) ?: strtotime('2020-01-01'),
+          'langs' => array_slice(array_keys($langs), 0, 3),
+          'top' => array_map(function ($x) {
+            return [
+              'name' => (string) $x['name'],
+              'stars' => (int) ($x['stargazers_count'] ?? 0),
+              'desc' => (string) ($x['description'] ?? ''),
+              'url' => (string) ($x['html_url'] ?? ''),
+            ];
+          }, array_slice($r['items'], 0, 3)),
+          'fetched_at' => time(),
+        ];
+
+        if (!is_dir($dir))
+          @mkdir($dir, 0775, true);
+        @file_put_contents($file, json_encode($stats, JSON_UNESCAPED_UNICODE));
+        return $stats;
+      }
+
+      /** "il y a 3 min" / "il y a 4 h" / "il y a 2 j" */
+      function fr_ago(int $ts): string
+      {
+        $d = max(0, time() - $ts);
+        if ($d < 3600)
+          return 'il y a ' . max(1, intdiv($d, 60)) . ' min';
+        if ($d < 86400)
+          return 'il y a ' . intdiv($d, 3600) . ' h';
+        if ($d < 2592000)
+          return 'il y a ' . intdiv($d, 86400) . ' j';
+        return 'le ' . date('d/m/Y', $ts);
+      }
+
+      $gh = gh_stats('berru-g');
+      ?>
+
+      <?php if ($gh): ?>
+        <!-- ================= FOOTER DYNAMIQUE — classes menu.css uniquement ======== -->
+        <footer class="nav-section" id="live-footer" data-aos="fade-up">
+
+          <!-- BLOC A : cartes GitHub live (réutilise .sidebar-footer + .footer-btn) -->
+          <div class="nav-section-title">Live depuis GitHub — données publiques, cache 6 h</div>
+
+          <div class="sidebar-footer">
+            <div class="footer-btn"><strong><?= (int) $gh['repos'] ?></strong>&nbsp;dépôts open source</div>
+            <div class="footer-btn"><strong>★ <?= (int) $gh['stars'] ?></strong>&nbsp;étoiles cumulées</div>
+            <div class="footer-btn"><strong><?= htmlspecialchars(fr_ago((int) $gh['last_push'])) ?></strong>&nbsp;dernier
+              push</div>
+            <div class="footer-btn"><strong><?= (int) floor((time() - (int) $gh['since']) / 31557600) ?>
+                ans</strong>&nbsp;que je code en public — <?= htmlspecialchars(implode(' · ', $gh['langs'])) ?></div>
+          </div>
+
+          <!-- Top 3 repos (réutilise .nav-item + .nav-badge) -->
+          <?php foreach ($gh['top'] as $repo): ?>
+            <a class="nav-item" href="<?= htmlspecialchars($repo['url']) ?>" target="_blank" rel="noopener">
+              <span><i class="fab fa-github"></i> <?= htmlspecialchars($repo['name']) ?>
+                <span class="nav-badge">★ <?= (int) $repo['stars'] ?></span>
+              </span>
+            </a>
+          <?php endforeach; ?>
+
+          <!-- BLOC B : démo RGPD terminal (réutilise .yn-popup, déjà stylée terminal
+       dans menu.css ; overrides inline pour la passer de fixed → statique) -->
+          <div class="nav-section-title">Ce que ton navigateur me dit — sans cookie, sans stockage</div>
+
+          <div class="yn-popup" id="rgpdDemo"
+            style="position:relative; transform:none; opacity:1; pointer-events:auto; top:auto; left:auto; max-width:720px; margin:0 0 .75rem; padding:14px 20px; text-align:left;">
+            <noscript>cette démo a besoin de JavaScript — tout se calcule dans ton navigateur, rien n'est
+              envoyé.</noscript>
+          </div>
+
+        </footer>
+      <?php endif; ?>
+      <!-- ================= /FOOTER DYNAMIQUE ==================================== -->
+
+      <script>
+        // ============================================================================
+        // DÉMO RGPD — 100% côté client : zéro requête, zéro stockage, zéro cookie.
+        // Aucune classe dédiée : couleurs posées en inline via les variables menu.css
+        // (--pink pour les commandes, texte terminal #c9f2d0 par défaut via .yn-popup).
+        // ============================================================================
+        (function () {
+          'use strict';
+
+          var out = document.getElementById('rgpdDemo');
+          if (!out) return;
+          var LIBREANALYTICS_URL = 'https://gael-berru.com/LibreAnalytics';
+
+          // --- Détection navigateur / OS (parsing sobre de l'UA, zéro dépendance) ---
+          function detect() {
+            var ua = navigator.userAgent;
+            var b = /Edg\//.test(ua) ? 'Edge'
+              : /OPR\//.test(ua) ? 'Opera'
+                : /Firefox\//.test(ua) ? 'Firefox'
+                  : /Chrome\//.test(ua) ? 'Chrome'
+                    : /Safari\//.test(ua) ? 'Safari' : 'navigateur inconnu';
+            var os = /Windows/.test(ua) ? 'Windows'
+              : /Android/.test(ua) ? 'Android'
+                : /iPhone|iPad/.test(ua) ? 'iOS'
+                  : /Mac OS X/.test(ua) ? 'macOS'
+                    : /Linux/.test(ua) ? 'Linux' : 'OS inconnu';
+            var type = /Mobi|Android|iPhone/.test(ua) ? 'mobile' : 'desktop';
+            return { b: b, os: os, type: type };
+          }
+
+          function buildScript() {
+            var d = detect();
+            var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'inconnu';
+            var now = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            var ref = document.referrer
+              ? 'arrivé depuis ' + (function () { try { return new URL(document.referrer).hostname; } catch (e) { return 'un lien externe'; } })()
+              : 'accès direct — aucun referrer transmis';
+            var conn = (navigator.connection && navigator.connection.effectiveType)
+              ? ' · réseau ~' + navigator.connection.effectiveType : '';
+            var cores = navigator.hardwareConcurrency ? navigator.hardwareConcurrency + ' coeurs cpu' : 'cpu inconnu';
+
+            return [
+              ['whoami', 'visiteur anonyme — et il le restera'],
+              ['navigateur', d.b.toLowerCase() + ' · ' + d.os.toLowerCase() + ' · ' + d.type],
+              ['ecran', screen.width + '×' + screen.height + ' (dpr ' + (window.devicePixelRatio || 1) + ') · ' + cores + conn],
+              ['locale', (navigator.language || '—') + ' · fuseau ' + tz + ' · heure locale ' + now],
+              ['provenance', ref],
+              ['data --stored', '0 octet. zéro requête serveur — tout a été calculé dans ton navigateur, rien n\u2019a été envoyé.']
+            ];
+          }
+
+          // --- Machine à écrire : démarre quand le bloc entre dans le viewport ---
+          var started = false;
+
+          function line(text, color, bold) {
+            var div = document.createElement('div');
+            div.textContent = text;
+            if (color) div.style.color = color;
+            if (bold) div.style.fontWeight = 'bold';
+            out.appendChild(div);
+          }
+
+          function link(url) {
+            var a = document.createElement('a');
+            a.href = url;
+            a.textContent = '→ ' + url;
+            a.target = '_blank';
+            a.rel = 'noopener';
+            a.style.color = 'var(--primary-color)';
+            out.appendChild(a);
+          }
+
+          function run() {
+            if (started) return;
+            started = true;
+
+            line('live-privacy — 0 donnée stockée', 'var(--text-secondary)');
+
+            var script = buildScript();
+            var i = 0;
+
+            function step() {
+              if (i >= script.length) {
+                line('ce genre de données, LibreAnalytics sait les mesurer sobrement — sans cookie, serveur en France :', 'var(--text-secondary)');
+                link(LIBREANALYTICS_URL);
+                return;
+              }
+              var cmd = script[i][0];
+              var res = script[i][1];
+              var isFinal = (i === script.length - 1);
+              line('$ ' + cmd, 'var(--pink)');
+              setTimeout(function () {
+                line('  ' + res, isFinal ? 'var(--pink)' : null, isFinal);
+                i++;
+                setTimeout(step, isFinal ? 0 : 420);
+              }, 260);
+            }
+            step();
+          }
+
+          if ('IntersectionObserver' in window) {
+            var io = new IntersectionObserver(function (entries) {
+              for (var k = 0; k < entries.length; k++) {
+                if (entries[k].isIntersecting) { io.disconnect(); run(); return; }
+              }
+            }, { threshold: 0.4 });
+            io.observe(out);
+          } else {
+            run(); // pas d'IO : on lance direct
+          }
+        })();
+      </script>
+
     </main>
 
   </div>
