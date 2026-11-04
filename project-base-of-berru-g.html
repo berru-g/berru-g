@@ -480,7 +480,7 @@
         <div class="brand-logo">
             <span class="b1">Project</span><span class="b2"> </span><span class="b3">Base</span>
         </div>
-        <p class="brand-tagline">of berru-g - 2020/2026</p>
+        <p class="brand-tagline">of berru-g - 2018/2026</p>
     </header>
 
     <!-- Barre de recherche -->
@@ -538,8 +538,8 @@
         // ASSISTANT — moteur d'intents par mots-clés scorés (berru·faq, même algo)
         // ======================================================================
         const CHAT_CFG = {
-            mail: 'contact@gael-berru.com',
-            restos: 'https://dons.restosducoeur.org/faire-un-don/~mon-don/',
+            mail: 'contact@gael-berru.com?subject=Salut Berru',
+            restos: 'https://dons.restosducoeur.org/faire-un-don/~mon-don/?utm_source=gael-berru.com',
             github: 'https://github.com/berru-g/',
             libreanalytics: 'https://gael-berru.com/LibreAnalytics',
             cryptoTools: 'https://crypto-free-tools.netlify.app/'
@@ -551,30 +551,9 @@
             {
                 icon: '🛠️', title: 'Mes services',
                 terms: { service: 3, prestation: 3, propose: 3, offre: 2, expertise: 3, competence: 2, sais: 2, faire: 2, peux: 2, aide: 1, quoi: 1 },
-                desc: "Je conçois des <strong>outils sur mesure</strong> — web, données, électronique. L'existant est open source, le sur-mesure se chiffre sur devis gratuit.",
+                desc: "Je conçois des <strong>outils sur mesure</strong> — web, données, électronique, sur devis gratuit.",
                 features: ['Intégration 3D web (Three.js / WebGL)', 'Dashboards sur mesure & dataviz', 'Outils éthiques & RGPD', 'Intégration API', 'Électronique / PCB', 'Sites vitrine & CMS'],
                 linkLabel: 'Me contacter', linkUrl: 'mailto:' + CHAT_CFG.mail + '?subject=Question depuis la Project Base'
-            },
-            {
-                icon: '💻', title: 'Mes compétences',
-                terms: { competence: 3, techno: 3, technologie: 3, stack: 3, langage: 3, code: 2, maitrise: 3, php: 2, python: 2, javascript: 2, html: 1, css: 1 },
-                desc: "PHP natif, Python, SQL, JavaScript vanilla, Three.js/WebGL, Arduino et PCB (EasyEDA). <strong>Ni frameworks ni templates</strong> : le code reste compréhensible et vous appartient de bout en bout.",
-                features: ['Frontend : HTML, CSS, JS vanilla', 'Backend : PHP, Python', 'Données : SQL / MySQL', '3D : Three.js, WebGL', 'Électronique : Arduino, PCB, NFC'],
-                linkLabel: 'Voir mon GitHub', linkUrl: CHAT_CFG.github
-            },
-            {
-                icon: '🧭', title: 'Ma méthode',
-                terms: { methode: 3, bosse: 3, travaille: 3, travail: 2, processus: 3, demarche: 3, souverain: 3, framework: 2, template: 2, dependance: 3, lovable: 3 },
-                desc: "La <strong>souveraineté technique</strong> : pas de dépendances superflues, vos données ne transitent dans aucun système externe, aucune boîte noire.",
-                features: ['Tu décris ta problématique', 'Devis gratuit, sans engagement', 'Développement itératif, code documenté', "Le code source t'appartient à 100 %"],
-                linkLabel: 'Décrire mon projet', linkUrl: 'mailto:' + CHAT_CFG.mail + '?subject=Projet sur mesure'
-            },
-            {
-                icon: '💚', title: 'Rien à vendre',
-                terms: { philosophie: 3, open: 2, source: 2, gratuit: 3, libre: 3, don: 3, restos: 3, coeur: 3, vendre: 2, licence: 2, ethique: 2 },
-                desc: "Tous mes projets sont open source. Pas de licence, pas de contrepartie : si un outil t'est utile, il est à toi. Si tu tiens à donner, fais-le plutôt aux <strong>Restos du Cœur</strong> — c'est la seule monnaie que j'accepte.",
-                features: ['Code visible ligne par ligne', 'Pas de licence, pas de contrepartie', 'Dons → Restos du Cœur'],
-                linkLabel: 'Faire un don aux Restos du Cœur', linkUrl: CHAT_CFG.restos
             },
             {
                 icon: '💰', title: 'Tarifs sur-mesure',
@@ -582,62 +561,6 @@
                 desc: "Grille indicative — <strong>chaque projet est chiffré sur devis, gratuitement</strong>. Mes outils existants restent gratuits et open source.",
                 features: ['Site vitrine / CMS — ~600 €', 'Dashboard sur mesure — ~900 €', 'PCB / électronique — ~400 €', 'Intégration 3D — ~700 €', 'Devis gratuit, sans engagement'],
                 linkLabel: 'Demander un devis', linkUrl: 'mailto:' + CHAT_CFG.mail + '?subject=Demande de devis'
-            },
-            {
-                icon: '👋', title: 'Qui suis-je',
-                terms: { berru: 3, gael: 3, autodidacte: 3, parcours: 3, experience: 2, presente: 2, histoire: 1 },
-                desc: "Développeur <strong>autodidacte depuis 2020</strong>, artisan du code souverain et open source. Web, données, électronique — tout mon travail est visible ligne par ligne sur GitHub.",
-                features: [],
-                linkLabel: 'Voir mon GitHub', linkUrl: CHAT_CFG.github
-            },
-            {
-                icon: '📊', title: 'LibreAnalytics',
-                terms: { analytics: 3, libreanalytics: 3, tracking: 2, google: 2, matomo: 2, plausible: 2, umami: 1, statistique: 2, cookie: 2, privee: 2, gafam: 2, rgpd: 2 },
-                desc: "Alternative <strong>souveraine à Google Analytics</strong> : auto-hébergé, sans cookies, conforme RGPD, open source. Tourne sur un mutualisé classique — pas besoin de Docker ni de VPS.",
-                features: ['Dashboard complet', 'Accès API', "Doc d'intégration complète"],
-                linkLabel: 'Voir LibreAnalytics', linkUrl: CHAT_CFG.libreanalytics
-            },
-            {
-                icon: '⚡', title: 'Électronique & PCB',
-                terms: { arduino: 3, pcb: 3, electronique: 3, nfc: 3, badge: 2, circuit: 2, midi: 3, daw: 3, radio: 2, rc: 2, robotique: 2, lego: 2, easyeda: 2, shield: 2 },
-                desc: "Conception de circuits et <strong>PCB (EasyEDA)</strong>, firmware Arduino, NFC, radio RC (2 km), contrôleurs MIDI pour DAW. Indicatif : ~400 € le PCB, sur devis selon complexité.",
-                features: ['NFC Badge (NT3H2111)', 'RC Motor — radio commandé', 'Contrôleurs MIDI USB-C', 'Shield Arduino × Lego'],
-                linkLabel: 'Voir sur GitHub', linkUrl: CHAT_CFG.github
-            },
-            {
-                icon: '🧊', title: '3D & WebGL',
-                terms: { '3d': 3, threejs: 3, webgl: 3, three: 3, immersion: 2, scroll: 2, animation: 2 },
-                desc: "Intégration <strong>Three.js / WebGL</strong> : animations synchronisées au scroll, univers immersifs, dataviz 3D. Indicatif : ~700 € l'intégration, sur devis selon la scène.",
-                features: ['3D Scroll Animator', "Jeu d'immersion navigateur", 'Heat map 3D crypto'],
-                linkLabel: 'Voir 3D Scroll Animator', linkUrl: 'https://github.com/berru-g/3Dscrollanimator'
-            },
-            {
-                icon: '📈', title: 'Dashboards & dataviz',
-                terms: { dashboard: 3, dataviz: 3, visualisation: 3, tableau: 2, chart: 2, graphique: 2, sql: 3, csv: 2, excel: 2, json: 2, reporting: 2, cron: 2 },
-                desc: "Tableaux de bord sur mesure : analytics multi-sites, wallets crypto (API CoinGecko), charts TradingView, agenda, météo, <strong>rapports automatisés par CRON</strong>. Éditeur SQL-to-Map : import CSV / Excel / JSON. Indicatif : ~900 €, sur devis.",
-                features: ['Analytics multi-sites', 'API CoinGecko · TradingView', 'Rapports clients par CRON'],
-                linkLabel: 'Voir mon GitHub', linkUrl: CHAT_CFG.github
-            },
-            {
-                icon: '🌐', title: 'Sites vitrines & CMS',
-                terms: { site: 3, vitrine: 3, cms: 3, ecommerce: 3, commerce: 3, boutique: 2, formulaire: 2, galerie: 2, refonte: 2 },
-                desc: "Sites vitrine et CMS <strong>from scratch, sans template</strong> : formulaires, galeries, responsive, analytics intégrée. Indicatif : ~600 €, sur devis.",
-                features: ['Golden Dessert — CMS pâtissier', 'Berru Clothing — e-commerce 2016-2018'],
-                linkLabel: 'Exemple : Golden Dessert', linkUrl: 'https://goldendessert.fr'
-            },
-            {
-                icon: '⛓️', title: 'Crypto & blockchain',
-                terms: { crypto: 3, bitcoin: 3, btc: 3, blockchain: 3, trading: 2, binance: 2, coingecko: 2, wallet: 2, investigation: 3, scam: 2, solana: 2 },
-                desc: "Outils traders (API TradingView / CoinGecko / Binance) et <strong>investigation blockchain</strong> : traçage de transactions Bitcoin, identification des plateformes KYC, diagrammes automatiques. Guide débutant : wallet sans KYC, stacking Solana.",
-                features: ['Suivi de transactions', 'Identification KYC', 'Guide crypto débutant'],
-                linkLabel: 'Voir les outils crypto', linkUrl: CHAT_CFG.cryptoTools
-            },
-            {
-                icon: '🔌', title: 'Intégration API',
-                terms: { api: 3, integration: 2, websocket: 2, rest: 2, connecter: 2, brancher: 2 },
-                desc: "Connexion aux APIs tierces — Binance, CoinGecko, Blockstream, TradingView, Google Calendar, météo — et aux <strong>APIs privées</strong> de tes propres outils.",
-                features: [],
-                linkLabel: "Exemple d'API documentée", linkUrl: 'https://gael-berru.com/LibreAnalytics/doc/'
             },
             {
                 icon: '✉️', title: 'Contact',
