@@ -1059,20 +1059,6 @@
 
           </div>
 
-          <section class="galerie-report" data-aos="fade-up" lang="en">
-            <div>
-              <h2 class="galerie-meta" style="font-size:1rem;">Web developer in Vertou, Loire-Atlantique (44), France
-              </h2>
-              <p class="galerie-meta" style="font-weight:400; opacity:.8; max-width:60ch;">
-                Self-taught developer based in <strong>Vertou, France</strong>, I design
-                <strong>PCBs</strong>, <strong>REST APIs</strong>, <strong>dashboards</strong> and
-                <strong>business software</strong> in <strong>plain PHP</strong> — no frameworks,
-                no unnecessary dependencies — for fast, maintainable tools where
-                <strong>you own your data</strong>. See also my
-                <a href="https://github.com/berru-g/" target="_blank" rel="noopener noreferrer">GitHub</a>.
-              </p>
-            </div>
-          </section>
 
         </div>
 
@@ -1503,40 +1489,24 @@
         }
       </style>
       <?php include "LibreAnalytics/smart_pixel_v2/public/chatbot.php" ?>
+      
+      <section class="galerie-report" data-aos="fade-up" lang="en">
+            <div>
+              <h2 class="galerie-meta" style="font-size:1rem;">Web developer in Vertou, Loire-Atlantique (44), France
+              </h2>
+              <p class="galerie-meta" style="font-weight:400; opacity:.4; max-width:60ch;">
+                Self-taught developer based in <strong>Vertou, France</strong>, I design
+                <strong>PCBs</strong>, <strong>REST APIs</strong>, <strong>dashboards</strong> and
+                <strong>business software</strong> in <strong>plain PHP</strong> — no frameworks,
+                no unnecessary dependencies — for fast, maintainable tools where
+                <strong>you own your data</strong>. See also my
+                <a href="https://github.com/berru-g/" target="_blank" rel="noopener noreferrer">GitHub</a>.
+              </p>
+            </div>
+          </section>
 
       <?php
-      // ============================================================================
-// FOOTER DYNAMIQUE pour index.php — combo RGPD live + GitHub live
-// ----------------------------------------------------------------------------
-// 100% REUTILISATION DES CLASSES DE menu.css — AUCUNE nouvelle classe,
-// AUCUN <style> ajouté :
-//   .nav-section        → conteneur de section
-//   .nav-section-title  → petits titres / légendes (uppercase, secondary)
-//   .sidebar-footer     → rangée flex de cartes (.footer-btn)
-//   .footer-btn         → cartes de stats (bordées, centrées)
-//   .nav-item           → lignes de liste (hover, radius) — liens repos
-//   .nav-badge          → pastille (★ étoiles)
-//   .yn-popup           → bloc TERMINAL déjà stylé dans menu.css
-//                         (fond sombre, #c9f2d0, monospace, préfixe "$" rose)
-//
-// Seuls overrides : inline styles (position/opacity du .yn-popup passé en
-// statique + couleurs des lignes JS via var(--pink)/var(--primary-color)).
-//
-// BLOC A (PHP)  : GitHub live — API publique, 0 token, cache fichier 6 h.
-// BLOC B (JS)   : démo RGPD "terminal" — 100% côté client, 0 stockage.
-//
-// À coller DANS <main class="main-content">, juste avant </main>.
-// Prérequis : dossier ./cache/ accessible en écriture (créé automatiquement).
-// ============================================================================
-      
-      /**
-       * Stats GitHub publiques pour un utilisateur, avec cache fichier.
-       * 2 requêtes API max par refresh : /users/:u + /search/repositories (1 seul
-       * appel pour TOUS les repos, leurs étoiles et leur date de dernier push).
-       * TTL 6h → ~8 requêtes/jour, très loin du rate limit (60/h/IP sans token).
-       * Si l'API échoue et pas de cache : le bloc ne s'affiche pas, jamais de
-       * chiffre bidonné (charte : ne jamais mentir ni exagérer).
-       */
+
       function gh_stats(string $user, int $ttl = 21600): ?array
       {
         $dir = __DIR__ . '/cache';
@@ -1626,156 +1596,70 @@
       ?>
 
       <?php if ($gh): ?>
-        <!-- ================= FOOTER DYNAMIQUE — classes menu.css uniquement ======== -->
-        <footer class="nav-section" id="live-footer" data-aos="fade-up">
+        <!-- ================= FOOTER DYNAMIQUE — GitHub live, styles inline ========== -->
+        <footer id="live-footer" data-aos="fade-up"
+          style="margin-top:3rem; padding:1.5rem; background:var(--sidebar-bg); border:1px solid var(--border-color); border-radius:12px; box-shadow:var(--shadow);">
 
-          <!-- BLOC A : cartes GitHub live (réutilise .sidebar-footer + .footer-btn) -->
-          <div class="nav-section-title">Live depuis GitHub API — données publiques, cache 6 h</div>
-
-          <div class="sidebar-footer">
-            <div class="footer-btn"><strong><?= (int) $gh['repos'] ?></strong>&nbsp;dépôts open source</div>
-            <div class="footer-btn"><strong>★ <?= (int) $gh['stars'] ?></strong>&nbsp;étoiles cumulées</div>
-            <div class="footer-btn"><strong><?= htmlspecialchars(fr_ago((int) $gh['last_push'])) ?></strong>&nbsp;dernier
-              push</div>
-            <div class="footer-btn"><strong><?= (int) floor((time() - (int) $gh['since']) / 31557600) ?>
-                ans</strong>&nbsp;que je code en public — <?= htmlspecialchars(implode(' · ', $gh['langs'])) ?></div>
+          <!-- En-tête -->
+          <div
+            style="display:flex; align-items:baseline; justify-content:space-between; gap:0.75rem; flex-wrap:wrap; margin-bottom:1.25rem;">
+            <h3 style="margin:0; font-size:0.95rem; font-weight:600; color:var(--text-color);">
+              <i class="fab fa-github" style="color:var(--primary-color); margin-right:0.4rem;"></i>Live depuis GitHub
+            </h3>
+            <span
+              style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-secondary);">données
+              publiques · cache 6 h</span>
           </div>
 
-          <!-- Top 3 repos (réutilise .nav-item + .nav-badge) -->
-          <?php foreach ($gh['top'] as $repo): ?>
-            <a class="nav-item" href="<?= htmlspecialchars($repo['url']) ?>" target="_blank" rel="noopener">
-              <span><i class="fab fa-github"></i> <?= htmlspecialchars($repo['name']) ?>
-                <span class="nav-badge">★ <?= (int) $repo['stars'] ?></span>
-              </span>
-            </a>
-          <?php endforeach; ?>
+          <!-- Cartes de stats : grille auto-responsive (4 → 2 → 1 selon la largeur) -->
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:0.75rem;">
+            <div
+              style="padding:0.875rem 1rem; background:var(--search-bg); ">
+              <div style="font-size:1.6rem; font-weight:700; line-height:1.15; color:var(--primary-color);">
+                <?= (int) $gh['repos'] ?></div>
+              <div style="margin-top:0.2rem; font-size:0.75rem; color:var(--text-secondary);">dépôts open source</div>
+            </div>
+            <div
+              style="padding:0.875rem 1rem; background:var(--search-bg); ">
+              <div style="font-size:1.6rem; font-weight:700; line-height:1.15; color:var(--primary-color);">★
+                <?= (int) $gh['stars'] ?></div>
+              <div style="margin-top:0.2rem; font-size:0.75rem; color:var(--text-secondary);">étoiles cumulées</div>
+            </div>
+            <div
+              style="padding:0.875rem 1rem; background:var(--search-bg); ">
+              <div style="font-size:1.25rem; font-weight:700; line-height:1.3; color:var(--primary-color);">
+                <?= htmlspecialchars(fr_ago((int) $gh['last_push'])) ?></div>
+              <div style="margin-top:0.2rem; font-size:0.75rem; color:var(--text-secondary);">dernier push</div>
+            </div>
+            <div
+              style="padding:0.875rem 1rem; background:var(--search-bg); ">
+              <div style="font-size:1.6rem; font-weight:700; line-height:1.15; color:var(--primary-color);">
+                <?= (int) floor((time() - (int) $gh['since']) / 31557600) ?> ans</div>
+              <div style="margin-top:0.2rem; font-size:0.75rem; color:var(--text-secondary);">de code public —
+                <?= htmlspecialchars(implode(' · ', $gh['langs'])) ?></div>
+            </div>
+          </div>
 
-          <!-- BLOC B : démo RGPD terminal (réutilise .yn-popup, déjà stylée terminal
-       dans menu.css ; overrides inline pour la passer de fixed → statique) -->
-          <div class="nav-section-title">Ce que ton navigateur me dit — sans cookie, sans stockage</div>
-
-          <div class="yn-popup" id="rgpdDemo"
-            style="position:relative; transform:none; opacity:1; pointer-events:auto; top:auto; left:auto; max-width:720px; margin:0 0 .75rem; padding:14px 20px; text-align:left;">
-            <noscript>cette démo a besoin de JavaScript — tout se calcule dans ton navigateur, rien n'est
-              envoyé.</noscript>
+          <!-- Top 3 repos les plus étoilés -->
+          <div style="margin-top:0.75rem; display:grid; gap:0.5rem;">
+            <?php foreach ($gh['top'] as $repo): ?>
+              <a href="<?= htmlspecialchars($repo['url']) ?>" target="_blank" rel="noopener"
+                style="display:flex; align-items:center; gap:0.75rem; padding:0.625rem 0.875rem; background:var(--search-bg); text-decoration:none; color:var(--text-color);">
+                <i class="fab fa-github" style="color:var(--primary-color); flex-shrink:0;"></i>
+                <span
+                  style="font-weight:600; font-size:0.875rem; flex-shrink:0;"><?= htmlspecialchars($repo['name']) ?></span>
+                <span
+                  style="flex:1; min-width:0; font-size:0.75rem; color:var(--text-secondary); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"><?= htmlspecialchars(mb_strimwidth($repo['desc'], 0, 110, '…')) ?></span>
+                <span
+                  style="flex-shrink:0; background:var(--primary-light); color:var(--primary-color); font-size:0.72rem; font-weight:600; padding:2px 8px; border-radius:12px;">★
+                  <?= (int) $repo['stars'] ?></span>
+              </a>
+            <?php endforeach; ?>
           </div>
 
         </footer>
       <?php endif; ?>
-      <!-- ================= /FOOTER DYNAMIQUE ==================================== -->
 
-      <script>
-        // ============================================================================
-        // DÉMO RGPD — 100% côté client : zéro requête, zéro stockage, zéro cookie.
-        // Aucune classe dédiée : couleurs posées en inline via les variables menu.css
-        // (--pink pour les commandes, texte terminal #c9f2d0 par défaut via .yn-popup).
-        // ============================================================================
-        (function () {
-          'use strict';
-
-          var out = document.getElementById('rgpdDemo');
-          if (!out) return;
-          var LIBREANALYTICS_URL = 'https://gael-berru.com/LibreAnalytics';
-
-          // --- Détection navigateur / OS (parsing sobre de l'UA, zéro dépendance) ---
-          function detect() {
-            var ua = navigator.userAgent;
-            var b = /Edg\//.test(ua) ? 'Edge'
-              : /OPR\//.test(ua) ? 'Opera'
-                : /Firefox\//.test(ua) ? 'Firefox'
-                  : /Chrome\//.test(ua) ? 'Chrome'
-                    : /Safari\//.test(ua) ? 'Safari' : 'navigateur inconnu';
-            var os = /Windows/.test(ua) ? 'Windows'
-              : /Android/.test(ua) ? 'Android'
-                : /iPhone|iPad/.test(ua) ? 'iOS'
-                  : /Mac OS X/.test(ua) ? 'macOS'
-                    : /Linux/.test(ua) ? 'Linux' : 'OS inconnu';
-            var type = /Mobi|Android|iPhone/.test(ua) ? 'mobile' : 'desktop';
-            return { b: b, os: os, type: type };
-          }
-
-          function buildScript() {
-            var d = detect();
-            var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'inconnu';
-            var now = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            var ref = document.referrer
-              ? 'arrivé depuis ' + (function () { try { return new URL(document.referrer).hostname; } catch (e) { return 'un lien externe'; } })()
-              : 'accès direct — aucun referrer transmis';
-            var conn = (navigator.connection && navigator.connection.effectiveType)
-              ? ' · réseau ~' + navigator.connection.effectiveType : '';
-            var cores = navigator.hardwareConcurrency ? navigator.hardwareConcurrency + ' coeurs cpu' : 'cpu inconnu';
-
-            return [
-              ['whoami', 'visiteur anonyme — et il le restera'],
-              ['navigateur', d.b.toLowerCase() + ' · ' + d.os.toLowerCase() + ' · ' + d.type],
-              ['ecran', screen.width + '×' + screen.height + ' (dpr ' + (window.devicePixelRatio || 1) + ') · ' + cores + conn],
-              ['locale', (navigator.language || '—') + ' · fuseau ' + tz + ' · heure locale ' + now],
-              ['provenance', ref],
-              ['data --stored', '0 octet. zéro requête serveur — tout a été calculé dans ton navigateur, rien n\u2019a été envoyé.']
-            ];
-          }
-
-          // --- Machine à écrire : démarre quand le bloc entre dans le viewport ---
-          var started = false;
-
-          function line(text, color, bold) {
-            var div = document.createElement('div');
-            div.textContent = text;
-            if (color) div.style.color = color;
-            if (bold) div.style.fontWeight = 'bold';
-            out.appendChild(div);
-          }
-
-          function link(url) {
-            var a = document.createElement('a');
-            a.href = url;
-            a.textContent = '→ ' + url;
-            a.target = '_blank';
-            a.rel = 'noopener';
-            a.style.color = 'var(--primary-color)';
-            out.appendChild(a);
-          }
-
-          function run() {
-            if (started) return;
-            started = true;
-
-            line('live-privacy — 0 donnée stockée', 'var(--text-secondary)');
-
-            var script = buildScript();
-            var i = 0;
-
-            function step() {
-              if (i >= script.length) {
-                line('ce genre de données, LibreAnalytics sait les mesurer sobrement — sans cookie, serveur en France :', 'var(--text-secondary)');
-                link(LIBREANALYTICS_URL);
-                return;
-              }
-              var cmd = script[i][0];
-              var res = script[i][1];
-              var isFinal = (i === script.length - 1);
-              line('$ ' + cmd, 'var(--pink)');
-              setTimeout(function () {
-                line('  ' + res, isFinal ? 'var(--pink)' : null, isFinal);
-                i++;
-                setTimeout(step, isFinal ? 0 : 420);
-              }, 260);
-            }
-            step();
-          }
-
-          if ('IntersectionObserver' in window) {
-            var io = new IntersectionObserver(function (entries) {
-              for (var k = 0; k < entries.length; k++) {
-                if (entries[k].isIntersecting) { io.disconnect(); run(); return; }
-              }
-            }, { threshold: 0.4 });
-            io.observe(out);
-          } else {
-            run(); // pas d'IO : on lance direct
-          }
-        })();
-      </script>
 
     </main>
 
