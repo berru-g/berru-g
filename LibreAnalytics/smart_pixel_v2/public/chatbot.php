@@ -206,7 +206,7 @@ $faqConfig = [
             <div class="ai-conversation" id="aiConversation"></div>
 
             <div class="ai-input-area">
-                <span class="ai-prompt" id="aiPrompt">visiteur@gael-berru:~$</span>
+                <span class="ai-prompt" id="aiPrompt">gael-berru@visiteur:~$</span>
                 <input type="text" id="aiInput" autocomplete="off" spellcheck="false"
                     placeholder="pose ta question, ou 'help'…">
             </div>
@@ -309,9 +309,9 @@ $faqConfig = [
                     '  1. intégration 3D web ....... Three.js / WebGL, sites immersifs',
                     '  2. dashboards sur mesure .... analytics, dataviz, rapports automatisés',
                     '  3. outils éthiques & RGPD ... analytics sans cookies, données chez vous',
-                    '  4. intégration API .......... Binance, CoinGecko, Blockstream, API privées',
+                    '  4. intégration ou création d\'API .......... Binance, CoinGecko, Blockstream, API privées',
                     '  5. électronique / PCB ...... conception, routage, firmware Arduino',
-                    '  6. sites vitrine & CMS ..... from scratch, sans template',
+                    '  6. sites vitrine & CMS ..... php natif et sql, sans template',
                     '',
                     "  tape 'prix' (grille indicative), 'projets' (portfolio),",
                     "  'methode' (façon de bosser) ou 'contact' (devis gratuit)."
@@ -444,7 +444,7 @@ $faqConfig = [
                     "  réalisations : 3D Scroll Animator (générateur d'animations), jeu d'immersion",
                     '  dans le navigateur, heat map 3D crypto.',
                     '',
-                    "  indicatif : ~700 € l'intégration — sur devis selon la scène."
+                    "  indicatif : ~330 € l'intégration — sur devis selon la scène."
                 ]
             })
         },
@@ -500,7 +500,7 @@ $faqConfig = [
             build: () => ({
                 title: 'INTÉGRATION API',
                 lines: [
-                    '  connexion aux APIs tierces : Binance, CoinGecko, Blockstream, TradingView,',
+                    '  création ou connexion aux APIs tierces : Binance, CoinGecko, Blockstream, TradingView,',
                     '  Google Calendar, météo… et aux APIs privées de vos propres outils.',
                     "  plein de mes projets reposent là-dessus — tape 'projets api'."
                 ]
@@ -644,7 +644,7 @@ $faqConfig = [
     $badge.textContent = '!';
     $toggle.appendChild($badge);
 
-    document.getElementById('aiPrompt').textContent = 'visiteur@gael-berru:~$';
+    document.getElementById('aiPrompt').textContent = 'gael-berru@visiteur:~$';
 
     function scrollBottom() { $conv.scrollTop = $conv.scrollHeight; }
 
@@ -704,7 +704,7 @@ $faqConfig = [
         $input.value = '';
         cmdHistory.push(q);
         histPos = cmdHistory.length;
-        echo('visiteur@gael-berru:~$ ' + q, 't-user');
+        echo('gael-berru@visiteur:~$ ' + q, 't-user');
 
         const nq = normalize(q);
 
@@ -754,9 +754,7 @@ $faqConfig = [
     }
 
     function banner() {
-        echo('berru·faq — assistant de renseignement · 100% local', 't-title');
-        echo('mes services · mes réalisations · mes tarifs · ma méthode', 't-dim');
-        echo('aucune donnée stockée, aucun cookie — RGPD by design.', 't-dim');
+        echo('berru·faq — assistant de renseignement · no-ia', 't-title');
         echo('tape "help" pour les commandes, ou pose ta question en langage naturel.', 't-dim');
         echo('');
     }
