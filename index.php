@@ -1,3 +1,6 @@
+<?php
+
+?>
 <html lang="fr">
 <!-- 
     ╔══════════════════════════════════════════════════╗
@@ -131,9 +134,9 @@
             data-search="projets galerie portfolio réalisations 3D saas">
             <span>Le Site</span>
           </a>
-          <a href="https://github.com/berru-g/LibreAnalytics" target="_blank" class="nav-item"
-            data-search="api rest libreanalytics open source php natif sans framework noia ">
-            <span>API</span>
+          <a href="3D/index.html" target="_blank" class="nav-item"
+            data-search="3D threejs three.js webgl game gamification score universe 3D">
+            <span>3D version</span>
           </a>
         </div>
 
@@ -153,43 +156,16 @@
             <div class="submenu">
               <a href="https://gael-berru.com/LibreAnalytics/" target="_blank" class="nav-item"
                 data-search="alternative souverain Google Analytics free Libre Analytics">
-                <span>Alternative à Google Analytics</span>
+                <span>Libre Analytics</span>
               </a>
-              <a href="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/cli.php" target="_blank"
-                class="nav-item" data-search="pseudo cli api analyse data terminal cmd commande">
-                <span>Pseudo CLI</span>
-              </a>
-              <a href="https://github.com/berru-g/3Dscrollanimator" target="_blank" class="nav-item"
-                data-search="design systems système cohérence">
-                <span>3D Scroll Animator</span>
-              </a>
-            </div>
-          </div>
-
-          <!-- TOOLS -->
-          <div class="nav-parent">
-            <button class="nav-item" data-search="ui ux design interface utilisateur expérience prototype figma">
-              <span>Tools</span>
-              <svg class="nav-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-              </svg>
-            </button>
-            <div class="submenu">
-
               <a href="https://berru-g.github.io/enquete/" target="_blank" class="nav-item"
                 data-search="blockchain crypto bitcoin enquete forensic arnaque scam wallet">
                 <span>Blockchain Explorer</span>
               </a>
-              <a href="https://github.com/berru-g/OTTO/" target="_blank" class="nav-item"
-                data-search="python automatisation script server preset">
-                <span>Automatisation & autre</span>
+              <a href="https://github.com/berru-g/3Dscrollanimator" target="_blank" class="nav-item"
+                data-search="snippet css threejs systems système 3D saas gamification solana payement">
+                <span>3D Scroll Animator</span>
               </a>
-              <a href="https://gael-berru.com/codepen/" target="_blank" class="nav-item"
-                data-search="codepen editeur front-end html css live preview">
-                <span>Codepen - editeur html/css</span>
-              </a>
-
             </div>
           </div>
 
@@ -215,10 +191,33 @@
             </div>
           </div>
 
+          <!-- TOOLS -->
+          <div class="nav-parent">
+            <button class="nav-item" data-search="ui ux design interface utilisateur expérience prototype figma">
+              <span>Tools</span>
+              <svg class="nav-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+            </button>
+            <div class="submenu">
+
+              <a href="https://gael-berru.com/LibreAnalytics/doc/" target="_blank" class="nav-item"
+                data-search="api rest libreanalytics open source php natif sans framework noia ">
+                <span>API</span>
+              </a>
+              <a href="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/cli.php" target="_blank"
+                class="nav-item" data-search="pseudo cli api analyse data terminal cmd commande">
+                <span>Pseudo CLI</span>
+              </a>
+
+            </div>
+          </div>
+
           <!-- RESSOURCES -->
           <div class="nav-parent">
             <button class="nav-item" data-search="ressources enquete articles blockchain crypto btc">
-              <span>Ressources externes</span>
+              <span>Find me</span>
               <svg class="nav-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -229,15 +228,23 @@
 
               <a href="https://medium.com/@gael-berru" target="_blank" class="nav-item"
                 data-search="articles blog écrits publication blockchain crypto web3">
-                <span>Articles</span>
-              </a>
-              <a href="https://github.com/berru-g/" target="_blank" class="nav-item"
-                data-search="github code source javascript python php sql">
-                <span>Github</span>
+                <span><i class="fab fa-medium"></i> Medium</span>
               </a>
               <a href="https://codepen.io/h-lautre" target="_blank" class="nav-item"
                 data-search="front-end responsive codepen animations">
-                <span>Codepen</span>
+                <span><i class="fab fa-codepen"></i> Codepen</span>
+              </a>
+              <a href="https://www.hackster.io/gleberruyer" target="_blank" class="nav-item"
+                data-search="pcb éléctronique arduino hackster diy circuit daw midi usbc shield">
+                <span><svg class="social-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M11.9 12.9003C11.9 12.6003 12.1 12.4003 12.3 12.3003L15.1 11.5003C15.3 11.5003 15.5 11.5003 15.5 11.8003V12.8003C15.5 13.0003 15.3 13.2003 15.1 13.2003H12.3C12.1 13.2003 11.9 13.0003 11.9 12.8003V12.9003ZM23.4 15.4003H20.5999C20.3999 15.4003 20.2 15.2003 20.2 15.0003V10.6003C20.2 10.4003 20.3999 10.1003 20.5999 10.1003L23.4 9.30029C23.6 9.30029 23.7999 9.30029 23.7999 9.60029V15.0003C23.7999 15.2003 23.6 15.4003 23.4 15.4003ZM23.7999 23.0003C23.7999 23.3003 23.6 23.5003 23.4 23.6003L20.5999 24.4003C20.3999 24.4003 20.2 24.4003 20.2 24.1003V23.1003C20.2 22.9003 20.3999 22.7003 20.5999 22.7003H23.4C23.6 22.7003 23.7999 22.9003 23.7999 23.1003V23.0003ZM12.3 20.5003H15.1C15.3 20.5003 15.5 20.7003 15.5 20.9003V25.3003C15.5 25.5003 15.3 25.8003 15.1 25.8003L12.3 26.6003C12.1 26.6003 11.9 26.6003 11.9 26.3003V20.9003C11.9 20.7003 12.1 20.5003 12.3 20.5003ZM7.79993 16.1003C7.79993 16.1003 8.19993 16.0003 8.39993 15.9003L15.2 14.0003C15.4 14.0003 15.6 14.0003 15.6 14.3003V16.1003C15.6 16.3003 15.8 16.5003 16 16.5003H23.5C23.7 16.5003 23.9 16.7003 23.9 16.9003V18.9003C23.9 19.1003 24.0999 19.3003 24.2999 19.3003H27.9C28 19.3003 28.2 19.4003 28.2 19.6003C28.2 19.8003 28.2 19.7003 28.2 19.8003C28.2 19.8003 27.7999 19.9003 27.5999 20.0003C26.2999 20.4003 22.0999 21.5003 20.7999 21.9003C20.5999 21.9003 20.4 21.9003 20.4 21.6003V19.8003C20.4 19.6003 20.2 19.4003 20 19.4003H12.5C12.3 19.4003 12.1 19.2003 12.1 19.0003V16.9003C12.1 16.7003 11.9 16.5003 11.7 16.5003H8.09993C7.99993 16.5003 7.79993 16.4003 7.79993 16.2003C7.79993 16.0003 7.79993 16.1003 7.79993 16.0003V16.1003Z"
+                            fill="var(--staticWhite)"></path>
+                    </svg> Hackster</span>
+              </a>
+              <a href="https://github.com/berru-g/" target="_blank" class="nav-item"
+                data-search="github code open source javascript python php sql">
+                <span><i class="fab fa-github"></i> Github</span>
               </a>
 
             </div>
@@ -248,6 +255,11 @@
         <!--FORMULAIRE-->
         <div class="nav-section">
           <div class="nav-section-title">Contact</div>
+
+          <a href="mailto:contact@gael-berru.com?subject=Salut Berru" target="_blank" class="nav-item"
+            data-search="github code open source javascript python php sql">
+            <span><i class="fas fa-envelope"></i> Mail</span>
+          </a>
 
           <div class="contact-form-inside"
             style="padding: 1rem; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; margin: 0.5rem 0;">
@@ -265,9 +277,7 @@
               <button type="submit"
                 style="width: 100%; padding: 0.625rem; background: var(--primary-color); color: white; border: none; border-radius: 6px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 0.5rem; cursor: pointer; transition: opacity 0.2s;">
                 <span>Envoyer</span>
-                <!--<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                </svg>-->
+
                 <i class="fa-regular fa-paper-plane"></i>
               </button>
             </form>
@@ -1492,7 +1502,7 @@
           }
         }
       </style>
-
+        <?php include "LibreAnalytics/smart_pixel_v2/public/chatbot.php" ?>
     </main>
 
   </div>
@@ -1555,94 +1565,6 @@
 
     console.log('✅ AOS initialisé');
 
-    /* Canvas background - points network (simple, performant)
-
-    const canvas = document.getElementById("canvas-bg");
-    const ctx = canvas.getContext("2d");
-    let width, height;
-    let points = [];
-
-    function resize() {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width * devicePixelRatio;
-      canvas.height = height * devicePixelRatio;
-      canvas.style.width = width + "px";
-      canvas.style.height = height + "px";
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(devicePixelRatio, devicePixelRatio);
-    }
-
-    class Point {
-      constructor(x, y, vx, vy) {
-        this.x = x;
-        this.y = y;
-        this.vx = vx;
-        this.vy = vy;
-        this.radius = 2;
-      }
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        if (this.x < 0 || this.x > width) this.vx = -this.vx;
-        if (this.y < 0 || this.y > height) this.vy = -this.vy;
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(156, 141, 234, 0.7)";
-        ctx.fill();
-      }
-    }
-
-    function connectPoints() {
-      let maxDist = 130;
-      for (let i = 0; i < points.length; i++) {
-        for (let j = i + 1; j < points.length; j++) {
-          let dx = points[i].x - points[j].x;
-          let dy = points[i].y - points[j].y;
-          let dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < maxDist) {
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(156, 141, 234, ${1 - dist / maxDist})`;
-            ctx.lineWidth = 1;
-            ctx.moveTo(points[i].x, points[i].y);
-            ctx.lineTo(points[j].x, points[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-    }
-
-    function animate() {
-      ctx.clearRect(0, 0, width, height);
-      points.forEach((p) => {
-        p.update();
-        p.draw();
-      });
-      connectPoints();
-      requestAnimationFrame(animate);
-    }
-
-    function init() {
-      points = [];
-      for (let i = 0; i < 140; i++) {
-        let x = Math.random() * width;
-        let y = Math.random() * height;
-        let vx = (Math.random() - 0.5) * 0.3;
-        let vy = (Math.random() - 0.5) * 0.3;
-        points.push(new Point(x, y, vx, vy));
-      }
-      animate();
-    }
-
-    window.addEventListener("resize", () => {
-      resize();
-      init();
-    });
-
-    resize();
-    init();*/
   </script>
 </body>
 

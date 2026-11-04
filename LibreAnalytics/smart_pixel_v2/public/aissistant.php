@@ -297,7 +297,7 @@ function e($v) { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
     <div class="ai-assistant-container">
         <button class="ai-toggle-btn" id="aiToggle" aria-label="Ouvrir l'assistant">
             <i class="fa-regular fa-message"></i>
-            <span class="ai-badge" id="aiBadge" hidden>AI</span>
+            <span class="ai-badge" id="aiBadge" hidden>?</span>
         </button>
 
         <div class="ai-panel" id="aiPanel">
