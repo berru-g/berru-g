@@ -1630,7 +1630,7 @@
         <footer class="nav-section" id="live-footer" data-aos="fade-up">
 
           <!-- BLOC A : cartes GitHub live (réutilise .sidebar-footer + .footer-btn) -->
-          <div class="nav-section-title">Live depuis GitHub — données publiques, cache 6 h</div>
+          <div class="nav-section-title">Live depuis GitHub API — données publiques, cache 6 h</div>
 
           <div class="sidebar-footer">
             <div class="footer-btn"><strong><?= (int) $gh['repos'] ?></strong>&nbsp;dépôts open source</div>

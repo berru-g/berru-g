@@ -31,7 +31,7 @@
                         </div>
                         <h3>Bienvenue</h3>
                         <p>Plutôt que de vous présenter mes compétences, je vous propose de chercher des mots clef dans ma base de projets.</p>
-                        <p><small>Essayez "3D", "dashboard", "arduino" etc.</small></p>
+                        <p><small>Essayez "api", "dashboard", "arduino" ,"saas" ...</small></p>
                         
                     `,
                     position: 'bottom'
@@ -43,7 +43,7 @@
                             <span style="font-size: 2em;">📂</span>
                         </div>
                         <h3>Vos recherches s'affichent ici !</h3>
-                        <p>Commencez par écrire,<strong>'bienvenue'</strong>, dans la barre de recherche ou <a href="./skill/index.html" style="text-decoration: none; color: #9d86ff;" target="blank">aller directement au site</a>.</p>
+                        <p>Commencez par écrire,<strong>'bienvenue'</strong>, dans la barre de recherche ou scrollez la galerie.</p>
                     `,
                     position: 'right'
                 }
