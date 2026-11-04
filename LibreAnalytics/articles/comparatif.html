@@ -1,0 +1,271 @@
+l<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LibreAnalytics vs Plausible vs Matomo vs Umami : comparatif honnête 2026</title>
+<meta name="description" content="Comparatif factuel et honnête de 4 alternatives libres à Google Analytics : LibreAnalytics, Plausible, Matomo, Umami. Prix, licences, hébergement, RGPD. Sans langue de bois." />
+<link rel="canonical" href="https://gael-berru.com/LibreAnalytics/articles/comparatif.html" />
+<meta property="og:title" content="LibreAnalytics vs Plausible vs Matomo vs Umami — comparatif honnête" />
+<meta property="og:description" content="4 alternatives libres à Google Analytics comparées sans langue de bois, y compris les défauts de chacune." />
+<meta property="og:type" content="article" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Faut-il un bandeau de consentement cookies avec un outil d'analytics sans cookies ?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Non. Si l'outil ne dépose aucun cookie et ne collecte aucune donnée personnelle (pas d'adresse IP stockée, pas d'identifiant persistant), l'analyse d'audience tombe sous le régime de l'exemption du consentement, comme le confirme la CNIL pour les outils correctement configurés. C'est le cas de LibreAnalytics, Plausible et Umami par conception, et de Matomo avec une configuration sans cookies." }
+    },
+    {
+      "@type": "Question",
+      "name": "Google Analytics est-il toujours utilisable en France ?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Techniquement oui, juridiquement sous conditions. La CNIL a rappelé que le transfert de données vers les États-Unis sans garanties appropriées expose l'éditeur du site à des sanctions. Beaucoup de sites préfèrent donc une alternative européenne auto-hébergée ou hébergée en UE pour éliminer le risque à la source plutôt que de le gérer." }
+    },
+    {
+      "@type": "Question",
+      "name": "Quel outil d'analytics auto-hébergé fonctionne sur un hébergement mutualisé classique ?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Matomo et LibreAnalytics tournent en PHP + MySQL : ils s'installent sur n'importe quel hébergement mutualisé (OVH, o2switch, Infomaniak) sans VPS ni Docker. Plausible exige Elixir/PostgreSQL et Umami exige Node.js/PostgreSQL : en pratique, il faut un VPS ou un conteneur Docker." }
+    },
+    {
+      "@type": "Question",
+      "name": "Quelle est la différence de prix entre Plausible, Matomo et Umami en version cloud ?",
+      "acceptedAnswer": { "@type": "Answer", "text": "En 2026 : Plausible Cloud démarre à 9 $/mois pour 10 000 pages vues, Umami Cloud propose un palier gratuit (Hobby) puis Pro à partir de 20 $/mois, et Matomo Cloud démarre autour de 26-29 $/mois sans palier gratuit (essai de 21 jours). Les trois sont gratuits en auto-hébergement." }
+    },
+    {
+      "@type": "Question",
+      "name": "Comment migrer mon site de Google Analytics vers un outil libre ?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Chez LibreAnalytics, l'installation se fait en 2 minutes : créez un compte, ajoutez votre site, copiez une seule ligne de script dans le head. L'API vous permet ensuite de récupérer vos données à tout moment, donc aucune donnée n'est enfermée. L'historique Google Analytics ne se transfère pas (il mesure différemment), mais les deux peuvent tourner en parallèle le temps de comparer." }
+    },
+    {
+      "@type": "Question",
+      "name": "Pourquoi choisir un outil d'analytics français ?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Pour la souveraineté des données : LibreAnalytics s'exécute sur un serveur situé en France et peut être auto-hébergé chez l'hébergeur de votre choix. Les données de vos visiteurs ne quittent jamais le territoire si vous ne le décidez pas, et le code source est auditable par n'importe qui." }
+    }
+  ]
+}
+</script>
+<style>
+  :root{
+    --ink:#1a2332; --muted:#5b6b7f; --line:#e3e8ef; --bg:#fafbfd;
+    --accent:#2f6f4f; --accent-bg:#eef5f0; --warn-bg:#fdf3ec; --warn-ink:#8a5a2b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+       color:var(--ink);background:var(--bg);line-height:1.65;font-size:16px}
+  .wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+  header{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:28px}
+  .kicker{text-transform:uppercase;letter-spacing:.12em;font-size:.72rem;color:var(--muted);margin:0 0 8px}
+  h1{font-size:clamp(1.5rem,4vw,2.2rem);line-height:1.2;margin:0 0 10px}
+  .lead{font-size:1.05rem;color:var(--muted);margin:0}
+  h2{font-size:1.35rem;margin:44px 0 12px;padding-top:10px}
+  h3{font-size:1.02rem;margin:26px 0 8px}
+  .transparency{background:var(--accent-bg);border-left:4px solid var(--accent);
+                padding:14px 18px;margin:22px 0;font-size:.95rem}
+  .transparency strong{color:var(--accent)}
+  .warn{background:var(--warn-bg);border-left:4px solid var(--warn-ink);
+        padding:14px 18px;margin:22px 0;font-size:.95rem;color:var(--warn-ink)}
+  .table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:#fff}
+  table{border-collapse:collapse;width:100%;min-width:760px;font-size:.88rem}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{background:#f0f3f7;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em}
+  tbody th{font-weight:600;color:var(--muted);white-space:nowrap;font-size:.82rem}
+  tr:last-child td,tr:last-row th{border-bottom:none}
+  .la{background:#f2f8f4}
+  td.win{color:var(--accent);font-weight:600}
+  td.lose{color:var(--warn-ink)}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:18px 0}
+  .card{border:1px solid var(--line);border-radius:8px;padding:16px;background:#fff;font-size:.9rem}
+  .card h4{margin:0 0 6px;font-size:.95rem}
+  .card p{margin:0;color:var(--muted)}
+  details{border:1px solid var(--line);border-radius:8px;background:#fff;margin:10px 0;padding:0}
+  summary{cursor:pointer;padding:14px 16px;font-weight:600;font-size:.95rem}
+  details p{margin:0;padding:0 16px 14px;color:var(--muted);font-size:.92rem}
+  a{color:var(--accent)}
+  .sources{font-size:.8rem;color:var(--muted)}
+  .sources li{margin-bottom:4px}
+  footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);
+         font-size:.85rem;color:var(--muted)}
+  .cta{display:inline-block;margin-top:14px;padding:10px 20px;border-radius:6px;
+       background:var(--ink);color:#fff;text-decoration:none;font-weight:600}
+  @media(max-width:640px){ tbody th{white-space:normal} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="kicker">Analytics libre · Comparatif 2026</p>
+  <h1>LibreAnalytics vs Plausible vs Matomo vs Umami : le comparatif sans langue de bois</h1>
+  <p class="lead">Quatre alternatives libres à Google Analytics, comparées factuellement — y compris là où LibreAnalytics est moins bon que les autres. Cette page est écrite par le créateur de LibreAnalytics, et la transparence y est plus importante que la vente.</p>
+</header>
+
+<div class="transparency">
+  <strong>Notre règle : ne jamais mentir, même quand ça nous défavorise.</strong>
+  Les prix cités sont les prix publics officiels vérifiés en 2026. LibreAnalytics est un projet solo, encore en version bêta (V1.0.8), utilisé par une quinzaine de sites français. Si vous cherchez un outil mature avec des millions d'utilisateurs, les trois autres sont des choix sérieux — nous vous dirons lesquels et pourquoi.
+</div>
+
+<h2>Le tableau de comparaison</h2>
+<div class="table-scroll">
+<table>
+  <thead>
+    <tr>
+      <th scope="col">Critère</th>
+      <th scope="col">LibreAnalytics</th>
+      <th scope="col">Plausible</th>
+      <th scope="col">Matomo</th>
+      <th scope="col">Umami</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Licence</th>
+      <td class="la">Open source</td>
+      <td>AGPL-3.0</td>
+      <td>GPL-3.0</td>
+      <td>MIT</td>
+    </tr>
+    <tr>
+      <th scope="row">Auto-hébergement</th>
+      <td class="la win">Gratuit (fork)</td>
+      <td>Gratuit</td>
+      <td>Gratuit</td>
+      <td>Gratuit</td>
+    </tr>
+    <tr>
+      <th scope="row">Technologie requise</th>
+      <td class="la win">PHP + MySQL : tourne sur n'importe quel mutualisé</td>
+      <td>Elixir + PostgreSQL : VPS ou Docker requis</td>
+      <td>PHP + MySQL, mais gourmand en maintenance (archivage, base à surveiller)</td>
+      <td>Node.js + PostgreSQL : VPS ou Docker requis</td>
+    </tr>
+    <tr>
+      <th scope="row">Version cloud — prix</th>
+      <td class="la">Plan gratuit (bêta). Version hébergée en préparation.</td>
+      <td>Dès 9 $/mois (10 000 pages vues)</td>
+      <td>Dès ~26-29 $/mois, pas de palier gratuit (essai 21 jours)</td>
+      <td>Hobby gratuit, puis Pro dès 20 $/mois</td>
+    </tr>
+    <tr>
+      <th scope="row">Cookies &amp; consentement</th>
+      <td class="la win">Aucun cookie, aucun bandeau</td>
+      <td>Aucun cookie, aucun bandeau</td>
+      <td>Sans cookies si configuré ainsi (exemption CNIL)</td>
+      <td>Aucun cookie, aucun bandeau</td>
+    </tr>
+    <tr>
+      <th scope="row">Localisation des données</th>
+      <td class="la win">Serveur en France (ou chez vous)</td>
+      <td>Union européenne</td>
+      <td>Cloud hébergé à Francfort</td>
+      <td>Dépend du plan</td>
+    </tr>
+    <tr>
+      <th scope="row">Interface</th>
+      <td class="la">Simple et directe</td>
+      <td class="win">Épurée, la référence du genre</td>
+      <td class="lose">Très complète mais chargée</td>
+      <td>Simple et claire</td>
+    </tr>
+    <tr>
+      <th scope="row">Fonctions avancées (funnels, heatmaps, replays)</th>
+      <td class="la lose">Non — volontairement léger : dashboard, API, CLI</td>
+      <td>Ensemble en croissance</td>
+      <td class="win">Le plus complet (certaines en plugins payants)</td>
+      <td>Sur le palier Business</td>
+    </tr>
+    <tr>
+      <th scope="row">Maturité / communauté</th>
+      <td class="la lose">Projet solo, bêta depuis 2021, ~14 sites</td>
+      <td class="win">Très mature, des milliers de clients payants</td>
+      <td class="win">Le plus ancien, énorme communauté</td>
+      <td class="win">Fort croissance, grande communauté</td>
+    </tr>
+    <tr>
+      <th scope="row">Accès API &amp; portabilité</th>
+      <td class="la win">API + Pseudo CLI, données exportables</td>
+      <td>API</td>
+      <td>API + export</td>
+      <td>API</td>
+    </tr>
+    <tr>
+      <th scope="row">Dépendance à un seul éditeur</th>
+      <td class="la">Éditeur indépendant français, pas de modèle de rente à défendre</td>
+      <td>Société privée (édition communautaire gratuite)</td>
+      <td>Société privée (fonctions gated)</td>
+      <td>Société privée</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h2>Alors, quel outil pour qui ?</h2>
+<p>Recommandations honnêtes, même quand elles ne nous avantagent pas :</p>
+<div class="cards">
+  <div class="card">
+    <h4>Matomo</h4>
+    <p>Si vous voulez le maximum de fonctions (heatmaps, A/B tests, replays de session) et que vous assumez la maintenance. L'option de référence pour les grosses structures.</p>
+  </div>
+  <div class="card">
+    <h4>Plausible</h4>
+    <p>Si vous voulez un SaaS léché, clé en main, sans rien administrer, et que 9 $/mois ne vous dérangent pas. L'expérience utilisateur la plus soignée du marché.</p>
+  </div>
+  <div class="card">
+    <h4>Umami</h4>
+    <p>Le bon équilibre entre la simplicité de Plausible et la richesse de Matomo, avec un palier gratuit et une licence MIT permissive.</p>
+  </div>
+  <div class="card">
+    <h4>LibreAnalytics</h4>
+    <p>Si vous êtes un webmaster français sur un hébergement mutualisé classique, que vous voulez la souveraineté totale sans VPS ni Docker, et qu'un projet indépendant, léger et auditable vous parle.</p>
+  </div>
+</div>
+
+<h2>Ce que LibreAnalytics ne sait pas faire (et pourquoi)</h2>
+<div class="warn">
+  Pas de tunnels de conversion, pas de cartes de chaleur, pas de replay de session, pas d'équipe support derrière. C'est un choix : un outil qu'une seule personne peut comprendre, installer sur un mutualisé à 3 €/mois et administrer sans y penser. Si vous avez besoin des fonctions avancées ci-dessus, prenez Matomo ou Umami — ce sera plus honnête de notre part que de vous vendre autre chose.
+</div>
+
+<h2>Questions fréquentes</h2>
+<details>
+  <summary>Faut-il un bandeau cookies avec un outil sans cookies ?</summary>
+  <p>Non. Sans cookie et sans donnée personnelle collectée, l'analyse d'audience relève de l'exemption de consentement confirmée par la CNIL. LibreAnalytics, Plausible et Umami sont sans cookies par conception ; Matomo l'est avec la configuration adaptée.</p>
+</details>
+<details>
+  <summary>Google Analytics est-il interdit en France ?</summary>
+  <p>Non, mais son usage est encadré : la CNIL a sanctionné des transferts de données vers les États-Unis sans garanties suffisantes. Une alternative européenne auto-hébergée élimine le risque à la source.</p>
+</details>
+<details>
+  <summary>Quel outil tourne sur un hébergement mutualisé classique ?</summary>
+  <p>Matomo et LibreAnalytics (PHP + MySQL). Plausible et Umami demandent un VPS ou Docker.</p>
+</details>
+<details>
+  <summary>Comment migrer depuis Google Analytics ?</summary>
+  <p>Chez LibreAnalytics : compte, site, une ligne de script dans le head — 2 minutes. L'API exporte vos données à tout moment. L'historique GA ne se transfère pas, mais les deux outils peuvent tourner en parallèle.</p>
+</details>
+<details>
+  <summary>C'est quoi, un « smart pixel » ?</summary>
+  <p>Un script de tracking d'une seule ligne de code, sans cookie, qui mesure les pages vues et la provenance des visiteurs et alimente votre dashboard en temps réel.</p>
+</details>
+
+<h2>Essayer LibreAnalytics</h2>
+<p>Inscription gratuite en 7 secondes, aucune carte bancaire requise, un seul site web (et ses sous-domaines) sur le plan gratuit. Le code source est ouvert et forkable — l'auto-hébergement sera toujours gratuit.</p>
+<p><a class="cta" href="https://gael-berru.com/LibreAnalytics/?utm_source=comparatif">Créer mon premier dashboard</a></p>
+
+<h2>Sources</h2>
+<ul class="sources">
+  <li>Prix Plausible : <a href="https://plausible.io/pricing" rel="nofollow">plausible.io/pricing</a></li>
+  <li>Prix Umami : <a href="https://umami.is/pricing" rel="nofollow">umami.is/pricing</a></li>
+  <li>Prix Matomo : <a href="https://matomo.org/pricing/" rel="nofollow">matomo.org/pricing</a></li>
+  <li>Licences et comparatifs croisés 2026 : <a href="https://openpanel.dev/articles/open-source-web-analytics" rel="nofollow">OpenPanel — survey des outils open source</a>, <a href="https://wz-it.com/en/blog/plausible-umami-matomo-comparison/" rel="nofollow">wz-it.com — comparatif self-hosted</a></li>
+  <li>Site LibreAnalytics : <a href="https://gael-berru.com/LibreAnalytics/?utm_source=comparatif">gael-berru.com/LibreAnalytics</a></li>
+</ul>
+
+<footer>
+  <p>Page maintenue par le créateur de LibreAnalytics, mise à jour à chaque évolution de prix des concurrents. Ce projet ne vend pas vos données — il n'y a d'ailleurs rien à vendre : les dons de soutien sont redirigés vers les Restos du Cœur, qui ont aidé l'auteur pendant une période difficile.</p>
+</footer>
+
+</div>
+</body>
+</html>
