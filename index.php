@@ -1059,6 +1059,20 @@
 
           </div>
 
+          <section class="galerie-report" data-aos="fade-up" lang="en">
+            <div>
+              <h2 class="galerie-meta" style="font-size:1rem;">Web developer in Vertou, Loire-Atlantique (44), France
+              </h2>
+              <p class="galerie-meta" style="font-weight:400; opacity:.8; max-width:60ch;">
+                Self-taught developer based in <strong>Vertou, France</strong>, I design
+                <strong>PCBs</strong>, <strong>REST APIs</strong>, <strong>dashboards</strong> and
+                <strong>business software</strong> in <strong>plain PHP</strong> — no frameworks,
+                no unnecessary dependencies — for fast, maintainable tools where
+                <strong>you own your data</strong>. See also my
+                <a href="https://github.com/berru-g/" target="_blank" rel="noopener noreferrer">GitHub</a>.
+              </p>
+            </div>
+          </section>
 
         </div>
 
@@ -1489,24 +1503,10 @@
         }
       </style>
       <?php include "LibreAnalytics/smart_pixel_v2/public/chatbot.php" ?>
-      
-      <section class="galerie-report" data-aos="fade-up" lang="en">
-            <div>
-              <h2 class="galerie-meta" style="font-size:1rem;">Web developer in Vertou, Loire-Atlantique (44), France
-              </h2>
-              <p class="galerie-meta" style="font-weight:400; opacity:.4; max-width:60ch;">
-                Self-taught developer based in <strong>Vertou, France</strong>, I design
-                <strong>PCBs</strong>, <strong>REST APIs</strong>, <strong>dashboards</strong> and
-                <strong>business software</strong> in <strong>plain PHP</strong> — no frameworks,
-                no unnecessary dependencies — for fast, maintainable tools where
-                <strong>you own your data</strong>. See also my
-                <a href="https://github.com/berru-g/" target="_blank" rel="noopener noreferrer">GitHub</a>.
-              </p>
-            </div>
-          </section>
 
+<!--
       <?php
-
+// ===== GITHUB STATS =====
       function gh_stats(string $user, int $ttl = 21600): ?array
       {
         $dir = __DIR__ . '/cache';
@@ -1596,11 +1596,9 @@
       ?>
 
       <?php if ($gh): ?>
-        <!-- ================= FOOTER DYNAMIQUE — GitHub live, styles inline ========== -->
         <footer id="live-footer" data-aos="fade-up"
           style="margin-top:3rem; padding:1.5rem; background:var(--sidebar-bg); border:1px solid var(--border-color); border-radius:12px; box-shadow:var(--shadow);">
 
-          <!-- En-tête -->
           <div
             style="display:flex; align-items:baseline; justify-content:space-between; gap:0.75rem; flex-wrap:wrap; margin-bottom:1.25rem;">
             <h3 style="margin:0; font-size:0.95rem; font-weight:600; color:var(--text-color);">
@@ -1611,7 +1609,6 @@
               publiques · cache 6 h</span>
           </div>
 
-          <!-- Cartes de stats : grille auto-responsive (4 → 2 → 1 selon la largeur) -->
           <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:0.75rem;">
             <div
               style="padding:0.875rem 1rem; background:var(--search-bg); ">
@@ -1640,7 +1637,6 @@
             </div>
           </div>
 
-          <!-- Top 3 repos les plus étoilés -->
           <div style="margin-top:0.75rem; display:grid; gap:0.5rem;">
             <?php foreach ($gh['top'] as $repo): ?>
               <a href="<?= htmlspecialchars($repo['url']) ?>" target="_blank" rel="noopener"
@@ -1659,6 +1655,7 @@
 
         </footer>
       <?php endif; ?>
+-->
 
 
     </main>

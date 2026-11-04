@@ -1,13 +1,98 @@
-<!DOCTYPE html>
 <html lang="fr">
+<!-- 
+    ╔══════════════════════════════════════════════════╗
+    ║     ██████╗ ███████╗██████╗ ██████╗ ██╗   ██╗    ║
+    ║     ██╔══██╗██╔════╝██╔══██╗██╔══██╗██║   ██║    ║
+    ║     ██████╔╝█████╗  ██████╔╝██████╔╝██║   ██║    ║
+    ║     ██╔══██╗██╔══╝  ██╔══██╗██╔══██╗██║   ██║    ║
+    ║     ██████╔╝███████╗██║  ██║██║  ██║╚██████╔╝    ║
+    ║     ╚═════╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝     ║
+    ╠══════════════════════════════════════════════════╣
+    ║  Project      : berru-g CV                       ║
+    ║  First commit : February 27, 2020                ║
+    ║  Version      : 5.0.0                            ║
+    ║  Copyright    : 2025 Berru                       ║
+    ║  GitHub       : https://github.com/berru-g/      ║
+    ╚══════════════════════════════════════════════════╝
+-->
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project base of berru-g</title>
-    <link rel="shortcut icon" href="/img/logo.png">
-    <link rel="stylesheet" href="./menu/dynamic-search.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gaël Berru — Développeur web PHP &amp; logiciel à Vertou (44)</title>
+  <link rel="shortcut icon" href="/img/logo.png" />
+  <link rel="apple-touch-icon" href="/img/logo.png" />
+  <meta name="keywords"
+    content="site web souverains vertou, developpeur web Vertou, Gael Leberruyer, Gael Berru, outils open source, Libre Analytics, web3, crypto enthusiast, enquete blockchain, open source, developpeur Vertou,">
+  <meta name="author" content="Gael Berru.">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Gaël Berru — Développeur web PHP &amp; logiciel à Vertou (44)">
+  <meta property="og:description"
+    content="Sites, API REST et logiciels sur mesure en PHP natif, sans framework. Open source et souveraineté numérique, depuis 2020.">
+  <meta property="og:image" content="https://berru-g.github.io/berru-g/img/logo.png">
+  <meta property="og:locale" content="fr_FR">
+  <meta name="twitter:card" content="summary">
+  <link rel="alternate" type="text/plain" href="https://gael-berru.com/llms.txt" title="llms.txt">
+  <meta name="theme-color" content="#9d86ff">
+  <meta property="og:url" content="https://gael-berru.com/">
+  <link rel="canonical" href="https://gael-berru.com/">
+  <link rel="stylesheet" href="./menu/dynamic-search.css">
+  <!--<link rel="stylesheet" href="./LibreAnalytics/RGPD/cookie.css">-->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <!-- premiere version de mon tracker et la derniére pour comparaison
+  <script src="./LibreAnalytics/pixel/smart-pixel.js"></script>-->
+  <script data-sp-id="SP_7f9505cc" src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js"
+    async></script>
+
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Gaël Leberruyer (Berru-G)",
+  "url": "https://gael-berru.com",
+  "description": "Développeur web à Vertou : sites, API REST et logiciels sur mesure en PHP natif, sans framework.",
+  "jobTitle": "Développeur web PHP fullstack",
+  "image": "https://berru-g.github.io/berru-g/img/logo.png",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Vertou",
+    "addressRegion": "Pays de la Loire",
+    "postalCode": "44120",
+    "addressCountry": "FR"
+  },
+  "knowsLanguage": "fr",
+  "sameAs": [
+    "https://github.com/berru-g",
+    "https://codepen.io/h-lautre",
+    "https://medium.com/@gael-berru",
+    "https://www.instagram.com/berru_aka/",
+    "https://www.hackster.io/gleberruyer",
+    "https://www.tindie.com/stores/makeandplay/",
+    "https://gael-berru.com/LibreAnalytics/"
+  ],
+  "skills": ["Développement web", "Développeur PHP", "API REST", "Analytics souverain"],
+  "hasOccupation": {
+    "@type": "Occupation",
+    "name": "Développeur web et logiciel",
+    "description": "Conception d'outils web, d'API REST et de logiciels sur mesure",
+    "skills": ["PHP", "SQL", "API REST", "JavaScript", "PCB design", "Arduino", "Easy EDA", "Hardware", "Open source"]
+  },
+  "knowsAbout": [
+    "Développement web",
+    "PHP natif",
+    "API REST",
+    "Open source",
+    "Web souverain",
+    "Développement SAAS",
+    "Création de circuits électroniques"
+  ]
+}
+</script>
     <style>
         /* ===== BERRU SEARCH — moteur de recherche ===== */
 
@@ -404,7 +489,7 @@
             stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
-        <input type="text" class="search-input" id="searchInput" placeholder="Search api, blockchain, pcb ..."
+        <input type="text" class="search-input" id="searchInput" placeholder="Cherche un projet ou pose ta question…"
             autocomplete="on">
         <kbd class="search-shortcut">/</kbd>
     </div>
@@ -428,7 +513,13 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // ===== SEARCH ONLY — version BERRU SEARCH =====
+        // ======================================================================
+        // SEARCH + ASSISTANT — tout passe par la barre de recherche.
+        // Un query peut matcher : une intention assistant (réponse en carte),
+        // des projets, ou les deux. Rendu 100% via les classes preview-* :
+        // la réponse de l'assistant est visuellement un résultat comme un autre.
+        // ======================================================================
+
         const searchInput = document.getElementById('searchInput');
 
         const EASTER_EGG_PASSWORD = '--cmd';
@@ -443,6 +534,141 @@
             return false;
         }
 
+        // ======================================================================
+        // ASSISTANT — moteur d'intents par mots-clés scorés (berru·faq, même algo)
+        // ======================================================================
+        const CHAT_CFG = {
+            mail: 'contact@gael-berru.com',
+            restos: 'https://dons.restosducoeur.org/faire-un-don/~mon-don/',
+            github: 'https://github.com/berru-g/',
+            libreanalytics: 'https://gael-berru.com/LibreAnalytics',
+            cryptoTools: 'https://crypto-free-tools.netlify.app/'
+        };
+
+        const normalize = (s) => String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+        const INTENTS = [
+            {
+                icon: '🛠️', title: 'Mes services',
+                terms: { service: 3, prestation: 3, propose: 3, offre: 2, expertise: 3, competence: 2, sais: 2, faire: 2, peux: 2, aide: 1, quoi: 1 },
+                desc: "Je conçois des <strong>outils sur mesure</strong> — web, données, électronique. L'existant est open source, le sur-mesure se chiffre sur devis gratuit.",
+                features: ['Intégration 3D web (Three.js / WebGL)', 'Dashboards sur mesure & dataviz', 'Outils éthiques & RGPD', 'Intégration API', 'Électronique / PCB', 'Sites vitrine & CMS'],
+                linkLabel: 'Me contacter', linkUrl: 'mailto:' + CHAT_CFG.mail + '?subject=Question depuis la Project Base'
+            },
+            {
+                icon: '💻', title: 'Mes compétences',
+                terms: { competence: 3, techno: 3, technologie: 3, stack: 3, langage: 3, code: 2, maitrise: 3, php: 2, python: 2, javascript: 2, html: 1, css: 1 },
+                desc: "PHP natif, Python, SQL, JavaScript vanilla, Three.js/WebGL, Arduino et PCB (EasyEDA). <strong>Ni frameworks ni templates</strong> : le code reste compréhensible et vous appartient de bout en bout.",
+                features: ['Frontend : HTML, CSS, JS vanilla', 'Backend : PHP, Python', 'Données : SQL / MySQL', '3D : Three.js, WebGL', 'Électronique : Arduino, PCB, NFC'],
+                linkLabel: 'Voir mon GitHub', linkUrl: CHAT_CFG.github
+            },
+            {
+                icon: '🧭', title: 'Ma méthode',
+                terms: { methode: 3, bosse: 3, travaille: 3, travail: 2, processus: 3, demarche: 3, souverain: 3, framework: 2, template: 2, dependance: 3, lovable: 3 },
+                desc: "La <strong>souveraineté technique</strong> : pas de dépendances superflues, vos données ne transitent dans aucun système externe, aucune boîte noire.",
+                features: ['Tu décris ta problématique', 'Devis gratuit, sans engagement', 'Développement itératif, code documenté', "Le code source t'appartient à 100 %"],
+                linkLabel: 'Décrire mon projet', linkUrl: 'mailto:' + CHAT_CFG.mail + '?subject=Projet sur mesure'
+            },
+            {
+                icon: '💚', title: 'Rien à vendre',
+                terms: { philosophie: 3, open: 2, source: 2, gratuit: 3, libre: 3, don: 3, restos: 3, coeur: 3, vendre: 2, licence: 2, ethique: 2 },
+                desc: "Tous mes projets sont open source. Pas de licence, pas de contrepartie : si un outil t'est utile, il est à toi. Si tu tiens à donner, fais-le plutôt aux <strong>Restos du Cœur</strong> — c'est la seule monnaie que j'accepte.",
+                features: ['Code visible ligne par ligne', 'Pas de licence, pas de contrepartie', 'Dons → Restos du Cœur'],
+                linkLabel: 'Faire un don aux Restos du Cœur', linkUrl: CHAT_CFG.restos
+            },
+            {
+                icon: '💰', title: 'Tarifs sur-mesure',
+                terms: { prix: 3, tarif: 3, coute: 3, combien: 3, budget: 3, devis: 2, cher: 2, euro: 2 },
+                desc: "Grille indicative — <strong>chaque projet est chiffré sur devis, gratuitement</strong>. Mes outils existants restent gratuits et open source.",
+                features: ['Site vitrine / CMS — ~600 €', 'Dashboard sur mesure — ~900 €', 'PCB / électronique — ~400 €', 'Intégration 3D — ~700 €', 'Devis gratuit, sans engagement'],
+                linkLabel: 'Demander un devis', linkUrl: 'mailto:' + CHAT_CFG.mail + '?subject=Demande de devis'
+            },
+            {
+                icon: '👋', title: 'Qui suis-je',
+                terms: { berru: 3, gael: 3, autodidacte: 3, parcours: 3, experience: 2, presente: 2, histoire: 1 },
+                desc: "Développeur <strong>autodidacte depuis 2020</strong>, artisan du code souverain et open source. Web, données, électronique — tout mon travail est visible ligne par ligne sur GitHub.",
+                features: [],
+                linkLabel: 'Voir mon GitHub', linkUrl: CHAT_CFG.github
+            },
+            {
+                icon: '📊', title: 'LibreAnalytics',
+                terms: { analytics: 3, libreanalytics: 3, tracking: 2, google: 2, matomo: 2, plausible: 2, umami: 1, statistique: 2, cookie: 2, privee: 2, gafam: 2, rgpd: 2 },
+                desc: "Alternative <strong>souveraine à Google Analytics</strong> : auto-hébergé, sans cookies, conforme RGPD, open source. Tourne sur un mutualisé classique — pas besoin de Docker ni de VPS.",
+                features: ['Dashboard complet', 'Accès API', "Doc d'intégration complète"],
+                linkLabel: 'Voir LibreAnalytics', linkUrl: CHAT_CFG.libreanalytics
+            },
+            {
+                icon: '⚡', title: 'Électronique & PCB',
+                terms: { arduino: 3, pcb: 3, electronique: 3, nfc: 3, badge: 2, circuit: 2, midi: 3, daw: 3, radio: 2, rc: 2, robotique: 2, lego: 2, easyeda: 2, shield: 2 },
+                desc: "Conception de circuits et <strong>PCB (EasyEDA)</strong>, firmware Arduino, NFC, radio RC (2 km), contrôleurs MIDI pour DAW. Indicatif : ~400 € le PCB, sur devis selon complexité.",
+                features: ['NFC Badge (NT3H2111)', 'RC Motor — radio commandé', 'Contrôleurs MIDI USB-C', 'Shield Arduino × Lego'],
+                linkLabel: 'Voir sur GitHub', linkUrl: CHAT_CFG.github
+            },
+            {
+                icon: '🧊', title: '3D & WebGL',
+                terms: { '3d': 3, threejs: 3, webgl: 3, three: 3, immersion: 2, scroll: 2, animation: 2 },
+                desc: "Intégration <strong>Three.js / WebGL</strong> : animations synchronisées au scroll, univers immersifs, dataviz 3D. Indicatif : ~700 € l'intégration, sur devis selon la scène.",
+                features: ['3D Scroll Animator', "Jeu d'immersion navigateur", 'Heat map 3D crypto'],
+                linkLabel: 'Voir 3D Scroll Animator', linkUrl: 'https://github.com/berru-g/3Dscrollanimator'
+            },
+            {
+                icon: '📈', title: 'Dashboards & dataviz',
+                terms: { dashboard: 3, dataviz: 3, visualisation: 3, tableau: 2, chart: 2, graphique: 2, sql: 3, csv: 2, excel: 2, json: 2, reporting: 2, cron: 2 },
+                desc: "Tableaux de bord sur mesure : analytics multi-sites, wallets crypto (API CoinGecko), charts TradingView, agenda, météo, <strong>rapports automatisés par CRON</strong>. Éditeur SQL-to-Map : import CSV / Excel / JSON. Indicatif : ~900 €, sur devis.",
+                features: ['Analytics multi-sites', 'API CoinGecko · TradingView', 'Rapports clients par CRON'],
+                linkLabel: 'Voir mon GitHub', linkUrl: CHAT_CFG.github
+            },
+            {
+                icon: '🌐', title: 'Sites vitrines & CMS',
+                terms: { site: 3, vitrine: 3, cms: 3, ecommerce: 3, commerce: 3, boutique: 2, formulaire: 2, galerie: 2, refonte: 2 },
+                desc: "Sites vitrine et CMS <strong>from scratch, sans template</strong> : formulaires, galeries, responsive, analytics intégrée. Indicatif : ~600 €, sur devis.",
+                features: ['Golden Dessert — CMS pâtissier', 'Berru Clothing — e-commerce 2016-2018'],
+                linkLabel: 'Exemple : Golden Dessert', linkUrl: 'https://goldendessert.fr'
+            },
+            {
+                icon: '⛓️', title: 'Crypto & blockchain',
+                terms: { crypto: 3, bitcoin: 3, btc: 3, blockchain: 3, trading: 2, binance: 2, coingecko: 2, wallet: 2, investigation: 3, scam: 2, solana: 2 },
+                desc: "Outils traders (API TradingView / CoinGecko / Binance) et <strong>investigation blockchain</strong> : traçage de transactions Bitcoin, identification des plateformes KYC, diagrammes automatiques. Guide débutant : wallet sans KYC, stacking Solana.",
+                features: ['Suivi de transactions', 'Identification KYC', 'Guide crypto débutant'],
+                linkLabel: 'Voir les outils crypto', linkUrl: CHAT_CFG.cryptoTools
+            },
+            {
+                icon: '🔌', title: 'Intégration API',
+                terms: { api: 3, integration: 2, websocket: 2, rest: 2, connecter: 2, brancher: 2 },
+                desc: "Connexion aux APIs tierces — Binance, CoinGecko, Blockstream, TradingView, Google Calendar, météo — et aux <strong>APIs privées</strong> de tes propres outils.",
+                features: [],
+                linkLabel: "Exemple d'API documentée", linkUrl: 'https://gael-berru.com/LibreAnalytics/doc/'
+            },
+            {
+                icon: '✉️', title: 'Contact',
+                terms: { contact: 3, mail: 2, email: 2, parler: 2, discuter: 2, joindre: 3, message: 2, ecrire: 2, telephone: 2 },
+                desc: "Le plus simple : <strong>décris-moi ta problématique</strong> actuelle et en quoi je peux t'aider. Devis gratuit, réponse humaine — pas de tunnel de vente.",
+                features: [CHAT_CFG.mail],
+                linkLabel: "M'écrire", linkUrl: 'mailto:' + CHAT_CFG.mail + '?subject=Salut Berru'
+            }
+        ];
+
+        /** Score chaque intent par mots-clés (même algo que le chatbot berru·faq) */
+        function detectIntent(query) {
+            const words = normalize(query).split(/[^a-z0-9]+/).filter(Boolean);
+            const stems = words.map(w => w.slice(0, 6));
+            let best = null, bestScore = 0;
+            for (const it of INTENTS) {
+                let s = 0;
+                for (const [term, weight] of Object.entries(it.terms)) {
+                    const t = normalize(term);
+                    const match = (w) => w === t || (t.length >= 4 && w.length >= 4 && (w.startsWith(t) || t.startsWith(w)));
+                    if (words.some(match) || stems.some(st => st.startsWith(t) && t.length >= 4)) s += weight;
+                }
+                if (s > bestScore) { bestScore = s; best = it; }
+            }
+            return bestScore >= 3 ? best : null; // seuil : au moins un mot-clé fort
+        }
+
+        // ======================================================================
+        // RECHERCHE PROJETS / SERVICES (inchangée) + ASSISTANT en tête de liste
+        // ======================================================================
+
         function calculateRelevance(project, term) {
             let r = 0;
             if (project.title.toLowerCase().includes(term)) r += 5;
@@ -456,6 +682,7 @@
             if (!searchTerm || searchTerm.length < 2) return hideProjectPreview();
 
             const term = searchTerm.toLowerCase();
+            const intent = detectIntent(searchTerm);
             const matches = [];
 
             projectsDatabase.forEach(project => {
@@ -466,13 +693,19 @@
                 }
             });
 
-            servicesDatabase.forEach(service => {
-                const searchSpace = [service.title, service.desc, ...service.keywords].join(' ').toLowerCase();
-                if (searchSpace.includes(term)) matches.push({ type: 'service', data: service, relevance: 1 });
-            });
+            // Les services doublonnent les réponses de l'assistant :
+            // quand l'assistant répond, on les laisse de côté.
+            if (!intent) {
+                servicesDatabase.forEach(service => {
+                    const searchSpace = [service.title, service.desc, ...service.keywords].join(' ').toLowerCase();
+                    if (searchSpace.includes(term)) matches.push({ type: 'service', data: service, relevance: 1 });
+                });
+            }
 
             matches.sort((a, b) => b.relevance - a.relevance);
-            matches.length ? showProjectPreview(matches) : showNoResults();
+
+            if (intent || matches.length) showProjectPreview(matches, intent);
+            else showNoResults();
         }
 
         function showNoResults() {
@@ -486,16 +719,27 @@
                 empty.className = 'no-results';
                 mainContent.prepend(empty);
             }
-            empty.innerHTML = '⌘ Aucun résultat — essayez "api", "arduino", "blockchain"... ou <a href="index.html" target="_blank" style="color: #ab9ff2; text-decoration: none;">visiter le site.</a>';
+            const suggestions = ['tes services', 'tes tarifs', 'ta méthode', 'qui es-tu', 'libreanalytics', 'nfc', 'blockchain'];
+            const chips = suggestions.map(s =>
+                `<span class="preview-tag" style="cursor:pointer" onclick="fillSearch('${s}')"># ${s}</span>`
+            ).join('');
+            empty.innerHTML = `⌘ Aucun résultat — cherche un projet (api, arduino, blockchain…) ou pose ta question :<br>
+                <div style="display:flex; flex-wrap:wrap; gap:0.4rem; justify-content:center; margin-top:0.9rem;">${chips}</div>`;
             empty.setAttribute('data-aos', 'fade-up');
             AOS.refreshHard();
         }
 
-        function showProjectPreview(matches) {
+        /** Suggestion cliquable → remplit la barre et relance la recherche */
+        function fillSearch(term) {
+            searchInput.value = term;
+            performExtendedSearch(term);
+            searchInput.focus();
+        }
+
+        function showProjectPreview(matches, intent) {
             const mainContent = document.querySelector('.main-content');
             if (!mainContent) return;
 
-            // supprimer l'état vide éventuel
             document.getElementById('no-results')?.remove();
 
             let preview = document.getElementById('dynamic-preview');
@@ -506,14 +750,35 @@
                 mainContent.prepend(preview);
             }
 
+            const badge = intent && matches.length
+                ? `Assistant · ${matches.length === 1 ? '1 résultat' : matches.length + ' résultats'}`
+                : intent
+                    ? 'Assistant'
+                    : (matches.length === 1 ? 'Projet correspondant' : matches.length + ' résultats');
+
             let html = `
     <div class="preview-header" data-aos="fade-down" data-aos-delay="100">
-      <span class="preview-badge" data-aos="fade-down" data-aos-delay="200">${matches.length === 1 ? 'Projet correspondant' : matches.length + ' résultats'}</span>
+      <span class="preview-badge" data-aos="fade-down" data-aos-delay="200">${badge}</span>
       <button class="preview-close" onclick="hideProjectPreview()">×</button>
     </div>`;
 
+            // --- Carte ASSISTANT (même gabarit qu'un résultat, en tête) ---
+            if (intent) {
+                html += `
+        <div class="preview-content service-preview" data-aos="fade-up" data-aos-delay="500" data-aos-anchor-placement="top-bottom">
+          <div class="preview-icon">${intent.icon}</div>
+          <div class="preview-details">
+            <h3 class="preview-title">${intent.title}</h3>
+            <p class="preview-desc">${intent.desc}</p>
+            ${intent.features.length ? `<div class="preview-features">${intent.features.map(f => `<span class="preview-feature">${f}</span>`).join('')}</div>` : ''}
+            ${intent.linkLabel ? `<a href="${intent.linkUrl}" target="_blank" class="preview-link">${intent.linkLabel} →</a>` : ''}
+          </div>
+        </div>`;
+            }
+
+            // --- Résultats projets / services, en cascade derrière ---
             matches.forEach((m, i) => {
-                const delay = 500 + i * 120; // effet cascade fluide
+                const delay = (intent ? 620 : 500) + i * 120;
 
                 if (m.type === 'project') {
                     const p = m.data;
@@ -544,10 +809,8 @@
 
             preview.innerHTML = html;
 
-            // ← CRUCIAL : réinitialiser AOS sur le contenu injecté
             AOS.refreshHard();
 
-            // Smooth apparition du conteneur
             preview.style.opacity = '0';
             preview.style.transform = 'translateY(-14px)';
             requestAnimationFrame(() => {
