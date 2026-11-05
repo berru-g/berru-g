@@ -16,7 +16,7 @@
 // ============================================================
 $user = [
     'id'    => 6,                              // id
-    'email' => 'contact@gael-berru.com',        // destinataire
+    'email' => 'g.leberruyer@gmail.com',        // destinataire
 ];
 
 // Cryptos suivies (clé = id CoinGecko)
@@ -423,7 +423,7 @@ HTML;
 // ============================================================
 // 9. En-têtes + envoi + logs
 // ============================================================
-$headers = "From: Récap Marchés <contact@gael-berru.com>\r\n";
+$headers = "From: Récap Marchés <g.leberruyer@gmail.com>\r\n";
 $headers .= "Reply-To: contact@gael-berru.com\r\n";
 $headers .= "MIME-Version: 1.0\r\n";
 $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
