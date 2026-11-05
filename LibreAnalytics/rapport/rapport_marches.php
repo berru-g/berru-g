@@ -15,7 +15,7 @@
 // 1. CONFIG — tout s'édite ici
 // ============================================================
 $user = [
-    'id'    => 6,                              // id
+   // 'id'    => 6,                              // id
     'email' => 'g.leberruyer@gmail.com',        // destinataire
 ];
 
@@ -423,17 +423,39 @@ HTML;
 // ============================================================
 // 9. En-têtes + envoi + logs
 // ============================================================
-$headers = "From: Récap Marchés <g.leberruyer@gmail.com>\r\n";
-$headers .= "Reply-To: contact@gael-berru.com\r\n";
-$headers .= "MIME-Version: 1.0\r\n";
-$headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-$mailSent = mail($user['email'], $subject, $message, $headers);
+require './vendor/autoload.php'; // ajustez le chemin selon votre installation
 
-if ($mailSent) {
-    echo "✅ Email envoyé avec succès à {$user['email']} ! Vérifie ta boîte de réception (et les spams).";
+$mail = new PHPMailer(true);
+
+try {
+    // Configuration SMTP
+    $mail->isSMTP();
+    $mail->Host       = 'smtp.gmail.com';
+    $mail->SMTPAuth   = true;
+    $mail->Username   = 'g.leberruyer@gmail.com';
+    $mail->Password   = 'kuww zsqm dhxx vfap'; // mot de passe d'application Google, pas le mot de passe du compte
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port       = 587;
+    $mail->CharSet    = 'UTF-8';
+
+    // Expéditeur et destinataire
+    $mail->setFrom('g.leberruyer@gmail.com', 'Récap Marchés');
+    $mail->addAddress($user['email'], $name);
+    $mail->addReplyTo('contact@gael-berru.com', 'Contact');
+
+    // Contenu
+    $mail->isHTML(true);
+    $mail->Subject = $subject;
+    $mail->Body    = $message;
+    $mail->AltBody = strip_tags($message); // alternative en texte brut
+
+    $mail->send();
+    echo "✅ Email envoyé avec succès à {$user['email']} !";
     logLine($logFile, "Récap envoyé à {$user['email']} (BTC {$btcChgTxt})");
-} else {
-    echo "❌ Échec de l'envoi de l'email. Vérifie la configuration de ton serveur.";
-    logLine($logFile, "Échec envoi récap à {$user['email']}");
+} catch (Exception $e) {
+    echo "❌ Échec de l'envoi : {$mail->ErrorInfo}";
+    logLine($logFile, "Échec envoi récap : {$mail->ErrorInfo}");
 }
