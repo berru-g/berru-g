@@ -2,9 +2,9 @@
 // rapport: envoie manuel a chaque id et son SP_ , l'api key étant propre à l'id mais commune aux différents code SP_ de l'id
 $user = [
     'id' => 6, // id
-    'email' => 'contact@gael-berru.com', // Remplace par l'email du destinataire 
-    'api_key' => 'da4ca75b23f50634547bcd158927eb18add7d35fd2ad4ab7005e225443af1550',       // Remplace par la clé API réelle
-    'site_id' => 'SP_79747769'       // Remplace par le site_id réel
+    'email' => 'contact@mail.com', // Remplace par l'email du destinataire 
+    'api_key' => '...',       // Remplace par la clé API réelle
+    'site_id' => 'SP_...'       // Remplace par le site_id réel
 ];
 
 // 2. Extraire le nom avant @ dans l'email

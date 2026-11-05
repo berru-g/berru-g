@@ -40,7 +40,7 @@ try {
 // ================================================================
 // PÉRIODE SÉLECTIONNÉE (7 / 30 / 90 / 365 jours) — pilote les requêtes
 // ================================================================
-$period = (int) ($_GET['period'] ?? 365);
+$period = (int) ($_GET['period'] ?? 30);
 if (!in_array($period, [7, 30, 90, 365], true)) {
     $period = 30;
 }
@@ -2795,7 +2795,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 solana: 4.67,
                 sui: 1701,
                 'usd-coin': 0,
-                render-token: 0,
+                'render-token': 0,
             };
 
             // Capital investi à l'origine (€) 
