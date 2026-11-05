@@ -3,7 +3,7 @@ session_start();
 // Dashboard - beta V2 regroupant :
 // - l'analytics de mon soft LibreAnalytics, 
 // - l'analytics de mon site perso
-// - API coingeck pour les prix crypto (SOL, SUI, AMI, USDC) de mes différents wallet et exchange réunis en un seul
+// - API coingeck pour les prix crypto (SOL, SUI, render-token, USDC) de mes différents wallet et exchange réunis en un seul
 // - API de TradingView pour la chart et les signaux globaux
 // - Embed de mon agenda Google Calendar (planning perso)
 // - API météo 
@@ -178,7 +178,7 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
     } else {
         $cgUrl = 'https://api.coingecko.com/api/v3/coins/markets?' . http_build_query([
             'vs_currency' => 'eur',
-            'ids' => 'bitcoin,solana,sui,usd-coin,ami',
+            'ids' => 'bitcoin,solana,sui,usd-coin,render-token',
             'sparkline' => 'true',
         ]);
 
@@ -2791,15 +2791,14 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             const tokenHoldings = {
                 bitcoin: 0,
                 solana: 4.67,
-                sui: 1675,
+                sui: 1701,
                 'usd-coin': 0,
-                ami: 35535,
+                render-token: 0,
             };
 
             // Capital investi à l'origine (€) 
             // sol=312 € à 68 l'unité, 
-            // sui=1600€ à 0.95 l'unité, 
-            // ami=44€ à 0.001237 l'unité, 
+            // sui=1620€ à 0.95 l'unité, 
             // btc=0 € à 0 l'unité, 
             // usdc=0 € à 0 l'unité
             const INITIAL_INVESTMENT = 1956;

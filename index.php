@@ -1,5 +1,13 @@
 <?php
-
+$to = 'g.leberruyer@gmail.com';  
+$subject = 'Accés chezwam';
+$message = 'New visit. Voir https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/dashboard.php?site_id=5';
+$headers = 'From: g.leberruyer@gmail.com' . "\r\n";
+if (mail($to, $subject, $message, $headers)) {
+    echo "✅";
+} else {
+    echo "❌";
+}
 ?>
 <html lang="fr">
 <!-- 

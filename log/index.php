@@ -2,7 +2,7 @@
 $to = 'g.leberruyer@gmail.com';  
 $subject = 'Accés aux Honey Pot';
 $message = 'Un acces à /log/ non autorisé. Voir https://gael-berru.com/LibreAnalytics/';
-$headers = 'From: contact@gael-berru.com' . "\r\n";
+$headers = 'From: g.leberruyer@gmail.com' . "\r\n";
 if (mail($to, $subject, $message, $headers)) {
     echo "Email envoyé avec succès !";
 } else {
