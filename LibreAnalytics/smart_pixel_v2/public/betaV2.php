@@ -1977,6 +1977,8 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                     </button>
                     <div class="pop cmd-menu" id="cmd-menu" role="menu">
                         <a href="cli.php" role="menuitem"><i class="fa-solid fa-terminal"></i> Terminal</a>
+                        <a href="../../rapport/rapport_marches.php" role="menuitem"><i class="fa-brands fa-bitcoin"></i> Rapport
+                            marches</a>
                         <a href="../campain/rapport.php" role="menuitem"><i class="fas fa-file-lines"></i> Rapport
                             id_gb</a>
                         <a href="../campain/rapport_lb.php" role="menuitem"><i class="fas fa-file-lines"></i> Rapport
