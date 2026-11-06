@@ -20,6 +20,7 @@ Analysez votre trafic sans compromettre la vie privée de vos visiteurs, avec un
 ## 🔌 Mise à Jour :
 
 
+- [Rapport hebdo par mail](https://github.com/berru-g/LibreAnalytics/tree/main/rapport). Nov  2026
 - [Pseudo_CLI_dispo](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/cli.php). Nov 2026
 - [API pour le plan FREE](https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/account.php). Oct 2026
 - [Template Map 3D avec vos data via l\'api'](https://codepen.io/h-lautre/pen/EayBqeE). Oct 2026

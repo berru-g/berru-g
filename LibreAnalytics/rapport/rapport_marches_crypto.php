@@ -1,8 +1,9 @@
 <?php
-// rapport_marches.php — Récap hebdo marchés (crypto + actions + flux + rendez-vous)
-// smtp mdp gmail a renouvellé https://myaccount.google.com/apppasswords
+// Rapport hebdo marchés (crypto + actions + flux + rendez-vous)
+// mdp gmail a renouvellé https://myaccount.google.com/apppasswords
+//
 // Usage manuel   : php rapport_marches.php   (CLI)  ou  ouverture dans le navigateur
-// Cron optionnel (jeudi 18h) : 0 18 * * 4 /usr/bin/php /chemin/vers/rapport_marches.php
+// Cron y: 0 15 * * 5/usr/bin/php /home/u667977963/domains/gael-berru.com/public_html/LibreAnalytics/smart_pixel_v2/campain/rapport_marches.php
 //
 // Sources de données :
 //   - Crypto      : API publique CoinGecko (gratuite, sans clé, quota ~10-30 req/min)
@@ -14,7 +15,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 // ============================================================
-// 0. AUTOLOAD PHPMailer — chemin auto-détecté sinon c'est bordel avec les chemins relatifs
+// 0. AUTOLOAD PHPMailer — chemin auto-détecté (plus besoin de le régler à la main)
+//    (le bug d'hier soir était ici : "_DIR_." au lieu de "__DIR__ . '/'")
 // ============================================================
 $autoloadCandidates = [
     __DIR__ . '/../../../vendor/autoload.php', // script 2 niveaux sous la racine
@@ -41,18 +43,28 @@ if (!$autoloadFound || !class_exists(PHPMailer::class)) {
 // ============================================================
 $user = [
     'id'    => 6,                              // id
-    'email' => 'contact@gael-berru.com',        // destinataire
+    'email' => 'g.leberruyer@gmail.com',        // destinataire
 ];
 
-// SMTP (⚠️ mot de passe d'application Gmail — à révoquer/régénérer si déjà exposé)
+/*  
 $smtp = [
     'host'     => 'smtp.gmail.com',
     'username' => 'g.leberruyer@gmail.com',
-    'password' => '**** **** **** ****', //mdp gmail a renouvellé https://myaccount.google.com/apppasswords
+    'password' => '**** **** **** ****',
     'port'     => 587,
     'secure'   => PHPMailer::ENCRYPTION_STARTTLS,
     'debug'    => false, // passer à true en cas de problème d'envoi (affiche le dialogue SMTP)
 ];
+*/
+$smtp = [
+    'host'     => 'smtp.hostinger.com',
+    'username' => 'contact@gael-berru.com',      
+    'password' => '**** **** **** ****', 
+    'port'     => 587,                                
+    'secure'   => PHPMailer::ENCRYPTION_STARTTLS,
+    'debug'    => false,
+];
+
 
 // Cryptos suivies (clé = id CoinGecko)
 $cryptos = [
@@ -336,7 +348,7 @@ $message = <<<HTML
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Récap marchés hebdo</title>
+    <title>Rapport marchés hebdo</title>
     <!-- Intégration d'AmCharts via CDN -->
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
@@ -368,12 +380,12 @@ $message = <<<HTML
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">📈 Récap Marchés</div>
+            <div class="logo">🧮 Rapport marchés</div>
             <p>Ton briefing hebdo — crypto, actions et flux d'actualité</p>
         </div>
 
-        <p>Bonjour $name,</p>
-        <p>Voici ton récap de la semaine du <strong>$startDate</strong> au <strong>$endDate</strong> :</p>
+        <p>Salut $name,</p>
+        <p>Voici les news du <strong>$startDate</strong> au <strong>$endDate</strong> :</p>
 
         <div class="stats">
             <p>$globalTxt</p>
@@ -400,8 +412,8 @@ $message = <<<HTML
         <table class="data">$rdvRows</table>
 
         <div class="footer">
-            <p>© 2026 Récap Marchés V.1.0.0 — <a href="https://gael-berru.com/?utm_source=rapport">gael-berru.com</a>.</p>
-            <p>Données : CoinGecko · Yahoo Finance · Cointelegraph / CoinDesk / Cryptoast.</p>
+            <p>© 2026 Rapport Marchés V.1.0.0 — by <a href="https://gael-berru.com/?utm_source=rapport">gael-berru.com</a>.</p>
+            <p>Données API : CoinGecko · Yahoo Finance · Cointelegraph / CoinDesk / Cryptoast.</p>
             <p>Ce rapport est informatif et ne constitue pas un conseil en investissement.</p>
         </div>
     </div>
@@ -484,9 +496,9 @@ try {
     $mail->Debugoutput = function ($str, $level) { echo "$str<br>\n"; };
 
     // Expéditeur et destinataire
-    $mail->setFrom($smtp['username'], 'Récap Marchés');
+    $mail->setFrom($smtp['username'], 'LibreAnalytics'); 
     $mail->addAddress($user['email'], $name);
-    $mail->addReplyTo('contact@gael-berru.com', 'Contact');
+    $mail->addReplyTo('contact@gael-berru.com', 'Gael');
 
     // Contenu
     $mail->isHTML(true);
@@ -495,9 +507,9 @@ try {
     $mail->AltBody = strip_tags($message); // alternative en texte brut
 
     $mail->send();
-    echo "✅ Email envoyé avec succès à {$user['email']} !";
-    logLine($logFile, "Récap envoyé à {$user['email']} (BTC {$btcChgTxt})");
+    echo "✅ Rapport envoyé avec succès à {$user['email']} !";
+    logLine($logFile, "Rapport envoyé à {$user['email']} (BTC {$btcChgTxt})");
 } catch (Exception $e) {
     echo "❌ Échec de l'envoi : {$mail->ErrorInfo}";
-    logLine($logFile, "Échec envoi récap : {$mail->ErrorInfo}");
+    logLine($logFile, "Échec envoi rapport : {$mail->ErrorInfo}");
 }

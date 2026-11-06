@@ -1,9 +1,8 @@
 <?php
-// rapport.php — Envoi manuel ou cron (lundi et jeudi 18h) du rapport LibreAnalytics
-// SMTP mdp gmail a renouvellé https://myaccount.google.com/apppasswords
-// Usage manuel  : php rapport.php   (CLI)  ou  ouverture dans le navigateur
-// Cron (lundi + jeudi 18h) :
-//   0 18 * * 1,4 /usr/bin/php /chemin/vers/rapport.php
+// Rapport hebdo LibreAnalytics par id, api, SP. berru-g 11/26
+//
+// Usage manuel  : runcron
+// Usage auto via Cron : 0 17 * * 4 - /usr/bin/php /home/u667977963/domains/gael-berru.com/public_html/LibreAnalytics/smart_pixel_v2/campain/rapport.php
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -42,18 +41,29 @@ $user = [
 ];
 
 // Config SMTP — à externaliser dans un .env en prod
-// (si le mot de passe est défini en variable d'environnement SMTP_PASSWORD, il est utilisé automatiquement)
+
+$smtp = [
+    'host'     => 'smtp.hostinger.com',
+    'port'     => 587,                                // STARTTLS (465/SSL fonctionne aussi)
+    'username' => 'contact@gael-berru.com',          // adresse complète de la boîte Hostinger
+    'password' => getenv('SMTP_PASSWORD') ?: '**** **** **** ****', // mot de passe de la boîte (pas d'app-password)
+    'from'     => 'contact@gael-berru.com',
+    'fromName' => 'Gaël — LibreAnalytics',
+    'replyTo'  => 'contact@gael-berru.com',
+    'debug'    => false,
+];
+/*
 $smtp = [
     'host'     => 'smtp.gmail.com',
     'port'     => 587,
     'username' => 'g.leberruyer@gmail.com',
-    'password' => getenv('SMTP_PASSWORD') ?: '****', // ⚠️ à remplacer ou définir via SMTP_PASSWORD
+    'password' => getenv('SMTP_PASSWORD') ?: '**** **** **** ****', // ⚠️ à remplacer ou définir via SMTP_PASSWORD
     'from'     => 'g.leberruyer@gmail.com',
     'fromName' => 'LibreAnalytics',
     'replyTo'  => 'contact@gael-berru.com',
     'debug'    => false, // passer à true en cas de problème d'envoi (affiche le dialogue SMTP)
 ];
-
+*/
 // ============================================================
 // 2. PRÉPARATION (nom, logs)
 // ============================================================
@@ -150,14 +160,14 @@ $chartDataJson = json_encode($chartData, JSON_UNESCAPED_SLASHES);
 // ============================================================
 // 5. CONSTRUCTION DE L'EMAIL
 // ============================================================
-$subject = "📆 Ton rapport trimestriel — $totalVisits visites, $name";
+$subject = "📆 Ton rapport hebdo — $totalVisits visites, $name";
 
 $message = <<<HTML
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Rapport trimestriel</title>
+    <title>Rapport hebdo</title>
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
@@ -179,8 +189,8 @@ $message = <<<HTML
             <div class="logo">LibreAnalytics</div>
             <p>L'analytics souverain et indépendant</p>
         </div>
-        <p>Bonjour $name,</p>
-        <p>Voici ton rapport trimestriel du <strong>$startDate</strong> au <strong>$endDate</strong> :</p>
+        <p>Salut $name,</p>
+        <p>Voici ton rapport hebdo du <strong>$startDate</strong> au <strong>$endDate</strong> :</p>
         <div class="stats">
             <p>Tu as reçu <strong>$totalVisits</strong> visites,</p>
             <p>dont <strong>$totalUniqueVisitors</strong> visiteurs uniques.</p>
@@ -285,7 +295,7 @@ try {
                    . "$totalVisits visites, $totalUniqueVisitors visiteurs uniques.\n";
 
     $mail->send();
-    echo "✅ Email envoyé avec succès à {$user['email']} !";
+    echo "✅ Rapport envoyé avec succès à {$user['email']} !";
     logLine($logFile, "Rapport envoyé à {$user['email']} ($totalVisits visites, $totalUniqueVisitors uniques)");
 } catch (Exception $e) {
     echo "❌ Échec de l'envoi : {$mail->ErrorInfo}";
