@@ -133,10 +133,7 @@ $githubRepos = gh_repos('berru-g');
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-  <!-- premiere version de mon tracker et la derniére pour comparaison
-  <script src="./LibreAnalytics/pixel/smart-pixel.js"></script>-->
-  <script data-sp-id="SP_7f9505cc" src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/tracker.js"
-    async></script>
+  
 
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
   <script type="application/ld+json">

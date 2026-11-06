@@ -1,5 +1,33 @@
 const projectsDatabase = [
     {
+        id: 'services',
+        title: 'Mes services',
+        shortDesc: 'Outils sur mesure — web, données, électronique.',
+        longDesc: 'Je conçois des <strong>outils sur mesure</strong> — web, données, électronique, sur devis gratuit.',
+        keywords: ['service', 'prestation', 'propose', 'expertise', 'competence', 'sais', 'faire', 'peux', 'aide', 'quoi'],
+        icon: '🐙',
+        image: null,
+        link: 'mailto:contact@gael-berru.com?subject=Question-depuis-la-Project-Base',
+        //linkLabel: 'Me contacter', 
+        category: 'assistant',
+        features: ['Intégration 3D web (Three.js / WebGL)', 'Dashboards sur mesure & dataviz', 'Outils éthiques & RGPD', 'Intégration API', 'Électronique / PCB', 'Sites vitrine & CMS'],
+        tags: ['services', 'sur-mesure', 'devis']
+    },
+    {
+        id: 'tarifs',
+        title: 'Tarifs sur-mesure',
+        shortDesc: 'Grille indicative, devis gratuit.',
+        longDesc: "Grille indicative — <strong>chaque projet est chiffré sur devis, gratuitement</strong>. Mes outils existants restent gratuits et open source.",
+        keywords: ['prix', 'tarif', 'coute', 'combien', 'budget', 'devis', 'cher', 'euro'],
+        icon: '🐙',
+        image: null,
+        link: 'mailto:contact@gael-berru.com?subject=Demande de devis',
+        //linkLabel: 'Demander un devis',
+        category: 'assistant',
+        features: ['Site vitrine / CMS — ~600 €', 'Dashboard sur mesure — ~900 €', 'PCB / électronique — ~400 €', 'Intégration 3D — ~700 €', 'Devis gratuit, sans engagement'],
+        tags: ['tarifs', 'prix', 'devis']
+    },
+    {
         id: 'Pseudo-CLI',
         title: 'Pseudo CLI',
         shortDesc: 'Interface de ligne de commande pour Libre Analytics.',

@@ -127,7 +127,7 @@ const EYE_LOOK_SPEED = 0.1;
 // =============================================
 
 const loader = new THREE.GLTFLoader();
-const avatarURL = "https://models.readyplayer.me/691732d6fa1ea12f834e291b.glb"; // Wam
+const avatarURL = "../img/neo_futuriste_faceMorph_readyplayer.glb"; // test3D local  FONCTIONNEL = UPLOAD GRATOS D OBJET 3D + FACEMOPRH SUR READY PLAYER ( pour l'instant )
 const avatarURL1 = "https://models.readyplayer.me/6918df9a786317131c6318b4.glb"; // Otto foiré
 const avatarURL2 = "https://models.readyplayer.me/691779f5132e61458cc3366d.glb"; // femme
 const avatarURL3 = "https://models.readyplayer.me/69177cac28f4be8b0cc83e05.glb"; // futur
@@ -297,10 +297,11 @@ window.addEventListener("mousemove",e=>{
 let compteurReponses = 0;
 const reponsesOrdonnees = [
   "Bonjour ! Je suis votre assistant virtuel. Actuellement en phase de test, je ne pourrais pas répondre à vos questions aujourd'hui. ",
-  "Je serais bientot relié à une IA, pour toute information, contactez mon créateur sur gael-berru.com.",
+  "Dernière mise à jour le 14 novembre 2024. Je suis un projet abandonnée par mon créateur, mais je reste fonctionnel pour des tests.",
+  "Je pourrais être relié à une IA, pour toute information, contactez mon créateur sur contact@gael-berru.com ou visiter le repo github.",
   "Je vous souhaite une belle journée !"
 ];
-
+    
 async function sendToAI(message){
     const statusEl = document.getElementById(STATUS_ID);
     if(statusEl) statusEl.textContent = "L'avatar réfléchit...";

@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container">
         <div class="header">
             <div class="logo">LibreAnalytics</div>
-            <div class="tagline">Vous êtes désormais propriétaire de vos données.</div>
+            <div class="tagline">Vous êtes désormais le seul propriétaire de vos données.</div>
         </div>
 
         <div class="content">
@@ -143,13 +143,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a href="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/dashboard.php" class="button">Accéder à mon dashboard</a>
             </p>
 
-            <p>Besoin d’aide pour l’installation ou des questions ? <strong>Réponds simplement à cet email</strong>, je suis là pour t’aider !</p>
-            <p>Gael créateur de LibreAnalytics.</p>
+            <p>Besoin d’aide pour l’installation ou des questions ? <strong><a href="https://gael-berru.com/LibreAnalytics/doc/?utm_source=MailInscription">Consulte la doc</a></strong>, ou réponds simplement à cet email, je suis là pour t’aider !</p>
+            <p>Gael créateur de LibreAnalytics.</p> 
         </div>
 
         <div class="footer">
             <p>© 2026 LibreAnalytics MVP V.1.0.7 – Une alternative <strong>100% française</strong>, <strong>open source</strong> et <strong>RGPD-friendly</strong> à Google Analytics.</p>
-            <p><a href="https://gael-berru.com/LibreAnalytics">Visite notre site</a> | <a href="https://gael-berru.com/LibreAnalytics/doc/">Documentation</a></p>
+            <p><a href="https://gael-berru.com/LibreAnalytics/?utm_source=MailInscription">Visite notre site</a> | <a href="https://gael-berru.com/LibreAnalytics/doc/?utm_source=MailInscription">Documentation</a></p>
         </div>
     </div>
 </body>

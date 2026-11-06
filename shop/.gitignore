@@ -1,9 +1,0 @@
-# Ignorer les fichiers sensibles
-/inc/config.php
-.env
-*.sql
-
-# Ignorer les logs et caches
-*.log
-/cache/
-/tmp/
