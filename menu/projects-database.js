@@ -28,6 +28,18 @@ const projectsDatabase = [
         tags: ['tarifs', 'prix', 'devis']
     },
     {
+        id: 'rapport-marches',
+        title: 'Rapport Marchés Hebdo',
+        shortDesc: 'Surveillez vos tokens par email, chaque semaine.',
+        longDesc: 'Choisissez les actifs qui vous intéressent — cryptos ou actions — et recevez chaque semaine un email automatique : cours, variation sur 7 jours, et une sélection des news essentielles qui les concernent. Un email, vos actifs, rien d\'autre. Inscription en double opt-in, désinscription en un clic, pas de revente de données. Ce rapport est un outil de veille sans IA, pas un conseil en investissement.',
+        keywords: ['email', 'newsletter', 'crypto', 'token', 'veille', 'marches', 'marchés', 'rapport', 'hebdo', 'actions', 'surveillance', 'news', 'automatique', 'cron', 'coingecko'],
+        image: './img/rapport-marches.png',
+        link: 'mailto:contact@gael-berru.com',
+        category: 'tool',
+        features: ['Vos actifs au choix (crypto & actions)', 'Cours + variation sur 7 jours', 'Sélection de news par actif', 'Envoi automatique CRON hebdo', 'Double opt-in, désinscription en 1 clic'],
+        tags: ['tool', 'email', 'crypto', 'veille', 'hebdo', 'newsletter', 'cron', 'php']
+    },
+    {
         id: 'Pseudo-CLI',
         title: 'Pseudo CLI',
         shortDesc: 'Interface de ligne de commande pour Libre Analytics.',
