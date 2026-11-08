@@ -5,8 +5,8 @@ const projectsDatabase = [
         shortDesc: 'Outils sur mesure — web, données, électronique.',
         longDesc: 'Je conçois des <strong>outils sur mesure</strong> — web, données, électronique, sur devis gratuit.',
         keywords: ['service', 'prestation', 'propose', 'expertise', 'competence', 'sais', 'faire', 'peux', 'aide', 'quoi'],
-        icon: '🐙',
-        image: null,
+        //icon: '🐙',
+        image: './img/berru-pieuvre.png',
         link: 'mailto:contact@gael-berru.com?subject=Question-depuis-la-Project-Base',
         //linkLabel: 'Me contacter', 
         category: 'assistant',
@@ -19,8 +19,8 @@ const projectsDatabase = [
         shortDesc: 'Grille indicative, devis gratuit.',
         longDesc: "Grille indicative — <strong>chaque projet est chiffré sur devis, gratuitement</strong>. Mes outils existants restent gratuits et open source.",
         keywords: ['prix', 'tarif', 'coute', 'combien', 'budget', 'devis', 'cher', 'euro'],
-        icon: '🐙',
-        image: null,
+        //icon: '🐙',
+        image: './img/berru-pieuvre-2.png',
         link: 'mailto:contact@gael-berru.com?subject=Demande de devis',
         //linkLabel: 'Demander un devis',
         category: 'assistant',
@@ -31,12 +31,12 @@ const projectsDatabase = [
         id: 'rapport-marches',
         title: 'Rapport Marchés Hebdo',
         shortDesc: 'Surveillez vos tokens par email, chaque semaine.',
-        longDesc: 'Choisissez les actifs qui vous intéressent — cryptos ou actions — et recevez chaque semaine un email automatique : cours, variation sur 7 jours, et une sélection des news essentielles qui les concernent. Un email, vos actifs, rien d\'autre. Inscription en double opt-in, désinscription en un clic, pas de revente de données. Ce rapport est un outil de veille sans IA, pas un conseil en investissement.',
+        longDesc: 'Choisissez les actifs qui vous intéressent — cryptos ou actions — et recevez chaque semaine un email automatique : cours, variation sur 7 jours, et une sélection des news essentielles qui les concernent. Un email, vos actifs, rien d\'autre. Inscription en double opt-in, désinscription en un clic, pas de revente de données. Ce rapport est un outil de veille sans IA, pas un conseil en investissement. Contactez moi pour obtenir ce service sur mesure.',
         keywords: ['email', 'newsletter', 'crypto', 'token', 'veille', 'marches', 'marchés', 'rapport', 'hebdo', 'actions', 'surveillance', 'news', 'automatique', 'cron', 'coingecko'],
         image: './img/rapport-marches.png',
-        link: 'mailto:contact@gael-berru.com',
+        link: 'mailto:contact@gael-berru.com?subject=rapport-marches',
         category: 'tool',
-        features: ['Vos actifs au choix (crypto & actions)', 'Cours + variation sur 7 jours', 'Sélection de news par actif', 'Envoi automatique CRON hebdo', 'Double opt-in, désinscription en 1 clic'],
+        features: ['Vos actifs au choix (crypto & actions)', 'Cours + variation sur 7 jours', 'Sélection de news par actif', 'Envoi automatique CRON hebdo', 'Double opt-in, désinscription en 1 clic', 'mailing list sur mesure', 'rapport hebdo'],
         tags: ['tool', 'email', 'crypto', 'veille', 'hebdo', 'newsletter', 'cron', 'php']
     },
     {
@@ -47,8 +47,8 @@ const projectsDatabase = [
         keywords: ['cli', 'command line', 'interface', 'libre-analytics', 'terminal'],
         image: './img/pseudo-cli.png',
         link: 'https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/cli.php',
-        category: 'hardware',
-        features: ['pseudo cli', 'cmd', 'terminal', 'gestin analytics'],
+        category: 'hardware', 
+        features: ['pseudo cli', 'cmd', 'terminal', 'gestion analytics'],
         tags: ['cmd', 'cli', 'terminal', 'command line', 'interface', 'ligne de commande']
     },
     {
@@ -97,7 +97,7 @@ const projectsDatabase = [
         link: 'https://berru-g.github.io/assoberru/',
         category: 'guinguette',
         features: ['guinguette', 'concert', 'open-air'],
-        tags: ['guinguette', 'concert', 'open-ai', 'dj set']
+        tags: ['guinguette', 'concert', 'open-air', 'dj set']
     },
     {
         id: '3dscrollanimator',

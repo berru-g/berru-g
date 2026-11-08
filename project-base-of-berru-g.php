@@ -811,7 +811,7 @@ $githubRepos = gh_repos('berru-g');
             const chips = suggestions.map(s =>
                 `<span class="preview-tag" style="cursor:pointer" onclick="fillSearch('${s}')"># ${s}</span>`
             ).join('');
-            empty.innerHTML = `⌘ Aucun résultat — cherche un projet (api, arduino, pcb …), <a href="index.php" target="_blank" style="text-decoration: none; color: var(--primary-color);">visite le sites</a>, ou pose ta question :<br>
+            empty.innerHTML = `⌘ Aucun résultat — cherche un projet (api, arduino, pcb …), <a href="index.php" target="_blank" style="text-decoration: none; color: #ff86e9;">visite le sites</a>, ou pose ta question :<br>
                 <div style="display:flex; flex-wrap:wrap; gap:0.4rem; justify-content:center; margin-top:0.9rem;">${chips}</div>`;
             empty.setAttribute('data-aos', 'fade-up');
             AOS.refreshHard();
