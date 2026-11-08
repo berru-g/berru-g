@@ -275,7 +275,7 @@ if (isset($_GET['api'])) {
         :root {
             --term-bg: #0b0d12;
             --term-fg: #c9f2d0;
-            --term-green: #4af626;
+            --term-green: #70ed57;
             --term-accent: #ab9ff2;
             --term-pink: #ff86e9;
             --term-dim: #5c6a72;
@@ -392,6 +392,9 @@ if (isset($_GET['api'])) {
     const DASHBOARD_URL = 'dashboard.php'; // ouvert via 'dashboard'
     const DOC_PATH = '../../doc/';         // ouvert via 'doc'
     const LOGIN_URL = 'index.php';         // ouvert via 'login'
+    const LOGOUT_URL = 'logout.php';       // ouvert via 'logout'
+    const ADMIN_URL = 'betaV2.php';        // dash admin et 'wallet'
+    const RAPPORT_URL = '../campain/rapport-marches.php'; // envoie mail via cron
 
     const pct = (part, total) => total > 0 ? Math.round(part / total * 100) : 0;
     const fmt = (n) => new Intl.NumberFormat('fr-FR').format(Number(n) || 0);
@@ -997,7 +1000,10 @@ if (isset($_GET['api'])) {
         '  doc ................... ouvre la documentation (../../doc/) dans un autre onglet',
         '  doc <question> ........ cherche la réponse dans la doc',
         '  login ................. page de connexion (autre onglet)',
+        '  logout ................ page de deconnexion (autre onglet)',
         "  clear ................ efface l'écran ET la mémoire de conversation",
+        '  admin ................. dashboard general (admin only)',
+        '  rapport ............... envoie de rapport par mail (admin only)',
         '  help ................. cette aide',
         "  (Tab = autocomplétion commandes & sites · ↑/↓ = historique · Ctrl+L = écran propre)",
         '',
@@ -1027,6 +1033,21 @@ if (isset($_GET['api'])) {
         if (nq === 'login' || nq === 'connexion') {
             window.open(LOGIN_URL, '_blank');
             echo('page de connexion ouverte dans un autre onglet.', 't-dim', { silent: true });
+            return;
+        }
+        if (nq === 'logout' || nq === 'deconnexion' || nq==='exit') {
+            window.open(LOGOUT_URL, '_blank');
+            echo('Déconnexion, cimer', 't-dim', { silent: true });
+            return;
+        }
+        if (nq === 'admin' || nq === 'beta' || nq==='wallet') {
+            window.open(ADMIN_URL, '_blank');
+            echo('Accès au dashboard admin ou wallet.', 't-dim', { silent: true });
+            return;
+        }
+        if (nq === 'rapport' || nq === 'envoie mail' || nq==='envoie rapport') {
+            window.open(RAPPORT_URL, '_blank');
+            echo('Envoie du rapport des marches', 't-dim', { silent: true });
             return;
         }
         if (nq === 'dashboard' || nq === 'dash' || nq === 'open dashboard' || nq === 'ouvrir dashboard' || nq === 'open dashboard.php') {

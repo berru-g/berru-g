@@ -23,8 +23,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gaël Berru — Développeur web PHP &amp; logiciel à Vertou (44)</title>
-  <link rel="shortcut icon" href="/img/logo.png" />
-  <link rel="apple-touch-icon" href="/img/logo.png" />
+  <link rel="shortcut icon" href="/img/berru-pieuvre.png" />
+  <link rel="apple-touch-icon" href="/img/berru-pieuvre.png" />
   <meta name="keywords"
     content="site web souverains vertou, developpeur web Vertou, Gael Leberruyer, Gael Berru, outils open source, Libre Analytics, web3, crypto enthusiast, enquete blockchain, open source, developpeur Vertou,">
   <meta name="author" content="Gael Berru.">
@@ -33,7 +33,7 @@
   <meta property="og:title" content="Gaël Berru — Développeur web PHP &amp; logiciel à Vertou (44)">
   <meta property="og:description"
     content="Sites, API REST et logiciels sur mesure en PHP natif, sans framework. Open source et souveraineté numérique, depuis 2020.">
-  <meta property="og:image" content="https://berru-g.github.io/berru-g/img/logo.png">
+  <meta property="og:image" content="https://berru-g.github.io/berru-g/img/berru-pieuvre.png">
   <meta property="og:locale" content="fr_FR">
   <meta name="twitter:card" content="summary">
   <link rel="alternate" type="text/plain" href="https://gael-berru.com/llms.txt" title="llms.txt">
@@ -108,9 +108,8 @@
 
       <!-- Header -->
       <div class="sidebar-header">
-        <div class="sidebar-title"> Berru-g</div>
-        <!--<img src="https://gael-berru.com/LibreAnalytics/pixel/pixel.php?utm_source=compare" width="1" height="1"
-          style="display:none;">-->
+        <!--<div class="sidebar-title"> Berru-g</div>-->
+        
         <div class="search-box">
           <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2">
@@ -136,7 +135,7 @@
           </a>
           <a href="3D/index.html" target="_blank" class="nav-item"
             data-search="3D threejs three.js webgl game gamification score universe 3D">
-            <span>3D version</span>
+            <span>Version 3D</span>
           </a>
         </div>
 
@@ -258,7 +257,7 @@
 
           <a href="mailto:contact@gael-berru.com?subject=Salut Berru" target="_blank" class="nav-item"
             data-search="contact mail email formulaire">
-            <span><i class="fas fa-envelope"></i> Mail</span>
+            <span><i class="fas fa-envelope"></i> Par Mail ou ↷</span>
           </a>
 
           <div class="contact-form-inside"
@@ -1057,22 +1056,22 @@
               </div>
             </div>
 
-          </div>
+            <section class="galerie-report" data-aos="fade-up" lang="en">
+              <div>
+                <h2 class="galerie-meta" style="font-size:1rem;">Web developer in Vertou, Loire-Atlantique (44), France
+                </h2>
+                <p class="galerie-meta" style="font-weight:400; opacity:.8; max-width:60ch;">
+                  Self-taught developer based in <strong>Vertou, France</strong>, I design
+                  <strong>PCBs</strong>, <strong>REST APIs</strong>, <strong>dashboards</strong> and
+                  <strong>business software</strong> in <strong>plain PHP</strong> — no frameworks,
+                  no unnecessary dependencies — for fast, maintainable tools where
+                  <strong>you own your data</strong>. See also my
+                  <a href="https://github.com/berru-g/" target="_blank" rel="noopener noreferrer">GitHub</a>.
+                </p>
+              </div>
+            </section>
 
-          <section class="galerie-report" data-aos="fade-up" lang="en">
-            <div>
-              <h2 class="galerie-meta" style="font-size:1rem;">Web developer in Vertou, Loire-Atlantique (44), France
-              </h2>
-              <p class="galerie-meta" style="font-weight:400; opacity:.8; max-width:60ch;">
-                Self-taught developer based in <strong>Vertou, France</strong>, I design
-                <strong>PCBs</strong>, <strong>REST APIs</strong>, <strong>dashboards</strong> and
-                <strong>business software</strong> in <strong>plain PHP</strong> — no frameworks,
-                no unnecessary dependencies — for fast, maintainable tools where
-                <strong>you own your data</strong>. See also my
-                <a href="https://github.com/berru-g/" target="_blank" rel="noopener noreferrer">GitHub</a>.
-              </p>
-            </div>
-          </section>
+          </div>
 
         </div>
 
@@ -1504,9 +1503,9 @@
       </style>
       <?php include "LibreAnalytics/smart_pixel_v2/public/chatbot.php" ?>
 
-<!--
+      <!--
       <?php
-// ===== GITHUB STATS =====
+      // ===== GITHUB STATS =====
       function gh_stats(string $user, int $ttl = 21600): ?array
       {
         $dir = __DIR__ . '/cache';
@@ -1656,7 +1655,7 @@
         </footer>
       <?php endif; ?>
 -->
-      
+
 
 
     </main>

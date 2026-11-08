@@ -68,10 +68,10 @@ $smtp = [
 
 // Cryptos suivies (clé = id CoinGecko)
 $cryptos = [
-    'bitcoin'  => ['label' => 'Bitcoin',  'symbol' => 'BTC', 'decimals' => 0, 'color' => '#f7931a'],
-    'ethereum' => ['label' => 'Ethereum', 'symbol' => 'ETH', 'decimals' => 0, 'color' => '#627eea'],
-    'solana'   => ['label' => 'Solana',   'symbol' => 'SOL', 'decimals' => 2, 'color' => '#9945ff'],
-    'sui'      => ['label' => 'Sui',      'symbol' => 'SUI', 'decimals' => 4, 'color' => '#4da2ff'],
+    'bitcoin'  => ['label' => 'Bitcoin',  'symbol' => 'BTC', 'decimals' => 0, 'color' => '#ff86e9'],
+    'ethereum' => ['label' => 'Ethereum', 'symbol' => 'ETH', 'decimals' => 0, 'color' => '#fbbf24'],
+    'solana'   => ['label' => 'Solana',   'symbol' => 'SOL', 'decimals' => 2, 'color' => '#9d86ff'],
+    'sui'      => ['label' => 'Sui',      'symbol' => 'SUI', 'decimals' => 4, 'color' => '#4ecdc4'],
 ];
 
 // Actions suivies (ticker Yahoo Finance => nom lisible)
@@ -357,7 +357,7 @@ $message = <<<HTML
         body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; }
         .container { background-color: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .header { text-align: center; margin-bottom: 20px; }
-        .logo { color: #9d86ff; font-size: 24px; font-weight: bold; }
+        .logo { color: #58a6ff; font-size: 24px; font-weight: bold; }
         h2 { font-size: 18px; color: #333; border-bottom: 2px solid #9d86ff; padding-bottom: 6px; margin-top: 28px; }
         .stats { background-color: #f5f5f5; padding: 15px; border-radius: 8px; margin: 15px 0; text-align: center; }
         .card { background-color: #f5f5f5; border-radius: 8px; padding: 12px; text-align: center; }
@@ -365,8 +365,8 @@ $message = <<<HTML
         .coin-price { font-size: 18px; font-weight: bold; margin: 4px 0; }
         .muted { color: #999; font-size: 12px; }
         .chip { font-weight: bold; font-size: 14px; }
-        .chip.up { color: #75f0a2; }
-        .chip.down { color: #fb6e6e; }
+        .chip.up { color: #8bfa8b; }
+        .chip.down { color: #f0635a; }
         table.data { width: 100%; border-collapse: collapse; margin: 10px 0; }
         table.data td { padding: 8px 6px; border-bottom: 1px solid #eee; font-size: 14px; vertical-align: top; }
         ul.news { padding-left: 18px; font-size: 14px; line-height: 1.7; }
@@ -496,7 +496,7 @@ try {
     $mail->Debugoutput = function ($str, $level) { echo "$str<br>\n"; };
 
     // Expéditeur et destinataire
-    $mail->setFrom($smtp['username'], 'LibreAnalytics'); 
+    $mail->setFrom($smtp['username'], 'Rapport Marchés'); 
     $mail->addAddress($user['email'], $name);
     $mail->addReplyTo('contact@gael-berru.com', 'Gael');
 

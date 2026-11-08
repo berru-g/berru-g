@@ -24,11 +24,26 @@
       caret-color: var(--text);
       min-height: 150px;
     }
-    .cm-tag { color: #4aa3ff; }
-    .cm-attribute { color: #ffe100; }
-    .cm-string { color: #a6e22e; }
-    .cm-bracket { color: #ff5e99; }
-    .cm-qualifier { color: #ffe100; }
+
+    .cm-tag {
+      color: #4aa3ff;
+    }
+
+    .cm-attribute {
+      color: #ffe100;
+    }
+
+    .cm-string {
+      color: #a6e22e;
+    }
+
+    .cm-bracket {
+      color: #ff5e99;
+    }
+
+    .cm-qualifier {
+      color: #ffe100;
+    }
   </style>
 </head>
 
@@ -39,7 +54,7 @@
       <button id="themeToggle"><i class="fa-solid fa-palette"></i> Thème</button>
       <button id="reset"><i class="fa-solid fa-trash-arrow-up"></i> Reset</button>
       <button id="save"><i class="fa-solid fa-floppy-disk"></i> Save</button>
-      <a href="../index.html"><button><i class="fa-solid fa-reply"></i></button></a>
+      <a href="../index.php"><button><i class="fa-solid fa-reply"></i></button></a>
     </div>
   </header>
 
@@ -47,15 +62,23 @@
     <div class="editor-panel">
       <div class="editor-block">
         <label for="htmlEditor">HTML</label>
-        <textarea id="htmlEditor" placeholder="Dev by berru-g"><h1>Titre</h1></textarea>
+        <textarea id="htmlEditor"
+          placeholder="Dev by berru-g"><img src="https://gael-berru.com/img/berru-pieuvre.png"><p>Berru logo</p></textarea>
       </div>
       <div class="editor-block">
         <label for="cssEditor">CSS</label>
-        <textarea id="cssEditor">h1, p {
+        <textarea id="cssEditor">p {
   color: grey;
   text-align: center;
-  margin-top: 40px;
-}</textarea>
+  margin-top: 10px;
+}
+img {
+  width: 87px;
+  height: auto;
+  margin: 0 auto;
+  display: flex;
+}
+</textarea>
       </div>
     </div>
     <div class="preview-panel">
@@ -138,45 +161,3 @@
 </body>
 
 </html>
-
-<!--<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Éditeur HTML/CSS/JS Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-    <header>
-        <h1>Live Code Editor</h1>
-        <div class="controls">
-            <button id="toggleMode">🌙 Mode</button>
-            <button id="reset">♻️ Reset</button>
-            <a href="../index.html"><button>⬅️ Berru</button></a>
-        </div>
-    </header>
-    <div class="main-layout">
-        <div class="editor-panel">
-            <div class="editor-block">
-                <label for="html">HTML</label>
-                <textarea id="html" class="editor" placeholder="Écris ton HTML ici..."><h1>Hello World</h1><p>What' up ?</p></textarea>
-            </div>
-            <div class="editor-block">
-                <label for="css">CSS</label>
-                <textarea id="css" class="editor" placeholder="Dev by berru-g">h1 {
-  color: #ab9ff2;
-  text-align: center;
-  margin-top: 40px;
-}</textarea>
-            </div>
-        </div>
-        <div class="preview-panel">
-            <iframe id="preview"></iframe>
-        </div>
-    </div>
-    <script src="script.js"></script>
-</body>
-</html>-->

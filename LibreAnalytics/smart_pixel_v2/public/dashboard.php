@@ -311,7 +311,8 @@ function getCountryCodeSimple($countryName)
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 
     <!-- amCharts 5 (version complète sans modules séparés) -->
     <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
@@ -332,23 +333,27 @@ function getCountryCodeSimple($countryName)
 
     <!-- === Sidebar redessinéefaçon site perso - Design moderne & rétractable === -->
     <div class="sidebar-wrapper">
-        <div class="sidebar <?= isset($_COOKIE['sidebar_collapsed']) && $_COOKIE['sidebar_collapsed'] === 'true' ? 'collapsed' : '' ?>" id="sidebar">
+        <div class="sidebar <?= isset($_COOKIE['sidebar_collapsed']) && $_COOKIE['sidebar_collapsed'] === 'true' ? 'collapsed' : '' ?>"
+            id="sidebar">
             <!-- En-tête de la sidebar -->
             <div class="sidebar-header">
                 <div class="logo-container">
                     <!--<div class="logo-icon">◰</div>-->
                     <div class="logo-text">
                         <a href="betaV2.php">
-                            <h3><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <h3><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                                     <circle cx="12" cy="7" r="4" />
                                 </svg></h3>
                         </a>
-                        <small class="user-email"><?= htmlspecialchars($_SESSION['user_email'] ?? 'Utilisateur') ?></small>
+                        <small
+                            class="user-email"><?= htmlspecialchars($_SESSION['user_email'] ?? 'Utilisateur') ?></small>
                     </div>
                 </div>
                 <button class="sidebar-toggle" id="sidebarToggle" title="Réduire/Étendre">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
                         <rect x="2" y="2" width="20" height="20" rx="2" stroke-linejoin="round" />
                         <path stroke-linecap="round" d="M6.8 2V22" />
                     </svg>
@@ -370,7 +375,8 @@ function getCountryCodeSimple($countryName)
                 </div>
                 <div class="subscription-details">
                     <div class="site-count">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                             <polyline points="9 22 9 12 15 12 15 22" />
                         </svg>
@@ -378,7 +384,8 @@ function getCountryCodeSimple($countryName)
                     </div>
                     <?php if (($userPlan['plan'] ?? 'free') != 'free'): ?>
                         <div class="next-payment">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <circle cx="12" cy="12" r="10" />
                                 <polyline points="12 6 12 12 16 14" />
                             </svg>
@@ -396,7 +403,8 @@ function getCountryCodeSimple($countryName)
                 <div class="section-header">
                     <h4>Mes Sites</h4>
                     <button class="add-site-btn" onclick="window.location.href='?create=site'">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <line x1="12" y1="5" x2="12" y2="19" />
                             <line x1="5" y1="12" x2="19" y2="12" />
                         </svg>
@@ -410,8 +418,10 @@ function getCountryCodeSimple($countryName)
                             class="site-item <?= $selectedSiteId == $site['id'] ? 'active' : '' ?>"
                             title="<?= htmlspecialchars($site['domain']) ?>">
                             <div class="site-icon">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path
+                                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
                                 </svg>
                             </div>
                             <div class="site-info">
@@ -432,16 +442,17 @@ function getCountryCodeSimple($countryName)
                     <div class="integration-header">
                         <h4>Code d'intégration</h4>
                         <button class="copy-btn" onclick="copyCode()" title="Copier le code">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
                                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                             </svg>
                         </button>
                     </div>
                     <code class="integration-code">
-                        &lt;!-- à intégrer dans la balise &lt;head&gt; de votre site --&gt;
-                        &lt;script data-sp-id="<?= $currentSite['tracking_code'] ?>" src="<?= APP_URL ?>tracker.js" async&gt;&lt;/script&gt;
-                    </code>
+                            &lt;!-- à intégrer dans la balise &lt;head&gt; de votre site --&gt;
+                            &lt;script data-sp-id="<?= $currentSite['tracking_code'] ?>" src="<?= APP_URL ?>tracker.js" async&gt;&lt;/script&gt;
+                        </code>
                 </div>
             <?php endif; ?>
 
@@ -450,8 +461,11 @@ function getCountryCodeSimple($countryName)
             <div class="integration-card" style="">
                 <div class="integration-header">
                     <h4>Votre SmartPixel</h4>
-                    <button class="copy-btn" onclick="copyTrackingCode('<?= htmlspecialchars($currentSite['tracking_code']) ?>')" title="Copier le code SP_">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <button class="copy-btn"
+                        onclick="copyTrackingCode('<?= htmlspecialchars($currentSite['tracking_code']) ?>')"
+                        title="Copier le code SP_">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                         </svg>
@@ -469,7 +483,8 @@ function getCountryCodeSimple($countryName)
                 <button class="logout-btn" onclick="confirmParametre()">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
                     </svg>
                     <span>Parametre</span>
                 </button>
@@ -511,13 +526,15 @@ function getCountryCodeSimple($countryName)
 
             <?php if ($limitReached): ?>
                 <!-- Afficher les options d'upgrade (refaire css car ce fdp ia est teubé) -->
-                <div style="background: var(--bg-color); border: 1px solid #ffeaa7; color: var(--text-color); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <div
+                    style="background: var(--bg-color); border: 1px solid #ffeaa7; color: var(--text-color); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                     <h3>Limite atteinte</h3>
                     <p><?= $errorMessage ?></p>
 
                     <div style="margin-top: 15px; padding: 15px; background: white; border-radius: 5px;">
                         <h4>Passez à un plan supérieur</h4>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
+                        <div
+                            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
                             <!-- Plan PRO -->
                             <div style="border: 2px solid var(--primary-color); border-radius: 8px; padding: 15px;">
                                 <h3>PRO</h3>
@@ -528,7 +545,8 @@ function getCountryCodeSimple($countryName)
                                     <li>Stats avancées</li>
                                     <li>API</li>
                                 </ul>
-                                <button onclick="showUpgradeForm('pro')" style="width: 100%; padding: 10px; background: var(--primary-color); color: var(--text-color); border: none; border-radius: 5px; cursor: pointer;">
+                                <button onclick="showUpgradeForm('pro')"
+                                    style="width: 100%; padding: 10px; background: var(--primary-color); color: var(--text-color); border: none; border-radius: 5px; cursor: pointer;">
                                     Choisir PRO
                                 </button>
                             </div>
@@ -543,7 +561,8 @@ function getCountryCodeSimple($countryName)
                                     <li>Support prioritaire</li>
                                     <li>API complète</li>
                                 </ul>
-                                <button onclick="showUpgradeForm('business')" style="width: 100%; padding: 10px; background: #4ecdc4; color: var(--text-color); border: none; border-radius: 5px; cursor: pointer;">
+                                <button onclick="showUpgradeForm('business')"
+                                    style="width: 100%; padding: 10px; background: #4ecdc4; color: var(--text-color); border: none; border-radius: 5px; cursor: pointer;">
                                     Choisir BUSINESS
                                 </button>
                             </div>
@@ -552,7 +571,8 @@ function getCountryCodeSimple($countryName)
                 </div>
 
                 <!-- Formulaire caché pour l'upgrade -->
-                <div id="upgradeForm" style="display: none; background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                <div id="upgradeForm"
+                    style="display: none; background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px;">
                     <h3>Mise à niveau du plan</h3>
                     <form id="upgradeFormContent">
                         <input type="hidden" name="new_plan" id="newPlanInput">
@@ -560,7 +580,8 @@ function getCountryCodeSimple($countryName)
                             <label>Email de facturation</label>
                             <input type="email" name="billing_email" required style="width: 100%; padding: 10px;">
                         </div>
-                        <button type="button" onclick="submitUpgrade()" style="padding: 10px 20px; background: var(--primary-color); color: var(--text-color); border: none; border-radius: 5px; cursor: pointer;">
+                        <button type="button" onclick="submitUpgrade()"
+                            style="padding: 10px 20px; background: var(--primary-color); color: var(--text-color); border: none; border-radius: 5px; cursor: pointer;">
                             Confirmer la mise à niveau
                         </button>
                     </form>
@@ -568,7 +589,8 @@ function getCountryCodeSimple($countryName)
 
             <?php else: ?>
                 <!-- Formulaire de création normal -->
-                <div style="background-color: var(--bg-color); color: var(--text-color); text-align: center; padding: 2rem; max-width: 500px; margin: 0 auto; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <div
+                    style="background-color: var(--bg-color); color: var(--text-color); text-align: center; padding: 2rem; max-width: 500px; margin: 0 auto; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                     <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 600;">
                         <i class="fa-regular fa-square-plus"></i>
                         <?= isset($_GET['first']) ? 'Créez votre premier site' : 'Ajouter un nouveau site' ?>
@@ -599,7 +621,8 @@ function getCountryCodeSimple($countryName)
                             $currentSite = array_filter($userSites, fn($s) => $s['id'] == $selectedSiteId);
                             $currentSite = reset($currentSite);
                             ?>
-                            <span style="color: var(--primary-color);"><?= htmlspecialchars($currentSite['site_name'] ?? 'Site non sélectionné') ?></span>
+                            <span
+                                style="color: var(--primary-color);"><?= htmlspecialchars($currentSite['site_name'] ?? 'Site non sélectionné') ?></span>
                         </h1>
 
                         <div class="period-filter">
@@ -626,7 +649,7 @@ function getCountryCodeSimple($countryName)
                         <div class="tab" onclick="openTab('sessions')">Sessions</div>
                         <div class="tab" onclick="openTab('details')">Détails</div>
                         <div class="tab" onclick="openTab('insights')">Insights</div>
-                        <!--<div class="tab" onclick="openTab('AgendaReco')">Agenda</div>-->
+                        <div class="tab" onclick="openTab('Cli')">Cli</div>
                     </div>
 
                     <!-- ONGLET APERÇU -->
@@ -711,7 +734,7 @@ function getCountryCodeSimple($countryName)
                                             $avgPagesPerSession = $sessionData ? array_sum(array_column($sessionData, 'page_views')) / count($sessionData) : 0;
                                             $avgSessionTime = $avgSessionTime; // Déjà calculé
                                             $bounceRateEstimate = 100 - ($avgPagesPerSession > 1 ? 70 : 40); // Estimation simplifiée
-
+                                        
                                             // Liste des métriques à analyser
                                             $metrics = [
                                                 [
@@ -824,7 +847,8 @@ function getCountryCodeSimple($countryName)
                         <div class="data-grid">
                             <!-- Colonne gauche : Map -->
                             <div class="chart-container">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                                     <h3 class="chart-title">Carte mondiale des visites</h3>
                                     <!--<div class="map-controls">
                                         <button onclick="zoomIn()" class="map-btn" title="Zoom avant">
@@ -838,11 +862,18 @@ function getCountryCodeSimple($countryName)
                                         </button>
                                     </div>-->
                                 </div>
-                                <div id="mapChart" style="width: 100%; height: 400px; background: var(--bg-color); border-radius: 8px;"></div>
-                                <div id="mapLegend" style="margin-top: 10px; text-align: center; font-size: 12px; color: #666;">
-                                    <span style="background: #ff6b8b; width: 12px; height: 12px; display: inline-block; border-radius: 50%; margin-right: 5px;"></span> Haut
+                                <div id="mapChart"
+                                    style="width: 100%; height: 400px; background: var(--bg-color); border-radius: 8px;">
+                                </div>
+                                <div id="mapLegend"
+                                    style="margin-top: 10px; text-align: center; font-size: 12px; color: #666;">
+                                    <span
+                                        style="background: #ff6b8b; width: 12px; height: 12px; display: inline-block; border-radius: 50%; margin-right: 5px;"></span>
+                                    Haut
                                     <span style="margin: 0 10px;">→</span>
-                                    <span style="background: #6772e5; width: 12px; height: 12px; display: inline-block; border-radius: 50%; margin-right: 5px;"></span> Bas
+                                    <span
+                                        style="background: #6772e5; width: 12px; height: 12px; display: inline-block; border-radius: 50%; margin-right: 5px;"></span>
+                                    Bas
                                 </div>
                             </div>
 
@@ -868,7 +899,7 @@ function getCountryCodeSimple($countryName)
                                 <tbody>
                                     <?php foreach ($countries as $country):
                                         $countryCode = getCountryCodeSimple($country['country']);
-                                    ?>
+                                        ?>
                                         <tr>
                                             <td>
                                                 <?php if ($countryCode): ?>
@@ -993,15 +1024,16 @@ function getCountryCodeSimple($countryName)
                                                 break;
                                             $data = json_decode($click['click_data'], true);
                                             if (is_array($data)):
-                                        ?>
+                                                ?>
                                                 <tr>
-                                                    <td><span class="badge badge-primary"><?= htmlspecialchars($data['element']) ?></span>
+                                                    <td><span
+                                                            class="badge badge-primary"><?= htmlspecialchars($data['element']) ?></span>
                                                     </td>
                                                     <td><?= htmlspecialchars(substr($data['text'], 0, 30)) . (strlen($data['text']) > 30 ? '...' : '') ?>
                                                     </td>
                                                     <td><?= $data['x'] ?>x<?= $data['y'] ?></td>
                                                 </tr>
-                                        <?php
+                                                <?php
                                                 $clickCount++;
                                             endif;
                                         endforeach;
@@ -1031,7 +1063,7 @@ function getCountryCodeSimple($countryName)
                                         $first = strtotime($session['first_visit']);
                                         $last = strtotime($session['last_visit']);
                                         $duration = round(($last - $first) / 60, 1); // en minutes
-                                    ?>
+                                        ?>
                                         <tr>
                                             <td><?= substr($session['session_id'], 0, 8) ?>...</td>
                                             <td><?= $session['page_views'] ?></td>
@@ -1067,12 +1099,13 @@ function getCountryCodeSimple($countryName)
                                         <tbody>
                                             <?php foreach ($detailedData as $visit):
                                                 $visitTime = strtotime($visit['timestamp']);
-                                            ?>
+                                                ?>
                                                 <tr>
                                                     <td class="ip-address"><?= htmlspecialchars($visit['ip_address']) ?></td>
                                                     <td><?= htmlspecialchars($visit['country']) ?></td>
                                                     <td><?= htmlspecialchars($visit['city']) ?></td>
-                                                    <td class="url-truncate" title="<?= htmlspecialchars($visit['page_url']) ?>">
+                                                    <td class="url-truncate"
+                                                        title="<?= htmlspecialchars($visit['page_url']) ?>">
                                                         <?= htmlspecialchars($visit['page_url']) ?>
                                                     </td>
                                                     <td><?= date('H:i', $visitTime) ?></td>
@@ -1112,7 +1145,7 @@ function getCountryCodeSimple($countryName)
                                             <tbody>
                                                 <?php
                                                 // Récupérer les données nécessaires
-
+                                            
 
                                                 $totalVisits = 0;
                                                 foreach ($topPages as $page) {
@@ -1232,7 +1265,7 @@ function getCountryCodeSimple($countryName)
                                                 $avgPagesPerSession = $sessionData ? array_sum(array_column($sessionData, 'page_views')) / count($sessionData) : 0;
                                                 $avgSessionTime = $avgSessionTime; // Déjà calculé
                                                 $bounceRateEstimate = 100 - ($avgPagesPerSession > 1 ? 70 : 40); // Estimation simplifiée
-
+                                            
                                                 // Liste des métriques à analyser
                                                 $metrics = [
                                                     [
@@ -1286,30 +1319,18 @@ function getCountryCodeSimple($countryName)
                         </div>
                     </div>
 
-                    <!-- ONGLET Agenda -->
-                    <div id="AgendaReco" class="tab-content">
-                        <h2>Calendrier de publication</h2>
 
-                        <!-- Heatmap avec vos données réelles -->
-                        <div class="chart-container">
-                            <h3>Fréquentation par heure</h3>
-                            <canvas id="heatmapChart" height="250"></canvas>
-                        </div>
 
-                        <!-- Planning Gantt -->
-                        <div class="chart-container">
-                            <h3>Planning recommandé</h3>
-                            <div id="ganttChart"></div>
-                        </div>
+                    <!-- ONGLET cli -->
+                    <div id="Cli" class="tab-content">
+                        <h2>Pseudo Cli terminal</h2>
+                        <iframe style="display: block; width: 100%; height: auto; border: none; border-radius: 8px;"
+                            src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/cli.php"
+                            title="pseudo cli LibreAnalytics" loading="lazy" allowfullscreen>
+                        </iframe>
 
-                        <!-- Top contenus - Utilise vos données existantes -->
-                        <div class="chart-container">
-                            <h3>Contenus performants</h3>
-                            <div id="topPagesList"></div>
-                        </div>
                     </div>
 
-                    <!-- ONGLET AGENDA ? -->
 
 
 
@@ -1326,7 +1347,9 @@ function getCountryCodeSimple($countryName)
 
                 <nav class="modal-nav">
                     <a href="../../doc/" class="modal-link primary" id="linkToDoc">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 12px; vertical-align: middle;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            style="margin-right: 12px; vertical-align: middle;">
                             <path d="M4 20V8a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" />
                             <path d="M4 11h16" />
                         </svg>
@@ -1334,22 +1357,28 @@ function getCountryCodeSimple($countryName)
                     </a>
 
                     <a href="account.php" class="modal-link">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cloud" viewBox="0 0 16 16">
-                            <path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                            class="bi bi-cloud" viewBox="0 0 16 16">
+                            <path
+                                d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z" />
                         </svg>
                         <span class="subtitle">Compte, API et son guide d'utilisation.</span>
                     </a>
 
                     <a href="cli.php" class="modal-link">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-square-text" viewBox="0 0 16 16">
-                            <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
-                            <path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                            class="bi bi-chat-square-text" viewBox="0 0 16 16">
+                            <path
+                                d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                            <path
+                                d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
                         </svg>
                         <span class="subtitle">Pseudo Cli pour les nerds.</span>
                     </a>
 
                     <button id="installPWA" class="install-btn" style="display: none">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                         </svg>
                         Installer l'app
@@ -1362,7 +1391,8 @@ function getCountryCodeSimple($countryName)
         </dialog>
     </div>
 
-    <p style="text-align:center;color:grey;">LibreAnalytics <?= APP_VERSION ?> by <a href="https://gael-berru.com" target="_blank" style="text-decoration:none;color:#9d86ff">berru-g</a> 24</p>
+    <p style="text-align:center;color:grey;">LibreAnalytics <?= APP_VERSION ?> by <a href="https://gael-berru.com"
+            target="_blank" style="text-decoration:none;color:#9d86ff">berru-g</a> 24</p>
 
 
 
@@ -1418,21 +1448,21 @@ function getCountryCodeSimple($countryName)
             data: {
                 labels: dailyStats.map(stat => stat.date),
                 datasets: [{
-                        label: 'Visites',
-                        data: dailyStats.map(stat => stat.visits),
-                        borderColor: '#9d86ff',
-                        backgroundColor: 'rgba(67, 97, 238, 0.1)',
-                        tension: 0.3,
-                        fill: true
-                    },
-                    {
-                        label: 'Visiteurs uniques',
-                        data: dailyStats.map(stat => stat.unique_visitors),
-                        borderColor: '#4ecdc4',
-                        backgroundColor: 'rgba(76, 201, 240, 0.1)',
-                        tension: 0.3,
-                        fill: true
-                    }
+                    label: 'Visites',
+                    data: dailyStats.map(stat => stat.visits),
+                    borderColor: '#9d86ff',
+                    backgroundColor: 'rgba(67, 97, 238, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Visiteurs uniques',
+                    data: dailyStats.map(stat => stat.unique_visitors),
+                    borderColor: '#4ecdc4',
+                    backgroundColor: 'rgba(76, 201, 240, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                }
                 ]
             },
             options: {
@@ -1706,7 +1736,7 @@ function getCountryCodeSimple($countryName)
                 polygonSeries.data.setAll(mapData);
 
                 // Configurer les couleurs basées sur les valeurs
-                polygonSeries.mapPolygons.template.adapters.add("fill", function(fill, target) {
+                polygonSeries.mapPolygons.template.adapters.add("fill", function (fill, target) {
                     const dataItem = target.dataItem;
                     if (dataItem) {
                         const value = dataItem.dataContext.value;
@@ -1728,7 +1758,7 @@ function getCountryCodeSimple($countryName)
                     am5map.MapPointSeries.new(mapRoot, {})
                 );
 
-                pointSeries.bullets.push(function(root, series, dataItem) {
+                pointSeries.bullets.push(function (root, series, dataItem) {
                     const value = dataItem.dataContext.value;
                     const size = Math.max(15, Math.min(50, Math.sqrt(value) * 0.7));
 
@@ -1758,7 +1788,7 @@ function getCountryCodeSimple($countryName)
                 pointSeries.data.setAll(mapData);
 
                 // Zoom au démarrage
-                polygonSeries.events.on("datavalidated", function() {
+                polygonSeries.events.on("datavalidated", function () {
                     mapChart.goHome();
                     mapChart.zoomToGeoPoint({
                         latitude: 20,
@@ -1802,7 +1832,7 @@ function getCountryCodeSimple($countryName)
 
 
         // ===== SECTION AJOUTEE: Graphique Revenus vs Trafic =====
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Récupérer les données passées depuis PHP
             const chartDates = <?php echo json_encode($chartDates); ?>;
             const chartVisits = <?php echo json_encode($chartVisits); ?>;
@@ -1825,21 +1855,21 @@ function getCountryCodeSimple($countryName)
                     data: {
                         labels: formattedDates,
                         datasets: [{
-                                label: 'Visites',
-                                data: chartVisits,
-                                borderColor: 'rgb(54, 162, 235)',
-                                backgroundColor: 'rgba(54, 162, 235, 0.1)',
-                                tension: 0.3,
-                                yAxisID: 'y'
-                            },
-                            {
-                                label: 'Revenus (€)',
-                                data: chartRevenue,
-                                borderColor: 'rgb(75, 192, 192)',
-                                backgroundColor: 'rgba(75, 192, 192, 0.1)',
-                                tension: 0.3,
-                                yAxisID: 'y1'
-                            }
+                            label: 'Visites',
+                            data: chartVisits,
+                            borderColor: 'rgb(54, 162, 235)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                            tension: 0.3,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Revenus (€)',
+                            data: chartRevenue,
+                            borderColor: 'rgb(75, 192, 192)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                            tension: 0.3,
+                            yAxisID: 'y1'
+                        }
                         ]
                     },
                     options: {
@@ -1853,7 +1883,7 @@ function getCountryCodeSimple($countryName)
                                 mode: 'index',
                                 intersect: false,
                                 callbacks: {
-                                    label: function(context) {
+                                    label: function (context) {
                                         let label = context.dataset.label || '';
                                         if (label) {
                                             label += ': ';
@@ -1910,7 +1940,7 @@ function getCountryCodeSimple($countryName)
                 tip.style.cursor = 'pointer';
                 tip.title = 'Cliquez pour en savoir plus';
 
-                tip.addEventListener('click', function() {
+                tip.addEventListener('click', function () {
                     const message = this.textContent;
                     alert('Recommandation détaillée:\n\n' + message + '\n\nCette analyse est basée sur vos données de trafic et transactions.');
                 });
@@ -1958,7 +1988,7 @@ function getCountryCodeSimple($countryName)
             const tabs = document.querySelectorAll('.tab');
 
             tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
+                tab.addEventListener('click', function () {
                     // Vérifier si c'est l'onglet Géographie
                     const tabText = this.textContent || '';
                     if (tabText.toLowerCase().includes('géographie') ||
@@ -2004,7 +2034,7 @@ function getCountryCodeSimple($countryName)
         }
 
         // Initialisation au chargement
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Configurer les écouteurs d'onglets
             setupMapTabListener();
 
@@ -2013,7 +2043,7 @@ function getCountryCodeSimple($countryName)
 
             // Observer les changements d'URL (pour les filtres de période)
             const originalOpenTab = window.openTab;
-            window.openTab = function(tabName) {
+            window.openTab = function (tabName) {
                 originalOpenTab(tabName);
 
                 // Si c'est l'onglet Géographie, initialiser la map
@@ -2095,7 +2125,7 @@ function getCountryCodeSimple($countryName)
             // Gestion du clic sur "Documentation complète" → redirection
             const linkDoc = document.getElementById('linkToDoc');
             if (linkDoc) {
-                linkDoc.addEventListener('click', function(e) {
+                linkDoc.addEventListener('click', function (e) {
                     e.preventDefault(); // empêche le lien direct
                     modal.close(); // ferme la modale
                     window.location.href = '../../doc/'; // redirige
@@ -2107,7 +2137,7 @@ function getCountryCodeSimple($countryName)
             // Bouton Annuler → ferme juste la modale
             const btnCancel = document.getElementById('btnCancel');
             if (btnCancel) {
-                btnCancel.addEventListener('click', function() {
+                btnCancel.addEventListener('click', function () {
                     modal.close();
                 }, {
                     once: true
@@ -2115,7 +2145,7 @@ function getCountryCodeSimple($countryName)
             }
 
             //  fermer en cliquant sur le backdrop
-            modal.addEventListener('click', function(e) {
+            modal.addEventListener('click', function (e) {
                 if (e.target === modal) {
                     modal.close();
                 }
@@ -2136,9 +2166,9 @@ function getCountryCodeSimple($countryName)
             const formData = new FormData(form);
 
             fetch('upgrade.php', {
-                    method: 'POST',
-                    body: formData
-                })
+                method: 'POST',
+                body: formData
+            })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -2161,7 +2191,7 @@ function getCountryCodeSimple($countryName)
 
             // Sauvegarder l'état dans un cookie (valide 30 jours)
             const isCollapsed = sidebar.classList.contains('collapsed');
-            document.cookie = `sidebar_collapsed=${isCollapsed}; path=/; max-age=${60*60*24*30}`;
+            document.cookie = `sidebar_collapsed=${isCollapsed}; path=/; max-age=${60 * 60 * 24 * 30}`;
 
             // Mettre à jour le contenu principal
             const mainContent = document.querySelector('.main-content');
@@ -2274,7 +2304,7 @@ function getCountryCodeSimple($countryName)
         });
 
         // ===== GRAPHIQUE DES TENDANCES =====
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Attendre que l'onglet insights soit chargé
             setTimeout(() => {
                 const trendsCtx = document.getElementById('trendsChart');
@@ -2284,21 +2314,21 @@ function getCountryCodeSimple($countryName)
                         data: {
                             labels: <?= json_encode($trendLabels) ?>,
                             datasets: [{
-                                    label: 'Visites totales',
-                                    data: <?= json_encode($trendVisits) ?>,
-                                    borderColor: '#9d86ff',
-                                    backgroundColor: 'rgba(157, 134, 255, 0.1)',
-                                    tension: 0.3,
-                                    fill: true
-                                },
-                                {
-                                    label: 'Visiteurs uniques',
-                                    data: <?= json_encode($trendUnique) ?>,
-                                    borderColor: '#4ecdc4',
-                                    backgroundColor: 'rgba(78, 205, 196, 0.1)',
-                                    tension: 0.3,
-                                    fill: true
-                                }
+                                label: 'Visites totales',
+                                data: <?= json_encode($trendVisits) ?>,
+                                borderColor: '#9d86ff',
+                                backgroundColor: 'rgba(157, 134, 255, 0.1)',
+                                tension: 0.3,
+                                fill: true
+                            },
+                            {
+                                label: 'Visiteurs uniques',
+                                data: <?= json_encode($trendUnique) ?>,
+                                borderColor: '#4ecdc4',
+                                backgroundColor: 'rgba(78, 205, 196, 0.1)',
+                                tension: 0.3,
+                                fill: true
+                            }
                             ]
                         },
                         options: {
@@ -2330,7 +2360,7 @@ function getCountryCodeSimple($countryName)
                     tip.style.cursor = 'pointer';
                     tip.title = 'Cliquez pour en savoir plus';
 
-                    tip.addEventListener('click', function() {
+                    tip.addEventListener('click', function () {
                         const message = this.textContent;
                         alert('Recommandation détaillée:\n\n' + message);
                     });
@@ -2605,9 +2635,9 @@ function getCountryCodeSimple($countryName)
                     hour: parseInt(hour),
                     count
                 } : max, {
-                    hour: 14,
-                    count: 0
-                }
+                hour: 14,
+                count: 0
+            }
             );
             return peak.hour;
         }
@@ -2625,76 +2655,76 @@ function getCountryCodeSimple($countryName)
         }
         /*!-- PWA: Enregistrement du Service Worker --*/
         if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('sw.js')
-            .then(registration => console.log('SW enregistré avec succès !'))
-            .catch(err => console.error('Échec de l\'enregistrement du SW :', err));
-        });
-      }
-
-      // Gestion de l'installation PWA
-      let deferredPrompt;
-      const installPWA = document.getElementById('installPWA');
-
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-
-        // Affiche le bouton uniquement si l'app n'est pas déjà installée
-        if (!isPWAInstalled()) {
-          installPWA.style.display = 'block';
-        }
-      });
-
-      // Gestion du clic sur le bouton d'installation
-      if (installPWA) {
-        installPWA.addEventListener('click', (e) => {
-          e.preventDefault();
-
-          if (deferredPrompt) {
-            deferredPrompt.prompt();
-
-            deferredPrompt.userChoice.then((choiceResult) => {
-              if (choiceResult.outcome === 'accepted') {
-                console.log('L\'utilisateur a accepté l\'installation');
-                installPWA.style.display = 'none';
-              }
-              deferredPrompt = null;
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => console.log('SW enregistré avec succès !'))
+                    .catch(err => console.error('Échec de l\'enregistrement du SW :', err));
             });
-          } else {
-            console.log('Le prompt d\'installation n\'est pas disponible');
-            // Fallback pour les navigateurs qui ne supportent pas l'API
-            showManualInstallInstructions();
-          }
-        });
-      }
-
-      // Vérifie si l'app est déjà installée
-      function isPWAInstalled() {
-        return window.matchMedia('(display-mode: standalone)').matches ||
-          navigator.standalone ||
-          document.referrer.includes('android-app://');
-      }
-
-      // Cache le bouton si l'app est déjà installée
-      window.addEventListener('appinstalled', () => {
-        console.log('PWA déjà installée');
-        if (installPWA) installPWA.style.display = 'none';
-      });
-
-      // Vérification au chargement
-      document.addEventListener('DOMContentLoaded', () => {
-        if (isPWAInstalled() && installPWA) {
-          installPWA.style.display = 'none';
         }
-      });
 
-      // Fallback pour les navigateurs moins supportés
-      function showManualInstallInstructions() {
-        // Tu peux ajouter une modal ou un tooltip ici
-        console.log('Instructions manuelles pour installer la PWA');
-        alert("Pour installer l'application :\n\n- Sur Chrome/Edge : cliquez sur l'icône 'Installer' dans la barre d'adresse\n- Sur iOS : utilisez l'option 'Partager' puis 'Ajouter à l'écran d'accueil'");
-      }
+        // Gestion de l'installation PWA
+        let deferredPrompt;
+        const installPWA = document.getElementById('installPWA');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+
+            // Affiche le bouton uniquement si l'app n'est pas déjà installée
+            if (!isPWAInstalled()) {
+                installPWA.style.display = 'block';
+            }
+        });
+
+        // Gestion du clic sur le bouton d'installation
+        if (installPWA) {
+            installPWA.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('L\'utilisateur a accepté l\'installation');
+                            installPWA.style.display = 'none';
+                        }
+                        deferredPrompt = null;
+                    });
+                } else {
+                    console.log('Le prompt d\'installation n\'est pas disponible');
+                    // Fallback pour les navigateurs qui ne supportent pas l'API
+                    showManualInstallInstructions();
+                }
+            });
+        }
+
+        // Vérifie si l'app est déjà installée
+        function isPWAInstalled() {
+            return window.matchMedia('(display-mode: standalone)').matches ||
+                navigator.standalone ||
+                document.referrer.includes('android-app://');
+        }
+
+        // Cache le bouton si l'app est déjà installée
+        window.addEventListener('appinstalled', () => {
+            console.log('PWA déjà installée');
+            if (installPWA) installPWA.style.display = 'none';
+        });
+
+        // Vérification au chargement
+        document.addEventListener('DOMContentLoaded', () => {
+            if (isPWAInstalled() && installPWA) {
+                installPWA.style.display = 'none';
+            }
+        });
+
+        // Fallback pour les navigateurs moins supportés
+        function showManualInstallInstructions() {
+            // Tu peux ajouter une modal ou un tooltip ici
+            console.log('Instructions manuelles pour installer la PWA');
+            alert("Pour installer l'application :\n\n- Sur Chrome/Edge : cliquez sur l'icône 'Installer' dans la barre d'adresse\n- Sur iOS : utilisez l'option 'Partager' puis 'Ajouter à l'écran d'accueil'");
+        }
     </script>
 
 </body>

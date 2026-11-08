@@ -6,7 +6,7 @@ const projectsDatabase = [
         longDesc: 'Je conçois des <strong>outils sur mesure</strong> — web, données, électronique, sur devis gratuit.',
         keywords: ['service', 'prestation', 'propose', 'expertise', 'competence', 'sais', 'faire', 'peux', 'aide', 'quoi'],
         //icon: '🐙',
-        image: './img/berru-pieuvre.png',
+        image: './img/berru-pieuvre.gif',
         link: 'mailto:contact@gael-berru.com?subject=Question-depuis-la-Project-Base',
         //linkLabel: 'Me contacter', 
         category: 'assistant',
@@ -20,7 +20,7 @@ const projectsDatabase = [
         longDesc: "Grille indicative — <strong>chaque projet est chiffré sur devis, gratuitement</strong>. Mes outils existants restent gratuits et open source.",
         keywords: ['prix', 'tarif', 'coute', 'combien', 'budget', 'devis', 'cher', 'euro'],
         //icon: '🐙',
-        image: './img/berru-pieuvre-2.png',
+        image: './img/berru-pieuvre.png',
         link: 'mailto:contact@gael-berru.com?subject=Demande de devis',
         //linkLabel: 'Demander un devis',
         category: 'assistant',
@@ -445,7 +445,7 @@ const projectsDatabase = [
 
 <p><strong>Tous mes projets sont open source.</strong> Les script sont sur mon GitHub, librement accessible : si un outil vous est utile, il est à vous. Pas de licence, pas de contrepartie.</p>
 
-<p>Si vous tenez à faire un don, faites-le plutôt aux <a href="https://dons.restosducoeur.org/faire-un-don/~mon-don/">Restos du Cœur</a>. C'est la seule monnaie que j'accepte.</p>
+<p>Si vous tenez à faire un don, faites-le plutôt aux <a href="https://dons.restosducoeur.org/faire-un-don/~mon-don/">Restos du Cœur</a>. Pour toute demande de developpement selon vos besoins, contactez moi.</p>
 
 <h3>Ma méthode : la souveraineté technique</h3> 
 
@@ -478,12 +478,12 @@ const projectsDatabase = [
 </ul>
 
 
-<p class="disclaimer"><small>Pour les tech : ma pseudo API est accessible, vous savez où chercher 😉</small></p></div>`,
+<p class="disclaimer"><small>Ce site contient des easter egg 😉</small></p></div>`,
         keywords: ['bienvenue'],
-        image: './img/Earth-by-MOODMAN.gif',
-        link: 'https://github.com/berru-g',
-        category: 'Message de bienvenue',
-        features: ['Développement souverain'],
+        image: './img/berru-pieuvre.gif',
+        link: '#',
+        category: 'info',
+        features: ['Dev'],
         tags: ['bienvenue', 'welcome']
     }
 
@@ -501,8 +501,8 @@ const servicesDatabase = [
     {
         id: 'dashboard-dev',
         title: 'Dashboards sur mesure',
-        desc: 'Tableaux de bord personnalisés avec Chart, dataviz etc.',
-        keywords: ['dashboard', 'analytics', 'charts', 'data', 'visualization'],
+        desc: 'Tableaux de bord personnalisés avec Chart, dataviz, wallet etc.',
+        keywords: ['dashboard', 'analytics', 'charts', 'data', 'visualization', 'api'],
         icon: '📊'
     },
     {
@@ -515,7 +515,7 @@ const servicesDatabase = [
     {
         id: 'api-integration',
         title: 'Intégration API',
-        desc: 'Connexion à des APIs tierces (Binance, CoinGecko, blockstream.) et API privé.',
+        desc: 'Connexion à des APIs tierces (Binance, CoinGecko, blockstream...) et API privé.',
         keywords: ['api', 'integration', 'rest', 'websocket', 'third-party'],
         icon: '🔌'
     }
