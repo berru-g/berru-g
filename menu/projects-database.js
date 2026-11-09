@@ -508,7 +508,7 @@ const servicesDatabase = [
     {
         id: 'privacy-tools',
         title: 'Outils éthiques & RGPD',
-        desc: 'Solutions respectueuses de la vie privée Smart_Pixel',
+        desc: 'Solutions respectueuses de la vie privée - LibreAnalytics',
         keywords: ['privacy', 'rgpd', 'ethical', 'open source', 'data protection'],
         icon: '🛡️'
     },

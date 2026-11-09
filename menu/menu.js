@@ -78,7 +78,7 @@ function showEasterEggNotification() {
     </style>
     <div class="easter-notification">
       <span class="easter-icon">🫡</span>
-      <span>Accès secret activé ! Redirection...</span>
+      <span>Redirection...</span>
     </div>
   `;
 
@@ -291,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   })();
 
-  // ===== BACKDOOR ADMIN  egotrip api test =====
+  // ===== BACKDOOR ADMIN trip console =====
   document.getElementById('settingsBtn').addEventListener('click', () => {
     Swal.fire({
       title: 'Access for aisistant',
