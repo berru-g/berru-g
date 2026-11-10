@@ -59,18 +59,7 @@ if (empty($userSites)) {
     $showCreateForm = true;
 }
 
-/* 3. Site sélectionné (depuis GET ou premier site)
-$selectedSiteId = $_GET['site_id'] ?? $userSites[0]['id'];
-    ?>
-        <h2>Créez votre premier site</h2>
-        <form method="POST">
-            <input type="text" name="site_name" placeholder="Nom du site" required>
-            <input type="text" name="site_domain" placeholder="mondomaine.com" required>
-            <button type="submit" name="create_site">Créer</button>
-        </form>
-    <?php
-    exit();
-}*/
+
 
 // 4. Site sélectionné (depuis GET ou premier site)
 $selectedSiteId = $_GET['site_id'] ?? $userSites[0]['id'];
@@ -1319,18 +1308,14 @@ function getCountryCodeSimple($countryName)
                         </div>
                     </div>
 
-
-
                     <!-- ONGLET cli -->
                     <div id="Cli" class="tab-content">
                         <h2>Pseudo Cli terminal</h2>
-                        <iframe style="display: block; width: 100%; height: auto; border: none; border-radius: 8px;"
+                        <iframe style="display: block; width: 100%; height: 550px; border: none; border-radius: 8px;"
                             src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/cli.php"
                             title="pseudo cli LibreAnalytics" loading="lazy" allowfullscreen>
                         </iframe>
-
                     </div>
-
 
 
 
@@ -1339,7 +1324,7 @@ function getCountryCodeSimple($countryName)
 
         <?php endif; ?>
 
-        <!-- La modale (cachée par défaut) -->
+        <!-- La modale PARAMETRE -->
         <dialog id="modalParametres" class="settings-modal">
             <div class="modal-content">
                 <h2>Besoin d'aide ?</h2>
@@ -2408,223 +2393,6 @@ function getCountryCodeSimple($countryName)
             }, 100);
         });
 
-        /* 1. HEATMAP avec vos données existantes
-        document.addEventListener('DOMContentLoaded', function() {
-            if (typeof visitsByHour !== 'undefined') {
-                const ctx = document.getElementById('heatmapChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: Object.keys(visitsByHour),
-                        datasets: [{
-                            label: 'Visites',
-                            data: Object.values(visitsByHour),
-                            backgroundColor: 'rgba(54, 162, 235, 0.8)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            }
-
-            // 2. Afficher le top des pages (données existantes)
-            if (typeof pagesData !== 'undefined') {
-                const topPages = pagesData.slice(0, 5);
-                const listHtml = topPages.map(page =>
-                    `<div class="page-item">${page.page} - <strong>${page.views} vues</strong></div>`
-                ).join('');
-                document.getElementById('topPagesList').innerHTML = listHtml;
-            }
-
-            // 3. GANTT CHART avec amCharts
-            // 3. GANTT CHART avec amCharts
-            document.addEventListener('DOMContentLoaded', function() {
-
-                // Variable pour éviter les initialisations multiples
-                window.ganttInitialized = false;
-
-                // Fonction d'initialisation du Gantt
-                function initGantt() {
-                    if (window.ganttInitialized) return;
-
-                    console.log('Initialisation du Gantt...');
-
-                    // Vérifier que amCharts est chargé
-                    if (typeof am5 === 'undefined') {
-                        console.error('amCharts non chargé !');
-                        document.getElementById('ganttChart').innerHTML =
-                            '<div style="text-align: center; padding: 20px;">⚠️ Chargement du planning...</div>';
-                        return;
-                    }
-
-                    try {
-                        am5.ready(function() {
-                            // Nettoyer le conteneur
-                            const container = document.getElementById("ganttChart");
-                            if (!container) return;
-                            container.innerHTML = '';
-
-                            // Créer la racine
-                            var root = am5.Root.new("ganttChart");
-
-                            // Appliquer le thème
-                            root.setThemes([
-                                am5themes_Animated.new(root)
-                            ]);
-
-                            // Créer le Gantt avec configuration simplifiée
-                            var gantt = root.container.children.push(
-                                am5gantt.Gantt.new(root, {
-                                    layout: root.verticalLayout,
-                                    headerHeight: 60
-                                })
-                            );
-
-                            // Données des catégories
-                            gantt.get("yAxis").data.setAll([{
-                                    name: "Idée",
-                                    id: "gantt_0"
-                                },
-                                {
-                                    name: "Lancement MVP",
-                                    id: "gantt_1"
-                                },
-                                {
-                                    name: "Planification",
-                                    id: "gantt_2"
-                                },
-                                {
-                                    name: "Développement",
-                                    id: "gantt_3"
-                                },
-                                {
-                                    name: "Tests",
-                                    id: "gantt_4"
-                                },
-                                {
-                                    name: "Finalisation",
-                                    id: "gantt_5"
-                                },
-                                {
-                                    name: "Publication",
-                                    id: "gantt_6"
-                                }
-                            ]);
-
-                            // Données des séries
-                            gantt.series.data.setAll([{
-                                    start: 1758142800000,
-                                    duration: 0,
-                                    progress: 1,
-                                    id: "gantt_0",
-                                    linkTo: ["gantt_1"]
-                                },
-                                {
-                                    start: 1758142800000,
-                                    duration: 2,
-                                    progress: 1,
-                                    id: "gantt_1",
-                                    linkTo: ["gantt_2"]
-                                },
-                                {
-                                    start: 1758488400000,
-                                    duration: 2,
-                                    progress: 0.2,
-                                    id: "gantt_2",
-                                    linkTo: ["gantt_3"]
-                                },
-                                {
-                                    start: 1758661200000,
-                                    duration: 1,
-                                    progress: 0.8,
-                                    id: "gantt_3",
-                                    linkTo: ["gantt_4"]
-                                },
-                                {
-                                    start: 1758747600000,
-                                    duration: 3,
-                                    progress: 0,
-                                    id: "gantt_4",
-                                    linkTo: ["gantt_5"]
-                                },
-                                {
-                                    start: 1759179600000,
-                                    duration: 0,
-                                    progress: 0,
-                                    id: "gantt_5",
-                                    linkTo: ["gantt_6"]
-                                },
-                                {
-                                    start: 1759179600000,
-                                    duration: 4,
-                                    progress: 0,
-                                    id: "gantt_6"
-                                }
-                            ]);
-
-                            gantt.appear(1000);
-
-                            window.ganttInitialized = true;
-                            console.log('✅ Gantt initialisé avec succès');
-                        });
-                    } catch (error) {
-                        console.error('❌ Erreur Gantt:', error);
-                        document.getElementById('ganttChart').innerHTML =
-                            '<div style="text-align: center; padding: 20px; color: #ff6b6b;">' +
-                            'Erreur de chargement du planning' +
-                            '</div>';
-                    }
-                }
-
-                // Initialiser si l'onglet AgendaReco est actif au chargement
-                const agendaReco = document.getElementById('AgendaReco');
-                if (agendaReco && agendaReco.classList.contains('active')) {
-                    setTimeout(initGantt, 500);
-                }
-
-                // Observer les clics sur les onglets
-                const tabs = document.querySelectorAll('.tab');
-                tabs.forEach(tab => {
-                    tab.addEventListener('click', function() {
-                        const tabText = this.textContent.trim();
-                        if (tabText === 'Agenda' || tabText === 'AgendaReco') {
-                            setTimeout(() => {
-                                if (!window.ganttInitialized) {
-                                    initGantt();
-                                }
-                            }, 300);
-                        }
-                    });
-                });
-
-                // Observer les changements de classe de l'onglet
-                if (agendaReco) {
-                    const observer = new MutationObserver(function(mutations) {
-                        mutations.forEach(function(mutation) {
-                            if (mutation.attributeName === 'class' &&
-                                agendaReco.classList.contains('active') &&
-                                !window.ganttInitialized) {
-                                setTimeout(initGantt, 200);
-                            }
-                        });
-                    });
-
-                    observer.observe(agendaReco, {
-                        attributes: true
-                    });
-                }
-            });
-
-
-        });*/
 
         // Fonctions utilitaires
         function getPeakHour(hourData) {

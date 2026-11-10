@@ -225,7 +225,7 @@ function showMissionComplete(mission) {
     `;
     document.body.appendChild(popup);
 
-    setTimeout(() => popup.remove(), 3000);
+    setTimeout(() => popup.remove(), 5000);
 }
 
 // État des touches sur mobile

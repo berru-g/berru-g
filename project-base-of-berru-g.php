@@ -65,7 +65,7 @@ function gh_repos(string $user, int $ttl = 21600): array
                 [$lang], $topics, [(string)($x['name'] ?? '')]
             )))),
             'icon'      => '🐙',
-            'image'     => null,
+//            'image'     => null,
             'link'      => (string)($x['html_url'] ?? ''),
             'linkLabel' => 'Voir sur GitHub',
             'category'  => 'github',
