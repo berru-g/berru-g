@@ -1310,8 +1310,7 @@ function getCountryCodeSimple($countryName)
                     </div>
 
                     <!-- ONGLET cli -->
-                    <div id="Cli" class="tab-content">
-                        <h2>Pseudo Cli terminal</h2>
+                    <div id="cli" class="tab-content">
                         <iframe style="display: block; width: 100%; height: 550px; border: none; border-radius: 8px;"
                             src="https://gael-berru.com/LibreAnalytics/smart_pixel_v2/public/cli.php"
                             title="pseudo cli LibreAnalytics" loading="lazy" allowfullscreen>

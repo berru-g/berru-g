@@ -1,6 +1,6 @@
 /* ===== VARIABLES (identiques au dashboard) ===== */
 #galerie-section {
-    --ink: #0b0d12;
+    --bg-color: #151515;
     --ink-2: #10131b;
     --ink-3: #161a25;
     --line: #232839;
@@ -26,7 +26,7 @@
 
 #galerie-section ::selection {
     background: var(--lime);
-    color: var(--ink);
+    color: var(--bg-color);
 }
 
 #galerie-section .shell {
