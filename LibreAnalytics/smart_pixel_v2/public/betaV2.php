@@ -563,7 +563,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             --green-soft: rgba(63, 185, 80, 0.12);
             --red: #f0635a;
             --red-soft: rgba(240, 99, 90, 0.12);
-            --blue: #58a6ff; 
+            --blue: #58a6ff;
             --violet: #9d86ff;
             --amber: #e3b341;
             --font: 'Inter', system-ui, -apple-system, sans-serif;
@@ -1977,17 +1977,19 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                     </button>
                     <div class="pop cmd-menu" id="cmd-menu" role="menu">
                         <a href="cli.php" role="menuitem"><i class="fa-solid fa-terminal"></i> Terminal</a>
-                        <a href="../campain/rapport_marches.php" role="menuitem"><i class="fa-brands fa-bitcoin"></i> Rapport
+                        <a href="../campain/rapport_marches.php" role="menuitem"><i class="fa-brands fa-bitcoin"></i>
+                            Rapport
                             marches</a>
                         <a href="../campain/rapport.php" role="menuitem"><i class="fas fa-file-lines"></i> Rapport
                             id_5</a>
                         <a href="../campain/rapport_lb.php" role="menuitem"><i class="fas fa-file-lines"></i> Rapport
                             id_6</a>
-                            <a href="../campain/prospect.php" role="menuitem"><i class="fas fa-enveloppe"></i> Prospect x20</a>
+                        <a href="../../../shop/admin.php?t=..." role="menuitem"><i class="fas fa-user-lock"></i>
+                            Admin_Shop</a>
                         <a href="https://calendar.google.com/calendar/u/0/r" role="menuitem"><i
                                 class="fa-regular fa-calendar-days"></i> Calendar</a>
-                        <a href="../campain/prospect_template.php" role="menuitem"><i
-                                class="fa-regular fa-file-code"></i> Script prospection</a>
+                        <a href="../campain/prospect.php" role="menuitem"><i class="fa-regular fa-file-code"></i> Script
+                            prospection</a>
                         <a href="?export_emails=1" role="menuitem"><i class="fas fa-download"></i> Export emails
                             CSV</a>
                     </div>
@@ -2370,6 +2372,12 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                     </div>
                 <?php endif; ?>
             </div>
+
+            <!--<iframe style="display: block; width: 100%; height: 550px; border: none; border-radius: 8px;"
+                src="https://gael-berru.com/shop/admin.php?t=..." title="admin shop" loading="lazy"
+                allowfullscreen>
+            </iframe>-->
+
             <div class="card">
                 <div class="card-head">
                     <h3 class="card-title"><i class="fas fa-users"></i> Comptes</h3>
@@ -2438,7 +2446,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
         </section>
     </div>
     <!-- .shell -->
-     <?php include "aissistant-cli.php" ?>
+    <?php include "aissistant-cli.php" ?>
 
     <script>
         // Toutes les initialisations attendent les scripts defer (Chart, Swal)

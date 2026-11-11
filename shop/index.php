@@ -174,7 +174,7 @@ header .guarantees span {
 <body>
 <div class="wrap">
 
-    <nav>
+   <!--<nav>
         <a class="logo" href="index.php">berru<span>.shop</span></a>
         <a class="back" href="../index.php">← Retour au site</a>
     </nav>
@@ -192,7 +192,7 @@ header .guarantees span {
             <span>🛠️ Testé unitairement</span>
             <span>eur Prix TTC, TVA incluse</span>
         </div>
-    </header>
+    </header>-->
 
     <div class="grid">
     <?php foreach ($products as $p): ?>

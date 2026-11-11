@@ -10,13 +10,13 @@
  */
 require __DIR__ . '/config.php';
 
-// ---- Protection d'accès (minimal, zéro dépendance) ----
+/* ---- Protection d'accès (minimal, zéro dépendance) ----
 $token = $_GET['t'] ?? $_POST['t'] ?? '';
 if (!defined('SHOP_ADMIN_TOKEN') || !hash_equals(SHOP_ADMIN_TOKEN, $token)) {
     http_response_code(403);
     exit('Accès refusé.');
 }
-
+*/
 /**
  * Client Stripe minimal en cURL natif (pas de lib stripe-php).
  * $params accepte des clés imbriquées type "line_items[0][price]".

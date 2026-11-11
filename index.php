@@ -109,7 +109,7 @@
       <!-- Header -->
       <div class="sidebar-header">
         <!--<div class="sidebar-title"> Berru-g</div>-->
-        
+
         <div class="search-box">
           <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2">
@@ -135,7 +135,11 @@
           </a>
           <a href="3D/index.html" target="_blank" class="nav-item"
             data-search="3D threejs three.js webgl game gamification score universe 3D">
-            <span>Version 3D</span>
+            <span>La version 3D</span>
+          </a>
+          <a href="#shop"  class="nav-item"
+            data-search="shop vente pcb conception electronique achat stripe noel cadeaux création diy">
+            <span>Le shop</span>
           </a>
         </div>
 
@@ -1655,7 +1659,10 @@
         </footer>
       <?php endif; ?>
 -->
-
+      <h2 id="#shop">Le shop</h2>
+      <iframe style="display: block; width: 100%; height: 550px; border: none; border-radius: 8px;"
+        src="https://gael-berru.com/shop/index.php" title="shop" loading="lazy" allowfullscreen>
+      </iframe>
 
 
     </main>
