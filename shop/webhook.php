@@ -80,6 +80,7 @@ if (($event['type'] ?? '') === 'checkout.session.completed') {
         curl_close($ch);
 
         if (!empty($resp['data'])) {
+            $newLines = []; // résumé pour l'email de notification
             $insert = $pdo->prepare(
                 'INSERT INTO orders
                     (stripe_session_id, stripe_payment_intent, stripe_customer_email,
@@ -104,6 +105,27 @@ if (($event['type'] ?? '') === 'checkout.session.completed') {
                 // Décrément du stock
                 $pdo->prepare('UPDATE products SET stock = GREATEST(stock - ?, 0) WHERE id = ?')
                     ->execute([max(1, (int) ($item['quantity'] ?? 1)), (int) $product]);
+
+                // Résumé pour la notif marchand
+                $pName = $pdo->prepare('SELECT name FROM products WHERE id = ?');
+                $pName->execute([(int) $product]);
+                $newLines[] = ($item['quantity'] ?? 1) . ' × ' . $pName->fetchColumn();
+            }
+
+            // ---- 3. Email de notification au marchand (à chaque vente) ----
+            if (!empty($newLines)) {
+                $to      = CONTACT_EMAIL;
+                $subject = '[Berru Shop] Nouvelle commande : ' . implode(', ', $newLines);
+                $body = "Nouvelle commande payée 🛒\n\n"
+                      . "Produits : " . implode("\n         ", $newLines) . "\n"
+                      . "Total : " . number_format($total / 100, 2, ',', ' ') . " € TTC\n"
+                      . "Client : " . ($email ?? 'inconnu') . "\n"
+                      . "Adresse de livraison :\n" . print_r(json_decode($shipping ?? 'null'), true) . "\n"
+                      . "Session Stripe : " . $sessionId . "\n"
+                      . "→ Détail complet : https://dashboard.stripe.com/payments";
+                $headers = 'From: ' . CONTACT_EMAIL . "\r\n"
+                         . 'Content-Type: text/plain; charset=utf-8';
+                mail($to, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, $headers);
             }
         }
     }
