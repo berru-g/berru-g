@@ -63,17 +63,50 @@
       <div class="editor-block">
         <label for="htmlEditor">HTML</label>
         <textarea id="htmlEditor"
-          placeholder="Dev by berru-g"><img src="https://gael-berru.com/img/berru-pieuvre.png"><p>Berru logo</p></textarea>
+          placeholder="Dev by berru-g"><a href="https://gael-berru.com/">
+
+<img src="https://gael-berru.com/img/berru-pieuvre.gif">
+
+</a>
+
+<p>Octopoulpe ou un truc dans le genre.</p>
+
+<p>Bienvenue dans l'editeur le plus simple du monde HTML et CSS. Parfait pour tester une idée rapidement sans chichi. Fait toi kiffer 🐙</p>
+        </textarea>
       </div>
       <div class="editor-block">
         <label for="cssEditor">CSS</label>
-        <textarea id="cssEditor">p {
-  color: grey;
+        <textarea id="cssEditor">:root {
+    --bg: #1e1e1e;
+    --text: #ccc;
+    --violet: #ab9ff2;
+    --blue: #61dafb;
+}
+
+* {
+    margin: 0;
+    padding: 10;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Fira Code', monospace;
+    background-color: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+p {
   text-align: center;
   margin-top: 10px;
 }
+span{
+  color: var(--violet);
+}
 img {
-  width: 87px;
+  width: 150px;
   height: auto;
   margin: 0 auto;
   display: flex;

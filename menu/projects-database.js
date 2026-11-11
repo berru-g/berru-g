@@ -28,6 +28,20 @@ const projectsDatabase = [
         tags: ['tarifs', 'prix', 'devis']
     },
     {
+        id: 'chat-bot',
+        title: 'Chat Bot',
+        shortDesc: 'Assistant virtuel lié à votre documentation.',
+        longDesc: "Un assistant virtuel lié à votre documentation, pour répondre au mieux aux questions de vos utilisateurs.",
+        keywords: ['chat', 'bot', 'assistant', 'virtuel', 'aide', 'question'],
+        //icon: '🐙',
+        image: './img/berru-pieuvre.png',
+        link: 'mailto:contact@gael-berru.com?subject=Chat bot sur mesure',
+        //linkLabel: 'Demander un devis',
+        category: 'assistant',
+        features: ['toute votre doc en une question', 'integration', 'api github'],
+        tags: ['chat bot', 'assistant sur mesure', 'documentation', 'assistant virtuel', 'api github']
+    },
+    {
         id: 'rapport-marches',
         title: 'Rapport Marchés Hebdo',
         shortDesc: 'Surveillez vos tokens par email, chaque semaine.',

@@ -1983,6 +1983,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                             id_5</a>
                         <a href="../campain/rapport_lb.php" role="menuitem"><i class="fas fa-file-lines"></i> Rapport
                             id_6</a>
+                            <a href="../campain/prospect.php" role="menuitem"><i class="fas fa-enveloppe"></i> Prospect x20</a>
                         <a href="https://calendar.google.com/calendar/u/0/r" role="menuitem"><i
                                 class="fa-regular fa-calendar-days"></i> Calendar</a>
                         <a href="../campain/prospect_template.php" role="menuitem"><i
