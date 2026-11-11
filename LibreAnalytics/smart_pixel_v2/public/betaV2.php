@@ -1,15 +1,18 @@
 <?php
 session_start();
 // Dashboard - beta V2 regroupant :
+
 // - l'analytics de mon soft LibreAnalytics, 
 // - l'analytics de mon site perso
 // - API coingeck pour les prix crypto (SOL, SUI, render-token, USDC) de mes différents wallet et exchange réunis en un seul
 // - API de TradingView pour la chart et les signaux globaux
 // - Embed de mon agenda Google Calendar (planning perso)
-// - API météo 
+// - API météo déco
 // - API Wikipedia pour des info utiles
 // - CMD pour envoyer, un rapport à mes clients (emails, stats, etc.) ou un mail de prospection auto (cron)
-// par berru-g de la V0.1 en 2020 puis avec Mistral pour les version suivantes (2026)
+// - Info de mes "client" libreanalytics
+// - iframe de gestion produit du shop
+// par berru-g de la V0.1 en 2020 puis avec Mistral (best ia) pour les version suivantes (2026)
 
 
 // --- Vérification de l'authentification ---
@@ -1984,7 +1987,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                             id_5</a>
                         <a href="../campain/rapport_lb.php" role="menuitem"><i class="fas fa-file-lines"></i> Rapport
                             id_6</a>
-                        <a href="../../../shop/admin.php?t=..." role="menuitem"><i class="fas fa-user-lock"></i>
+                        <a href="../../../shop/admin.php?t=heincestquoica" role="menuitem"><i class="fas fa-user-lock"></i>
                             Admin_Shop</a>
                         <a href="https://calendar.google.com/calendar/u/0/r" role="menuitem"><i
                                 class="fa-regular fa-calendar-days"></i> Calendar</a>

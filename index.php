@@ -1119,6 +1119,8 @@
       <?php include "LibreAnalytics/smart_pixel_v2/public/chatbot.php" ?>
 
       <!--LE SHOP -->
+      <h2 id="shop" style="color: transparent;">Création de shield arduino, conception de pcb, circuit éléctronique.</h2>
+      
       <iframe style="display: block; width: 100%; height: 700px; border: none; border-radius: 8px;"
         src="https://gael-berru.com/shop/index.php" title="shop" loading="lazy" allowfullscreen>
       </iframe>

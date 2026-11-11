@@ -639,7 +639,7 @@ function getCountryCodeSimple($countryName)
                         <div class="tab" onclick="openTab('details')">Détails</div>
                         <div class="tab" onclick="openTab('insights')">Insights</div>
                         <div class="tab" onclick="openTab('cli')">Cli</div>
-                        <div class="tab" onclick="openTab('Admin_Shop')">Admin_Shop</div>
+                        <!--<div class="tab" onclick="openTab('Admin_Shop')">Admin_Shop</div>-->
                     </div>
 
                     <!-- ONGLET APERÇU -->
@@ -1317,13 +1317,13 @@ function getCountryCodeSimple($countryName)
                         </iframe>
                     </div>
 
-                    <!-- ONGLET Admin_Shop -->
+                    <!-- ONGLET Admin_Shop 
                     <div id="Admin_Shop" class="tab-content">
                         <iframe style="display: block; width: 100%; height: 550px; border: none; border-radius: 8px;"
                             src="https://gael-berru.com/shop/admin.php?t=heincestquoica"
                             title="admin shop" loading="lazy" allowfullscreen>
                         </iframe>
-                    </div>
+                    </div>-->
  
 
 

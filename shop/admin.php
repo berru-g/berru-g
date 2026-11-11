@@ -1,22 +1,18 @@
 <?php
 /**
- * /shop/admin.php — Gestion des produits : prix, stock, visibilité.
- * Un seul endroit pour tout changer : la page met à jour la BDD ET Stripe
+ * Gestion des produits : prix, stock, visibilité.
+ * All in one : la page met à jour la BDD ET Stripe et cette page est integré à mon dash general via iframe !
  * (création du nouveau prix + rebranchement du lien de paiement) automatiquement.
- * Tu n'ouvres plus jamais le Dashboard Stripe pour changer un prix.
- *
- * Accès : définir SHOP_ADMIN_TOKEN dans config.php, puis ouvrir
- * /shop/admin.php?t=TON_TOKEN  (à mettre en favori).
  */
 require __DIR__ . '/config.php';
 
-/* ---- Protection d'accès (minimal, zéro dépendance) ----
+/* ---- Protection d'accès (minimal, zéro dépendance) ----*/
 $token = $_GET['t'] ?? $_POST['t'] ?? '';
 if (!defined('SHOP_ADMIN_TOKEN') || !hash_equals(SHOP_ADMIN_TOKEN, $token)) {
     http_response_code(403);
     exit('Accès refusé.');
 }
-*/
+
 /**
  * Client Stripe minimal en cURL natif (pas de lib stripe-php).
  * $params accepte des clés imbriquées type "line_items[0][price]".

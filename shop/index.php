@@ -44,7 +44,7 @@ function price_eur(int $cents): string
             padding: 0;
             background: var(--bg-color);
         }
-
+/*
         #galerie-section {
             background: var(--bg-color);
             min-height: 100vh;
@@ -55,7 +55,7 @@ function price_eur(int $cents): string
             flex-direction: column;
             cursor: default;
         }
-
+*/
         .galerie-caption {
             flex: 1;
             display: flex;
