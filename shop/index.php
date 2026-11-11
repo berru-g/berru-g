@@ -159,67 +159,64 @@ function price_eur(int $cents): string
 
     <section id="galerie-section">
         <div class="shell">
+            <section class="galerie-report" data-aos="fade-up">
+                <h2 id="shop" class="galerie-title" data-aos="fade-right" data-aos-delay="100">Le shop<br><span
+                        class="stroke">DIY</span>
+                </h2>
+                <p class="galerie-meta" data-aos="fade-right" data-aos-delay="200">Toute ces créations sont conçu dans
+                    mon atelier au milieu des vignes nantaise.
+                </p>
+                <p class="galerie-meta" data-aos="fade-right" data-aos-delay="300">Pour toute commande particulière,
+                    n'hésitez pas à me contacter.</p><br>
+                <p class="galerie-meta" data-aos="fade-right" data-aos-delay="400"><span>Paiement sécurisé
+                        <strong>Stripe</strong><br>
+                        Envoi France, Belgique, Suisse · Prix TTC</span></p>
+            </section>
+        </div>
 
-            <!-- ===== EN-TÊTE ===== -->
-            <!-- Décommente ce bloc pour réactiver l'en-tête (il était commenté dans l'ancienne version)
-    <div class="galerie-report">
-      <div>
-        <h1 class="galerie-title">Berru <span class="stroke">Shop</span></h1>
-        <p class="galerie-meta">
-          Électronique open source · Fabriqué à Nantes · Testé avant expédition
+        <!-- ===== GRILLE ===== -->
+        <div class="galerie-grid">
+            <?php foreach ($products as $i => $p): ?>
+                <article class="galerie-item"
+                    style="animation-delay: <?= number_format(min($i, 10) * 0.07 + 0.05, 2, '.', '') ?>s">
+                    <div class="galerie-image-container">
+                        <img src="<?= htmlspecialchars($p['image']) ?>" alt="<?= htmlspecialchars($p['name']) ?>"
+                            loading="lazy">
+                        <span class="galerie-index"><?= str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT) ?></span>
+                    </div>
+                    <div class="galerie-caption">
+                        <h4><?= htmlspecialchars($p['name']) ?></h4>
+                        <p class="desc"><?= htmlspecialchars($p['short_desc']) ?></p>
+
+                        <div class="galerie-tags">
+                            <span class="tag <?= $p['stock'] <= 3 ? 'low' : '' ?>">
+                                <?= $p['stock'] > 0 ? 'En stock (' . (int) $p['stock'] . ')' : 'Fabrication sur commande' ?>
+                            </span>
+                        </div>
+
+                        <div class="galerie-foot">
+                            <div class="galerie-price">
+                                <?= price_eur((int) $p['price_cents']) ?>
+                                <small>TTC · livraison incluse</small>
+                            </div>
+                            <a class="galerie-buy" href="<?= htmlspecialchars($p['stripe_payment_link']) ?>" rel="noopener">
+                                Commander
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            <?php endforeach; ?>
+        </div>
+
+        <p class="oss">
+            <span class="links">
+                <a href="../project-base-of-berru-g.php?utm_source=shop">Bdd</a>
+                <a href="https://github.com/berru-g/?utm_source=shop">GitHub</a>
+                <a href="mailto:contact@gael-berru.com?subject=Question concernant ma commande">Contact</a>
+            </span>
+            Tous mes projets restent open source — ici, vous achetez l'objet assemblé et testé, pas la licence.<br>
+            Paiement sécurisé par Stripe · TVA collectée via Stripe Tax · Prix TTC
         </p>
-      </div>
-      <div class="galerie-hint">
-        <span>Paiement sécurisé <strong>Stripe</strong><br>
-        Envoi France, Belgique, Suisse · Prix TTC</span>
-      </div>
-    </div>
-    -->
-
-            <!-- ===== GRILLE ===== -->
-            <div class="galerie-grid">
-                <?php foreach ($products as $i => $p): ?>
-                    <article class="galerie-item"
-                        style="animation-delay: <?= number_format(min($i, 10) * 0.07 + 0.05, 2, '.', '') ?>s">
-                        <div class="galerie-image-container">
-                            <img src="<?= htmlspecialchars($p['image']) ?>" alt="<?= htmlspecialchars($p['name']) ?>"
-                                loading="lazy">
-                            <span class="galerie-index"><?= str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT) ?></span>
-                        </div>
-                        <div class="galerie-caption">
-                            <h4><?= htmlspecialchars($p['name']) ?></h4>
-                            <p class="desc"><?= htmlspecialchars($p['short_desc']) ?></p>
-
-                            <div class="galerie-tags">
-                                <span class="tag <?= $p['stock'] <= 3 ? 'low' : '' ?>">
-                                    <?= $p['stock'] > 0 ? 'En stock (' . (int) $p['stock'] . ')' : 'Fabrication sur commande' ?>
-                                </span>
-                            </div>
-
-                            <div class="galerie-foot">
-                                <div class="galerie-price">
-                                    <?= price_eur((int) $p['price_cents']) ?>
-                                    <small>TTC · livraison incluse</small>
-                                </div>
-                                <a class="galerie-buy" href="<?= htmlspecialchars($p['stripe_payment_link']) ?>"
-                                    rel="noopener">
-                                    Commander
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-                <?php endforeach; ?>
-            </div>
-
-            <p class="oss">
-                <span class="links">
-                    <a href="../index.php?utm_source=shop">← Retour à mon site</a>
-                    <a href="https://github.com/berru-g/?utm_source=shop">GitHub</a>
-                    <a href="mailto:contact@gael-berru.com?subject=Question concernant ma commande">Contact</a>
-                </span>
-                Tous mes projets restent open source — ici, vous achetez l'objet assemblé et testé, pas la licence.<br>
-                Paiement sécurisé par Stripe · TVA collectée via Stripe Tax · Prix TTC
-            </p>
 
         </div>
     </section>

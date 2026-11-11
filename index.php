@@ -1059,7 +1059,7 @@
               </div>
             </div>
 
-            <section class="galerie-report" data-aos="fade-up" lang="en">
+            <!--<section class="galerie-report" data-aos="fade-up" lang="en">
               <div>
                 <h2 class="galerie-meta" style="font-size:1rem;">Web developer in Vertou, Loire-Atlantique (44), France
                 </h2>
@@ -1072,7 +1072,7 @@
                   <a href="https://github.com/berru-g/" target="_blank" rel="noopener noreferrer">GitHub</a>.
                 </p>
               </div>
-            </section>
+            </section>-->
 
           </div>
 
@@ -1118,17 +1118,8 @@
 
       <?php include "LibreAnalytics/smart_pixel_v2/public/chatbot.php" ?>
 
-
-
-      <div>
-        <h2 id="shop" class="galerie-title" data-aos="fade-right" data-aos-delay="100">Le shop<br><span class="stroke">DIY</span>
-        </h2>
-        <p class="galerie-meta" data-aos="fade-right" data-aos-delay="200">Toute ces créations sont conçu dans mon atelier au milieu des vignes nantaise.
-        </p>
-        <p class="galerie-meta" data-aos="fade-right" data-aos-delay="300">Pour toute commande particulière, n'hésitez pas à me contacter.</p>
-      </div>
-
-      <iframe style="display: block; width: 100%; height: 550px; border: none; border-radius: 8px;"
+      <!--LE SHOP -->
+      <iframe style="display: block; width: 100%; height: 700px; border: none; border-radius: 8px;"
         src="https://gael-berru.com/shop/index.php" title="shop" loading="lazy" allowfullscreen>
       </iframe>
 
