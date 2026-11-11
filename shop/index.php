@@ -186,7 +186,7 @@ function price_eur(int $cents): string
                     </div>
                     <div class="galerie-caption">
                         <h4><?= htmlspecialchars($p['name']) ?></h4>
-                        <p class="desc"><?= htmlspecialchars($p['short_desc']) ?></p>
+                        <p class="desc"><?= htmlspecialchars($p['description']) ?></p>
 
                         <div class="galerie-tags">
                             <span class="tag <?= $p['stock'] <= 3 ? 'low' : '' ?>">
@@ -199,7 +199,7 @@ function price_eur(int $cents): string
                                 <?= price_eur((int) $p['price_cents']) ?>
                                 <small>TTC · livraison incluse</small>
                             </div>
-                            <a class="galerie-buy" href="<?= htmlspecialchars($p['stripe_payment_link']) ?>" rel="noopener">
+                            <a class="galerie-buy" href="<?= htmlspecialchars($p['stripe_payment_link']) ?>" rel="noopener" target="_blank">
                                 Commander
                             </a>
                         </div>

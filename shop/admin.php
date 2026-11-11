@@ -130,8 +130,8 @@ button:hover { background: #ff86e9; }
 </head>
 <body>
 <div class="wrap">
-    <h1>🛠️ Berru Shop — Admin</h1>
-    <p class="sub">Prix, stock, visibilité — Stripe est synchronisé automatiquement. Le lien de paiement reste identique (même URL, l'ancien prix est archivé).</p>
+    <h1>Gestion du Shop = bdd + stripe</h1>
+    <p class="sub">Prix, stock, visibilité — Synchronisé. <strong><a href="../LibreAnalytics/smart_pixel_v2/public/betaV2.php">← BetaV2.php</a></strong></p>
 
     <?php if ($msg): ?><div class="msg <?= $msgType ?>"><?= $msg ?></div><?php endif; ?>
 
