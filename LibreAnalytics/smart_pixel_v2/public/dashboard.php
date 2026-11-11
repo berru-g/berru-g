@@ -638,6 +638,7 @@ function getCountryCodeSimple($countryName)
                         <div class="tab" onclick="openTab('sessions')">Sessions</div>
                         <div class="tab" onclick="openTab('details')">Détails</div>
                         <div class="tab" onclick="openTab('insights')">Insights</div>
+                        <div class="tab" onclick="openTab('cli')">Cli</div>
                         <div class="tab" onclick="openTab('Admin_Shop')">Admin_Shop</div>
                     </div>
 
