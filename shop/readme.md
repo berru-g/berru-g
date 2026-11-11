@@ -11,6 +11,9 @@ Stack : **PHP vanilla + MySQL + Stripe Payment Links**. Zéro framework, zéro c
 | `webhook.php` | Reçoit `checkout.session.completed` de Stripe, vérifie la signature (HMAC maison), enregistre la commande + décrémente le stock |
 | `database.sql` | Schéma + les 4 fiches produits avec les IDs Stripe LIVE réels |
 
+        Stock à gérer de la bdd direct
+        Prix a gerer de la bdd et stripe
+
 ## Fiches Stripe déjà créées (compte « mr », mode live, TVA incluse)
 
 | Produit | Prix TTC | Payment Link |

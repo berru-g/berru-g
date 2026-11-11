@@ -81,7 +81,7 @@ header .eyebrow {
 header h1 {
     font-size: clamp(1.9rem, 4vw, 2.8rem);
     letter-spacing: -.5px; font-weight: 800;
-    background: linear-gradient(90deg, var(--violet), var(--p-rose) 55%, var(--p-bleu));
+    background: var(--violet);
     -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -111,7 +111,7 @@ header .guarantees span {
 }
 .card::before {
     content: ''; position: absolute; inset: 0 0 auto 0; height: 3px;
-    background: linear-gradient(90deg, var(--violet), var(--p-rose));
+    background: var(--violet);
     opacity: 0; transition: opacity .25s;
 }
 .card:hover {
@@ -148,7 +148,7 @@ header .guarantees span {
 }
 .buy {
     display: inline-block; padding: .7rem 1.2rem;
-    background: linear-gradient(135deg, var(--violet), var(--p-rose));
+    background: var(--violet);
     color: #fff; text-align: center; text-decoration: none;
     border-radius: 10px; font-weight: 700; font-size: .9rem;
     box-shadow: 0 4px 16px rgba(157, 134, 255, .25);
@@ -159,7 +159,7 @@ header .guarantees span {
     box-shadow: 0 8px 24px rgba(255, 134, 233, .35);
 }
 
-/* ---- Pied de page ---- */
+/* ---- Pied de page ---- */ 
 .oss {
     text-align: center; margin-top: 3.5rem; padding: 1.5rem 1rem 0;
     color: var(--muted); font-size: .85rem;
