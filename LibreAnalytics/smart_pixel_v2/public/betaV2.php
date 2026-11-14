@@ -2804,8 +2804,8 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             // ===== WALLET CRYPTO =====
             const tokenHoldings = {
                 bitcoin: 0,
-                solana: 4.68,
-                sui: 1701,
+                solana: 5.5,
+                sui: 1702,
                 'usd-coin': 0,
                 'render-token': 0,
             };

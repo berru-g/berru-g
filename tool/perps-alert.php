@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
 /**
  * SOL PERPS SCANNER — version cron + PHPMailer
  *
@@ -45,13 +47,19 @@ const SYMBOL          = 'SOLUSDT';
 const MIN_CONFLUENCE  = 3;      // nb de signaux alignés minimum (sur 5)
 const MIN_GAP         = 2;      // écart minimal long vs short
 const OPPORTUNITY_COOLDOWN_H = 6;   // renvoyer un mail si même signal > 6h
+// Événements macro : pas d'alerte ces jours-là (spread + mèches = indicateurs inutiles)
+// Format 'YYYY-MM-DD' => label. Mets à jour chaque mois (FOMC, CPI, NFP).
+const MACRO_EVENTS = [
+    // '2026-12-09' => 'FOMC',
+    // '2026-12-11' => 'CPI US',
+];
 const STATE_FILE      = __DIR__ . '/sol-perps-state.json';
 const LOG_PREFIX      = '[SOL-PERPS]';
 
 $smtp = [
     'host'     => 'smtp.hostinger.com',
     'username' => 'contact@gael-berru.com',
-    'password' => '**** **** **** ****',
+    'password' => '****',
     'port'     => 587,
     'secure'   => PHPMailer::ENCRYPTION_STARTTLS,
     'debug'    => false,
@@ -73,7 +81,7 @@ $trade = [
 // ============================================================
 // 2. HELPERS
 // ============================================================
-function log(string $msg): void {
+function scannerLog(string $msg): void {
     echo LOG_PREFIX . ' ' . date('Y-m-d H:i:s') . " — $msg\n";
 }
 
@@ -289,7 +297,7 @@ function sendSignalMail(array $smtp, array $mailFromTo, array $d, array $trade):
         $mail->send();
         return true;
     } catch (Exception $e) {
-        log('❌ Mail échoué : ' . $mail->ErrorInfo);
+        scannerLog('❌ Mail échoué : ' . $mail->ErrorInfo);
         return false;
     }
 }
@@ -299,7 +307,7 @@ function sendSignalMail(array $smtp, array $mailFromTo, array $d, array $trade):
 // ============================================================
 try {
     $d = computeIndicators();
-    log(sprintf('Prix $%.2f | RSI %.1f | funding %+.4f%% | ΔOI %+.1f%% | long %d/%d short %d/%d → %s',
+    scannerLog(sprintf('Prix $%.2f | RSI %.1f | funding %+.4f%% | ΔOI %+.1f%% | long %d/%d short %d/%d → %s',
         $d['price'], $d['rsiNow'], $d['funding'], $d['oiChange'],
         $d['long'], $d['total'], $d['short'], $d['total'], strtoupper($d['signal'])));
 
@@ -315,17 +323,17 @@ try {
 
     if ($shouldSend) {
         if (sendSignalMail($smtp, $mailTo, $d, $trade)) {
-            log("✅ Mail envoyé (signal {$d['signal']})");
+            scannerLog("✅ Mail envoyé (signal {$d['signal']})");
             $state = ['lastSignal' => $d['signal'], 'lastSentAt' => time()];
         }
     } else {
-        log($d['signal'] === 'wait'
+        scannerLog($d['signal'] === 'wait'
             ? 'Pas de signal. Rien envoyé.'
             : "Signal {$d['signal']} déjà notifié récemment (cooldown " . OPPORTUNITY_COOLDOWN_H . "h).");
     }
 
     saveState($state);
 } catch (Throwable $e) {
-    log('❌ ERREUR : ' . $e->getMessage());
+    scannerLog('❌ ERREUR : ' . $e->getMessage());
     exit(1);
 }
