@@ -1,11 +1,12 @@
 <?php
 session_start();
-// Dashboard - beta V2 regroupant :
+// Dashboard - beta V3 regroupant :
 
 // - l'analytics de mon soft LibreAnalytics, 
 // - l'analytics de mon site perso
-// - API coingeck pour les prix crypto (SOL, SUI, render-token, USDC) de mes différents wallet et exchange réunis en un seul
+// - API coingecko pour les prix crypto (SOL, SUI, render-token, USDC) de mes différents wallet et exchange réunis en un seul
 // - API de TradingView pour la chart et les signaux globaux
+// - RPC Solana (publicnode) pour la courbe d'accumulation SOL de mon wallet
 // - Embed de mon agenda Google Calendar (planning perso)
 // - API météo déco
 // - API Wikipedia pour des info utiles
@@ -51,7 +52,6 @@ if (!in_array($period, [7, 30, 90, 365], true)) {
 // --- Récupération des données ---
 try {
     // 1) Série journalière sur la période (avec jours à zéro)
-    //    Nombres 0..99 générés par produit cartésien -> compatible MySQL 5.x et 8.x
     $stmt = $pdo->prepare("
         SELECT
             DATE(CURDATE() - INTERVAL n DAY) AS date,
@@ -213,8 +213,128 @@ if (defined('COINGECKO_API_KEY') && COINGECKO_API_KEY !== '' && COINGECKO_API_KE
 }
 
 // ================================================================
+// SOL — COURBE D'ACCUMULATION DU WALLET
+// RPC public : https://solana-rpc.publicnode.com (POST JSON-RPC)
+// Rejoue chaque transaction (getTransaction) pour recalculer le solde
+// après chaque opération. Cache fichier 6 h (les 1ers chargements sont
+// lents : ~1 requête RPC par transaction). ?refresh_sol=1 force un recalcul.
+// ================================================================
+$solWallet = 'D6khWoqvc2zX46HVtSZcNrPumnPLPM72SnSuDhBrZeTC';
+$solRpcUrl = 'https://solana-rpc.publicnode.com';
+$solMaxTx = 1000;            // nb max de transactions rejouées
+$solCacheTtl = 21600;        // 6 h
+$solCache = __DIR__ . '/cache_sol_history.json';
+$solSeries = null;
+$solBuiltNow = false;
+
+function solRpcCall(string $url, string $method, array $params): ?array
+{
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+        CURLOPT_POSTFIELDS => json_encode(['jsonrpc' => '2.0', 'id' => 1, 'method' => $method, 'params' => $params]),
+        CURLOPT_TIMEOUT => 15,
+        CURLOPT_CONNECTTIMEOUT => 5,
+    ]);
+    $resp = curl_exec($ch);
+    $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($code !== 200 || !$resp) {
+        return null;
+    }
+    $j = json_decode($resp, true);
+    return is_array($j) && !isset($j['error']) ? ($j['result'] ?? null) : null;
+}
+
+$solNeedsBuild = isset($_GET['refresh_sol'])
+    || !is_file($solCache)
+    || (time() - filemtime($solCache)) >= $solCacheTtl;
+
+if ($solNeedsBuild) {
+    // 1) Liste des signatures (les plus récentes d'abord), pagination
+    $sigs = [];
+    $before = null;
+    while (count($sigs) < $solMaxTx) {
+        $params = [$solWallet, ['limit' => 1000, 'encoding' => 'json']];
+        if ($before !== null) {
+            $params[1]['before'] = $before;
+        }
+        $batch = solRpcCall($solRpcUrl, 'getSignaturesForAddress', $params);
+        if (!is_array($batch) || $batch === []) {
+            break;
+        }
+        foreach ($batch as $s) {
+            $sigs[] = $s['signature'];
+            if (count($sigs) >= $solMaxTx) {
+                break;
+            }
+        }
+        $before = end($batch)['signature'];
+        if (count($batch) < 1000) {
+            break;
+        }
+    }
+
+    // 2) Rejeu oldest -> newest : solde après chaque tx
+    $points = [];
+    $ordered = array_reverse($sigs);
+    foreach ($ordered as $sig) {
+        $tx = solRpcCall($solRpcUrl, 'getTransaction', [
+            $sig,
+            ['encoding' => 'json', 'maxSupportedTransactionVersion' => 0, 'commitment' => 'confirmed'],
+        ]);
+        if (!is_array($tx) || !isset($tx['meta']['postBalances'])) {
+            continue; // tx élaguée par le RPC : on saute
+        }
+        $keys = array_map(function ($k) {
+            return is_array($k) ? ($k['pubkey'] ?? '') : $k;
+        }, $tx['transaction']['message']['accountKeys'] ?? []);
+        $idx = array_search($solWallet, $keys, true);
+        if ($idx === false) {
+            continue;
+        }
+        $points[] = [
+            't' => $tx['blockTime'] ?? null,
+            'bal' => $tx['meta']['postBalances'][$idx] / 1e9,
+        ];
+    }
+
+    if ($points !== []) {
+        file_put_contents($solCache, json_encode($points), LOCK_EX);
+        $solBuiltNow = true;
+    }
+}
+
+if (is_file($solCache)) {
+    $solPoints = json_decode(file_get_contents($solCache), true);
+    if (is_array($solPoints) && $solPoints !== []) {
+        $solLabels = $solBalances = [];
+        $solMin = $solMax = null;
+        foreach ($solPoints as $p) {
+            $ts = $p['t'] ?? null;
+            $solLabels[] = $ts ? date('d/m/y H:i', (int) $ts) : '?';
+            $solBalances[] = round((float) $p['bal'], 6);
+            $solMin = $solMin === null ? $p['bal'] : min($solMin, $p['bal']);
+            $solMax = $solMax === null ? $p['bal'] : max($solMax, $p['bal']);
+        }
+        $solSeries = [
+            'wallet' => $solWallet,
+            'labels' => $solLabels,
+            'balances' => $solBalances,
+            'current' => round((float) end($solPoints)['bal'], 6),
+            'min' => round((float) $solMin, 6),
+            'max' => round((float) $solMax, 6),
+            'tx_count' => count($solPoints),
+            'built_now' => $solBuiltNow,
+            'updated_at' => date('d/m/Y H:i'),
+        ];
+    }
+}
+
+// ================================================================
 // MÉTÉO VERTOU (44) — Open-Meteo : API gratuite, aucune clé requise.
-// Appel serveur + cache 30 min. Aujourd'hui + J+1 + J+2 inclus.
 // ================================================================
 function wmoInfo(int $code): array
 {
@@ -353,35 +473,19 @@ function fetchJsonCached(string $url, string $cacheFile, int $ttl): ?array
     return null;
 }
 
-// 1) « Un jour comme aujourd'hui » — Wikipédia FR via Action API (sans clé).
-//    Le feed api.wikimedia.org est instable sans authentification : on parse
-//    directement la section « Événements » de la page du jour.
+// 1) « Un jour comme aujourd'hui » — Wikipédia FR
 $onThisDay = null;
 $wikiMonths = [
-    1 => 'janvier',
-    2 => 'février',
-    3 => 'mars',
-    4 => 'avril',
-    5 => 'mai',
-    6 => 'juin',
-    7 => 'juillet',
-    8 => 'août',
-    9 => 'septembre',
-    10 => 'octobre',
-    11 => 'novembre',
-    12 => 'décembre'
+    1 => 'janvier', 2 => 'février', 3 => 'mars', 4 => 'avril', 5 => 'mai', 6 => 'juin',
+    7 => 'juillet', 8 => 'août', 9 => 'septembre', 10 => 'octobre', 11 => 'novembre', 12 => 'décembre'
 ];
 $wikiPage = (int) date('j') . '_' . $wikiMonths[(int) date('n')];
 $wikiBase = 'https://fr.wikipedia.org/w/api.php';
 
-// 1a) Index de la section « Événements » de la page du jour
 $otdSecRaw = fetchJsonCached(
     $wikiBase . '?' . http_build_query([
-        'action' => 'parse',
-        'page' => $wikiPage,
-        'prop' => 'sections',
-        'format' => 'json',
-        'formatversion' => 2,
+        'action' => 'parse', 'page' => $wikiPage, 'prop' => 'sections',
+        'format' => 'json', 'formatversion' => 2,
     ]),
     __DIR__ . '/cache_otd_sections_' . date('Ymd') . '.json',
     21600
@@ -399,16 +503,11 @@ if (is_array($otdSecRaw)) {
     }
 }
 
-// 1b) Wikitext de la section, puis extraction des lignes d'événements
 if ($otdSection !== null) {
     $otdEvRaw = fetchJsonCached(
         $wikiBase . '?' . http_build_query([
-            'action' => 'parse',
-            'page' => $wikiPage,
-            'section' => $otdSection,
-            'prop' => 'wikitext',
-            'format' => 'json',
-            'formatversion' => 2,
+            'action' => 'parse', 'page' => $wikiPage, 'section' => $otdSection,
+            'prop' => 'wikitext', 'format' => 'json', 'formatversion' => 2,
         ]),
         __DIR__ . '/cache_otd_events_' . date('Ymd') . '.json',
         21600
@@ -420,7 +519,6 @@ if ($otdSection !== null) {
             if (count($otdEvents) >= 4) {
                 break;
             }
-            // Nettoyage wikitext : refs, modèles imbriqués, liens internes, gras/italique
             $line = preg_replace('/<ref[^>]*\/?>/i', '', $line);
             $line = preg_replace('/<\/ref>/i', '', $line);
             $line = preg_replace('/{{[^{}]*}}/', '', $line);
@@ -448,7 +546,7 @@ if ($otdSection !== null) {
     }
 }
 
-// 2) berru.com — stats SmartPixel via l'API publique (clé uniquement côté serveur)
+// 2) berru.com — stats SmartPixel via l'API publique
 $berruStats = null;
 $berruSeries = null;
 $berruApiKey = defined('SMARTPIXEL_API_KEY') && SMARTPIXEL_API_KEY !== ''
@@ -471,7 +569,6 @@ if (is_array($berruRaw) && !empty($berruRaw['success']) && is_array($berruRaw['d
             $berruByDate[$berruRow['date']] = $berruRow;
         }
     }
-    // Série continue depuis le 1er janvier (jours sans données = 0)
     $berruLabels = $berruVisits = $berruUniques = [];
     $berruTotalVisits = $berruTotalUniques = $berruBestDay = 0;
     $berruDay = new DateTime(date('Y') . '-01-01');
@@ -502,19 +599,13 @@ if (is_array($berruRaw) && !empty($berruRaw['success']) && is_array($berruRaw['d
     }
 }
 
-// 3) Planning — embed Google Calendar.
-//    ⚠️ Google interdit l'affichage de « /calendar/u/0/r » dans une iframe
-//    (X-Frame-Options). Pour voir ton planning dans la card, ouvre
-//    Google Calendar → Paramètres → « Intégrer le calendrier » et colle
-//    l'URL obtenue (https://calendar.google.com/calendar/embed?src=…) ici.
+// 3) Planning — embed Google Calendar
 $gcalEmbedUrl = 'https://calendar.google.com/calendar/embed?src=g.leberruyer%40gmail.com&ctz=Europe%2FParis';
 
-// Date longue en français pour le titre « Infos du jour »
 $daysFr = ['Monday' => 'lundi', 'Tuesday' => 'mardi', 'Wednesday' => 'mercredi', 'Thursday' => 'jeudi', 'Friday' => 'vendredi', 'Saturday' => 'samedi', 'Sunday' => 'dimanche'];
 $monthsFr = ['January' => 'janvier', 'February' => 'février', 'March' => 'mars', 'April' => 'avril', 'May' => 'mai', 'June' => 'juin', 'July' => 'juillet', 'August' => 'août', 'September' => 'septembre', 'October' => 'octobre', 'November' => 'novembre', 'December' => 'décembre'];
 $todayLong = ($daysFr[date('l')] ?? date('l')) . ' ' . (int) date('j') . ' ' . ($monthsFr[date('F')] ?? date('F')) . ' ' . date('Y');
 
-// Données passées aux graphiques
 $chartPayload = [
     'period' => $period,
     'labels' => array_map(fn($r) => (new DateTime($r['date']))->format('d/m'), $dailySeries),
@@ -526,7 +617,6 @@ $chartPayload = [
     ],
 ];
 
-// Ordre d'affichage des plans dans les chips
 $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premium' => 'Premium'];
 ?>
 <!DOCTYPE html>
@@ -544,14 +634,10 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Perf UX : scripts non bloquants -->
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- amCharts : chargé à la demande, uniquement si la carte est demandée -->
     <style>
         :root {
-            /* Mode clair par défaut — le mode sombre suit automatiquement
-               la préférence du système (PC, Android, iOS) via prefers-color-scheme. */
             color-scheme: light;
             --bg: #f4f5f8;
             --surface: #ffffff;
@@ -569,6 +655,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             --blue: #58a6ff;
             --violet: #9d86ff;
             --amber: #e3b341;
+            --solana: #14f195;
             --font: 'Inter', system-ui, -apple-system, sans-serif;
             --mono: 'JetBrains Mono', ui-monospace, monospace;
             --radius: 12px;
@@ -577,6 +664,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             --topbar-bg: rgba(255, 255, 255, 0.85);
             --t-fast: 140ms cubic-bezier(0.4, 0, 0.2, 1);
             --t-med: 240ms cubic-bezier(0.4, 0, 0.2, 1);
+            --sidebar-w: 232px;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -603,1855 +691,887 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             }
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; scrollbar-color: var(--surface-3) transparent; -webkit-text-size-adjust: 100%; }
+        body { font-family: var(--font); font-size: 14px; background: var(--bg); color: var(--text); line-height: 1.5; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        ::selection { background: var(--violet); color: var(--bg); }
+        :focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; border-radius: 4px; }
+        a { color: inherit; text-decoration: none; }
+        button { font: inherit; color: inherit; }
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        .num { font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+
+        /* ===== LAYOUT : SIDEBAR + CONTENU ===== */
+        .layout { display: flex; min-height: 100vh; }
+
+        .sidebar {
+            position: fixed;
+            top: 0; left: 0; bottom: 0;
+            width: var(--sidebar-w);
+            background: var(--surface);
+            border-right: 1px solid var(--border-soft);
+            display: flex;
+            flex-direction: column;
+            z-index: 40;
+            transition: transform var(--t-med);
         }
 
-        html {
-            scroll-behavior: smooth;
-            scrollbar-color: var(--surface-3) transparent;
-            -webkit-text-size-adjust: 100%;
-        }
-
-        body {
-            font-family: var(--font);
-            font-size: 14px;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.5;
-            overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        ::selection {
-            background: var(--violet);
-            color: var(--bg);
-        }
-
-        :focus-visible {
-            outline: 2px solid var(--violet);
-            outline-offset: 2px;
-            border-radius: 4px;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        button {
-            font: inherit;
-            color: inherit;
-        }
-
-        ::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--surface-3);
-            border-radius: 5px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .num {
-            font-variant-numeric: tabular-nums;
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 18px 18px 14px;
+            border-bottom: 1px solid var(--border-soft);
+            font-weight: 700;
+            font-size: 15px;
             letter-spacing: -0.01em;
         }
 
-        .shell {
-            max-width: 1240px;
-            margin: 0 auto;
-            padding: 0 20px 64px;
+        .sidebar-brand i { color: var(--violet); }
+
+        .sidebar-nav { flex: 1; overflow-y: auto; padding: 10px 10px 16px; }
+
+        .sidebar-nav .nav-group {
+            font-size: 10.5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-3);
+            padding: 14px 10px 6px;
         }
 
-        @media (min-width: 720px) {
-            .shell {
-                padding: 0 32px 80px;
-            }
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 9px 10px;
+            font-size: 13.5px;
+            font-weight: 500;
+            color: var(--text-2);
+            border-radius: var(--radius-sm);
+            margin-bottom: 1px;
+            transition: background var(--t-fast), color var(--t-fast);
         }
+
+        .sidebar-nav a i { width: 16px; text-align: center; font-size: 13px; color: var(--text-3); transition: color var(--t-fast); }
+        .sidebar-nav a:hover { background: var(--surface-2); color: var(--text); }
+        .sidebar-nav a:hover i { color: var(--violet); }
+        .sidebar-nav a.active { background: var(--surface-3); color: var(--text); font-weight: 600; }
+        .sidebar-nav a.active i { color: var(--violet); }
+
+        .sidebar-foot { padding: 12px 16px; border-top: 1px solid var(--border-soft); font-size: 11px; color: var(--text-3); }
+
+        .content { flex: 1; margin-left: var(--sidebar-w); min-width: 0; }
+
+        /* Burger mobile */
+        .sidebar-toggle { display: none; }
+
+        @media (max-width: 900px) {
+            .sidebar { transform: translateX(-100%); box-shadow: var(--shadow); }
+            .sidebar.open { transform: translateX(0); }
+            .content { margin-left: 0; }
+            .sidebar-toggle { display: inline-flex; }
+        }
+
+        .shell { max-width: 1240px; margin: 0 auto; padding: 0 20px 64px; }
+        @media (min-width: 720px) { .shell { padding: 0 32px 80px; } }
 
         /* ===== TOPBAR ===== */
         .topbar {
-            position: sticky;
-            top: 0;
-            z-index: 50;
+            position: sticky; top: 0; z-index: 50;
             background: var(--topbar-bg);
             backdrop-filter: blur(12px) saturate(1.4);
             -webkit-backdrop-filter: blur(12px) saturate(1.4);
             border-bottom: 1px solid var(--border-soft);
         }
 
-        .topbar-inner {
-            max-width: 1240px;
-            margin: 0 auto;
-            padding: 0 20px;
-            height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-        }
+        .topbar-inner { max-width: 1240px; margin: 0 auto; padding: 0 20px; height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        @media (min-width: 720px) { .topbar-inner { padding: 0 32px; } }
+        .topbar-right { display: flex; align-items: center; gap: 8px; }
 
-        @media (min-width: 720px) {
-            .topbar-inner {
-                padding: 0 32px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .back-label {
-                display: none;
-            }
-        }
-
-        .topbar-right {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Boutons topbar : cible tactile confortable */
         .tb-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            min-height: 38px;
-            padding: 0 12px;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-2);
-            background: transparent;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            cursor: pointer;
+            display: inline-flex; align-items: center; gap: 8px; min-height: 38px; padding: 0 12px;
+            font-size: 13px; font-weight: 500; color: var(--text-2); background: transparent;
+            border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer;
             transition: color var(--t-fast), border-color var(--t-fast), background var(--t-fast);
         }
+        .tb-btn:hover, .tb-btn[aria-expanded="true"] { color: var(--text); border-color: var(--surface-3); background: var(--surface-2); }
+        .tb-btn i { font-size: 13px; }
 
-        .tb-btn:hover,
-        .tb-btn[aria-expanded="true"] {
-            color: var(--text);
-            border-color: var(--surface-3);
-            background: var(--surface-2);
-        }
+        .status-chip { display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 11px; color: var(--text-3); letter-spacing: 0.04em; }
+        .status-chip::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px rgba(139, 127, 250, 0.14); animation: pulse 2.4s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.85); } }
+        @media (max-width: 560px) { .status-chip { display: none; } }
 
-        .tb-btn i {
-            font-size: 13px;
-        }
-
-        .status-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            font-family: var(--mono);
-            font-size: 11px;
-            color: var(--text-3);
-            letter-spacing: 0.04em;
-        }
-
-        .status-chip::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--green);
-            box-shadow: 0 0 0 3px rgba(139, 127, 250, 0.14);
-            animation: pulse 2.4s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 0.4;
-                transform: scale(0.85);
-            }
-        }
-
-        @media (max-width: 560px) {
-            .status-chip {
-                display: none;
-            }
-        }
-
-        /* ===== POPOVERS (météo + menu) ===== */
+        /* ===== POPOVERS ===== */
         .pop {
-            position: absolute;
-            right: 0;
-            top: calc(100% + 8px);
+            position: absolute; right: 0; top: calc(100% + 8px);
             width: min(240px, calc(100vw - 32px));
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-4px);
-            transition: opacity var(--t-fast), transform var(--t-fast), visibility var(--t-fast);
-            z-index: 60;
+            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+            box-shadow: var(--shadow); opacity: 0; visibility: hidden; transform: translateY(-4px);
+            transition: opacity var(--t-fast), transform var(--t-fast), visibility var(--t-fast); z-index: 60;
         }
+        .pop.open { opacity: 1; visibility: visible; transform: translateY(0); }
 
-        .pop.open {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        /* --- Météo --- */
-        .weather-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-        }
-
-        .weather-day {
-            padding: 14px 8px 12px;
-            text-align: center;
-            border-right: 1px solid var(--border-soft);
-            position: relative;
-        }
-
-        .weather-day:last-child {
-            border-right: none;
-        }
-
-        .weather-day.today::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 24px;
-            height: 2px;
-            border-radius: 1px;
-            background: var(--violet);
-        }
-
-        .weather-day .d-label {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-2);
-            margin-bottom: 8px;
-        }
-
-        .weather-day .d-icon {
-            font-size: 20px;
-            color: var(--text);
-            margin-bottom: 4px;
-        }
-
-        .weather-day .d-desc {
-            font-size: 11px;
-            color: var(--text-3);
-            margin-bottom: 8px;
-            line-height: 1.3;
-            min-height: 2.6em;
-            display: grid;
-            place-items: center;
-        }
-
-        .weather-day .d-temps {
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .weather-day .d-temps .min {
-            color: var(--text-3);
-            font-weight: 500;
-        }
-
-        .weather-day .d-rain {
-            font-size: 11px;
-            color: var(--blue);
-            margin-top: 4px;
-        }
-
-        .weather-day .d-wind {
-            font-size: 11px;
-            color: var(--text-3);
-            margin-top: 2px;
-        }
-
-        @media (max-width: 480px) {
-            .weather-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .weather-day {
-                border-right: none;
-                border-bottom: 1px solid var(--border-soft);
-                display: grid;
-                grid-template-columns: 64px 1fr auto;
-                align-items: center;
-                text-align: left;
-                gap: 4px 12px;
-            }
-
-            .weather-day .d-label {
-                grid-column: 1;
-                grid-row: 1;
-                margin: 0;
-                align-self: center;
-            }
-
-            .weather-day .d-icon {
-                grid-column: 1;
-                grid-row: 2 / span 2;
-                font-size: 22px;
-                margin: 0;
-            }
-
-            .weather-day .d-desc {
-                grid-column: 2;
-                grid-row: 2;
-                min-height: 0;
-                text-align: left;
-                justify-items: start;
-                display: block;
-            }
-
-            .weather-day .d-temps {
-                grid-column: 3;
-                grid-row: 2;
-            }
-
-            .weather-day .d-rain {
-                grid-column: 2;
-                grid-row: 3;
-                margin: 0;
-            }
-
-            .weather-day .d-wind {
-                grid-column: 3;
-                grid-row: 3;
-                margin: 0;
-                text-align: right;
-            }
-        }
-
-        /* --- Menu commandes --- */
-        .menu-anchor {
-            position: relative;
-        }
-
-        .cmd-menu,
-        .menu-nav {
-            min-width: 264px;
-            overflow: hidden;
-        }
-
-        .cmd-menu a,
-        .menu-nav a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 11px 16px;
-            font-size: 13.5px;
-            font-weight: 500;
-            border-bottom: 1px solid var(--border-soft);
-            min-height: 44px;
+        .menu-anchor { position: relative; }
+        .cmd-menu, .menu-nav { min-width: 264px; overflow: hidden; }
+        .cmd-menu a, .menu-nav a {
+            display: flex; align-items: center; gap: 12px; padding: 11px 16px; font-size: 13.5px; font-weight: 500;
+            border-bottom: 1px solid var(--border-soft); min-height: 44px;
             transition: background var(--t-fast), color var(--t-fast);
         }
+        .cmd-menu a:last-child, .menu-nav a:last-child { border-bottom: none; }
+        .cmd-menu a i, .menu-nav a i { width: 16px; text-align: center; color: var(--text-3); font-size: 13px; transition: color var(--t-fast); }
+        .cmd-menu a:hover, .menu-nav a:hover { background: var(--surface-2); color: var(--violet); }
+        .cmd-menu a:hover i, .menu-nav a:hover i { color: var(--violet); }
 
-        .cmd-menu a:last-child,
-        .menu-nav a:last-child {
-            border-bottom: none;
-        }
+        /* ===== EN-TÊTE + PÉRIODE ===== */
+        .page-head { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding: 28px 0 20px; }
+        .page-head h1, .page-head h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+        .page-head .meta { font-size: 13px; color: var(--text-3); margin-top: 4px; }
 
-        .cmd-menu a i,
-        .menu-nav a i {
-            width: 16px;
-            text-align: center;
-            color: var(--text-3);
-            font-size: 13px;
-            transition: color var(--t-fast);
-        }
+        .period-switch { display: inline-flex; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 3px; gap: 2px; }
+        .period-switch a { font-size: 13px; font-weight: 500; min-width: 44px; padding: 6px 12px; text-align: center; color: var(--text-3); border-radius: 6px; transition: color var(--t-fast), background var(--t-fast); }
+        .period-switch a:hover { color: var(--text); }
+        .period-switch a.active { background: var(--surface-3); color: var(--text); font-weight: 600; }
 
-        .cmd-menu a:hover,
-        .menu-nav a:hover {
-            background: var(--surface-2);
-            color: var(--violet);
-        }
+        /* ===== SECTIONS / ONGLETS ===== */
+        .section { margin-bottom: 36px; scroll-margin-top: 76px; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; animation: fadeIn var(--t-med); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 
-        .cmd-menu a:hover i,
-        .menu-nav a:hover i {
-            color: var(--violet);
-        }
-
-        /* ===== EN-TÊTE DE PAGE + PÉRIODE ===== */
-        .page-head {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 16px;
-            padding: 28px 0 20px;
-        }
-
-        .page-head h1 {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
-        .page-head .meta {
-            font-size: 13px;
-            color: var(--text-3);
-            margin-top: 4px;
-        }
-
-        .period-switch {
-            display: inline-flex;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            padding: 3px;
-            gap: 2px;
-        }
-
-        .period-switch a {
-            font-size: 13px;
-            font-weight: 500;
-            min-width: 44px;
-            padding: 6px 12px;
-            text-align: center;
-            color: var(--text-3);
-            border-radius: 6px;
-            transition: color var(--t-fast), background var(--t-fast);
-        }
-
-        .period-switch a:hover {
-            color: var(--text);
-        }
-
-        .period-switch a.active {
-            background: var(--surface-3);
-            color: var(--text);
-            font-weight: 600;
-        }
-
-        /* ===== SECTIONS ===== */
-        .section {
-            margin-bottom: 36px;
-        }
-
-        .section-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
-        }
-
-        .section-head h2 {
-            font-size: 15px;
-            font-weight: 600;
-            letter-spacing: -0.01em;
-        }
-
-        .section-head .hint {
-            font-size: 12.5px;
-            color: var(--text-3);
-        }
+        .section-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+        .section-head h2 { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+        .section-head .hint { font-size: 12.5px; color: var(--text-3); }
 
         /* ===== KPI ===== */
-        .kpi-strip {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
-        }
+        .kpi-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+        @media (max-width: 1020px) { .kpi-strip { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 520px) { .kpi-strip { grid-template-columns: 1fr; gap: 10px; } }
 
-        @media (max-width: 1020px) {
-            .kpi-strip {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 520px) {
-            .kpi-strip {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-        }
-
-        .kpi {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 18px 18px 14px;
-            position: relative;
-            overflow: hidden;
-            transition: border-color var(--t-fast);
-        }
-
-        .kpi:hover {
-            border-color: var(--surface-3);
-        }
-
-        .kpi-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-
-        .kpi-label {
-            font-size: 13px;
-            color: var(--text-2);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .kpi-label i {
-            font-size: 12px;
-            color: var(--text-3);
-        }
-
-        .delta {
-            font-size: 12px;
-            font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 999px;
-            white-space: nowrap;
-        }
-
-        .delta.up {
-            color: var(--green);
-            background: var(--green-soft);
-        }
-
-        .delta.down {
-            color: var(--red);
-            background: var(--red-soft);
-        }
-
-        .delta.flat {
-            color: var(--text-3);
-            background: var(--surface-2);
-        }
-
-        .kpi-value {
-            font-size: clamp(24px, 3.2vw, 30px);
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
-        .kpi-sub {
-            font-size: 12px;
-            color: var(--text-3);
-            margin-top: 2px;
-        }
-
-        .kpi .spark {
-            height: 42px;
-            margin-top: 12px;
-        }
+        .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 18px 14px; position: relative; overflow: hidden; transition: border-color var(--t-fast); }
+        .kpi:hover { border-color: var(--surface-3); }
+        .kpi-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 10px; }
+        .kpi-label { font-size: 13px; color: var(--text-2); display: inline-flex; align-items: center; gap: 8px; }
+        .kpi-label i { font-size: 12px; color: var(--text-3); }
+        .delta { font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 999px; white-space: nowrap; }
+        .delta.up { color: var(--green); background: var(--green-soft); }
+        .delta.down { color: var(--red); background: var(--red-soft); }
+        .delta.flat { color: var(--text-3); background: var(--surface-2); }
+        .kpi-value { font-size: clamp(24px, 3.2vw, 30px); font-weight: 700; letter-spacing: -0.02em; }
+        .kpi-sub { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+        .kpi .spark { height: 42px; margin-top: 12px; }
 
         /* ===== CARTES ===== */
-        .card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            overflow: hidden;
-        }
-
-        .card-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            padding: 16px 18px;
-            border-bottom: 1px solid var(--border-soft);
-        }
-
-        .card-title {
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 9px;
-        }
-
-        .card-title i {
-            color: var(--text-3);
-            font-size: 13px;
-        }
-
-        .card-body {
-            padding: 18px;
-        }
-
-        .duo {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-
-        @media (max-width: 1020px) {
-            .duo {
-                grid-template-columns: 1fr;
-            }
-        }
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+        .card-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 16px 18px; border-bottom: 1px solid var(--border-soft); }
+        .card-title { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 9px; }
+        .card-title i { color: var(--text-3); font-size: 13px; }
+        .card-body { padding: 18px; }
+        .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        @media (max-width: 1020px) { .duo { grid-template-columns: 1fr; } }
 
         /* ===== WALLET ===== */
-        .wallet-hero {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 12px;
-            padding: 18px;
-            background: linear-gradient(180deg, var(--surface-2), var(--surface));
-            border-bottom: 1px solid var(--border-soft);
-        }
+        .wallet-hero { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 18px; background: linear-gradient(180deg, var(--surface-2), var(--surface)); border-bottom: 1px solid var(--border-soft); }
+        .wallet-hero .label { font-size: 12px; color: var(--text-3); margin-bottom: 6px; }
+        .wallet-hero .total { font-size: clamp(28px, 4vw, 36px); font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
+        .wallet-hero .invested { font-size: 12px; color: var(--text-3); margin-top: 6px; }
+        .wallet-hero .pnl-box { text-align: right; }
+        .wallet-hero .pnl { font-size: 16px; font-weight: 700; }
+        .wallet-hero .pnl.positive { color: var(--green); }
+        .wallet-hero .pnl.negative { color: var(--red); }
+        .wallet-hero .pnl-pct { display: inline-block; font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 999px; margin-bottom: 6px; }
+        .wallet-hero .pnl-pct.positive { color: var(--green); background: var(--green-soft); }
+        .wallet-hero .pnl-pct.negative { color: var(--red); background: var(--red-soft); }
+        .wallet-hero .pnl-label { display: block; font-size: 11px; color: var(--text-3); }
 
-        .wallet-hero .label {
-            font-size: 12px;
-            color: var(--text-3);
-            margin-bottom: 6px;
-        }
-
-        .wallet-hero .total {
-            font-size: clamp(28px, 4vw, 36px);
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            line-height: 1;
-        }
-
-        .wallet-hero .invested {
-            font-size: 12px;
-            color: var(--text-3);
-            margin-top: 6px;
-        }
-
-        .wallet-hero .pnl-box {
-            text-align: right;
-        }
-
-        .wallet-hero .pnl {
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-        .wallet-hero .pnl.positive {
-            color: var(--green);
-        }
-
-        .wallet-hero .pnl.negative {
-            color: var(--red);
-        }
-
-        .wallet-hero .pnl-pct {
-            display: inline-block;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 999px;
-            margin-bottom: 6px;
-        }
-
-        .wallet-hero .pnl-pct.positive {
-            color: var(--green);
-            background: var(--green-soft);
-        }
-
-        .wallet-hero .pnl-pct.negative {
-            color: var(--red);
-            background: var(--red-soft);
-        }
-
-        .wallet-hero .pnl-label {
-            display: block;
-            font-size: 11px;
-            color: var(--text-3);
-        }
-
-        #crypto-prices {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .crypto-item {
-            display: grid;
-            grid-template-columns: 40px 1fr auto auto;
-            align-items: center;
-            gap: 14px;
-            padding: 13px 18px;
-            border-bottom: 1px solid var(--border-soft);
-            transition: background var(--t-fast);
-        }
-
-        .crypto-item:last-child {
-            border-bottom: none;
-        }
-
-        .crypto-item:hover {
-            background: var(--surface-2);
-        }
-
-        .crypto-item img {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-        }
-
-        .crypto-item .name {
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
-
-        .crypto-item .symbol {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .crypto-item .symbol a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        .crypto-item .symbol a:hover {
-            text-decoration: underline;
-        }
-
-        .crypto-item .price {
-            font-size: 12.5px;
-            color: var(--text-3);
-        }
-
-        .crypto-item .holdings {
-            display: flex;
-            flex-direction: column;
-            text-align: right;
-        }
-
-        .crypto-item .holdings .amount {
-            font-family: var(--mono);
-            font-size: 11.5px;
-            color: var(--text-3);
-        }
-
-        .crypto-item .holdings .value {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .crypto-item .change {
-            font-size: 13px;
-            font-weight: 600;
-            min-width: 68px;
-            text-align: right;
-        }
-
-        .crypto-item .change.positive {
-            color: var(--green);
-        }
-
-        .crypto-item .change.negative {
-            color: var(--red);
-        }
-
+        #crypto-prices { display: flex; flex-direction: column; }
+        .crypto-item { display: grid; grid-template-columns: 40px 1fr auto auto; align-items: center; gap: 14px; padding: 13px 18px; border-bottom: 1px solid var(--border-soft); transition: background var(--t-fast); }
+        .crypto-item:last-child { border-bottom: none; }
+        .crypto-item:hover { background: var(--surface-2); }
+        .crypto-item img { width: 34px; height: 34px; border-radius: 50%; }
+        .crypto-item .name { display: flex; flex-direction: column; min-width: 0; }
+        .crypto-item .symbol { font-weight: 600; font-size: 14px; }
+        .crypto-item .symbol a { color: inherit; text-decoration: none; }
+        .crypto-item .symbol a:hover { text-decoration: underline; }
+        .crypto-item .price { font-size: 12.5px; color: var(--text-3); }
+        .crypto-item .holdings { display: flex; flex-direction: column; text-align: right; }
+        .crypto-item .holdings .amount { font-family: var(--mono); font-size: 11.5px; color: var(--text-3); }
+        .crypto-item .holdings .value { font-size: 14px; font-weight: 600; }
+        .crypto-item .change { font-size: 13px; font-weight: 600; min-width: 68px; text-align: right; }
+        .crypto-item .change.positive { color: var(--green); }
+        .crypto-item .change.negative { color: var(--red); }
         @media (max-width: 460px) {
-            .crypto-item {
-                grid-template-columns: 34px 1fr auto;
-                gap: 10px;
-            }
-
-            .crypto-item .holdings {
-                display: none;
-            }
-
-            .crypto-item img {
-                width: 30px;
-                height: 30px;
-            }
+            .crypto-item { grid-template-columns: 34px 1fr auto; gap: 10px; }
+            .crypto-item .holdings { display: none; }
+            .crypto-item img { width: 30px; height: 30px; }
         }
 
-        .ghost-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            min-height: 36px;
-            padding: 0 12px;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-2);
-            background: transparent;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: color var(--t-fast), border-color var(--t-fast);
-        }
+        .ghost-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 12px; font-size: 13px; font-weight: 500; color: var(--text-2); background: transparent; border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; transition: color var(--t-fast), border-color var(--t-fast); }
+        .ghost-btn:hover { color: var(--text); border-color: var(--surface-3); }
+        .ghost-btn i { color: var(--text-3); font-size: 12px; }
 
-        .ghost-btn:hover {
-            color: var(--text);
-            border-color: var(--surface-3);
-        }
+        /* ===== SOL — ACCUMULATION ===== */
+        .sol-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 14px; }
+        @media (max-width: 1020px) { .sol-kpis { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 520px) { .sol-kpis { grid-template-columns: 1fr; gap: 10px; } }
+        .sol-kpis .kpi-value { color: var(--solana); }
+        #solChartBox { height: 340px; position: relative; }
 
-        .ghost-btn i {
-            color: var(--text-3);
-            font-size: 12px;
-        }
-
-        /* ===== ACTIVITÉ (petit-multiples) ===== */
-        .multiples {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
-        }
-
-        @media (max-width: 1020px) {
-            .multiples {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .mini {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 16px 18px 12px;
-        }
-
-        .mini-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 10px;
-        }
-
-        .mini-head .t {
-            font-size: 13px;
-            color: var(--text-2);
-        }
-
-        .mini-head .v {
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-        .mini .chart-sm {
-            height: 150px;
-        }
-
-        @media (max-width: 520px) {
-            .mini .chart-sm {
-                height: 120px;
-            }
-        }
+        /* ===== ACTIVITÉ ===== */
+        .multiples { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+        @media (max-width: 1020px) { .multiples { grid-template-columns: 1fr; } }
+        .mini { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px 12px; }
+        .mini-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+        .mini-head .t { font-size: 13px; color: var(--text-2); }
+        .mini-head .v { font-size: 16px; font-weight: 700; }
+        .mini .chart-sm { height: 150px; }
+        @media (max-width: 520px) { .mini .chart-sm { height: 120px; } }
 
         /* ===== GÉO ===== */
-        .geo-toggle {
-            display: inline-flex;
-            background: var(--surface-2);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            padding: 3px;
-            gap: 2px;
-        }
-
-        .geo-toggle button {
-            font-size: 12px;
-            font-weight: 500;
-            padding: 5px 12px;
-            background: transparent;
-            color: var(--text-3);
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background var(--t-fast), color var(--t-fast);
-        }
-
-        .geo-toggle button.active {
-            background: var(--surface-3);
-            color: var(--text);
-            font-weight: 600;
-        }
-
-        .geo-view {
-            height: 340px;
-            position: relative;
-        }
-
-        .geo-view canvas,
-        .geo-view .map-holder {
-            height: 100%;
-        }
-
-        .map-holder {
-            display: none;
-        }
-
-        .map-holder.visible {
-            display: block;
-        }
-
-        .map-loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            font-size: 13px;
-            color: var(--text-3);
-        }
+        .geo-toggle { display: inline-flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 3px; gap: 2px; }
+        .geo-toggle button { font-size: 12px; font-weight: 500; padding: 5px 12px; background: transparent; color: var(--text-3); border: none; border-radius: 6px; cursor: pointer; transition: background var(--t-fast), color var(--t-fast); }
+        .geo-toggle button.active { background: var(--surface-3); color: var(--text); font-weight: 600; }
+        .geo-view { height: 340px; position: relative; }
+        .geo-view canvas, .geo-view .map-holder { height: 100%; }
+        .map-holder { display: none; }
+        .map-holder.visible { display: block; }
+        .map-loading { display: flex; align-items: center; justify-content: center; height: 100%; font-size: 13px; color: var(--text-3); }
 
         /* ===== REGISTRE UTILISATEURS ===== */
-        .plan-chips {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
+        .plan-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+        .plan-chip { font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--border); color: var(--text-2); background: var(--surface-2); }
+        .plan-chip b { font-weight: 700; color: var(--text); }
+        .search-box { position: relative; }
+        .search-box input { font-family: var(--font); font-size: 13.5px; color: var(--text); background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px 8px 34px; min-height: 38px; width: min(260px, 56vw); transition: border-color var(--t-fast); }
+        .search-box input::placeholder { color: var(--text-3); }
+        .search-box input:focus { outline: none; border-color: var(--green); }
+        .search-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-3); font-size: 12px; }
+        .table-responsive { overflow-x: auto; }
+        .data-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+        .data-table th { text-align: left; padding: 11px 18px; color: var(--text-3); font-weight: 600; font-size: 12px; border-bottom: 1px solid var(--border); white-space: nowrap; background: var(--surface); user-select: none; }
+        .data-table th.sortable { cursor: pointer; transition: color var(--t-fast); }
+        .data-table th.sortable:hover { color: var(--text); }
+        .data-table th.sortable::after { content: '↕'; margin-left: 5px; opacity: 0.4; font-size: 11px; }
+        .data-table th.sortable.sorted-asc::after { content: '↑'; opacity: 1; color: var(--green); }
+        .data-table th.sortable.sorted-desc::after { content: '↓'; opacity: 1; color: var(--green); }
+        .data-table td { padding: 12px 18px; border-bottom: 1px solid var(--border-soft); white-space: nowrap; font-variant-numeric: tabular-nums; }
+        .data-table tbody tr { transition: background var(--t-fast); }
+        .data-table tbody tr:hover { background: var(--surface-2); }
+        .data-table tbody tr:last-child td { border-bottom: none; }
+        .search-empty { display: none; }
+        .badge { display: inline-block; padding: 3px 9px; font-size: 11px; font-weight: 600; letter-spacing: 0.02em; border-radius: 999px; border: 1px solid; }
+        .badge-free { color: var(--text-2); border-color: var(--border); background: var(--surface-2); }
+        .badge-pro { color: var(--green); border-color: rgba(63, 185, 80, 0.4); background: var(--green-soft); }
+        .badge-business { color: var(--red); border-color: rgba(240, 99, 90, 0.4); background: var(--red-soft); }
+        .badge-premium { color: var(--violet); border-color: rgba(167, 139, 250, 0.4); background: rgba(167, 139, 250, 0.1); }
+        .export-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 38px; padding: 0 14px; font-size: 13px; font-weight: 600; background: var(--green); color: var(--bg); border: none; border-radius: var(--radius-sm); cursor: pointer; transition: filter var(--t-fast); }
+        .export-btn:hover { filter: brightness(1.1); }
 
-        .plan-chip {
-            font-size: 11.5px;
-            font-weight: 600;
-            padding: 3px 9px;
-            border-radius: 999px;
-            border: 1px solid var(--border);
-            color: var(--text-2);
-            background: var(--surface-2);
-        }
-
-        .plan-chip b {
-            font-weight: 700;
-            color: var(--text);
-        }
-
-        .search-box {
-            position: relative;
-        }
-
-        .search-box input {
-            font-family: var(--font);
-            font-size: 13.5px;
-            color: var(--text);
-            background: var(--surface-2);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            padding: 8px 12px 8px 34px;
-            min-height: 38px;
-            width: min(260px, 56vw);
-            transition: border-color var(--t-fast);
-        }
-
-        .search-box input::placeholder {
-            color: var(--text-3);
-        }
-
-        .search-box input:focus {
-            outline: none;
-            border-color: var(--green);
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-3);
-            font-size: 12px;
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13.5px;
-        }
-
-        .data-table th {
-            text-align: left;
-            padding: 11px 18px;
-            color: var(--text-3);
-            font-weight: 600;
-            font-size: 12px;
-            border-bottom: 1px solid var(--border);
-            white-space: nowrap;
-            background: var(--surface);
-            user-select: none;
-        }
-
-        .data-table th.sortable {
-            cursor: pointer;
-            transition: color var(--t-fast);
-        }
-
-        .data-table th.sortable:hover {
-            color: var(--text);
-        }
-
-        .data-table th.sortable::after {
-            content: '↕';
-            margin-left: 5px;
-            opacity: 0.4;
-            font-size: 11px;
-        }
-
-        .data-table th.sortable.sorted-asc::after {
-            content: '↑';
-            opacity: 1;
-            color: var(--green);
-        }
-
-        .data-table th.sortable.sorted-desc::after {
-            content: '↓';
-            opacity: 1;
-            color: var(--green);
-        }
-
-        .data-table td {
-            padding: 12px 18px;
-            border-bottom: 1px solid var(--border-soft);
-            white-space: nowrap;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .data-table tbody tr {
-            transition: background var(--t-fast);
-        }
-
-        .data-table tbody tr:hover {
-            background: var(--surface-2);
-        }
-
-        .data-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        .search-empty {
-            display: none;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 3px 9px;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.02em;
-            border-radius: 999px;
-            border: 1px solid;
-        }
-
-        .badge-free {
-            color: var(--text-2);
-            border-color: var(--border);
-            background: var(--surface-2);
-        }
-
-        .badge-pro {
-            color: var(--green);
-            border-color: rgba(63, 185, 80, 0.4);
-            background: var(--green-soft);
-        }
-
-        .badge-business {
-            color: var(--red);
-            border-color: rgba(240, 99, 90, 0.4);
-            background: var(--red-soft);
-        }
-
-        .badge-premium {
-            color: var(--violet);
-            border-color: rgba(167, 139, 250, 0.4);
-            background: rgba(167, 139, 250, 0.1);
-        }
-
-        .export-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            min-height: 38px;
-            padding: 0 14px;
-            font-size: 13px;
-            font-weight: 600;
-            background: var(--green);
-            color: var(--bg);
-            border: none;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: filter var(--t-fast);
-        }
-
-        .export-btn:hover {
-            filter: brightness(1.1);
-        }
-
-        /* --- Mobile : la table devient une liste de cartes --- */
         @media (max-width: 720px) {
-            .data-table thead {
-                display: none;
-            }
-
-            .data-table,
-            .data-table tbody,
-            .data-table tr,
-            .data-table td {
-                display: block;
-                width: 100%;
-            }
-
-            .data-table tbody tr {
-                background: var(--surface);
-                border: 1px solid var(--border);
-                border-radius: var(--radius);
-                margin: 10px 12px;
-                padding: 4px 0;
-                overflow: hidden;
-            }
-
-            .data-table tbody tr:hover {
-                background: var(--surface);
-            }
-
-            .data-table td {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                gap: 16px;
-                padding: 8px 14px;
-                border-bottom: 1px solid var(--border-soft);
-                white-space: normal;
-                font-size: 13.5px;
-            }
-
-            .data-table td:last-child {
-                border-bottom: none;
-            }
-
-            .data-table td::before {
-                content: attr(data-label);
-                color: var(--text-3);
-                font-size: 12px;
-                font-weight: 500;
-                flex-shrink: 0;
-            }
-
-            .data-table td[data-label="Email"] {
-                font-weight: 600;
-                word-break: break-all;
-            }
-
-            .data-table td[data-label="Email"]::before {
-                display: none;
-            }
-
-            .data-table td[data-label="Email"] {
-                justify-content: flex-start;
-            }
-
-            .data-table tbody tr:last-child td {
-                border-radius: 0;
-            }
-        }
-
-        /* ===== ANCRAGES DE SECTION (menu de navigation) ===== */
-        .section {
-            scroll-margin-top: 76px;
+            .data-table thead { display: none; }
+            .data-table, .data-table tbody, .data-table tr, .data-table td { display: block; width: 100%; }
+            .data-table tbody tr { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin: 10px 12px; padding: 4px 0; overflow: hidden; }
+            .data-table tbody tr:hover { background: var(--surface); }
+            .data-table td { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 8px 14px; border-bottom: 1px solid var(--border-soft); white-space: normal; font-size: 13.5px; }
+            .data-table td:last-child { border-bottom: none; }
+            .data-table td::before { content: attr(data-label); color: var(--text-3); font-size: 12px; font-weight: 500; flex-shrink: 0; }
+            .data-table td[data-label="Email"] { font-weight: 600; word-break: break-all; }
+            .data-table td[data-label="Email"]::before { display: none; }
+            .data-table td[data-label="Email"] { justify-content: flex-start; }
+            .data-table tbody tr:last-child td { border-radius: 0; }
         }
 
         /* ===== INFOS DU JOUR ===== */
-        .info-hero {
-            padding: 6px 0 14px;
-        }
+        .info-hero { padding: 6px 0 14px; }
+        .info-hero h2 { font-size: clamp(26px, 4vw, 32px); font-weight: 700; letter-spacing: -0.03em; }
+        .info-hero .meta { font-size: 13px; color: var(--text-3); margin-top: 4px; }
+        .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-items: start; }
+        @media (max-width: 1020px) { .info-grid { grid-template-columns: 1fr; } }
+        .today-event { display: flex; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--border-soft); align-items: flex-start; }
+        .today-event .year { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--green); background: var(--green-soft); border-radius: 6px; padding: 2px 8px; white-space: nowrap; flex-shrink: 0; }
+        .today-event p { font-size: 13.5px; color: var(--text-2); line-height: 1.5; }
+        .card-src { font-size: 11.5px; color: var(--text-3); margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border-soft); }
 
-        .info-hero h2 {
-            font-size: clamp(26px, 4vw, 32px);
-            font-weight: 700;
-            letter-spacing: -0.03em;
-        }
+        .gcal-holder { padding: 10px 10px 0; height: 470px; }
+        .gcal-holder iframe { width: 100%; height: 100%; border: 0; border-radius: var(--radius-sm); background: rgba(167, 139, 250, 0.1); }
+        iframe { background-color: rgba(167, 139, 250, 0.1); }
 
-        .info-hero .meta {
-            font-size: 13px;
-            color: var(--text-3);
-            margin-top: 4px;
-        }
+        .tv-holder { height: 460px; }
+        .tv-holder .tradingview-widget-container, .tv-holder .tradingview-widget-container__widget { height: 100%; width: 100%; }
+        .tv-holder iframe { border-radius: var(--radius-sm); }
 
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-            align-items: start;
-        }
+        .weather-section .weather-day { padding: 20px 12px 16px; }
+        .weather-section .weather-day .d-icon { font-size: 26px; }
+        @media (max-width: 480px) { .weather-section .weather-day { padding: 14px 16px; } }
 
-        @media (max-width: 1020px) {
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .today-event {
-            display: flex;
-            gap: 12px;
-            padding: 11px 0;
-            border-bottom: 1px solid var(--border-soft);
-            align-items: flex-start;
-        }
-
-        .today-event .year {
-            font-family: var(--mono);
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--green);
-            background: var(--green-soft);
-            border-radius: 6px;
-            padding: 2px 8px;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .today-event p {
-            font-size: 13.5px;
-            color: var(--text-2);
-            line-height: 1.5;
-        }
-
-        .card-src {
-            font-size: 11.5px;
-            color: var(--text-3);
-            margin-top: 14px;
-            padding-top: 10px;
-            border-top: 1px solid var(--border-soft);
-        }
-
-        /* ===== GOOGLE CALENDAR (infos du jour) ===== */
-        .gcal-holder {
-            padding: 10px 10px 0;
-            height: 470px;
-        }
-
-        .gcal-holder iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
-            border-radius: var(--radius-sm);
-            background: rgba(167, 139, 250, 0.1);
-        }
-
-        iframe {
-            background-color: rgba(167, 139, 250, 0.1);
-        }
-
-        /* ===== WIDGET TRADINGVIEW (wallet) ===== */
-        .tv-holder {
-            height: 460px;
-        }
-
-        .tv-holder .tradingview-widget-container,
-        .tv-holder .tradingview-widget-container__widget {
-            height: 100%;
-            width: 100%;
-        }
-
-        .tv-holder iframe {
-            border-radius: var(--radius-sm);
-        }
-
-        /* ===== MÉTÉO EN SECTION PLEINE ===== */
-        .weather-section .weather-day {
-            padding: 20px 12px 16px;
-        }
-
-        .weather-section .weather-day .d-icon {
-            font-size: 26px;
-        }
-
+        .weather-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+        .weather-day { padding: 14px 8px 12px; text-align: center; border-right: 1px solid var(--border-soft); position: relative; }
+        .weather-day:last-child { border-right: none; }
+        .weather-day.today::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 24px; height: 2px; border-radius: 1px; background: var(--violet); }
+        .weather-day .d-label { font-size: 11px; font-weight: 600; color: var(--text-2); margin-bottom: 8px; }
+        .weather-day .d-icon { font-size: 20px; color: var(--text); margin-bottom: 4px; }
+        .weather-day .d-desc { font-size: 11px; color: var(--text-3); margin-bottom: 8px; line-height: 1.3; min-height: 2.6em; display: grid; place-items: center; }
+        .weather-day .d-temps { font-size: 14px; font-weight: 700; }
+        .weather-day .d-temps .min { color: var(--text-3); font-weight: 500; }
+        .weather-day .d-rain { font-size: 11px; color: var(--blue); margin-top: 4px; }
+        .weather-day .d-wind { font-size: 11px; color: var(--text-3); margin-top: 2px; }
         @media (max-width: 480px) {
-            .weather-section .weather-day {
-                padding: 14px 16px;
-            }
+            .weather-grid { grid-template-columns: 1fr; }
+            .weather-day { border-right: none; border-bottom: 1px solid var(--border-soft); display: grid; grid-template-columns: 64px 1fr auto; align-items: center; text-align: left; gap: 4px 12px; }
+            .weather-day .d-label { grid-column: 1; grid-row: 1; margin: 0; align-self: center; }
+            .weather-day .d-icon { grid-column: 1; grid-row: 2 / span 2; font-size: 22px; margin: 0; }
+            .weather-day .d-desc { grid-column: 2; grid-row: 2; min-height: 0; text-align: left; justify-items: start; display: block; }
+            .weather-day .d-temps { grid-column: 3; grid-row: 2; }
+            .weather-day .d-rain { grid-column: 2; grid-row: 3; margin: 0; }
+            .weather-day .d-wind { grid-column: 3; grid-row: 3; margin: 0; text-align: right; }
         }
 
-        /* ===== ÉTATS VIDES ===== */
-        .empty-state {
-            text-align: center;
-            padding: 40px 16px;
-            color: var(--text-3);
-            font-size: 13.5px;
-        }
+        .empty-state { text-align: center; padding: 40px 16px; color: var(--text-3); font-size: 13.5px; }
 
-        /* ===== SWEETALERT ===== */
-        .custom-swal-popup {
-            background: var(--surface) !important;
-            color: var(--text) !important;
-            border: 1px solid var(--border) !important;
-            border-radius: var(--radius) !important;
-            font-family: var(--font) !important;
-        }
-
-        .custom-swal-popup h2 {
-            font-family: var(--mono) !important;
-            color: var(--green) !important;
-            letter-spacing: 0.1em;
-        }
-
-        .custom-swal-close-button {
-            color: var(--text-3) !important;
-        }
-
-        .custom-swal-content ul {
-            list-style: none;
-            padding: 0;
-            text-align: left;
-        }
-
-        .custom-swal-content li {
-            padding: 11px 0;
-            border-bottom: 1px solid var(--border);
-            font-size: 14px;
-        }
-
-        .custom-swal-content li:last-child {
-            border-bottom: none;
-        }
-
-        .custom-swal-content a {
-            color: var(--green);
-            font-weight: 600;
-        }
+        .custom-swal-popup { background: var(--surface) !important; color: var(--text) !important; border: 1px solid var(--border) !important; border-radius: var(--radius) !important; font-family: var(--font) !important; }
+        .custom-swal-popup h2 { font-family: var(--mono) !important; color: var(--green) !important; letter-spacing: 0.1em; }
+        .custom-swal-close-button { color: var(--text-3) !important; }
+        .custom-swal-content ul { list-style: none; padding: 0; text-align: left; }
+        .custom-swal-content li { padding: 11px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+        .custom-swal-content li:last-child { border-bottom: none; }
+        .custom-swal-content a { color: var(--green); font-weight: 600; }
 
         @media (prefers-reduced-motion: reduce) {
-
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
+            *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
         }
     </style>
 </head>
 
 <body>
-    <!-- ===== TOPBAR ===== -->
-    <header class="topbar">
-        <div class="topbar-inner">
-            <button class="tb-btn" id="back-btn" aria-label="Retour à la page précédente">
-                <i class="fas fa-arrow-left"></i>
-                <span class="back-label">Retour</span>
-            </button>
-            <div class="topbar-right">
-                <span class="status-chip">API</span>
-
-                <div class="menu-anchor">
-                    <button class="tb-btn" id="menu-toggle" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-bars"></i>
-                        Menu
-                        <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
-                    </button>
-                    <div class="pop menu-nav" id="menu-nav" role="menu" aria-label="Navigation entre les sections">
-                        <a href="dashboard.php?site_id=6" role="menuitem"><i class="fas fa-gauge-high"></i>
-                            LibreAnalytics.com</a>
-                        <a href="dashboard.php?site_id=5" role="menuitem"><i class="fas fa-house"></i>
-                            gael-berru.com</a>
-                        <a href="#wallet" role="menuitem"><i class="fas fa-wallet"></i> Wallet all in one</a>
-                        <a href="#infos" role="menuitem"><i class="fas fa-bolt"></i> Infos du jour</a>
-                        <a href="#meteo" role="menuitem"><i class="fas fa-cloud-sun"></i> Météo</a>
-                        <a href="#activite" role="menuitem"><i class="fas fa-chart-bar"></i> Activité détaillée</a>
-                        <a href="#geo" role="menuitem"><i class="fas fa-earth-europe"></i> Top sites &amp; géo</a>
-                        <a href="#users" role="menuitem"><i class="fas fa-users"></i> Utilisateurs</a>
-                    </div>
-                </div>
-
-                <div class="menu-anchor">
-                    <button class="tb-btn" id="cmd-toggle" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-terminal"></i>
-                        CMD
-                        <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
-                    </button>
-                    <div class="pop cmd-menu" id="cmd-menu" role="menu">
-                        <a href="cli.php" role="menuitem"><i class="fa-solid fa-terminal"></i> Terminal</a>
-                        <a href="../campain/rapport_marches.php" role="menuitem"><i class="fa-brands fa-bitcoin"></i>
-                            Rapport
-                            marches</a>
-                        <a href="../campain/rapport.php" role="menuitem"><i class="fas fa-file-lines"></i> Rapport
-                            id_5</a>
-                        <a href="../../../tool/index.html" role="menuitem"><i class="fas fa-"></i> Perpetual trade</a>
-                        <a href="../../../shop/admin.php?t=heincestquoica" role="menuitem"><i class="fas fa-user-lock"></i>
-                            Admin_Shop</a>
-                        <a href="https://calendar.google.com/calendar/u/0/r" role="menuitem"><i
-                                class="fa-regular fa-calendar-days"></i> Calendar</a>
-                        <a href="../campain/prospect.php" role="menuitem"><i class="fa-regular fa-file-code"></i> Script
-                            prospection</a>
-                        <a href="?export_emails=1" role="menuitem"><i class="fas fa-download"></i> Export emails
-                            CSV</a>
-                    </div>
-                </div>
+    <div class="layout">
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <i class="fas fa-chart-simple"></i> LibreAnalytics/Admin
             </div>
-        </div>
-    </header>
+            <nav class="sidebar-nav" aria-label="Navigation principale">
+                <div class="nav-group">Analytics</div>
+                <a href="./dashboard.php" data-tab="dashboard"><i class="fas fa-house"></i> LibreAnalytics/public</a>
 
-    <div class="shell">
-        <!-- ===== EN-TÊTE + PÉRIODE ===== -->
-        <div class="page-head">
-            <div>
-                <h2>LibreAnalytics.com</h2>
-                <p class="meta">Console admin — <?= date('d/m/Y') ?> —
-                    <?= htmlspecialchars($_SESSION['user_email']) ?>
-                </p>
-            </div>
-            <nav class="period-switch" aria-label="Période d'analyse">
-                <a href="?period=7" class="<?= $period === 7 ? 'active' : '' ?>">7j</a>
-                <a href="?period=30" class="<?= $period === 30 ? 'active' : '' ?>">30j</a>
-                <a href="?period=90" class="<?= $period === 90 ? 'active' : '' ?>">90j</a>
-                <a href="?period=365" class="<?= $period === 365 ? 'active' : '' ?>">365j</a>
+                <a href="#dashboard" data-tab="dashboard" class="active"><i class="fas fa-gauge-high"></i> LibreAnalytics.com</a>
+                <a href="#berru" data-tab="berru"><i class="fas fa-house"></i> gael-berru.com</a>
+                <div class="nav-group">Crypto</div>
+                <a href="#wallet" data-tab="wallet"><i class="fas fa-wallet"></i> Wallet all in one</a>
+                <a href="#sol" data-tab="sol"><i class="fas fa-chart-line"></i> Accumulation SOL</a>
+                <div class="nav-group">Quotidien</div>
+                <a href="#infos" data-tab="infos"><i class="fas fa-bolt"></i> Infos du jour</a>
+                <a href="#meteo" data-tab="meteo"><i class="fas fa-cloud-sun"></i> Météo</a>
+                <div class="nav-group">Données</div>
+                <a href="#activite" data-tab="activite"><i class="fas fa-chart-bar"></i> Activité détaillée</a>
+                <a href="#geo" data-tab="geo"><i class="fas fa-earth-europe"></i> Top sites &amp; géo</a>
+                <a href="#users" data-tab="users"><i class="fas fa-users"></i> Utilisateurs</a>
             </nav>
-        </div>
-
-        <!-- ===== KPI : valeur + delta + sparkline ===== -->
-        <section class="section" id="kpis" aria-label="Indicateurs clés">
-            <?php
-            $kpis = [
-                [
-                    'key' => 'visits',
-                    'label' => 'Visites',
-                    'icon' => 'fa-eye',
-                    'cur' => (int) ($periodTotals['cur_visits'] ?? 0),
-                    'prev' => (int) ($periodTotals['prev_visits'] ?? 0)
-                ],
-                [
-                    'key' => 'uniques',
-                    'label' => 'Visiteurs uniques',
-                    'icon' => 'fa-fingerprint',
-                    'cur' => (int) ($periodTotals['cur_uniques'] ?? 0),
-                    'prev' => (int) ($periodTotals['prev_uniques'] ?? 0)
-                ],
-                [
-                    'key' => 'users',
-                    'label' => 'Nouveaux utilisateurs',
-                    'icon' => 'fa-user-plus',
-                    'cur' => (int) ($periodTotals['cur_users'] ?? 0),
-                    'prev' => (int) ($periodTotals['prev_users'] ?? 0)
-                ],
-                [
-                    'key' => 'sites',
-                    'label' => 'Nouveaux sites',
-                    'icon' => 'fa-globe',
-                    'cur' => (int) ($periodTotals['cur_sites'] ?? 0),
-                    'prev' => (int) ($periodTotals['prev_sites'] ?? 0)
-                ],
-            ];
-            $totalLabel = $period . ' derniers jours';
-            ?>
-            <div class="kpi-strip">
-                <?php foreach ($kpis as $kpi):
-                    $delta = deltaPct($kpi['cur'], $kpi['prev']);
-                    if ($delta === null) {
-                        $deltaClass = 'flat';
-                        $deltaTxt = 'n/a';
-                    } elseif ($delta >= 0) {
-                        $deltaClass = 'up';
-                        $deltaTxt = '+' . $delta . '%';
-                    } else {
-                        $deltaClass = 'down';
-                        $deltaTxt = $delta . '%';
-                    }
-                    $global = $kpi['key'] === 'sites' ? $totalSites . ' au total' : ($kpi['key'] === 'users' ? $totalUsers . ' au total' : null);
-                    ?>
-                    <article class="kpi">
-                        <div class="kpi-top">
-                            <span class="kpi-label"><i class="fas <?= $kpi['icon'] ?>"></i>
-                                <?= htmlspecialchars($kpi['label']) ?></span>
-                            <span class="delta <?= $deltaClass ?>"><?= $deltaTxt ?></span>
-                        </div>
-                        <div class="kpi-value num"><?= number_format($kpi['cur']) ?></div>
-                        <?php if ($global): ?>
-                            <div class="kpi-sub"><?= $global ?> · <?= $totalLabel ?></div>
-                        <?php else: ?>
-                            <div class="kpi-sub"><?= $totalLabel ?></div>
-                        <?php endif; ?>
-                        <div class="spark"><canvas data-spark="<?= $kpi['key'] ?>"></canvas></div>
-                    </article>
-                <?php endforeach; ?>
+            <div class="sidebar-foot">
+                berru-g · v3 · <?= date('Y') ?>
             </div>
-        </section>
+        </aside>
 
-        <!-- ===== BERRU.COM — stats SmartPixel ===== -->
-        <section class="section" id="berru">
-            <div class="section-head">
-                <h2>gael-berru.com</h2>
-                <span class="hint">LibreAnalytics_API · 1ᵉʳ janvier → aujourd'hui</span>
-            </div>
-            <?php if ($berruStats !== null): ?>
-                <div class="kpi-strip">
-                    <article class="kpi">
-                        <div class="kpi-top">
-                            <span class="kpi-label"><i class="fas fa-eye"></i> Visites</span>
-                        </div>
-                        <div class="kpi-value num"><?= number_format($berruStats['total_visits'], 0, ',', ' ') ?></div>
-                        <div class="kpi-sub">depuis le 1ᵉʳ janvier</div>
-                    </article>
-                    <article class="kpi">
-                        <div class="kpi-top">
-                            <span class="kpi-label"><i class="fas fa-fingerprint"></i> Visiteurs uniques</span>
-                        </div>
-                        <div class="kpi-value num"><?= number_format($berruStats['total_uniques'], 0, ',', ' ') ?></div>
-                        <div class="kpi-sub">somme des uniques quotidiens</div>
-                    </article>
-                    <article class="kpi">
-                        <div class="kpi-top">
-                            <span class="kpi-label"><i class="fas fa-calendar-day"></i> Moyenne / jour</span>
-                        </div>
-                        <div class="kpi-value num"><?= str_replace('.', ',', (string) $berruStats['avg_per_day']) ?></div>
-                        <div class="kpi-sub">sur <?= $berruStats['days'] ?> jours</div>
-                    </article>
-                    <article class="kpi">
-                        <div class="kpi-top">
-                            <span class="kpi-label"><i class="fas fa-fire"></i> Meilleure journée</span>
-                        </div>
-                        <div class="kpi-value num"><?= number_format($berruStats['best_day'], 0, ',', ' ') ?></div>
-                        <div class="kpi-sub">visites en 24 h</div>
-                    </article>
-                </div>
-                <div class="card" style="margin-top: 14px;">
-                    <div class="card-head">
-                        <h3 class="card-title"><i class="fas fa-chart-line"></i> Visites quotidiennes — berru.com</h3>
-                    </div>
-                    <div class="card-body" style="height: 280px;">
-                        <canvas id="berruChart"></canvas>
-                    </div>
-                </div>
-            <?php else: ?>
-                <div class="card">
-                    <div class="empty-state">Statistiques berru.com indisponibles pour le moment</div>
-                </div>
-            <?php endif; ?>
-        </section>
-
-        <!-- ===== WALLET ===== -->
-        <section class="section" id="wallet">
-            <div class="section-head">
-                <h2>Wallet</h2>
-                <span class="hint">CoinGecko · cache 5 min</span>
-            </div>
-            <div class="duo">
-                <div class="card">
-                    <div class="card-head">
-                        <h3 class="card-title"><i class="fas fa-wallet"></i> Tokens</h3>
-                        <button class="ghost-btn" id="wallet-links-btn">
-                            <i class="fas fa-link"></i> Liens 0x
+        <div class="content">
+            <!-- ===== TOPBAR ===== -->
+            <header class="topbar">
+                <div class="topbar-inner">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <button class="tb-btn sidebar-toggle" id="sidebar-toggle" aria-label="Ouvrir le menu">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <button class="tb-btn" id="back-btn" aria-label="Retour à la page précédente">
+                            <i class="fas fa-arrow-left"></i>
+                            <span class="back-label">Retour</span>
                         </button>
                     </div>
-                    <div class="wallet-hero" id="portfolio-total"></div>
-                    <div id="crypto-prices"></div>
-                </div>
-                <div class="card">
+                    <div class="topbar-right">
+                        <span class="status-chip">API</span>
 
-                    <div class="card-body tv-holder">
-                        <div class="tradingview-widget-container">
-                            <div class="tradingview-widget-container__widget"></div>
-                            <script src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js"
-                                async>
-                                    {
-                                        "autosize": true,
-                                            "symbol": "BITSTAMP:SUIEUR",
-                                                "interval": "D",
-                                                    "timezone": "Europe/Paris",
-                                                        "theme": "dark",
-                                                            "style": "1",
-                                                                "locale": "fr",
-                                                                    "backgroundColor": "rgba(18, 20, 26, 0.65)",
-                                                                        "gridColor": "rgba(35, 38, 47, 0.6)",
-                                                                            "withdateranges": true,
-                                                                                "hide_side_toolbar": false,
-                                                                                    "allow_symbol_change": true,
-                                                                                        "save_image": false,
-                                                                                            "details": true,
-                                                                                                "calendar": false,
-                                                                                                    "support_host": "https://www.tradingview.com"
-                                    }
-                                </script>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== INFOS DU JOUR ===== -->
-        <section class="section" id="infos">
-            <div class="info-hero">
-                <h2>Infos du jour</h2>
-                <p class="meta"><?= htmlspecialchars($todayLong) ?> · CoinGecko · Wikipédia FR</p>
-            </div>
-            <div class="info-grid">
-                <div class="card">
-                    <div class="card-head">
-                        <h3 class="card-title"><i class="fas fa-cubes"></i> Solana &amp; Sui — sentiment &amp; signaux
-                            du jour</h3>
-                    </div>
-                    <div class="card-body">
-                        <script type="module"
-                            src="https://widgets.tradingview-widget.com/w/en/tv-news-feed.js"></script>
-
-                        <tv-news-feed symbol="COINBASE:SUIUSD" news-type="all"></tv-news-feed>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-head">
-                        <h3 class="card-title"><i class="fas fa-calendar-days"></i> Mon planning — Google Calendar</h3>
-                        <a class="ghost-btn" href="https://calendar.google.com/calendar/u/0/r" target="_blank"
-                            rel="noopener">
-                            <i class="fas fa-arrow-up-right-from-square"></i> Ouvrir
-                        </a>
-                    </div>
-                    <div class="card-body gcal-holder">
-                        <iframe src="<?= htmlspecialchars($gcalEmbedUrl) ?>" title="Planning Google Calendar"
-                            loading="lazy" referrerpolicy="no-referrer"></iframe>
-                    </div>
-                    <div class="card-src">Google bloque « /calendar/u/0/r » en iframe : colle ton URL « Intégrer le
-                        calendrier » dans $gcalEmbedUrl pour afficher ton planning ici</div>
-                </div>
-
-                <?php if (!empty($onThisDay)): ?>
-                    <div class="card">
-                        <div class="card-head">
-                            <h3 class="card-title"><i class="fas fa-landmark"></i> Un jour comme aujourd'hui</h3>
-                        </div>
-                        <div class="card-body">
-                            <?php foreach ($onThisDay as $ev): ?>
-                                <div class="today-event">
-                                    <span class="year num"><?= htmlspecialchars((string) ($ev['year'] ?? '')) ?></span>
-                                    <p><?= htmlspecialchars(strip_tags((string) ($ev['text'] ?? ''))) ?></p>
-                                </div>
-                            <?php endforeach; ?>
-                            <div class="card-src">Wikipédia FR · section « Événements »</div>
-                        </div>
-                    </div>
-                <?php else: ?>
-                    <div class="card">
-                        <div class="card-head">
-                            <h3 class="card-title"><i class="fas fa-landmark"></i> Un jour comme aujourd'hui</h3>
-                        </div>
-                        <div class="empty-state">Événements indisponibles pour le moment</div>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </section>
-
-        <!-- ===== MÉTÉO ===== -->
-        <section class="section weather-section" id="meteo">
-            <div class="section-head">
-                <h2>Météo — Vertou (44)</h2>
-                <span class="hint">open-meteo · aujourd'hui + J+2</span>
-            </div>
-            <?php if (!empty($weatherDays)): ?>
-                <div class="card">
-                    <div class="weather-grid">
-                        <?php foreach ($weatherDays as $i => $day): ?>
-                            <div class="weather-day <?= $i === 0 ? 'today' : '' ?>">
-                                <div class="d-label"><?= htmlspecialchars($day['day_label']) ?></div>
-                                <div class="d-icon"><i class="fas <?= htmlspecialchars($day['icon']) ?>"></i></div>
-                                <div class="d-desc"><?= htmlspecialchars($day['label']) ?></div>
-                                <div class="d-temps num"><?= $day['t_max'] ?>° <span class="min">/ <?= $day['t_min'] ?>°</span>
-                                </div>
-                                <div class="d-rain"><i class="fas fa-umbrella"></i>
-                                    <?= $day['rain_prob'] ?>%
-                                </div>
-                                <div class="d-wind"><i class="fas fa-wind"></i> <?= $day['wind_max'] ?> km/h</div>
+                        <div class="menu-anchor">
+                            <button class="tb-btn" id="cmd-toggle" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-terminal"></i>
+                                CMD
+                                <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
+                            </button>
+                            <div class="pop cmd-menu" id="cmd-menu" role="menu">
+                                <a href="cli.php" role="menuitem"><i class="fa-solid fa-terminal"></i> Terminal</a>
+                                <a href="../campain/rapport_marches.php" role="menuitem"><i class="fa-brands fa-bitcoin"></i> Rapport marches</a>
+                                <a href="../campain/rapport.php" role="menuitem"><i class="fas fa-file-lines"></i> Rapport id_5</a>
+                                <a href="../../../tool/index.html" role="menuitem"><i class="fas fa-chart-line"></i> Perpetual trade</a>
+                                <a href="../../../shop/admin.php?t=heincestquoica" role="menuitem"><i class="fas fa-user-lock"></i> Admin_Shop</a>
+                                <a href="https://calendar.google.com/calendar/u/0/r" role="menuitem"><i class="fa-regular fa-calendar-days"></i> Calendar</a>
+                                <a href="../campain/prospect.php" role="menuitem"><i class="fa-regular fa-file-code"></i> Script prospection</a>
+                                <a href="?export_emails=1" role="menuitem"><i class="fas fa-download"></i> Export emails CSV</a>
                             </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-            <?php else: ?>
-                <div class="card">
-                    <div class="empty-state">Météo indisponible pour le moment</div>
-                </div>
-            <?php endif; ?>
-        </section>
-
-        <!-- ===== ACTIVITÉ DÉTAILLÉE (chaque métrique à son échelle) ===== -->
-        <section class="section" id="activite">
-            <div class="section-head">
-                <h2>Activité détaillée LibreAnalytics</h2>
-                <span class="hint"><?= $period ?> jours</span>
-            </div>
-            <div class="multiples">
-                <div class="mini">
-                    <div class="mini-head">
-                        <span class="t">Utilisateurs / jour</span>
-                        <span class="v num" style="color: var(--violet)"
-                            id="sum-users"><?= number_format(array_sum($chartPayload['series']['users'])) ?></span>
-                    </div>
-                    <div class="chart-sm"><canvas id="mini-users"></canvas></div>
-                </div>
-                <div class="mini">
-                    <div class="mini-head">
-                        <span class="t">Sites / jour</span>
-                        <span class="v num" style="color: var(--blue)"
-                            id="sum-sites"><?= number_format(array_sum($chartPayload['series']['sites'])) ?></span>
-                    </div>
-                    <div class="chart-sm"><canvas id="mini-sites"></canvas></div>
-                </div>
-                <div class="mini">
-                    <div class="mini-head">
-                        <span class="t">Visites / jour</span>
-                        <span class="v num" style="color: var(--green)"
-                            id="sum-visits"><?= number_format(array_sum($chartPayload['series']['visits'])) ?></span>
-                    </div>
-                    <div class="chart-sm"><canvas id="mini-visits"></canvas></div>
-                </div>
-                <div class="mini">
-                    <div class="mini-head">
-                        <span class="t">Visiteurs uniques / jour</span>
-                        <span class="v num" style="color: var(--amber)"
-                            id="sum-uniques"><?= number_format(array_sum($chartPayload['series']['uniques'])) ?></span>
-                    </div>
-                    <div class="chart-sm"><canvas id="mini-uniques"></canvas></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===== TOP SITES + GÉO ===== -->
-        <section class="section" id="geo">
-            <div class="section-head">
-                <h2>Top sites &amp; géographie</h2>
-            </div>
-            <div class="duo">
-                <div class="card">
-                    <div class="card-head">
-                        <h3 class="card-title"><i class="fas fa-trophy"></i> Top 5 sites</h3>
-                    </div>
-                    <div class="card-body" style="height: 280px;">
-                        <canvas id="topSitesChart"></canvas>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-head">
-                        <h3 class="card-title"><i class="fas fa-earth-europe"></i> Pays visités</h3>
-                        <div class="geo-toggle" role="tablist">
-                            <button id="geo-bars" class="active">Barres</button>
-                            <button id="geo-map">Carte</button>
-                        </div>
-                    </div>
-                    <div class="card-body geo-view">
-                        <canvas id="countriesChart"></canvas>
-                        <div class="map-holder" id="map-holder">
-                            <div id="worldMap"></div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </header>
 
-        <!-- ===== REGISTRE UTILISATEURS ===== -->
-        <section class="section" id="users">
-            <div class="section-head">
-                <h2>Registre des utilisateurs (<?= count($usersList) ?>)</h2>
-                <?php if (!empty($plansStats)): ?>
-                    <div class="plan-chips" aria-label="Répartition par plan">
-                        <?php foreach ($planOrder as $planKey => $planLabel):
-                            if (!isset($plansStats[$planKey]))
-                                continue; ?>
-                            <span class="plan-chip"><?= $planLabel ?> <b
-                                    class="num"><?= (int) $plansStats[$planKey] ?></b></span>
-                        <?php endforeach; ?>
-                        <?php foreach ($plansStats as $planKey => $count):
-                            if (isset($planOrder[$planKey]))
-                                continue; ?>
-                            <span class="plan-chip"><?= htmlspecialchars(ucfirst($planKey)) ?> <b
-                                    class="num"><?= (int) $count ?></b></span>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
-            </div>
-
-            <!--<iframe style="display: block; width: 100%; height: 550px; border: none; border-radius: 8px;"
-                src="https://gael-berru.com/shop/admin.php?t=..." title="admin shop" loading="lazy"
-                allowfullscreen>
-            </iframe>-->
-
-            <div class="card">
-                <div class="card-head">
-                    <h3 class="card-title"><i class="fas fa-users"></i> Comptes</h3>
-                    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-                        <div class="search-box">
-                            <i class="fas fa-search"></i>
-                            <input type="search" id="user-search" placeholder="Rechercher un email…"
-                                aria-label="Rechercher un email">
+            <div class="shell">
+                <!-- ===== ONGLET : DASHBOARD LIBREANALYTICS ===== -->
+                <div class="tab-panel active" id="tab-dashboard">
+                    <div class="page-head">
+                        <div>
+                            <h2>LibreAnalytics.com</h2>
+                            <p class="meta">Console admin — <?= date('d/m/Y') ?> —
+                                <?= htmlspecialchars($_SESSION['user_email']) ?>
+                            </p>
                         </div>
-                        <a href="?export_emails=1" class="export-btn">
-                            <i class="fas fa-download"></i> Export CSV
-                        </a>
+                        <nav class="period-switch" aria-label="Période d'analyse">
+                            <a href="?period=7" class="<?= $period === 7 ? 'active' : '' ?>">7j</a>
+                            <a href="?period=30" class="<?= $period === 30 ? 'active' : '' ?>">30j</a>
+                            <a href="?period=90" class="<?= $period === 90 ? 'active' : '' ?>">90j</a>
+                            <a href="?period=365" class="<?= $period === 365 ? 'active' : '' ?>">365j</a>
+                        </nav>
                     </div>
+
+                    <section class="section" id="kpis" aria-label="Indicateurs clés">
+                        <?php
+                        $kpis = [
+                            ['key' => 'visits', 'label' => 'Visites', 'icon' => 'fa-eye', 'cur' => (int) ($periodTotals['cur_visits'] ?? 0), 'prev' => (int) ($periodTotals['prev_visits'] ?? 0)],
+                            ['key' => 'uniques', 'label' => 'Visiteurs uniques', 'icon' => 'fa-fingerprint', 'cur' => (int) ($periodTotals['cur_uniques'] ?? 0), 'prev' => (int) ($periodTotals['prev_uniques'] ?? 0)],
+                            ['key' => 'users', 'label' => 'Nouveaux utilisateurs', 'icon' => 'fa-user-plus', 'cur' => (int) ($periodTotals['cur_users'] ?? 0), 'prev' => (int) ($periodTotals['prev_users'] ?? 0)],
+                            ['key' => 'sites', 'label' => 'Nouveaux sites', 'icon' => 'fa-globe', 'cur' => (int) ($periodTotals['cur_sites'] ?? 0), 'prev' => (int) ($periodTotals['prev_sites'] ?? 0)],
+                        ];
+                        $totalLabel = $period . ' derniers jours';
+                        ?>
+                        <div class="kpi-strip">
+                            <?php foreach ($kpis as $kpi):
+                                $delta = deltaPct($kpi['cur'], $kpi['prev']);
+                                if ($delta === null) { $deltaClass = 'flat'; $deltaTxt = 'n/a'; }
+                                elseif ($delta >= 0) { $deltaClass = 'up'; $deltaTxt = '+' . $delta . '%'; }
+                                else { $deltaClass = 'down'; $deltaTxt = $delta . '%'; }
+                                $global = $kpi['key'] === 'sites' ? $totalSites . ' au total' : ($kpi['key'] === 'users' ? $totalUsers . ' au total' : null);
+                                ?>
+                                <article class="kpi">
+                                    <div class="kpi-top">
+                                        <span class="kpi-label"><i class="fas <?= $kpi['icon'] ?>"></i>
+                                            <?= htmlspecialchars($kpi['label']) ?></span>
+                                        <span class="delta <?= $deltaClass ?>"><?= $deltaTxt ?></span>
+                                    </div>
+                                    <div class="kpi-value num"><?= number_format($kpi['cur']) ?></div>
+                                    <?php if ($global): ?>
+                                        <div class="kpi-sub"><?= $global ?> · <?= $totalLabel ?></div>
+                                    <?php else: ?>
+                                        <div class="kpi-sub"><?= $totalLabel ?></div>
+                                    <?php endif; ?>
+                                    <div class="spark"><canvas data-spark="<?= $kpi['key'] ?>"></canvas></div>
+                                </article>
+                            <?php endforeach; ?>
+                        </div>
+                    </section>
                 </div>
-                <div class="table-responsive">
-                    <table class="data-table" id="users-table">
-                        <thead>
-                            <tr>
-                                <th class="sortable" data-sort="text">Email</th>
-                                <th class="sortable" data-sort="text">Plan</th>
-                                <th class="sortable" data-sort="num">Sites</th>
-                                <th class="sortable" data-sort="num">Visites</th>
-                                <th class="sortable" data-sort="num">Inscription</th>
-                                <th class="sortable" data-sort="num">Dernière connexion</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (!empty($usersList)): ?>
-                                <?php foreach ($usersList as $user):
-                                    $planClass = strtolower($user['plan'] ?? 'free');
-                                    $createdTs = !empty($user['created_at']) ? strtotime($user['created_at']) : 0;
-                                    $loginTs = !empty($user['last_login']) ? strtotime($user['last_login']) : 0;
-                                    ?>
-                                    <tr data-email="<?= htmlspecialchars(strtolower($user['email'])) ?>">
-                                        <td data-label="Email"><?= htmlspecialchars($user['email']) ?></td>
-                                        <td data-label="Plan"><span
-                                                class="badge badge-<?= htmlspecialchars($planClass) ?>"><?= strtoupper($user['plan'] ?? 'free') ?></span>
-                                        </td>
-                                        <td data-label="Sites" data-value="<?= (int) ($user['site_count'] ?? 0) ?>">
-                                            <?= (int) ($user['site_count'] ?? 0) ?>
-                                        </td>
-                                        <td data-label="Visites" data-value="<?= (int) ($user['total_visits'] ?? 0) ?>">
-                                            <?= number_format($user['total_visits'] ?? 0) ?>
-                                        </td>
-                                        <td data-label="Inscription" data-value="<?= $createdTs ?>">
-                                            <?= $createdTs ? date('d/m/Y', $createdTs) : '-' ?>
-                                        </td>
-                                        <td data-label="Dernière connexion" data-value="<?= $loginTs ?>">
-                                            <?= $loginTs ? date('d/m/Y H:i', $loginTs) : '<span style="color:var(--text-3);">Jamais</span>' ?>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                                <tr class="search-empty">
-                                    <td colspan="6" class="empty-state">Aucun utilisateur ne correspond à cette
-                                        recherche</td>
-                                </tr>
+
+                <!-- ===== ONGLET : BERRU.COM ===== -->
+                <div class="tab-panel" id="tab-berru">
+                    <section class="section" id="berru">
+                        <div class="section-head">
+                            <h2>gael-berru.com</h2>
+                            <span class="hint">LibreAnalytics_API · 1ᵉʳ janvier → aujourd'hui</span>
+                        </div>
+                        <?php if ($berruStats !== null): ?>
+                            <div class="kpi-strip">
+                                <article class="kpi">
+                                    <div class="kpi-top"><span class="kpi-label"><i class="fas fa-eye"></i> Visites</span></div>
+                                    <div class="kpi-value num"><?= number_format($berruStats['total_visits'], 0, ',', ' ') ?></div>
+                                    <div class="kpi-sub">depuis le 1ᵉʳ janvier</div>
+                                </article>
+                                <article class="kpi">
+                                    <div class="kpi-top"><span class="kpi-label"><i class="fas fa-fingerprint"></i> Visiteurs uniques</span></div>
+                                    <div class="kpi-value num"><?= number_format($berruStats['total_uniques'], 0, ',', ' ') ?></div>
+                                    <div class="kpi-sub">somme des uniques quotidiens</div>
+                                </article>
+                                <article class="kpi">
+                                    <div class="kpi-top"><span class="kpi-label"><i class="fas fa-calendar-day"></i> Moyenne / jour</span></div>
+                                    <div class="kpi-value num"><?= str_replace('.', ',', (string) $berruStats['avg_per_day']) ?></div>
+                                    <div class="kpi-sub">sur <?= $berruStats['days'] ?> jours</div>
+                                </article>
+                                <article class="kpi">
+                                    <div class="kpi-top"><span class="kpi-label"><i class="fas fa-fire"></i> Meilleure journée</span></div>
+                                    <div class="kpi-value num"><?= number_format($berruStats['best_day'], 0, ',', ' ') ?></div>
+                                    <div class="kpi-sub">visites en 24 h</div>
+                                </article>
+                            </div>
+                            <div class="card" style="margin-top: 14px;">
+                                <div class="card-head">
+                                    <h3 class="card-title"><i class="fas fa-chart-line"></i> Visites quotidiennes — berru.com</h3>
+                                </div>
+                                <div class="card-body" style="height: 280px;">
+                                    <canvas id="berruChart"></canvas>
+                                </div>
+                            </div>
+                        <?php else: ?>
+                            <div class="card">
+                                <div class="empty-state">Statistiques berru.com indisponibles pour le moment</div>
+                            </div>
+                        <?php endif; ?>
+                    </section>
+                </div>
+
+                <!-- ===== ONGLET : WALLET ===== -->
+                <div class="tab-panel" id="tab-wallet">
+                    <section class="section" id="wallet">
+                        <div class="section-head">
+                            <h2>Wallet</h2>
+                            <span class="hint">CoinGecko · cache 5 min</span>
+                        </div>
+                        <div class="duo">
+                            <div class="card">
+                                <div class="card-head">
+                                    <h3 class="card-title"><i class="fas fa-wallet"></i> Tokens</h3>
+                                    <button class="ghost-btn" id="wallet-links-btn">
+                                        <i class="fas fa-link"></i> Liens 0x
+                                    </button>
+                                </div>
+                                <div class="wallet-hero" id="portfolio-total"></div>
+                                <div id="crypto-prices"></div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body tv-holder">
+                                    <div class="tradingview-widget-container">
+                                        <div class="tradingview-widget-container__widget"></div>
+                                        <script src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js"
+                                            async>
+                                                {
+                                                    "autosize": true,
+                                                        "symbol": "BITSTAMP:SUIEUR",
+                                                            "interval": "D",
+                                                                "timezone": "Europe/Paris",
+                                                                    "theme": "dark",
+                                                                        "style": "1",
+                                                                            "locale": "fr",
+                                                                                "backgroundColor": "rgba(18, 20, 26, 0.65)",
+                                                                                    "gridColor": "rgba(35, 38, 47, 0.6)",
+                                                                                        "withdateranges": true,
+                                                                                            "hide_side_toolbar": false,
+                                                                                                "allow_symbol_change": true,
+                                                                                                    "save_image": false,
+                                                                                                        "details": true,
+                                                                                                            "calendar": false,
+                                                                                                                "support_host": "https://www.tradingview.com"
+                                                }
+                                            </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ===== ONGLET : ACCUMULATION SOL ===== -->
+                <div class="tab-panel" id="tab-sol">
+                    <section class="section" id="sol">
+                        <div class="section-head">
+                            <h2>Accumulation SOL — <?= htmlspecialchars(substr($solWallet, 0, 6)) ?>…<?= htmlspecialchars(substr($solWallet, -4)) ?></h2>
+                            <span class="hint">
+                                RPC solana-rpc.publicnode.com · cache 6 h
+                                <?php if ($solSeries): ?> · maj <?= htmlspecialchars($solSeries['updated_at']) ?><?php endif; ?>
+                                · <a href="?refresh_sol=1<?= $period !== 30 ? '&period=' . $period : '' ?>" style="color: var(--violet);">↻ recalculer</a>
+                            </span>
+                        </div>
+
+                        <?php if ($solSeries !== null): ?>
+                            <div class="sol-kpis">
+                                <article class="kpi">
+                                    <div class="kpi-top"><span class="kpi-label"><i class="fas fa-coins"></i> Solde actuel</span></div>
+                                    <div class="kpi-value num"><?= number_format($solSeries['current'], 4, ',', ' ') ?> SOL</div>
+                                    <div class="kpi-sub">après <?= (int) $solSeries['tx_count'] ?> transactions rejouées</div>
+                                </article>
+                                <article class="kpi">
+                                    <div class="kpi-top"><span class="kpi-label"><i class="fas fa-arrow-trend-up"></i> Solde max</span></div>
+                                    <div class="kpi-value num"><?= number_format($solSeries['max'], 4, ',', ' ') ?> SOL</div>
+                                    <div class="kpi-sub">pic historique analysé</div>
+                                </article>
+                                <article class="kpi">
+                                    <div class="kpi-top"><span class="kpi-label"><i class="fas fa-arrow-trend-down"></i> Solde min</span></div>
+                                    <div class="kpi-value num"><?= number_format($solSeries['min'], 4, ',', ' ') ?> SOL</div>
+                                    <div class="kpi-sub">plus bas historique analysé</div>
+                                </article>
+                                <article class="kpi">
+                                    <div class="kpi-top"><span class="kpi-label"><i class="fas fa-link"></i> Explorer</span></div>
+                                    <div class="kpi-sub" style="margin-top: 8px;">
+                                        <a class="ghost-btn" href="https://solscan.io/account/<?= htmlspecialchars($solWallet) ?>" target="_blank" rel="noopener">
+                                            <i class="fas fa-arrow-up-right-from-square"></i> Solscan
+                                        </a>
+                                    </div>
+                                </article>
+                            </div>
+                            <div class="card">
+                                <div class="card-head">
+                                    <h3 class="card-title"><i class="fas fa-chart-line"></i> Solde SOL après chaque transaction</h3>
+                                    <div class="geo-toggle" role="tablist" aria-label="Période d'accumulation SOL">
+                                        <button id="sol-p7" data-days="7">7j</button>
+                                        <button id="sol-p30" data-days="30">30j</button>
+                                        <button id="sol-p90" data-days="90" class="active">90j</button>
+                                        <button id="sol-pall" data-days="0">Tout</button>
+                                    </div>
+                                </div>
+                                <div class="card-body" id="solChartBox">
+                                    <canvas id="solChart"></canvas>
+                                </div>
+                                <div class="card-src">Reconstruction on-chain : chaque transaction du wallet est rejouée via le RPC Solana pour recalculer le solde. Les transactions élaguées par le nœud public sont ignorées.</div>
+                            </div>
+                        <?php else: ?>
+                            <div class="card">
+                                <div class="empty-state">
+                                    Historique SOL indisponible pour le moment.<br>
+                                    <a href="?refresh_sol=1" style="color: var(--violet);">Réessayer le calcul</a>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    </section>
+                </div>
+
+                <!-- ===== ONGLET : INFOS DU JOUR ===== -->
+                <div class="tab-panel" id="tab-infos">
+                    <section class="section" id="infos">
+                        <div class="info-hero">
+                            <h2>Infos du jour</h2>
+                            <p class="meta"><?= htmlspecialchars($todayLong) ?> · CoinGecko · Wikipédia FR</p>
+                        </div>
+                        <div class="info-grid">
+                            <div class="card">
+                                <div class="card-head">
+                                    <h3 class="card-title"><i class="fas fa-cubes"></i> Solana &amp; Sui — sentiment &amp; signaux du jour</h3>
+                                </div>
+                                <div class="card-body">
+                                    <script type="module" src="https://widgets.tradingview-widget.com/w/en/tv-news-feed.js"></script>
+                                    <tv-news-feed symbol="COINBASE:SUIUSD" news-type="all"></tv-news-feed>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-head">
+                                    <h3 class="card-title"><i class="fas fa-calendar-days"></i> Mon planning — Google Calendar</h3>
+                                    <a class="ghost-btn" href="https://calendar.google.com/calendar/u/0/r" target="_blank" rel="noopener">
+                                        <i class="fas fa-arrow-up-right-from-square"></i> Ouvrir
+                                    </a>
+                                </div>
+                                <div class="card-body gcal-holder">
+                                    <iframe src="<?= htmlspecialchars($gcalEmbedUrl) ?>" title="Planning Google Calendar" loading="lazy" referrerpolicy="no-referrer"></iframe>
+                                </div>
+                                <div class="card-src">Google bloque « /calendar/u/0/r » en iframe : colle ton URL « Intégrer le calendrier » dans $gcalEmbedUrl pour afficher ton planning ici</div>
+                            </div>
+
+                            <?php if (!empty($onThisDay)): ?>
+                                <div class="card">
+                                    <div class="card-head">
+                                        <h3 class="card-title"><i class="fas fa-landmark"></i> Un jour comme aujourd'hui</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <?php foreach ($onThisDay as $ev): ?>
+                                            <div class="today-event">
+                                                <span class="year num"><?= htmlspecialchars((string) ($ev['year'] ?? '')) ?></span>
+                                                <p><?= htmlspecialchars(strip_tags((string) ($ev['text'] ?? ''))) ?></p>
+                                            </div>
+                                        <?php endforeach; ?>
+                                        <div class="card-src">Wikipédia FR · section « Événements »</div>
+                                    </div>
+                                </div>
                             <?php else: ?>
-                                <tr>
-                                    <td colspan="6" class="empty-state">Aucun utilisateur enregistré</td>
-                                </tr>
+                                <div class="card">
+                                    <div class="card-head">
+                                        <h3 class="card-title"><i class="fas fa-landmark"></i> Un jour comme aujourd'hui</h3>
+                                    </div>
+                                    <div class="empty-state">Événements indisponibles pour le moment</div>
+                                </div>
                             <?php endif; ?>
-                        </tbody>
-                    </table>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ===== ONGLET : MÉTÉO ===== -->
+                <div class="tab-panel" id="tab-meteo">
+                    <section class="section weather-section" id="meteo">
+                        <div class="section-head">
+                            <h2>Météo — Vertou (44)</h2>
+                            <span class="hint">open-meteo · aujourd'hui + J+2</span>
+                        </div>
+                        <?php if (!empty($weatherDays)): ?>
+                            <div class="card">
+                                <div class="weather-grid">
+                                    <?php foreach ($weatherDays as $i => $day): ?>
+                                        <div class="weather-day <?= $i === 0 ? 'today' : '' ?>">
+                                            <div class="d-label"><?= htmlspecialchars($day['day_label']) ?></div>
+                                            <div class="d-icon"><i class="fas <?= htmlspecialchars($day['icon']) ?>"></i></div>
+                                            <div class="d-desc"><?= htmlspecialchars($day['label']) ?></div>
+                                            <div class="d-temps num"><?= $day['t_max'] ?>° <span class="min">/ <?= $day['t_min'] ?>°</span></div>
+                                            <div class="d-rain"><i class="fas fa-umbrella"></i> <?= $day['rain_prob'] ?>%</div>
+                                            <div class="d-wind"><i class="fas fa-wind"></i> <?= $day['wind_max'] ?> km/h</div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php else: ?>
+                            <div class="card">
+                                <div class="empty-state">Météo indisponible pour le moment</div>
+                            </div>
+                        <?php endif; ?>
+                    </section>
+                </div>
+
+                <!-- ===== ONGLET : ACTIVITÉ DÉTAILLÉE ===== -->
+                <div class="tab-panel" id="tab-activite">
+                    <section class="section" id="activite">
+                        <div class="section-head">
+                            <h2>Activité détaillée LibreAnalytics</h2>
+                            <span class="hint"><?= $period ?> jours</span>
+                        </div>
+                        <div class="multiples">
+                            <div class="mini">
+                                <div class="mini-head">
+                                    <span class="t">Utilisateurs / jour</span>
+                                    <span class="v num" style="color: var(--violet)" id="sum-users"><?= number_format(array_sum($chartPayload['series']['users'])) ?></span>
+                                </div>
+                                <div class="chart-sm"><canvas id="mini-users"></canvas></div>
+                            </div>
+                            <div class="mini">
+                                <div class="mini-head">
+                                    <span class="t">Sites / jour</span>
+                                    <span class="v num" style="color: var(--blue)" id="sum-sites"><?= number_format(array_sum($chartPayload['series']['sites'])) ?></span>
+                                </div>
+                                <div class="chart-sm"><canvas id="mini-sites"></canvas></div>
+                            </div>
+                            <div class="mini">
+                                <div class="mini-head">
+                                    <span class="t">Visites / jour</span>
+                                    <span class="v num" style="color: var(--green)" id="sum-visits"><?= number_format(array_sum($chartPayload['series']['visits'])) ?></span>
+                                </div>
+                                <div class="chart-sm"><canvas id="mini-visits"></canvas></div>
+                            </div>
+                            <div class="mini">
+                                <div class="mini-head">
+                                    <span class="t">Visiteurs uniques / jour</span>
+                                    <span class="v num" style="color: var(--amber)" id="sum-uniques"><?= number_format(array_sum($chartPayload['series']['uniques'])) ?></span>
+                                </div>
+                                <div class="chart-sm"><canvas id="mini-uniques"></canvas></div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ===== ONGLET : TOP SITES + GÉO ===== -->
+                <div class="tab-panel" id="tab-geo">
+                    <section class="section" id="geo">
+                        <div class="section-head">
+                            <h2>Top sites &amp; géographie</h2>
+                        </div>
+                        <div class="duo">
+                            <div class="card">
+                                <div class="card-head">
+                                    <h3 class="card-title"><i class="fas fa-trophy"></i> Top 5 sites</h3>
+                                </div>
+                                <div class="card-body" style="height: 280px;">
+                                    <canvas id="topSitesChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-head">
+                                    <h3 class="card-title"><i class="fas fa-earth-europe"></i> Pays visités</h3>
+                                    <div class="geo-toggle" role="tablist">
+                                        <button id="geo-bars" class="active">Barres</button>
+                                        <button id="geo-map">Carte</button>
+                                    </div>
+                                </div>
+                                <div class="card-body geo-view">
+                                    <canvas id="countriesChart"></canvas>
+                                    <div class="map-holder" id="map-holder">
+                                        <div id="worldMap"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ===== ONGLET : UTILISATEURS ===== -->
+                <div class="tab-panel" id="tab-users">
+                    <section class="section" id="users">
+                        <div class="section-head">
+                            <h2>Registre des utilisateurs (<?= count($usersList) ?>)</h2>
+                            <?php if (!empty($plansStats)): ?>
+                                <div class="plan-chips" aria-label="Répartition par plan">
+                                    <?php foreach ($planOrder as $planKey => $planLabel):
+                                        if (!isset($plansStats[$planKey])) continue; ?>
+                                        <span class="plan-chip"><?= $planLabel ?> <b class="num"><?= (int) $plansStats[$planKey] ?></b></span>
+                                    <?php endforeach; ?>
+                                    <?php foreach ($plansStats as $planKey => $count):
+                                        if (isset($planOrder[$planKey])) continue; ?>
+                                        <span class="plan-chip"><?= htmlspecialchars(ucfirst($planKey)) ?> <b class="num"><?= (int) $count ?></b></span>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-head">
+                                <h3 class="card-title"><i class="fas fa-users"></i> Comptes</h3>
+                                <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                                    <div class="search-box">
+                                        <i class="fas fa-search"></i>
+                                        <input type="search" id="user-search" placeholder="Rechercher un email…" aria-label="Rechercher un email">
+                                    </div>
+                                    <a href="?export_emails=1" class="export-btn">
+                                        <i class="fas fa-download"></i> Export CSV
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table" id="users-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="sortable" data-sort="text">Email</th>
+                                            <th class="sortable" data-sort="text">Plan</th>
+                                            <th class="sortable" data-sort="num">Sites</th>
+                                            <th class="sortable" data-sort="num">Visites</th>
+                                            <th class="sortable" data-sort="num">Inscription</th>
+                                            <th class="sortable" data-sort="num">Dernière connexion</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php if (!empty($usersList)): ?>
+                                            <?php foreach ($usersList as $user):
+                                                $planClass = strtolower($user['plan'] ?? 'free');
+                                                $createdTs = !empty($user['created_at']) ? strtotime($user['created_at']) : 0;
+                                                $loginTs = !empty($user['last_login']) ? strtotime($user['last_login']) : 0;
+                                                ?>
+                                                <tr data-email="<?= htmlspecialchars(strtolower($user['email'])) ?>">
+                                                    <td data-label="Email"><?= htmlspecialchars($user['email']) ?></td>
+                                                    <td data-label="Plan"><span class="badge badge-<?= htmlspecialchars($planClass) ?>"><?= strtoupper($user['plan'] ?? 'free') ?></span></td>
+                                                    <td data-label="Sites" data-value="<?= (int) ($user['site_count'] ?? 0) ?>"><?= (int) ($user['site_count'] ?? 0) ?></td>
+                                                    <td data-label="Visites" data-value="<?= (int) ($user['total_visits'] ?? 0) ?>"><?= number_format($user['total_visits'] ?? 0) ?></td>
+                                                    <td data-label="Inscription" data-value="<?= $createdTs ?>"><?= $createdTs ? date('d/m/Y', $createdTs) : '-' ?></td>
+                                                    <td data-label="Dernière connexion" data-value="<?= $loginTs ?>"><?= $loginTs ? date('d/m/Y H:i', $loginTs) : '<span style="color:var(--text-3);">Jamais</span>' ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                            <tr class="search-empty">
+                                                <td colspan="6" class="empty-state">Aucun utilisateur ne correspond à cette recherche</td>
+                                            </tr>
+                                        <?php else: ?>
+                                            <tr>
+                                                <td colspan="6" class="empty-state">Aucun utilisateur enregistré</td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </div>
-        </section>
+            <!-- .shell -->
+        </div>
+        <!-- .content -->
     </div>
-    <!-- .shell -->
+    <!-- .layout -->
     <?php include "aissistant-cli.php" ?>
 
     <script>
-        // Toutes les initialisations attendent les scripts defer (Chart, Swal)
         document.addEventListener('DOMContentLoaded', () => {
 
             // ===== DONNÉES SERVEUR =====
@@ -2459,6 +1579,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             const topSites = <?= json_encode($topSites ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
             const countries = <?= json_encode($visitedCountries ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
             const cryptoData = <?= json_encode($coingeckoData ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
+            const solData = <?= json_encode($solSeries, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
 
             Chart.defaults.font.family = "'Inter', sans-serif";
             Chart.defaults.color = '#6b7180';
@@ -2470,6 +1591,45 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 visits: '#3fb950',
                 uniques: '#e3b341'
             };
+
+            // ===== SYSTÈME D'ONGLETS (sidebar) =====
+            const panels = document.querySelectorAll('.tab-panel');
+            const navLinks = document.querySelectorAll('.sidebar-nav a[data-tab]');
+
+            function showTab(name, push = true) {
+                panels.forEach(p => p.classList.toggle('active', p.id === 'tab-' + name));
+                navLinks.forEach(a => a.classList.toggle('active', a.dataset.tab === name));
+                document.getElementById('sidebar').classList.remove('open');
+                if (push && location.hash !== '#' + name) {
+                    history.pushState(null, '', '#' + name);
+                }
+                window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+                // Chart.js dans un conteneur récemment affiché : resize
+                Chart.instances && Object.values(Chart.instances).forEach(c => c.resize());
+            }
+
+            navLinks.forEach(a => a.addEventListener('click', e => {
+                e.preventDefault();
+                showTab(a.dataset.tab);
+            }));
+
+            // Onglet initial : hash de l'URL sinon dashboard
+            const initial = (location.hash || '#dashboard').slice(1);
+            showTab(panels.length && document.getElementById('tab-' + initial) ? initial : 'dashboard', false);
+
+            window.addEventListener('popstate', () => {
+                const h = (location.hash || '#dashboard').slice(1);
+                if (document.getElementById('tab-' + h)) showTab(h, false);
+            });
+
+            // Burger mobile
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', e => {
+                    e.stopPropagation();
+                    document.getElementById('sidebar').classList.toggle('open');
+                });
+            }
 
             // ===== SPARKLINES KPI =====
             document.querySelectorAll('[data-spark]').forEach(canvas => {
@@ -2565,6 +1725,92 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 });
             }
 
+            // ===== SOL : courbe d'accumulation (escalier) + filtre période =====
+            // Période par défaut : 90 jours (modifier solDefaultDays pour changer)
+            const solDefaultDays = 90;
+            let solChart = null;
+
+            function renderSolChart(days) {
+                const solCanvas = document.getElementById('solChart');
+                if (!solCanvas || !solData) return;
+
+                // Filtre les points sur les N derniers jours (0 = tout l'historique)
+                let labels = solData.labels, balances = solData.balances;
+                if (days > 0) {
+                    const cutoff = Date.now() / 1000 - days * 86400;
+                    const filtered = solData.points
+                        ? solData.points.filter(p => (p.t ?? 0) >= cutoff)
+                        : null;
+                    if (filtered) {
+                        labels = filtered.map(p => {
+                            const d = new Date(p.t * 1000);
+                            return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' }) + ' ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                        });
+                        balances = filtered.map(p => p.bal);
+                    }
+                    // Fallback si le serveur n'a pas envoyé les timestamps :
+                    // on déduit la période à partir du nombre de labels (approximation)
+                }
+
+                const data = {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Solde SOL',
+                        data: balances,
+                        borderColor: '#14f195',
+                        backgroundColor: 'rgba(20,241,149,0.10)',
+                        borderWidth: 2,
+                        stepped: true,
+                        fill: true,
+                        pointRadius: 0,
+                        pointHitRadius: 12
+                    }]
+                };
+
+                if (solChart) {
+                    solChart.data.labels = data.labels;
+                    solChart.data.datasets[0].data = data.datasets[0].data;
+                    solChart.update();
+                    return;
+                }
+
+                solChart = new Chart(solCanvas.getContext('2d'), {
+                    type: 'line',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    title: (items) => items[0].label,
+                                    label: (ctx) => ' ' + ctx.parsed.y.toLocaleString('fr-FR', { maximumFractionDigits: 4 }) + ' SOL'
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true, autoSkipPadding: 28, font: { size: 10 } } },
+                            y: { beginAtZero: false, grid: { color: GRID_COLOR }, ticks: { font: { size: 10 }, callback: (v) => Number(v).toLocaleString('fr-FR', { maximumFractionDigits: 2 }) } }
+                        }
+                    }
+                });
+            }
+
+            // Boutons de période de l'onglet SOL
+            document.querySelectorAll('[id^="sol-p"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('[id^="sol-p"]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    renderSolChart(parseInt(btn.dataset.days, 10));
+                });
+            });
+
+            // Rendu initial avec la période par défaut (seulement si l'onglet est visible,
+            // sinon le resize au changement d'onglet s'en charge)
+            renderSolChart(solDefaultDays);
+
             // ===== TOP SITES : barres horizontales =====
             new Chart(document.getElementById('topSitesChart').getContext('2d'), {
                 type: 'bar',
@@ -2645,7 +1891,6 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 }
             });
 
-            // Chargement à la demande des scripts amCharts
             const AM_SCRIPTS = [
                 'https://cdn.amcharts.com/lib/5/index.js',
                 'https://cdn.amcharts.com/lib/5/map.js',
@@ -2736,14 +1981,13 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             geoMapBtn.addEventListener('click', showMap);
             geoBarsBtn.addEventListener('click', showBars);
 
-            // ===== POPOVERS : ouverture/fermeture (météo + menu) =====
+            // ===== POPOVERS =====
             function bindPopover(btnId, popId) {
                 const btn = document.getElementById(btnId);
                 const pop = document.getElementById(popId);
                 if (!btn || !pop) return;
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    // ferme l'autre popover
                     document.querySelectorAll('.pop.open').forEach(p => {
                         if (p !== pop) {
                             p.classList.remove('open');
@@ -2756,29 +2000,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 });
             }
 
-            bindPopover('menu-toggle', 'menu-nav');
             bindPopover('cmd-toggle', 'cmd-menu');
-
-            // Le menu de navigation referme le popover après un clic sur une ancre
-            const menuNav = document.getElementById('menu-nav');
-            if (menuNav) {
-                menuNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-                    menuNav.classList.remove('open');
-                    document.getElementById('menu-toggle').setAttribute('aria-expanded', 'false');
-                }));
-            }
-
-            // Bouton retour : historique navigateur, sinon page compte
-            const backBtn = document.getElementById('back-btn');
-            if (backBtn) {
-                backBtn.addEventListener('click', () => {
-                    if (history.length > 1) {
-                        history.back();
-                    } else {
-                        location.href = 'account.php';
-                    }
-                });
-            }
 
             document.addEventListener('click', (e) => {
                 document.querySelectorAll('.pop.open').forEach(p => {
@@ -2797,8 +2019,21 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         const btn = document.querySelector('[aria-controls="' + p.id + '"]');
                         if (btn) btn.setAttribute('aria-expanded', 'false');
                     });
+                    document.getElementById('sidebar').classList.remove('open');
                 }
             });
+
+            // Bouton retour : historique navigateur, sinon page compte
+            const backBtn = document.getElementById('back-btn');
+            if (backBtn) {
+                backBtn.addEventListener('click', () => {
+                    if (history.length > 1) {
+                        history.back();
+                    } else {
+                        location.href = 'account.php';
+                    }
+                });
+            }
 
             // ===== WALLET CRYPTO =====
             const tokenHoldings = {
