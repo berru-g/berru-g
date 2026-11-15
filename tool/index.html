@@ -62,12 +62,40 @@
     .badge.neutral { background:rgba(200,246,93,.1); color:var(--acid); }
     canvas { margin-top:16px; }
     .funding-next { font-family:var(--mono); font-size:0.8em; }
+
+    /* ==== Analyse de trades (CSV Jupiter) ==== */
+    .btn { background:var(--ink-3); color:var(--txt); border:1px solid var(--line); border-radius:8px;
+      padding:8px 16px; cursor:pointer; font-family:var(--mono); font-size:0.82em; }
+    .btn:hover { border-color:var(--violet); }
+    .btn.acid { background:var(--acid); color:var(--ink); border:none; font-weight:600; }
+    #csvDrop { border:2px dashed var(--line); border-radius:12px; padding:28px; text-align:center;
+      transition:border-color .15s, background .15s; }
+    #csvDrop.over { border-color:var(--lime); background:rgba(52,211,153,.05); }
+    #csvDrop .reason { margin:8px 0 14px; }
+    #csvPaste { width:100%; height:120px; margin-top:12px; background:var(--ink-3); border:1px solid var(--line);
+      border-radius:8px; color:var(--txt); font-family:var(--mono); font-size:0.72rem; padding:10px; display:none; }
+    #csvErr { color:var(--rose); font-family:var(--mono); font-size:0.8em; margin-top:10px; display:none; }
+    #tradesKpis { margin-top:16px; }
+    .charts2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; margin-top:16px; }
+    .chart-box h3 { font-size:0.8em; color:var(--txt-dim); font-family:var(--mono); font-weight:500; margin-bottom:8px; }
+    .legend { display:flex; gap:14px; font-size:0.72em; color:var(--txt-dim); font-family:var(--mono); margin-bottom:6px; }
+    .dot { display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:5px; vertical-align:-1px; }
+    .scroll { max-height:420px; overflow:auto; margin-top:16px; border:1px solid var(--line); border-radius:10px; }
+    .ttable { width:100%; border-collapse:collapse; font-size:0.75rem; font-family:var(--mono); }
+    .ttable th, .ttable td { padding:6px 9px; text-align:left; white-space:nowrap; }
+    .ttable thead th { position:sticky; top:0; background:var(--ink-3); color:var(--txt-dim); font-weight:500;
+      border-bottom:1px solid var(--line); }
+    .ttable tbody tr { border-bottom:1px solid var(--line-soft); }
+    .ttable tbody tr:hover { background:rgba(171,159,242,.05); }
+    svg text { fill:var(--txt-dim); font-size:10px; font-family:var(--mono); }
+    .tip { position:fixed; pointer-events:none; background:var(--ink-3); border:1px solid var(--line);
+      border-radius:8px; padding:8px 10px; font-size:0.75rem; font-family:var(--mono); display:none; z-index:10; }
   </style>
 </head>
 <body>
 
   <h1>SOL Perps <span class="violet">/</span> Scanner d'opportunités</h1>
-  <p class="sub">Funding · Open Interest · EMA cross · RSI · Divergence spot/perps · Garde-fou BTC · Filtre macro — Données Binance</p>
+  <p class="sub">Funding · Open Interest · EMA cross · RSI · Divergence spot/perps · Garde-fou BTC · Filtre macro — Données Binance -- <a href="csv-perps.html" style="text-decoration: none; color: var(--violet);">History Position Perps .csv</a></p>
 
   <div class="card">
     <h2>Marché</h2>
@@ -107,6 +135,63 @@
       ATTENDRE : jour de FOMC/CPI/NFP · funding neutre + OI plat · ATR &lt; 0.2% du prix · moins de 3 signaux alignés.
     </p>
   </div>
+
+  <!-- ==== ANALYSE DES TRADES — import CSV Jupiter ==== -->
+  <div class="card" id="tradesCard">
+    <h2>Journal de trading <span class="violet">/</span> import CSV Jupiter</h2>
+    <p class="sub">Exporte depuis jup.ag (Positions → Export) et importe le fichier. Tout reste en local, rien n'est envoyé.</p>
+
+    <div id="csvDrop">
+      <button class="btn acid" id="csvPick">Importer le CSV Jupiter</button>
+      <p class="reason">…ou glisse-dépose le fichier ici</p>
+      <details>
+        <summary class="reason" style="cursor:pointer">ou colle le contenu du CSV</summary>
+        <textarea id="csvPaste" placeholder="Created at, Transaction ID, Asset, Position, ..."></textarea>
+      </details>
+    </div>
+    <p id="csvErr"></p>
+
+    <div id="tradesResult" style="display:none">
+      <p class="reason" id="tradesRange" style="margin-top:14px"></p>
+      <div class="grid" id="tradesKpis"></div>
+
+      <div class="charts2">
+        <div class="chart-box">
+          <h3>PnL net cumulé</h3>
+          <div id="cumChart"></div>
+        </div>
+        <div class="chart-box">
+          <h3>PnL par jour (vs frais)</h3>
+          <div class="legend">
+            <span><span class="dot" style="background:var(--lime)"></span>PnL brut</span>
+            <span><span class="dot" style="background:var(--acid)"></span>Frais</span>
+          </div>
+          <div id="dayChart"></div>
+        </div>
+        <div class="chart-box">
+          <h3>Long vs Short — PnL</h3>
+          <div id="lsChart"></div>
+        </div>
+        <div class="chart-box">
+          <h3>Frais par côté</h3>
+          <div id="feeChart"></div>
+        </div>
+      </div>
+
+      <div class="scroll">
+        <table class="ttable">
+          <thead><tr>
+            <th>Date</th><th>Tx</th><th>Position</th><th>Change</th><th>Ordre</th>
+            <th>Dépôt/Retrait</th><th>Prix exec.</th><th>Taille</th><th>PnL</th><th>Frais</th><th>Collatéral</th>
+          </tr></thead>
+          <tbody id="tradesTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="csvFile" accept=".csv,text/csv" hidden />
+  <div class="tip" id="tip"></div>
 
   <script type="module">
     // ==== AUDIO ====
@@ -304,11 +389,13 @@
           signal = 'long'; cls = 'long';
           label = '🟢 OPPORTUNITÉ LONG — confluence ' + longScore + '/' + total;
           text = ind.filter(i => i[1] > 0).map(i => `• ${i[0]} : ${i[2]}`).join(' · ');
+          playAlert();
         } else if (shortScore >= 3 && shortScore - longScore >= 2) {
           macroWarn.style.display = 'none';
           signal = 'short'; cls = 'short';
           label = '🔴 OPPORTUNITÉ SHORT — confluence ' + shortScore + '/' + total;
           text = ind.filter(i => i[1] < 0).map(i => `• ${i[0]} : ${i[2]}`).join(' · ');
+          playAlert();
         } else {
           macroWarn.style.display = 'none';
           label = '🟡 ATTENDRE — pas de confluence';
@@ -424,6 +511,302 @@
     loadData();
     setInterval(loadData, 60000);
     window.addEventListener('resize', () => loadData());
+  </script>
+
+  <script>
+  "use strict";
+  /* ==== JOURNAL DE TRADING — import CSV Jupiter (vanilla) ==== */
+
+  // ---- Parsing CSV ----
+  function parseLine(line) {
+    const out = []; let cur = "", inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (c === '"') { inQ = !inQ; continue; }
+      if (c === "," && !inQ) { out.push(cur.trim()); cur = ""; continue; }
+      cur += c;
+    }
+    out.push(cur.trim());
+    return out;
+  }
+  function parseCSV(text) {
+    const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    if (lines.length < 2) return [];
+    const header = parseLine(lines[0]).map(h => h.toLowerCase());
+    const idx = name => header.findIndex(h => h.includes(name));
+    const iDate = idx("created at"), iTx = idx("transaction id"), iAsset = idx("asset"),
+          iPos = idx("position"), iChange = idx("position change"), iOrder = idx("order type"),
+          iDW = idx("deposit"), iPrice = idx("execution price"), iSize = idx("trade size"),
+          iPnl = idx("profit"), iFee = idx("trade fee"), iLiq = idx("liquidation fee"), iColl = idx("collateral");
+    const num = s => { if (!s) return 0; const v = parseFloat(s.replace(/[$\s]/g, "").replace(",", ".")); return isNaN(v) ? 0 : v; };
+    const trades = [];
+    for (let i = 1; i < lines.length; i++) {
+      const c = parseLine(lines[i]);
+      if (c.length < 5) continue;
+      trades.push({
+        createdAt: new Date(c[iDate] || 0),
+        txId: c[iTx] || "",
+        asset: c[iAsset] || "",
+        position: (c[iPos] || "").toLowerCase().startsWith("l") ? "Long" : "Short",
+        change: (c[iChange] || "").toLowerCase().startsWith("inc") ? "Increase" : "Decrease",
+        orderType: c[iOrder] || "",
+        dw: num(c[iDW]),
+        price: num(c[iPrice]),
+        size: num(c[iSize]),
+        pnl: num(c[iPnl]),
+        fee: num(c[iFee]) + num(c[iLiq]),
+        collateral: c[iColl] || ""
+      });
+    }
+    return trades.sort((a, b) => a.createdAt - b.createdAt);
+  }
+
+  // ---- Formatage ----
+  const fmt = (v, d = 2) =>
+    (v < 0 ? "-" : "") + "$" + Math.abs(v).toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
+  const shortDate = d =>
+    d.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit" }) + " " +
+    d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+  const shortTx = t => t.length > 10 ? t.slice(0, 4) + "…" + t.slice(-4) : t;
+  const cls = v => v > 0 ? "green" : v < 0 ? "red" : "dim";
+
+  // ---- Graphiques SVG (sans lib) ----
+  const tip = document.getElementById("tip");
+  function showTip(e, html) {
+    tip.innerHTML = html; tip.style.display = "block";
+    tip.style.left = Math.min(e.clientX + 12, window.innerWidth - 220) + "px";
+    tip.style.top = (e.clientY + 12) + "px";
+  }
+  function hideTip() { tip.style.display = "none"; }
+  function svgEl(tag, attrs) {
+    const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (const k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+
+  function lineChart(container, series, h = 220) {
+    container.innerHTML = "";
+    const W = container.clientWidth || 420, P = { l: 56, r: 12, t: 10, b: 24 };
+    const svg = svgEl("svg", { viewBox: `0 0 ${W} ${h}`, width: "100%", height: h });
+    const ys = series.map(p => p.y);
+    const yMin = Math.min(0, ...ys), yMax = Math.max(0, ...ys);
+    const pad = (yMax - yMin) * 0.08 || 1;
+    const y0 = yMin - pad, y1 = yMax + pad;
+    const X = i => P.l + (i / Math.max(series.length - 1, 1)) * (W - P.l - P.r);
+    const Y = v => P.t + (1 - (v - y0) / (y1 - y0)) * (h - P.t - P.b);
+    for (let g = 0; g <= 4; g++) {
+      const v = y0 + (g / 4) * (y1 - y0);
+      svg.appendChild(svgEl("line", { x1: P.l, x2: W - P.r, y1: Y(v), y2: Y(v), stroke: "#1b2030", "stroke-dasharray": "3 3" }));
+      const t = svgEl("text", { x: P.l - 6, y: Y(v) + 3, "text-anchor": "end" });
+      t.textContent = fmt(v, 0); svg.appendChild(t);
+    }
+    if (y0 < 0 && y1 > 0) svg.appendChild(svgEl("line", { x1: P.l, x2: W - P.r, y1: Y(0), y2: Y(0), stroke: "#3a4157" }));
+    if (series.length > 1) {
+      let d = `M ${X(0)} ${Y(series[0].y)}`;
+      series.forEach((p, i) => { if (i) d += ` L ${X(i)} ${Y(p.y)}`; });
+      const zeroY = Y(Math.max(y0, 0));
+      d += ` L ${X(series.length - 1)} ${zeroY} L ${X(0)} ${zeroY} Z`;
+      const defs = svgEl("defs", {});
+      const grad = svgEl("linearGradient", { id: "cumGrad", x1: 0, y1: 0, x2: 0, y2: 1 });
+      grad.innerHTML = '<stop offset="0%" stop-color="#34d399" stop-opacity=".3"/><stop offset="100%" stop-color="#34d399" stop-opacity="0"/>';
+      defs.appendChild(grad); svg.appendChild(defs);
+      svg.appendChild(svgEl("path", { d, fill: "url(#cumGrad)" }));
+    }
+    svg.appendChild(svgEl("path", {
+      d: series.map((p, i) => (i ? "L" : "M") + ` ${X(i)} ${Y(p.y)}`).join(" "),
+      fill: "none", stroke: "#34d399", "stroke-width": 2
+    }));
+    const hover = svgEl("line", { y1: P.t, y2: h - P.b, stroke: "#3a4157", visibility: "hidden" });
+    svg.appendChild(hover);
+    svg.addEventListener("mousemove", e => {
+      const rect = svg.getBoundingClientRect();
+      const i = Math.max(0, Math.min(Math.round(((e.clientX - rect.left) / rect.width * W - P.l) / ((W - P.l - P.r) / Math.max(series.length - 1, 1))), series.length - 1));
+      hover.setAttribute("x1", X(i)); hover.setAttribute("x2", X(i)); hover.setAttribute("visibility", "visible");
+      showTip(e, `<b>${series[i].label}</b><br>${fmt(series[i].y)}`);
+    });
+    svg.addEventListener("mouseleave", () => { hover.setAttribute("visibility", "hidden"); hideTip(); });
+    container.appendChild(svg);
+  }
+
+  function barChart(container, data, h = 220) {
+    container.innerHTML = "";
+    const W = container.clientWidth || 420, P = { l: 56, r: 12, t: 10, b: 28 };
+    const svg = svgEl("svg", { viewBox: `0 0 ${W} ${h}`, width: "100%", height: h });
+    const all = data.flatMap(d => d.values.map(s => s.v));
+    const yMin = Math.min(0, ...all), yMax = Math.max(0, ...all);
+    const pad = (yMax - yMin) * 0.1 || 1;
+    const y0 = yMin - pad, y1 = yMax + pad;
+    const Y = v => P.t + (1 - (v - y0) / (y1 - y0)) * (h - P.t - P.b);
+    const slot = (W - P.l - P.r) / Math.max(data.length, 1);
+    for (let g = 0; g <= 4; g++) {
+      const v = y0 + (g / 4) * (y1 - y0);
+      svg.appendChild(svgEl("line", { x1: P.l, x2: W - P.r, y1: Y(v), y2: Y(v), stroke: "#1b2030", "stroke-dasharray": "3 3" }));
+      const t = svgEl("text", { x: P.l - 6, y: Y(v) + 3, "text-anchor": "end" });
+      t.textContent = fmt(v, 0); svg.appendChild(t);
+    }
+    if (y0 < 0 && y1 > 0) svg.appendChild(svgEl("line", { x1: P.l, x2: W - P.r, y1: Y(0), y2: Y(0), stroke: "#3a4157" }));
+    data.forEach((d, i) => {
+      const n = d.values.length, bw = Math.min(20, (slot * 0.7) / n);
+      d.values.forEach((s, j) => {
+        const x = P.l + i * slot + slot / 2 - (n * bw) / 2 + j * bw;
+        const yTop = Y(Math.max(s.v, 0)), yBot = Y(Math.min(s.v, 0));
+        const rect = svgEl("rect", { x, y: yTop, width: bw - 2, height: Math.max(yBot - yTop, 1), rx: 2, fill: s.color });
+        rect.addEventListener("mousemove", e => showTip(e, `<b>${d.label}</b><br>${fmt(s.v)}`));
+        rect.addEventListener("mouseleave", hideTip);
+        svg.appendChild(rect);
+      });
+      if (data.length <= 14 || i % Math.ceil(data.length / 10) === 0) {
+        const t = svgEl("text", { x: P.l + i * slot + slot / 2, y: h - 8, "text-anchor": "middle" });
+        t.textContent = d.label; svg.appendChild(t);
+      }
+    });
+    container.appendChild(svg);
+  }
+
+  function hBars(container, items, h = 130) {
+    container.innerHTML = "";
+    const W = container.clientWidth || 300;
+    const svg = svgEl("svg", { viewBox: `0 0 ${W} ${h}`, width: "100%", height: h });
+    const max = Math.max(...items.map(i => Math.abs(i.v))) || 1;
+    items.forEach((it, i) => {
+      const y = 20 + i * (h / items.length);
+      const t = svgEl("text", { x: 0, y: y + 4 }); t.textContent = it.name; svg.appendChild(t);
+      const bw = (Math.abs(it.v) / max) * (W - 110);
+      const rect = svgEl("rect", { x: 78, y, width: Math.max(bw, 2), height: 16, rx: 3, fill: it.color });
+      rect.addEventListener("mousemove", e => showTip(e, `<b>${it.name}</b><br>${fmt(it.v)}`));
+      rect.addEventListener("mouseleave", hideTip);
+      svg.appendChild(rect);
+      const vt = svgEl("text", { x: 80 + Math.max(bw, 2) + 6, y: y + 12, fill: it.color });
+      vt.textContent = fmt(it.v); svg.appendChild(vt);
+    });
+    container.appendChild(svg);
+  }
+
+  // ---- Rendu ----
+  function renderTrades(trades) {
+    document.getElementById("tradesResult").style.display = "block";
+    document.getElementById("csvDrop").style.display = "none";
+    document.getElementById("csvErr").style.display = "none";
+
+    document.getElementById("tradesRange").textContent =
+      trades.length + " transactions · " + (trades[0]?.asset || "?") + " · du " +
+      shortDate(trades[0].createdAt) + " au " + shortDate(trades[trades.length - 1].createdAt) +
+      ' · <button class="btn" id="csvChange" style="margin-left:8px">Changer de CSV</button>';
+    document.getElementById("csvChange").onclick = () => {
+      document.getElementById("tradesResult").style.display = "none";
+      document.getElementById("csvDrop").style.display = "block";
+    };
+
+    // Stats
+    const closes = trades.filter(t => t.change === "Decrease" && t.pnl !== 0);
+    const wins = closes.filter(t => t.pnl > 0);
+    const gross = closes.reduce((s, t) => s + t.pnl, 0);
+    const fees = trades.reduce((s, t) => s + t.fee, 0);
+    const deposits = trades.filter(t => t.dw > 0).reduce((s, t) => s + t.dw, 0);
+    const withdrawals = -trades.filter(t => t.dw < 0).reduce((s, t) => s + t.dw, 0);
+    const net = gross - fees;
+    const volume = trades.reduce((s, t) => s + t.size, 0);
+    const longPnl = closes.filter(t => t.position === "Long").reduce((s, t) => s + t.pnl, 0);
+    const shortPnl = closes.filter(t => t.position === "Short").reduce((s, t) => s + t.pnl, 0);
+    const feesLong = trades.filter(t => t.position === "Long").reduce((s, t) => s + t.fee, 0);
+    const feesShort = trades.filter(t => t.position === "Short").reduce((s, t) => s + t.fee, 0);
+    const losses = closes.filter(t => t.pnl <= 0);
+    const avgWin = wins.length ? wins.reduce((s, t) => s + t.pnl, 0) / wins.length : 0;
+    const avgLoss = losses.length ? losses.reduce((s, t) => s + t.pnl, 0) / losses.length : 0;
+    const best = closes.reduce((m, t) => (!m || t.pnl > m.pnl) ? t : m, null);
+    const worst = closes.reduce((m, t) => (!m || t.pnl < m.pnl) ? t : m, null);
+
+    const kpi = (label, value, sub, color) =>
+      `<div><div class="stat-label">${label}</div><div class="stat-value ${color || ""}">${value}</div><div class="reason">${sub || ""}</div></div>`;
+    document.getElementById("tradesKpis").innerHTML = [
+      kpi("PnL brut", fmt(gross), closes.length + " clôtures · " + (closes.length ? (wins.length / closes.length * 100).toFixed(0) : 0) + "% win rate", cls(gross)),
+      kpi("Frais totaux", fmt(fees), "≈ " + (volume ? (fees / volume * 100).toFixed(3) : 0) + "% du volume", "yellow"),
+      kpi("PnL net", fmt(net), "brut − frais", cls(net)),
+      kpi("Dépôts / Retraits", fmt(deposits, 0) + " / " + fmt(withdrawals, 0), "net flux : " + fmt(deposits - withdrawals)),
+      kpi("Volume tradé", fmt(volume, 0), ""),
+      kpi("Gain moyen", fmt(avgWin), "par trade gagnant", "green"),
+      kpi("Perte moyenne", fmt(avgLoss), "par trade perdant", "red"),
+      kpi("Meilleur / Pire", fmt(best?.pnl || 0) + " / " + fmt(worst?.pnl || 0), best ? shortTx(best.txId) + " / " + shortTx(worst?.txId || "") : ""),
+    ].join("");
+
+    // PnL cumulé
+    let cum = 0;
+    lineChart(document.getElementById("cumChart"),
+      trades.map(t => { cum += t.pnl - t.fee; return { y: Math.round(cum * 100) / 100, label: shortDate(t.createdAt) }; }));
+
+    // Par jour
+    const dayMap = new Map();
+    for (const t of trades) {
+      const day = t.createdAt.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit" });
+      const e = dayMap.get(day) || { pnl: 0, fees: 0 };
+      e.pnl += t.pnl; e.fees += t.fee; dayMap.set(day, e);
+    }
+    barChart(document.getElementById("dayChart"),
+      [...dayMap].map(([day, e]) => ({
+        label: day,
+        values: [
+          { v: Math.round(e.pnl * 100) / 100, color: e.pnl >= 0 ? "#34d399" : "#ff7a8a" },
+          { v: Math.round(e.fees * 100) / 100, color: "#c8f65d" },
+        ],
+      })));
+
+    // Long vs Short + frais
+    hBars(document.getElementById("lsChart"), [
+      { name: "Long", v: Math.round(longPnl * 100) / 100, color: longPnl >= 0 ? "#34d399" : "#ff7a8a" },
+      { name: "Short", v: Math.round(shortPnl * 100) / 100, color: shortPnl >= 0 ? "#34d399" : "#ff7a8a" },
+    ]);
+    hBars(document.getElementById("feeChart"), [
+      { name: "Frais Long", v: Math.round(feesLong * 100) / 100, color: "#86baff" },
+      { name: "Frais Short", v: Math.round(feesShort * 100) / 100, color: "#ab9ff2" },
+    ]);
+
+    // Table
+    document.getElementById("tradesTbody").innerHTML = [...trades].reverse().map(t => `<tr>
+      <td class="dim">${shortDate(t.createdAt)}</td>
+      <td class="dim" title="${t.txId}">${shortTx(t.txId)}</td>
+      <td><span class="badge ${t.position.toLowerCase()}">${t.position}</span></td>
+      <td class="dim">${t.change === "Increase" ? "Ouverture +" : "Clôture −"}</td>
+      <td class="dim">${t.orderType}</td>
+      <td class="${t.dw >= 0 ? "green" : "dim"}">${fmt(t.dw)}</td>
+      <td>$${t.price.toFixed(2)}</td>
+      <td>${fmt(t.size, 0)}</td>
+      <td class="${cls(t.pnl)}" style="font-weight:600">${t.pnl !== 0 ? fmt(t.pnl) : "—"}</td>
+      <td class="yellow">${fmt(t.fee)}</td>
+      <td class="dim">${t.collateral}</td>
+    </tr>`).join("");
+  }
+
+  function handleText(text) {
+    const trades = parseCSV(text);
+    if (!trades.length) {
+      const err = document.getElementById("csvErr");
+      err.textContent = "CSV invalide ou vide — vérifie que c'est bien l'export Jupiter.";
+      err.style.display = "block";
+      return;
+    }
+    renderTrades(trades);
+  }
+  function handleFile(file) {
+    const r = new FileReader();
+    r.onload = () => handleText(String(r.result || ""));
+    r.onerror = () => {
+      const err = document.getElementById("csvErr");
+      err.textContent = "Impossible de lire le fichier.";
+      err.style.display = "block";
+    };
+    r.readAsText(file);
+  }
+
+  const csvFile = document.getElementById("csvFile");
+  document.getElementById("csvPick").onclick = () => csvFile.click();
+  csvFile.onchange = () => csvFile.files[0] && handleFile(csvFile.files[0]);
+
+  const csvDrop = document.getElementById("csvDrop");
+  ["dragover", "dragenter"].forEach(ev => csvDrop.addEventListener(ev, e => { e.preventDefault(); csvDrop.classList.add("over"); }));
+  ["dragleave", "drop"].forEach(ev => csvDrop.addEventListener(ev, e => { e.preventDefault(); csvDrop.classList.remove("over"); }));
+  csvDrop.addEventListener("drop", e => e.dataTransfer.files[0] && handleFile(e.dataTransfer.files[0]));
+
+  document.getElementById("csvPaste").addEventListener("input", e => { if (e.target.value.trim()) handleText(e.target.value); });
   </script>
 </body>
 </html>

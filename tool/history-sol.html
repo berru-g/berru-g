@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SOL Wallet History</title>
+<style>
+  :root {
+    --bg: #0b1020; --panel: #131a2e; --border: #26304d;
+    --text: #e7ecf7; --muted: #8b96b3; --accent: #14f195; --accent2: #9945ff;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--bg); color: var(--text); }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 24px 16px 60px; }
+  h1 { font-size: 1.4rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); font-size: .9rem; margin-bottom: 20px; }
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label { display: block; font-size: .8rem; color: var(--muted); margin: 8px 0 4px; }
+  input, select { width: 100%; background: #0e1526; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: .95rem; }
+  button { background: linear-gradient(90deg, var(--accent2), var(--accent)); color: #06121f; font-weight: 700; border: 0; border-radius: 8px; padding: 11px 18px; font-size: .95rem; cursor: pointer; margin-top: 12px; }
+  button:disabled { opacity: .5; cursor: default; }
+  .stats { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+  .stat { flex: 1 1 140px; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
+  .stat .v { font-size: 1.15rem; font-weight: 700; margin-top: 2px; }
+  .stat .l { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  #bar { height: 6px; background: #0e1526; border-radius: 3px; overflow: hidden; margin-top: 12px; display: none; }
+  #bar > div { height: 100%; width: 0; background: linear-gradient(90deg, var(--accent2), var(--accent)); transition: width .2s; }
+  #status { color: var(--muted); font-size: .85rem; margin-top: 8px; min-height: 1.2em; }
+  #chartBox { display: none; }
+  svg { width: 100%; height: auto; display: block; }
+  .err { color: #ff8a8a; }
+  a { color: var(--accent); }
+  .legend { font-size: .78rem; color: var(--muted); margin-top: 6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>📈 Historique du solde SOL</h1>
+  <div class="sub">Reconstruit on-chain : chaque transaction du wallet est rejouée pour recalculer le solde après chaque opération.</div>
+
+  <div class="panel">
+    <label for="addr">Adresse du wallet</label>
+    <input id="addr" spellcheck="false" />
+    <label for="rpc">Endpoint RPC</label>
+    <select id="rpc">
+      <option value="https://api.mainnet-beta.solana.com">api.mainnet-beta.solana.com (public)</option>
+      <option value="https://solana-rpc.publicnode.com">solana-rpc.publicnode.com</option>
+      <option value="https://rpc.ankr.com/solana">rpc.ankr.com/solana</option>
+    </select>
+    <label for="maxtx">Nombre max de transactions à analyser (les plus récentes d'abord)</label>
+    <select id="maxtx">
+      <option value="200">200 (rapide)</option>
+      <option value="1000">1 000</option>
+      <option value="5000">5 000</option>
+      <option value="0">Toutes (peut être long)</option>
+    </select>
+    <button id="go">Analyser le wallet</button>
+    <div id="bar"><div></div></div>
+    <div id="status"></div>
+  </div>
+
+  <div class="stats" id="stats" style="display:none">
+    <div class="stat"><div class="l">Solde actuel</div><div class="v" id="sNow">–</div></div>
+    <div class="stat"><div class="l">Solde min</div><div class="v" id="sMin">–</div></div>
+    <div class="stat"><div class="l">Solde max</div><div class="v" id="sMax">–</div></div>
+    <div class="stat"><div class="l">Transactions analysées</div><div class="v" id="sTx">–</div></div>
+    <div class="stat"><div class="l">Première activité</div><div class="v" id="sFirst">–</div></div>
+  </div>
+
+  <div class="panel" id="chartBox">
+    <svg id="chart" viewBox="0 0 960 420" role="img" aria-label="Graphique du solde SOL"></svg>
+    <div class="legend">Courbe en escalier : solde SOL après chaque transaction. Survolez la courbe pour les détails.</div>
+  </div>
+
+  <div class="sub" id="link"></div>
+</div>
+
+<script>
+const WALLET_DEFAULT = 'D6khWoqvc2zX46HVtSZcNrPumnPLPM72SnSuDhBrZeTC';
+document.getElementById('addr').value = WALLET_DEFAULT;
+
+const LAMPORTS = 1e9;
+const $ = id => document.getElementById(id);
+const fmt = n => n.toLocaleString('fr-FR', { maximumFractionDigits: 4 });
+const fmtDate = ms => new Date(ms).toLocaleString('fr-FR', { dateStyle: 'medium', timeStyle: 'short' });
+
+async function rpc(endpoint, method, params, tries = 4) {
+  for (let i = 0; i < tries; i++) {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ jsonrpc: '2.0', id: 1, method, params })
+    });
+    if (res.status === 429 || res.status >= 500) {
+      await new Promise(r => setTimeout(r, 800 * (i + 1)));
+      continue;
+    }
+    const j = await res.json();
+    if (j.error) throw new Error(j.error.message || JSON.stringify(j.error));
+    return j.result;
+  }
+  throw new Error('RPC injoignable (rate limit ?). Essayez un autre endpoint.');
+}
+
+async function getAllSignatures(endpoint, addr, max, onProgress) {
+  let all = [], before = null;
+  while (true) {
+    const params = [addr, { limit: 1000, encoding: 'json' }];
+    if (before) params[1].before = before;
+    const batch = await rpc(endpoint, 'getSignaturesForAddress', params);
+    if (!batch.length) break;
+    all = all.concat(batch);
+    before = batch[batch.length - 1].signature;
+    onProgress(all.length);
+    if (max > 0 && all.length >= max) { all = all.slice(0, max); break; }
+    if (batch.length < 1000) break;
+  }
+  return all;
+}
+
+async function buildHistory(endpoint, addr, sigs, onProgress) {
+  // oldest -> newest
+  const ordered = sigs.slice().reverse();
+  const points = [];
+  let last = 0;
+  for (let i = 0; i < ordered.length; i++) {
+    const s = ordered[i];
+    try {
+      const tx = await rpc(endpoint, 'getTransaction', [s.signature, { encoding: 'json', maxSupportedTransactionVersion: 0, commitment: 'confirmed' }]);
+      if (tx && tx.meta) {
+        const keys = tx.transaction.message.accountKeys.map(k => (typeof k === 'string' ? k : k.pubkey));
+        const idx = keys.indexOf(addr);
+        if (idx >= 0) {
+          last = tx.meta.postBalances[idx] / LAMPORTS;
+          const t = (tx.blockTime ? tx.blockTime * 1000 : null);
+          points.push({ t, bal: last, sig: s.signature, err: tx.meta.err });
+        }
+      }
+    } catch (e) {
+      // transaction non disponible (élaguée par le RPC) : on garde le dernier solde connu
+    }
+    if (i % 10 === 0 || i === ordered.length - 1) onProgress(i + 1, ordered.length);
+  }
+  return points;
+}
+
+function drawChart(points, current) {
+  const svg = $('chart');
+  const W = 960, H = 420, m = { l: 70, r: 20, t: 20, b: 46 };
+  const iw = W - m.l - m.r, ih = H - m.t - m.b;
+  const now = Date.now();
+  // points avec temps : premier point -> date de la tx, dernier -> maintenant
+  const ts = points.filter(p => p.t != null);
+  if (!ts.length && current == null) { svg.innerHTML = '<text x="20" y="40" fill="#8b96b3">Aucune donnée</text>'; return; }
+
+  const data = ts.map(p => ({ x: p.t, y: p.bal, p }));
+  if (current != null) data.push({ x: now, y: current, p: null });
+
+  const x0 = data[0].x, x1 = data[data.length - 1].x || now;
+  let y0 = Math.min(...data.map(d => d.y)), y1 = Math.max(...data.map(d => d.y));
+  if (y1 - y0 < 1e-9) { y0 = Math.max(0, y0 - 0.5); y1 = y1 + 0.5; } else { const pad = (y1 - y0) * 0.08; y0 = Math.max(0, y0 - pad); y1 += pad; }
+  const X = x => m.l + (x - x0) / (x1 - x0 || 1) * iw;
+  const Y = y => m.t + ih - (y - y0) / (y1 - y0) * ih;
+
+  let g = '';
+  // grille + axe Y
+  for (let i = 0; i <= 4; i++) {
+    const v = y0 + (y1 - y0) * i / 4, y = Y(v);
+    g += `<line x1="${m.l}" y1="${y}" x2="${W - m.r}" y2="${y}" stroke="#26304d" stroke-width="1"/>` +
+         `<text x="${m.l - 8}" y="${y + 4}" fill="#8b96b3" font-size="11" text-anchor="end">${fmt(v)}</text>`;
+  }
+  // axe X (dates)
+  for (let i = 0; i <= 4; i++) {
+    const t = x0 + (x1 - x0) * i / 4, x = X(t);
+    g += `<text x="${x}" y="${H - 24}" fill="#8b96b3" font-size="11" text-anchor="middle">${new Date(t).toLocaleDateString('fr-FR')}</text>`;
+  }
+  // courbe en escalier
+  let d = `M ${X(data[0].x)} ${Y(data[0].y)}`;
+  for (let i = 1; i < data.length; i++) {
+    d += ` L ${X(data[i].x)} ${Y(data[i - 1].y)} L ${X(data[i].x)} ${Y(data[i].y)}`;
+  }
+  // aire sous la courbe
+  const area = d + ` L ${X(data[data.length - 1].x)} ${Y(y0)} L ${X(data[0].x)} ${Y(y0)} Z`;
+  g += `<path d="${area}" fill="url(#grad)" opacity="0.25"/>`;
+  g += `<path d="${d}" fill="none" stroke="#14f195" stroke-width="2.5" stroke-linejoin="round"/>`;
+  // points de transaction (échec = rouge)
+  for (const dd of data) {
+    if (dd.p && dd.p.err) g += `<circle cx="${X(dd.x)}" cy="${Y(dd.y)}" r="3" fill="#ff5c5c"/>`;
+  }
+  // tooltip
+  g += `<g id="tip" style="display:none"><rect id="tipBox" rx="6" fill="#1c2440" stroke="#3a4670"/><text id="tipT" fill="#e7ecf7" font-size="12"/></g>`;
+  svg.innerHTML = `<defs><linearGradient id="grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14f195"/><stop offset="1" stop-color="#14f195" stop-opacity="0"/></linearGradient></defs>` + g;
+
+  svg.addEventListener('mousemove', e => {
+    const r = svg.getBoundingClientRect();
+    const mx = (e.clientX - r.left) * (W / r.width);
+    let best = null, bd = Infinity;
+    for (const dd of data) { const dist = Math.abs(X(dd.x) - mx); if (dist < bd) { bd = dist; best = dd; } }
+    if (!best) return;
+    const tip = $('tip'), tb = $('tipBox'), tt = $('tipT');
+    const lines = [fmt(best.y) + ' SOL', best.p ? fmtDate(best.x) : 'Maintenant'];
+    tt.textContent = '';
+    tt.innerHTML = lines.map((l, i) => `<tspan x="0" dy="${i ? 15 : 0}">${l}</tspan>`).join('');
+    const tx = Math.min(X(best.x) + 12, W - 160), ty = Math.max(Y(best.y) - 46, 8);
+    tip.setAttribute('transform', `translate(${tx},${ty})`);
+    tip.style.display = '';
+    tb.setAttribute('width', 140); tb.setAttribute('height', 40);
+  });
+  svg.addEventListener('mouseleave', () => { $('tip').style.display = 'none'; });
+}
+
+$('go').addEventListener('click', async () => {
+  const addr = $('addr').value.trim();
+  const endpoint = $('rpc').value;
+  const max = parseInt($('maxtx').value, 10);
+  $('go').disabled = true;
+  $('bar').style.display = 'block';
+  const barDiv = $('bar').firstElementChild;
+  const status = (s, cls) => { $('status').textContent = s; $('status').className = cls || ''; };
+  try {
+    status('Récupération de la liste des transactions…');
+    const sigs = await getAllSignatures(endpoint, addr, max, n => {
+      barDiv.style.width = Math.min(20, n / 50) + '%';
+      status(`${n} transactions trouvées…`);
+    });
+    if (!sigs.length) { status('Aucune transaction trouvée pour ce wallet.', 'err'); return; }
+    status(`Analyse de ${sigs.length} transactions (rejeu on-chain)…`);
+    const points = await buildHistory(endpoint, addr, sigs, (i, n) => {
+      barDiv.style.width = (20 + 80 * i / n) + '%';
+      status(`Analyse : ${i}/${n}`);
+    });
+    const current = points.length ? points[points.length - 1].bal : null;
+    $('stats').style.display = 'flex';
+    $('sNow').textContent = fmt(current) + ' SOL';
+    $('sMin').textContent = fmt(Math.min(...points.map(p => p.bal))) + ' SOL';
+    $('sMax').textContent = fmt(Math.max(...points.map(p => p.bal))) + ' SOL';
+    $('sTx').textContent = points.length;
+    const first = points.find(p => p.t != null);
+    $('sFirst').textContent = first ? new Date(first.t).toLocaleDateString('fr-FR') : '–';
+    $('chartBox').style.display = 'block';
+    drawChart(points, current);
+    $('link').innerHTML = `Voir sur <a href="https://solscan.io/account/${addr}" target="_blank" rel="noopener">Solscan</a>`;
+    status(`Terminé ✅ ${points.length} points de solde reconstitués.`);
+    barDiv.style.width = '100%';
+  } catch (e) {
+    status('Erreur : ' + e.message, 'err');
+  } finally {
+    $('go').disabled = false;
+  }
+});
+</script>
+</body>
+</html>

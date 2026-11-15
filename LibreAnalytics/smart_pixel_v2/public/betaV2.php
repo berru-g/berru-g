@@ -1985,8 +1985,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                             marches</a>
                         <a href="../campain/rapport.php" role="menuitem"><i class="fas fa-file-lines"></i> Rapport
                             id_5</a>
-                        <a href="../campain/rapport_lb.php" role="menuitem"><i class="fas fa-file-lines"></i> Rapport
-                            id_6</a>
+                        <a href="../../../tool/index.html" role="menuitem"><i class="fas fa-"></i> Perpetual trade</a>
                         <a href="../../../shop/admin.php?t=heincestquoica" role="menuitem"><i class="fas fa-user-lock"></i>
                             Admin_Shop</a>
                         <a href="https://calendar.google.com/calendar/u/0/r" role="menuitem"><i
@@ -2842,7 +2841,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                     el.innerHTML = `
                         <img src="${crypto.image}" alt="${crypto.id} logo">
                         <div class="name">
-                            <span class="symbol"><a href="https://www.coingecko.com/fr/pi%C3%A8ces/${crypto.id}" target="_blank" rel="noopener" title="Voir ${crypto.symbol.toUpperCase()} sur CoinGecko">${crypto.symbol.toUpperCase()}</a></span>
+                            <span class="symbol"><a href="https://www.coingecko.com/fr/coin/${crypto.id}" target="_blank" rel="noopener" title="Voir ${crypto.symbol.toUpperCase()} sur CoinGecko">${crypto.symbol.toUpperCase()}</a></span>
                             <span class="price num">${price.toLocaleString('fr-FR', { minimumFractionDigits: 2 })} €</span>
                         </div>
                         <div class="holdings">
