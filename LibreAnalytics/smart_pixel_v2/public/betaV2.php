@@ -1051,24 +1051,34 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
         <!-- ===== SIDEBAR ===== -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-brand">
-                <i class="fas fa-chart-simple"></i> LibreAnalytics/Admin
+                <i class="fas fa-chart-simple"></i> ../Admin
             </div>
             <nav class="sidebar-nav" aria-label="Navigation principale">
                 <div class="nav-group">Analytics</div>
-                <a href="./dashboard.php" data-tab="dashboard"><i class="fas fa-house"></i> LibreAnalytics/public</a>
+                <a href="./dashboard.php" target="_blank"><i class="fa-solid fa-tags"></i> LibreAnalytics/public</a>
 
                 <a href="#dashboard" data-tab="dashboard" class="active"><i class="fas fa-gauge-high"></i> LibreAnalytics.com</a>
                 <a href="#berru" data-tab="berru"><i class="fas fa-house"></i> gael-berru.com</a>
+
+                <div class="nav-group">More +</div>
+                <a href="#activite" data-tab="activite"><i class="fas fa-chart-bar"></i> Activité détaillée</a>
+                <a href="#geo" data-tab="geo"><i class="fas fa-earth-europe"></i> Top sites &amp; géo</a>
+
                 <div class="nav-group">Crypto</div>
                 <a href="#wallet" data-tab="wallet"><i class="fas fa-wallet"></i> Wallet all in one</a>
                 <a href="#sol" data-tab="sol"><i class="fas fa-chart-line"></i> Accumulation SOL</a>
+                <a href="../../../tool/index.html" target="_blank"><i class="fas fa-chart-line"></i> Perps tendance</a>
+
                 <div class="nav-group">Quotidien</div>
-                <a href="#infos" data-tab="infos"><i class="fas fa-bolt"></i> Infos du jour</a>
+                <a href="#infos" data-tab="infos"><i class="fas fa-bolt"></i> News + calendar</a>
                 <a href="#meteo" data-tab="meteo"><i class="fas fa-cloud-sun"></i> Météo</a>
-                <div class="nav-group">Données</div>
-                <a href="#activite" data-tab="activite"><i class="fas fa-chart-bar"></i> Activité détaillée</a>
-                <a href="#geo" data-tab="geo"><i class="fas fa-earth-europe"></i> Top sites &amp; géo</a>
-                <a href="#users" data-tab="users"><i class="fas fa-users"></i> Utilisateurs</a>
+                
+                <div class="nav-group">Gestion</div>
+                <a href="#users" data-tab="users"><i class="fas fa-users"></i> Users</a>
+                <a href="../../../shop/admin.php" target="_blank"><i class="fa-solid fa-store"></i> Shop</a>
+                <a href="https://mail.hostinger.com/v2/mailboxes/INBOX" target="_blank"><i class="fa-regular fa-envelope"></i> Mail</a>
+                <a href="https://hpanel.hostinger.com/" target="_blank"><i class="fa-regular fa-cloud"></i> Host</a>
+                <a href="https://dashboard.stripe.com/login" target="_blank"><i class="fa-brands fa-stripe"></i> Stripe</a>
             </nav>
             <div class="sidebar-foot">
                 berru-g · v3 · <?= date('Y') ?>
@@ -1101,7 +1111,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                                 <a href="cli.php" role="menuitem"><i class="fa-solid fa-terminal"></i> Terminal</a>
                                 <a href="../campain/rapport_marches.php" role="menuitem"><i class="fa-brands fa-bitcoin"></i> Rapport marches</a>
                                 <a href="../campain/rapport.php" role="menuitem"><i class="fas fa-file-lines"></i> Rapport id_5</a>
-                                <a href="../../../tool/index.html" role="menuitem"><i class="fas fa-chart-line"></i> Perpetual trade</a>
+                                
                                 <a href="../../../shop/admin.php?t=heincestquoica" role="menuitem"><i class="fas fa-user-lock"></i> Admin_Shop</a>
                                 <a href="https://calendar.google.com/calendar/u/0/r" role="menuitem"><i class="fa-regular fa-calendar-days"></i> Calendar</a>
                                 <a href="../campain/prospect.php" role="menuitem"><i class="fa-regular fa-file-code"></i> Script prospection</a>
@@ -2038,7 +2048,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
             // ===== WALLET CRYPTO =====
             const tokenHoldings = {
                 bitcoin: 0,
-                solana: 5.5,
+                solana: 6.1,
                 sui: 1702,
                 'usd-coin': 0,
                 'render-token': 0,
