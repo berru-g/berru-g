@@ -1276,7 +1276,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         <iframe
                             src="https://www.phoenix.trade/?ghost=4Yi7CxFrdsthpzWyLUoK4vLjsZyHm7QzEuHRi84x3HqT"
                             title="compare trade with ..."
-                            style="display: flex; margin: 20px auto; width: 100%; height: 650px;"
+                            style="display: flex; margin: 20px auto; width: 100%; height: 800px;"
                             loading="lazy"
                             allowfullscreen>
                         </iframe>
