@@ -1051,7 +1051,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
         <!-- ===== SIDEBAR ===== -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-brand">
-                <i class="fas fa-chart-simple"></i> ../Admin
+                <i class="fa-regular fa-bookmark"></i> /Admin
             </div>
             <nav class="sidebar-nav" aria-label="Navigation principale">
                 <div class="nav-group">Analytics</div>
@@ -1067,7 +1067,8 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 <div class="nav-group">Crypto</div>
                 <a href="#wallet" data-tab="wallet"><i class="fas fa-wallet"></i> Wallet all in one</a>
                 <a href="#sol" data-tab="sol"><i class="fas fa-chart-line"></i> Accumulation SOL</a>
-                <a href="../../../tool/index.html" target="_blank"><i class="fas fa-chart-line"></i> Perps tendance</a>
+                <a href="../../../tool/index.html" target="_blank"><i class="fa-regular fa-bell"></i> Perps tendance</a>
+                <a href="../../../tool/csv-perps.html" target="_blank"><i class="fa-solid fa-file-csv"></i> Perps csv</a>
 
                 <div class="nav-group">Quotidien</div>
                 <a href="#infos" data-tab="infos"><i class="fas fa-bolt"></i> News + calendar</a>
@@ -1075,13 +1076,13 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                 
                 <div class="nav-group">Gestion</div>
                 <a href="#users" data-tab="users"><i class="fas fa-users"></i> Users</a>
-                <a href="../../../shop/admin.php" target="_blank"><i class="fa-solid fa-store"></i> Shop</a>
+                <a href="../../../shop/admin.php?t=heincestquoica" target="_blank"><i class="fa-solid fa-store"></i> Shop</a>
                 <a href="https://mail.hostinger.com/v2/mailboxes/INBOX" target="_blank"><i class="fa-regular fa-envelope"></i> Mail</a>
-                <a href="https://hpanel.hostinger.com/" target="_blank"><i class="fa-regular fa-cloud"></i> Host</a>
+                <a href="https://hpanel.hostinger.com/" target="_blank"><i class="fa-solid fa-server"></i> Host</a>
                 <a href="https://dashboard.stripe.com/login" target="_blank"><i class="fa-brands fa-stripe"></i> Stripe</a>
             </nav>
             <div class="sidebar-foot">
-                berru-g · v3 · <?= date('Y') ?>
+                <a href="https://gael-berru.com" style="tex-decoration: none; color: var(--text-3);" target="_blank">berru-g</a> · v3 · <?= date('Y') ?>
             </div>
         </aside>
 
@@ -1093,10 +1094,10 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         <button class="tb-btn sidebar-toggle" id="sidebar-toggle" aria-label="Ouvrir le menu">
                             <i class="fas fa-bars"></i>
                         </button>
-                        <button class="tb-btn" id="back-btn" aria-label="Retour à la page précédente">
+                        <!--<button class="tb-btn" id="back-btn" aria-label="Retour à la page précédente">
                             <i class="fas fa-arrow-left"></i>
                             <span class="back-label">Retour</span>
-                        </button>
+                        </button>-->
                     </div>
                     <div class="topbar-right">
                         <span class="status-chip">API</span>
@@ -1270,6 +1271,13 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                                 </div>
                             </div>
                         </div>
+                        <!--https://www.phoenix.trade/?ghost=4Yi7CxFrdsthpzWyLUoK4vLjsZyHm7QzEuHRi84x3HqT-->
+                        <iframe
+                            src="https://www.phoenix.trade/?ghost=4Yi7CxFrdsthpzWyLUoK4vLjsZyHm7QzEuHRi84x3HqT"
+                            title="compare trade with ..."
+                            loading="lazy"
+                            allowfullscreen>
+                        </iframe>
                     </section>
                 </div>
 
@@ -2126,7 +2134,7 @@ $planOrder = ['free' => 'Free', 'pro' => 'Pro', 'business' => 'Business', 'premi
                         <li><a href="#">Phantom</a>/app</li>
                         <li><a href="https://solscan.io/account/D6khWoqvc2zX46HVtSZcNrPumnPLPM72SnSuDhBrZeTC#portfolio">Solscan</a>.io</li>
                         <li><a href="https://pump.fun/profile/D6khWo">Pump</a>.fun</li>
-                        <li><a href="https://jup.ag">jup</a>.ag</li>
+                        <li><a href="https://jup.ag/perps/short/SOL-SOL">perps jup</a>.ag</li>
                     </ul>`,
                     showCloseButton: true,
                     showConfirmButton: false,
