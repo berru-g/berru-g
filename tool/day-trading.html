@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0d12" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+  <title>Perps · SOL Day Trading Terminal v4.1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://s3.tradingview.com/tv.js"></script>
+  <style>
+    :root {
+      color-scheme: dark light;
+      --bg: #0b0d12; --card: #10131b; --elev: #161a25; --border: #232839; --border-soft: #1b2030;
+      --text: #e8eaf2; --dim: #8b90a5;
+      --green: #34d399; --red: #ff7a8a; --yellow: #c8f65d; --violet: #ab9ff2; --blue: #86baff;
+      --green-bg: rgba(52,211,153,.12); --red-bg: rgba(255,122,138,.12); --yellow-bg: rgba(200,246,93,.1);
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --header-h: 68px;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #eef1f6; --card: #ffffff; --elev: #f4f6fa; --border: #dfe3ec; --border-soft: #eaedf3;
+        --text: #0f172a; --dim: #64748b;
+        --green: #059669; --red: #dc2626; --yellow: #b45309; --violet: #7c3aed; --blue: #2563eb;
+        --green-bg: rgba(5,150,105,.1); --red-bg: rgba(220,38,38,.1); --yellow-bg: rgba(180,83,9,.1);
+        --shadow: 0 20px 60px rgba(15,23,42,.15);
+      }
+    }
+    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family:'Space Grotesk',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height: 100vh;
+      background-image:
+        radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--violet) 8%, transparent), transparent 60%),
+        radial-gradient(circle at 80% 100%, color-mix(in srgb, var(--green) 6%, transparent), transparent 60%);
+      background-attachment: fixed;
+    }
+    .app-header { position: sticky; top: 0; z-index: 10; height: var(--header-h); background: color-mix(in srgb, var(--card) 92%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-soft); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; gap: 16px; }
+    .brand { display: flex; flex-direction: column; }
+    .brand .sym { font-size: .68rem; font-family: 'JetBrains Mono', monospace; color: var(--dim); text-transform: uppercase; letter-spacing: .08em; }
+    .brand .px { font-size: 1.5rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: -.02em; line-height: 1.1; }
+    .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); margin-right: 5px; animation: pulse 2s infinite; vertical-align: 1px; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+    .hdr-right { display: flex; align-items: center; gap: 12px; }
+    .chg { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: .9rem; }
+    .btn-icon { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--border); background: var(--elev); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: all .2s; }
+    .btn-icon:hover { border-color: var(--violet); color: var(--violet); }
+    .btn-icon:active { transform: scale(.95); }
+    .audio-hint { background: var(--yellow-bg); color: var(--yellow); border-radius: 5px; padding: 4px 7px; font-family: 'JetBrains Mono', monospace; font-size: .6rem; cursor: pointer; border: 1px solid color-mix(in srgb, var(--yellow) 30%, transparent); white-space: nowrap; }
+    .audio-hint.hide { display: none; }
+
+    .tabs { position: sticky; top: var(--header-h); z-index: 9; background: var(--card); border-bottom: 1px solid var(--border-soft); display: flex; gap: 4px; padding: 0 16px; overflow-x: auto; scrollbar-width: none; }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tabs button { flex: 1; min-width: max-content; background: none; border: none; color: var(--dim); cursor: pointer; padding: 12px 20px; font-family: 'JetBrains Mono', monospace; font-size: .74rem; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 6px; position: relative; transition: color .2s; }
+    .tabs button .ico { font-size: .9rem; }
+    .tabs button.active { color: var(--text); }
+    .tabs button.active::after { content: ''; position: absolute; bottom: 0; left: 25%; right: 25%; height: 2px; background: var(--violet); border-radius: 2px 2px 0 0; }
+    .tabs button .badge { position: absolute; top: 8px; right: 8px; min-width: 16px; height: 16px; background: var(--red); color: #fff; border-radius: 8px; font-size: .6rem; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 4px; }
+    .tabs button .badge.triggered { background: var(--green); }
+
+    main.content { padding: 20px; max-width: 900px; margin: 0 auto; }
+    .tab { display: none; animation: fade .2s ease; }
+    .tab.active { display: block; }
+    @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+    .card { background: var(--card); border: 1px solid var(--border-soft); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+    .card .lbl { font-size: .62rem; font-family: 'JetBrains Mono', monospace; color: var(--dim); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+    .card .val { font-size: 1.1rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+    .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 12px; }
+    .grid-stats .card { margin: 0; padding: 12px 14px; }
+    .grid-stats .val { font-size: .95rem; }
+
+    .green { color: var(--green); } .red { color: var(--red); } .yellow { color: var(--yellow); }
+    .violet { color: var(--violet); } .blue { color: var(--blue); } .dim { color: var(--dim); }
+
+    .signal { font-size: .95rem; font-weight: 700; padding: 14px; border-radius: 10px; text-align: center; font-family: 'JetBrains Mono', monospace; margin: 12px 0; border: 1px solid transparent; line-height: 1.4; }
+    .signal.long { background: var(--green-bg); color: var(--green); border-color: color-mix(in srgb, var(--green) 40%, transparent); }
+    .signal.short { background: var(--red-bg); color: var(--red); border-color: color-mix(in srgb, var(--red) 40%, transparent); }
+    .signal.wait { background: var(--yellow-bg); color: var(--yellow); border-color: color-mix(in srgb, var(--yellow) 25%, transparent); }
+    .scorebar { height: 8px; border-radius: 4px; background: var(--border); margin: 10px 0 6px; display: flex; overflow: hidden; }
+    .scorebar .l { background: var(--green); transition: width .3s; }
+    .scorebar .s { background: var(--red); transition: width .3s; }
+    .reason { color: var(--dim); font-size: .74rem; font-family: 'JetBrains Mono', monospace; line-height: 1.6; }
+    .ind-row { display: flex; justify-content: space-between; gap: 8px; padding: 8px 0; border-bottom: 1px dashed var(--border-soft); font-family: 'JetBrains Mono', monospace; font-size: .74rem; }
+    .ind-row:last-child { border-bottom: none; }
+    .ind-row .n { color: var(--text); }
+    .ind-row .d { color: var(--dim); font-size: .66rem; display: block; margin-top: 2px; }
+    .badge { padding: 2px 9px; border-radius: 6px; font-size: .66rem; font-weight: 600; white-space: nowrap; align-self: center; }
+    .badge.long { background: var(--green-bg); color: var(--green); }
+    .badge.short { background: var(--red-bg); color: var(--red); }
+    .badge.neutral { background: var(--yellow-bg); color: var(--yellow); }
+    .badge.confirmed { box-shadow: 0 0 0 1.5px currentColor inset; }
+    .badge-large { display: inline-block; padding: 10px 16px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: .82rem; font-weight: 700; text-align: center; margin: 8px 0; }
+
+    canvas { width: 100%; display: block; margin-top: 8px; }
+    .levels { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin-top: 10px; font-size: .72rem; font-family: 'JetBrains Mono', monospace; color: var(--dim); }
+    .levels strong { color: var(--text); }
+
+    .explain { background: var(--elev); border-left: 3px solid var(--violet); padding: 10px 12px; border-radius: 6px; margin-top: 8px; font-family: 'JetBrains Mono', monospace; font-size: .7rem; line-height: 1.6; color: var(--dim); }
+    .explain strong { color: var(--text); }
+    .explain.good { border-left-color: var(--green); }
+    .explain.warn { border-left-color: var(--yellow); }
+    .explain.bad { border-left-color: var(--red); }
+
+    .in { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); font-family: 'JetBrains Mono', monospace; padding: 10px 12px; border-radius: 8px; font-size: .82rem; outline: none; transition: border-color .15s; }
+    .in:focus { border-color: var(--violet); }
+    .in.ok { border-color: var(--green); }
+    .in.err { border-color: var(--red); }
+    .form-row { margin-bottom: 10px; }
+    .form-row label { display: block; font-size: .64rem; color: var(--dim); font-family: 'JetBrains Mono', monospace; text-transform: uppercase; margin-bottom: 6px; letter-spacing: .08em; }
+    .hint { font-size: .66rem; font-family: 'JetBrains Mono', monospace; color: var(--dim); margin-top: 5px; min-height: 16px; }
+    .hint.ok { color: var(--green); } .hint.err { color: var(--red); }
+    .btn { width: 100%; background: var(--violet); color: #fff; border: none; padding: 11px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: .78rem; font-weight: 600; cursor: pointer; transition: opacity .2s, transform .1s; }
+    .btn:hover { opacity: .9; }
+    .btn:active { transform: scale(.98); }
+    .btn:disabled { opacity: .4; cursor: not-allowed; }
+    .presets { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; margin: 8px 0 12px; }
+    .presets button { background: var(--elev); color: var(--dim); border: 1px solid var(--border); padding: 7px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: .68rem; cursor: pointer; transition: all .15s; }
+    .presets button:hover { color: var(--text); border-color: var(--violet); }
+    .dir-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .dir-toggle button { background: var(--elev); border: 1px solid var(--border); color: var(--dim); padding: 9px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: .78rem; cursor: pointer; transition: all .15s; }
+    .dir-toggle button.on { background: var(--green-bg); color: var(--green); border-color: var(--green); }
+    .dir-toggle button.on.below { background: var(--red-bg); color: var(--red); border-color: var(--red); }
+    .alert-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--card); border: 1px solid var(--border-soft); border-radius: 8px; margin-bottom: 6px; font-family: 'JetBrains Mono', monospace; font-size: .76rem; }
+    .alert-item.triggered { opacity: .6; border-style: dashed; }
+    .alert-item .sym { font-weight: 600; color: var(--text); }
+    .alert-item .cond { color: var(--dim); font-size: .68rem; margin-top: 2px; }
+    .alert-item .status { margin-left: auto; font-size: .66rem; }
+    .alert-item .status .live { color: var(--yellow); }
+    .alert-item .status .ok { color: var(--green); }
+    .alert-item .del { background: none; border: none; color: var(--dim); cursor: pointer; font-size: .9rem; padding: 4px 6px; border-radius: 4px; }
+    .alert-item .del:hover { color: var(--red); background: var(--red-bg); }
+    .empty { text-align: center; color: var(--dim); font-family: 'JetBrains Mono', monospace; font-size: .74rem; padding: 24px 8px; line-height: 1.6; }
+    .section-title { font-size: .68rem; font-family: 'JetBrains Mono', monospace; color: var(--dim); text-transform: uppercase; letter-spacing: .1em; margin: 16px 0 8px; display: flex; justify-content: space-between; align-items: center; }
+    #tvChartContainer { border-radius: 8px; overflow: hidden; border: 1px solid var(--border-soft); }
+    .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--text); color: var(--bg); padding: 12px 20px; border-radius: 10px; font-family: 'JetBrains Mono', monospace; font-size: .76rem; z-index: 100; opacity: 0; transition: all .3s; pointer-events: none; max-width: 90%; text-align: center; font-weight: 600; box-shadow: var(--shadow); }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    body.in-popup .btn-icon#popupBtn { display: none; }
+
+    @media (max-width: 640px) {
+      .app-header { padding: 0 14px; gap: 10px; }
+      .brand .px { font-size: 1.25rem; }
+      .chg { font-size: .8rem; }
+      .tabs { position: fixed; bottom: 0; left: 0; right: 0; top: auto; border-top: 1px solid var(--border-soft); border-bottom: none; padding: 4px 6px calc(4px + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--card) 95%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+      .tabs button { padding: 8px 4px; font-size: .62rem; flex-direction: column; gap: 3px; }
+      .tabs button .ico { font-size: 1.1rem; }
+      .tabs button.active::after { left: 20%; right: 20%; }
+      .tabs button .badge { top: 4px; right: 20%; }
+      main.content { padding: 14px 14px 90px; }
+      .grid-stats { grid-template-columns: repeat(2, 1fr); }
+      .toast { bottom: 100px; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="brand">
+    <span class="sym"><span class="live-dot"></span>SOLUSDT · PERP · DAY TRADING</span>
+    <span class="px" id="hdrPrice">—</span>
+  </div>
+  <div class="hdr-right">
+    <span class="chg" id="hdrChange">—</span>
+    <span class="audio-hint" id="audioHint">🔇 son</span>
+    <button class="btn-icon" id="popupBtn" title="Ouvrir en fenêtre réduite">⧉</button>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button data-tab="market" class="active"><span class="ico"><i class="fas fa-chart-bar"></i></span>Marché</button>
+  <button data-tab="tools"><span class="ico">⚠️</span>VWAP</button>
+  <button data-tab="signals"><span class="ico"><i class="fas fa-bolt"></i></span>Signaux</button>
+  <button data-tab="flow"><span class="ico">🌊</span>Flux</button>
+  <button data-tab="alerts"><span class="ico"><i class="fa-regular fa-bell"></i></span>Alertes<span class="badge" id="alertBadge" style="display:none">0</span></button>
+</nav>
+
+<main class="content">
+
+  <section class="tab active" id="tab-market">
+    <div class="card">
+      <div class="lbl">Graphique SOLUSDT · TradingView</div>
+      <div id="tvChartContainer" style="height: 340px;"></div>
+    </div>
+    <div class="grid-stats">
+      <div class="card"><div class="lbl">Funding</div><div class="val" id="mFunding">—</div></div>
+      <div class="card"><div class="lbl">RSI 14</div><div class="val" id="mRsi">—</div></div>
+      <div class="card"><div class="lbl">ATR</div><div class="val" id="mAtr">—</div></div>
+      <div class="card"><div class="lbl">Order Book</div><div class="val" id="mOb">—</div></div>
+      <div class="card"><div class="lbl">Vol rel.</div><div class="val" id="mVol">—</div></div>
+      <div class="card"><div class="lbl">Ratio L/S</div><div class="val" id="mLs">—</div></div>
+    </div>
+    <div class="card">
+      <div class="lbl">BTC</div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span class="val" id="mBtc">—</span>
+        <span class="reason" id="mBtcCorr">Corr. —</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TAB OUTILS (VWAP + VWAP TEST + VP + Pivots) ============ -->
+  <section class="tab" id="tab-tools">
+
+    <!-- NOUVEAU : Test VWAP -->
+    <div class="card">
+      <div class="lbl">⚡ Test VWAP · Setup day trading</div>
+      <div style="text-align:center">
+        <span id="vwapTestBadge" class="badge-large neutral">— pas de test</span>
+      </div>
+      <div id="vwapTestExplain" class="explain">Analyse en cours…</div>
+    </div>
+
+    <div class="card">
+      <div class="lbl">VWAP de session</div>
+      <div class="val" id="vwapVal">—</div>
+      <canvas id="vwapChart" height="70"></canvas>
+      <div id="vwapExplain" class="explain">Calcul en cours…</div>
+    </div>
+    <div class="card">
+      <div class="lbl">Volume Profile · POC / VAH / VAL (24h)</div>
+      <div class="levels" id="vpLevels" style="margin-top:0">
+        <span>POC <strong id="vpPoc">—</strong></span>
+        <span>VAH <strong id="vpVah">—</strong></span>
+        <span>VAL <strong id="vpVal">—</strong></span>
+      </div>
+      <div id="vpExplain" class="explain" style="margin-top:10px">Calcul en cours…</div>
+    </div>
+    <div class="card">
+      <div class="lbl">Pivot Points (veille)</div>
+      <div class="levels" id="pivotLevels" style="margin-top:0">
+        <span>R2 <strong id="pivR2">—</strong></span>
+        <span>R1 <strong id="pivR1">—</strong></span>
+        <span>Pivot <strong id="pivP">—</strong></span>
+        <span>S1 <strong id="pivS1">—</strong></span>
+        <span>S2 <strong id="pivS2">—</strong></span>
+      </div>
+      <div id="pivotExplain" class="explain" style="margin-top:10px">Calcul en cours…</div>
+    </div>
+  </section>
+
+  <section class="tab" id="tab-signals">
+    <div id="macroWarning" class="signal short" style="display:none"></div>
+    <div id="signalBox" class="signal wait">En attente…</div>
+    <div class="scorebar" id="scoreBar"><div class="l" style="width:0%"></div><div class="s" style="width:0%"></div></div>
+    <div class="reason" id="scoreText" style="text-align:center;margin-bottom:10px">—</div>
+    <div class="reason" id="reason" style="margin-bottom:14px"></div>
+    <div class="section-title"><span>Indicateurs</span><span id="indCount">0</span></div>
+    <div class="card" style="padding:6px 14px"><div id="indicatorsBox"></div></div>
+  </section>
+
+  <section class="tab" id="tab-flow">
+    <div class="card">
+      <div class="lbl">CVD 3H — Delta cumulé</div>
+      <canvas id="cvdChart" height="90"></canvas>
+      <div style="display:flex;justify-content:space-between;margin-top:8px" class="reason">
+        <span>Achats <strong id="cvdBuy" class="green">—</strong></span>
+        <span>Ventes <strong id="cvdSell" class="red">—</strong></span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="lbl">Footprint dernière bougie</div>
+      <div style="display:flex;height:22px;border-radius:6px;overflow:hidden;margin-top:8px;background:var(--border)">
+        <div id="fpBuy" style="background:var(--green);width:50%"></div>
+        <div id="fpSell" style="background:var(--red);width:50%"></div>
+      </div>
+      <div class="reason" style="margin-top:6px">Delta : <strong id="fpDelta">—</strong></div>
+    </div>
+    <div class="card">
+      <div class="lbl">Open Interest & Prix</div>
+      <canvas id="oiChart" height="90"></canvas>
+      <div class="reason" style="margin-top:6px">Δ 3h : <strong id="oiDelta">—</strong></div>
+    </div>
+    <div class="card">
+      <div class="lbl">Funding historique (8h)</div>
+      <canvas id="fundingChart" height="90"></canvas>
+      <div class="reason" style="margin-top:6px">Actuel : <strong id="fundingNow">—</strong></div>
+    </div>
+  </section>
+
+  <section class="tab" id="tab-alerts">
+    <div class="card">
+      <div class="lbl">🔔 Nouvelle alerte</div>
+      <div class="form-row" style="margin-top:10px">
+        <label>Token</label>
+        <input type="text" class="in" id="alertSymbol" placeholder="SOL, BTC, ETH…" autocomplete="off" spellcheck="false">
+        <div class="hint" id="alertSymbolHint"></div>
+      </div>
+      <div class="form-row">
+        <label>Prix cible ($)</label>
+        <input type="number" step="any" class="in" id="alertPrice" placeholder="0.00">
+      </div>
+      <div class="form-row">
+        <label>Déclencher quand le prix est</label>
+        <div class="dir-toggle">
+          <button id="dirAbove" data-dir="above" class="on">Au-dessus</button>
+          <button id="dirBelow" data-dir="below" class="below">En-dessous</button>
+        </div>
+      </div>
+      <div class="presets">
+        <button data-pct="2">+2%</button>
+        <button data-pct="5">+5%</button>
+        <button data-pct="-2">−2%</button>
+        <button data-pct="-5">−5%</button>
+      </div>
+      <button class="btn" id="createAlert" disabled>Créer l'alerte</button>
+    </div>
+    <div class="section-title"><span>Alertes actives</span><span id="alertsCount">0</span></div>
+    <div id="alertsList"></div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+  // ============================================================
+  // POPUP MODE & AUDIO
+  // ============================================================
+  if (new URLSearchParams(location.search).has('popup')) document.body.classList.add('in-popup');
+
+  document.getElementById('popupBtn').addEventListener('click', () => {
+    const w = 360, h = 680;
+    const left = Math.max(0, (screen.availWidth - w) / 2);
+    const top = Math.max(0, (screen.availHeight - h) / 2);
+    const win = window.open(location.pathname + '?popup=1', 'PerpsTerminal',
+      `width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=no,menubar=no,toolbar=no,location=no,status=no`);
+    if (!win) showToast('⚠️ Popup bloqué — autorise les popups');
+    else win.focus();
+  });
+
+  let audioCtx = null, audioUnlocked = false, alertAudio = null, alertAudioReady = false;
+  function initAudio() {
+    if (audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    alertAudio = new Audio('./alert.mp3');
+    alertAudio.preload = 'auto';
+    alertAudio.addEventListener('canplaythrough', () => { alertAudioReady = true; });
+    alertAudio.addEventListener('error', () => { alertAudioReady = false; });
+  }
+  function unlockAudio() {
+    initAudio();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    audioUnlocked = true;
+    document.getElementById('audioHint').classList.add('hide');
+  }
+  document.addEventListener('click', unlockAudio, { once: true });
+  document.addEventListener('touchstart', unlockAudio, { once: true });
+
+  function playBeep() {
+    if (!audioCtx) return;
+    const now = audioCtx.currentTime;
+    [880, 1108.73].forEach((freq, i) => {
+      const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.type = 'sine'; osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, now + i * 0.15);
+      gain.gain.linearRampToValueAtTime(0.18, now + i * 0.15 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.15 + 0.45);
+      osc.start(now + i * 0.15); osc.stop(now + i * 0.15 + 0.5);
+    });
+  }
+
+  // NEW : son dédié au test VWAP (3 tons distincts)
+  function playVWAPAlert() {
+    if (!audioUnlocked || !audioCtx) return;
+    const now = audioCtx.currentTime;
+    [523.25, 659.25, 783.99].forEach((freq, i) => {
+      const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.type = 'triangle'; osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, now + i * 0.12);
+      gain.gain.linearRampToValueAtTime(0.2, now + i * 0.12 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.12 + 0.35);
+      osc.start(now + i * 0.12); osc.stop(now + i * 0.12 + 0.4);
+    });
+  }
+
+  function playAlertSound() {
+    if (!audioUnlocked) return;
+    if (alertAudioReady && alertAudio) {
+      try { alertAudio.currentTime = 0; alertAudio.play().catch(() => playBeep()); return; } catch (_) {}
+    }
+    playBeep();
+  }
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  // ============================================================
+  // TRADINGVIEW WIDGET
+  // ============================================================
+  function initTradingView() {
+    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    new TradingView.widget({
+      container_id: 'tvChartContainer', autosize: true, symbol: 'BINANCE:SOLUSDT',
+      interval: '15', timezone: 'Etc/UTC', theme: isDark ? 'dark' : 'light', style: '1', locale: 'fr',
+      toolbar_bg: isDark ? '#161a25' : '#f4f6fa', enable_publishing: false, hide_side_toolbar: true,
+      allow_symbol_change: false, studies: ['VWAP@tv-basicstudies'], withdateranges: false, details: false
+    });
+  }
+  setTimeout(() => { if (typeof TradingView !== 'undefined' && TradingView.widget) initTradingView(); }, 500);
+
+  // ============================================================
+  // INDICATEURS TECHNIQUES
+  // ============================================================
+  function ema(v, p) {
+    if (v.length < p) return null;
+    const k = 2/(p+1);
+    let e = v.slice(0,p).reduce((a,b)=>a+b,0)/p;
+    for (let i=p; i<v.length; i++) e = v[i]*k + e*(1-k);
+    return e;
+  }
+  function computeRSI(c, p=14) {
+    if (c.length < p+1) return 50;
+    let g=0, l=0;
+    for (let i=c.length-p; i<c.length; i++) { const d=c[i]-c[i-1]; if (d>=0) g+=d; else l-=d; }
+    const ag=g/p, al=l/p;
+    return al === 0 ? 100 : 100 - 100/(1+ag/al);
+  }
+  function computeATR(c, p=14) {
+    const s = c.slice(-p);
+    return s.length ? s.map(x=>x.high-x.low).reduce((a,b)=>a+b,0)/s.length : 0;
+  }
+  function rsiSlope(c) { return computeRSI(c,14) - computeRSI(c.slice(0,-3),14); }
+  function takerBuyRatio(k, n=24) {
+    const s = k.slice(-n); let vol=0, buy=0;
+    s.forEach(x=>{ vol+=+x[5]; buy+=+x[9]; });
+    return vol>0 ? buy/vol : 0.5;
+  }
+  function corr(a, b) {
+    const n = Math.min(a.length, b.length);
+    if (n < 5) return 0;
+    const x = a.slice(-n), y = b.slice(-n);
+    const mx = x.reduce((s,v)=>s+v,0)/n, my = y.reduce((s,v)=>s+v,0)/n;
+    let num=0, dx=0, dy=0;
+    for (let i=0; i<n; i++) { const a1=x[i]-mx, b1=y[i]-my; num+=a1*b1; dx+=a1*a1; dy+=b1*b1; }
+    return dx && dy ? num/Math.sqrt(dx*dy) : 0;
+  }
+  const fmt = (v, d=2) => '$' + (+v).toLocaleString('fr-FR', { minimumFractionDigits: d, maximumFractionDigits: d });
+  const pct = (v, d=2) => (v>=0?'+':'') + (+v).toFixed(d) + '%';
+  const cls = (v) => v > 0 ? 'green' : v < 0 ? 'red' : 'yellow';
+
+  // ============================================================
+  // OUTILS DAY TRADING
+  // ============================================================
+  function computeVWAP(candles) {
+    let cumPV = 0, cumV = 0;
+    const series = [];
+    for (const c of candles) {
+      const typical = (c.high + c.low + c.close) / 3;
+      cumPV += typical * c.vol;
+      cumV += c.vol;
+      series.push({ t: c.t, v: cumV > 0 ? cumPV / cumV : c.close });
+    }
+    return { value: series[series.length-1]?.v || null, series };
+  }
+
+  // NEW : détection Test VWAP
+  function detectVWAPTest(candles, vwap, atr, cvdLastDelta, volRatio) {
+    if (!vwap || !vwap.series || vwap.series.length < 5 || candles.length < 5) {
+      return { state: 'none', detail: 'Données insuffisantes pour analyser le test VWAP.' };
+    }
+    const last = candles[candles.length - 1];
+    const price = last.close;
+    const vwapNow = vwap.series[vwap.series.length - 1].v;
+    const vwapPrev4 = vwap.series[vwap.series.length - 5].v;
+    const slope = (vwapNow - vwapPrev4) / vwapPrev4 * 100;
+    const distPct = (price - vwapNow) / vwapNow * 100;
+
+    const range = (last.high - last.low) || 0.0001;
+    const body = Math.abs(last.close - last.open);
+    const upperWick = last.high - Math.max(last.open, last.close);
+    const lowerWick = Math.min(last.open, last.close) - last.low;
+    const bodyRatio = body / range;
+    const upperWickRatio = upperWick / range;
+    const lowerWickRatio = lowerWick / range;
+
+    // VWAP descendant : biais baissier
+    if (slope < -0.03) {
+      const isTouching = last.high >= vwapNow * 0.999 && last.close < vwapNow * 1.003;
+      const isRejection = isTouching && upperWickRatio > 0.35 && bodyRatio < 0.55 && last.close < vwapNow;
+      if (isRejection) {
+        const cvdOk = cvdLastDelta < 0, volOk = volRatio > 1.2;
+        return {
+          state: cvdOk && volOk ? 'reject-short-confirmed' : 'reject-short-weak',
+          direction: 'short', vwap: vwapNow, slope,
+          detail: `Rejet sur VWAP descendant à ${fmt(vwapNow)} (mèche sup. ${(upperWickRatio*100).toFixed(0)}%). CVD ${cvdOk ? '✓' : '✗'} · Volume ${volOk ? '✓' : '✗'}. ${cvdOk && volOk ? 'Setup SHORT confirmé.' : 'Setup faible, attendre confirmation.'}`,
+          confirmed: cvdOk && volOk
+        };
+      }
+      if (last.close > vwapNow && last.open < vwapNow * 1.001) {
+        const cvdOk = cvdLastDelta > 0, volOk = volRatio > 1.2;
+        return {
+          state: cvdOk && volOk ? 'break-long-confirmed' : 'break-long-weak',
+          direction: 'long', vwap: vwapNow, slope,
+          detail: `Cassure du VWAP descendant à ${fmt(vwapNow)}. CVD ${cvdOk ? '✓' : '✗'} · Volume ${volOk ? '✓' : '✗'}. ${cvdOk && volOk ? 'Setup LONG confirmé (attendre un retest).' : 'Cassure faible, risque de piège.'}`,
+          confirmed: cvdOk && volOk
+        };
+      }
+    }
+
+    // VWAP montant : biais haussier
+    if (slope > 0.03) {
+      const isTouching = last.low <= vwapNow * 1.001 && last.close > vwapNow * 0.997;
+      const isRejection = isTouching && lowerWickRatio > 0.35 && bodyRatio < 0.55 && last.close > vwapNow;
+      if (isRejection) {
+        const cvdOk = cvdLastDelta > 0, volOk = volRatio > 1.2;
+        return {
+          state: cvdOk && volOk ? 'reject-long-confirmed' : 'reject-long-weak',
+          direction: 'long', vwap: vwapNow, slope,
+          detail: `Rebond sur VWAP montant à ${fmt(vwapNow)} (mèche inf. ${(lowerWickRatio*100).toFixed(0)}%). CVD ${cvdOk ? '✓' : '✗'} · Volume ${volOk ? '✓' : '✗'}. ${cvdOk && volOk ? 'Setup LONG confirmé.' : 'Setup faible, attendre confirmation.'}`,
+          confirmed: cvdOk && volOk
+        };
+      }
+      if (last.close < vwapNow && last.open > vwapNow * 0.999) {
+        const cvdOk = cvdLastDelta < 0, volOk = volRatio > 1.2;
+        return {
+          state: cvdOk && volOk ? 'break-short-confirmed' : 'break-short-weak',
+          direction: 'short', vwap: vwapNow, slope,
+          detail: `Cassure baissière du VWAP montant à ${fmt(vwapNow)}. CVD ${cvdOk ? '✓' : '✗'} · Volume ${volOk ? '✓' : '✗'}. ${cvdOk && volOk ? 'Setup SHORT confirmé (attendre un retest).' : 'Cassure faible, risque de piège.'}`,
+          confirmed: cvdOk && volOk
+        };
+      }
+    }
+
+    // Contexte sans test
+    let context;
+    if (slope < -0.03) context = `VWAP descendant (${fmt(vwapNow)}), prix ${distPct > 0 ? 'au-dessus' : 'en-dessous'} de ${Math.abs(distPct).toFixed(2)}%. Pas de test en cours.`;
+    else if (slope > 0.03) context = `VWAP montant (${fmt(vwapNow)}), prix ${distPct > 0 ? 'au-dessus' : 'en-dessous'} de ${Math.abs(distPct).toFixed(2)}%. Pas de test en cours.`;
+    else context = `VWAP plat (${fmt(vwapNow)}), pas de biais directionnel clair.`;
+    return { state: 'none', vwap: vwapNow, slope, detail: context };
+  }
+
+  function computeVolumeProfile(candles, bins = 30) {
+    const slice = candles.slice(-96);
+    if (!slice.length) return null;
+    const max = Math.max(...slice.map(c=>c.high)), min = Math.min(...slice.map(c=>c.low));
+    if (max === min) return null;
+    const binSize = (max - min) / bins;
+    const buckets = Array.from({length: bins}, () => 0);
+    for (const c of slice) {
+      const typical = (c.high + c.low + c.close) / 3;
+      const idx = Math.min(bins - 1, Math.floor((typical - min) / binSize));
+      if (idx >= 0) buckets[idx] += c.vol;
+    }
+    let pocIdx = 0, pocVol = 0;
+    buckets.forEach((v, i) => { if (v > pocVol) { pocVol = v; pocIdx = i; } });
+    const totalVol = buckets.reduce((a,b)=>a+b,0);
+    const targetVA = totalVol * 0.7;
+    let vaVol = buckets[pocIdx], lowIdx = pocIdx, highIdx = pocIdx;
+    while (vaVol < targetVA && (lowIdx > 0 || highIdx < bins - 1)) {
+      const lowNext = lowIdx > 0 ? buckets[lowIdx - 1] : -1;
+      const highNext = highIdx < bins - 1 ? buckets[highIdx + 1] : -1;
+      if (highNext >= lowNext) { highIdx++; vaVol += buckets[highIdx]; }
+      else { lowIdx--; vaVol += buckets[lowIdx]; }
+    }
+    return {
+      poc: min + (pocIdx + 0.5) * binSize,
+      vah: min + (highIdx + 0.5) * binSize,
+      val: min + (lowIdx + 0.5) * binSize
+    };
+  }
+
+  function computePivotPoints(prevCandle) {
+    if (!prevCandle) return null;
+    const H = prevCandle.high, L = prevCandle.low, C = prevCandle.close;
+    const P = (H + L + C) / 3;
+    return { p: P, r1: 2*P - L, s1: 2*P - H, r2: P + (H-L), s2: P - (H-L) };
+  }
+
+  // ============================================================
+  // EXPLICATIONS CONTEXTUELLES
+  // ============================================================
+  function explainVWAP(vwap, price) {
+    if (!vwap) return { text: 'VWAP non calculable.', cls: '' };
+    const diff = (price - vwap) / vwap * 100;
+    if (Math.abs(diff) < 0.15) return { text: `Prix collé au VWAP (${fmt(vwap)}). Zone d'équilibre — attends un breakout ou un rejet.`, cls: 'warn' };
+    if (diff > 0.5) return { text: `Prix ${diff.toFixed(1)}% au-dessus du VWAP (${fmt(vwap)}). Biais acheteur intraday. Le VWAP est support dynamique — pullback dessus = entrée long classique.`, cls: 'good' };
+    if (diff > 0.15) return { text: `Prix légèrement au-dessus du VWAP (${fmt(vwap)}). Momentum haussier naissant.`, cls: '' };
+    if (diff < -0.5) return { text: `Prix ${Math.abs(diff).toFixed(1)}% sous le VWAP (${fmt(vwap)}). Biais vendeur intraday. Le VWAP est résistance — rebond dessus = entrée short.`, cls: 'bad' };
+    return { text: `Prix légèrement sous le VWAP (${fmt(vwap)}). Pression vendeuse modérée, surveille un reclaim.`, cls: 'warn' };
+  }
+  function explainVP(vp, price) {
+    if (!vp) return { text: 'Volume Profile non calculable.', cls: '' };
+    if (price > vp.vah) return { text: `Prix au-dessus du VAH (${fmt(vp.vah)}). Acceptation haussière — POC (${fmt(vp.poc)}) devient support.`, cls: 'good' };
+    if (price < vp.val) return { text: `Prix sous le VAL (${fmt(vp.val)}). Rejet baissier — POC (${fmt(vp.poc)}) devient résistance.`, cls: 'bad' };
+    return { text: `Prix dans la Value Area (${fmt(vp.val)} – ${fmt(vp.vah)}). Zone d'équilibre — breakout net = direction. POC ${fmt(vp.poc)} = aimant principal.`, cls: '' };
+  }
+  function explainPivots(piv, price) {
+    if (!piv) return { text: 'Pivot Points non calculables.', cls: '' };
+    if (price > piv.r1) return { text: `Prix au-dessus de R1 (${fmt(piv.r1)}). Force acheteuse forte. R2 (${fmt(piv.r2)}) prochaine cible. Pivot (${fmt(piv.p)}) = support.`, cls: 'good' };
+    if (price > piv.p) return { text: `Prix entre pivot (${fmt(piv.p)}) et R1 (${fmt(piv.r1)}). Biais haussier modéré.`, cls: '' };
+    if (price < piv.s1) return { text: `Prix sous S1 (${fmt(piv.s1)}). Force vendeuse forte. S2 (${fmt(piv.s2)}) prochaine cible. Pivot (${fmt(piv.p)}) = résistance.`, cls: 'bad' };
+    return { text: `Prix entre S1 (${fmt(piv.s1)}) et pivot (${fmt(piv.p)}). Biais baissier modéré.`, cls: 'warn' };
+  }
+
+  // ============================================================
+  // DATA LOADER
+  // ============================================================
+  let lastData = null;
+  let chartData = null;
+  let lastVWAPTestState = null; // NEW
+
+  function macroToday() { return null; } // Placeholder
+
+  async function loadData() {
+    try {
+      const [klinesRes, fundingRes, oiRes, spotRes, btcRes, depthRes, lsRes] = await Promise.all([
+        fetch('https://fapi.binance.com/fapi/v1/klines?symbol=SOLUSDT&interval=15m&limit=100'),
+        fetch('https://fapi.binance.com/fapi/v1/premiumIndex?symbol=SOLUSDT'),
+        fetch('https://fapi.binance.com/futures/data/openInterestHist?symbol=SOLUSDT&period=15m&limit=13'),
+        fetch('https://api.binance.com/api/v3/klines?symbol=SOLUSDT&interval=15m&limit=24'),
+        fetch('https://fapi.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=15m&limit=60'),
+        fetch('https://fapi.binance.com/fapi/v1/depth?symbol=SOLUSDT&limit=50').catch(()=>null),
+        fetch('https://fapi.binance.com/futures/data/globalLongShortAccountRatio?symbol=SOLUSDT&period=15m&limit=1').catch(()=>null)
+      ]);
+      if (!klinesRes.ok) throw new Error('HTTP ' + klinesRes.status);
+      const klines = await klinesRes.json();
+      const candles = klines.map(k => ({ t:+k[0], high:+k[2], low:+k[3], close:+k[4], vol:+k[5], takerBuyVol:+k[9] }));
+      const closes = candles.map(c => c.close);
+      const price = closes[closes.length-1];
+
+      let funding = 0, nextFundingTime = null;
+      if (fundingRes.ok) {
+        const f = await fundingRes.json();
+        funding = +f.lastFundingRate * 100;
+        nextFundingTime = +f.nextFundingTime;
+      }
+      let oiChange = 0, oiData = [];
+      if (oiRes.ok) {
+        oiData = await oiRes.json();
+        if (oiData.length >= 2) {
+          const first = +oiData[0].sumOpenInterest, last = +oiData[oiData.length-1].sumOpenInterest;
+          oiChange = (last-first)/first*100;
+        }
+      }
+      let spotRatio = 0.5;
+      if (spotRes.ok) spotRatio = takerBuyRatio(await spotRes.json(), 24);
+      const perpRatio = takerBuyRatio(klines, 24);
+      const divergence = spotRatio - perpRatio;
+
+      let btcPrice = null, btcAbove = null, btcCorr = 0;
+      if (btcRes.ok) {
+        const btcK = await btcRes.json();
+        const btcC = btcK.map(k=>+k[4]);
+        btcPrice = btcC[btcC.length-1];
+        const btcEma = ema(btcC, 50);
+        btcAbove = btcEma ? btcPrice >= btcEma : null;
+        const solR=[], btcR=[];
+        const n = Math.min(closes.length, btcC.length);
+        for (let i=n-50; i<n; i++) { if (i>0) { solR.push(closes[i]-closes[i-1]); btcR.push(btcC[i]-btcC[i-1]); } }
+        btcCorr = corr(solR, btcR);
+      }
+      let obImbalance = 0, obSpread = 0;
+      if (depthRes?.ok) {
+        const d = await depthRes.json();
+        const bids = d.bids.slice(0,20), asks = d.asks.slice(0,20);
+        const bv = bids.reduce((s,[p,q])=>s+(+p*+q),0);
+        const av = asks.reduce((s,[p,q])=>s+(+p*+q),0);
+        obImbalance = (bv-av)/(bv+av||1);
+        if (bids.length && asks.length) {
+          const bb=+bids[0][0], ba=+asks[0][0];
+          obSpread = (ba-bb)/((ba+bb)/2)*100;
+        }
+      }
+      let lsRatio = 1;
+      if (lsRes?.ok) {
+        const l = await lsRes.json();
+        if (l.length) lsRatio = +l[0].longShortRatio || 1;
+      }
+      const vols = candles.map(c=>c.vol);
+      const avgVol = vols.slice(-20).reduce((a,b)=>a+b,0)/20;
+      const recentVol = vols.slice(-3).reduce((a,b)=>a+b,0)/3;
+      const volRatio = avgVol ? recentVol/avgVol : 1;
+      const atr = computeATR(candles, 14);
+      const rsi = computeRSI(closes, 14);
+      const rsiDelta = rsiSlope(closes);
+      const ema20 = ema(closes, 20);
+      const ema50 = ema(closes, 50);
+      const support = price - 1.5*atr;
+      const resistance = price + 1.5*atr;
+      const change24h = (price - closes[Math.max(0, closes.length-97)]) / closes[Math.max(0, closes.length-97)] * 100;
+
+      // Outils day trading
+      const vwap = computeVWAP(candles);
+      const vp = computeVolumeProfile(candles);
+      const prevDayCandle = {
+        high: Math.max(...candles.slice(-96).map(c=>c.high)),
+        low: Math.min(...candles.slice(-96).map(c=>c.low)),
+        close: candles[candles.length-1].close
+      };
+      const piv = computePivotPoints(prevDayCandle);
+
+      // CVD & footprint
+      let cumDelta = 0;
+      const cvdSeries = candles.slice(-12).map(c => {
+        const delta = c.takerBuyVol - (c.vol - c.takerBuyVol);
+        cumDelta += delta;
+        return { t: c.t, v: cumDelta };
+      });
+      const lastC = candles[candles.length-1];
+      const lastDelta = lastC.takerBuyVol - (lastC.vol - lastC.takerBuyVol);
+
+      // NEW : Test VWAP
+      const vwapTest = detectVWAPTest(candles, vwap, atr, lastDelta, volRatio);
+
+      // NEW : alerte sonore sur transition
+      if (vwapTest.state !== 'none' && vwapTest.confirmed && lastVWAPTestState !== vwapTest.state) {
+        playVWAPAlert();
+        const kind = vwapTest.state.includes('reject') ? 'REJET' : 'CASSURE';
+        showToast(`⚡ ${kind} VWAP · ${vwapTest.direction.toUpperCase()} confirmé`);
+        if (Notification.permission === 'granted') {
+          new Notification(`⚡ ${kind} VWAP SOL`, { body: `${vwapTest.direction.toUpperCase()} · ${vwapTest.detail.substring(0, 100)}` });
+        }
+      }
+      lastVWAPTestState = vwapTest.state;
+
+      // Score 15 indicateurs (avec pondération)
+      const ind = [];
+      if (ema20 && ema50) {
+        if (ema20 > ema50*1.0005) ind.push(['EMA20/50', 1, 'haussier']);
+        else if (ema20 < ema50*0.9995) ind.push(['EMA20/50', -1, 'baissier']);
+        else ind.push(['EMA20/50', 0, 'plates']);
+      }
+      if (ema20) ind.push(price > ema20 ? ['Prix vs EMA20', 1, 'au-dessus'] : ['Prix vs EMA20', -1, 'en-dessous']);
+      if (rsi < 35 && rsiDelta > 2) ind.push(['RSI', 1, `${rsi.toFixed(1)} survente ↑`]);
+      else if (rsi > 65 && rsiDelta < -2) ind.push(['RSI', -1, `${rsi.toFixed(1)} surachat ↓`]);
+      else if (rsi < 30) ind.push(['RSI', 1, `${rsi.toFixed(1)} survente`]);
+      else if (rsi > 70) ind.push(['RSI', -1, `${rsi.toFixed(1)} surachat`]);
+      else ind.push(['RSI', 0, rsi.toFixed(1) + ' neutre']);
+      if (funding > 0.05) ind.push(['Funding', -1, `+${funding.toFixed(3)}% longs surpayés`]);
+      else if (funding < -0.05) ind.push(['Funding', 1, `${funding.toFixed(3)}% shorts paient`]);
+      else ind.push(['Funding', 0, funding.toFixed(3) + '% neutre']);
+      if (oiChange < -3 && change24h < 0) ind.push(['OI', 1, `${oiChange.toFixed(1)}% shorts couvrent`]);
+      else if (oiChange > 3 && change24h > 0) ind.push(['OI', -1, `+${oiChange.toFixed(1)}% extension fragile`]);
+      else if (oiChange > 3 && change24h < 0) ind.push(['OI', 1, `+${oiChange.toFixed(1)}% nouveaux shorts`]);
+      else ind.push(['OI', 0, `${oiChange.toFixed(1)}% plat`]);
+      if (divergence > 0.04) ind.push(['Spot/Perps', 1, `spot +${(divergence*100).toFixed(0)} pts`]);
+      else if (divergence < -0.04) ind.push(['Spot/Perps', -1, `perps poussent, spot absent`]);
+      else ind.push(['Spot/Perps', 0, `flux équilibrés`]);
+      if (btcAbove === null) ind.push(['BTC', 0, 'indisponible']);
+      else if (btcAbove) ind.push(['BTC', 1, `> EMA50 vent porteur`]);
+      else ind.push(['BTC', -1, `< EMA50 vent contraire`]);
+      if (obImbalance > 0.15) ind.push(['Order Book', 1, `bid-heavy ${(obImbalance*100).toFixed(0)}%`]);
+      else if (obImbalance < -0.15) ind.push(['Order Book', -1, `ask-heavy ${(obImbalance*100).toFixed(0)}%`]);
+      else ind.push(['Order Book', 0, 'équilibré']);
+      if (volRatio > 1.2) ind.push(['Volume', price > (ema20||price) ? 1 : -1, `${volRatio.toFixed(2)}x expansion`]);
+      else if (volRatio < 0.8) ind.push(['Volume', 0, `${volRatio.toFixed(2)}x faible`]);
+      else ind.push(['Volume', 0, `${volRatio.toFixed(2)}x normal`]);
+      if (lsRatio > 2.5) ind.push(['Ratio L/S', -1, `${lsRatio.toFixed(2)} trop longs`]);
+      else if (lsRatio < 0.6) ind.push(['Ratio L/S', 1, `${lsRatio.toFixed(2)} trop shorts`]);
+      else ind.push(['Ratio L/S', 0, `${lsRatio.toFixed(2)} équilibré`]);
+      if (Math.abs(btcCorr) < 0.4 && btcAbove !== null) ind.push(['Corr. BTC', btcAbove ? 1 : -1, `${btcCorr.toFixed(2)} indépendant`]);
+      else if (Math.abs(btcCorr) > 0.8) ind.push(['Corr. BTC', 0, `${btcCorr.toFixed(2)} forte = signal BTC`]);
+      else ind.push(['Corr. BTC', 0, `${btcCorr.toFixed(2)} moyenne`]);
+      const atrLong = computeATR(candles, 50);
+      const atrExp = atrLong ? atr/atrLong : 1;
+      if (atrExp > 1.2) ind.push(['ATR', 0, `+${((atrExp-1)*100).toFixed(0)}% vol. soutient`]);
+      else if (atrExp < 0.8) ind.push(['ATR', 0, `${((atrExp-1)*100).toFixed(0)}% vol. s'effondre`]);
+      else ind.push(['ATR', 0, `stable ${atrExp.toFixed(2)}x`]);
+      const dS = (price-support)/atr, dR = (resistance-price)/atr;
+      if (dS < 0.5) ind.push(['Range', 1, `support proche ${dS.toFixed(1)} ATR`]);
+      else if (dR < 0.5) ind.push(['Range', -1, `résistance proche ${dR.toFixed(1)} ATR`]);
+      else ind.push(['Range', 0, `milieu S${dS.toFixed(1)}/R${dR.toFixed(1)}`]);
+
+      // NEW : indicateur Test VWAP pondéré
+      if (vwapTest.state !== 'none') {
+        const val = vwapTest.direction === 'long' ? 1 : -1;
+        const weight = vwapTest.confirmed ? 2 : 1;
+        ind.push(['Test VWAP', val, vwapTest.detail.substring(0, 80), weight]);
+      }
+
+      // NEW : calcul pondéré
+      let longScore = 0, shortScore = 0, total = 0;
+      ind.forEach(([, v, , w]) => {
+        const weight = w || 1;
+        total += weight;
+        if (v > 0) longScore += weight;
+        else if (v < 0) shortScore += weight;
+      });
+
+      const macro = macroToday();
+      const atrTooLow = atr < price * 0.002;
+      const spreadTooWide = obSpread > 0.15;
+      const cvdLong = lastDelta > 0 && cumDelta > 0;
+      const cvdShort = lastDelta < 0 && cumDelta < 0;
+
+      let signal = 'wait', label = '', text = '';
+      if (macro) { label = '🟡 ATTENDRE — ' + macro; text = 'Événement macro — signaux désactivés'; }
+      else if (atrTooLow) { label = '🟡 ATTENDRE — marché calme'; text = 'ATR < 0.2% du prix'; }
+      else if (spreadTooWide) { label = '🟡 ATTENDRE — spread large'; text = `Spread ${obSpread.toFixed(2)}%`; }
+      else if (longScore >= 5 && longScore-shortScore >= 3 && cvdLong) {
+        signal = 'long'; label = `🟢 LONG · ${longScore}pts/${total}`;
+        text = ind.filter(i=>i[1]>0).map(i=>i[0]).join(' · ') + ' | CVD ✓';
+      } else if (shortScore >= 5 && shortScore-longScore >= 3 && cvdShort) {
+        signal = 'short'; label = `🔴 SHORT · ${shortScore}pts/${total}`;
+        text = ind.filter(i=>i[1]<0).map(i=>i[0]).join(' · ') + ' | CVD ✓';
+      } else {
+        label = '🟡 ATTENDRE — pas de confluence';
+        let r = `L ${longScore}pts/${total} · S ${shortScore}pts/${total}`;
+        if (longScore >= 5 && !cvdLong) r += ' — CVD non confirmé';
+        if (shortScore >= 5 && !cvdShort) r += ' — CVD non confirmé';
+        text = r;
+      }
+
+      if (signal !== 'wait' && lastData && lastData.signal !== signal) {
+        playAlertSound();
+        if (Notification.permission === 'granted') {
+          new Notification(`Signal ${signal.toUpperCase()} SOL`, { body: `Score ${longScore}L/${shortScore}S — ${fmt(price)}` });
+        }
+      }
+      lastData = { signal, price, longScore, shortScore };
+
+      chartData = {
+        candles: candles.slice(-48), support, resistance, cvdSeries, lastDelta, oiData,
+        candlesForOI: candles.slice(-oiData.length),
+        vwap: vwap?.series || [], vp, piv, vwapTest
+      };
+
+      renderMarket({ price, change24h, funding, rsi, atr, obImbalance, volRatio, lsRatio, btcPrice, btcAbove, btcCorr, support, resistance, ema20, ema50, oiChange, nextFundingTime });
+      renderTools({ vwap, vp, piv, price, vwapTest });
+      renderSignals({ ind, longScore, shortScore, total, signal, label, text, macro });
+      renderFlow({ cvdSeries, lastDelta, oiData, candles, funding });
+      drawPriceChart(chartData.candles, support, resistance);
+      window._currentPrice = price;
+    } catch (e) {
+      console.error(e);
+      const el = document.getElementById('hdrPrice');
+      el.textContent = 'Erreur réseau';
+      el.style.color = 'var(--red)';
+    }
+  }
+
+  function renderMarket(d) {
+    document.getElementById('hdrPrice').textContent = fmt(d.price);
+    document.getElementById('hdrPrice').style.color = '';
+    document.getElementById('hdrChange').textContent = pct(d.change24h);
+    document.getElementById('hdrChange').className = 'chg ' + cls(d.change24h);
+    document.getElementById('mFunding').textContent = (d.funding>=0?'+':'') + d.funding.toFixed(3) + '%';
+    document.getElementById('mFunding').className = 'val ' + (d.funding>0.05?'red':d.funding<-0.05?'green':'yellow');
+    document.getElementById('mRsi').textContent = d.rsi.toFixed(1);
+    document.getElementById('mRsi').className = 'val ' + (d.rsi>70?'red':d.rsi<30?'green':'yellow');
+    document.getElementById('mAtr').textContent = '$' + d.atr.toFixed(2);
+    document.getElementById('mAtr').className = 'val violet';
+    document.getElementById('mOb').textContent = (d.obImbalance*100).toFixed(0) + '%';
+    document.getElementById('mOb').className = 'val ' + (d.obImbalance>0.15?'green':d.obImbalance<-0.15?'red':'yellow');
+    document.getElementById('mVol').textContent = d.volRatio.toFixed(2) + 'x';
+    document.getElementById('mVol').className = 'val ' + (d.volRatio>1.2?'green':d.volRatio<0.8?'red':'yellow');
+    document.getElementById('mLs').textContent = d.lsRatio.toFixed(2);
+    document.getElementById('mLs').className = 'val ' + (d.lsRatio>2.5?'red':d.lsRatio<0.6?'green':'yellow');
+    document.getElementById('mBtc').textContent = d.btcPrice ? '$' + d.btcPrice.toFixed(0) : '—';
+    document.getElementById('mBtc').className = 'val ' + (d.btcAbove ? 'green' : 'red');
+    document.getElementById('mBtcCorr').textContent = 'Corr. ' + d.btcCorr.toFixed(2);
+  }
+
+  // NEW : rendu du test VWAP
+  function renderVWAPTest(t) {
+    const badge = document.getElementById('vwapTestBadge');
+    const expl = document.getElementById('vwapTestExplain');
+    const stateMap = {
+      'none': { text: '— pas de test', cls: 'neutral' },
+      'reject-short-confirmed': { text: '🔴 REJET VWAP · SHORT', cls: 'short confirmed' },
+      'reject-short-weak': { text: '🔴 REJET VWAP · SHORT (faible)', cls: 'short' },
+      'break-long-confirmed': { text: '🟢 CASSURE VWAP · LONG', cls: 'long confirmed' },
+      'break-long-weak': { text: '🟢 CASSURE VWAP · LONG (faible)', cls: 'long' },
+      'reject-long-confirmed': { text: '🟢 REBOND VWAP · LONG', cls: 'long confirmed' },
+      'reject-long-weak': { text: '🟢 REBOND VWAP · LONG (faible)', cls: 'long' },
+      'break-short-confirmed': { text: '🔴 CASSURE VWAP · SHORT', cls: 'short confirmed' },
+      'break-short-weak': { text: '🔴 CASSURE VWAP · SHORT (faible)', cls: 'short' }
+    };
+    const m = stateMap[t.state] || stateMap.none;
+    badge.textContent = m.text;
+    badge.className = 'badge-large ' + m.cls;
+    expl.textContent = t.detail;
+    let ec = '';
+    if (t.state.includes('confirmed')) ec = t.direction === 'long' ? 'good' : 'bad';
+    else if (t.state.includes('weak')) ec = 'warn';
+    expl.className = 'explain ' + ec;
+  }
+
+  function renderTools({ vwap, vp, piv, price, vwapTest }) {
+    // Test VWAP
+    renderVWAPTest(vwapTest);
+
+    // VWAP
+    document.getElementById('vwapVal').textContent = vwap?.value ? fmt(vwap.value) : '—';
+    const vwExp = explainVWAP(vwap?.value, price);
+    const vwEl = document.getElementById('vwapExplain');
+    vwEl.textContent = vwExp.text;
+    vwEl.className = 'explain ' + vwExp.cls;
+    if (vwap?.series?.length) drawVWAPChart(vwap.series);
+
+    // VP
+    if (vp) {
+      document.getElementById('vpPoc').textContent = fmt(vp.poc);
+      document.getElementById('vpVah').textContent = fmt(vp.vah);
+      document.getElementById('vpVal').textContent = fmt(vp.val);
+      const vpExp = explainVP(vp, price);
+      const vpEl = document.getElementById('vpExplain');
+      vpEl.textContent = vpExp.text;
+      vpEl.className = 'explain ' + vpExp.cls;
+    }
+
+    // Pivots
+    if (piv) {
+      document.getElementById('pivR2').textContent = fmt(piv.r2);
+      document.getElementById('pivR1').textContent = fmt(piv.r1);
+      document.getElementById('pivP').textContent = fmt(piv.p);
+      document.getElementById('pivS1').textContent = fmt(piv.s1);
+      document.getElementById('pivS2').textContent = fmt(piv.s2);
+      const pivExp = explainPivots(piv, price);
+      const pivEl = document.getElementById('pivotExplain');
+      pivEl.textContent = pivExp.text;
+      pivEl.className = 'explain ' + pivExp.cls;
+    }
+  }
+
+  function renderSignals(d) {
+    document.getElementById('signalBox').className = 'signal ' + d.signal;
+    document.getElementById('signalBox').textContent = d.label;
+    const bar = document.getElementById('scoreBar');
+    bar.children[0].style.width = (d.longScore/d.total*100) + '%';
+    bar.children[1].style.width = (d.shortScore/d.total*100) + '%';
+    document.getElementById('scoreText').textContent = `L ${d.longScore}pts · S ${d.shortScore}pts / ${d.total} total`;
+    document.getElementById('reason').textContent = d.text;
+    document.getElementById('indCount').textContent = `${d.total} pts`;
+    document.getElementById('indicatorsBox').innerHTML = d.ind.map(([n, v, desc, w]) => {
+      const c = v>0?'long':v<0?'short':'neutral';
+      const a = v>0?'▲':v<0?'▼':'—';
+      const weightLabel = (w && w > 1) ? ` <span class="dim" style="font-size:.6rem">×${w}</span>` : '';
+      return `<div class="ind-row"><div><span class="n">${n}${weightLabel}</span><span class="d">${desc}</span></div><span class="badge ${c}">${a}</span></div>`;
+    }).join('');
+    const mw = document.getElementById('macroWarning');
+    if (d.macro) { mw.style.display = 'block'; mw.textContent = '🚫 ' + d.macro; }
+    else mw.style.display = 'none';
+  }
+
+  function renderFlow(d) {
+    drawLineChart(document.getElementById('cvdChart'), d.cvdSeries.map(s=>s.v), d.cvdSeries[d.cvdSeries.length-1]?.v >= d.cvdSeries[0]?.v ? '--green' : '--red');
+    const last = d.candles[d.candles.length-1];
+    const buy = last.takerBuyVol, sell = last.vol - last.takerBuyVol;
+    const tot = buy + sell || 1;
+    document.getElementById('fpBuy').style.width = (buy/tot*100) + '%';
+    document.getElementById('fpSell').style.width = (sell/tot*100) + '%';
+    document.getElementById('fpDelta').textContent = d.lastDelta.toFixed(0);
+    document.getElementById('fpDelta').className = d.lastDelta >= 0 ? 'green' : 'red';
+    document.getElementById('cvdBuy').textContent = buy.toFixed(0);
+    document.getElementById('cvdSell').textContent = sell.toFixed(0);
+    if (d.oiData.length > 1) {
+      drawDualChart(document.getElementById('oiChart'), d.oiData.map(x=>+x.sumOpenInterest), d.candles.slice(-d.oiData.length).map(c=>c.close), '--yellow', '--violet');
+      const first = +d.oiData[0].sumOpenInterest, last2 = +d.oiData[d.oiData.length-1].sumOpenInterest;
+      const oiChg = (last2-first)/first*100;
+      document.getElementById('oiDelta').textContent = pct(oiChg, 1);
+      document.getElementById('oiDelta').className = oiChg >= 0 ? 'green' : 'red';
+    }
+    drawFundingChart();
+    document.getElementById('fundingNow').textContent = (d.funding>=0?'+':'') + d.funding.toFixed(4) + '%';
+  }
+
+  // ============================================================
+  // CANVAS
+  // ============================================================
+  function cssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function setupCanvas(cv, h) {
+    const dpr = window.devicePixelRatio || 1;
+    const w = cv.clientWidth || 300;
+    cv.width = w * dpr; cv.height = h * dpr; cv.style.height = h + 'px';
+    const ctx = cv.getContext('2d');
+    ctx.scale(dpr, dpr); ctx.clearRect(0, 0, w, h);
+    return { ctx, w, h };
+  }
+  function drawPriceChart(candles, support, resistance) {
+    const cv = document.getElementById('priceChart');
+    if (!cv) return;
+    const { ctx, w, h } = setupCanvas(cv, 120);
+    if (!candles.length) return;
+    const closes = candles.map(c => c.close);
+    const min = Math.min(...closes, support, resistance), max = Math.max(...closes, support, resistance);
+    const pad = (max-min)*0.1 || 1;
+    const y = v => h - (v-min+pad)/(max-min+2*pad)*h;
+    const x = i => i/(closes.length-1)*w;
+    ctx.strokeStyle = cssVar('--border-soft'); ctx.lineWidth = 1;
+    for (let g=1; g<3; g++) { ctx.beginPath(); ctx.moveTo(0,h*g/3); ctx.lineTo(w,h*g/3); ctx.stroke(); }
+    const grad = ctx.createLinearGradient(0, 0, 0, h);
+    grad.addColorStop(0, cssVar('--violet') + '40'); grad.addColorStop(1, cssVar('--violet') + '00');
+    ctx.strokeStyle = cssVar('--violet'); ctx.lineWidth = 2; ctx.beginPath();
+    closes.forEach((v,i) => i ? ctx.lineTo(x(i),y(v)) : ctx.moveTo(x(i),y(v)));
+    ctx.stroke();
+    ctx.beginPath();
+    closes.forEach((v,i) => i ? ctx.lineTo(x(i),y(v)) : ctx.moveTo(x(i),y(v)));
+    ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath();
+    ctx.fillStyle = grad; ctx.fill();
+    [['s', support, '--green'], ['r', resistance, '--red']].forEach(([_, v, color]) => {
+      ctx.strokeStyle = cssVar(color) + '80'; ctx.setLineDash([4,4]);
+      ctx.beginPath(); ctx.moveTo(0,y(v)); ctx.lineTo(w,y(v)); ctx.stroke(); ctx.setLineDash([]);
+    });
+  }
+  function drawVWAPChart(series) {
+    const cv = document.getElementById('vwapChart');
+    if (!cv) return;
+    const { ctx, w, h } = setupCanvas(cv, 70);
+    const vals = series.map(s => s.v);
+    const min = Math.min(...vals), max = Math.max(...vals);
+    const pad = (max-min)*0.1 || 0.01;
+    const y = v => h - (v-min+pad)/(max-min+2*pad)*h;
+    const x = i => i/(vals.length-1 || 1)*w;
+    ctx.strokeStyle = cssVar('--border-soft'); ctx.beginPath(); ctx.moveTo(0,h/2); ctx.lineTo(w,h/2); ctx.stroke();
+    ctx.strokeStyle = cssVar('--blue'); ctx.lineWidth = 2; ctx.beginPath();
+    vals.forEach((v,i) => i ? ctx.lineTo(x(i),y(v)) : ctx.moveTo(x(i),y(v)));
+    ctx.stroke();
+  }
+  function drawLineChart(cv, values, colorVar) {
+    const { ctx, w, h } = setupCanvas(cv, cv.clientHeight || 90);
+    if (!values.length) return;
+    const min = Math.min(...values), max = Math.max(...values);
+    const pad = (max-min)*0.1 || 1;
+    const y = v => h - (v-min+pad)/(max-min+2*pad)*h;
+    const x = i => i/(values.length-1 || 1)*w;
+    ctx.strokeStyle = cssVar('--border-soft'); ctx.beginPath(); ctx.moveTo(0,y(0)); ctx.lineTo(w,y(0)); ctx.stroke();
+    ctx.strokeStyle = cssVar(colorVar); ctx.lineWidth = 2; ctx.beginPath();
+    values.forEach((v,i) => i ? ctx.lineTo(x(i),y(v)) : ctx.moveTo(x(i),y(v)));
+    ctx.stroke();
+  }
+  function drawDualChart(cv, a, b, colorA, colorB) {
+    const { ctx, w, h } = setupCanvas(cv, cv.clientHeight || 90);
+    if (!a.length || !b.length) return;
+    const draw = (vals, color) => {
+      const min = Math.min(...vals), max = Math.max(...vals);
+      const pad = (max-min)*0.1 || 1;
+      const y = v => h - (v-min+pad)/(max-min+2*pad)*h;
+      const x = i => i/(vals.length-1 || 1)*w;
+      ctx.strokeStyle = cssVar(color); ctx.lineWidth = 2; ctx.beginPath();
+      vals.forEach((v,i) => i ? ctx.lineTo(x(i),y(v)) : ctx.moveTo(x(i),y(v)));
+      ctx.stroke();
+    };
+    draw(a, colorA); draw(b.slice(-a.length), colorB);
+  }
+  function drawFundingChart() {
+    const cv = document.getElementById('fundingChart');
+    if (!cv) return;
+    const { ctx, w, h } = setupCanvas(cv, cv.clientHeight || 90);
+    const hist = window._fundHist || [];
+    if (!hist.length) return;
+    const min = Math.min(...hist, 0), max = Math.max(...hist, 0);
+    const pad = (max-min)*0.1 || 0.01;
+    const y = v => h - (v-min+pad)/(max-min+2*pad)*h;
+    const barW = w / hist.length;
+    ctx.strokeStyle = cssVar('--border'); ctx.beginPath(); ctx.moveTo(0,y(0)); ctx.lineTo(w,y(0)); ctx.stroke();
+    hist.forEach((r,i) => {
+      ctx.fillStyle = r >= 0 ? cssVar('--red') : cssVar('--green');
+      const yTop = y(Math.max(r,0)), yBot = y(Math.min(r,0));
+      ctx.fillRect(i*barW+1, yTop, Math.max(barW-2, 1), Math.max(yBot-yTop, 1));
+    });
+  }
+  function redrawCharts() {
+    if (!chartData) return;
+    drawPriceChart(chartData.candles, chartData.support, chartData.resistance);
+    if (chartData.cvdSeries.length) {
+      drawLineChart(document.getElementById('cvdChart'), chartData.cvdSeries.map(s=>s.v), chartData.cvdSeries[chartData.cvdSeries.length-1].v >= chartData.cvdSeries[0].v ? '--green' : '--red');
+    }
+    if (chartData.oiData.length > 1) {
+      drawDualChart(document.getElementById('oiChart'), chartData.oiData.map(x=>+x.sumOpenInterest), chartData.candlesForOI.map(c=>c.close), '--yellow', '--violet');
+    }
+    if (chartData.vwap.length) drawVWAPChart(chartData.vwap);
+    drawFundingChart();
+  }
+
+  // ============================================================
+  // ALERTES (V3 conservé)
+  // ============================================================
+  const ALERTS_KEY = 'perpsPopupAlerts';
+  let alertFormState = { symbol: 'SOLUSDT', price: null, dir: 'above', valid: false };
+
+  function loadAlerts() { try { return JSON.parse(localStorage.getItem(ALERTS_KEY) || '[]'); } catch { return []; } }
+  function saveAlerts(list) { localStorage.setItem(ALERTS_KEY, JSON.stringify(list)); updateAlertBadge(); renderAlerts(); }
+  function updateAlertBadge() {
+    const alerts = loadAlerts();
+    const active = alerts.filter(a => !a.triggered).length;
+    const triggered = alerts.filter(a => a.triggered).length;
+    const b = document.getElementById('alertBadge');
+    if (active || triggered) {
+      b.style.display = 'flex';
+      b.textContent = active || '✓';
+      b.className = 'badge' + (triggered && !active ? ' triggered' : '');
+    } else b.style.display = 'none';
+  }
+  function renderAlerts() {
+    const alerts = loadAlerts();
+    const list = document.getElementById('alertsList');
+    document.getElementById('alertsCount').textContent = alerts.filter(a => !a.triggered).length;
+    if (!alerts.length) { list.innerHTML = '<div class="empty">Aucune alerte.<br>Crée-en une ci-dessus.</div>'; return; }
+    list.innerHTML = alerts.map(a => `
+      <div class="alert-item ${a.triggered ? 'triggered' : ''}">
+        <div>
+          <div class="sym">${a.symbol}</div>
+          <div class="cond">${a.direction === 'above' ? '≥' : '≤'} ${fmt(a.targetPrice)}</div>
+        </div>
+        <div class="status">${a.triggered ? `<span class="ok">✓ ${new Date(a.triggeredAt).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}</span>` : `<span class="live">● actif</span>`}</div>
+        <button class="del" data-id="${a.id}">✕</button>
+      </div>`).join('');
+    list.querySelectorAll('.del').forEach(b => b.onclick = () => {
+      saveAlerts(loadAlerts().filter(a => a.id !== b.dataset.id));
+      showToast('Alerte supprimée');
+    });
+  }
+  function normalizeSymbol(input) {
+    let s = input.trim().toUpperCase();
+    if (!s) return '';
+    if (!/USDT$|BUSD$|USDC$|USD$/.test(s)) s += 'USDT';
+    return s;
+  }
+  async function validateSymbol(sym) {
+    if (!sym) return { valid: false };
+    try {
+      const r = await fetch(`https://fapi.binance.com/fapi/v1/ticker/price?symbol=${sym}`);
+      if (!r.ok) return { valid: false };
+      const d = await r.json();
+      return { valid: true, price: +d.price };
+    } catch { return { valid: false }; }
+  }
+  let symbolTimeout;
+  document.getElementById('alertSymbol').addEventListener('input', e => {
+    clearTimeout(symbolTimeout);
+    const raw = e.target.value;
+    const hint = document.getElementById('alertSymbolHint');
+    const inp = e.target;
+    if (!raw.trim()) { hint.textContent = ''; hint.className = 'hint'; inp.className = 'in'; alertFormState.valid = false; updateCreateBtn(); return; }
+    const sym = normalizeSymbol(raw);
+    hint.textContent = 'Vérification…'; hint.className = 'hint';
+    symbolTimeout = setTimeout(async () => {
+      const res = await validateSymbol(sym);
+      if (res.valid) {
+        alertFormState.symbol = sym; alertFormState.valid = true;
+        hint.textContent = `✓ ${sym} · ${fmt(res.price)}`; hint.className = 'hint ok'; inp.className = 'in ok';
+        if (!document.getElementById('alertPrice').value) document.getElementById('alertPrice').value = res.price.toFixed(2);
+        updateCreateBtn();
+      } else {
+        alertFormState.valid = false;
+        hint.textContent = `✗ ${sym} introuvable`; hint.className = 'hint err'; inp.className = 'in err';
+        updateCreateBtn();
+      }
+    }, 400);
+  });
+  document.querySelectorAll('#tab-alerts .dir-toggle button').forEach(b => {
+    b.onclick = () => {
+      document.querySelectorAll('#tab-alerts .dir-toggle button').forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+      alertFormState.dir = b.dataset.dir;
+    };
+  });
+  document.querySelectorAll('.presets button').forEach(b => {
+    b.onclick = () => {
+      const pctVal = parseFloat(b.dataset.pct);
+      const cur = window._currentPrice || (lastData?.price) || 0;
+      if (!cur) return;
+      document.getElementById('alertPrice').value = (cur * (1 + pctVal/100)).toFixed(2);
+      const isAbove = pctVal > 0;
+      document.querySelectorAll('#tab-alerts .dir-toggle button').forEach(x => x.classList.toggle('on', (x.dataset.dir === 'above') === isAbove));
+      alertFormState.dir = isAbove ? 'above' : 'below';
+      updateCreateBtn();
+    };
+  });
+  document.getElementById('alertPrice').addEventListener('input', updateCreateBtn);
+  function updateCreateBtn() {
+    const price = parseFloat(document.getElementById('alertPrice').value);
+    document.getElementById('createAlert').disabled = !(alertFormState.valid && !isNaN(price) && price > 0);
+    alertFormState.price = price;
+  }
+  document.getElementById('createAlert').onclick = () => {
+    if (!alertFormState.valid || !alertFormState.price) return;
+    if (Notification.permission === 'default') Notification.requestPermission();
+    const alert = { id: 'a_' + Date.now() + '_' + Math.random().toString(36).slice(2,6), symbol: alertFormState.symbol, targetPrice: alertFormState.price, direction: alertFormState.dir, createdAt: Date.now(), triggered: false };
+    const alerts = loadAlerts();
+    alerts.unshift(alert); saveAlerts(alerts);
+    showToast(`🔔 ${alert.symbol} ${alert.direction === 'above' ? '≥' : '≤'} ${fmt(alert.targetPrice)}`);
+    document.getElementById('alertPrice').value = '';
+    document.getElementById('alertSymbol').value = '';
+    document.getElementById('alertSymbolHint').textContent = '';
+    document.getElementById('alertSymbol').className = 'in';
+    alertFormState.valid = false; updateCreateBtn(); unlockAudio();
+  };
+  async function checkAlerts() {
+    const alerts = loadAlerts();
+    const active = alerts.filter(a => !a.triggered);
+    if (!active.length) return;
+    const symbols = [...new Set(active.map(a => a.symbol))];
+    const prices = {};
+    await Promise.all(symbols.map(async sym => {
+      try {
+        const r = await fetch(`https://fapi.binance.com/fapi/v1/ticker/price?symbol=${sym}`);
+        if (r.ok) prices[sym] = +(await r.json()).price;
+      } catch {}
+    }));
+    let changed = false;
+    for (const a of active) {
+      const p = prices[a.symbol];
+      if (!p) continue;
+      const hit = a.direction === 'above' ? p >= a.targetPrice : p <= a.targetPrice;
+      if (hit) {
+        a.triggered = true; a.triggeredAt = Date.now(); a.triggeredPrice = p;
+        changed = true;
+        playAlertSound();
+        if (Notification.permission === 'granted') {
+          new Notification(`🔔 ${a.symbol}`, { body: `${a.direction === 'above' ? '≥' : '≤'} ${fmt(a.targetPrice)} atteint · ${fmt(p)}`, tag: a.id });
+        }
+      }
+    }
+    if (changed) { saveAlerts(alerts); showToast('🔔 Alerte prix déclenchée !'); }
+  }
+
+  // ============================================================
+  // NAVIGATION & INIT
+  // ============================================================
+  function setTab(name) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.id === 'tab-' + name));
+    document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    history.replaceState(null, '', '#' + name);
+    setTimeout(redrawCharts, 50);
+  }
+  document.querySelectorAll('.tabs button').forEach(b => {
+    b.onclick = () => { unlockAudio(); setTab(b.dataset.tab); };
+  });
+  const initialTab = (location.hash || '#market').slice(1);
+  setTab(['market','tools','signals','flow','alerts'].includes(initialTab) ? initialTab : 'market');
+
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout); resizeTimeout = setTimeout(redrawCharts, 150);
+  });
+
+  if ('Notification' in window && Notification.permission === 'default') {
+    setTimeout(() => Notification.requestPermission().catch(()=>{}), 3000);
+  }
+
+  document.getElementById('audioHint').addEventListener('click', unlockAudio);
+  renderAlerts();
+  updateAlertBadge();
+  loadData();
+  setInterval(loadData, 60000);
+  setInterval(checkAlerts, 15000);
+
+  async function loadFundingHist() {
+    try {
+      const r = await fetch('https://fapi.binance.com/fapi/v1/fundingRate?symbol=SOLUSDT&limit=24');
+      if (r.ok) {
+        const data = await r.json();
+        window._fundHist = data.map(f => +f.fundingRate * 100);
+        drawFundingChart();
+      }
+    } catch {}
+  }
+  loadFundingHist();
+  setInterval(loadFundingHist, 5 * 60 * 1000);
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) { loadData(); checkAlerts(); }
+  });
+</script>
+</body>
+</html>

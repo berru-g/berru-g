@@ -344,7 +344,8 @@
   function initAudio() {
     if (audioCtx) return;
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    alertAudio = new Audio('../sounds/notification-success.mp3');
+    //alertAudio = new Audio('../sounds/notification-success.mp3');
+    alertAudio = new Audio('https://github.com/berru-g/Rick-MortySample/raw/master/PadMusical-master/public/rsc-mp3/Rick-sample/ricky_ticky_tabby_biatch.wav');
     alertAudio.preload = 'auto';
     alertAudio.addEventListener('canplaythrough', () => { alertAudioReady = true; });
     alertAudio.addEventListener('error', () => { alertAudioReady = false; });
