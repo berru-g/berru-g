@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0b0d12" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
-  <title>Perps · SOL Day Trading Terminal v4.1</title>
+  <title>Perps · SOL Day Trading Terminal v4.2</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- FIX #3 : Font Awesome n'était jamais chargé — les icônes des onglets s'affichaient en carrés vides -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <script src="https://s3.tradingview.com/tv.js"></script>
   <style>
     :root {
@@ -89,10 +91,13 @@
     .ind-row .n { color: var(--text); }
     .ind-row .d { color: var(--dim); font-size: .66rem; display: block; margin-top: 2px; }
     .badge { padding: 2px 9px; border-radius: 6px; font-size: .66rem; font-weight: 600; white-space: nowrap; align-self: center; }
-    .badge.long { background: var(--green-bg); color: var(--green); }
-    .badge.short { background: var(--red-bg); color: var(--red); }
-    .badge.neutral { background: var(--yellow-bg); color: var(--yellow); }
-    .badge.confirmed { box-shadow: 0 0 0 1.5px currentColor inset; }
+    /* FIX #1 : le JS pose class="badge-large short confirmed" (sans .badge) — les sélecteurs
+       .badge.short/.long/.neutral ne matchaient jamais le grand badge du Test VWAP.
+       On combined les sélecteurs pour couvrir les deux structures. */
+    .badge.long, .badge-large.long { background: var(--green-bg); color: var(--green); }
+    .badge.short, .badge-large.short { background: var(--red-bg); color: var(--red); }
+    .badge.neutral, .badge-large.neutral { background: var(--yellow-bg); color: var(--yellow); }
+    .badge.confirmed, .badge-large.confirmed { box-shadow: 0 0 0 1.5px currentColor inset; }
     .badge-large { display: inline-block; padding: 10px 16px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: .82rem; font-weight: 700; text-align: center; margin: 8px 0; }
 
     canvas { width: 100%; display: block; margin-top: 8px; }
@@ -204,7 +209,7 @@
   <!-- ============ TAB OUTILS (VWAP + VWAP TEST + VP + Pivots) ============ -->
   <section class="tab" id="tab-tools">
 
-    <!-- NOUVEAU : Test VWAP -->
+    <!-- Test VWAP -->
     <div class="card">
       <div class="lbl">⚡ Test VWAP · Setup day trading</div>
       <div style="text-align:center">
@@ -214,7 +219,7 @@
     </div>
 
     <div class="card">
-      <div class="lbl">VWAP de session</div>
+      <div class="lbl">VWAP de session (00:00 UTC)</div>
       <div class="val" id="vwapVal">—</div>
       <canvas id="vwapChart" height="70"></canvas>
       <div id="vwapExplain" class="explain">Calcul en cours…</div>
@@ -363,7 +368,7 @@
     });
   }
 
-  // NEW : son dédié au test VWAP (3 tons distincts)
+  // Son dédié au test VWAP (3 tons distincts)
   function playVWAPAlert() {
     if (!audioUnlocked || !audioCtx) return;
     const now = audioCtx.currentTime;
@@ -449,90 +454,138 @@
   // ============================================================
   // OUTILS DAY TRADING
   // ============================================================
+  // FIX #2 : VWAP de session — accumulation depuis 00:00 UTC (même ancrage
+  // que le VWAP de session TradingView), plus VWAP roulant sur les 100
+  // bougies. La série et la valeur qui s'affichent couvrent donc la session
+  // en cours uniquement.
   function computeVWAP(candles) {
+    if (!candles.length) return { value: null, series: [], sessionCandles: [] };
+    const sessionStart = new Date(candles[candles.length - 1].t);
+    sessionStart.setUTCHours(0, 0, 0, 0);
+    const start = sessionStart.getTime();
+    const sessionCandles = candles.filter(c => c.t >= start);
     let cumPV = 0, cumV = 0;
     const series = [];
-    for (const c of candles) {
-      const typical = (c.high + c.low + c.close) / 3;
+    for (const c of sessionCandles) {
+      const typical = (c.high + c.low + c.close) / 3; // hlc3 conservé
       cumPV += typical * c.vol;
       cumV += c.vol;
       series.push({ t: c.t, v: cumV > 0 ? cumPV / cumV : c.close });
     }
-    return { value: series[series.length-1]?.v || null, series };
+    return { value: series[series.length-1]?.v || null, series, sessionCandles };
   }
 
-  // NEW : détection Test VWAP
-  function detectVWAPTest(candles, vwap, atr, cvdLastDelta, volRatio) {
-    if (!vwap || !vwap.series || vwap.series.length < 5 || candles.length < 5) {
-      return { state: 'none', detail: 'Données insuffisantes pour analyser le test VWAP.' };
-    }
-    const last = candles[candles.length - 1];
-    const price = last.close;
-    const vwapNow = vwap.series[vwap.series.length - 1].v;
-    const vwapPrev4 = vwap.series[vwap.series.length - 5].v;
-    const slope = (vwapNow - vwapPrev4) / vwapPrev4 * 100;
-    const distPct = (price - vwapNow) / vwapNow * 100;
+  // FIX #4 : configuration du détecteur — fenêtre élargie + seuils moins
+  // stricts et centralisés, ajustables selon ton retour terrain.
+  const VWAP_TEST_CFG = {
+    lookback: 3,     // bougies scannées (dont celle en cours) : 3 × 15m = 45 min
+    slopeMin: 0.03,  // pente min du VWAP en % sur 4 bougies
+    wickMin: 0.30,   // mèche du côté du rejet > 30% du range (avant : 0.35)
+    bodyMax: 0.60,   // corps < 60% du range (avant : 0.55)
+    volX: 1.2        // volume bougie > 1.2× la moyenne des 20 précédentes
+  };
 
-    const range = (last.high - last.low) || 0.0001;
-    const body = Math.abs(last.close - last.open);
-    const upperWick = last.high - Math.max(last.open, last.close);
-    const lowerWick = Math.min(last.open, last.close) - last.low;
+  // Évalue une bougie contre la valeur du VWAP à son timestamp.
+  // FIX #4 : CVD et volume sont désormais mesurés sur la bougie du test
+  // elle-même (avant : uniquement la dernière bougie du cycle de 60s).
+  function testCandleVsVWAP(c, vwapNow, slope, volAvg, cfg) {
+    const range = (c.high - c.low) || 0.0001;
+    const body = Math.abs(c.close - c.open);
+    const upperWick = c.high - Math.max(c.open, c.close);
+    const lowerWick = Math.min(c.open, c.close) - c.low;
     const bodyRatio = body / range;
     const upperWickRatio = upperWick / range;
     const lowerWickRatio = lowerWick / range;
+    const delta = c.takerBuyVol - (c.vol - c.takerBuyVol);
+    const volOk = volAvg > 0 && c.vol > volAvg * cfg.volX;
+    const hh = new Date(c.t).toISOString().substring(11, 16);
 
     // VWAP descendant : biais baissier
-    if (slope < -0.03) {
-      const isTouching = last.high >= vwapNow * 0.999 && last.close < vwapNow * 1.003;
-      const isRejection = isTouching && upperWickRatio > 0.35 && bodyRatio < 0.55 && last.close < vwapNow;
+    if (slope < -cfg.slopeMin) {
+      const isRejection = c.high >= vwapNow * 0.999 && c.close < vwapNow * 1.003
+        && upperWickRatio > cfg.wickMin && bodyRatio < cfg.bodyMax && c.close < vwapNow;
       if (isRejection) {
-        const cvdOk = cvdLastDelta < 0, volOk = volRatio > 1.2;
+        const cvdOk = delta < 0;
         return {
           state: cvdOk && volOk ? 'reject-short-confirmed' : 'reject-short-weak',
-          direction: 'short', vwap: vwapNow, slope,
-          detail: `Rejet sur VWAP descendant à ${fmt(vwapNow)} (mèche sup. ${(upperWickRatio*100).toFixed(0)}%). CVD ${cvdOk ? '✓' : '✗'} · Volume ${volOk ? '✓' : '✗'}. ${cvdOk && volOk ? 'Setup SHORT confirmé.' : 'Setup faible, attendre confirmation.'}`,
-          confirmed: cvdOk && volOk
+          direction: 'short', vwap: vwapNow, slope, candleT: c.t, confirmed: cvdOk && volOk,
+          detail: `Rejet sur VWAP descendant à ${fmt(vwapNow)} (bougie ${hh} UTC, mèche sup. ${(upperWickRatio*100).toFixed(0)}%). CVD ${cvdOk ? '✓' : '✗'} · Volume ${volOk ? '✓' : '✗'}. ${cvdOk && volOk ? 'Setup SHORT confirmé.' : 'Setup faible, attendre confirmation.'}`
         };
       }
-      if (last.close > vwapNow && last.open < vwapNow * 1.001) {
-        const cvdOk = cvdLastDelta > 0, volOk = volRatio > 1.2;
+      const isBreak = c.close > vwapNow && c.open < vwapNow * 1.001;
+      if (isBreak) {
+        const cvdOk = delta > 0;
         return {
           state: cvdOk && volOk ? 'break-long-confirmed' : 'break-long-weak',
-          direction: 'long', vwap: vwapNow, slope,
-          detail: `Cassure du VWAP descendant à ${fmt(vwapNow)}. CVD ${cvdOk ? '✓' : '✗'} · Volume ${volOk ? '✓' : '✗'}. ${cvdOk && volOk ? 'Setup LONG confirmé (attendre un retest).' : 'Cassure faible, risque de piège.'}`,
-          confirmed: cvdOk && volOk
+          direction: 'long', vwap: vwapNow, slope, candleT: c.t, confirmed: cvdOk && volOk,
+          detail: `Cassure du VWAP descendant à ${fmt(vwapNow)} (bougie ${hh} UTC). CVD ${cvdOk ? '✓' : '✗'} · Volume ${volOk ? '✓' : '✗'}. ${cvdOk && volOk ? 'Setup LONG confirmé (attendre un retest).' : 'Cassure faible, risque de piège.'}`
         };
       }
     }
 
     // VWAP montant : biais haussier
-    if (slope > 0.03) {
-      const isTouching = last.low <= vwapNow * 1.001 && last.close > vwapNow * 0.997;
-      const isRejection = isTouching && lowerWickRatio > 0.35 && bodyRatio < 0.55 && last.close > vwapNow;
+    if (slope > cfg.slopeMin) {
+      const isRejection = c.low <= vwapNow * 1.001 && c.close > vwapNow * 0.997
+        && lowerWickRatio > cfg.wickMin && bodyRatio < cfg.bodyMax && c.close > vwapNow;
       if (isRejection) {
-        const cvdOk = cvdLastDelta > 0, volOk = volRatio > 1.2;
+        const cvdOk = delta > 0;
         return {
           state: cvdOk && volOk ? 'reject-long-confirmed' : 'reject-long-weak',
-          direction: 'long', vwap: vwapNow, slope,
-          detail: `Rebond sur VWAP montant à ${fmt(vwapNow)} (mèche inf. ${(lowerWickRatio*100).toFixed(0)}%). CVD ${cvdOk ? '✓' : '✗'} · Volume ${volOk ? '✓' : '✗'}. ${cvdOk && volOk ? 'Setup LONG confirmé.' : 'Setup faible, attendre confirmation.'}`,
-          confirmed: cvdOk && volOk
+          direction: 'long', vwap: vwapNow, slope, candleT: c.t, confirmed: cvdOk && volOk,
+          detail: `Rebond sur VWAP montant à ${fmt(vwapNow)} (bougie ${hh} UTC, mèche inf. ${(lowerWickRatio*100).toFixed(0)}%). CVD ${cvdOk ? '✓' : '✗'} · Volume ${volOk ? '✓' : '✗'}. ${cvdOk && volOk ? 'Setup LONG confirmé.' : 'Setup faible, attendre confirmation.'}`
         };
       }
-      if (last.close < vwapNow && last.open > vwapNow * 0.999) {
-        const cvdOk = cvdLastDelta < 0, volOk = volRatio > 1.2;
+      const isBreak = c.close < vwapNow && c.open > vwapNow * 0.999;
+      if (isBreak) {
+        const cvdOk = delta < 0;
         return {
           state: cvdOk && volOk ? 'break-short-confirmed' : 'break-short-weak',
-          direction: 'short', vwap: vwapNow, slope,
-          detail: `Cassure baissière du VWAP montant à ${fmt(vwapNow)}. CVD ${cvdOk ? '✓' : '✗'} · Volume ${volOk ? '✓' : '✗'}. ${cvdOk && volOk ? 'Setup SHORT confirmé (attendre un retest).' : 'Cassure faible, risque de piège.'}`,
-          confirmed: cvdOk && volOk
+          direction: 'short', vwap: vwapNow, slope, candleT: c.t, confirmed: cvdOk && volOk,
+          detail: `Cassure baissière du VWAP montant à ${fmt(vwapNow)} (bougie ${hh} UTC). CVD ${cvdOk ? '✓' : '✗'} · Volume ${volOk ? '✓' : '✗'}. ${cvdOk && volOk ? 'Setup SHORT confirmé (attendre un retest).' : 'Cassure faible, risque de piège.'}`
         };
       }
     }
 
+    return null;
+  }
+
+  function detectVWAPTest(sessionCandles, vwapSeries, cfg = VWAP_TEST_CFG) {
+    if (!vwapSeries || vwapSeries.length < 5 || sessionCandles.length < 5) {
+      return { state: 'none', detail: 'Données insuffisantes pour analyser le test VWAP (session trop jeune).' };
+    }
+    const n = sessionCandles.length;
+    const vwapNow = vwapSeries[vwapSeries.length - 1].v;
+    const vwapPrev4 = vwapSeries[vwapSeries.length - 5].v;
+    const slope = (vwapNow - vwapPrev4) / vwapPrev4 * 100;
+    const last = sessionCandles[n - 1];
+    const price = last.close;
+
+    const vmap = new Map(vwapSeries.map(s => [s.t, s.v]));
+    const priorWindow = sessionCandles.slice(-21, -1);
+    const volAvg = priorWindow.reduce((a, b) => a + b.vol, 0) / (priorWindow.length || 1);
+
+    // FIX #4 : on scanne les `lookback` dernières bougies au lieu de la seule
+    // bougie en cours, sinon un rejet survenu 1-2 bougies plus tôt est ignoré.
+    const matches = [];
+    for (let i = n - 1; i >= Math.max(5, n - cfg.lookback); i--) {
+      const c = sessionCandles[i];
+      const v = vmap.get(c.t);
+      if (v == null) continue;
+      const m = testCandleVsVWAP(c, v, slope, volAvg, cfg);
+      if (m) matches.push(m); // ordre : plus récent d'abord
+    }
+    // Priorité au test le plus récent confirmé ; sinon le plus récent faible.
+    const chosen = matches.find(m => m.confirmed) || matches[0];
+    if (chosen) {
+      // Clef de dédup : même event ne re-siffle pas à chaque cycle de 60s.
+      return { ...chosen, key: chosen.state + ':' + chosen.candleT };
+    }
+
     // Contexte sans test
+    const distPct = (price - vwapNow) / vwapNow * 100;
     let context;
-    if (slope < -0.03) context = `VWAP descendant (${fmt(vwapNow)}), prix ${distPct > 0 ? 'au-dessus' : 'en-dessous'} de ${Math.abs(distPct).toFixed(2)}%. Pas de test en cours.`;
-    else if (slope > 0.03) context = `VWAP montant (${fmt(vwapNow)}), prix ${distPct > 0 ? 'au-dessus' : 'en-dessous'} de ${Math.abs(distPct).toFixed(2)}%. Pas de test en cours.`;
+    if (slope < -cfg.slopeMin) context = `VWAP descendant (${fmt(vwapNow)}), prix ${distPct > 0 ? 'au-dessus' : 'en-dessous'} de ${Math.abs(distPct).toFixed(2)}%. Aucun test sur les ${cfg.lookback} dernières bougies.`;
+    else if (slope > cfg.slopeMin) context = `VWAP montant (${fmt(vwapNow)}), prix ${distPct > 0 ? 'au-dessus' : 'en-dessous'} de ${Math.abs(distPct).toFixed(2)}%. Aucun test sur les ${cfg.lookback} dernières bougies.`;
     else context = `VWAP plat (${fmt(vwapNow)}), pas de biais directionnel clair.`;
     return { state: 'none', vwap: vwapNow, slope, detail: context };
   }
@@ -605,7 +658,7 @@
   // ============================================================
   let lastData = null;
   let chartData = null;
-  let lastVWAPTestState = null; // NEW
+  let lastVWAPTestKey = null; // FIX #4 : dédup par event (état + bougie), plus par état seul
 
   function macroToday() { return null; } // Placeholder
 
@@ -707,11 +760,11 @@
       const lastC = candles[candles.length-1];
       const lastDelta = lastC.takerBuyVol - (lastC.vol - lastC.takerBuyVol);
 
-      // NEW : Test VWAP
-      const vwapTest = detectVWAPTest(candles, vwap, atr, lastDelta, volRatio);
+      // Test VWAP — FIX #4 : passe les bougies de session + la série VWAP alignée
+      const vwapTest = detectVWAPTest(vwap.sessionCandles, vwap.series);
 
-      // NEW : alerte sonore sur transition
-      if (vwapTest.state !== 'none' && vwapTest.confirmed && lastVWAPTestState !== vwapTest.state) {
+      // Alerte sonore sur nouvel event (dédup par event, pas par état)
+      if (vwapTest.state !== 'none' && vwapTest.confirmed && lastVWAPTestKey !== vwapTest.key) {
         playVWAPAlert();
         const kind = vwapTest.state.includes('reject') ? 'REJET' : 'CASSURE';
         showToast(`⚡ ${kind} VWAP · ${vwapTest.direction.toUpperCase()} confirmé`);
@@ -719,7 +772,7 @@
           new Notification(`⚡ ${kind} VWAP SOL`, { body: `${vwapTest.direction.toUpperCase()} · ${vwapTest.detail.substring(0, 100)}` });
         }
       }
-      lastVWAPTestState = vwapTest.state;
+      lastVWAPTestKey = vwapTest.key || null;
 
       // Score 15 indicateurs (avec pondération)
       const ind = [];
@@ -769,14 +822,14 @@
       else if (dR < 0.5) ind.push(['Range', -1, `résistance proche ${dR.toFixed(1)} ATR`]);
       else ind.push(['Range', 0, `milieu S${dS.toFixed(1)}/R${dR.toFixed(1)}`]);
 
-      // NEW : indicateur Test VWAP pondéré
+      // Indicateur Test VWAP pondéré
       if (vwapTest.state !== 'none') {
         const val = vwapTest.direction === 'long' ? 1 : -1;
         const weight = vwapTest.confirmed ? 2 : 1;
         ind.push(['Test VWAP', val, vwapTest.detail.substring(0, 80), weight]);
       }
 
-      // NEW : calcul pondéré
+      // Calcul pondéré
       let longScore = 0, shortScore = 0, total = 0;
       ind.forEach(([, v, , w]) => {
         const weight = w || 1;
@@ -859,7 +912,7 @@
     document.getElementById('mBtcCorr').textContent = 'Corr. ' + d.btcCorr.toFixed(2);
   }
 
-  // NEW : rendu du test VWAP
+  // Rendu du test VWAP
   function renderVWAPTest(t) {
     const badge = document.getElementById('vwapTestBadge');
     const expl = document.getElementById('vwapTestExplain');
